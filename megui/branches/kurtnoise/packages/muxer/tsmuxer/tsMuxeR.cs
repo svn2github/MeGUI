@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,9 +24,12 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 using MeGUI.core.details;
 using MeGUI.core.util;
+
+using MediaInfoWrapper;
 
 namespace MeGUI
 {
@@ -42,14 +45,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
             return null;
         }
 
-        private int numberOfAudioTracks, numberOfSubtitleTracks, trackNumber;
+        private int numberOfAudioTracks, numberOfSubtitleTracks;
         private string metaFile = null;
         private string lastLine;
 
         public tsMuxeR(string executablePath)
         {
             this.executable = executablePath;
-            trackNumber = 0;
             lastLine = "";
         }
         #region setup/start overrides
@@ -65,12 +67,28 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
         #endregion
 
 
+        protected override void setProjectedFileSize()
+        {
+        }
+
         protected override string Commandline
         {
             get
             {
                 return " \"" + metaFile + "\"" + " \"" + job.Output + "\"";
             }
+        }
+
+        public override void ProcessLine(string line, StreamType stream)
+        {
+            if (Regex.IsMatch(line, @"^[0-9]{1,3}\.[0-9]{1}%", RegexOptions.Compiled))
+            {
+                su.PercentageDoneExact = getPercentage(line);
+            }
+            else
+                base.ProcessLine(line, stream);
+
+            lastLine = line;
         }
         
         /// <summary>
@@ -82,10 +100,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
         {
             try
             {
-                int percentageStart = 0;
-                int percentageEnd = line.IndexOf(".");
-                string frameNumber = line.Substring(percentageStart, percentageEnd - percentageStart).Trim();
-                return Int32.Parse(frameNumber);
+                string[] strPercentage = line.Split('%')[0].Split('.');
+                return Convert.ToDecimal(strPercentage[0]) + Convert.ToDecimal(strPercentage[1]) / 10;
             }
             catch (Exception e)
             {
@@ -93,6 +109,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                 return null;
             }
         }
+
         /// <summary>
         /// determines if a read line is empty
         /// </summary>
@@ -124,11 +141,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                 string vcodecID = "";
                 string extra = "";
 
-                sw.Write("MUXOPT --no-pcr-on-video-pid --new-audio-pes --vbr --vbv-len=500"); // mux options
-                if (settings.SplitSize.HasValue)
-                    sw.Write(" --split-size " + settings.SplitSize.Value.MB + "MB");
-
-                if (settings.DeviceType != "Standard")
+                sw.Write("MUXOPT --no-pcr-on-video-pid --new-audio-pes"); // mux options
+                if (!string.IsNullOrEmpty(settings.DeviceType) && settings.DeviceType != "Standard")
                 {
                     switch (settings.DeviceType)
                     {
@@ -142,36 +156,55 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                         sw.Write(" --custom-chapters" + chapterTimeLine);
                     }
 
-                    job.Output = Path.ChangeExtension(job.Output, ""); // remove m2ts file extension - use folder name only with this mode
+                    job.Output = Path.GetDirectoryName(job.Output) + "\\" + Path.GetFileNameWithoutExtension(job.Output); // remove m2ts file extension - use folder name only with this mode
                 }
+                sw.Write(" --vbr --vbv-len=500"); // mux options
+                if (settings.SplitSize.HasValue)
+                    sw.Write(" --split-size=" + settings.SplitSize.Value.MB + "MB");
 
+                MediaInfoFile oVideoInfo = null;
                 if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
-                    if (settings.VideoInput.ToLower().EndsWith(".264") ||
-                        settings.VideoInput.ToLower().EndsWith(".h264"))
+                    oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
+                    if (!oVideoInfo.HasVideo)
+                        log.Error("No video track found: " + settings.VideoInput);
+                    else
                     {
-                        vcodecID = "V_MPEG4/ISO/AVC";
-                        extra = " insertSEI, contSPS";
+                        if (oVideoInfo.VideoInfo.Codec == VideoCodec.AVC)
+                        {
+                            vcodecID = "V_MPEG4/ISO/AVC";
+                            extra = " insertSEI, contSPS";
+                            if (oVideoInfo.ContainerFileType == ContainerType.MP4)
+                                extra += " , track=1";
+                        }
+                        else if (oVideoInfo.VideoInfo.Codec == VideoCodec.MPEG2)
+                            vcodecID = "V_MPEG-2";
+                        else if (oVideoInfo.VideoInfo.Codec == VideoCodec.VC1)
+                            vcodecID = "V_MS/VFW/WVC1";
                     }
-                    else if (settings.VideoInput.ToLower().EndsWith(".m2v"))
-                        vcodecID = "V_MPEG2";
-                    else vcodecID = "V_MS/VFW/WVC1";
                     sw.Write("\n" + vcodecID + ", ");
 
                     sw.Write("\"" + settings.VideoInput + "\"");
                 }
-
-                if (!string.IsNullOrEmpty(settings.MuxedInput))
+                else if (!string.IsNullOrEmpty(settings.MuxedInput))
                 {
-                    if (settings.MuxedInput.ToLower().EndsWith(".264") |
-                        settings.MuxedInput.ToLower().EndsWith(".h264"))
+                    oVideoInfo = new MediaInfoFile(settings.MuxedInput, ref log);
+                    if (!oVideoInfo.HasVideo)
+                        log.Error("No video track found: " + settings.MuxedInput);
+                    else
                     {
-                        vcodecID = "V_MPEG4/ISO/AVC";
-                        extra = " insertSEI, contSPS";
+                        if (oVideoInfo.VideoInfo.Codec == VideoCodec.AVC)
+                        {
+                            vcodecID = "V_MPEG4/ISO/AVC";
+                            extra = " insertSEI, contSPS";
+                            if (oVideoInfo.ContainerFileType == ContainerType.MP4)
+                                extra += " , track=1";
+                        }
+                        else if (oVideoInfo.HasVideo && oVideoInfo.VideoInfo.Codec == VideoCodec.MPEG2)
+                            vcodecID = "V_MPEG-2";
+                        else if (oVideoInfo.HasVideo && oVideoInfo.VideoInfo.Codec == VideoCodec.VC1)
+                            vcodecID = "V_MS/VFW/WVC1";
                     }
-                    else if (settings.MuxedInput.ToLower().EndsWith(".m2v"))
-                        vcodecID = "V_MPEG2";
-                    else vcodecID = "V_MS/VFW/WVC1";
                     sw.Write(vcodecID + ", ");
 
                     sw.Write("\"" + settings.MuxedInput + "\"");
@@ -190,11 +223,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     MuxStream stream = (MuxStream)o;
                     string acodecID = "";
 
-                    if (stream.path.ToLower().EndsWith(".ac3")) 
+                    MediaInfoFile oInfo = new MediaInfoFile(stream.path, ref log);
+
+                    if (!oInfo.HasAudio)
+                    {
+                        log.Error("No audio track found: " + stream.path);
+                        continue;
+                    }
+
+                    if (oInfo.AudioInfo.Codecs[0] == AudioCodec.AC3)
                         acodecID = "A_AC3";
-                    else if (stream.path.ToLower().EndsWith(".aac"))
+                    else if (oInfo.AudioInfo.Codecs[0] == AudioCodec.AAC)
                         acodecID = "A_AAC";
-                    else if (stream.path.ToLower().EndsWith(".dts"))
+                    else if (oInfo.AudioInfo.Codecs[0] == AudioCodec.DTS || oInfo.AudioInfo.Codecs[0] == AudioCodec.DTSHD || oInfo.AudioInfo.Codecs[0] == AudioCodec.DTSMA)
                         acodecID = "A_DTS";
 
                     sw.Write("\n" + acodecID + ", ");
@@ -204,7 +245,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                        sw.Write(", timeshift={0}ms", stream.delay);
 
                     if (!string.IsNullOrEmpty(stream.language))
-                       sw.Write(", lang=" + stream.language);
+                    {
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        {
+                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                            {
+                                sw.Write(", lang=" + strLanguage.Value);
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 foreach (object o in settings.SubtitleStreams)
@@ -212,9 +262,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     MuxStream stream = (MuxStream)o;
                     string scodecID = "";
 
-                    if (stream.path.ToLower().EndsWith(".srt"))
+                    if (stream.path.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".srt"))
                         scodecID = "S_TEXT/UTF8";
-                    else scodecID = "S_HDMV/PGS"; // sup files
+                    else 
+                        scodecID = "S_HDMV/PGS"; // sup files
 
                     sw.Write("\n" + scodecID + ", ");
                     sw.Write("\"" + stream.path + "\"");
@@ -222,11 +273,40 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     if (stream.delay != 0)
                         sw.Write(", timeshift={0}ms", stream.delay);
 
-                    if (!string.IsNullOrEmpty(stream.language))
-                        sw.Write(", lang=" + stream.language);
-                }                
+                    if (stream.path.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".srt"))
+                    {
+                        sw.Write(", video-width={0}, video-height={1}, fps={2}", oVideoInfo.VideoInfo.Width, oVideoInfo.VideoInfo.Height, settings.Framerate.Value.ToString(ci));
+                    }
 
-                job.FilesToDelete.Add(metaFile);
+                    if (!string.IsNullOrEmpty(stream.language))
+                    {
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        {
+                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                            {
+                                sw.Write(", lang=" + strLanguage.Value);
+                                break;
+                            }
+                        }
+                    }
+                }                
+            }
+
+            job.FilesToDelete.Add(metaFile);
+            if (File.Exists(metaFile))
+            {
+                string strMuxFile = String.Empty;
+                try
+                {
+                    StreamReader sr = new StreamReader(metaFile);
+                    strMuxFile = sr.ReadToEnd();
+                    sr.Close();
+                }
+                catch (Exception)
+                {
+
+                }
+                log.LogValue("mux script", strMuxFile);
             }
         }
     }

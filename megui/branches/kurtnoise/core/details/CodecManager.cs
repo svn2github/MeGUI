@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -44,7 +44,6 @@ namespace MeGUI
         }
         public static readonly VideoCodec ASP   = new VideoCodec("ASP");
         public static readonly VideoCodec AVC   = new VideoCodec("AVC");
-        public static readonly VideoCodec SNOW  = new VideoCodec("SNOW");
         public static readonly VideoCodec HFYU  = new VideoCodec("HFYU");
         public static readonly VideoCodec VC1   = new VideoCodec("VC1");
         public static readonly VideoCodec MPEG2 = new VideoCodec("MPEG2");
@@ -64,7 +63,7 @@ namespace MeGUI
         public static readonly AudioCodec AAC    = new AudioCodec("AAC");
         public static readonly AudioCodec VORBIS = new AudioCodec("VORBIS");
         public static readonly AudioCodec DTS    = new AudioCodec("DTS");
-        public static readonly AudioCodec AC3    = new AudioCodec("AC3");
+        public static readonly AudioCodec AC3    = new AudioCodec("AC-3");
         public static readonly AudioCodec MP2    = new AudioCodec("MP2");
         public static readonly AudioCodec WAV    = new AudioCodec("WAV");
         public static readonly AudioCodec PCM    = new AudioCodec("PCM");
@@ -72,7 +71,7 @@ namespace MeGUI
         public static readonly AudioCodec THD    = new AudioCodec("THD");
         public static readonly AudioCodec DTSHD  = new AudioCodec("DTSHD");
         public static readonly AudioCodec DTSMA  = new AudioCodec("DTSMA");
-        public static readonly AudioCodec LOSSLESS = new AudioCodec("LOSSLESS");
+        public static readonly AudioCodec FLAC   = new AudioCodec("FLAC");
     }
     public class SubtitleCodec : ICodec, IIDable
     {
@@ -130,9 +129,7 @@ namespace MeGUI
         }
         public static readonly VideoEncoderType XVID = new VideoEncoderType("Xvid", VideoCodec.ASP);
         public static readonly VideoEncoderType X264 = new VideoEncoderType("x264", VideoCodec.AVC);
-        public static readonly VideoEncoderType SNOW = new VideoEncoderType("Snow", VideoCodec.SNOW);
         public static readonly VideoEncoderType HFYU = new VideoEncoderType("Huffyuv", VideoCodec.HFYU);
-        public static readonly VideoEncoderType DIVXAVC = new VideoEncoderType("DivX264", VideoCodec.AVC);
     }
     public class AudioEncoderType : IEncoderType, IIDable
     {
@@ -156,11 +153,13 @@ namespace MeGUI
             this.codec = codec;
         }
         public static readonly AudioEncoderType LAME   = new AudioEncoderType("LAME", AudioCodec.MP3);
-        public static readonly AudioEncoderType WAAC   = new AudioEncoderType("WAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType NAAC   = new AudioEncoderType("NAAC", AudioCodec.AAC);
+        public static readonly AudioEncoderType FAAC   = new AudioEncoderType("FAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType VORBIS = new AudioEncoderType("VORBIS", AudioCodec.VORBIS);
+        public static readonly AudioEncoderType FFAC3  = new AudioEncoderType("FFAC3", AudioCodec.AC3);
+        public static readonly AudioEncoderType FFMP2  = new AudioEncoderType("FFMP2", AudioCodec.MP2);
         public static readonly AudioEncoderType AFTEN  = new AudioEncoderType("AFTEN", AudioCodec.AC3);
-        public static readonly AudioEncoderType FLAC = new AudioEncoderType("FLAC", AudioCodec.LOSSLESS);
+        public static readonly AudioEncoderType FLAC   = new AudioEncoderType("FLAC", AudioCodec.FLAC);
     }
     #endregion
     
@@ -177,7 +176,6 @@ namespace MeGUI
                 VideoCodecs.Register(VideoCodec.ASP)  &&
                 VideoCodecs.Register(VideoCodec.AVC)  &&
                 VideoCodecs.Register(VideoCodec.HFYU) &&
-                VideoCodecs.Register(VideoCodec.SNOW) &&
                 VideoCodecs.Register(VideoCodec.MPEG2) &&
                 VideoCodecs.Register(VideoCodec.VC1)))
                 throw new Exception("Failed to register a standard video codec");
@@ -185,7 +183,6 @@ namespace MeGUI
                 AudioCodecs.Register(AudioCodec.AAC) &&
                 AudioCodecs.Register(AudioCodec.AC3) &&
                 AudioCodecs.Register(AudioCodec.DTS) &&
-                AudioCodecs.Register(AudioCodec.LOSSLESS) &&
                 AudioCodecs.Register(AudioCodec.MP2) &&
                 AudioCodecs.Register(AudioCodec.MP3) &&
                 AudioCodecs.Register(AudioCodec.VORBIS) &&
@@ -194,22 +191,23 @@ namespace MeGUI
                 AudioCodecs.Register(AudioCodec.EAC3)   &&
                 AudioCodecs.Register(AudioCodec.PCM)    &&
                 AudioCodecs.Register(AudioCodec.THD)    &&
+                AudioCodecs.Register(AudioCodec.FLAC)   &&
                 AudioCodecs.Register(AudioCodec.WAV)))
                 throw new Exception("Failed to register a standard audio codec");
             if (!(
                 VideoEncoderTypes.Register(VideoEncoderType.HFYU) &&
-                VideoEncoderTypes.Register(VideoEncoderType.SNOW) &&
                 VideoEncoderTypes.Register(VideoEncoderType.X264) &&
-                VideoEncoderTypes.Register(VideoEncoderType.XVID) &&
-                VideoEncoderTypes.Register(VideoEncoderType.DIVXAVC)))
+                VideoEncoderTypes.Register(VideoEncoderType.XVID)))
                 throw new Exception("Failed to register a standard video encoder type");
             if (!(
+                AudioEncoderTypes.Register(AudioEncoderType.FAAC)   &&
+                AudioEncoderTypes.Register(AudioEncoderType.FFAC3)  &&
+                AudioEncoderTypes.Register(AudioEncoderType.FFMP2)  &&
                 AudioEncoderTypes.Register(AudioEncoderType.LAME)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.NAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.VORBIS) &&
-                AudioEncoderTypes.Register(AudioEncoderType.WAAC)   &&
-                AudioEncoderTypes.Register(AudioEncoderType.AFTEN)  &&
-                AudioEncoderTypes.Register(AudioEncoderType.FLAC)))
+                AudioEncoderTypes.Register(AudioEncoderType.FLAC)   &&
+                AudioEncoderTypes.Register(AudioEncoderType.AFTEN)))
                 throw new Exception("Failed to register a standard audio encoder type");
                 
         }
@@ -235,8 +233,8 @@ namespace MeGUI
         public static readonly VideoType RAWASP  = new VideoType("RAWASP", "RAW MPEG-4 ASP Files", "m4v", null, VideoCodec.ASP);
         public static readonly VideoType RAWAVC  = new VideoType("RAWAVC", "RAW MPEG-4 AVC Files", "264", null, VideoCodec.AVC);
         public static readonly VideoType RAWAVC2 = new VideoType("RAWAVC", "RAW MPEG-4 AVC Files", "h264", null, VideoCodec.AVC);
-        public static readonly VideoType MKV     = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.SNOW, VideoCodec.HFYU, VideoCodec.MPEG2, VideoCodec.VC1});
-        public static readonly VideoType AVI     = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.SNOW });
+        public static readonly VideoType MKV     = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.MPEG2, VideoCodec.VC1});
+        public static readonly VideoType AVI     = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU });
         public static readonly VideoType MPEG2   = new VideoType("MPEG2", "MPEG-2 Files", "m2v", null, VideoCodec.MPEG2);
         public static readonly VideoType VC1     = new VideoType("VC1", "VC-1 Files", "vc1", null, VideoCodec.VC1);
         public static readonly VideoType M2TS    = new VideoType("M2TS", "M2TS Files", "m2ts", ContainerType.M2TS, new VideoCodec[] { VideoCodec.AVC, VideoCodec.MPEG2, VideoCodec.VC1 });
@@ -273,7 +271,8 @@ namespace MeGUI
         public static readonly AudioType THD    = new AudioType("THD", "TrueHD Files", "thd", null, AudioCodec.THD);
         public static readonly AudioType DTSHD  = new AudioType("DTSHD", "DTS-HD High Resolution Files", "dtshd", null, AudioCodec.DTSHD);
         public static readonly AudioType DTSMA  = new AudioType("DTSMA", "DTS Master Audio Files", "dtsma", null, AudioCodec.DTSMA);
-        public static readonly AudioType FLAC = new AudioType("FLAC", "Flac Files", "flac", null, AudioCodec.LOSSLESS);
+        public static readonly AudioType FLAC   = new AudioType("FLAC", "FLAC Audio Lossless Files", "flac", null, AudioCodec.FLAC);
+        public static readonly AudioType AVS    = new AudioType("AVS", "AviSynth Script Files", "avs", null, AudioCodec.PCM);
     }
     public class SubtitleType : OutputType
     {
@@ -301,7 +300,8 @@ namespace MeGUI
         public static readonly DeviceType ISMA = new DeviceType("ISMA", "ISMA", "ISMA", ContainerType.MP4);
         public static readonly DeviceType PSP = new DeviceType("PSP", "PSP", "PSP", ContainerType.MP4);
         public static readonly DeviceType BD = new DeviceType("Blu-ray", "Blu-ray", "Blu-ray", ContainerType.M2TS);
-    //    public static readonly DeviceType AVCHD = new DeviceType("AVCHD", "AVCHD", "AVCHD", ContainerType.M2TS);
+        public static readonly DeviceType AVCHD = new DeviceType("AVCHD", "AVCHD", "AVCHD", ContainerType.M2TS);
+        public static readonly DeviceType PC = new DeviceType("PC", "PC", "PC", ContainerType.AVI);
     }
     public class ContainerType : OutputFileType
     {
@@ -347,6 +347,7 @@ namespace MeGUI
                 AudioTypes.Register(AudioType.AC3)    &&
                 AudioTypes.Register(AudioType.MP3)    &&
                 AudioTypes.Register(AudioType.DTS)    &&
+                AudioTypes.Register(AudioType.WAV)    &&
                 AudioTypes.Register(AudioType.MP2)    &&
                 AudioTypes.Register(AudioType.MP4AAC) &&
                 AudioTypes.Register(AudioType.M4A)    &&
@@ -355,8 +356,9 @@ namespace MeGUI
                 AudioTypes.Register(AudioType.DTSHD)  &&
                 AudioTypes.Register(AudioType.DTSMA)  &&
                 AudioTypes.Register(AudioType.EAC3)   &&
-                AudioTypes.Register(AudioType.THD)    &&
-                AudioTypes.Register(AudioType.FLAC)))
+                AudioTypes.Register(AudioType.FLAC)   &&
+                AudioTypes.Register(AudioType.AVS)    &&
+                AudioTypes.Register(AudioType.THD)))
                 throw new Exception("Failed to register an audio type");
             if (!(
                 SubtitleTypes.Register(SubtitleType.ASS)    &&
@@ -376,8 +378,9 @@ namespace MeGUI
                 ChapterTypes.Register(ChapterType.MKV_XML)))
 		        throw new Exception("Failed to register a chapter type");
             if (!(
-            //    DeviceTypes.Register(DeviceType.AVCHD) &&
+                DeviceTypes.Register(DeviceType.AVCHD) &&
                 DeviceTypes.Register(DeviceType.BD) &&
+                DeviceTypes.Register(DeviceType.PC) &&
                 DeviceTypes.Register(DeviceType.IPOD) &&
                 DeviceTypes.Register(DeviceType.PSP) &&
                 DeviceTypes.Register(DeviceType.IPHONE) &&

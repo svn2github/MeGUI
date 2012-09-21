@@ -36,13 +36,13 @@ namespace MeGUI
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.editZonesButton = new System.Windows.Forms.Button();
-            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.label2 = new System.Windows.Forms.Label();
-            this.videoInput = new MeGUI.FileBar();
-            this.videoOutput = new MeGUI.FileBar();
             this.fileType = new System.Windows.Forms.ComboBox();
             this.videopreview = new System.Windows.Forms.Button();
             this.addPrerenderJob = new System.Windows.Forms.CheckBox();
+            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.videoInput = new MeGUI.FileBar();
+            this.videoOutput = new MeGUI.FileBar();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -76,7 +76,7 @@ namespace MeGUI
             this.queueVideoButton.Name = "queueVideoButton";
             this.queueVideoButton.Size = new System.Drawing.Size(61, 23);
             this.queueVideoButton.TabIndex = 11;
-            this.queueVideoButton.Text = "Enqueue";
+            this.queueVideoButton.Text = "Queue";
             this.queueVideoButton.Click += new System.EventHandler(this.queueVideoButton_Click);
             // 
             // addAnalysisPass
@@ -150,7 +150,6 @@ namespace MeGUI
             this.editZonesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.editZonesButton.AutoSize = true;
             this.editZonesButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.editZonesButton.Enabled = false;
             this.editZonesButton.Location = new System.Drawing.Point(423, 90);
             this.editZonesButton.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
             this.editZonesButton.Name = "editZonesButton";
@@ -159,17 +158,6 @@ namespace MeGUI
             this.editZonesButton.Text = "Zones";
             this.editZonesButton.UseVisualStyleBackColor = true;
             this.editZonesButton.Click += new System.EventHandler(this.editZonesButton_Click);
-            // 
-            // videoProfile
-            // 
-            this.videoProfile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.SetColumnSpan(this.videoProfile, 3);
-            this.videoProfile.Location = new System.Drawing.Point(136, 61);
-            this.videoProfile.Name = "videoProfile";
-            this.videoProfile.ProfileSet = "Video";
-            this.videoProfile.Size = new System.Drawing.Size(345, 22);
-            this.videoProfile.TabIndex = 12;
-            this.videoProfile.SelectedProfileChanged += new System.EventHandler(this.videoProfile_SelectedProfileChanged);
             // 
             // label2
             // 
@@ -180,41 +168,6 @@ namespace MeGUI
             this.label2.Size = new System.Drawing.Size(127, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Encoder settings";
-            // 
-            // videoInput
-            // 
-            this.videoInput.AllowDrop = true;
-            this.videoInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.SetColumnSpan(this.videoInput, 3);
-            this.videoInput.Filename = "";
-            this.videoInput.Filter = "AviSynth files (*.avs)|*.avs|All files (*.*)|*.*";
-            this.videoInput.FilterIndex = 0;
-            this.videoInput.FolderMode = false;
-            this.videoInput.Location = new System.Drawing.Point(136, 3);
-            this.videoInput.Name = "videoInput";
-            this.videoInput.ReadOnly = true;
-            this.videoInput.SaveMode = false;
-            this.videoInput.Size = new System.Drawing.Size(345, 23);
-            this.videoInput.TabIndex = 1;
-            this.videoInput.Title = "Open AviSynth script";
-            this.videoInput.FileSelected += new MeGUI.FileBarEventHandler(this.videoInput_FileSelected);
-            // 
-            // videoOutput
-            // 
-            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.SetColumnSpan(this.videoOutput, 3);
-            this.videoOutput.Filename = "";
-            this.videoOutput.Filter = null;
-            this.videoOutput.FilterIndex = 0;
-            this.videoOutput.FolderMode = false;
-            this.videoOutput.Location = new System.Drawing.Point(136, 32);
-            this.videoOutput.Name = "videoOutput";
-            this.videoOutput.ReadOnly = false;
-            this.videoOutput.SaveMode = true;
-            this.videoOutput.Size = new System.Drawing.Size(345, 23);
-            this.videoOutput.TabIndex = 3;
-            this.videoOutput.Title = "Enter name of output";
-            this.videoOutput.FileSelected += new MeGUI.FileBarEventHandler(this.videoOutput_FileSelected);
             // 
             // fileType
             // 
@@ -249,6 +202,52 @@ namespace MeGUI
             this.addPrerenderJob.TabIndex = 17;
             this.addPrerenderJob.Text = "Add pre-rendering job";
             this.addPrerenderJob.UseVisualStyleBackColor = true;
+            // 
+            // videoProfile
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.videoProfile, 3);
+            this.videoProfile.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.videoProfile.Location = new System.Drawing.Point(136, 61);
+            this.videoProfile.Name = "videoProfile";
+            this.videoProfile.ProfileSet = "Video";
+            this.videoProfile.Size = new System.Drawing.Size(345, 23);
+            this.videoProfile.TabIndex = 12;
+            this.videoProfile.SelectedProfileChanged += new System.EventHandler(this.videoProfile_SelectedProfileChanged);
+            // 
+            // videoInput
+            // 
+            this.videoInput.AllowDrop = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.videoInput, 3);
+            this.videoInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.videoInput.Filename = "";
+            this.videoInput.Filter = "AviSynth files (*.avs)|*.avs|All files (*.*)|*.*";
+            this.videoInput.FilterIndex = 0;
+            this.videoInput.FolderMode = false;
+            this.videoInput.Location = new System.Drawing.Point(136, 3);
+            this.videoInput.Name = "videoInput";
+            this.videoInput.ReadOnly = true;
+            this.videoInput.SaveMode = false;
+            this.videoInput.Size = new System.Drawing.Size(345, 23);
+            this.videoInput.TabIndex = 1;
+            this.videoInput.Title = "Open AviSynth script";
+            this.videoInput.FileSelected += new MeGUI.FileBarEventHandler(this.videoInput_FileSelected);
+            // 
+            // videoOutput
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.videoOutput, 3);
+            this.videoOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.videoOutput.Filename = "";
+            this.videoOutput.Filter = null;
+            this.videoOutput.FilterIndex = 0;
+            this.videoOutput.FolderMode = false;
+            this.videoOutput.Location = new System.Drawing.Point(136, 32);
+            this.videoOutput.Name = "videoOutput";
+            this.videoOutput.ReadOnly = false;
+            this.videoOutput.SaveMode = true;
+            this.videoOutput.Size = new System.Drawing.Size(345, 23);
+            this.videoOutput.TabIndex = 3;
+            this.videoOutput.Title = "Enter name of output";
+            this.videoOutput.FileSelected += new MeGUI.FileBarEventHandler(this.videoOutput_FileSelected);
             // 
             // VideoEncodingComponent
             // 

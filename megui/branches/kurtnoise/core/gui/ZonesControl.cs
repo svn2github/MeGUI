@@ -125,7 +125,7 @@ namespace MeGUI
                     zone.mode = ZONEMODE.Quantizer;
                 else
                     zone.mode = ZONEMODE.Weight;
-                zone.value = zoneModifier.Value;
+                zone.modifier = zoneModifier.Value;
                 Zone[] newZones = new Zone[zones.Length + 1];
                 int index = 0;
                 if (zones.Length == 0) // no zones defined yet
@@ -196,7 +196,7 @@ namespace MeGUI
                         zoneMode.SelectedIndex = 0;
                     else
                         zoneMode.SelectedIndex = 1;
-                    zoneModifier.Value = (decimal)z.value;
+                    zoneModifier.Value = (decimal)z.modifier;
                 }
             }
         }
@@ -221,7 +221,7 @@ namespace MeGUI
                         zone.mode = ZONEMODE.Quantizer;
                     else
                         zone.mode = ZONEMODE.Weight;
-                    zone.value = zoneModifier.Value;
+                    zone.modifier = zoneModifier.Value;
                     zones[item.Index] = zone;
                     this.showZones(zones);
                     updateGUI();
@@ -268,6 +268,7 @@ namespace MeGUI
                         if (creditsStartFrame > 0)
                             player.CreditsStart = this.creditsStartFrame;
                         player.Show();
+                        player.SetScreenSize();
                     }
                     else
                         return;

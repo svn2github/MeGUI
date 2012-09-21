@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -74,12 +74,11 @@ namespace MeGUI
 			
 			if (Path.GetDirectoryName(settings.Logfile).Equals("")) // no path set
 				settings.Logfile = Path.ChangeExtension(output, ".stats");
-            if (settings.SettingsID.Equals("x264"))
+            if (job.Settings.SettingsID.Equals("x264"))
                 mbtreeFile = Path.ChangeExtension(output, ".stats.mbtree");
 			if (job.Settings.EncodingMode == 4) // automated 2 pass, change type to 2 pass 2nd pass
 			{
 				job.Settings.EncodingMode = 3;
-				job.Settings.Turbo = false;
 			}
 			else if (job.Settings.EncodingMode == 8) // automated 3 pass, change type to 3 pass first pass
 			{
@@ -87,7 +86,6 @@ namespace MeGUI
 					job.Settings.EncodingMode = 7;
 				else
 					job.Settings.EncodingMode = 3; // 2 pass 2nd pass.. doesn't overwrite the stats file
-				job.Settings.Turbo = false;
 			}
 
             if (!skipVideoCheck)
@@ -120,22 +118,59 @@ namespace MeGUI
             }
         }
 
-        public JobChain GenerateMuxJobs(VideoStream video, decimal? framerate, MuxStream[] audioStreamsArray, MuxableType[] audioTypes,
-            MuxStream[] subtitleStreamsArray, MuxableType[] subTypes,
-            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize, List<string> inputsToDelete, string deviceType, MuxableType deviceOutputType)
+        public JobChain GenerateMuxJobs(VideoStream video, decimal? framerate, MuxStream[] audioStreamsArray, 
+            MuxableType[] audioTypes, MuxStream[] subtitleStreamsArray, MuxableType[] subTypes,
+            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, 
+            FileSize? splitSize, List<string> inputsToDelete, string deviceType, MuxableType deviceOutputType)
         {
             Debug.Assert(splitSize == null || splitSize.Value != FileSize.Empty);
 
             MuxProvider prov = mainForm.MuxProvider;
             List<MuxableType> allTypes = new List<MuxableType>();
+            List<MuxableType> tempTypes = new List<MuxableType>();
+            List<MuxableType> duplicateTypes = new List<MuxableType>();
+            tempTypes.AddRange(audioTypes);
+            tempTypes.AddRange(subTypes);
             allTypes.Add(video.VideoType);
-            allTypes.AddRange(audioTypes);
-            allTypes.AddRange(subTypes);
+
+            // remove duplicate entries to speed up the process
+            foreach (MuxableType oType in tempTypes)
+            {
+                bool bFound = false;
+                foreach (MuxableType oAllType in allTypes)
+                {
+                    if (oType.outputType.ID.Equals(oAllType.outputType.ID))
+                    {
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (!bFound)
+                    allTypes.Add(oType);
+                else
+                    duplicateTypes.Add(oType);
+            }
             if (chapterInputType != null)
                 allTypes.Add(chapterInputType);
             if (deviceOutputType != null)
                 allTypes.Add(deviceOutputType);
+
+            // get mux path
             MuxPath muxPath = prov.GetMuxPath(container, splitSize.HasValue, allTypes.ToArray());
+
+            // add duplicate entries back into the mux path
+            muxPath.InitialInputTypes.AddRange(duplicateTypes);
+            while (duplicateTypes.Count > 0)
+            {
+                int iPath = 0;
+                for (int i = 0; i < muxPath.Length; i++)
+                    foreach (MuxableType oType in muxPath[i].handledInputTypes)
+                        if (oType.outputType.ID.Equals(duplicateTypes[0].outputType.ID))
+                            iPath = i;
+                muxPath[iPath].handledInputTypes.Add(duplicateTypes[0]);
+                duplicateTypes.RemoveAt(0);
+            }
+
             List<MuxJob> jobs = new List<MuxJob>();
             List<MuxStream> subtitleStreams = new List<MuxStream>(subtitleStreamsArray);
             List<MuxStream> audioStreams = new List<MuxStream>(audioStreamsArray);
@@ -148,19 +183,21 @@ namespace MeGUI
 
                 MuxJob mjob = new MuxJob();
 
-
                 if (previousOutput != null)
                 {
                     mjob.Settings.MuxedInput = previousOutput;
                     filesToDeleteThisJob.Add(previousOutput);
                 }
 
+                if (video.Settings != null)
+                {
+                    mjob.NbOfBFrames = video.Settings.NbBframes;
+                    mjob.Codec = video.Settings.Codec.ToString();
+                    mjob.Settings.VideoName = video.Settings.VideoName;
+                }
                 mjob.NbOfFrames = video.NumberOfFrames;
-                mjob.NbOfBFrames = video.Settings.NbBframes;
-                mjob.Codec = video.Settings.Codec.ToString();
                 string fpsFormated = String.Format("{0:##.###}", framerate); // this formating is required for mkvmerge at least to avoid fps rounding error
                 mjob.Settings.Framerate = Convert.ToDecimal(fpsFormated); 
-                mjob.Settings.VideoName = video.Settings.VideoName;
 
                 string tempOutputName = Path.Combine(Path.GetDirectoryName(output),
                     Path.GetFileNameWithoutExtension(output) + tempNumber + ".");
@@ -279,21 +316,18 @@ namespace MeGUI
 		/// <returns>an Array of VideoJobs in the order they are to be encoded</returns>
 		public JobChain prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar, bool prerender, bool checkVideo, Zone[] zones)
 		{
-			bool twoPasses = false, turbo = settings.Turbo, threePasses = false;
-            if (settings.SettingsID.Equals("DivX264"))
-            {
-                if (settings.EncodingMode == 2)
-                    twoPasses = true;
-            }
-            else
-            {
-                if (settings.EncodingMode == 4) // automated twopass
-                    twoPasses = true;
-                else if (settings.EncodingMode == 8) // automated threepass
-                    threePasses = true;
-            }
+            //Check to see if output file already exists before creating the job.
+            if (File.Exists(movieOutput) && !mainForm.DialogManager.overwriteJobOutput(movieOutput))
+                return null;
+
+			bool twoPasses = false, threePasses = false;
+			if (settings.EncodingMode == 4) // automated twopass
+				twoPasses = true;
+			else if (settings.EncodingMode == 8) // automated threepass
+				threePasses = true;
 
             VideoJob prerenderJob = null;
+            FFMSIndexJob indexJob = null;
             string hfyuFile = null;
             string inputAVS = movieInput;
             if (prerender)
@@ -318,13 +352,15 @@ namespace MeGUI
                 try
                 {
                     StreamWriter hfyuWrapper = new StreamWriter(inputAVS, false, Encoding.Default);
-                    hfyuWrapper.WriteLine("AviSource(\"" + hfyuFile + "\")");
+                    String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
+                    hfyuWrapper.WriteLine("LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + hfyuFile + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")");
                     hfyuWrapper.Close();
                 }
-                catch (IOException)
+                catch (Exception)
                 {
                     return null;
                 }
+                indexJob = new FFMSIndexJob(hfyuFile, null, 0, null, false);
                 prerenderJob = this.generateVideoJob(movieInput, hfyuFile, new hfyuSettings(), dar, zones);
                 if (prerenderJob == null)
                     return null;
@@ -350,22 +386,18 @@ namespace MeGUI
 			{
 				if (twoPasses || threePasses) // we just created the last pass, now create previous one(s)
 				{
-                    job.FilesToDelete.Add(job.Settings.Logfile);
-                    if (settings.SettingsID.Equals("x264"))
+					job.FilesToDelete.Add(job.Settings.Logfile);
+                    if (job.Settings.SettingsID.Equals("x264"))
                         job.FilesToDelete.Add(mbtreeFile);
                     firstpass = cloneJob(job);
-					firstpass.Output = "NUL"; // the first pass has no output
-                    if (settings.SettingsID.Equals("DivX264"))
-                         firstpass.Settings.EncodingMode = 0;
-                    else firstpass.Settings.EncodingMode = 2;
-					firstpass.Settings.Turbo = turbo;
+					firstpass.Output = ""; // the first pass has no output
+					firstpass.Settings.EncodingMode = 2;
                     firstpass.DAR = dar;
 					if (threePasses)
 					{
 						firstpass.Settings.EncodingMode = 5; // change to 3 pass 3rd pass just for show
 						middlepass = cloneJob(job);
 						middlepass.Settings.EncodingMode = 6; // 3 pass 2nd pass
-						middlepass.Settings.Turbo = false;
                         if (mainForm.Settings.Keep2of3passOutput) // give the 2nd pass a new name
                         {
                             middlepass.Output = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileNameWithoutExtension(job.Output)
@@ -379,10 +411,14 @@ namespace MeGUI
                 {
                     job.FilesToDelete.Add(hfyuFile);
                     job.FilesToDelete.Add(inputAVS);
+                    job.FilesToDelete.Add(hfyuFile + ".ffindex");
                 }
-                List<VideoJob> jobList = new List<VideoJob>();
+                List<Job> jobList = new List<Job>();
                 if (prerenderJob != null)
+                {
                     jobList.Add(prerenderJob);
+                    jobList.Add(indexJob);
+                }
                 if (firstpass != null)
                     jobList.Add(firstpass);
                 if (middlepass != null) // we have a middle pass
@@ -404,6 +440,7 @@ namespace MeGUI
 			job.Input = oldJob.Input;
 			job.Output = oldJob.Output;
             job.Settings = oldJob.Settings.Clone();
+            job.Zones = oldJob.Zones;
             return job;
 		}
 		#endregion
@@ -430,13 +467,20 @@ namespace MeGUI
 		/// <returns>true if the input file could be opened, false if not</returns>
 		public static bool getInputProperties(out ulong nbOfFrames, out double framerate, string video)
 		{
-            int d1, d2;
+            int d1, d2, d3, d4;
             Dar d;
-            return getAllInputProperties(out nbOfFrames, out framerate, out d1, out d2, out d, video);
+            return GetAllInputProperties(out nbOfFrames, out framerate, out d1, out d2, out d3, out d4, out d, video);
 		}
-
-        public static void GetAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, 
-			out int vRes, out Dar dar, string video)
+        /// <summary>
+        /// gets the number of frames, framerate, horizontal and vertical resolution from a video source
+        /// </summary>
+        /// <param name="nbOfFrames">the number of frames</param>
+        /// <param name="framerate">the framerate</param>
+        /// <param name="hRes">the horizontal resolution</param>
+        /// <param name="vRes">the vertical resolution</param>
+        /// <param name="video">the video whose properties are to be read</param>
+        /// <returns>whether the source could be opened or not</returns>
+        public static bool GetAllInputProperties(out ulong nbOfFrames, out double framerate, out int framerate_n, out int framerate_d, out int hRes, out int vRes, out Dar dar, string video)
 		{
             nbOfFrames = 0;
             hRes = vRes = 0;
@@ -445,23 +489,24 @@ namespace MeGUI
 			{
                 using (AvsFile avi = AvsFile.OpenScriptFile(video))
                 {
-                    checked { nbOfFrames = (ulong)avi.Info.FrameCount; }
-                    framerate = avi.Info.FPS;
-                    hRes = (int)avi.Info.Width;
-                    vRes = (int)avi.Info.Height;
-                    dar = avi.Info.DAR;
+                    checked { nbOfFrames = (ulong)avi.VideoInfo.FrameCount; }
+                    framerate = avi.VideoInfo.FPS;
+                    framerate_n = avi.VideoInfo.FPS_N;
+                    framerate_d = avi.VideoInfo.FPS_D;
+                    hRes = (int)avi.VideoInfo.Width;
+                    vRes = (int)avi.VideoInfo.Height;
+                    dar = avi.VideoInfo.DAR;
                 }
+                return true;
 			}
 			catch (Exception e)
 			{
                 throw new JobRunException("The file " + video + " cannot be opened.\r\n"
                      + "Error message for your reference: " + e.Message, e);
             }
-			
 		}
 
-
-		/// <summary>
+  		/// <summary>
 		/// gets the number of frames, framerate, horizontal and vertical resolution from a video source
 		/// </summary>
 		/// <param name="nbOfFrames">the number of frames</param>
@@ -470,24 +515,10 @@ namespace MeGUI
 		/// <param name="vRes">the vertical resolution</param>
 		/// <param name="video">the video whose properties are to be read</param>
 		/// <returns>whether the source could be opened or not</returns>
-		public static bool getAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, 
-			out int vRes, out Dar dar, string video)
+		public static bool GetAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, out int vRes, out Dar dar, string video)
 		{
-            try
-            {
-                GetAllInputProperties(out nbOfFrames, out framerate, out hRes, out vRes, out dar, video);
-                return true;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message,
-                        "Cannot open video input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                nbOfFrames = 0;
-                hRes = vRes = 0;
-                framerate = 0;
-                dar = Dar.ITU16x9PAL;
-                return false;
-            }
+            int fn, fd;
+            return GetAllInputProperties(out nbOfFrames, out framerate, out fn, out fd, out hRes, out vRes, out dar, video);
 		}
 
         /// <summary>
@@ -508,7 +539,7 @@ namespace MeGUI
             ulong nbFrames;
 			double framerate;
 			compliantLevel = -1;
-			if (getAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out d, source))
+			if (GetAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out d, source))
 			{
 				return this.al.validateAVCLevel(hRes, vRes, framerate, settings, out compliantLevel);
 			}
@@ -554,7 +585,7 @@ namespace MeGUI
 			Zone z = zones[0];
 			Zone newZone = new Zone();
 			newZone.mode = ZONEMODE.Weight;
-			newZone.value = (decimal)100;
+			newZone.modifier = (decimal)100;
 			if (z.startFrame > 0) // zone doesn't start at the beginning, add zone before the first configured zone
 			{
 				newZone.startFrame = 0;
@@ -660,7 +691,7 @@ namespace MeGUI
 				introZone.startFrame = 0;
 				introZone.endFrame = introEndFrame;
 				introZone.mode = ZONEMODE.Quantizer;
-				introZone.value = vSettings.CreditsQuantizer;
+				introZone.modifier = vSettings.CreditsQuantizer;
 				if (zones.Length > 0)
 				{
 					Zone z = zones[0];
@@ -696,7 +727,7 @@ namespace MeGUI
 				creditsZone.startFrame = creditsStartFrame;
 				creditsZone.endFrame = (int)nbOfFrames-1;
 				creditsZone.mode = ZONEMODE.Quantizer;
-				creditsZone.value = vSettings.CreditsQuantizer;
+				creditsZone.modifier = vSettings.CreditsQuantizer;
 				if (zones.Length > 0)
 				{
 					Zone z = zones[zones.Length - 1]; // get the last zone

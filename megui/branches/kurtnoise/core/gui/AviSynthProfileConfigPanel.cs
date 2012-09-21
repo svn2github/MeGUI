@@ -70,6 +70,7 @@ namespace MeGUI.core.gui
                 mpeg2Deblocking.Checked = value.MPEG2Deblock;
                 colourCorrect.Checked = value.ColourCorrect;
                 signalAR.Checked = (value.Mod16Method != mod16Method.none);
+                mod16Box.Enabled = signalAR.Checked;
                 mod16Box.SelectedIndex = (int)value.Mod16Method;
                 dss2.Checked = value.DSS2;
             }

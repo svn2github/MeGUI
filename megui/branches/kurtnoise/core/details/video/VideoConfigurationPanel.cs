@@ -42,7 +42,6 @@ namespace MeGUI.core.details.video
         protected string input = "input", output = "output", encoderPath = "program";
         #endregion
         protected ToolTip tooltipHelp;
-        protected TextBox commandline;
         private IContainer components;
         #region start / stop
         public VideoConfigurationPanel()
@@ -149,6 +148,7 @@ namespace MeGUI.core.details.video
 
 
         protected TabControl tabControl1;
+        protected TextBox commandline;
         protected TabPage mainTabPage;
     
 
@@ -157,20 +157,21 @@ namespace MeGUI.core.details.video
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.mainTabPage = new System.Windows.Forms.TabPage();
-            this.tooltipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.commandline = new System.Windows.Forms.TextBox();
+            this.tooltipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.mainTabPage);
-            this.tabControl1.Location = new System.Drawing.Point(7, 92);
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(402, 398);
+            this.tabControl1.Size = new System.Drawing.Size(368, 344);
             this.tabControl1.TabIndex = 39;
             // 
             // mainTabPage
@@ -178,10 +179,21 @@ namespace MeGUI.core.details.video
             this.mainTabPage.Location = new System.Drawing.Point(4, 22);
             this.mainTabPage.Name = "mainTabPage";
             this.mainTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.mainTabPage.Size = new System.Drawing.Size(394, 372);
+            this.mainTabPage.Size = new System.Drawing.Size(360, 318);
             this.mainTabPage.TabIndex = 0;
             this.mainTabPage.Text = "Main";
             this.mainTabPage.UseVisualStyleBackColor = true;
+            // 
+            // commandline
+            // 
+            this.commandline.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.commandline.Location = new System.Drawing.Point(3, 350);
+            this.commandline.Multiline = true;
+            this.commandline.Name = "commandline";
+            this.commandline.ReadOnly = true;
+            this.commandline.Size = new System.Drawing.Size(365, 59);
+            this.commandline.TabIndex = 41;
             // 
             // tooltipHelp
             // 
@@ -191,22 +203,12 @@ namespace MeGUI.core.details.video
             this.tooltipHelp.ReshowDelay = 100;
             this.tooltipHelp.ShowAlways = true;
             // 
-            // commandline
-            // 
-            this.commandline.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.commandline.Location = new System.Drawing.Point(0, 496);
-            this.commandline.Multiline = true;
-            this.commandline.Name = "commandline";
-            this.commandline.ReadOnly = true;
-            this.commandline.Size = new System.Drawing.Size(409, 59);
-            this.commandline.TabIndex = 44;
-            // 
             // VideoConfigurationPanel
             // 
             this.Controls.Add(this.commandline);
             this.Controls.Add(this.tabControl1);
             this.Name = "VideoConfigurationPanel";
-            this.Size = new System.Drawing.Size(409, 555);
+            this.Size = new System.Drawing.Size(372, 409);
             this.Load += new System.EventHandler(this.VideoConfigurationPanel_Load);
             this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -31,7 +31,9 @@ using System.Windows.Forms;
 using MeGUI.core.gui;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
+using MeGUI.packages.audio.faac;
 using MeGUI.packages.tools.oneclick;
+using MeGUI.packages.video.x264;
 
 namespace MeGUI
 {
@@ -51,16 +53,16 @@ namespace MeGUI
         {
             this.path = path;
             profileGroups.Add(new ProfileGroup(typeof(VideoCodecSettings), "Video"));
-            SafeRegister<x264Settings, MeGUI.packages.video.x264.x264ConfigurationPanel>("Video");
+            SafeRegister<x264Settings, x264ConfigurationPanel>("Video");
             SafeRegister<xvidSettings, MeGUI.packages.video.xvid.xvidConfigurationPanel>("Video");
-            SafeRegister<snowSettings, MeGUI.packages.video.snow.snowConfigurationPanel>("Video");
-            SafeRegister<DivXAVCSettings, MeGUI.packages.video.divxavc.DivXAVCConfigurationPanel>("Video");
             profileGroups.Add(new ProfileGroup(typeof(AudioCodecSettings), "Audio"));
             SafeRegister<AftenSettings, MeGUI.packages.audio.aften.AftenConfigurationPanel>("Audio");
+            SafeRegister<FaacSettings, faacConfigurationPanel>("Audio");
+            SafeRegister<AC3Settings, MeGUI.packages.audio.ffac3.AC3ConfigurationPanel>("Audio");
+            SafeRegister<MP2Settings, MeGUI.packages.audio.ffmp2.MP2ConfigurationPanel>("Audio");
             SafeRegister<MP3Settings, MeGUI.packages.audio.lame.lameConfigurationPanel>("Audio");
             SafeRegister<NeroAACSettings, MeGUI.packages.audio.naac.neroConfigurationPanel>("Audio");
             SafeRegister<OggVorbisSettings, MeGUI.packages.audio.vorbis.OggVorbisConfigurationPanel>("Audio");
-            SafeRegister<WinAmpAACSettings, MeGUI.packages.audio.waac.WinAmpAACConfigurationPanel>("Audio");
             SafeRegister<FlacSettings, MeGUI.packages.audio.flac.FlacConfigurationPanel>("Audio");
             
             SafeRegister<OneClickSettings, OneClickConfigPanel>();
@@ -68,7 +70,7 @@ namespace MeGUI
         }
         #endregion
 
-        public static readonly string ScratchPadName = "*default*";
+        public static readonly string ScratchPadName = "*scratchpad*";
 
         string path;
         private List<ProfileType> profileTypes = new List<ProfileType>();
@@ -166,10 +168,9 @@ namespace MeGUI
             {
                 FileUtil.DeleteDirectoryIfExists(GetSaveFolder(path), true);
             }
-            catch (IOException e)
+            catch (Exception ex)
             {
-                MessageBox.Show("There was an error clearing the profiles folder before deletion: " + e.Message, "Error saving profiles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show("There was an error clearing the profiles folder before deletion: " + ex.Message, "Error saving profiles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             foreach (Profile p in profiles)
@@ -210,6 +211,7 @@ namespace MeGUI
         {
             string file = Path.Combine(GetSaveFolder(path), "SelectedProfiles.xml");
             if (!File.Exists(file)) return;
+
             using (Stream s = File.OpenRead(file))
             {
                 try
@@ -242,34 +244,25 @@ namespace MeGUI
 
         public void LoadProfiles()
         {
-            if (Directory.Exists(Path.Combine(path, "profiles")))
-            {
-                //setAllProfiles(Loader.TryLoadProfiles(path));
-                FileUtil.DeleteDirectoryIfExists(Path.Combine(path, "profiles"), true);
-                return;
-            }
-
             foreach (ProfileType t in profileTypes)
-                t.Profiles = readAllProfiles(t);
+                t.Profiles = readAllProfiles(t, false);
 
             loadSelectedProfiles();
         }
 
-        public static List<Profile> ReadAllProfiles(string path)
+        public static List<Profile> ReadAllProfiles(string path, bool bSilentError)
         {
             ProfileManager p = new ProfileManager(path);
-            //if (Directory.Exists(Path.Combine(path, "profiles")))
-              //  return Loader.TryLoadProfiles(path);
 
             List<Profile> ps = new List<Profile>();
 
             foreach (ProfileType t in p.profileTypes)
-                ps.AddRange(p.readAllProfiles(t));
+                ps.AddRange(p.readAllProfiles(t, bSilentError));
 
             return ps;
         }
 
-        private List<Profile> readAllProfiles(ProfileType type)
+        private List<Profile> readAllProfiles(ProfileType type, bool bSilentError)
         {
             string profilePath = Path.Combine(GetSaveFolder(path), type.ID);
             DirectoryInfo di = FileUtil.ensureDirectoryExists(profilePath);
@@ -278,7 +271,7 @@ namespace MeGUI
             return Util.RemoveDuds(new List<FileInfo>(files).ConvertAll<Profile>(
                 delegate(FileInfo fi)
                 {
-                    return (Profile)Util.XmlDeserialize(fi.FullName, type.GenericProfileType);
+                    return (Profile)Util.XmlDeserialize(fi.FullName, type.GenericProfileType, bSilentError);
                 }));
         }
 

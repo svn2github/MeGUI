@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -51,6 +51,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
         protected override void checkJobIO()
         {
             script_filename = writeScript(job);
+            job.FilesToDelete.Add(script_filename);
             
             base.checkJobIO();
         }
@@ -124,11 +125,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
 
             // split size
             script.AppendLine("SET OUTPUT OPTIONS");
-            if (settings.SplitSize.HasValue)
+            if (settings.SplitSize.HasValue || String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard")
             {
                 script.AppendLine("SET OPTION NUMBERING ON");
                 script.AppendLine("SET OPTION MAXFILESIZE ON");
-                script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", ((MeGUI.core.util.FileSize)settings.SplitSize).MB, Environment.NewLine);
+                if ((String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard") && (!settings.SplitSize.HasValue || ((MeGUI.core.util.FileSize)settings.SplitSize).MB > 2000))
+                    script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", 2000, Environment.NewLine);
+                else
+                    script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", ((MeGUI.core.util.FileSize)settings.SplitSize).MB, Environment.NewLine);
             }
             else
             {
@@ -149,27 +153,39 @@ SET OPTION ALL AUDIO 1
 SET OPTION CLOSEAPP 1
 SET OPTION DONEDLG 0
 SET OPTION OVERWRITEDLG 0
-SET OPTION STDIDX AUTO");
+SET OPTION PRELOAD 200");
+
+            if (String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard")
+            {
+                script.AppendLine(
+@"SET OPTION OPENDML 0
+SET OPTION RECLISTS 0
+SET OPTION AVI ADDJUNKBEFOREHEADERS 0
+SET OPTION AUDIO INTERLEAVE 4 FR");
+            }
+            else
+            {
+                script.AppendLine(
+@"SET OPTION OPENDML 1
+SET OPTION RECLISTS 1
+SET OPTION AUDIO INTERLEAVE 100 KB
+SET OPTION AVI RIFFAVISIZE 1
+SET OPTION AVI ADDJUNKBEFOREHEADERS 1
+SET OPTION AVI HAALIMODE 0
+SET OPTION STDIDX 10000 FRAMES
+SET OPTION LEGACY 1");
+            }
 
             script.AppendFormat("START {0}{1}", settings.MuxedOutput, Environment.NewLine);            
 
             /// the script is now created; let's write it to a temp file
-            string filename = Path.GetTempFileName();
-            using (StreamWriter output = new StreamWriter(File.OpenWrite(filename)))
+            string filename = Path.ChangeExtension(job.Output, ".mux");
+            using (StreamWriter output = new StreamWriter(File.OpenWrite(filename), System.Text.Encoding.UTF8))
             {
                 output.Write(script.ToString());
             }
+            log.LogValue("mux script", script);
             return filename;
-        }
-
-        protected override void doExitConfig()
-        {
-            try
-            {
-                File.Delete(script_filename);
-            }
-            catch (IOException) { }
-            base.doExitConfig();
         }
 
         #endregion

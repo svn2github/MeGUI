@@ -45,6 +45,7 @@ namespace MeGUI.core.gui
         }
 
         private TPanel s;
+        private bool bCloseFormWithoutSaving = false, bSaveSettings = false;
 
         private TSettings Settings
         {
@@ -79,6 +80,7 @@ namespace MeGUI.core.gui
             Size = size;
             t.Dock = DockStyle.Fill;
             panel1.Controls.Add(t);
+            this.Icon = MainForm.Instance.Icon;
         }
 
         private void loadDefaultsButton_Click(object sender, EventArgs e)
@@ -174,6 +176,30 @@ namespace MeGUI.core.gui
 
         private void okButton_Click(object sender, EventArgs e)
         {
+            bSaveSettings = true;
+            this.Close();
+        }
+
+        private void putSettingsInScratchpad()
+        {
+            TSettings s = Settings;
+            GenericProfile<TSettings> p = scratchPadProfile;
+
+            if (p == null)
+            {
+                p = new GenericProfile<TSettings>(ProfileManager.ScratchPadName, s);
+                videoProfile.Items.Add(p);
+            }
+
+            p.Settings = s;
+            videoProfile.SelectedItem = p;
+        }
+
+        private void ProfileConfigurationWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (bCloseFormWithoutSaving == true)
+                return;
+
             Profile prof = SelectedProfile;
             if (prof.Name == ProfileManager.ScratchPadName)
                 prof.BaseSettings = Settings;
@@ -191,25 +217,21 @@ namespace MeGUI.core.gui
                         break;
 
                     case DialogResult.Cancel:
+                        if (bSaveSettings == true)
+                        {
+                            bSaveSettings = false;
+                            e.Cancel = true;
+                        }
                         return;
                 }
             }
-            this.DialogResult = DialogResult.OK;
+            this.DialogResult = DialogResult.OK;            
         }
 
-        private void putSettingsInScratchpad()
+        private void cancelButton_Click(object sender, EventArgs e)
         {
-            TSettings s = Settings;
-            GenericProfile<TSettings> p = scratchPadProfile;
-
-            if (p == null)
-            {
-                p = new GenericProfile<TSettings>(ProfileManager.ScratchPadName, s);
-                videoProfile.Items.Add(p);
-            }
-
-            p.Settings = s;
-            videoProfile.SelectedItem = p;
+            bCloseFormWithoutSaving = true;
+            this.Close();
         }
     }
 

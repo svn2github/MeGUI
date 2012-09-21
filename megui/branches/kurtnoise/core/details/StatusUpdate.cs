@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ namespace MeGUI
         private FileSize? filesize, audioFileSize, projectedFileSize;
         private string processingspeed;
 		private decimal percentage;
+        private JobStatus jobStatus;
 		internal StatusUpdate(string name)
 		{
             jobName = name;
@@ -57,6 +58,7 @@ namespace MeGUI
 			timeElapsed = TimeSpan.Zero;
             processingspeed = null;
 			filesize = null;
+            jobStatus = MeGUI.JobStatus.PROCESSING;
 
             for (int i = 0; i < UpdatesPerEstimate; ++i)
             {
@@ -72,6 +74,15 @@ namespace MeGUI
         {
             get { return status; }
             set { status = value; }
+        }
+
+        /// <summary>
+        /// Job Status currently processing
+        /// </summary>
+        public JobStatus JobStatus
+        {
+            get { return jobStatus; }
+            set { jobStatus = value; }
         }
 
         /// <summary>
@@ -314,14 +325,14 @@ namespace MeGUI
                 // FPS
                 if (_frame.HasValue && timeElapsed.TotalSeconds > 0)
                     processingspeed =
-                        Util.ToString((decimal)_frame.Value / (decimal)timeElapsed.TotalSeconds) + " FPS";
+                        Util.ToString((decimal)_frame.Value / (decimal)timeElapsed.TotalSeconds, false) + " FPS";
                 // Other processing speeds
                 else if (_currentTime.HasValue && timeElapsed.Ticks > 0)
                     processingspeed =
-                        Util.ToString((decimal)_currentTime.Value.Ticks / (decimal)timeElapsed.Ticks) + "x realtime";
+                        Util.ToString((decimal)_currentTime.Value.Ticks / (decimal)timeElapsed.Ticks, false) + "x realtime";
                 else if (fraction.HasValue && _totalTime.HasValue && timeElapsed.Ticks > 0)
                     processingspeed =
-                        Util.ToString((decimal)_totalTime.Value.Ticks * fraction.Value / (decimal)timeElapsed.Ticks) + "x realtime";
+                        Util.ToString((decimal)_totalTime.Value.Ticks * fraction.Value / (decimal)timeElapsed.Ticks, false) + "x realtime";
 
 
                 // Processing time

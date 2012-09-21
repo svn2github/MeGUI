@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ namespace MeGUI.core.details.mux
             subtitleLanguage.Items.AddRange(new List<string>(LanguageSelectionContainer.Languages.Keys).ToArray());
         }
 
+        private TrackInfo _trackInfo;
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public MuxStream Stream
         {
@@ -46,10 +47,17 @@ namespace MeGUI.core.details.mux
                 if (string.IsNullOrEmpty(input.Filename))
                     return null;
 
-                string language = null;
-                if (subtitleLanguage.Text != null && LanguageSelectionContainer.Languages.ContainsKey(subtitleLanguage.Text))
-                    language = LanguageSelectionContainer.Languages[subtitleLanguage.Text];
-                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, (int)audioDelay.Value);
+                int iDelay = 0;
+                if (showDelay)
+                    iDelay = (int)audioDelay.Value;
+                bool bDefault = false;
+                if (showDefaultSubtitleStream)
+                    bDefault = chkDefaultStream.Checked;
+                bool bForce = false;
+                if (showForceSubtitleStream)
+                    bForce = chkForceStream.Checked;
+
+                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, iDelay, bDefault, bForce, _trackInfo);
             }
 
             set
@@ -62,9 +70,17 @@ namespace MeGUI.core.details.mux
 
                 input.Filename = value.path;
                 if (!string.IsNullOrEmpty(value.language))
-                    subtitleLanguage.SelectedValue = value.language;
+                {
+                    if (LanguageSelectionContainer.Languages.ContainsValue(value.language))
+                        subtitleLanguage.Text = LanguageSelectionContainer.lookupISOCode(value.language);
+                    else
+                        subtitleLanguage.Text = value.language;
+                }
                 subName.Text = value.name;
                 audioDelay.Value = value.delay;
+                chkDefaultStream.Checked = value.bDefaultTrack;
+                chkForceStream.Checked = value.bForceTrack;
+                _trackInfo = value.MuxOnlyInfo;
             }
         }
 
@@ -76,11 +92,38 @@ namespace MeGUI.core.details.mux
                 showDelay = value;
                 delayLabel.Visible = value;
                 audioDelay.Visible = value;
-                if (!value) audioDelay.Value = 0;
             }
             get
             {
                 return showDelay;
+            }
+        }
+
+        private bool showDefaultSubtitleStream;
+        public bool ShowDefaultSubtitleStream
+        {
+            set
+            {
+                showDefaultSubtitleStream = value;
+                chkDefaultStream.Visible = value;
+            }
+            get
+            {
+                return showDefaultSubtitleStream;
+            }
+        }
+
+        private bool showForceSubtitleStream;
+        public bool ShowForceSubtitleStream
+        {
+            set
+            {
+                showForceSubtitleStream = value;
+                chkForceStream.Visible = value;
+            }
+            get
+            {
+                return showForceSubtitleStream;
             }
         }
 
@@ -93,6 +136,11 @@ namespace MeGUI.core.details.mux
         public void SetLanguage(string lang)
         {
             subtitleLanguage.SelectedItem = lang;
+        }
+
+        public void SetAutoEncodeMode()
+        {
+            audioDelay.Enabled = input.Enabled = false;
         }
 
         private void removeSubtitleTrack_Click(object sender, EventArgs e)
@@ -115,7 +163,44 @@ namespace MeGUI.core.details.mux
         private void input_FileSelected(FileBar sender, FileBarEventArgs args)
         {
             audioDelay.Value = PrettyFormatting.getDelayAndCheck(input.Filename) ?? 0;
+
+            bool bFound = false;
+            foreach (KeyValuePair<string,string> strLanguage in LanguageSelectionContainer.Languages)
+            {
+                if (input.Filename.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                {
+                    SetLanguage(strLanguage.Key);
+                    bFound = true;
+                    break;
+                }
+            }
+            if (!bFound && input.Filename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".idx"))
+            {
+                List<SubtitleInfo> subTracks;
+                idxReader.readFileProperties(input.Filename, out subTracks);
+                if (subTracks.Count > 0)
+                    SetLanguage(LanguageSelectionContainer.Short2FullLanguageName(subTracks[0].Name));
+            }
             raiseEvent();
+        }
+
+        private void chkForceStream_CheckedChanged(object sender, EventArgs e)
+        {
+            string strForceName = MeGUI.MainForm.Instance.Settings.AppendToForcedStreams;
+
+            if (String.IsNullOrEmpty(strForceName))
+                return;
+
+            if (chkForceStream.Checked && !subName.Text.EndsWith(strForceName))
+            {
+                if (!String.IsNullOrEmpty(subName.Text) && !subName.Text.EndsWith(" "))
+                    subName.Text += " ";
+                subName.Text += strForceName;
+            }
+            else if (!chkForceStream.Checked && subName.Text.EndsWith(strForceName))
+            {
+                subName.Text = (subName.Text.Substring(0, subName.Text.Length - strForceName.Length)).TrimEnd();
+            }
         }
     }
 }

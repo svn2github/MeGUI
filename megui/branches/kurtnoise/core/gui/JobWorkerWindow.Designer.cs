@@ -59,7 +59,7 @@ namespace MeGUI.core.gui
             groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             groupBox1.Location = new System.Drawing.Point(4, 28);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(557, 437);
+            groupBox1.Size = new System.Drawing.Size(635, 201);
             groupBox1.TabIndex = 33;
             groupBox1.TabStop = false;
             groupBox1.Text = "Worker-Local Queue";
@@ -67,17 +67,15 @@ namespace MeGUI.core.gui
             // jobQueue1
             // 
             this.jobQueue1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jobQueue1.Location = new System.Drawing.Point(3, 16);
+            this.jobQueue1.Location = new System.Drawing.Point(3, 17);
             this.jobQueue1.Name = "jobQueue1";
             this.jobQueue1.Padding = new System.Windows.Forms.Padding(2);
             this.jobQueue1.PauseResumeMode = MeGUI.core.gui.PauseResumeMode.Disabled;
-            this.jobQueue1.SaveSettings = true;
-            this.jobQueue1.SettingsKey = "JobQueue";
-            this.jobQueue1.Size = new System.Drawing.Size(551, 392);
+            this.jobQueue1.Size = new System.Drawing.Size(629, 155);
             this.jobQueue1.StartStopMode = MeGUI.core.gui.StartStopMode.Start;
             this.jobQueue1.TabIndex = 0;
-            this.jobQueue1.StartClicked += new System.EventHandler(this.jobQueue1_StartClicked);
             this.jobQueue1.AbortClicked += new System.EventHandler(this.jobQueue1_AbortClicked);
+            this.jobQueue1.StartClicked += new System.EventHandler(this.jobQueue1_StartClicked);
             this.jobQueue1.StopClicked += new System.EventHandler(this.jobQueue1_StopClicked);
             // 
             // panel1
@@ -86,9 +84,9 @@ namespace MeGUI.core.gui
             this.panel1.Controls.Add(this.progressLabel);
             this.panel1.Controls.Add(this.jobProgress);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(3, 408);
+            this.panel1.Location = new System.Drawing.Point(3, 172);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(551, 26);
+            this.panel1.Size = new System.Drawing.Size(629, 26);
             this.panel1.TabIndex = 2;
             // 
             // progressLabel
@@ -105,23 +103,23 @@ namespace MeGUI.core.gui
             // 
             // jobProgress
             // 
-            this.jobProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.jobProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.jobProgress.Location = new System.Drawing.Point(58, 3);
             this.jobProgress.Margin = new System.Windows.Forms.Padding(0);
             this.jobProgress.Name = "jobProgress";
-            this.jobProgress.Size = new System.Drawing.Size(493, 23);
+            this.jobProgress.Size = new System.Drawing.Size(571, 23);
             this.jobProgress.TabIndex = 30;
             // 
             // helpButton1
             // 
-            helpButton1.ArticleName = "Job Worker Window";
+            helpButton1.ArticleName = "Parallel job execution";
             helpButton1.AutoSize = true;
             helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             helpButton1.Location = new System.Drawing.Point(3, 3);
             helpButton1.Name = "helpButton1";
-            helpButton1.Size = new System.Drawing.Size(48, 23);
+            helpButton1.Size = new System.Drawing.Size(38, 23);
             helpButton1.TabIndex = 36;
             // 
             // flowLayoutPanel2
@@ -130,9 +128,9 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel2.Controls.Add(helpButton1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(4, 465);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(4, 229);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(557, 29);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(635, 29);
             this.flowLayoutPanel2.TabIndex = 36;
             // 
             // menuStrip1
@@ -142,7 +140,7 @@ namespace MeGUI.core.gui
             this.progressWindowToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(4, 4);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(557, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(635, 24);
             this.menuStrip1.TabIndex = 37;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -161,27 +159,27 @@ namespace MeGUI.core.gui
             // 
             this.changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
             this.changeNameToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
             this.changeNameToolStripMenuItem.Text = "Change name";
             this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(269, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(308, 6);
             // 
             // shutDownWhenFinishedLocalQueueToolStripMenuItem
             // 
             this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Name = "shutDownWhenFinishedLocalQueueToolStripMenuItem";
-            this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
-            this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Text = "Shut down when finished local queue";
+            this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
+            this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Text = "Shut down worker when finished local queue";
             this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Click += new System.EventHandler(this.shutDownWhenFinishedLocalQueueToolStripMenuItem_Click);
             // 
             // shutDownWorkerNowToolStripMenuItem
             // 
             this.shutDownWorkerNowToolStripMenuItem.Name = "shutDownWorkerNowToolStripMenuItem";
             this.shutDownWorkerNowToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.shutDownWorkerNowToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.shutDownWorkerNowToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
             this.shutDownWorkerNowToolStripMenuItem.Text = "Shut down worker now";
             this.shutDownWorkerNowToolStripMenuItem.Click += new System.EventHandler(this.shutDownWorkerNowToolStripMenuItem_Click);
             // 
@@ -205,21 +203,18 @@ namespace MeGUI.core.gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(565, 498);
+            this.ClientSize = new System.Drawing.Size(643, 262);
             this.Controls.Add(groupBox1);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.menuStrip1);
-            this.DataBindings.Add(new System.Windows.Forms.Binding("WindowState", global::MeGUI.Properties.Settings.Default, "JobWorkerWindowState", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "JobWorker";
             this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "Job Worker Window";
-            this.WindowState = global::MeGUI.Properties.Settings.Default.JobWorkerWindowState;
-            this.ClientSizeChanged += new System.EventHandler(this.JobWorker_ClientSizeChanged);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.JobWorker_FormClosed);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.Configuration.IPersistComponentSettings)(this.jobQueue1)).LoadComponentSettings();
             this.panel1.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();

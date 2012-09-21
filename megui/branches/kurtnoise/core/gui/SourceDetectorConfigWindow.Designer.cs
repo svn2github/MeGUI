@@ -60,7 +60,7 @@ namespace MeGUI
             this.analysisPercentLabel.AutoSize = true;
             this.analysisPercentLabel.Location = new System.Drawing.Point(12, 11);
             this.analysisPercentLabel.Name = "analysisPercentLabel";
-            this.analysisPercentLabel.Size = new System.Drawing.Size(88, 13);
+            this.analysisPercentLabel.Size = new System.Drawing.Size(90, 13);
             this.analysisPercentLabel.TabIndex = 0;
             this.analysisPercentLabel.Text = "Analysis Percent:";
             // 
@@ -73,7 +73,7 @@ namespace MeGUI
             0,
             0});
             this.analysisPercent.Name = "analysisPercent";
-            this.analysisPercent.Size = new System.Drawing.Size(120, 20);
+            this.analysisPercent.Size = new System.Drawing.Size(120, 21);
             this.analysisPercent.TabIndex = 1;
             this.analysisPercent.Value = new decimal(new int[] {
             1,
@@ -86,7 +86,7 @@ namespace MeGUI
             this.minAnalyseSectionsLabel.AutoSize = true;
             this.minAnalyseSectionsLabel.Location = new System.Drawing.Point(12, 37);
             this.minAnalyseSectionsLabel.Name = "minAnalyseSectionsLabel";
-            this.minAnalyseSectionsLabel.Size = new System.Drawing.Size(133, 13);
+            this.minAnalyseSectionsLabel.Size = new System.Drawing.Size(134, 13);
             this.minAnalyseSectionsLabel.TabIndex = 0;
             this.minAnalyseSectionsLabel.Text = "Minimum analysis sections:";
             // 
@@ -104,7 +104,7 @@ namespace MeGUI
             0,
             0});
             this.minAnalyseSections.Name = "minAnalyseSections";
-            this.minAnalyseSections.Size = new System.Drawing.Size(120, 20);
+            this.minAnalyseSections.Size = new System.Drawing.Size(120, 21);
             this.minAnalyseSections.TabIndex = 1;
             this.minAnalyseSections.Value = new decimal(new int[] {
             150,
@@ -117,7 +117,7 @@ namespace MeGUI
             this.hybridThresholdLabel.AutoSize = true;
             this.hybridThresholdLabel.Location = new System.Drawing.Point(12, 63);
             this.hybridThresholdLabel.Name = "hybridThresholdLabel";
-            this.hybridThresholdLabel.Size = new System.Drawing.Size(107, 13);
+            this.hybridThresholdLabel.Size = new System.Drawing.Size(114, 13);
             this.hybridThresholdLabel.TabIndex = 0;
             this.hybridThresholdLabel.Text = "Hybrid Threshold (%):";
             // 
@@ -130,7 +130,7 @@ namespace MeGUI
             0,
             0});
             this.hybridThreshold.Name = "hybridThreshold";
-            this.hybridThreshold.Size = new System.Drawing.Size(120, 20);
+            this.hybridThreshold.Size = new System.Drawing.Size(120, 21);
             this.hybridThreshold.TabIndex = 1;
             this.hybridThreshold.Value = new decimal(new int[] {
             5,
@@ -143,7 +143,7 @@ namespace MeGUI
             this.hybridFOThresholdLabel.AutoSize = true;
             this.hybridFOThresholdLabel.Location = new System.Drawing.Point(12, 89);
             this.hybridFOThresholdLabel.Name = "hybridFOThresholdLabel";
-            this.hybridFOThresholdLabel.Size = new System.Drawing.Size(161, 13);
+            this.hybridFOThresholdLabel.Size = new System.Drawing.Size(170, 13);
             this.hybridFOThresholdLabel.TabIndex = 0;
             this.hybridFOThresholdLabel.Text = "Hybrid Field Order Threshold (%):";
             // 
@@ -156,7 +156,7 @@ namespace MeGUI
             0,
             0});
             this.hybridFOThreshold.Name = "hybridFOThreshold";
-            this.hybridFOThreshold.Size = new System.Drawing.Size(120, 20);
+            this.hybridFOThreshold.Size = new System.Drawing.Size(120, 21);
             this.hybridFOThreshold.TabIndex = 1;
             this.hybridFOThreshold.Value = new decimal(new int[] {
             10,
@@ -169,7 +169,7 @@ namespace MeGUI
             this.portionThresholdLabel.AutoSize = true;
             this.portionThresholdLabel.Location = new System.Drawing.Point(12, 161);
             this.portionThresholdLabel.Name = "portionThresholdLabel";
-            this.portionThresholdLabel.Size = new System.Drawing.Size(93, 13);
+            this.portionThresholdLabel.Size = new System.Drawing.Size(95, 13);
             this.portionThresholdLabel.TabIndex = 0;
             this.portionThresholdLabel.Text = "Portion Threshold:";
             // 
@@ -184,7 +184,7 @@ namespace MeGUI
             0,
             0});
             this.portionThreshold.Name = "portionThreshold";
-            this.portionThreshold.Size = new System.Drawing.Size(120, 20);
+            this.portionThreshold.Size = new System.Drawing.Size(120, 21);
             this.portionThreshold.TabIndex = 1;
             this.portionThreshold.Value = new decimal(new int[] {
             5,
@@ -197,7 +197,7 @@ namespace MeGUI
             this.maximumPortionsLabel.AutoSize = true;
             this.maximumPortionsLabel.Location = new System.Drawing.Point(12, 187);
             this.maximumPortionsLabel.Name = "maximumPortionsLabel";
-            this.maximumPortionsLabel.Size = new System.Drawing.Size(147, 13);
+            this.maximumPortionsLabel.Size = new System.Drawing.Size(150, 13);
             this.maximumPortionsLabel.TabIndex = 0;
             this.maximumPortionsLabel.Text = "Maximum Number of Portions:";
             // 
@@ -211,7 +211,7 @@ namespace MeGUI
             0,
             0});
             this.maximumPortions.Name = "maximumPortions";
-            this.maximumPortions.Size = new System.Drawing.Size(120, 20);
+            this.maximumPortions.Size = new System.Drawing.Size(120, 21);
             this.maximumPortions.TabIndex = 1;
             this.maximumPortions.Value = new decimal(new int[] {
             5,
@@ -224,7 +224,7 @@ namespace MeGUI
             this.portionsAllowed.AutoSize = true;
             this.portionsAllowed.Location = new System.Drawing.Point(15, 136);
             this.portionsAllowed.Name = "portionsAllowed";
-            this.portionsAllowed.Size = new System.Drawing.Size(104, 17);
+            this.portionsAllowed.Size = new System.Drawing.Size(105, 17);
             this.portionsAllowed.TabIndex = 2;
             this.portionsAllowed.Text = "Portions Allowed";
             this.portionsAllowed.UseVisualStyleBackColor = true;
@@ -279,12 +279,12 @@ namespace MeGUI
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
-            this.helpButton1.ArticleName = "Source detector configuration window";
+            this.helpButton1.ArticleName = "Source Detector";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(15, 212);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 16;
             // 
             // SourceDetectorConfigWindow
@@ -310,12 +310,12 @@ namespace MeGUI
             this.Controls.Add(this.minAnalyseSectionsLabel);
             this.Controls.Add(this.analysisPercent);
             this.Controls.Add(this.analysisPercentLabel);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SourceDetectorConfigWindow";
-            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "MeGUI - Source Detector Configuration";
             ((System.ComponentModel.ISupportInitialize)(this.analysisPercent)).EndInit();

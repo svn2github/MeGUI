@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -61,6 +61,17 @@ namespace MeGUI
                 return info;
             }
         }
+        public string FileType
+        {
+            get
+            {
+                return fileType.Text; ;
+            }
+            set
+            {
+                fileType.Text = value;
+            }
+        }
         #endregion
         #region generic handlers: filetype, profiles and codec. Also, encoder provider
 
@@ -107,16 +118,7 @@ namespace MeGUI
         private void videoInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
             if (!string.IsNullOrEmpty(videoInput.Filename))
-            {
-                if (findDGSource(videoInput.Filename))
-                {
-                    if (VideoUtil.manageCUVIDServer())
-                        openVideoFile(videoInput.Filename);
-                }
-                else
-                    openVideoFile(videoInput.Filename);
-            }
-            editZonesButton.Enabled = !string.IsNullOrEmpty(videoInput.Filename);
+                openVideoFile(videoInput.Filename);
         }
 
         private void videoOutput_FileSelected(FileBar sender, FileBarEventArgs args)
@@ -138,13 +140,12 @@ namespace MeGUI
             bool videoLoaded = player.loadVideo(mainForm, fileName, PREVIEWTYPE.CREDITS, true);
             if (videoLoaded)
             {
-                info.DAR = info.DAR ?? player.File.Info.DAR;
+                info.DAR = info.DAR ?? player.File.VideoInfo.DAR;
                 player.DAR = info.DAR;
-
-
                 player.IntroCreditsFrameSet += new IntroCreditsFrameSetCallback(player_IntroCreditsFrameSet);
                 player.Closed += new EventHandler(player_Closed);
                 player.Show();
+                player.SetScreenSize();
                 if (mainForm.Settings.AlwaysOnTop) player.TopMost = true;
             }
         }
@@ -174,10 +175,15 @@ namespace MeGUI
             mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentSettings.Clone(),
                 info.IntroEndFrame, info.CreditsStartFrame, info.DAR, PrerenderJob, true, info.Zones);
         }
+        private bool bInitialStart = true;
         private void fileType_SelectedIndexChanged(object sender, EventArgs e)
         {
             videoOutput.Filter = CurrentVideoOutputType.OutputFilterString;
             this.VideoOutput = Path.ChangeExtension(this.VideoOutput, CurrentVideoOutputType.Extension);
+            if (!bInitialStart)
+                MainForm.Instance.Settings.MainFileFormat = fileType.Text;
+            else
+                bInitialStart = false;
         }
         /// <summary>
         /// enables / disables output fields depending on the codec configuration
@@ -204,6 +210,9 @@ namespace MeGUI
         public string verifyVideoSettings()
         {
             // test for valid input filename
+            if (String.IsNullOrEmpty(this.VideoInput))
+                return "Please specify a video input file";
+
             string fileErr = MainForm.verifyInputFile(this.VideoInput);
             if (fileErr != null)
             {
@@ -237,6 +246,9 @@ namespace MeGUI
         }
         public void openVideoFile(string fileName)
         {
+            if (AudioUtil.AVSFileHasAudio(fileName))
+                mainForm.Audio.openAudioFile(fileName);
+
             info.CreditsStartFrame = -1;
             info.IntroEndFrame = -1;
             info.VideoInput = fileName;
@@ -249,12 +261,12 @@ namespace MeGUI
             {
                 using (AvsFile avi = AvsFile.OpenScriptFile(fileName))
                 {
-                    info.DAR = avi.Info.DAR;
+                    info.DAR = avi.VideoInfo.DAR;
                 }
             }
             string filePath;
             if (string.IsNullOrEmpty(filePath = mainForm.Settings.DefaultOutputDir))
-                    filePath = Path.GetDirectoryName(fileName);
+                filePath = Path.GetDirectoryName(fileName);
             string fileNameNoExtension = Path.GetFileNameWithoutExtension(fileName);
             this.VideoOutput = Path.Combine(filePath, fileNameNoExtension) + mainForm.Settings.VideoExtension + ".extension";
             this.VideoOutput = Path.ChangeExtension(this.VideoOutput, this.CurrentVideoOutputType.Extension);
@@ -267,23 +279,6 @@ namespace MeGUI
                 return true;
             else
                 return false;
-        }
-        public bool findDGSource(string FileName)
-        {
-            
-            using (StreamReader sr = new StreamReader(FileName))
-            {
-                string line = string.Empty;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    if (line.ToLower().Contains("dgsource"))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         #endregion
@@ -397,7 +392,6 @@ namespace MeGUI
             this.VideoInput = "";
             this.VideoOutput = "";
             info.CreditsStartFrame = 0;
-            editZonesButton.Enabled = false;
             info.Zones = null;
         }
         #endregion
@@ -427,6 +421,12 @@ namespace MeGUI
 
         private void editZonesButton_Click(object sender, EventArgs e)
         {
+            if (String.IsNullOrEmpty(videoInput.Filename))
+            {
+                MessageBox.Show("Load an avisynth script first...", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             ClosePlayer();
             ZonesWindow zw = new ZonesWindow(mainForm, VideoInput);
             zw.Zones = Info.Zones;

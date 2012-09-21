@@ -142,6 +142,7 @@ namespace MeGUI.core.gui
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 47;
             this.cancelButton.Text = "Cancel";
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // okButton
             // 
@@ -161,7 +162,12 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.presetsGroupbox);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ProfileConfigurationWindow";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProfileConfigurationWindow_FormClosing);
             this.presetsGroupbox.ResumeLayout(false);
             this.ResumeLayout(false);
 

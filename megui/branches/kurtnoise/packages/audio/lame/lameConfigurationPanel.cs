@@ -33,6 +33,9 @@ namespace MeGUI.packages.audio.lame
         public lameConfigurationPanel():base()
         {
             InitializeComponent();
+            cbrBitrate.DataSource = MP3Settings.SupportedBitrates;
+            cbrBitrate.BindingContext = new BindingContext();
+            cbrBitrate.SelectedItem = 128;
         }
 		#region properties
         protected override bool IsMultichanelSupported
@@ -50,36 +53,46 @@ namespace MeGUI.packages.audio.lame
 	        get
 	        {
                 MP3Settings ms = new MP3Settings();
-                if (rbBitrate.Checked)
-                {
-                    if (cbCBR.Checked)
-                        ms.BitrateMode = BitrateManagementMode.CBR;
-                    else
-                        ms.BitrateMode = BitrateManagementMode.ABR;
-                    ms.Bitrate = (int)this.tbBitrate.Value;
-                }
-                else
-                {
+                if (vbrMode.Checked)
                     ms.BitrateMode = BitrateManagementMode.VBR;
-                    ms.Quality = (int)this.tbQuality.Value;
-                }
+                else if (abrMode.Checked)
+                    ms.BitrateMode = BitrateManagementMode.ABR;
+                else
+                    ms.BitrateMode = BitrateManagementMode.CBR;
+                ms.Bitrate = (int)cbrBitrate.SelectedItem;
+                ms.AbrBitrate = (int)abrValue.Value;
+                ms.Quality = (int)vbrValue.Value;
                 return ms;
 	        }
 	        set
 	        {
                 MP3Settings ms = value as MP3Settings;
-                switch (ms.BitrateMode)
-                {
-                    case BitrateManagementMode.VBR: rbQuality.Checked = true; cbCBR.Checked = false; break;
-                    case BitrateManagementMode.ABR: rbBitrate.Checked = true; cbCBR.Checked = false; break;
-                    case BitrateManagementMode.CBR: rbBitrate.Checked = true; cbCBR.Checked = true; break;
-                }
-                tbQuality.Value = ms.Quality;
-                tbBitrate.Value = ms.Bitrate;
-
-                target_CheckedChanged(null, null);
+                if (ms.BitrateMode == BitrateManagementMode.ABR)
+                    abrMode.Checked = true;
+                else if (ms.BitrateMode == BitrateManagementMode.VBR)
+                    vbrMode.Checked = true;
+                else
+                    cbrMode.Checked = true;
+                cbrBitrate.SelectedItem = ms.Bitrate;
+                if (ms.AbrBitrate < 8 || ms.AbrBitrate > 320)
+                    abrValue.Value = 128;
+                else
+                    abrValue.Value = ms.AbrBitrate;
+                vbrValue.Value = ms.Quality;	            
 	        }
 	    }
+		#endregion
+		#region buttons
+		/// <summary>
+		/// handles entires into textfiels, blocks entry of non digit characters
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void textField_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (! char.IsDigit(e.KeyChar) && (int)Keys.Back != (int)e.KeyChar)
+				e.Handled = true;
+		}
 		#endregion
 
         #region Editable<MP3Settings> Members
@@ -98,76 +111,23 @@ namespace MeGUI.packages.audio.lame
 
         #endregion
 
-        #region Bitrate Scrollbar
-        private void tbBitrate_Scroll(object sender, EventArgs e)
+        private void cbrMode_CheckedChanged(object sender, EventArgs e)
         {
-            gbBitrate.Text = String.Format("Bitrate ({0} kbps)", tbBitrate.Value);
-        }
-        #endregion
-
-        #region Quality Scrollbar
-        private void tbQuality_Scroll(object sender, EventArgs e)
-        {
-            gbQuality.Text = String.Format("Quality (Q = {0}0)", tbQuality.Value);
-
-            switch (tbQuality.Value)
-            {
-                case 10: tbBitrate.Value = 245; break; //preset fast extreme
-                case  9: tbBitrate.Value = 225; break;
-                case  8: tbBitrate.Value = 190; break; //preset fast standard 
-                case  7: tbBitrate.Value = 175; break;
-                case  6: tbBitrate.Value = 165; break; //preset fast medium
-                case  5: tbBitrate.Value = 130; break;
-                case  4: tbBitrate.Value = 115; break;
-                case  3: tbBitrate.Value = 100; break;
-                case  2: tbBitrate.Value = 85;  break;
-                case  1: tbBitrate.Value = 65;  break;
-            }
-
-            tbBitrate_Scroll(sender, e);
-        }
-        #endregion
-
-        #region Target
-        private void target_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbBitrate.Checked)
-            {
-                gbQuality.Enabled = false;
-                gbBitrate.Enabled = true;
-            }
-            else
-            {
-                gbBitrate.Enabled = false;
-                gbQuality.Enabled = true;
-            }
-
-            tbBitrate_Scroll(null, null);
-            tbQuality_Scroll(null, null);
-        }
-        #endregion
-
-        #region website link
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                VisitLink();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Unable to open link that was clicked.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            cbrBitrate.Enabled = true;
+            vbrValue.Enabled = abrValue.Enabled = false;
         }
 
-        private void VisitLink()
+        private void abrMode_CheckedChanged(object sender, EventArgs e)
         {
-            //Call the Process.Start method to open the default browser 
-            //with a URL:
-            System.Diagnostics.Process.Start("http://lame.sourceforge.net");
+            abrValue.Enabled = true;
+            vbrValue.Enabled = cbrBitrate.Enabled = false;
         }
-        #endregion
 
+        private void vbrMode_CheckedChanged(object sender, EventArgs e)
+        {
+            vbrValue.Enabled = true;
+            abrValue.Enabled = cbrBitrate.Enabled = false;
+        }
     }
 }
 

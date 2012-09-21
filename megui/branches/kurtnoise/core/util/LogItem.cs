@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -70,6 +70,13 @@ namespace MeGUI.core.util
             get { return text; }
         }
 
+        private int iLevel = 0;
+        public int Level
+        {
+            get { return iLevel;  }
+            set { iLevel = value; }
+        }
+
         public ImageType Type
         {
             get { return type; }
@@ -87,10 +94,16 @@ namespace MeGUI.core.util
         {
             this.text = name;
             this.type = type;
+            if (type == ImageType.Warning)
+                MainForm.Instance.setOverlayIcon(System.Drawing.SystemIcons.Warning);
+            else if (type == ImageType.Error)
+                MainForm.Instance.setOverlayIcon(System.Drawing.SystemIcons.Error);
         }
 
         public LogItem Add(LogItem logItem)
         {
+            logItem.Level = iLevel + 1;
+            logItem.WriteLogEntry();
             subEvents.Add(logItem);
             if (SubItemAdded != null)
                 SubItemAdded(this, new EventArgs<LogItem>(logItem));
@@ -104,12 +117,12 @@ namespace MeGUI.core.util
 
         public LogItem LogValue(string name, object value)
         {
-            return LogValue(name, value, ImageType.NoImage);
+            return LogValue(name, value, ImageType.Information);
         }
 
         public LogItem LogValue(string name, object value, ImageType im)
         {
-            return Add(AutomatedLogger.LogValue(name, value, im));
+            return Add(AutomatedLogger.LogValue(string.Format("[{0:G}] {1}", DateTime.Now, name), value, im));
         }
 
         public LogItem LogEvent(string eventName)
@@ -168,12 +181,40 @@ namespace MeGUI.core.util
         private string ToString(int level)
         {
             StringBuilder res = new StringBuilder();
-            res.AppendFormat("{0}[{1}] {2}{3}", dashes(level), Type, Text, Environment.NewLine);
 
-            foreach (LogItem i in SubEvents)
-                res.Append(i.ToString(level + 1));
+            try
+            {
+                res.AppendFormat("{0}[{1}] {2}{3}", dashes(level), Type, Text, Environment.NewLine);
+
+                foreach (LogItem i in SubEvents)
+                    res.Append(i.ToString(level + 1));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
 
             return res.ToString();
+        }
+
+        private void WriteLogEntry()
+        {
+            StringBuilder res = new StringBuilder();
+
+            try
+            {
+                MainForm.Instance.LogLock.WaitOne(10000, false);
+                res.AppendFormat("{0}[{1}] {2}{3}", dashes(iLevel), Type, Text, Environment.NewLine);
+                System.IO.File.AppendAllText(MainForm.Instance.LogFile, res.ToString());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error writing log file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                MainForm.Instance.LogLock.Release();
+            }
         }
 
         private static string dashes(int number)
@@ -330,13 +371,13 @@ namespace MeGUI.core.util
         {
             Exception e = (Exception)o;
 
-            LogItem l = new LogItem(message, i);
-            l.LogValue("Exception message", e.Message);
-            l.LogValue("Stacktrace", e.StackTrace);
-            l.LogValue("Inner exception", e.InnerException);
+            LogItem l = new LogItem(message, ImageType.Error);
+            l.LogValue("Exception message", e.Message, ImageType.Error);
+            l.LogValue("Stacktrace", e.StackTrace, ImageType.Error);
+            l.LogValue("Inner exception", e.InnerException, ImageType.Error);
 
             foreach (DictionaryEntry info in e.Data)
-                l.LogValue(info.Key.ToString(), info.Value);
+                l.LogValue(info.Key.ToString(), info.Value, ImageType.Error);
 
             return l;
         }

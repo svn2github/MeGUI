@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ namespace MeGUI
                     keyFrameBoost, keyframeThreshold, keyframeReduction, overflowControlStrength,
                     maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod,
                     rateControlBuffer, frameDropRatio, xvidProfile, vbvBuffer, vbvMaxRate, vbvPeakRate, hvsMasking;
-        private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, adaptiveQuant, interlaced, bottomFieldFirst, lumiMasking;
+        private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, interlaced, bottomFieldFirst, turbo;
         private decimal bframeThreshold, quantizer;
         private string customQuantizerMatrix;
         public override bool UsesSAR
@@ -117,10 +117,8 @@ namespace MeGUI
             chromaMotion = true;
             closedGOP = true;
             Trellis = true;
-            adaptiveQuant = false;
             bframeThreshold = new decimal(0);
             interlaced = false;
-            lumiMasking = false;
             frameDropRatio = 0;
             bottomFieldFirst = true;
             customQuantizerMatrix = "";
@@ -130,7 +128,8 @@ namespace MeGUI
             vbvPeakRate = 0;
             base.MaxNumberOfPasses = 2;
             FourCCs = FourCCsForMPEG4ASP;
-            hvsMasking = 0;
+            hvsMasking = 1;
+            NbThreads = 0;
         }
         #region properties
         /// I believe we really does'nt need to create this array @ per-instance basis
@@ -146,7 +145,11 @@ namespace MeGUI
             get { return quantizer; }
             set { quantizer = value; }
         }
-
+        public bool Turbo
+        {
+            get { return turbo; }
+            set { turbo = value; }
+        }
         public int MotionSearchPrecision
         {
             get { return motionSearchPrecision; }
@@ -301,11 +304,6 @@ namespace MeGUI
             get { return vhqForBframes; }
             set { vhqForBframes = value; }
         }
-        public bool AdaptiveQuant
-        {
-            get { return adaptiveQuant; }
-            set { adaptiveQuant = value; }
-        }
         public bool Interlaced
         {
             get { return interlaced; }
@@ -320,14 +318,6 @@ namespace MeGUI
         {
             get { return bottomFieldFirst; }
             set { bottomFieldFirst = value; }
-        }
-        /// <summary>
-        /// gets / sets if lumi masking is used
-        /// </summary>
-        public bool LumiMasking
-        {
-            get { return lumiMasking; }
-            set { lumiMasking = value; }
         }
         public decimal BframeThreshold
         {
@@ -344,7 +334,12 @@ namespace MeGUI
         }
         public int HVSMasking
         {
-            get { return hvsMasking; }
+            get 
+            {
+                if (hvsMasking > 1)
+                    hvsMasking = 1;
+                return hvsMasking; 
+            }
             set { hvsMasking = value; }
         }
         #endregion
@@ -369,7 +364,6 @@ namespace MeGUI
                 return true;
             xvidSettings otherSettings = (xvidSettings)settings;
             if (
-               this.AdaptiveQuant != otherSettings.AdaptiveQuant ||
                this.AveragingPeriod != otherSettings.AveragingPeriod ||
                this.BframeThreshold != otherSettings.BframeThreshold ||
                this.BQuantOffset != otherSettings.BQuantOffset ||

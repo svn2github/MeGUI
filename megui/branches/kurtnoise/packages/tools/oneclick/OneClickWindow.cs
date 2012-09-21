@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,44 +21,49 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 using MeGUI.core.details;
-using MeGUI.core.details.video;
-using MeGUI.core.gui;
-using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
 using MeGUI.packages.tools.oneclick;
 
 namespace MeGUI
 {
-
-//    public class OneClickPostProcessor 
     public partial class OneClickWindow : Form
     {
-        List<FileSCBox> audioTrack;
-        List<Label> trackLabel;
-        List<AudioConfigControl> audioConfigControl;
+        #region Variable Declaration
+        LogItem _oLog;
+        List<OneClickStreamControl> audioTracks;
+        List<OneClickStreamControl> subtitleTracks;
+        OneClickSettings _oSettings;
+        private bool bLock;
+        private bool bAutomatedProcessing;
+
+        /// <summary>
+        /// whether we ignore the restrictions on container output type set by the profile
+        /// </summary>
+        private bool ignoreRestrictions = false;
+
+        /// <summary>
+        /// the restrictions from above: the only containers we may use
+        /// </summary>
+        private ContainerType[] acceptableContainerTypes;
+
+        private VideoUtil vUtil;
+        private MainForm mainForm;
+        private MuxProvider muxProvider;
+        private MediaInfoFile _videoInputInfo;
+
+        /// <summary>
+        /// whether the user has selected an output filename
+        /// </summary>
+        private bool outputChosen = false;
+        #endregion
 
         #region profiles
-        void ProfileChanged(object sender, EventArgs e)
-        {
-            if (VideoSettings.EncoderType.ID == "x264")
-                usechaptersmarks.Enabled = true;
-            else
-            {
-                usechaptersmarks.Enabled = false;
-                usechaptersmarks.Checked = usechaptersmarks.Enabled;
-            }            
-            updatePossibleContainers();
-        }
-
         #region OneClick profiles
         private void initOneClickHandler()
         {
@@ -67,17 +72,17 @@ namespace MeGUI
 
         private void initTabs()
         {
-            audioTrack = new List<FileSCBox>();
-            audioTrack.Add(audioTrack1);
-            audioTrack.Add(audioTrack2);
-
-            trackLabel = new List<Label>();
-            trackLabel.Add(track1Label);
-            trackLabel.Add(track2Label);
-
-            audioConfigControl = new List<AudioConfigControl>();
-            audioConfigControl.Add(audio1);
-            audioConfigControl.Add(audio2);
+            audioTracks = new List<OneClickStreamControl>();
+            audioTracks.Add(oneClickAudioStreamControl1);
+            oneClickAudioStreamControl1.StandardStreams = new object[] { "None" };
+            oneClickAudioStreamControl1.SelectedStreamIndex = 0;
+            oneClickAudioStreamControl1.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
+            
+            subtitleTracks = new List<OneClickStreamControl>();
+            subtitleTracks.Add(oneClickSubtitleStreamControl1);
+            oneClickSubtitleStreamControl1.StandardStreams = new object[] { "None" };
+            oneClickSubtitleStreamControl1.SelectedStreamIndex = 0;
+            oneClickSubtitleStreamControl1.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.SubtitleTypes.ValuesArray);
         }
 
         void OneClickProfileChanged(object sender, EventArgs e)
@@ -94,53 +99,26 @@ namespace MeGUI
         #region Audio profiles
         private void initAudioHandler()
         {
-            audio1.initHandler();
-            audio2.initHandler();
+            oneClickAudioStreamControl1.initProfileHandler();
+            oneClickSubtitleStreamControl1.initProfileHandler();
         }
         #endregion
         #endregion
-
-        #region Variable Declaration
-        /// <summary>
-        /// whether we ignore the restrictions on container output type set by the profile
-        /// </summary>
-        private bool ignoreRestrictions = false;
-        
-        /// <summary>
-        /// the restrictions from above: the only containers we may use
-        /// </summary>
-        private ContainerType[] acceptableContainerTypes;
-        
-        private VideoUtil vUtil;
-        private MainForm mainForm;
-        private MuxProvider muxProvider;
-        
-        /// <summary>
-        /// whether the user has selected an output filename
-        /// </summary>
-        private bool outputChosen = false;
-
-        #endregion
         
         #region init
-        public OneClickWindow(MainForm mainForm, JobUtil jobUtil, VideoEncoderProvider vProv, AudioEncoderProvider aProv)
+        public OneClickWindow(MainForm mainForm)
         {
             this.mainForm = mainForm;
+            this._oLog = mainForm.OneClickLog;
             vUtil = new VideoUtil(mainForm);
             this.muxProvider = mainForm.MuxProvider;
             acceptableContainerTypes = muxProvider.GetSupportedContainers().ToArray();
-
             InitializeComponent();
-
-            initTabs();
-
             videoProfile.Manager = mainForm.Profiles;
+            initTabs();
             initAudioHandler();
             avsProfile.Manager = mainForm.Profiles;
             initOneClickHandler();
-
-            audioTrack1.StandardItems = audioTrack2.StandardItems = new object[] { "None" };
-            audioTrack1.SelectedIndex = audioTrack2.SelectedIndex = 0;
 
             //if containerFormat has not yet been set by the oneclick profile, add supported containers
             if (containerFormat.Items.Count == 0)
@@ -153,46 +131,159 @@ namespace MeGUI
             if (devicetype.Items.Count == 0)
             {
                 devicetype.Items.Add("Standard");
-                devicetype.Items.AddRange(muxProvider.GetSupportedDevices().ToArray());
-                this.devicetype.SelectedIndex = 0;
+                devicetype.Items.AddRange(muxProvider.GetSupportedDevices((ContainerType)this.containerFormat.SelectedItem).ToArray());
             }
+            if (containerFormat.SelectedItem.ToString().Equals(mainForm.Settings.AedSettings.Container))
+            {
+                foreach (object o in devicetype.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+                {
+                    if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                    {
+                        devicetype.SelectedItem = o;
+                        break;
+                    }
+                }
+            }
+            else
+                this.devicetype.SelectedIndex = 0;
 
-            showAdvancedOptions_CheckedChanged(null, null);
+            bLock = true;
+            cbGUIMode.DataSource = EnumProxy.CreateArray(new object[] { MeGUISettings.OCGUIMode.Basic, MeGUISettings.OCGUIMode.Default, MeGUISettings.OCGUIMode.Advanced });
+            bLock = false;
+
+            if (MainForm.Instance.Settings.IsDGIIndexerAvailable())
+                input.Filter = "All supported files|*.avs;*.ifo;*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.ifo;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.vc1;*.mpls|All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All DGIndexNV supported files|*.264;*.h264;*.avc;*.m2v;*.mpv;*.vc1;*.mkv;*.vob;*.mpg;*.mpeg;*.m2t;*.m2ts;*.mts;*.tp;*.ts;*.trp|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|AviSynth Scripts|*.avs|IFO DVD files|*.ifo|Blu-Ray Playlist|*.mpls|All files|*.*";
+            else
+                input.Filter = "All supported files|*.avs;*.ifo;*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.ifo;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.mpls|All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|AviSynth Scripts|*.avs|IFO DVD files|*.ifo|Blu-Ray Playlist|*.mpls|All files|*.*";
+            DragDropUtil.RegisterSingleFileDragDrop(input, setInput, delegate() { return input.Filter + "|All folders|*."; });
+            DragDropUtil.RegisterSingleFileDragDrop(output, setOutput);
+            DragDropUtil.RegisterSingleFileDragDrop(chapterFile, null, delegate() { return chapterFile.Filter; });
+            DragDropUtil.RegisterSingleFileDragDrop(workingDirectory, setWorkingDirectory);
         }
         #endregion
 
         #region event handlers
-        private void showAdvancedOptions_CheckedChanged(object sender, EventArgs e)
+        private void cbGUIMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (showAdvancedOptions.Checked)
+            EnumProxy o = cbGUIMode.SelectedItem as EnumProxy;
+            if (o == null)
+                return;
+
+            if (bLock)
+                cbGUIMode.SelectedItem = EnumProxy.Create(MainForm.Instance.Settings.OneClickGUIMode);
+            else
+                MainForm.Instance.Settings.OneClickGUIMode = (MeGUISettings.OCGUIMode)o.RealValue;
+            
+            if (MainForm.Instance.Settings.OneClickGUIMode == MeGUISettings.OCGUIMode.Advanced)
             {
-                if (!tabControl1.TabPages.Contains(tabPage2))
-                    tabControl1.TabPages.Add(tabPage2);
+                audioTab.Height = 175;
+                subtitlesTab.Location = new Point(subtitlesTab.Location.X, 258);
+                subtitlesTab.Visible = true;
+                outputTab.Location = new Point(outputTab.Location.X, 379);
+                this.Height = 583;
                 if (!tabControl1.TabPages.Contains(encoderConfigTab))
                     tabControl1.TabPages.Add(encoderConfigTab);
             }
+            else if (MainForm.Instance.Settings.OneClickGUIMode == MeGUISettings.OCGUIMode.Basic)
+            {
+                audioTab.Height = 90;
+                subtitlesTab.Visible = false;
+                outputTab.Location = new Point(outputTab.Location.X, 173);
+                this.Height = 377;
+                if (tabControl1.TabPages.Contains(encoderConfigTab))
+                    tabControl1.TabPages.Remove(encoderConfigTab);
+            }
             else
             {
-                if (tabControl1.TabPages.Contains(tabPage2))
-                    tabControl1.TabPages.Remove(tabPage2);
+                audioTab.Height = 115;
+                subtitlesTab.Location = new Point(subtitlesTab.Location.X, 198);
+                subtitlesTab.Visible = true;
+                outputTab.Location = new Point(outputTab.Location.X, 319);
+                this.Height = 523;
                 if (tabControl1.TabPages.Contains(encoderConfigTab))
                     tabControl1.TabPages.Remove(encoderConfigTab);
             }
         }
-        private void containerFormat_SelectedIndexChanged_1(object sender, EventArgs e)
+
+        private void containerFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.containerFormat.Text != "MP4")
+            if (this.containerFormat.Text == "MKV")
                 this.devicetype.Enabled = false;
-            else this.devicetype.Enabled = true;
+            else 
+                this.devicetype.Enabled = true;
             updateFilename();
+
+            //add device types
+            devicetype.Items.Clear();
+            devicetype.Items.Add("Standard");
+            devicetype.Items.AddRange(muxProvider.GetSupportedDevices((ContainerType)this.containerFormat.SelectedItem).ToArray());
+            if (containerFormat.SelectedItem.ToString().Equals(mainForm.Settings.AedSettings.Container))
+            {
+                foreach (object o in devicetype.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+                {
+                    if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                    {
+                        devicetype.SelectedItem = o;
+                        break;
+                    }
+                }
+            }
+            else
+                this.devicetype.SelectedIndex = 0;
+        }
+
+        private void updateWorkingName(String strInputFile)
+        {
+            int iPGCNumber = 0;
+            if (_videoInputInfo != null)
+                iPGCNumber = _videoInputInfo.VideoInfo.PGCNumber;
+            
+            if (iPGCNumber > 1)
+            {
+                String strTempName = Path.GetFileNameWithoutExtension(strInputFile);
+                if (strTempName.StartsWith("VTS_", StringComparison.InvariantCultureIgnoreCase) &&
+                    strTempName.EndsWith("1", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    strTempName = strTempName.Substring(0, strTempName.Length - 1) + iPGCNumber;
+                    strTempName = Path.Combine(Path.GetDirectoryName(strInputFile), strTempName + Path.GetExtension(strInputFile));
+                    workingName.Text = PrettyFormatting.ExtractWorkingName(strTempName, _oSettings.WorkingNameReplace, _oSettings.WorkingNameReplaceWith);
+                }
+                else
+                    workingName.Text = PrettyFormatting.ExtractWorkingName(strInputFile, _oSettings.WorkingNameReplace, _oSettings.WorkingNameReplaceWith);
+            }
+            else
+                workingName.Text = PrettyFormatting.ExtractWorkingName(strInputFile, _oSettings.WorkingNameReplace, _oSettings.WorkingNameReplaceWith);
+
+            this.updateFilename();
         }
 
         private void updateFilename()
         {
             if (!outputChosen)
             {
-                output.Filename = Path.Combine(workingDirectory.Filename, workingName.Text + "." +
-                    ((ContainerType)containerFormat.SelectedItem).Extension);
+                String strVideoInput = input.SelectedText;
+                if (!String.IsNullOrEmpty(strVideoInput) && File.Exists(strVideoInput))
+                {
+                    if (!String.IsNullOrEmpty(_oSettings.DefaultOutputDirectory) && Directory.Exists(_oSettings.DefaultOutputDirectory))
+                    {
+                        output.Filename = Path.Combine(_oSettings.DefaultOutputDirectory, workingName.Text + "." +
+                            ((ContainerType)containerFormat.SelectedItem).Extension);
+                    }
+                    else if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultOutputDir) && Directory.Exists(MainForm.Instance.Settings.DefaultOutputDir))
+                    {
+                        output.Filename = Path.Combine(MainForm.Instance.Settings.DefaultOutputDir, workingName.Text + "." +
+                            ((ContainerType)containerFormat.SelectedItem).Extension);
+                    }
+                    else
+                    {
+                        output.Filename = Path.Combine(Path.GetDirectoryName(strVideoInput), workingName.Text + "." +
+                            ((ContainerType)containerFormat.SelectedItem).Extension);
+                    }
+                }
+                else
+                {
+                    output.Filename = Path.ChangeExtension(output.Filename, ((ContainerType)containerFormat.SelectedItem).Extension);
+                }
                 outputChosen = false;
             }
             else
@@ -202,18 +293,37 @@ namespace MeGUI
             output.Filter = ((ContainerType)containerFormat.SelectedItem).OutputFilterString;
         }
 
-        private void input_FileSelected(FileBar sender, FileBarEventArgs args)
+        private void input_SelectionChanged(object sender, string val)
         {
-            openInput(input.Filename);
+            if (!String.IsNullOrEmpty(input.SelectedText))
+            {
+                if (!bAutomatedProcessing && !bLock)
+                    openInput(input.SelectedText);
+            }   
+        }
+
+        private void setOutput(string strFileName)
+        {
+            output.Filename = strFileName;
+            output_FileSelected(null, null);  
         }
 
         private void output_FileSelected(FileBar sender, FileBarEventArgs args)
         {
             outputChosen = true;
+            updateFilename();
+        }
+
+        private void setWorkingDirectory(string strFolder)
+        {
+            workingDirectory.Filename = strFolder;
+            updateFilename();
         }
 
         private void workingDirectory_FileSelected(FileBar sender, FileBarEventArgs args)
         {
+            if (File.Exists(workingDirectory.Filename))
+                workingDirectory.Filename = Path.GetDirectoryName(workingDirectory.Filename);
             updateFilename();
         }
 
@@ -221,71 +331,119 @@ namespace MeGUI
         {
             updateFilename();
         }
-        
-        public void openInput(string fileName)
+
+        public void setInput(string strFileorFolderName)
         {
-            input.Filename = fileName;
-            Dar? ar;
-            int maxHorizontalResolution;
-            List<AudioTrackInfo> audioTracks;
-            List<SubtitleInfo> subtitles;
-            vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
-
-            List<object> trackNames = new List<object>();
-            trackNames.Add("None");
-            foreach (object o in audioTracks)
-                trackNames.Add(o);
-
-            foreach (FileSCBox b in audioTrack)
-                b.StandardItems = trackNames.ToArray();
-
-            foreach (AudioTrackInfo ati in audioTracks)
+            input.AddCustomItem(strFileorFolderName);
+            input.SelectedObject = strFileorFolderName;
+        }
+        
+        private void openInput(string fileName)
+        {
+            if (!Directory.Exists(fileName) && !File.Exists(fileName))
             {
-                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage1.ToLower()) &&
-                    audioTrack1.SelectedIndex == 0)
-                {
-                    audioTrack1.SelectedObject = ati;
-                    continue;
-                }
-                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()) &&
-                    audioTrack2.SelectedIndex == 0)
-                {
-                    audioTrack2.SelectedObject = ati;
-                    continue;
-                }
+                MessageBox.Show("Input " + fileName + " does not exists", "Input not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
-            // If nothing matches DefaultLanguage select 1st track
-            if (audioTrack1.SelectedIndex == 0)
+            if (_oLog == null)
             {
-                audioTrack1.SelectedObject = audioTracks[0];
+                _oLog = mainForm.Log.Info("OneClick");
+                mainForm.OneClickLog = _oLog;
             }
-  
+
+            this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            goButton.Enabled = false;
+            OneClickProcessing oProcessor = new OneClickProcessing(this, fileName, _oSettings, _oLog);
+        }
+
+        public void setOpenFailure()
+        {
+            this.Cursor = System.Windows.Forms.Cursors.Default;
+            MessageBox.Show("This file or folder cannot be used in OneClick mode.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public void setBatchProcessing(List<OneClickFilesToProcess> arrFilesToProcess, OneClickSettings oSettings)
+        {
+            if (_oLog == null)
+            {
+                _oLog = mainForm.Log.Info("OneClick");
+                mainForm.OneClickLog = _oLog;
+            }
+            bAutomatedProcessing = true;
+            this.Settings = oSettings;
+            OneClickProcessing oProcessor = new OneClickProcessing(this, arrFilesToProcess, oSettings, _oLog);
+            return;
+        }
+
+        public void setInputData(MediaInfoFile iFile, List<OneClickFilesToProcess> arrFilesToProcess)
+        {
+            if (iFile == null)
+                return;
+
+            if (!bAutomatedProcessing && arrFilesToProcess.Count > 0)
+            {
+                string question = "Do you want to process all " + (arrFilesToProcess.Count + 1) + " files in the folder?\r\nAll files will be processed with the current settings\r\nin the OneClick profile \"" + oneclickProfile.SelectedProfile.Name + "\".";
+                DialogResult dr = MessageBox.Show(question, "Automated folder processing", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == System.Windows.Forms.DialogResult.Yes)
+                {
+                    bAutomatedProcessing = true;
+                    this.Settings = (OneClickSettings)oneclickProfile.SelectedProfile.BaseSettings;
+                }
+            }
+            if (input.SelectedSCItem == null || !iFile.FileName.Equals((string)input.SelectedObject))
+            {
+                bLock = true;
+                input.StandardItems = new object[] { iFile.FileName };
+                input.SelectedIndex = 0;
+                bLock = false;
+            }
+
+            _videoInputInfo = iFile;
+
+            int maxHorizontalResolution = int.Parse(iFile.VideoInfo.Width.ToString());
+       
+            List<OneClickStream> arrAudioTrackInfo = new List<OneClickStream>();
+            foreach (AudioTrackInfo oInfo in iFile.AudioInfo.Tracks)
+                arrAudioTrackInfo.Add(new OneClickStream(oInfo));
+            AudioResetTrack(arrAudioTrackInfo, _oSettings);
+
+            List<OneClickStream> arrSubtitleTrackInfo = new List<OneClickStream>();
+            foreach (SubtitleTrackInfo oInfo in iFile.SubtitleInfo.Tracks)
+                arrSubtitleTrackInfo.Add(new OneClickStream(oInfo));
+            SubtitleResetTrack(arrSubtitleTrackInfo, _oSettings);
+
             horizontalResolution.Maximum = maxHorizontalResolution;
             
-            string chapterFile = VideoUtil.getChapterFile(fileName);
-            if (File.Exists(chapterFile))
-                this.chapterFile.Filename = chapterFile;
-            if (string.IsNullOrEmpty(this.chapterFile.Filename))
+            // Detect Chapters
+            if (_videoInputInfo.hasMKVChapters())
+                this.chapterFile.Filename = "<internal chapters>";
+            else if (Path.GetExtension(iFile.FileName).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".vob"))
+                this.chapterFile.Filename = "<internal chapters>";
+            else if (_videoInputInfo.getEac3toChaptersTrack() > -1)
+                this.chapterFile.Filename = "<internal chapters>";
+            else
             {
-                bool useqpFile = false;
-                if (usechaptersmarks.Checked && usechaptersmarks.Enabled)
-                    useqpFile = true;
-                VideoUtil.getChaptersFromIFO(fileName, useqpFile);
-                chapterFile = VideoUtil.getChapterFile(fileName);
+                string chapterFile = VideoUtil.getChapterFile(iFile.FileName);
                 if (File.Exists(chapterFile))
                     this.chapterFile.Filename = chapterFile;
             }
 
-            if (string.IsNullOrEmpty(workingDirectory.Filename = mainForm.Settings.DefaultOutputDir))
-                workingDirectory.Filename = Path.GetDirectoryName(fileName);
+            if (string.IsNullOrEmpty(workingDirectory.Filename))
+                workingDirectory.Filename = Path.GetDirectoryName(iFile.FileName);
 
-            workingName.Text = PrettyFormatting.ExtractWorkingName(fileName);
-            this.updateFilename();
-            this.ar.Value = ar;            
+            updateWorkingName(iFile.FileName);
+
+            this.ar.Value = _videoInputInfo.VideoInfo.DAR;
 
             if (VideoSettings.EncoderType.ID == "x264" && this.chapterFile.Filename != null)
-                this.usechaptersmarks.Enabled = true; 
+                this.usechaptersmarks.Enabled = true;
+
+            if (bAutomatedProcessing)
+                createOneClickJob(arrFilesToProcess);
+
+            this.Cursor = System.Windows.Forms.Cursors.Default;
+            goButton.Enabled = true;
         }
 
         private bool beingCalled;
@@ -299,26 +457,25 @@ namespace MeGUI
             List<AudioEncoderType> audioCodecs = new List<AudioEncoderType>();
             List<MuxableType> dictatedOutputTypes = new List<MuxableType>();
 
-            for (int i = 0; i < audioConfigControl.Count; ++i)
+            for (int i = 0; i < audioTracks.Count; ++i)
             {
-                if (audioTrack[i].SelectedIndex == 0) // "None"
+                if (audioTracks[i].SelectedStreamIndex == 0) // "None"
                     continue;
 
-                if (audioConfigControl[i].Settings != null && !audioConfigControl[i].DontEncode)
-                    audioCodecs.Add(audioConfigControl[i].Settings.EncoderType);
-
-                else if (audioConfigControl[i].DontEncode)
+                if (audioTracks[i].SelectedStream.EncoderSettings != null && audioTracks[i].SelectedStream.EncodingMode != AudioEncodingMode.Never)
+                    audioCodecs.Add(audioTracks[i].SelectedStream.EncoderSettings.EncoderType);
+                else if (audioTracks[i].SelectedStream.EncodingMode == AudioEncodingMode.Never)
                 {
                     string typeString;
 
-                    if (audioTrack[i].SelectedSCItem.IsStandard)
+                    if (audioTracks[i].SelectedItem.IsStandard)
                     {
-                        AudioTrackInfo ati = (AudioTrackInfo)audioTrack[i].SelectedObject;
-                        typeString = "file." + ati.Type;
+                        AudioTrackInfo ati = (AudioTrackInfo)audioTracks[i].SelectedStream.TrackInfo;
+                        typeString = "file." + ati.Codec;
                     }
                     else
                     {
-                        typeString = audioTrack[i].SelectedText;
+                        typeString = audioTracks[i].SelectedFile;
                     }
 
                     if (VideoUtil.guessAudioType(typeString) != null)
@@ -342,13 +499,14 @@ namespace MeGUI
                 if (tempSupportedOutputTypes.Count > 0 && !ignoreRestrictions)
                 {
                     string message = string.Format(
-                    "No container type could be found that matches the list of acceptable types" +
+                    "No container type could be found that matches the list of acceptable types " +
                     "in your chosen one click profile. {0}" +
                     "Your restrictions are now being ignored.", Environment.NewLine);
                     MessageBox.Show(message, "Filetype restrictions too restrictive", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     ignoreRestrictions = true;
                 }
-                if (ignoreRestrictions) supportedOutputTypes = tempSupportedOutputTypes;
+                if (ignoreRestrictions) 
+                    supportedOutputTypes = tempSupportedOutputTypes;
                 if (tempSupportedOutputTypes.Count == 0)
                     MessageBox.Show("No container type could be found for your current settings. Please modify the codecs you use", "No container found", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -368,8 +526,20 @@ namespace MeGUI
             {
                 OneClickSettings settings = value;
 
-                foreach (AudioConfigControl a in audioConfigControl)
-                    a.SelectProfileNameOrWarn(settings.AudioProfileName);
+                if (_videoInputInfo != null)
+                {
+                    List<OneClickStream> arrAudioTrackInfo = new List<OneClickStream>();
+                    foreach (AudioTrackInfo oInfo in _videoInputInfo.AudioInfo.Tracks)
+                        arrAudioTrackInfo.Add(new OneClickStream(oInfo));
+                    AudioResetTrack(arrAudioTrackInfo, settings);
+
+                    List<OneClickStream> arrSubtitleTrackInfo = new List<OneClickStream>();
+                    foreach (SubtitleTrackInfo oInfo in _videoInputInfo.SubtitleInfo.Tracks)
+                        arrSubtitleTrackInfo.Add(new OneClickStream(oInfo));
+                    SubtitleResetTrack(arrSubtitleTrackInfo, settings);
+                }
+                else
+                    ResetAudioSettings(settings);
 
                 videoProfile.SetProfileNameOrWarn(settings.VideoProfileName);
                 avsProfile.SetProfileNameOrWarn(settings.AvsProfileName);
@@ -386,10 +556,8 @@ namespace MeGUI
 
                 ignoreRestrictions = false;
 
-                foreach (AudioConfigControl a in audioConfigControl)
-                    a.DontEncode = settings.DontEncodeAudio;
-                
                 // bools
+                chkDontEncodeVideo.Checked = settings.DontEncodeVideo;
                 signalAR.Checked = settings.SignalAR;
                 autoDeint.Checked = settings.AutomaticDeinterlacing;
                 autoCrop.Checked = settings.AutoCrop;
@@ -399,225 +567,929 @@ namespace MeGUI
                     usechaptersmarks.Checked = settings.UseChaptersMarks;
 
                 splitting.Value = settings.SplitSize;
-                optionalTargetSizeBox1.Value = settings.Filesize;
-                horizontalResolution.Value = settings.OutputResolution;
+                fileSize.Value = settings.Filesize;
+                if (settings.OutputResolution <= horizontalResolution.Maximum)
+                    horizontalResolution.Value = settings.OutputResolution;
+                workingDirectory.Filename = settings.DefaultWorkingDirectory;
 
                 // device type
                 devicetype.Text = settings.DeviceOutputType;
 
                 // Clean up after those settings were set
                 updatePossibleContainers();
-                containerFormat_SelectedIndexChanged_1(null, null);
+                containerFormat_SelectedIndexChanged(null, null);
+
+                _oSettings = settings;
+
+                if (!string.IsNullOrEmpty(input.SelectedText))
+                    updateWorkingName(input.SelectedText);
             }
         }
 
         private void goButton_Click(object sender, EventArgs e)
         {
-            if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(output.Filename)) || // check whether the output path is read-only
-                Drives.ableToWriteOnThisDrive(Path.GetPathRoot(workingName.Text)))
+            goButton.Enabled = false;
+            createOneClickJob(null);
+        }
+
+        private void createOneClickJob(List<OneClickFilesToProcess> arrFilesToProcess)
+        {
+            // set random working directory
+            string strWorkingDirectory = string.Empty;
+            if (Directory.Exists(workingDirectory.Filename))
+                strWorkingDirectory = workingDirectory.Filename;
+            else
+                strWorkingDirectory = Path.GetDirectoryName(output.Filename);
+            do
+                strWorkingDirectory = Path.Combine(strWorkingDirectory, Path.GetRandomFileName());
+            while (Directory.Exists(strWorkingDirectory));
+
+            if (!verifyInputSettings(_videoInputInfo, strWorkingDirectory))
             {
-                if ((verifyAudioSettings() == null)
-                    && (VideoSettings != null)
-                    && !string.IsNullOrEmpty(input.Filename)
-                    && !string.IsNullOrEmpty(workingName.Text))
+                goButton.Enabled = true;
+                return;
+            }
+
+            ContainerType inputContainer = _videoInputInfo.ContainerFileType;
+            JobChain prepareJobs = null;
+
+            // set oneclick job settings
+            OneClickPostprocessingProperties dpp = new OneClickPostprocessingProperties();
+            dpp.DAR = ar.Value;
+            dpp.AvsSettings = (AviSynthSettings)avsProfile.SelectedProfile.BaseSettings;
+            dpp.Container = (ContainerType)containerFormat.SelectedItem;
+            dpp.FinalOutput = output.Filename;
+            dpp.DeviceOutputType = devicetype.Text;
+            dpp.VideoSettings = VideoSettings.Clone();
+            dpp.Splitting = splitting.Value;
+            dpp.VideoInput = _videoInputInfo.FileName;
+            dpp.IndexType = _videoInputInfo.IndexerToUse;
+            dpp.TitleNumberToProcess = _videoInputInfo.VideoInfo.PGCNumber;
+            if (arrFilesToProcess != null)
+            {
+                dpp.FilesToProcess = arrFilesToProcess;
+                dpp.OneClickSetting = _oSettings;
+            }
+            dpp.WorkingDirectory = strWorkingDirectory;
+            dpp.FilesToDelete.Add(dpp.WorkingDirectory);
+            dpp.ChapterFile = chapterFile.Filename;
+            dpp.AutoCrop = autoCrop.Checked;
+
+            // create eac3to demux job if needed
+            if (_videoInputInfo.isEac3toDemuxable())
+            {
+                dpp.Eac3toDemux = true;
+                StringBuilder sb = new StringBuilder();
+
+                dpp.VideoInput = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(_videoInputInfo.FileName) + ".mkv");
+                sb.Append(string.Format("{0}:\"{1}\" ", _videoInputInfo.VideoInfo.Track.TrackID, dpp.VideoInput));
+                inputContainer = ContainerType.MKV;
+                dpp.FilesToDelete.Add(dpp.VideoInput);
+                dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(dpp.VideoInput) + " - Log.txt"));
+                
+                if (dpp.ChapterFile.Equals("<internal chapters>"))
                 {
-                    FileSize? desiredSize = optionalTargetSizeBox1.Value;
-
-                    List<AudioJob> aJobs = new List<AudioJob>();
-                    List<MuxStream> muxOnlyAudio = new List<MuxStream>();
-                    List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
-                    for (int i = 0; i < audioConfigControl.Count; ++i)
+                    int iTrackNumber = _videoInputInfo.getEac3toChaptersTrack();
+                    if (iTrackNumber > -1)
                     {
-                        if (audioTrack[i].SelectedIndex == 0) // "None"
-                            continue;
+                        dpp.ChapterFile = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(dpp.VideoInput) + " - chapter.txt");
+                        sb.Append(string.Format("{0}:\"{1}\" ", iTrackNumber, dpp.ChapterFile)); 
+                        dpp.FilesToDelete.Add(dpp.ChapterFile);
+                    }
+                }
 
-                        string aInput;
-                        TrackInfo info = null;
-                        int delay = audioConfigControl[i].Delay;
-                        if (audioTrack[i].SelectedSCItem.IsStandard)
-                        {
-                            AudioTrackInfo a = (AudioTrackInfo)audioTrack[i].SelectedObject;
-                            audioTracks.Add(a);
-                            aInput = "::" + a.TrackID + "::";
-                            info = a.TrackInfo;
-                        }
-                        else
-                            aInput = audioTrack[i].SelectedText;
+                foreach (OneClickStreamControl oStreamControl in audioTracks)
+                {
+                    if (!oStreamControl.SelectedItem.IsStandard)
+                        continue;
 
-                        if (audioConfigControl[i].DontEncode)
-                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay));
-                        else
-                            aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay));
+                    bool bDontEncode = false;
+                    if (oStreamControl.IsDontEncodePossible() &&
+                        (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.Never ||
+                        (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
+                        oStreamControl.SelectedStream.EncoderSettings.EncoderType.ACodec.ID.Equals(oStreamControl.SelectedStream.TrackInfo.Codec, StringComparison.InvariantCultureIgnoreCase))))
+                        bDontEncode = true;
+
+                    if (!bDontEncode)
+                    {
+                        if (oStreamControl.SelectedStream.TrackInfo.Codec.Equals("TrueHD", StringComparison.InvariantCultureIgnoreCase))
+                            oStreamControl.SelectedStream.TrackInfo.Codec = "AC-3";                            
+                        else if (oStreamControl.SelectedStream.TrackInfo.Codec.StartsWith("DTS-HD", StringComparison.InvariantCultureIgnoreCase))
+                            oStreamControl.SelectedStream.TrackInfo.Codec = "DTS";
                     }
 
-                    string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
+                    sb.Append(string.Format("{0}:\"{1}\" ", oStreamControl.SelectedStream.TrackInfo.TrackID,
+                        Path.Combine(dpp.WorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName)));
+                    dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName));
 
-                    DGIndexPostprocessingProperties dpp = new DGIndexPostprocessingProperties();
-                    dpp.DAR = ar.Value;
-                    dpp.DirectMuxAudio = muxOnlyAudio.ToArray();
-                    dpp.AudioJobs = aJobs.ToArray();
-                    dpp.AutoDeinterlace = autoDeint.Checked;
-                    dpp.AvsSettings = (AviSynthSettings)avsProfile.SelectedProfile.BaseSettings;
-                    dpp.ChapterFile = chapterFile.Filename;
-                    dpp.Container = (ContainerType)containerFormat.SelectedItem;
-                    dpp.FinalOutput = output.Filename;
-                    dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
-                    dpp.OutputSize = desiredSize;
-                    dpp.SignalAR = signalAR.Checked;
-                    dpp.AutoCrop = autoCrop.Checked;
-                    dpp.KeepInputResolution = keepInputResolution.Checked;
-                    dpp.PrerenderJob = addPrerenderJob.Checked;
-                    dpp.Splitting = splitting.Value;
-                    dpp.DeviceOutputType = devicetype.Text;
-                    dpp.UseChaptersMarks = usechaptersmarks.Checked;
-                    dpp.VideoSettings = VideoSettings.Clone();
-                    IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
-                    mainForm.Jobs.addJobsToQueue(job);
-                    if (this.openOnQueue.Checked)
-                    {
-                        if (!string.IsNullOrEmpty(this.chapterFile.Filename))
-                            this.chapterFile.Filename = string.Empty; // clean up  
-                        input.PerformClick();
-                    }
+                    if (!bDontEncode && oStreamControl.SelectedStream.TrackInfo.Codec.StartsWith("DTS", StringComparison.InvariantCultureIgnoreCase))
+                        sb.Append("-core ");
+                }
+
+                foreach (OneClickStreamControl oStreamControl in subtitleTracks)
+                {
+                    if (!oStreamControl.SelectedItem.IsStandard)
+                        continue;
+
+                    string strDemuxFilePath = Path.Combine(dpp.WorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName);
+                    sb.Append(string.Format("{0}:\"{1}\" ", oStreamControl.SelectedStream.TrackInfo.MMGTrackID, strDemuxFilePath));
+                    oStreamControl.SelectedStream.DemuxFilePath = strDemuxFilePath;
+                    dpp.FilesToDelete.Add(strDemuxFilePath);
+                }
+
+                if (sb.Length != 0)
+                    prepareJobs = new SequentialChain(new HDStreamsExJob(_videoInputInfo.FileName, dpp.WorkingDirectory, null, sb.ToString(), 2));
+            }
+
+            // set video mux handling
+            if (chkDontEncodeVideo.Checked)
+            {
+                if (dpp.Container != ContainerType.MKV)
+                    _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the target container MKV is supported");
+                else if (inputContainer != ContainerType.MKV)
+                    _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the source container MKV is supported");
+                else
+                    dpp.VideoFileToMux = dpp.VideoInput;
+            }
+
+            // set oneclick job settings
+            if (String.IsNullOrEmpty(dpp.VideoFileToMux))
+            {
+                dpp.AutoDeinterlace = autoDeint.Checked;
+                dpp.KeepInputResolution = keepInputResolution.Checked;
+                dpp.OutputSize = fileSize.Value;
+                dpp.PrerenderJob = addPrerenderJob.Checked;
+                dpp.UseChaptersMarks = usechaptersmarks.Checked;
+                dpp.SignalAR = signalAR.Checked;
+            }
+            else
+            {
+                dpp.AutoDeinterlace = dpp.PrerenderJob = dpp.UseChaptersMarks = false;
+                dpp.KeepInputResolution = dpp.PrerenderJob = dpp.UseChaptersMarks = false;
+                dpp.OutputSize = null;
+                dpp.SignalAR = false;
+            }
+
+            if (keepInputResolution.Checked || !String.IsNullOrEmpty(dpp.VideoFileToMux))
+                dpp.HorizontalOutputResolution = 0;
+            else
+                dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
+
+            // create pgcdemux job if needed
+            if (Path.GetExtension(_videoInputInfo.FileName.ToUpper(System.Globalization.CultureInfo.InvariantCulture)) == ".VOB")
+            {
+                string videoIFO;
+                // PGC numbers are not present in VOB, so we check the main IFO
+                if (Path.GetFileName(_videoInputInfo.FileName).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
+                    videoIFO = _videoInputInfo.FileName.Substring(0, _videoInputInfo.FileName.LastIndexOf("_")) + "_0.IFO";
+                else
+                    videoIFO = Path.ChangeExtension(_videoInputInfo.FileName, ".IFO");
+
+                if (File.Exists(videoIFO))
+                {
+                    prepareJobs = new SequentialChain(new PgcDemuxJob(videoIFO, dpp.WorkingDirectory, _videoInputInfo.VideoInfo.PGCNumber));
+                    for (int i = 1; i < 10; i++)
+                        dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, "VTS_01_" + i + ".VOB"));
+                    dpp.IFOInput = videoIFO;
+                    dpp.VideoInput = Path.Combine(dpp.WorkingDirectory, "VTS_01_1.VOB");
+                }
+            }
+
+            // MKV tracks which need to be extracted
+            List<TrackInfo> oExtractMKVTrack = new List<TrackInfo>();
+
+            // get audio information
+            JobChain audioJobs = null;
+            List<AudioTrackInfo> arrAudioTrackInfo = new List<AudioTrackInfo>();
+            foreach (OneClickStreamControl oStreamControl in audioTracks)
+            {
+                if (oStreamControl.SelectedStreamIndex <= 0) // "None"
+                    continue;
+
+                string aInput = null;
+                string strLanguage = null;
+                string strName = null;
+                string strAudioCodec = null;
+                bool bExtractMKVTrack = false;
+                AudioTrackInfo oAudioTrackInfo = null;
+                int delay = oStreamControl.SelectedStream.Delay;
+                if (oStreamControl.SelectedItem.IsStandard)
+                {
+                    oAudioTrackInfo = (AudioTrackInfo)oStreamControl.SelectedStream.TrackInfo;
+                    arrAudioTrackInfo.Add(oAudioTrackInfo);
+                    if (dpp.IndexType != FileIndexerWindow.IndexType.NONE && !dpp.Eac3toDemux)
+                        aInput = "::" + oAudioTrackInfo.TrackID + "::";
                     else
-                        this.Close();
+                        aInput = Path.Combine(dpp.WorkingDirectory, oAudioTrackInfo.DemuxFileName);
+                    strName = oAudioTrackInfo.Name;
+                    strLanguage = oAudioTrackInfo.Language;
+                    strAudioCodec = oAudioTrackInfo.Codec;
+                    if (inputContainer == ContainerType.MKV && !dpp.Eac3toDemux) // only if container MKV and no demux with eac3to
+                    {
+                        oExtractMKVTrack.Add(oStreamControl.SelectedStream.TrackInfo);
+                        bExtractMKVTrack = true;
+                    }                        
                 }
                 else
-                    MessageBox.Show("You must select audio and video profile, output name and working directory to continue",
-                        "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            }
-            else MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(output.Filename) + " \n" +
-                                 "Please, select another output path to save your project...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                {
+                    aInput = oStreamControl.SelectedFile;
+                    MediaInfoFile oInfo = new MediaInfoFile(aInput, ref _oLog);
+                    if (oInfo.AudioInfo.Tracks.Count > 0)
+                        strAudioCodec = oInfo.AudioInfo.Tracks[0].Codec;
+                    strName = oStreamControl.SelectedStream.Name;
+                    strLanguage = oStreamControl.SelectedStream.Language;
+                }
 
+                if (oStreamControl.IsDontEncodePossible() &&
+                    (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.Never ||
+                    (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
+                    oStreamControl.SelectedStream.EncoderSettings.EncoderType.ACodec.ID.Equals(strAudioCodec, StringComparison.InvariantCultureIgnoreCase))))
+                    dpp.AudioTracks.Add(new OneClickAudioTrack(null, new MuxStream(aInput, strLanguage, strName, delay, false, false, null), oAudioTrackInfo, bExtractMKVTrack));
+                else
+                {
+                    // audio track will be encoded
+                    string strFileName = string.Empty;
+                    if (!oStreamControl.SelectedItem.IsStandard || !dpp.Eac3toDemux)
+                    {
+                        if (strAudioCodec.Equals("TrueHD", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            strAudioCodec = "AC-3";
+                            if (oStreamControl.SelectedItem.IsStandard)
+                            {
+                                strFileName = Path.Combine(strWorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName);
+                                strFileName = Path.ChangeExtension(strFileName, "ac3");
+                                oAudioTrackInfo.Codec = strAudioCodec;
+                                aInput = FileUtil.AddToFileName(strFileName, "_core");
+                            }
+                            else
+                            {
+                                strFileName = oStreamControl.SelectedFile;
+                                aInput = FileUtil.AddToFileName(Path.ChangeExtension(strFileName, "ac3"), "_core");
+                                aInput = Path.Combine(strWorkingDirectory, Path.GetFileName(aInput));
+                            }
+
+                            HDStreamsExJob oJob = new HDStreamsExJob(strFileName, aInput, null, "\"" + aInput + "\"", 2);
+                            audioJobs = new SequentialChain(audioJobs, new SequentialChain(oJob));
+                            dpp.FilesToDelete.Add(FileUtil.AddToFileName(Path.ChangeExtension(aInput, "txt"), " - Log"));
+                            dpp.FilesToDelete.Add(aInput);
+                        }
+                        else if (strAudioCodec.StartsWith("DTS-HD", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            strAudioCodec = "DTS";
+                            if (oStreamControl.SelectedItem.IsStandard)
+                            {
+                                strFileName = Path.Combine(strWorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName);
+                                oAudioTrackInfo.Codec = strAudioCodec;
+                                aInput = FileUtil.AddToFileName(Path.ChangeExtension(strFileName, "dts"), "_core");
+                            }
+                            else
+                            {
+                                strFileName = oStreamControl.SelectedFile;
+                                aInput = FileUtil.AddToFileName(Path.ChangeExtension(strFileName, "dts"), "_core");
+                                aInput = Path.Combine(strWorkingDirectory, Path.GetFileName(aInput));
+                            }
+
+                            HDStreamsExJob oJob = new HDStreamsExJob(strFileName, aInput, null, "\"" + aInput + "\" -core", 2);
+                            audioJobs = new SequentialChain(audioJobs, new SequentialChain(oJob));
+                            dpp.FilesToDelete.Add(FileUtil.AddToFileName(Path.ChangeExtension(aInput, "txt"), " - Log"));
+                            dpp.FilesToDelete.Add(aInput);
+                        }
+                    }
+
+                    dpp.AudioTracks.Add(new OneClickAudioTrack(new AudioJob(aInput, null, null, oStreamControl.SelectedStream.EncoderSettings, delay, strLanguage, strName), null, oAudioTrackInfo, bExtractMKVTrack));
+                }
+            }
+
+            // subtitle handling
+            if (dpp.Container == ContainerType.MKV)
+            {
+                foreach (OneClickStreamControl oStream in subtitleTracks)
+                {
+                    if (oStream.SelectedStreamIndex <= 0) // not NONE
+                        continue;
+
+                    if (oStream.SelectedItem.IsStandard)
+                    {
+                        string strExtension = Path.GetExtension(oStream.SelectedStream.TrackInfo.SourceFileName.ToLower(System.Globalization.CultureInfo.InvariantCulture));
+                        if (strExtension.Equals(".ifo") || strExtension.Equals(".vob"))
+                        {
+                            string strInput = oStream.SelectedStream.TrackInfo.SourceFileName;
+                            if (strExtension.Equals(".vob"))
+                            {
+                                if (Path.GetFileName(strInput).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
+                                    strInput = strInput.Substring(0, strInput.LastIndexOf("_")) + "_0.IFO";
+                                else
+                                    strInput = Path.ChangeExtension(strInput, ".IFO");
+                            }
+                            string outputFile = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(strInput)) + "_" + oStream.SelectedStream.TrackInfo.MMGTrackID + ".idx";
+                            SubtitleIndexJob oJob = new SubtitleIndexJob(strInput, outputFile, false, new List<int> { oStream.SelectedStream.TrackInfo.MMGTrackID }, _videoInputInfo.VideoInfo.PGCNumber);
+                            prepareJobs = new SequentialChain(new SequentialChain(prepareJobs), new SequentialChain(oJob));
+                            oStream.SelectedStream.DemuxFilePath = outputFile;
+                            dpp.FilesToDelete.Add(outputFile);
+                            dpp.FilesToDelete.Add(Path.ChangeExtension(outputFile, ".sub"));
+                        }
+                        else if (!dpp.Eac3toDemux)
+                            oExtractMKVTrack.Add(oStream.SelectedStream.TrackInfo);
+                    }
+                    dpp.SubtitleTracks.Add(oStream.SelectedStream);
+                }
+            }
+
+            // create MKV extract job if required
+            if (oExtractMKVTrack.Count > 0)
+            {
+                MkvExtractJob extractJob = new MkvExtractJob(dpp.VideoInput, dpp.WorkingDirectory, oExtractMKVTrack);
+                prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(extractJob));
+            }
+
+            // add audio job to chain if required
+            prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(audioJobs));
+
+            JobChain finalJobChain = null;
+            if (dpp.IndexType == FileIndexerWindow.IndexType.D2V || dpp.IndexType == FileIndexerWindow.IndexType.DGA)
+            {   
+                string indexFile = string.Empty;
+                IndexJob job = null;
+                if (dpp.IndexType == FileIndexerWindow.IndexType.D2V)
+                {
+                    indexFile = Path.Combine(dpp.WorkingDirectory, workingName.Text + ".d2v");
+                    job = new D2VIndexJob(dpp.VideoInput, indexFile, 2, arrAudioTrackInfo, false, false);
+                }
+                else
+                {
+                    indexFile = Path.Combine(dpp.WorkingDirectory, workingName.Text + ".dga");
+                    job = new DGAIndexJob(dpp.VideoInput, indexFile, 2, arrAudioTrackInfo, false, false);
+                }
+                OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(dpp.VideoInput, indexFile, dpp);
+                finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(job), new SequentialChain(ocJob));
+            }
+            else if (dpp.IndexType == FileIndexerWindow.IndexType.DGI || dpp.IndexType == FileIndexerWindow.IndexType.FFMS)
+            {
+                string indexFile = string.Empty;
+                if (dpp.IndexType == FileIndexerWindow.IndexType.DGI)
+                    indexFile = Path.Combine(dpp.WorkingDirectory, workingName.Text + ".dgi");
+                else
+                    indexFile = Path.Combine(dpp.WorkingDirectory, Path.GetFileName(dpp.VideoInput) + ".ffindex");
+                OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(dpp.VideoInput, indexFile, dpp);
+
+                IndexJob job = null;
+                if (inputContainer == ContainerType.MKV)
+                {
+                    if (dpp.IndexType == FileIndexerWindow.IndexType.DGI)
+                        job = new DGIIndexJob(dpp.VideoInput, indexFile, 0, null, false, false);
+                    else
+                        job = new FFMSIndexJob(dpp.VideoInput, indexFile, 0, null, false);
+                    if (!String.IsNullOrEmpty(dpp.VideoFileToMux) && dpp.Container == ContainerType.MKV)
+                    {
+                        finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(ocJob));
+                        dpp.IndexType = FileIndexerWindow.IndexType.NONE;
+                    }
+                    else
+                        finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(job), new SequentialChain(ocJob));
+                }
+                else
+                {
+                    if (dpp.IndexType == FileIndexerWindow.IndexType.DGI)
+                        job = new DGIIndexJob(dpp.VideoInput, indexFile, 2, arrAudioTrackInfo, false, false);
+                    else
+                        job = new FFMSIndexJob(dpp.VideoInput, indexFile, 2, arrAudioTrackInfo, false);
+                    finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(job), new SequentialChain(ocJob));
+                }
+            }
+            else
+            {
+                // no indexer
+                OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(dpp.VideoInput, null, dpp);
+                finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(ocJob));
+            }
+
+            mainForm.Jobs.addJobsWithDependencies(finalJobChain);
+
+            if (this.openOnQueue.Checked && !bAutomatedProcessing)
+            {
+                if (!string.IsNullOrEmpty(this.chapterFile.Filename))
+                    this.chapterFile.Filename = string.Empty; // clean up
+                tabControl1.SelectedTab = tabControl1.TabPages[0];
+                input.SelectedIndex = 0;
+                goButton.Enabled = true;
+            }
+            else
+                this.Close();
+        }
+
+        private bool verifyInputSettings(MediaInfoFile oVideoInputInfo, string strWorkingDirectory)
+        {
+            if (oVideoInputInfo == null)
+            {
+                MessageBox.Show("Please select a valid input file!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
+
+            if (String.IsNullOrEmpty(output.Filename) || !File.Exists(oVideoInputInfo.FileName))
+            {
+                MessageBox.Show("Please select valid input and output file!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
+
+            if (!FileUtil.IsDirWriteable(Path.GetDirectoryName(output.Filename)))
+            {
+                MessageBox.Show("MeGUI cannot write on the disc " + Path.GetDirectoryName(output.Filename) + " \n" +
+                                 "Please, select another output path to save your project...", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
+
+            if (!FileUtil.IsDirWriteable(strWorkingDirectory))
+            {
+                MessageBox.Show("MeGUI cannot write on the disc " + strWorkingDirectory + " \n" +
+                                 "Please, select another working path to save your project...", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
+
+            if ((verifyStreamSettings() != null) || (VideoSettings == null) || string.IsNullOrEmpty(workingName.Text))
+            {
+                MessageBox.Show("MeGUI cannot process this job", "Wrong configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
+
+            return true;
         }
 
         #endregion
 
         #region profile management
 
-        private string verifyAudioSettings()
+        private string verifyStreamSettings()
         {
-            for (int i = 0; i < audioTrack.Count; ++i)
+            for (int i = 0; i < audioTracks.Count; ++i)
             {
-                if (audioTrack[i].SelectedSCItem.IsStandard)
+                if (audioTracks[i].SelectedItem.IsStandard || audioTracks[i].SelectedStreamIndex <= 0)
                     continue;
 
-                string r = MainForm.verifyInputFile(audioTrack[i].SelectedText);
-                if (r != null) return r;
+                string r = MainForm.verifyInputFile(audioTracks[i].SelectedFile);
+                if (r != null) 
+                    return r;
+            }
+            for (int i = 0; i < subtitleTracks.Count; ++i)
+            {
+                if (subtitleTracks[i].SelectedItem.IsStandard || subtitleTracks[i].SelectedStreamIndex <= 0)
+                    continue;
+
+                string r = MainForm.verifyInputFile(subtitleTracks[i].SelectedFile);
+                if (r != null) 
+                    return r;
             }
             return null;
         }
         #endregion
-
-        public struct PartialAudioStream
-        {
-            public string input;
-            public string language;
-            public bool useExternalInput;
-            public bool dontEncode;
-            public int trackNumber;
-            public AudioCodecSettings settings;
-        }
-
-        private void AddTrack()
-        {
-            FileSCBox b = new FileSCBox();
-            b.Filter = audioTrack1.Filter;
-            b.Size = audioTrack1.Size;
-            b.StandardItems = audioTrack1.StandardItems;
-            b.SelectedIndex = 0;
-            b.Anchor = audioTrack1.Anchor;
-            b.SelectionChanged += new StringChanged(this.audioTrack1_SelectionChanged);
-            
-            int delta_y = audioTrack2.Location.Y - audioTrack1.Location.Y;
-            b.Location = new Point(audioTrack1.Location.X, audioTrack[audioTrack.Count - 1].Location.Y + delta_y);
-
-            Label l = new Label();
-            l.Text = "Track " + (audioTrack.Count + 1);
-            l.AutoSize = true;
-            l.Location = new Point(track1Label.Location.X, trackLabel[trackLabel.Count - 1].Location.Y + delta_y);
-
-            AudioConfigControl a = new AudioConfigControl();
-            a.Dock = DockStyle.Fill;
-            a.Location = audio1.Location;
-            a.Size = audio1.Size;
-            a.initHandler();
-            a.SomethingChanged += new EventHandler(audio1_SomethingChanged);
-
-            TabPage t = new TabPage("Audio track " + (audioTrack.Count + 1));
-            t.UseVisualStyleBackColor = trackTabPage1.UseVisualStyleBackColor;
-            t.Padding = trackTabPage1.Padding;
-            t.Size = trackTabPage1.Size;
-            t.Controls.Add(a);
-            tabControl2.TabPages.Add(t);
-            
-            panel1.SuspendLayout();
-            panel1.Controls.Add(l);
-            panel1.Controls.Add(b);
-            panel1.ResumeLayout();
-
-            trackLabel.Add(l);
-            audioTrack.Add(b);
-            audioConfigControl.Add(a);
-        }
-
-        private void RemoveTrack()
-        {
-            panel1.SuspendLayout();
-            panel1.Controls.Remove(trackLabel[trackLabel.Count - 1]);
-            panel1.Controls.Remove(audioTrack[audioTrack.Count - 1]);
-            panel1.ResumeLayout();
-            
-            tabControl2.TabPages.RemoveAt(tabControl2.TabPages.Count - 1);
-            trackLabel.RemoveAt(trackLabel.Count - 1);
-            audioTrack.RemoveAt(audioTrack.Count - 1);
-        }
-
-        private void audioTrack1_SelectionChanged(object sender, string val)
-        {
-            int i = audioTrack.IndexOf((FileSCBox)sender);
-            Debug.Assert(i >= 0 && i < audioTrack.Count);
-            
-            FileSCBox track = audioTrack[i];
-            if (!track.SelectedSCItem.IsStandard)
-                audioConfigControl[i].openAudioFile((string)track.SelectedObject);
-            audioConfigControl[i].DelayEnabled = !track.SelectedSCItem.IsStandard;
-        }
         
         private void audio1_SomethingChanged(object sender, EventArgs e)
         {
             updatePossibleContainers();
         }
 
-        private void addTrackToolStripMenuItem_Click(object sender, EventArgs e)
+        void ProfileChanged(object sender, EventArgs e)
         {
-            AddTrack();
-        }
-
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-            removeTrackToolStripMenuItem.Enabled = (audioTrack.Count > 1);
-        }
-
-        private void removeTrackToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RemoveTrack();
+            if (videoProfile.SelectedProfile.FQName.StartsWith("x264") && !chkDontEncodeVideo.Checked)
+                usechaptersmarks.Enabled = true;
+            else
+                usechaptersmarks.Enabled = false;
+            updatePossibleContainers();
         }
 
         private void keepInputResolution_CheckedChanged(object sender, EventArgs e)
         {
             if (keepInputResolution.Checked)
             {
-                horizontalResolution.Enabled = false;
-                autoCrop.Checked = false;
+                horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = false;
+                signalAR.Checked = true;
+            }
+            else
+                horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = true;
+        }
+
+        private void chkDontEncodeVideo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDontEncodeVideo.Checked)
+            {
+                horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = videoProfile.Enabled = false;
+                usechaptersmarks.Enabled = keepInputResolution.Enabled = addPrerenderJob.Enabled = false;
+                autoDeint.Enabled = fileSize.Enabled = avsProfile.Enabled = ar.Enabled = false;
             }
             else
             {
-                horizontalResolution.Enabled = true;
-                autoCrop.Checked = true;
+                videoProfile.Enabled = keepInputResolution.Enabled = addPrerenderJob.Enabled = true;
+                autoDeint.Enabled = fileSize.Enabled = avsProfile.Enabled = true;
+                if (videoProfile.SelectedProfile.FQName.StartsWith("x264"))
+                    usechaptersmarks.Enabled = true;
+                else
+                    usechaptersmarks.Enabled = false;
+                if (keepInputResolution.Checked)
+                    horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = ar.Enabled = false;
+                else
+                    horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = ar.Enabled = true;
             }
         }
+
+
+        // Subtitle Track Handling
+        private void subtitleMenu_Opening(object sender, CancelEventArgs e)
+        {
+            //subtitleRemoveTrack.Enabled = (subtitleTracks.Count > 1);
+        }
+
+        private void subtitleAddTrack_Click(object sender, EventArgs e)
+        {
+            SubtitleAddTrack();
+        }
+
+        private void subtitleRemoveTrack_Click(object sender, EventArgs e)
+        {
+            SubtitleRemoveTrack(iSelectedSubtitleTabPage);
+        }
+
+        private void SubtitleAddTrack()
+        {
+            TabPage p = new TabPage("Subtitle " + (subtitleTracks.Count + 1));
+            p.UseVisualStyleBackColor = subtitlesTab.TabPages[0].UseVisualStyleBackColor;
+            p.Padding = subtitlesTab.TabPages[0].Padding;
+
+            OneClickStreamControl a = new OneClickStreamControl();
+            a.Dock = subtitleTracks[0].Dock;
+            a.Padding = subtitleTracks[0].Padding;
+            a.ShowDelay = subtitleTracks[0].ShowDelay;
+            a.ShowDefaultStream = subtitleTracks[0].ShowDefaultStream;
+            a.ShowForceStream = subtitleTracks[0].ShowForceStream;
+            a.chkDefaultStream.CheckedChanged += new System.EventHandler(this.chkDefaultStream_CheckedChanged);
+            a.Filter = subtitleTracks[0].Filter;
+            a.FileUpdated += oneClickSubtitleStreamControl_FileUpdated;
+            a.StandardStreams = subtitleTracks[0].StandardStreams;
+            a.CustomStreams = subtitleTracks[0].CustomStreams;
+            a.SelectedStreamIndex = 0;
+            a.initProfileHandler();
+            if (this.Visible)
+                a.enableDragDrop();
+
+            subtitlesTab.TabPages.Add(p);
+            p.Controls.Add(a);
+            subtitleTracks.Add(a);
+        }
+
+        private void SubtitleRemoveTrack(int iTabPageIndex)
+        {
+            if (iTabPageIndex == 0 && subtitlesTab.TabCount == 1)
+                SubtitleAddTrack();
+
+            subtitlesTab.TabPages.RemoveAt(iTabPageIndex);
+            subtitleTracks.RemoveAt(iTabPageIndex);
+
+            for (int i = 0; i < subtitlesTab.TabCount; i++)
+            {
+                subtitlesTab.TabPages[i].Text = "Subtitle " + (i + 1);
+            }
+        }
+
+        private void chkDefaultStream_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((CheckBox)sender).Checked == false)
+                return;
+
+            foreach (OneClickStreamControl oTrack in subtitleTracks)
+            {
+                if (sender != oTrack.chkDefaultStream && oTrack.chkDefaultStream.Checked == true)
+                    oTrack.chkDefaultStream.Checked = false;
+            }
+        }
+
+        private int iSelectedSubtitleTabPage = -1;
+        private void subtitlesTab_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+
+            Point p = e.Location;
+            for (int i = 0; i < subtitlesTab.TabCount; i++)
+            {
+                Rectangle rect = subtitlesTab.GetTabRect(i);
+                rect.Offset(2, 2);
+                rect.Width -= 4;
+                rect.Height -= 4;
+                if (rect.Contains(p))
+                {
+                    iSelectedSubtitleTabPage = i;
+                    subtitleMenu.Show(subtitlesTab, e.Location);
+                    break;
+                }
+            }
+        }
+
+        private void oneClickSubtitleStreamControl_FileUpdated(object sender, EventArgs e)
+        {
+            if (bLock)
+                return;
+
+            int i = subtitleTracks.IndexOf((OneClickStreamControl)sender);
+
+            if (i < 0)
+                return;
+
+            OneClickStreamControl track = subtitleTracks[i];
+            foreach (OneClickStreamControl oControl in subtitleTracks)
+            {
+                if (oControl == track)
+                    continue;
+
+                if (oControl.CustomStreams.Length != track.CustomStreams.Length)
+                {
+                    int iIndex = -1;
+                    if (!track.SelectedItem.IsStandard)
+                        iIndex = oControl.SelectedStreamIndex;
+                    bLock = true;
+                    oControl.CustomStreams = track.CustomStreams;
+                    bLock = false;
+                    if (iIndex >= 0 && oControl.SelectedStreamIndex != iIndex)
+                        oControl.SelectedStreamIndex = iIndex;
+                }
+            }
+
+            updatePossibleContainers();
+        }
+
+        private void SubtitleResetTrack(List<OneClickStream> arrSubtitleTrackInfo, OneClickSettings settings)
+        {
+            // generate track names
+            List<object> trackNames = new List<object>();
+            trackNames.Add("None");
+            foreach (object o in arrSubtitleTrackInfo)
+                trackNames.Add(o);
+            subtitleTracks[0].StandardStreams = trackNames.ToArray();
+            subtitleTracks[0].CustomStreams = new object[0];
+            subtitleTracks[0].SelectedStreamIndex = 0;
+
+            // delete all tracks beside the first one
+            for (int i = subtitlesTab.TabCount; i > 1; i--)
+            {
+                subtitlesTab.TabPages.RemoveAt(i - 1);
+                subtitleTracks.RemoveAt(i - 1);
+            }
+
+            foreach (string strLanguage in settings.DefaultSubtitleLanguage)
+                if (strLanguage.Equals("[none]"))
+                    return;
+
+            int iCounter = 0;
+            foreach (string strLanguage in settings.DefaultSubtitleLanguage)
+            {
+                for (int i = 0; i < arrSubtitleTrackInfo.Count; i++)
+                {
+                    if (arrSubtitleTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                    {
+                        if (iCounter > 0)
+                            SubtitleAddTrack();
+                        subtitleTracks[iCounter++].SelectedStreamIndex = i + 1;
+                    }
+                }
+            }
+
+            if (iCounter == 0 && arrSubtitleTrackInfo.Count > 0 && !settings.UseNoLanguagesAsFallback)
+            {
+                for (int i = 0; i < arrSubtitleTrackInfo.Count; i++)
+                {
+                    if (iCounter > 0)
+                        SubtitleAddTrack();
+                    subtitleTracks[iCounter++].SelectedStreamIndex = i + 1;
+                }
+            }
+        }
+
+        private void subtitlesTab_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            SubtitleAddTrack();
+        }
+
+
+        // Audio Track Handling
+        private void audioMenu_Opening(object sender, CancelEventArgs e)
+        {
+            //audioRemoveTrack.Enabled = (audioTracks.Count > 1);
+        }
+
+        private void audioAddTrack_Click(object sender, EventArgs e)
+        {
+           AudioAddTrack();
+        }
+
+        private void audioRemoveTrack_Click(object sender, EventArgs e)
+        {
+            AudioRemoveTrack(iSelectedAudioTabPage);
+        }
+
+        private void AudioAddTrack()
+        {
+            TabPage p = new TabPage("Audio " + (audioTracks.Count + 1));
+            p.UseVisualStyleBackColor = audioTab.TabPages[0].UseVisualStyleBackColor;
+            p.Padding = audioTab.TabPages[0].Padding;
+
+            OneClickStreamControl a = new OneClickStreamControl();
+            a.Dock = audioTracks[0].Dock;
+            a.Padding = audioTracks[0].Padding;
+            a.ShowDelay = audioTracks[0].ShowDelay;
+            a.ShowDefaultStream = audioTracks[0].ShowDefaultStream;
+            a.ShowForceStream = audioTracks[0].ShowForceStream;
+            a.Filter = audioTracks[0].Filter;
+            a.FileUpdated += oneClickAudioStreamControl_FileUpdated;
+            a.StandardStreams = audioTracks[0].StandardStreams;
+            a.CustomStreams = audioTracks[0].CustomStreams;
+            a.SelectedStreamIndex = 0;
+            a.SomethingChanged += new EventHandler(audio1_SomethingChanged);
+            a.EncodingMode = audioTracks[0].EncodingMode;
+            a.initProfileHandler();
+            a.SelectProfileNameOrWarn(audioTracks[0].EncoderProfile);
+            if (this.Visible)
+                a.enableDragDrop();
+
+            audioTab.TabPages.Add(p);
+            p.Controls.Add(a);
+            audioTracks.Add(a);
+        }
+
+        private void AudioRemoveTrack(int iTabPageIndex)
+        {
+            if (iTabPageIndex == 0 && audioTab.TabCount == 1)
+                AudioAddTrack();
+
+            audioTab.TabPages.RemoveAt(iTabPageIndex);
+            audioTracks.RemoveAt(iTabPageIndex);
+
+            for (int i = 0; i < audioTab.TabCount; i++)
+                audioTab.TabPages[i].Text = "Audio " + (i + 1);
+        }
+
+        private int iSelectedAudioTabPage = -1;
+        private void audioTab_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+
+            Point p = e.Location;
+            for (int i = 0; i < audioTab.TabCount; i++)
+            {
+                Rectangle rect = audioTab.GetTabRect(i);
+                rect.Offset(2, 2);
+                rect.Width -= 4;
+                rect.Height -= 4;
+                if (rect.Contains(p))
+                {
+                    iSelectedAudioTabPage = i;
+                    audioMenu.Show(audioTab, e.Location);
+                    break;
+                }
+            }
+        }
+
+        private void oneClickAudioStreamControl_FileUpdated(object sender, EventArgs e)
+        {
+            if (bLock)
+                return;
+            
+            int i = audioTracks.IndexOf((OneClickStreamControl)sender);
+
+            if (i < 0)
+                return;
+
+            OneClickStreamControl track = audioTracks[i];
+            if (!track.SelectedItem.IsStandard)
+                track.SelectedStream.Delay = PrettyFormatting.getDelayAndCheck(track.SelectedStream.DemuxFilePath) ?? 0;
+            if (_videoInputInfo != null && _videoInputInfo.IndexerToUse == FileIndexerWindow.IndexType.FFMS 
+                && track.SelectedItem.IsStandard && _videoInputInfo.ContainerFileType != ContainerType.MKV 
+                && !_videoInputInfo.isEac3toDemuxable())
+                audioTracks[i].DisableDontEncode(true);
+            else
+                audioTracks[i].DisableDontEncode(false);
+
+            foreach (OneClickStreamControl oControl in audioTracks)
+            {
+                if (oControl == track)
+                    continue;
+
+                if (oControl.CustomStreams.Length != track.CustomStreams.Length)
+                {
+                    int iIndex = -1;
+                    if (!track.SelectedItem.IsStandard)
+                        iIndex = oControl.SelectedStreamIndex;
+                    bLock = true;
+                    oControl.CustomStreams = track.CustomStreams;
+                    bLock = false;
+                    if (iIndex >= 0 && oControl.SelectedStreamIndex != iIndex)
+                        oControl.SelectedStreamIndex = iIndex;
+                }
+            }
+
+            updatePossibleContainers();
+        }
+
+        private void AudioResetTrack(List<OneClickStream> arrAudioTrackInfo, OneClickSettings settings)
+        {
+            // generate track names
+            List<object> trackNames = new List<object>();
+            trackNames.Add("None");
+            foreach (OneClickStream o in arrAudioTrackInfo)
+                trackNames.Add(o);
+            audioTracks[0].StandardStreams = trackNames.ToArray();
+            audioTracks[0].CustomStreams = new object[0];
+            audioTracks[0].SelectedStreamIndex = 0;
+
+            // delete all tracks beside the first one
+            for (int i = audioTab.TabCount; i > 1; i--)
+            {
+                audioTab.TabPages.RemoveAt(i - 1);
+                audioTracks.RemoveAt(i - 1);
+            }
+
+            foreach (string strLanguage in settings.DefaultAudioLanguage)
+                if (strLanguage.Equals("[none]"))
+                    return;
+
+            int iCounter = 0;
+            foreach (string strLanguage in settings.DefaultAudioLanguage)
+            {
+                for (int i = 0; i < arrAudioTrackInfo.Count; i++)
+                {
+                    if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                    {
+                        if (iCounter > 0)
+                            AudioAddTrack();
+                        audioTracks[iCounter++].SelectedStreamIndex = i + 1;
+                    }
+                }
+            }
+
+            if (iCounter == 0 && arrAudioTrackInfo.Count > 0 && !settings.UseNoLanguagesAsFallback)
+            {
+                for (int i = 0; i < arrAudioTrackInfo.Count; i++)
+                {
+                    if (iCounter > 0)
+                        AudioAddTrack();
+                    audioTracks[iCounter++].SelectedStreamIndex = i + 1;
+                }
+            }
+
+            ResetAudioSettings(settings);
+        }
+
+        private void ResetAudioSettings(OneClickSettings settings)
+        {
+            foreach (OneClickStreamControl a in audioTracks)
+            {
+                bool bFound = false;
+                for (int i = 1; i < settings.AudioSettings.Count; i++)
+                {
+                    if (a.SelectedStream.Language.Equals(settings.AudioSettings[i].Language))
+                    {
+                        a.SelectProfileNameOrWarn(settings.AudioSettings[i].Profile);
+                        if (a.IsDontEncodePossible() == true)
+                            a.EncodingMode = settings.AudioSettings[i].AudioEncodingMode;
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (!bFound)
+                {
+                    a.SelectProfileNameOrWarn(settings.AudioSettings[0].Profile);
+                    if (a.IsDontEncodePossible() == true)
+                        a.EncodingMode = settings.AudioSettings[0].AudioEncodingMode;
+                }
+            }
+        }
+
+        private void audioTab_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            AudioAddTrack();
+        }
+
+        private void OneClickWindow_Shown(object sender, EventArgs e)
+        {
+            oneClickAudioStreamControl1.enableDragDrop();
+            oneClickSubtitleStreamControl1.enableDragDrop();
+        }
     }
+
+    public class OneClickFilesToProcess
+    {
+        public string FilePath;
+        public int TrackNumber;
+
+        public OneClickFilesToProcess() : this(string.Empty, 1)
+        {
+
+        }
+
+        public OneClickFilesToProcess(string strPath, int iNumber)
+        {
+            FilePath = strPath;
+            TrackNumber = iNumber;
+        }
+    }
+
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool
     {
 
@@ -630,8 +1502,7 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            OneClickWindow ocmt = new OneClickWindow(info, info.JobUtil, info.Video.VideoEncoderProvider,
-                new AudioEncoderProvider());
+            OneClickWindow ocmt = new OneClickWindow(info);
             ocmt.Show();
         }
 
@@ -651,352 +1522,5 @@ namespace MeGUI
 
         #endregion
 
-    }
-    public class OneClickPostProcessor
-    {
-        #region postprocessor
-        private static LogItem postprocess(MainForm mainForm, Job job)
-        {
-            if (!(job is IndexJob))
-                return null;
-            IndexJob ijob = (IndexJob)job;
-            if (ijob.PostprocessingProperties == null)
-                return null;
-            OneClickPostProcessor p = new OneClickPostProcessor(mainForm, ijob);
-            return p.postprocess();
-        }
-        public static JobPostProcessor PostProcessor = new JobPostProcessor(postprocess, "OneClick_postprocessor");
-
-        #endregion
-        private MainForm mainForm;
-        Dictionary<int, string> audioFiles;
-        private JobUtil jobUtil;
-        private VideoUtil vUtil;
-        private IndexJob job;
-        private AVCLevels al = new AVCLevels();
-        private bool finished = false;
-        private bool interlaced = false;
-        private DeinterlaceFilter[] filters;
-        private LogItem log = new LogItem("OneClick postprocessor", ImageType.Information);
-        string qpfile = string.Empty;
-        
-        public OneClickPostProcessor(MainForm mainForm, IndexJob ijob)
-        {
-            this.job = ijob;
-            this.mainForm = mainForm;
-            this.jobUtil = mainForm.JobUtil;
-            this.vUtil = new VideoUtil(mainForm);
-        }
-
-        public LogItem postprocess()
-        {
-            audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, job.Output, 8);
-
-            fillInAudioInformation();
-
-            log.LogValue("Desired size", job.PostprocessingProperties.OutputSize);
-            log.LogValue("Split size", job.PostprocessingProperties.Splitting);
-
-            VideoCodecSettings videoSettings = job.PostprocessingProperties.VideoSettings;
-
-            string videoOutput = Path.Combine(Path.GetDirectoryName(job.Output),
-                Path.GetFileNameWithoutExtension(job.Output) + "_Video");
-            string muxedOutput = job.PostprocessingProperties.FinalOutput;
-
-            //Open the video
-            Dar? dar;
-            string videoInput = openVideo(job.Output, job.PostprocessingProperties.DAR, 
-                job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, log,
-                job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar,
-                job.PostprocessingProperties.AutoCrop, job.PostprocessingProperties.KeepInputResolution,
-                job.PostprocessingProperties.UseChaptersMarks);
-
-            VideoStream myVideo = new VideoStream();
-            ulong length;
-            double framerate;        
-            JobUtil.getInputProperties(out length, out framerate, videoInput);
-            myVideo.Input = videoInput;
-            myVideo.Output = videoOutput;
-            myVideo.NumberOfFrames = length;
-            myVideo.Framerate = (decimal)framerate;
-            myVideo.DAR = dar;
-            myVideo.VideoType = new MuxableType((new VideoEncoderProvider().GetSupportedOutput(videoSettings.EncoderType))[0], videoSettings.Codec);
-            myVideo.Settings = videoSettings;
-            List<string> intermediateFiles = new List<string>();
-            intermediateFiles.Add(videoInput);
-            intermediateFiles.Add(job.Output);
-            intermediateFiles.AddRange(audioFiles.Values);
-            if (!string.IsNullOrEmpty(qpfile))
-                intermediateFiles.Add(qpfile);
-
-            if (!string.IsNullOrEmpty(videoInput))
-            {
-                //Create empty subtitles for muxing (subtitles not supported in one click mode)
-                MuxStream[] subtitles = new MuxStream[0];
-                JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, job.PostprocessingProperties.AudioJobs, subtitles,
-                    job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
-                    job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
-                    job.PostprocessingProperties.PrerenderJob, job.PostprocessingProperties.DirectMuxAudio, log, job.PostprocessingProperties.DeviceOutputType);
-                if (c == null)
-                {
-                    log.Warn("Job creation aborted");
-                    return log;
-                }
-
-                c = CleanupJob.AddAfter(c, intermediateFiles);
-                mainForm.Jobs.addJobsWithDependencies(c);
-            }
-            return log;
-        }
-
-        private void fillInAudioInformation()
-        {
-            foreach (MuxStream m in job.PostprocessingProperties.DirectMuxAudio)
-                m.path = convertTrackNumberToFile(m.path, ref m.delay);
-
-            foreach (AudioJob a in job.PostprocessingProperties.AudioJobs)
-            {
-                a.Input = convertTrackNumberToFile(a.Input, ref a.Delay);
-                if (string.IsNullOrEmpty(a.Output))
-                    a.Output = FileUtil.AddToFileName(a.Input, "_audio");
-            }
-        }
-
-        /// <summary>
-        /// if input is a track number (of the form, "::&lt;number&gt;::")
-        /// then it returns the file path of that track number. Otherwise,
-        /// it returns the string only
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        private string convertTrackNumberToFile(string input, ref int delay)
-        {
-            if (input.StartsWith("::") && input.EndsWith("::") && input.Length > 4)
-            {
-                string sub = input.Substring(2, input.Length - 4);
-                try
-                {
-                    int t = int.Parse(sub);
-                    string s = audioFiles[t];
-                    delay = PrettyFormatting.getDelay(s) ?? 0;
-                    return s;
-                }
-                catch (Exception)
-                {
-                    log.Warn(string.Format("Couldn't find audio file for track {0}. Skipping track.", input));
-                    return null;
-                }
-            }
-
-            return input;
-        }
-        /// <summary>
-        /// opens a dgindex script
-        /// if the file can be properly opened, auto-cropping is performed, then depending on the AR settings
-        /// the proper resolution for automatic resizing, taking into account the derived cropping values
-        /// is calculated, and finally the avisynth script is written and its name returned
-        /// </summary>
-        /// <param name="path">dgindex script</param>
-        /// <param name="aspectRatio">aspect ratio selection to be used</param>
-        /// <param name="customDAR">custom display aspect ratio for this source</param>
-        /// <param name="horizontalResolution">desired horizontal resolution of the output</param>
-        /// <param name="settings">the codec settings (used only for x264)</param>
-        /// <param name="sarX">pixel aspect ratio X</param>
-        /// <param name="sarY">pixel aspect ratio Y</param>
-        /// <param name="height">the final height of the video</param>
-        /// <param name="signalAR">whether or not ar signalling is to be used for the output 
-        /// (depending on this parameter, resizing changes to match the source AR)</param>
-        /// <param name="autoCrop">whether or not autoCrop is used for the input</param>
-        /// <returns>the name of the AviSynth script created, empty of there was an error</returns>
-        private string openVideo(string path, Dar? AR, int horizontalResolution,
-            bool signalAR, LogItem log, AviSynthSettings avsSettings, bool autoDeint,
-            VideoCodecSettings settings, out Dar? dar, bool autoCrop, bool keepInputResolution, bool useChaptersMarks)
-        {
-            dar = null; 
-            IMediaFile d2v = new d2vFile(path);
-            IVideoReader reader = d2v.GetVideoReader();
-            if (reader.FrameCount < 1)
-            {
-                log.Error("DGDecode reported 0 frames in this file. This is a fatal error. Please recreate the DGIndex project");
-                return "";
-            }
-
-            //Autocrop
-            CropValues final = Autocrop.autocrop(reader);
-
-            if (signalAR)
-            {
-                if (avsSettings.Mod16Method == mod16Method.overcrop)
-                    ScriptServer.overcrop(ref final);
-                else if (avsSettings.Mod16Method == mod16Method.mod4Horizontal)
-                    ScriptServer.cropMod4Horizontal(ref final);
-                else if (avsSettings.Mod16Method == mod16Method.undercrop)
-                    ScriptServer.undercrop(ref final);
-            }
-
-            bool error = (final.left == -1);
-            if (autoCrop)
-            {
-                if (!error)
-                    log.LogValue("Autocrop values", final);
-                else
-                {
-                    log.Error("Autocrop failed, aborting now");
-                    return "";
-                }
-            }
-
-            decimal customDAR;
-
-            log.LogValue("Auto-detect aspect ratio now", AR == null);
-            //Check if AR needs to be autodetected now
-            if (AR == null) // it does
-            {
-                customDAR = d2v.Info.DAR.ar;
-                if (customDAR > 0)
-                    log.LogValue("Aspect ratio", customDAR);
-                else
-                {
-                    customDAR = Dar.ITU16x9PAL.ar;
-                    log.Warn(string.Format("No aspect ratio found, defaulting to {0}.", customDAR));
-                }
-            }
-            else customDAR = AR.Value.ar;
-
-            // Minimise upsizing
-            int sourceHorizontalResolution = (int)d2v.Info.Width - final.right - final.left;
-            if (autoCrop)
-                sourceHorizontalResolution = (int)d2v.Info.Width;
-
-            if (horizontalResolution > sourceHorizontalResolution)
-            {
-                if (avsSettings.Mod16Method == mod16Method.resize)
-                    while (horizontalResolution > sourceHorizontalResolution + 16)
-                        horizontalResolution -= 16;
-                else
-                    horizontalResolution = sourceHorizontalResolution;
-            }
-
-            //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
-            int scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
-                final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
-
-            log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
-
-            if (settings != null && settings is x264Settings) // verify that the video corresponds to the chosen avc level, if not, change the resolution until it does fit
-            {
-                x264Settings xs = (x264Settings)settings;
-                if (xs.Level != 15)
-                {
-                    AVCLevels al = new AVCLevels();
-                    log.LogValue("AVC level", al.getLevels()[xs.Level]);
-
-                    int compliantLevel = 15;
-                    while (!this.al.validateAVCLevel(horizontalResolution, scriptVerticalResolution, d2v.Info.FPS, xs, out compliantLevel))
-                    { // resolution not profile compliant, reduce horizontal resolution by 16, get the new vertical resolution and try again
-                        string levelName = al.getLevels()[xs.Level];
-                        horizontalResolution -= 16;
-                        scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
-                            final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
-                    }
-                    log.LogValue("Resolution adjusted for AVC Level", horizontalResolution + "x" + scriptVerticalResolution);
-                }
-                if (useChaptersMarks)
-                {
-                    qpfile = job.PostprocessingProperties.ChapterFile;
-                    if ((Path.GetExtension(qpfile).ToLower()) == ".txt")
-                        qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.Info.FPS);
-                    if (File.Exists(qpfile))
-                    {
-                        xs.UseQPFile = true;
-                        xs.QPFile = qpfile;
-                    }
-                }
-            }
-
-            //Generate the avs script based on the template
-            string inputLine = "#input";
-            string deinterlaceLines = "#deinterlace";
-            string denoiseLines = "#denoise";
-            string cropLine = "#crop";
-            string resizeLine = "#resize";
-
-            inputLine = ScriptServer.GetInputLine(path, false, PossibleSources.d2v,
-                false, false, false, 0, false);
-
-            log.LogValue("Automatic deinterlacing", autoDeint);
-            if (autoDeint)
-            {
-                string d2vPath = path;
-                SourceDetector sd = new SourceDetector(inputLine, d2vPath, false,
-                    mainForm.Settings.SourceDetectorSettings,
-                    new UpdateSourceDetectionStatus(analyseUpdate),
-                    new FinishedAnalysis(finishedAnalysis));
-                finished = false;
-                sd.analyse();
-                waitTillAnalyseFinished();
-                deinterlaceLines = filters[0].Script;
-                log.LogValue("Deinterlacing used", deinterlaceLines);
-            }
-
-            inputLine = ScriptServer.GetInputLine(path, interlaced, PossibleSources.d2v, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0, false);
-
-            if (autoCrop)
-                 cropLine = ScriptServer.GetCropLine(true, final);
-            else cropLine = ScriptServer.GetCropLine(false, final);
-            denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
-
-            if (keepInputResolution == false)
-            resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
-
-            string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
-            if (dar.HasValue)
-                newScript = string.Format("global MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n{2}", dar.Value.X, dar.Value.Y, newScript);
-
-            log.LogValue("Generated Avisynth script", newScript);
-            try
-            {
-                StreamWriter sw = new StreamWriter(Path.ChangeExtension(path, ".avs"),false, System.Text.Encoding.Default);
-                sw.Write(newScript);
-                sw.Close();
-            }
-            catch (IOException i)
-            {
-                log.LogValue("Error saving AviSynth script", i, ImageType.Error);
-                return "";
-            }
-            return Path.ChangeExtension(path, ".avs");
-        }
-        
-        public void finishedAnalysis(SourceInfo info, bool error, string errorMessage)
-        {
-            if (error)
-            {
-                MessageBox.Show(errorMessage, "Source detection failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                filters = new DeinterlaceFilter[] {
-                    new DeinterlaceFilter("Error", "#An error occurred in source detection. Doing no processing")};
-            }
-            else if (info.sourceType == SourceType.NOT_ENOUGH_SECTIONS)
-            {
-                MessageBox.Show("Could not find enough useful sections to determine source type for " + job.Input, "Source detection failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                filters = new DeinterlaceFilter[] {
-                    new DeinterlaceFilter("Error", "#Not enough useful sections for source detection. Doing no processing")};
-            }
-            else
-                this.filters = ScriptServer.GetDeinterlacers(info).ToArray();
-            interlaced = (info.sourceType != SourceType.PROGRESSIVE);
-            finished = true;
-        }
-
-        public void analyseUpdate(int amountDone, int total)
-        { /*Do nothing*/ }
-
-        private void waitTillAnalyseFinished()
-        {
-            while (!finished)
-            {
-                Thread.Sleep(500);
-            }
-        }
     }
 }

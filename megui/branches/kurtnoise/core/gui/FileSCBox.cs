@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -29,17 +29,35 @@ namespace MeGUI.core.gui
 {
     public class FileSCBox : StandardAndCustomComboBox
     {
+        public enum FileSCBoxType
+        {
+            Default, OC_FILE_AND_FOLDER, OC_FILE
+        };
+
         public FileSCBox() : base("Clear user-selected files...", "Select file...")
         {
             base.Getter = new Getter<object>(getter);
+            base.bSaveEveryItem = true;
         }
 
         OpenFileDialog ofd = new OpenFileDialog();
+        FolderBrowserDialog fbd = new FolderBrowserDialog();
+        FileSCBoxType oType = FileSCBoxType.Default;
 
         private object getter()
         {
             if (ofd.ShowDialog() == DialogResult.OK)
                 return ofd.FileName;
+            return null;
+        }
+
+        private object getterFolder()
+        {
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                MainForm.Instance.Settings.LastUsedOneClickFolder = fbd.SelectedPath;
+                return fbd.SelectedPath;
+            }
             return null;
         }
 
@@ -49,5 +67,23 @@ namespace MeGUI.core.gui
             set { ofd.Filter = value; }
         }
 
+        public FileSCBoxType Type
+        {
+            get { return oType; }
+            set 
+            { 
+                oType = value;
+                if (oType == FileSCBoxType.OC_FILE || oType == FileSCBoxType.OC_FILE_AND_FOLDER)
+                {
+                    base.SetFileSCBoxType("Select file...", "Select folder...", oType);
+                    if (oType == FileSCBoxType.OC_FILE_AND_FOLDER)
+                    {
+                        base.GetterFolder = new Getter<object>(getterFolder);
+                        if (MainForm.Instance != null && System.IO.Directory.Exists(MainForm.Instance.Settings.LastUsedOneClickFolder))
+                            fbd.SelectedPath = MainForm.Instance.Settings.LastUsedOneClickFolder;
+                    }
+                }
+            }
+        }
     }
 }

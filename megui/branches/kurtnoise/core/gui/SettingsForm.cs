@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Text;
+using System.Xml;
 using System.Windows.Forms;
 
 namespace MeGUI
@@ -41,14 +43,6 @@ namespace MeGUI
         private TabControl tabControl1;
         private TabPage tabPage1;
         private SourceDetectorSettings sdSettings;
-		private System.Windows.Forms.CheckBox autoForceFilm;
-		private System.Windows.Forms.NumericUpDown forceFilmPercentage;
-        private System.Windows.Forms.Label percentLabel;
-		private System.Windows.Forms.GroupBox vobGroupBox;
-		private System.Windows.Forms.Label defaultAudioTrack1Label;
-		private System.Windows.Forms.ComboBox defaultLanguage1;
-		private System.Windows.Forms.Label defaultAudioTrack2Label;
-        private System.Windows.Forms.ComboBox defaultLanguage2;
         private System.Windows.Forms.FolderBrowserDialog openFolderDialog;
         private CheckBox chkboxUseAdvancedTooltips;
         private Button configSourceDetector;
@@ -84,70 +78,14 @@ namespace MeGUI
         private RadioButton shutdown;
         private RadioButton donothing;
         private Button configureServersButton;
-        private Label label14;
-        private NumericUpDown maxServersToTry;
         private NumericUpDown acceptableFPSError;
         private Label label15;
         private NumericUpDown audiosamplesperupdate;
         private Label label6;
         private MeGUI.core.gui.HelpButton helpButton1;
-        private TabPage tabPage2;
-        private TabControl tabControl2;
-        private TabPage tabPage4;
-        private Label xvidEncrawLabel;
-        private Button selectXvidEncrawButton;
-        private TextBox xvidEncrawPath;
-        private Button selectMencoderExecutableButton;
-        private TextBox mencoderPath;
-        private Label mencoderPathLabel;
-        private Label x264ExePathLabel;
-        private TextBox x264ExePath;
-        private Button selectX264ExecutableButton;
-        private TabPage tabPage5;
-        private TabPage tabPage7;
-        private Button button9;
-        private Button selectAvisynthPluginsDir;
-        private TextBox textBox9;
-        private Label label16;
-        private TextBox avisynthPluginsDir;
-        private TextBox dgIndexPath;
-        private Label dgIndexLabel;
-        private Button selectDGIndexExecutable;
-        private Label avisynthPluginsLabel;
-        private TabPage tabPage6;
-        private TextBox aviMuxGUIPath;
-        private TextBox mp4boxPath;
-        private Button selectMkvmergeExecutableButton;
-        private Button selectAviMuxGUIExecutableButton;
-        private TextBox mkvmergePath;
-        private Button selectMP4boxExecutableButton;
-        private Label mp4boxPathLabel;
-        private Label mkvmergePathLabel;
-        private Label avimuxguiPathLabel;
-        private TextBox tbEncAacPlus;
-        private Label label9;
-        private Button button6;
-        private TextBox tbOggEnc;
-        private Label label7;
-        private Button button4;
-        private TextBox tbLame;
-        private Label label3;
-        private Button button3;
-        private TextBox tbNeroAacEnc;
-        private Label label2;
-        private Button button2;
         private CheckBox keep2ndPassOutput;
         private CheckBox keep2ndPassLogFile;
-        private Label label17;
-        private Button button10;
-        private TextBox meguiUpdateCache;
         private Button configAutoEncodeDefaults;
-        private TextBox textBox8;
-        private Label besplit;
-        private Button button8;
-        private TextBox tbAften;
-        private Label lbAften;
-        private Button selectAftenExecutableButton;
         private GroupBox gbVideoPreview;
         private CheckBox chAlwaysOnTop;
         private GroupBox groupBox2;
@@ -160,39 +98,49 @@ namespace MeGUI
         private CheckBox cbx_usehttpproxy;
         private TextBox txt_httpproxypwd;
         private TextBox txt_httpproxyport;
-        private CheckBox cbAddTimePos;
-        private TextBox dgavcIndexPath;
-        private Label DGAIndex;
-        private Button selectDGAIndexExecutable;
-        private TextBox dgvc1IndexPath;
-        private Label label5;
-        private Button selectDGVIndexExecutable;
-        private TextBox dgmpgIndexPath;
-        private Label label22;
-        private Button selectDGMIndexExecutable;
-        private TextBox eac3toPath;
-        private Label label23;
-        private Button selectEAC3toExecutable;
-        private TextBox tsmuxerPath;
-        private Label tsmuxerPathLabel;
-        private Button selectTSMuxerExecutableButton;
-        private CheckBox backupfiles;
-        private CheckBox forcerawavcuse;
-        private Label label1;
-        private TextBox DivXAVCPath;
-        private Button selectDivXAVCExecButton;
         private GroupBox gbDefaultOutput;
         private Button clearDefaultOutputDir;
         private FileBar defaultOutputDir;
-        private TextBox tbFlac;
-        private Label label4;
-        private Button selectFlacExecutableButton;
-
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        private CheckBox cbAddTimePos;
+        private CheckBox backupfiles;
+        private CheckBox forcerawavcuse;
+        private TabPage tabPage2;
+        private GroupBox vobGroupBox;
+        private Label percentLabel;
+        private NumericUpDown forceFilmPercentage;
+        private CheckBox autoForceFilm;
+        private GroupBox groupBox4;
+        private Button btnClearMP4TempDirectory;
+        private FileBar tempDirMP4;
+        private GroupBox groupBox5;
+        private GroupBox groupBox6;
+        private CheckBox cbAutoLoadDG;
+        private RadioButton rbCloseMeGUI;
+        private CheckBox cbAutoStartQueueStartup;
+        private ComboBox cbAutoUpdateServerSubList;
+        private CheckBox chkAlwaysMuxMKV;
 		#endregion
+        private ToolTip toolTipHelp;
+        private IContainer components;
+        private CheckBox chkEnable64bitX264;
+        private CheckBox chkEnsureCorrectPlaybackSpeed;
+        private GroupBox groupBox3;
+        private ComboBox defaultLanguage2;
+        private ComboBox defaultLanguage1;
+        private CheckBox chkSelectHDTracks;
+        private Button btnClearOutputDirecoty;
+        private NumericUpDown ffmsThreads;
+        private Label lblffmsThreads;
+        private Label lblForcedName;
+        private TextBox txtForcedName;
+        private CheckBox cbUseITUValues;
+        private CheckBox cbOpenAVSinThread;
+        private core.gui.TargetSizeSCBox targetSizeSCBox1;
+        private FileBar neroaacencLocation;
+        private CheckBox useNeroAacEnc;
+        private Label lblNero;
+        private CheckBox useDGIndexNV;
+        private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
 		{
@@ -201,9 +149,62 @@ namespace MeGUI
             defaultLanguage2.DataSource = defaultLanguage1.DataSource = keys;
             defaultLanguage2.BindingContext = new BindingContext();
             defaultLanguage1.BindingContext = new BindingContext();
-            this.avisynthPluginsDir.Text = "" + MeGUISettings.AvisynthPluginsPath;
-            this.meguiUpdateCache.Text = "" + MeGUISettings.MeGUIUpdateCache;
-		}
+            SetToolTips();
+#if x86
+            if (!OSInfo.isWow64())
+                chkEnable64bitX264.Enabled = chkEnable64bitX264.Checked = false;
+#endif
+#if x64
+            chkEnable64bitX264.Enabled = false;
+            chkEnable64bitX264.Checked = true;
+            chkEnable64bitX264.Visible = false;
+#endif
+            ffmsThreads.Maximum = System.Environment.ProcessorCount;
+        }
+
+        /// <summary>
+        /// Sets any required tooltips
+        /// </summary>
+        private void SetToolTips()
+        {
+            try
+            {
+                string p = System.IO.Path.Combine(Application.StartupPath, "Data");
+                p = System.IO.Path.Combine(p, "ContextHelp.xml");             
+                ContextHelp.Load(p);
+            }
+            catch
+            {
+                MessageBox.Show("The ContextHelp.xml file could not be found. Please check in the 'Data' directory to see if it exists. Help tooltips will not be available.", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            toolTipHelp.SetToolTip(chkAlwaysMuxMKV, SelectHelpText("alwaysmuxmkv"));
+            toolTipHelp.SetToolTip(ffmsThreads, SelectHelpText("ffmsthreads"));
+            toolTipHelp.SetToolTip(cbUseITUValues, SelectHelpText("useituvalues"));
+        }
+
+        /// <summary>
+        /// Gets the help text
+        /// </summary>
+        private string SelectHelpText(string node)
+        {
+            StringBuilder HelpText = new StringBuilder(64);
+
+            string xpath = "/ContextHelp/Form[@name='SettingsForm']/" + node;
+            XmlNodeList nl = ContextHelp.SelectNodes(xpath); // Return the details for the specified node
+
+            if (nl.Count == 1) // if it finds the required HelpText, count should be 1
+            {
+                HelpText.Append(nl[0].Attributes["name"].Value);
+                HelpText.AppendLine();
+                HelpText.AppendLine(nl[0]["Basic"].InnerText);
+            }
+            else // If count isn't 1, then theres no valid data.
+                HelpText.Append("Error: No data available");
+
+            return (HelpText.ToString());
+        }
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -226,8 +227,10 @@ namespace MeGUI
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.GroupBox groupBox1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+            this.rbCloseMeGUI = new System.Windows.Forms.RadioButton();
             this.command = new System.Windows.Forms.TextBox();
             this.runCommand = new System.Windows.Forms.RadioButton();
             this.shutdown = new System.Windows.Forms.RadioButton();
@@ -235,6 +238,9 @@ namespace MeGUI
             this.saveButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.otherGroupBox = new System.Windows.Forms.GroupBox();
+            this.cbOpenAVSinThread = new System.Windows.Forms.CheckBox();
+            this.cbUseITUValues = new System.Windows.Forms.CheckBox();
+            this.cbAutoStartQueueStartup = new System.Windows.Forms.CheckBox();
             this.forcerawavcuse = new System.Windows.Forms.CheckBox();
             this.audiosamplesperupdate = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
@@ -253,20 +259,15 @@ namespace MeGUI
             this.autostartQueue = new System.Windows.Forms.CheckBox();
             this.priority = new System.Windows.Forms.ComboBox();
             this.priorityLabel = new System.Windows.Forms.Label();
-            this.vobGroupBox = new System.Windows.Forms.GroupBox();
-            this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
-            this.defaultAudioTrack2Label = new System.Windows.Forms.Label();
-            this.defaultLanguage1 = new System.Windows.Forms.ComboBox();
-            this.defaultAudioTrack1Label = new System.Windows.Forms.Label();
-            this.percentLabel = new System.Windows.Forms.Label();
-            this.forceFilmPercentage = new System.Windows.Forms.NumericUpDown();
-            this.autoForceFilm = new System.Windows.Forms.CheckBox();
             this.openExecutableDialog = new System.Windows.Forms.OpenFileDialog();
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
+            this.defaultLanguage1 = new System.Windows.Forms.ComboBox();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
-            this.defaultOutputDir = new MeGUI.FileBar();
+            this.btnClearOutputDirecoty = new System.Windows.Forms.Button();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -280,12 +281,12 @@ namespace MeGUI
             this.label18 = new System.Windows.Forms.Label();
             this.cbx_usehttpproxy = new System.Windows.Forms.CheckBox();
             this.gbVideoPreview = new System.Windows.Forms.GroupBox();
+            this.chkEnsureCorrectPlaybackSpeed = new System.Windows.Forms.CheckBox();
             this.cbAddTimePos = new System.Windows.Forms.CheckBox();
             this.chAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
+            this.cbAutoUpdateServerSubList = new System.Windows.Forms.ComboBox();
             this.backupfiles = new System.Windows.Forms.CheckBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.maxServersToTry = new System.Windows.Forms.NumericUpDown();
             this.configureServersButton = new System.Windows.Forms.Button();
             this.useAutoUpdateCheckbox = new System.Windows.Forms.CheckBox();
             this.outputExtensions = new System.Windows.Forms.GroupBox();
@@ -294,133 +295,95 @@ namespace MeGUI
             this.label12 = new System.Windows.Forms.Label();
             this.audioExtension = new System.Windows.Forms.TextBox();
             this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
+            this.chkAlwaysMuxMKV = new System.Windows.Forms.CheckBox();
             this.configAutoEncodeDefaults = new System.Windows.Forms.Button();
             this.keep2ndPassLogFile = new System.Windows.Forms.CheckBox();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabControl2 = new System.Windows.Forms.TabControl();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
-            this.DivXAVCPath = new System.Windows.Forms.TextBox();
-            this.selectDivXAVCExecButton = new System.Windows.Forms.Button();
-            this.xvidEncrawLabel = new System.Windows.Forms.Label();
-            this.selectXvidEncrawButton = new System.Windows.Forms.Button();
-            this.xvidEncrawPath = new System.Windows.Forms.TextBox();
-            this.selectMencoderExecutableButton = new System.Windows.Forms.Button();
-            this.mencoderPath = new System.Windows.Forms.TextBox();
-            this.mencoderPathLabel = new System.Windows.Forms.Label();
-            this.x264ExePathLabel = new System.Windows.Forms.Label();
-            this.x264ExePath = new System.Windows.Forms.TextBox();
-            this.selectX264ExecutableButton = new System.Windows.Forms.Button();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.tbAften = new System.Windows.Forms.TextBox();
-            this.lbAften = new System.Windows.Forms.Label();
-            this.selectAftenExecutableButton = new System.Windows.Forms.Button();
-            this.tbEncAacPlus = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.button6 = new System.Windows.Forms.Button();
-            this.tbOggEnc = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
-            this.tbLame = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.tbNeroAacEnc = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.tsmuxerPath = new System.Windows.Forms.TextBox();
-            this.tsmuxerPathLabel = new System.Windows.Forms.Label();
-            this.selectTSMuxerExecutableButton = new System.Windows.Forms.Button();
-            this.aviMuxGUIPath = new System.Windows.Forms.TextBox();
-            this.mp4boxPath = new System.Windows.Forms.TextBox();
-            this.avimuxguiPathLabel = new System.Windows.Forms.Label();
-            this.selectMkvmergeExecutableButton = new System.Windows.Forms.Button();
-            this.mkvmergePathLabel = new System.Windows.Forms.Label();
-            this.selectAviMuxGUIExecutableButton = new System.Windows.Forms.Button();
-            this.mp4boxPathLabel = new System.Windows.Forms.Label();
-            this.mkvmergePath = new System.Windows.Forms.TextBox();
-            this.selectMP4boxExecutableButton = new System.Windows.Forms.Button();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.eac3toPath = new System.Windows.Forms.TextBox();
-            this.label23 = new System.Windows.Forms.Label();
-            this.selectEAC3toExecutable = new System.Windows.Forms.Button();
-            this.dgmpgIndexPath = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.selectDGMIndexExecutable = new System.Windows.Forms.Button();
-            this.dgvc1IndexPath = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.selectDGVIndexExecutable = new System.Windows.Forms.Button();
-            this.dgavcIndexPath = new System.Windows.Forms.TextBox();
-            this.DGAIndex = new System.Windows.Forms.Label();
-            this.selectDGAIndexExecutable = new System.Windows.Forms.Button();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.besplit = new System.Windows.Forms.Label();
-            this.button8 = new System.Windows.Forms.Button();
-            this.label17 = new System.Windows.Forms.Label();
-            this.avisynthPluginsLabel = new System.Windows.Forms.Label();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.selectAvisynthPluginsDir = new System.Windows.Forms.Button();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.meguiUpdateCache = new System.Windows.Forms.TextBox();
-            this.avisynthPluginsDir = new System.Windows.Forms.TextBox();
-            this.dgIndexPath = new System.Windows.Forms.TextBox();
-            this.dgIndexLabel = new System.Windows.Forms.Label();
-            this.selectDGIndexExecutable = new System.Windows.Forms.Button();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.lblForcedName = new System.Windows.Forms.Label();
+            this.txtForcedName = new System.Windows.Forms.TextBox();
+            this.lblffmsThreads = new System.Windows.Forms.Label();
+            this.ffmsThreads = new System.Windows.Forms.NumericUpDown();
+            this.chkSelectHDTracks = new System.Windows.Forms.CheckBox();
+            this.chkEnable64bitX264 = new System.Windows.Forms.CheckBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.useNeroAacEnc = new System.Windows.Forms.CheckBox();
+            this.lblNero = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnClearMP4TempDirectory = new System.Windows.Forms.Button();
+            this.vobGroupBox = new System.Windows.Forms.GroupBox();
+            this.useDGIndexNV = new System.Windows.Forms.CheckBox();
+            this.cbAutoLoadDG = new System.Windows.Forms.CheckBox();
+            this.percentLabel = new System.Windows.Forms.Label();
+            this.forceFilmPercentage = new System.Windows.Forms.NumericUpDown();
+            this.autoForceFilm = new System.Windows.Forms.CheckBox();
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
-            this.tbFlac = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.selectFlacExecutableButton = new System.Windows.Forms.Button();
+            this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.targetSizeSCBox1 = new MeGUI.core.gui.TargetSizeSCBox();
+            this.defaultOutputDir = new MeGUI.FileBar();
+            this.neroaacencLocation = new MeGUI.FileBar();
+            this.tempDirMP4 = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.audiosamplesperupdate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
-            this.vobGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.gbDefaultOutput.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.gbVideoPreview.SuspendLayout();
             this.autoUpdateGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).BeginInit();
             this.outputExtensions.SuspendLayout();
             this.autoModeGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
             this.tabPage2.SuspendLayout();
-            this.tabControl2.SuspendLayout();
-            this.tabPage4.SuspendLayout();
-            this.tabPage5.SuspendLayout();
-            this.tabPage6.SuspendLayout();
-            this.tabPage7.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ffmsThreads)).BeginInit();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.vobGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(this.rbCloseMeGUI);
             groupBox1.Controls.Add(this.command);
             groupBox1.Controls.Add(this.runCommand);
             groupBox1.Controls.Add(this.shutdown);
             groupBox1.Controls.Add(this.donothing);
             groupBox1.Location = new System.Drawing.Point(4, 187);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(217, 117);
+            groupBox1.Size = new System.Drawing.Size(217, 95);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
-            groupBox1.Text = "After encoding";
+            groupBox1.Text = " After encoding ";
+            // 
+            // rbCloseMeGUI
+            // 
+            this.rbCloseMeGUI.AutoSize = true;
+            this.rbCloseMeGUI.Location = new System.Drawing.Point(123, 43);
+            this.rbCloseMeGUI.Name = "rbCloseMeGUI";
+            this.rbCloseMeGUI.Size = new System.Drawing.Size(84, 17);
+            this.rbCloseMeGUI.TabIndex = 4;
+            this.rbCloseMeGUI.TabStop = true;
+            this.rbCloseMeGUI.Text = "close MeGUI";
+            this.rbCloseMeGUI.UseVisualStyleBackColor = true;
             // 
             // command
             // 
             this.command.Enabled = false;
-            this.command.Location = new System.Drawing.Point(10, 89);
+            this.command.Location = new System.Drawing.Point(10, 64);
             this.command.Name = "command";
             this.command.Size = new System.Drawing.Size(197, 21);
             this.command.TabIndex = 3;
@@ -428,7 +391,7 @@ namespace MeGUI
             // runCommand
             // 
             this.runCommand.AutoSize = true;
-            this.runCommand.Location = new System.Drawing.Point(11, 66);
+            this.runCommand.Location = new System.Drawing.Point(11, 43);
             this.runCommand.Name = "runCommand";
             this.runCommand.Size = new System.Drawing.Size(96, 17);
             this.runCommand.TabIndex = 2;
@@ -439,7 +402,7 @@ namespace MeGUI
             // shutdown
             // 
             this.shutdown.AutoSize = true;
-            this.shutdown.Location = new System.Drawing.Point(11, 43);
+            this.shutdown.Location = new System.Drawing.Point(123, 21);
             this.shutdown.Name = "shutdown";
             this.shutdown.Size = new System.Drawing.Size(73, 17);
             this.shutdown.TabIndex = 1;
@@ -480,6 +443,9 @@ namespace MeGUI
             // 
             // otherGroupBox
             // 
+            this.otherGroupBox.Controls.Add(this.cbOpenAVSinThread);
+            this.otherGroupBox.Controls.Add(this.cbUseITUValues);
+            this.otherGroupBox.Controls.Add(this.cbAutoStartQueueStartup);
             this.otherGroupBox.Controls.Add(this.forcerawavcuse);
             this.otherGroupBox.Controls.Add(this.audiosamplesperupdate);
             this.otherGroupBox.Controls.Add(this.label6);
@@ -498,16 +464,47 @@ namespace MeGUI
             this.otherGroupBox.Controls.Add(this.autostartQueue);
             this.otherGroupBox.Controls.Add(this.priority);
             this.otherGroupBox.Controls.Add(this.priorityLabel);
-            this.otherGroupBox.Location = new System.Drawing.Point(2, 85);
+            this.otherGroupBox.Location = new System.Drawing.Point(2, 6);
             this.otherGroupBox.Name = "otherGroupBox";
-            this.otherGroupBox.Size = new System.Drawing.Size(467, 231);
+            this.otherGroupBox.Size = new System.Drawing.Size(467, 275);
             this.otherGroupBox.TabIndex = 1;
             this.otherGroupBox.TabStop = false;
-            this.otherGroupBox.Text = "Other";
+            this.otherGroupBox.Tag = "";
+            this.otherGroupBox.Text = " Main Settings ";
+            // 
+            // cbOpenAVSinThread
+            // 
+            this.cbOpenAVSinThread.Checked = true;
+            this.cbOpenAVSinThread.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbOpenAVSinThread.Location = new System.Drawing.Point(300, 92);
+            this.cbOpenAVSinThread.Name = "cbOpenAVSinThread";
+            this.cbOpenAVSinThread.Size = new System.Drawing.Size(144, 17);
+            this.cbOpenAVSinThread.TabIndex = 21;
+            this.cbOpenAVSinThread.Text = "Improved AVS opening";
+            // 
+            // cbUseITUValues
+            // 
+            this.cbUseITUValues.Checked = true;
+            this.cbUseITUValues.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbUseITUValues.Location = new System.Drawing.Point(300, 207);
+            this.cbUseITUValues.Name = "cbUseITUValues";
+            this.cbUseITUValues.Size = new System.Drawing.Size(144, 17);
+            this.cbUseITUValues.TabIndex = 20;
+            this.cbUseITUValues.Text = "Use ITU Aspect Ratio";
+            // 
+            // cbAutoStartQueueStartup
+            // 
+            this.cbAutoStartQueueStartup.AutoSize = true;
+            this.cbAutoStartQueueStartup.Location = new System.Drawing.Point(13, 207);
+            this.cbAutoStartQueueStartup.Name = "cbAutoStartQueueStartup";
+            this.cbAutoStartQueueStartup.Size = new System.Drawing.Size(203, 17);
+            this.cbAutoStartQueueStartup.TabIndex = 19;
+            this.cbAutoStartQueueStartup.Text = "Process queue on application startup";
+            this.cbAutoStartQueueStartup.UseVisualStyleBackColor = true;
             // 
             // forcerawavcuse
             // 
-            this.forcerawavcuse.Location = new System.Drawing.Point(13, 174);
+            this.forcerawavcuse.Location = new System.Drawing.Point(13, 184);
             this.forcerawavcuse.Name = "forcerawavcuse";
             this.forcerawavcuse.Size = new System.Drawing.Size(258, 17);
             this.forcerawavcuse.TabIndex = 18;
@@ -608,7 +605,7 @@ namespace MeGUI
             // 
             // resetDialogs
             // 
-            this.resetDialogs.Location = new System.Drawing.Point(13, 197);
+            this.resetDialogs.Location = new System.Drawing.Point(13, 230);
             this.resetDialogs.Name = "resetDialogs";
             this.resetDialogs.Size = new System.Drawing.Size(149, 23);
             this.resetDialogs.TabIndex = 16;
@@ -618,7 +615,7 @@ namespace MeGUI
             // 
             // configSourceDetector
             // 
-            this.configSourceDetector.Location = new System.Drawing.Point(300, 197);
+            this.configSourceDetector.Location = new System.Drawing.Point(298, 230);
             this.configSourceDetector.Name = "configSourceDetector";
             this.configSourceDetector.Size = new System.Drawing.Size(154, 23);
             this.configSourceDetector.TabIndex = 17;
@@ -628,7 +625,7 @@ namespace MeGUI
             // 
             // chkboxUseAdvancedTooltips
             // 
-            this.chkboxUseAdvancedTooltips.Location = new System.Drawing.Point(13, 105);
+            this.chkboxUseAdvancedTooltips.Location = new System.Drawing.Point(13, 115);
             this.chkboxUseAdvancedTooltips.Name = "chkboxUseAdvancedTooltips";
             this.chkboxUseAdvancedTooltips.Size = new System.Drawing.Size(152, 17);
             this.chkboxUseAdvancedTooltips.TabIndex = 8;
@@ -638,7 +635,7 @@ namespace MeGUI
             // 
             this.openProgressWindow.Checked = true;
             this.openProgressWindow.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.openProgressWindow.Location = new System.Drawing.Point(300, 174);
+            this.openProgressWindow.Location = new System.Drawing.Point(300, 184);
             this.openProgressWindow.Name = "openProgressWindow";
             this.openProgressWindow.Size = new System.Drawing.Size(144, 17);
             this.openProgressWindow.TabIndex = 15;
@@ -646,7 +643,7 @@ namespace MeGUI
             // 
             // deleteIntermediateFiles
             // 
-            this.deleteIntermediateFiles.Location = new System.Drawing.Point(300, 151);
+            this.deleteIntermediateFiles.Location = new System.Drawing.Point(300, 161);
             this.deleteIntermediateFiles.Name = "deleteIntermediateFiles";
             this.deleteIntermediateFiles.Size = new System.Drawing.Size(152, 17);
             this.deleteIntermediateFiles.TabIndex = 13;
@@ -654,7 +651,7 @@ namespace MeGUI
             // 
             // deleteAbortedOutput
             // 
-            this.deleteAbortedOutput.Location = new System.Drawing.Point(13, 151);
+            this.deleteAbortedOutput.Location = new System.Drawing.Point(13, 161);
             this.deleteAbortedOutput.Name = "deleteAbortedOutput";
             this.deleteAbortedOutput.Size = new System.Drawing.Size(184, 17);
             this.deleteAbortedOutput.TabIndex = 12;
@@ -662,7 +659,7 @@ namespace MeGUI
             // 
             // deleteCompletedJobs
             // 
-            this.deleteCompletedJobs.Location = new System.Drawing.Point(300, 128);
+            this.deleteCompletedJobs.Location = new System.Drawing.Point(300, 138);
             this.deleteCompletedJobs.Name = "deleteCompletedJobs";
             this.deleteCompletedJobs.Size = new System.Drawing.Size(144, 17);
             this.deleteCompletedJobs.TabIndex = 11;
@@ -670,7 +667,7 @@ namespace MeGUI
             // 
             // openScript
             // 
-            this.openScript.Location = new System.Drawing.Point(13, 128);
+            this.openScript.Location = new System.Drawing.Point(13, 138);
             this.openScript.Name = "openScript";
             this.openScript.Size = new System.Drawing.Size(248, 17);
             this.openScript.TabIndex = 10;
@@ -678,7 +675,7 @@ namespace MeGUI
             // 
             // autostartQueue
             // 
-            this.autostartQueue.Location = new System.Drawing.Point(300, 105);
+            this.autostartQueue.Location = new System.Drawing.Point(300, 115);
             this.autostartQueue.Name = "autostartQueue";
             this.autostartQueue.Size = new System.Drawing.Size(112, 17);
             this.autostartQueue.TabIndex = 9;
@@ -707,86 +704,6 @@ namespace MeGUI
             this.priorityLabel.Text = "Default Priority";
             this.priorityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // vobGroupBox
-            // 
-            this.vobGroupBox.Controls.Add(this.defaultLanguage2);
-            this.vobGroupBox.Controls.Add(this.defaultAudioTrack2Label);
-            this.vobGroupBox.Controls.Add(this.defaultLanguage1);
-            this.vobGroupBox.Controls.Add(this.defaultAudioTrack1Label);
-            this.vobGroupBox.Controls.Add(this.percentLabel);
-            this.vobGroupBox.Controls.Add(this.forceFilmPercentage);
-            this.vobGroupBox.Controls.Add(this.autoForceFilm);
-            this.vobGroupBox.Location = new System.Drawing.Point(2, 2);
-            this.vobGroupBox.Name = "vobGroupBox";
-            this.vobGroupBox.Size = new System.Drawing.Size(467, 77);
-            this.vobGroupBox.TabIndex = 0;
-            this.vobGroupBox.TabStop = false;
-            this.vobGroupBox.Text = "DGIndex";
-            // 
-            // defaultLanguage2
-            // 
-            this.defaultLanguage2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.defaultLanguage2.Location = new System.Drawing.Point(126, 47);
-            this.defaultLanguage2.Name = "defaultLanguage2";
-            this.defaultLanguage2.Size = new System.Drawing.Size(104, 21);
-            this.defaultLanguage2.TabIndex = 6;
-            // 
-            // defaultAudioTrack2Label
-            // 
-            this.defaultAudioTrack2Label.Location = new System.Drawing.Point(8, 50);
-            this.defaultAudioTrack2Label.Name = "defaultAudioTrack2Label";
-            this.defaultAudioTrack2Label.Size = new System.Drawing.Size(112, 13);
-            this.defaultAudioTrack2Label.TabIndex = 5;
-            this.defaultAudioTrack2Label.Text = "Default Audio Track 2";
-            this.defaultAudioTrack2Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // defaultLanguage1
-            // 
-            this.defaultLanguage1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.defaultLanguage1.Location = new System.Drawing.Point(126, 20);
-            this.defaultLanguage1.Name = "defaultLanguage1";
-            this.defaultLanguage1.Size = new System.Drawing.Size(104, 21);
-            this.defaultLanguage1.TabIndex = 1;
-            // 
-            // defaultAudioTrack1Label
-            // 
-            this.defaultAudioTrack1Label.Location = new System.Drawing.Point(8, 24);
-            this.defaultAudioTrack1Label.Name = "defaultAudioTrack1Label";
-            this.defaultAudioTrack1Label.Size = new System.Drawing.Size(112, 13);
-            this.defaultAudioTrack1Label.TabIndex = 0;
-            this.defaultAudioTrack1Label.Text = "Default Audio Track 1";
-            this.defaultAudioTrack1Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // percentLabel
-            // 
-            this.percentLabel.Location = new System.Drawing.Point(411, 24);
-            this.percentLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.percentLabel.Name = "percentLabel";
-            this.percentLabel.Size = new System.Drawing.Size(50, 13);
-            this.percentLabel.TabIndex = 4;
-            this.percentLabel.Text = "Percent";
-            this.percentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // forceFilmPercentage
-            // 
-            this.forceFilmPercentage.Location = new System.Drawing.Point(365, 20);
-            this.forceFilmPercentage.Name = "forceFilmPercentage";
-            this.forceFilmPercentage.Size = new System.Drawing.Size(40, 21);
-            this.forceFilmPercentage.TabIndex = 3;
-            this.forceFilmPercentage.Value = new decimal(new int[] {
-            95,
-            0,
-            0,
-            0});
-            // 
-            // autoForceFilm
-            // 
-            this.autoForceFilm.Location = new System.Drawing.Point(239, 22);
-            this.autoForceFilm.Name = "autoForceFilm";
-            this.autoForceFilm.Size = new System.Drawing.Size(120, 17);
-            this.autoForceFilm.TabIndex = 2;
-            this.autoForceFilm.Text = "Auto Force Film at";
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -801,51 +718,75 @@ namespace MeGUI
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.gbDefaultOutput);
-            this.tabPage1.Controls.Add(this.vobGroupBox);
             this.tabPage1.Controls.Add(this.otherGroupBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(475, 387);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Main";
+            this.tabPage1.Text = "Main Configuration";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.defaultLanguage2);
+            this.groupBox3.Controls.Add(this.defaultLanguage1);
+            this.groupBox3.Location = new System.Drawing.Point(2, 287);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(174, 92);
+            this.groupBox3.TabIndex = 8;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = " Default Languages ";
+            // 
+            // defaultLanguage2
+            // 
+            this.defaultLanguage2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.defaultLanguage2.Location = new System.Drawing.Point(13, 56);
+            this.defaultLanguage2.Name = "defaultLanguage2";
+            this.defaultLanguage2.Size = new System.Drawing.Size(152, 21);
+            this.defaultLanguage2.TabIndex = 7;
+            // 
+            // defaultLanguage1
+            // 
+            this.defaultLanguage1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.defaultLanguage1.Location = new System.Drawing.Point(13, 29);
+            this.defaultLanguage1.Name = "defaultLanguage1";
+            this.defaultLanguage1.Size = new System.Drawing.Size(152, 21);
+            this.defaultLanguage1.TabIndex = 2;
             // 
             // gbDefaultOutput
             // 
-            this.gbDefaultOutput.Controls.Add(this.defaultOutputDir);
+            this.gbDefaultOutput.Controls.Add(this.targetSizeSCBox1);
+            this.gbDefaultOutput.Controls.Add(this.btnClearOutputDirecoty);
             this.gbDefaultOutput.Controls.Add(this.clearDefaultOutputDir);
-            this.gbDefaultOutput.Location = new System.Drawing.Point(2, 322);
+            this.gbDefaultOutput.Controls.Add(this.defaultOutputDir);
+            this.gbDefaultOutput.Location = new System.Drawing.Point(182, 287);
             this.gbDefaultOutput.Name = "gbDefaultOutput";
-            this.gbDefaultOutput.Size = new System.Drawing.Size(467, 57);
-            this.gbDefaultOutput.TabIndex = 8;
+            this.gbDefaultOutput.Size = new System.Drawing.Size(287, 92);
+            this.gbDefaultOutput.TabIndex = 7;
             this.gbDefaultOutput.TabStop = false;
-            this.gbDefaultOutput.Text = "Default Output Directory";
+            this.gbDefaultOutput.Text = " Default Output Directory + Custom File Size Values ";
             // 
-            // defaultOutputDir
+            // btnClearOutputDirecoty
             // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(6, 20);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
-            this.defaultOutputDir.TabIndex = 42;
-            this.defaultOutputDir.Title = null;
+            this.btnClearOutputDirecoty.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btnClearOutputDirecoty.Location = new System.Drawing.Point(257, 25);
+            this.btnClearOutputDirecoty.Name = "btnClearOutputDirecoty";
+            this.btnClearOutputDirecoty.Size = new System.Drawing.Size(24, 23);
+            this.btnClearOutputDirecoty.TabIndex = 43;
+            this.btnClearOutputDirecoty.Text = "x";
+            this.btnClearOutputDirecoty.Click += new System.EventHandler(this.btnClearOutputDirecoty_Click);
             // 
             // clearDefaultOutputDir
             // 
-            this.clearDefaultOutputDir.Location = new System.Drawing.Point(429, 21);
+            this.clearDefaultOutputDir.Location = new System.Drawing.Point(430, 29);
             this.clearDefaultOutputDir.Name = "clearDefaultOutputDir";
-            this.clearDefaultOutputDir.Size = new System.Drawing.Size(24, 23);
+            this.clearDefaultOutputDir.Size = new System.Drawing.Size(24, 26);
             this.clearDefaultOutputDir.TabIndex = 41;
             this.clearDefaultOutputDir.Text = "x";
+            this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
             // 
             // tabPage3
             // 
@@ -859,7 +800,7 @@ namespace MeGUI
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(475, 387);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Extra config";
+            this.tabPage3.Text = "Extra Configuration";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // groupBox2
@@ -873,12 +814,12 @@ namespace MeGUI
             this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.cbx_usehttpproxy);
-            this.groupBox2.Location = new System.Drawing.Point(227, 187);
+            this.groupBox2.Location = new System.Drawing.Point(227, 234);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(240, 191);
+            this.groupBox2.Size = new System.Drawing.Size(240, 144);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Auto Update Http Proxy:";
+            this.groupBox2.Text = " Auto Update Http Proxy ";
             // 
             // txt_httpproxyport
             // 
@@ -962,20 +903,29 @@ namespace MeGUI
             // 
             // gbVideoPreview
             // 
+            this.gbVideoPreview.Controls.Add(this.chkEnsureCorrectPlaybackSpeed);
             this.gbVideoPreview.Controls.Add(this.cbAddTimePos);
             this.gbVideoPreview.Controls.Add(this.chAlwaysOnTop);
-            this.gbVideoPreview.Location = new System.Drawing.Point(4, 309);
+            this.gbVideoPreview.Location = new System.Drawing.Point(4, 288);
             this.gbVideoPreview.Name = "gbVideoPreview";
-            this.gbVideoPreview.Size = new System.Drawing.Size(217, 69);
+            this.gbVideoPreview.Size = new System.Drawing.Size(217, 90);
             this.gbVideoPreview.TabIndex = 4;
             this.gbVideoPreview.TabStop = false;
-            this.gbVideoPreview.Text = "Video Preview";
+            this.gbVideoPreview.Text = " Video Preview ";
+            // 
+            // chkEnsureCorrectPlaybackSpeed
+            // 
+            this.chkEnsureCorrectPlaybackSpeed.AutoSize = true;
+            this.chkEnsureCorrectPlaybackSpeed.Location = new System.Drawing.Point(8, 63);
+            this.chkEnsureCorrectPlaybackSpeed.Name = "chkEnsureCorrectPlaybackSpeed";
+            this.chkEnsureCorrectPlaybackSpeed.Size = new System.Drawing.Size(173, 17);
+            this.chkEnsureCorrectPlaybackSpeed.TabIndex = 2;
+            this.chkEnsureCorrectPlaybackSpeed.Text = "Ensure correct playback speed";
+            this.chkEnsureCorrectPlaybackSpeed.UseVisualStyleBackColor = true;
             // 
             // cbAddTimePos
             // 
             this.cbAddTimePos.AutoSize = true;
-            this.cbAddTimePos.Checked = true;
-            this.cbAddTimePos.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbAddTimePos.Location = new System.Drawing.Point(8, 40);
             this.cbAddTimePos.Name = "cbAddTimePos";
             this.cbAddTimePos.Size = new System.Drawing.Size(110, 17);
@@ -995,24 +945,36 @@ namespace MeGUI
             // 
             // autoUpdateGroupBox
             // 
+            this.autoUpdateGroupBox.Controls.Add(this.cbAutoUpdateServerSubList);
             this.autoUpdateGroupBox.Controls.Add(this.backupfiles);
-            this.autoUpdateGroupBox.Controls.Add(this.label14);
-            this.autoUpdateGroupBox.Controls.Add(this.maxServersToTry);
             this.autoUpdateGroupBox.Controls.Add(this.configureServersButton);
             this.autoUpdateGroupBox.Controls.Add(this.useAutoUpdateCheckbox);
-            this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 82);
+            this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 104);
             this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
-            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 99);
+            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 124);
             this.autoUpdateGroupBox.TabIndex = 3;
             this.autoUpdateGroupBox.TabStop = false;
-            this.autoUpdateGroupBox.Text = "Auto Update";
+            this.autoUpdateGroupBox.Text = " Auto Update ";
+            // 
+            // cbAutoUpdateServerSubList
+            // 
+            this.cbAutoUpdateServerSubList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAutoUpdateServerSubList.FormattingEnabled = true;
+            this.cbAutoUpdateServerSubList.Items.AddRange(new object[] {
+            "Use stable update server",
+            "Use development update server",
+            "Use custom update server"});
+            this.cbAutoUpdateServerSubList.Location = new System.Drawing.Point(9, 47);
+            this.cbAutoUpdateServerSubList.Name = "cbAutoUpdateServerSubList";
+            this.cbAutoUpdateServerSubList.Size = new System.Drawing.Size(176, 21);
+            this.cbAutoUpdateServerSubList.TabIndex = 5;
             // 
             // backupfiles
             // 
             this.backupfiles.AutoSize = true;
             this.backupfiles.Checked = true;
             this.backupfiles.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.backupfiles.Location = new System.Drawing.Point(9, 76);
+            this.backupfiles.Location = new System.Drawing.Point(9, 103);
             this.backupfiles.Name = "backupfiles";
             this.backupfiles.Size = new System.Drawing.Size(187, 17);
             this.backupfiles.TabIndex = 4;
@@ -1020,37 +982,11 @@ namespace MeGUI
             this.backupfiles.UseVisualStyleBackColor = true;
             this.backupfiles.CheckedChanged += new System.EventHandler(this.backupfiles_CheckedChanged);
             // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 53);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(152, 13);
-            this.label14.TabIndex = 2;
-            this.label14.Text = "Max number of servers to try:";
-            // 
-            // maxServersToTry
-            // 
-            this.maxServersToTry.Location = new System.Drawing.Point(190, 51);
-            this.maxServersToTry.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.maxServersToTry.Name = "maxServersToTry";
-            this.maxServersToTry.Size = new System.Drawing.Size(44, 21);
-            this.maxServersToTry.TabIndex = 3;
-            this.maxServersToTry.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            // 
             // configureServersButton
             // 
             this.configureServersButton.AutoSize = true;
             this.configureServersButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.configureServersButton.Location = new System.Drawing.Point(119, 18);
+            this.configureServersButton.Location = new System.Drawing.Point(9, 74);
             this.configureServersButton.Name = "configureServersButton";
             this.configureServersButton.Size = new System.Drawing.Size(115, 23);
             this.configureServersButton.TabIndex = 1;
@@ -1074,12 +1010,12 @@ namespace MeGUI
             this.outputExtensions.Controls.Add(this.label11);
             this.outputExtensions.Controls.Add(this.label12);
             this.outputExtensions.Controls.Add(this.audioExtension);
-            this.outputExtensions.Location = new System.Drawing.Point(3, 82);
+            this.outputExtensions.Location = new System.Drawing.Point(3, 104);
             this.outputExtensions.Name = "outputExtensions";
-            this.outputExtensions.Size = new System.Drawing.Size(218, 99);
+            this.outputExtensions.Size = new System.Drawing.Size(218, 77);
             this.outputExtensions.TabIndex = 1;
             this.outputExtensions.TabStop = false;
-            this.outputExtensions.Text = "Optional output extensions";
+            this.outputExtensions.Text = " Optional output extensions ";
             // 
             // videoExtension
             // 
@@ -1115,6 +1051,7 @@ namespace MeGUI
             // 
             // autoModeGroupbox
             // 
+            this.autoModeGroupbox.Controls.Add(this.chkAlwaysMuxMKV);
             this.autoModeGroupbox.Controls.Add(this.configAutoEncodeDefaults);
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassLogFile);
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassOutput);
@@ -1122,16 +1059,28 @@ namespace MeGUI
             this.autoModeGroupbox.Controls.Add(this.nbPasses);
             this.autoModeGroupbox.Location = new System.Drawing.Point(4, 3);
             this.autoModeGroupbox.Name = "autoModeGroupbox";
-            this.autoModeGroupbox.Size = new System.Drawing.Size(463, 73);
+            this.autoModeGroupbox.Size = new System.Drawing.Size(463, 95);
             this.autoModeGroupbox.TabIndex = 0;
             this.autoModeGroupbox.TabStop = false;
-            this.autoModeGroupbox.Text = "Automated Encoding";
+            this.autoModeGroupbox.Text = " Automated Encoding ";
+            // 
+            // chkAlwaysMuxMKV
+            // 
+            this.chkAlwaysMuxMKV.AutoSize = true;
+            this.chkAlwaysMuxMKV.Checked = true;
+            this.chkAlwaysMuxMKV.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAlwaysMuxMKV.Location = new System.Drawing.Point(232, 70);
+            this.chkAlwaysMuxMKV.Name = "chkAlwaysMuxMKV";
+            this.chkAlwaysMuxMKV.Size = new System.Drawing.Size(226, 17);
+            this.chkAlwaysMuxMKV.TabIndex = 21;
+            this.chkAlwaysMuxMKV.Text = "Always mux mkv encoding with mkvmerge";
+            this.chkAlwaysMuxMKV.UseVisualStyleBackColor = true;
             // 
             // configAutoEncodeDefaults
             // 
             this.configAutoEncodeDefaults.AutoSize = true;
             this.configAutoEncodeDefaults.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.configAutoEncodeDefaults.Location = new System.Drawing.Point(11, 43);
+            this.configAutoEncodeDefaults.Location = new System.Drawing.Point(14, 47);
             this.configAutoEncodeDefaults.Name = "configAutoEncodeDefaults";
             this.configAutoEncodeDefaults.Size = new System.Drawing.Size(179, 23);
             this.configAutoEncodeDefaults.TabIndex = 5;
@@ -1148,7 +1097,7 @@ namespace MeGUI
             this.keep2ndPassLogFile.Name = "keep2ndPassLogFile";
             this.keep2ndPassLogFile.Size = new System.Drawing.Size(176, 17);
             this.keep2ndPassLogFile.TabIndex = 4;
-            this.keep2ndPassLogFile.Text = "Overwrite Stats File in 3rd Pass";
+            this.keep2ndPassLogFile.Text = "Overwrite Stats File in 3rd pass";
             this.keep2ndPassLogFile.UseVisualStyleBackColor = true;
             // 
             // keep2ndPassOutput
@@ -1195,710 +1144,220 @@ namespace MeGUI
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.tabControl2);
+            this.tabPage2.Controls.Add(this.groupBox6);
+            this.tabPage2.Controls.Add(this.groupBox5);
+            this.tabPage2.Controls.Add(this.groupBox4);
+            this.tabPage2.Controls.Add(this.vobGroupBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(475, 387);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Program Paths";
+            this.tabPage2.Text = "External Program Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // tabControl2
-            // 
-            this.tabControl2.Controls.Add(this.tabPage4);
-            this.tabControl2.Controls.Add(this.tabPage5);
-            this.tabControl2.Controls.Add(this.tabPage6);
-            this.tabControl2.Controls.Add(this.tabPage7);
-            this.tabControl2.Location = new System.Drawing.Point(8, 6);
-            this.tabControl2.Name = "tabControl2";
-            this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(459, 310);
-            this.tabControl2.TabIndex = 0;
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.Controls.Add(this.label1);
-            this.tabPage4.Controls.Add(this.DivXAVCPath);
-            this.tabPage4.Controls.Add(this.selectDivXAVCExecButton);
-            this.tabPage4.Controls.Add(this.xvidEncrawLabel);
-            this.tabPage4.Controls.Add(this.selectXvidEncrawButton);
-            this.tabPage4.Controls.Add(this.xvidEncrawPath);
-            this.tabPage4.Controls.Add(this.selectMencoderExecutableButton);
-            this.tabPage4.Controls.Add(this.mencoderPath);
-            this.tabPage4.Controls.Add(this.mencoderPathLabel);
-            this.tabPage4.Controls.Add(this.x264ExePathLabel);
-            this.tabPage4.Controls.Add(this.x264ExePath);
-            this.tabPage4.Controls.Add(this.selectX264ExecutableButton);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(451, 284);
-            this.tabPage4.TabIndex = 0;
-            this.tabPage4.Text = "Video";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(6, 100);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 16);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "DivXAVC";
-            // 
-            // DivXAVCPath
-            // 
-            this.DivXAVCPath.Location = new System.Drawing.Point(81, 97);
-            this.DivXAVCPath.Name = "DivXAVCPath";
-            this.DivXAVCPath.ReadOnly = true;
-            this.DivXAVCPath.Size = new System.Drawing.Size(330, 21);
-            this.DivXAVCPath.TabIndex = 13;
-            this.DivXAVCPath.Text = "DivXAVC.exe";
-            // 
-            // selectDivXAVCExecButton
-            // 
-            this.selectDivXAVCExecButton.Location = new System.Drawing.Point(417, 96);
-            this.selectDivXAVCExecButton.Name = "selectDivXAVCExecButton";
-            this.selectDivXAVCExecButton.Size = new System.Drawing.Size(24, 23);
-            this.selectDivXAVCExecButton.TabIndex = 14;
-            this.selectDivXAVCExecButton.Text = "...";
-            this.selectDivXAVCExecButton.Click += new System.EventHandler(this.selectDivXAVCExecButton_Click);
-            // 
-            // xvidEncrawLabel
-            // 
-            this.xvidEncrawLabel.Location = new System.Drawing.Point(6, 72);
-            this.xvidEncrawLabel.Name = "xvidEncrawLabel";
-            this.xvidEncrawLabel.Size = new System.Drawing.Size(69, 16);
-            this.xvidEncrawLabel.TabIndex = 9;
-            this.xvidEncrawLabel.Text = "xvid_encraw";
-            // 
-            // selectXvidEncrawButton
-            // 
-            this.selectXvidEncrawButton.Location = new System.Drawing.Point(417, 69);
-            this.selectXvidEncrawButton.Name = "selectXvidEncrawButton";
-            this.selectXvidEncrawButton.Size = new System.Drawing.Size(24, 23);
-            this.selectXvidEncrawButton.TabIndex = 11;
-            this.selectXvidEncrawButton.Text = "...";
-            this.selectXvidEncrawButton.Click += new System.EventHandler(this.selectXvidEncrawButton_Click);
-            // 
-            // xvidEncrawPath
-            // 
-            this.xvidEncrawPath.Location = new System.Drawing.Point(81, 70);
-            this.xvidEncrawPath.Name = "xvidEncrawPath";
-            this.xvidEncrawPath.ReadOnly = true;
-            this.xvidEncrawPath.Size = new System.Drawing.Size(330, 21);
-            this.xvidEncrawPath.TabIndex = 10;
-            this.xvidEncrawPath.Text = "xvid_encraw.exe";
-            // 
-            // selectMencoderExecutableButton
-            // 
-            this.selectMencoderExecutableButton.Location = new System.Drawing.Point(417, 15);
-            this.selectMencoderExecutableButton.Name = "selectMencoderExecutableButton";
-            this.selectMencoderExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectMencoderExecutableButton.TabIndex = 2;
-            this.selectMencoderExecutableButton.Text = "...";
-            this.selectMencoderExecutableButton.Click += new System.EventHandler(this.selectMencoderExecutableButton_Click);
-            // 
-            // mencoderPath
-            // 
-            this.mencoderPath.Location = new System.Drawing.Point(81, 16);
-            this.mencoderPath.Name = "mencoderPath";
-            this.mencoderPath.ReadOnly = true;
-            this.mencoderPath.Size = new System.Drawing.Size(330, 21);
-            this.mencoderPath.TabIndex = 1;
-            this.mencoderPath.Text = "mencoder.exe";
-            // 
-            // mencoderPathLabel
-            // 
-            this.mencoderPathLabel.Location = new System.Drawing.Point(6, 16);
-            this.mencoderPathLabel.Name = "mencoderPathLabel";
-            this.mencoderPathLabel.Size = new System.Drawing.Size(57, 18);
-            this.mencoderPathLabel.TabIndex = 0;
-            this.mencoderPathLabel.Text = "mencoder";
-            // 
-            // x264ExePathLabel
-            // 
-            this.x264ExePathLabel.Location = new System.Drawing.Point(6, 46);
-            this.x264ExePathLabel.Name = "x264ExePathLabel";
-            this.x264ExePathLabel.Size = new System.Drawing.Size(38, 16);
-            this.x264ExePathLabel.TabIndex = 6;
-            this.x264ExePathLabel.Text = "x264";
-            // 
-            // x264ExePath
-            // 
-            this.x264ExePath.Location = new System.Drawing.Point(81, 43);
-            this.x264ExePath.Name = "x264ExePath";
-            this.x264ExePath.ReadOnly = true;
-            this.x264ExePath.Size = new System.Drawing.Size(330, 21);
-            this.x264ExePath.TabIndex = 7;
-            this.x264ExePath.Text = "x264.exe";
-            // 
-            // selectX264ExecutableButton
-            // 
-            this.selectX264ExecutableButton.Location = new System.Drawing.Point(417, 42);
-            this.selectX264ExecutableButton.Name = "selectX264ExecutableButton";
-            this.selectX264ExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectX264ExecutableButton.TabIndex = 8;
-            this.selectX264ExecutableButton.Text = "...";
-            this.selectX264ExecutableButton.Click += new System.EventHandler(this.selectX264ExecutableButton_Click);
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.tbFlac);
-            this.tabPage5.Controls.Add(this.label4);
-            this.tabPage5.Controls.Add(this.selectFlacExecutableButton);
-            this.tabPage5.Controls.Add(this.tbAften);
-            this.tabPage5.Controls.Add(this.lbAften);
-            this.tabPage5.Controls.Add(this.selectAftenExecutableButton);
-            this.tabPage5.Controls.Add(this.tbEncAacPlus);
-            this.tabPage5.Controls.Add(this.label9);
-            this.tabPage5.Controls.Add(this.button6);
-            this.tabPage5.Controls.Add(this.tbOggEnc);
-            this.tabPage5.Controls.Add(this.label7);
-            this.tabPage5.Controls.Add(this.button4);
-            this.tabPage5.Controls.Add(this.tbLame);
-            this.tabPage5.Controls.Add(this.label3);
-            this.tabPage5.Controls.Add(this.button3);
-            this.tabPage5.Controls.Add(this.tbNeroAacEnc);
-            this.tabPage5.Controls.Add(this.label2);
-            this.tabPage5.Controls.Add(this.button2);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(451, 284);
-            this.tabPage5.TabIndex = 1;
-            this.tabPage5.Text = "Audio";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // tbAften
-            // 
-            this.tbAften.Location = new System.Drawing.Point(91, 87);
-            this.tbAften.Name = "tbAften";
-            this.tbAften.ReadOnly = true;
-            this.tbAften.Size = new System.Drawing.Size(322, 21);
-            this.tbAften.TabIndex = 26;
-            this.tbAften.Text = "aften.exe";
-            // 
-            // lbAften
-            // 
-            this.lbAften.Location = new System.Drawing.Point(5, 91);
-            this.lbAften.Name = "lbAften";
-            this.lbAften.Size = new System.Drawing.Size(80, 13);
-            this.lbAften.TabIndex = 25;
-            this.lbAften.Text = "aften";
-            // 
-            // selectAftenExecutableButton
-            // 
-            this.selectAftenExecutableButton.Location = new System.Drawing.Point(419, 86);
-            this.selectAftenExecutableButton.Name = "selectAftenExecutableButton";
-            this.selectAftenExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectAftenExecutableButton.TabIndex = 27;
-            this.selectAftenExecutableButton.Text = "...";
-            this.selectAftenExecutableButton.Click += new System.EventHandler(this.selectAftenExecutableButton_Click);
-            // 
-            // tbEncAacPlus
-            // 
-            this.tbEncAacPlus.Location = new System.Drawing.Point(91, 60);
-            this.tbEncAacPlus.Name = "tbEncAacPlus";
-            this.tbEncAacPlus.ReadOnly = true;
-            this.tbEncAacPlus.Size = new System.Drawing.Size(322, 21);
-            this.tbEncAacPlus.TabIndex = 13;
-            this.tbEncAacPlus.Text = "enc_aacplus.exe";
-            // 
-            // label9
-            // 
-            this.label9.Location = new System.Drawing.Point(5, 64);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(80, 13);
-            this.label9.TabIndex = 12;
-            this.label9.Text = "enc_aacPlus";
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(419, 59);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(24, 23);
-            this.button6.TabIndex = 14;
-            this.button6.Text = "...";
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // tbOggEnc
-            // 
-            this.tbOggEnc.Location = new System.Drawing.Point(91, 114);
-            this.tbOggEnc.Name = "tbOggEnc";
-            this.tbOggEnc.ReadOnly = true;
-            this.tbOggEnc.Size = new System.Drawing.Size(322, 21);
-            this.tbOggEnc.TabIndex = 22;
-            this.tbOggEnc.Text = "oggenc2.exe";
-            // 
-            // label7
-            // 
-            this.label7.Location = new System.Drawing.Point(5, 118);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(80, 13);
-            this.label7.TabIndex = 21;
-            this.label7.Text = "oggenc";
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(419, 113);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(24, 23);
-            this.button4.TabIndex = 23;
-            this.button4.Text = "...";
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // tbLame
-            // 
-            this.tbLame.Location = new System.Drawing.Point(91, 33);
-            this.tbLame.Name = "tbLame";
-            this.tbLame.ReadOnly = true;
-            this.tbLame.Size = new System.Drawing.Size(322, 21);
-            this.tbLame.TabIndex = 7;
-            this.tbLame.Text = "lame.exe";
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(5, 37);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "lame";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(419, 32);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(24, 23);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "...";
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // tbNeroAacEnc
-            // 
-            this.tbNeroAacEnc.Location = new System.Drawing.Point(91, 6);
-            this.tbNeroAacEnc.Name = "tbNeroAacEnc";
-            this.tbNeroAacEnc.ReadOnly = true;
-            this.tbNeroAacEnc.Size = new System.Drawing.Size(322, 21);
-            this.tbNeroAacEnc.TabIndex = 4;
-            this.tbNeroAacEnc.Text = "neroAacEnc.exe";
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(5, 10);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "neroAacEnc";
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(419, 5);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(24, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "...";
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.Controls.Add(this.tsmuxerPath);
-            this.tabPage6.Controls.Add(this.tsmuxerPathLabel);
-            this.tabPage6.Controls.Add(this.selectTSMuxerExecutableButton);
-            this.tabPage6.Controls.Add(this.aviMuxGUIPath);
-            this.tabPage6.Controls.Add(this.mp4boxPath);
-            this.tabPage6.Controls.Add(this.avimuxguiPathLabel);
-            this.tabPage6.Controls.Add(this.selectMkvmergeExecutableButton);
-            this.tabPage6.Controls.Add(this.mkvmergePathLabel);
-            this.tabPage6.Controls.Add(this.selectAviMuxGUIExecutableButton);
-            this.tabPage6.Controls.Add(this.mp4boxPathLabel);
-            this.tabPage6.Controls.Add(this.mkvmergePath);
-            this.tabPage6.Controls.Add(this.selectMP4boxExecutableButton);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(451, 284);
-            this.tabPage6.TabIndex = 2;
-            this.tabPage6.Text = "Muxer";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // tsmuxerPath
-            // 
-            this.tsmuxerPath.Location = new System.Drawing.Point(89, 97);
-            this.tsmuxerPath.Name = "tsmuxerPath";
-            this.tsmuxerPath.ReadOnly = true;
-            this.tsmuxerPath.Size = new System.Drawing.Size(322, 21);
-            this.tsmuxerPath.TabIndex = 10;
-            this.tsmuxerPath.Text = "tsmuxer.exe";
-            // 
-            // tsmuxerPathLabel
-            // 
-            this.tsmuxerPathLabel.Location = new System.Drawing.Point(6, 100);
-            this.tsmuxerPathLabel.Name = "tsmuxerPathLabel";
-            this.tsmuxerPathLabel.Size = new System.Drawing.Size(57, 17);
-            this.tsmuxerPathLabel.TabIndex = 9;
-            this.tsmuxerPathLabel.Text = "tsmuxer";
-            // 
-            // selectTSMuxerExecutableButton
-            // 
-            this.selectTSMuxerExecutableButton.Location = new System.Drawing.Point(417, 96);
-            this.selectTSMuxerExecutableButton.Name = "selectTSMuxerExecutableButton";
-            this.selectTSMuxerExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectTSMuxerExecutableButton.TabIndex = 11;
-            this.selectTSMuxerExecutableButton.Text = "...";
-            this.selectTSMuxerExecutableButton.Click += new System.EventHandler(this.selectTSMuxerExecutableButton_Click);
-            // 
-            // aviMuxGUIPath
-            // 
-            this.aviMuxGUIPath.Location = new System.Drawing.Point(89, 70);
-            this.aviMuxGUIPath.Name = "aviMuxGUIPath";
-            this.aviMuxGUIPath.ReadOnly = true;
-            this.aviMuxGUIPath.Size = new System.Drawing.Size(322, 21);
-            this.aviMuxGUIPath.TabIndex = 7;
-            this.aviMuxGUIPath.Text = "avimux_gui.exe";
-            // 
-            // mp4boxPath
-            // 
-            this.mp4boxPath.Location = new System.Drawing.Point(89, 16);
-            this.mp4boxPath.Name = "mp4boxPath";
-            this.mp4boxPath.ReadOnly = true;
-            this.mp4boxPath.Size = new System.Drawing.Size(322, 21);
-            this.mp4boxPath.TabIndex = 1;
-            this.mp4boxPath.Text = "mp4box.exe";
-            // 
-            // avimuxguiPathLabel
-            // 
-            this.avimuxguiPathLabel.Location = new System.Drawing.Point(6, 72);
-            this.avimuxguiPathLabel.Name = "avimuxguiPathLabel";
-            this.avimuxguiPathLabel.Size = new System.Drawing.Size(70, 17);
-            this.avimuxguiPathLabel.TabIndex = 6;
-            this.avimuxguiPathLabel.Text = "avimux_gui";
-            // 
-            // selectMkvmergeExecutableButton
-            // 
-            this.selectMkvmergeExecutableButton.Location = new System.Drawing.Point(417, 42);
-            this.selectMkvmergeExecutableButton.Name = "selectMkvmergeExecutableButton";
-            this.selectMkvmergeExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectMkvmergeExecutableButton.TabIndex = 5;
-            this.selectMkvmergeExecutableButton.Text = "...";
-            this.selectMkvmergeExecutableButton.Click += new System.EventHandler(this.selectMkvmergeExecutableButton_Click);
-            // 
-            // mkvmergePathLabel
-            // 
-            this.mkvmergePathLabel.Location = new System.Drawing.Point(6, 46);
-            this.mkvmergePathLabel.Name = "mkvmergePathLabel";
-            this.mkvmergePathLabel.Size = new System.Drawing.Size(57, 17);
-            this.mkvmergePathLabel.TabIndex = 3;
-            this.mkvmergePathLabel.Text = "mkvmerge";
-            // 
-            // selectAviMuxGUIExecutableButton
-            // 
-            this.selectAviMuxGUIExecutableButton.Location = new System.Drawing.Point(417, 69);
-            this.selectAviMuxGUIExecutableButton.Name = "selectAviMuxGUIExecutableButton";
-            this.selectAviMuxGUIExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectAviMuxGUIExecutableButton.TabIndex = 8;
-            this.selectAviMuxGUIExecutableButton.Text = "...";
-            this.selectAviMuxGUIExecutableButton.Click += new System.EventHandler(this.selectAviMuxGUIExecutableButton_Click);
-            // 
-            // mp4boxPathLabel
-            // 
-            this.mp4boxPathLabel.Location = new System.Drawing.Point(6, 19);
-            this.mp4boxPathLabel.Name = "mp4boxPathLabel";
-            this.mp4boxPathLabel.Size = new System.Drawing.Size(57, 17);
-            this.mp4boxPathLabel.TabIndex = 0;
-            this.mp4boxPathLabel.Text = "mp4Box";
-            // 
-            // mkvmergePath
-            // 
-            this.mkvmergePath.Location = new System.Drawing.Point(89, 43);
-            this.mkvmergePath.Name = "mkvmergePath";
-            this.mkvmergePath.ReadOnly = true;
-            this.mkvmergePath.Size = new System.Drawing.Size(322, 21);
-            this.mkvmergePath.TabIndex = 4;
-            this.mkvmergePath.Text = "mkvmerge.exe";
-            // 
-            // selectMP4boxExecutableButton
-            // 
-            this.selectMP4boxExecutableButton.Location = new System.Drawing.Point(417, 15);
-            this.selectMP4boxExecutableButton.Name = "selectMP4boxExecutableButton";
-            this.selectMP4boxExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectMP4boxExecutableButton.TabIndex = 2;
-            this.selectMP4boxExecutableButton.Text = "...";
-            this.selectMP4boxExecutableButton.Click += new System.EventHandler(this.selectMP4boxExecutableButton_Click);
-            // 
-            // tabPage7
-            // 
-            this.tabPage7.Controls.Add(this.eac3toPath);
-            this.tabPage7.Controls.Add(this.label23);
-            this.tabPage7.Controls.Add(this.selectEAC3toExecutable);
-            this.tabPage7.Controls.Add(this.dgmpgIndexPath);
-            this.tabPage7.Controls.Add(this.label22);
-            this.tabPage7.Controls.Add(this.selectDGMIndexExecutable);
-            this.tabPage7.Controls.Add(this.dgvc1IndexPath);
-            this.tabPage7.Controls.Add(this.label5);
-            this.tabPage7.Controls.Add(this.selectDGVIndexExecutable);
-            this.tabPage7.Controls.Add(this.dgavcIndexPath);
-            this.tabPage7.Controls.Add(this.DGAIndex);
-            this.tabPage7.Controls.Add(this.selectDGAIndexExecutable);
-            this.tabPage7.Controls.Add(this.textBox8);
-            this.tabPage7.Controls.Add(this.besplit);
-            this.tabPage7.Controls.Add(this.button8);
-            this.tabPage7.Controls.Add(this.label17);
-            this.tabPage7.Controls.Add(this.avisynthPluginsLabel);
-            this.tabPage7.Controls.Add(this.button9);
-            this.tabPage7.Controls.Add(this.button10);
-            this.tabPage7.Controls.Add(this.selectAvisynthPluginsDir);
-            this.tabPage7.Controls.Add(this.textBox9);
-            this.tabPage7.Controls.Add(this.label16);
-            this.tabPage7.Controls.Add(this.meguiUpdateCache);
-            this.tabPage7.Controls.Add(this.avisynthPluginsDir);
-            this.tabPage7.Controls.Add(this.dgIndexPath);
-            this.tabPage7.Controls.Add(this.dgIndexLabel);
-            this.tabPage7.Controls.Add(this.selectDGIndexExecutable);
-            this.tabPage7.Location = new System.Drawing.Point(4, 22);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(451, 284);
-            this.tabPage7.TabIndex = 3;
-            this.tabPage7.Text = "Others";
-            this.tabPage7.UseVisualStyleBackColor = true;
-            // 
-            // eac3toPath
-            // 
-            this.eac3toPath.Location = new System.Drawing.Point(96, 244);
-            this.eac3toPath.Name = "eac3toPath";
-            this.eac3toPath.ReadOnly = true;
-            this.eac3toPath.Size = new System.Drawing.Size(315, 21);
-            this.eac3toPath.TabIndex = 37;
-            this.eac3toPath.Text = "eac3to.exe";
-            // 
-            // label23
-            // 
-            this.label23.Location = new System.Drawing.Point(6, 247);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(80, 13);
-            this.label23.TabIndex = 36;
-            this.label23.Text = "EAC3to";
-            // 
-            // selectEAC3toExecutable
-            // 
-            this.selectEAC3toExecutable.Location = new System.Drawing.Point(417, 242);
-            this.selectEAC3toExecutable.Name = "selectEAC3toExecutable";
-            this.selectEAC3toExecutable.Size = new System.Drawing.Size(24, 23);
-            this.selectEAC3toExecutable.TabIndex = 38;
-            this.selectEAC3toExecutable.Text = "...";
-            this.selectEAC3toExecutable.Click += new System.EventHandler(this.selectEAC3toExecutable_Click);
-            // 
-            // dgmpgIndexPath
-            // 
-            this.dgmpgIndexPath.Location = new System.Drawing.Point(96, 214);
-            this.dgmpgIndexPath.Name = "dgmpgIndexPath";
-            this.dgmpgIndexPath.ReadOnly = true;
-            this.dgmpgIndexPath.Size = new System.Drawing.Size(315, 21);
-            this.dgmpgIndexPath.TabIndex = 34;
-            this.dgmpgIndexPath.Text = "dgmpgindex.exe";
-            // 
-            // label22
-            // 
-            this.label22.Location = new System.Drawing.Point(4, 217);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(94, 19);
-            this.label22.TabIndex = 33;
-            this.label22.Text = "DGMPGIndex(NV)";
-            // 
-            // selectDGMIndexExecutable
-            // 
-            this.selectDGMIndexExecutable.Location = new System.Drawing.Point(417, 213);
-            this.selectDGMIndexExecutable.Name = "selectDGMIndexExecutable";
-            this.selectDGMIndexExecutable.Size = new System.Drawing.Size(24, 23);
-            this.selectDGMIndexExecutable.TabIndex = 35;
-            this.selectDGMIndexExecutable.Text = "...";
-            this.selectDGMIndexExecutable.Click += new System.EventHandler(this.selectDGMIndexExecutable_Click);
-            // 
-            // dgvc1IndexPath
-            // 
-            this.dgvc1IndexPath.Location = new System.Drawing.Point(96, 183);
-            this.dgvc1IndexPath.Name = "dgvc1IndexPath";
-            this.dgvc1IndexPath.ReadOnly = true;
-            this.dgvc1IndexPath.Size = new System.Drawing.Size(315, 21);
-            this.dgvc1IndexPath.TabIndex = 31;
-            this.dgvc1IndexPath.Text = "dgvc1index.exe";
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(4, 186);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(94, 19);
-            this.label5.TabIndex = 30;
-            this.label5.Text = "DGVC1Index(NV)";
-            // 
-            // selectDGVIndexExecutable
-            // 
-            this.selectDGVIndexExecutable.Location = new System.Drawing.Point(417, 182);
-            this.selectDGVIndexExecutable.Name = "selectDGVIndexExecutable";
-            this.selectDGVIndexExecutable.Size = new System.Drawing.Size(24, 23);
-            this.selectDGVIndexExecutable.TabIndex = 32;
-            this.selectDGVIndexExecutable.Text = "...";
-            this.selectDGVIndexExecutable.Click += new System.EventHandler(this.selectDGVIndexExecutable_Click);
-            // 
-            // dgavcIndexPath
-            // 
-            this.dgavcIndexPath.Location = new System.Drawing.Point(96, 153);
-            this.dgavcIndexPath.Name = "dgavcIndexPath";
-            this.dgavcIndexPath.ReadOnly = true;
-            this.dgavcIndexPath.Size = new System.Drawing.Size(315, 21);
-            this.dgavcIndexPath.TabIndex = 28;
-            this.dgavcIndexPath.Text = "dgavcindex.exe";
-            // 
-            // DGAIndex
-            // 
-            this.DGAIndex.Location = new System.Drawing.Point(4, 156);
-            this.DGAIndex.Name = "DGAIndex";
-            this.DGAIndex.Size = new System.Drawing.Size(94, 19);
-            this.DGAIndex.TabIndex = 27;
-            this.DGAIndex.Text = "DGAVCIndex(NV)";
-            // 
-            // selectDGAIndexExecutable
-            // 
-            this.selectDGAIndexExecutable.Location = new System.Drawing.Point(417, 152);
-            this.selectDGAIndexExecutable.Name = "selectDGAIndexExecutable";
-            this.selectDGAIndexExecutable.Size = new System.Drawing.Size(24, 23);
-            this.selectDGAIndexExecutable.TabIndex = 29;
-            this.selectDGAIndexExecutable.Text = "...";
-            this.selectDGAIndexExecutable.Click += new System.EventHandler(this.selectDGAIndexExecutable_Click);
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(96, 126);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.ReadOnly = true;
-            this.textBox8.Size = new System.Drawing.Size(315, 21);
-            this.textBox8.TabIndex = 22;
-            this.textBox8.Text = "besplit.exe";
-            // 
-            // besplit
-            // 
-            this.besplit.Location = new System.Drawing.Point(6, 129);
-            this.besplit.Name = "besplit";
-            this.besplit.Size = new System.Drawing.Size(80, 13);
-            this.besplit.TabIndex = 21;
-            this.besplit.Text = "BeSplit";
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(417, 124);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(24, 23);
-            this.button8.TabIndex = 23;
-            this.button8.Text = "...";
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(6, 101);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(73, 13);
-            this.label17.TabIndex = 6;
-            this.label17.Text = "Update cache";
-            // 
-            // avisynthPluginsLabel
-            // 
-            this.avisynthPluginsLabel.AutoSize = true;
-            this.avisynthPluginsLabel.Location = new System.Drawing.Point(6, 74);
-            this.avisynthPluginsLabel.Name = "avisynthPluginsLabel";
-            this.avisynthPluginsLabel.Size = new System.Drawing.Size(84, 13);
-            this.avisynthPluginsLabel.TabIndex = 6;
-            this.avisynthPluginsLabel.Text = "avisynth plugins";
-            // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(417, 42);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(24, 23);
-            this.button9.TabIndex = 5;
-            this.button9.Text = "...";
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
-            // button10
-            // 
-            this.button10.Location = new System.Drawing.Point(417, 96);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(24, 23);
-            this.button10.TabIndex = 8;
-            this.button10.Text = "...";
-            this.button10.Click += new System.EventHandler(this.button10_Click);
-            // 
-            // selectAvisynthPluginsDir
-            // 
-            this.selectAvisynthPluginsDir.Location = new System.Drawing.Point(417, 69);
-            this.selectAvisynthPluginsDir.Name = "selectAvisynthPluginsDir";
-            this.selectAvisynthPluginsDir.Size = new System.Drawing.Size(24, 23);
-            this.selectAvisynthPluginsDir.TabIndex = 8;
-            this.selectAvisynthPluginsDir.Text = "...";
-            this.selectAvisynthPluginsDir.Click += new System.EventHandler(this.selectAvisynthDir_Click);
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(96, 43);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.ReadOnly = true;
-            this.textBox9.Size = new System.Drawing.Size(315, 21);
-            this.textBox9.TabIndex = 4;
-            this.textBox9.Text = "avisynth plugins Directory";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 47);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(45, 13);
-            this.label16.TabIndex = 3;
-            this.label16.Text = "yadif.dll";
-            // 
-            // meguiUpdateCache
-            // 
-            this.meguiUpdateCache.Location = new System.Drawing.Point(96, 97);
-            this.meguiUpdateCache.Name = "meguiUpdateCache";
-            this.meguiUpdateCache.ReadOnly = true;
-            this.meguiUpdateCache.Size = new System.Drawing.Size(315, 21);
-            this.meguiUpdateCache.TabIndex = 7;
-            this.meguiUpdateCache.Text = "MeGUI update cache";
-            // 
-            // avisynthPluginsDir
-            // 
-            this.avisynthPluginsDir.Location = new System.Drawing.Point(96, 70);
-            this.avisynthPluginsDir.Name = "avisynthPluginsDir";
-            this.avisynthPluginsDir.ReadOnly = true;
-            this.avisynthPluginsDir.Size = new System.Drawing.Size(315, 21);
-            this.avisynthPluginsDir.TabIndex = 7;
-            this.avisynthPluginsDir.Text = "avisynth plugins Directory";
-            // 
-            // dgIndexPath
-            // 
-            this.dgIndexPath.Location = new System.Drawing.Point(96, 16);
-            this.dgIndexPath.Name = "dgIndexPath";
-            this.dgIndexPath.ReadOnly = true;
-            this.dgIndexPath.Size = new System.Drawing.Size(315, 21);
-            this.dgIndexPath.TabIndex = 1;
-            this.dgIndexPath.Text = "dgindex.exe";
-            // 
-            // dgIndexLabel
-            // 
-            this.dgIndexLabel.Location = new System.Drawing.Point(6, 19);
-            this.dgIndexLabel.Name = "dgIndexLabel";
-            this.dgIndexLabel.Size = new System.Drawing.Size(60, 15);
-            this.dgIndexLabel.TabIndex = 0;
-            this.dgIndexLabel.Text = "DGIndex";
-            // 
-            // selectDGIndexExecutable
-            // 
-            this.selectDGIndexExecutable.Location = new System.Drawing.Point(417, 15);
-            this.selectDGIndexExecutable.Name = "selectDGIndexExecutable";
-            this.selectDGIndexExecutable.Size = new System.Drawing.Size(24, 23);
-            this.selectDGIndexExecutable.TabIndex = 2;
-            this.selectDGIndexExecutable.Text = "...";
-            this.selectDGIndexExecutable.Click += new System.EventHandler(this.selectDGIndexExecutable_Click);
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.lblForcedName);
+            this.groupBox6.Controls.Add(this.txtForcedName);
+            this.groupBox6.Controls.Add(this.lblffmsThreads);
+            this.groupBox6.Controls.Add(this.ffmsThreads);
+            this.groupBox6.Controls.Add(this.chkSelectHDTracks);
+            this.groupBox6.Controls.Add(this.chkEnable64bitX264);
+            this.groupBox6.Location = new System.Drawing.Point(4, 265);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(467, 116);
+            this.groupBox6.TabIndex = 33;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = " Misc ";
+            // 
+            // lblForcedName
+            // 
+            this.lblForcedName.AutoSize = true;
+            this.lblForcedName.Location = new System.Drawing.Point(11, 81);
+            this.lblForcedName.Name = "lblForcedName";
+            this.lblForcedName.Size = new System.Drawing.Size(163, 13);
+            this.lblForcedName.TabIndex = 33;
+            this.lblForcedName.Text = "add text to forced track names: ";
+            // 
+            // txtForcedName
+            // 
+            this.txtForcedName.Location = new System.Drawing.Point(225, 78);
+            this.txtForcedName.Name = "txtForcedName";
+            this.txtForcedName.Size = new System.Drawing.Size(234, 21);
+            this.txtForcedName.TabIndex = 32;
+            // 
+            // lblffmsThreads
+            // 
+            this.lblffmsThreads.AutoSize = true;
+            this.lblffmsThreads.Location = new System.Drawing.Point(10, 32);
+            this.lblffmsThreads.Name = "lblffmsThreads";
+            this.lblffmsThreads.Size = new System.Drawing.Size(106, 13);
+            this.lblffmsThreads.TabIndex = 31;
+            this.lblffmsThreads.Text = "FFMS Thread Count:";
+            // 
+            // ffmsThreads
+            // 
+            this.ffmsThreads.Location = new System.Drawing.Point(122, 30);
+            this.ffmsThreads.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.ffmsThreads.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.ffmsThreads.Name = "ffmsThreads";
+            this.ffmsThreads.Size = new System.Drawing.Size(38, 21);
+            this.ffmsThreads.TabIndex = 30;
+            this.ffmsThreads.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // chkSelectHDTracks
+            // 
+            this.chkSelectHDTracks.AutoSize = true;
+            this.chkSelectHDTracks.Checked = true;
+            this.chkSelectHDTracks.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSelectHDTracks.Location = new System.Drawing.Point(225, 31);
+            this.chkSelectHDTracks.Name = "chkSelectHDTracks";
+            this.chkSelectHDTracks.Size = new System.Drawing.Size(234, 17);
+            this.chkSelectHDTracks.TabIndex = 29;
+            this.chkSelectHDTracks.Text = "HD Streams Extractor: select default tracks";
+            this.chkSelectHDTracks.UseVisualStyleBackColor = true;
+            // 
+            // chkEnable64bitX264
+            // 
+            this.chkEnable64bitX264.AutoSize = true;
+            this.chkEnable64bitX264.Checked = true;
+            this.chkEnable64bitX264.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEnable64bitX264.Location = new System.Drawing.Point(225, 54);
+            this.chkEnable64bitX264.Name = "chkEnable64bitX264";
+            this.chkEnable64bitX264.Size = new System.Drawing.Size(148, 17);
+            this.chkEnable64bitX264.TabIndex = 28;
+            this.chkEnable64bitX264.Text = "X264: enable 64 bit mode";
+            this.chkEnable64bitX264.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.useNeroAacEnc);
+            this.groupBox5.Controls.Add(this.lblNero);
+            this.groupBox5.Controls.Add(this.neroaacencLocation);
+            this.groupBox5.Location = new System.Drawing.Point(4, 8);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(467, 70);
+            this.groupBox5.TabIndex = 32;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "                                        ";
+            // 
+            // useNeroAacEnc
+            // 
+            this.useNeroAacEnc.AutoSize = true;
+            this.useNeroAacEnc.Location = new System.Drawing.Point(12, -1);
+            this.useNeroAacEnc.Name = "useNeroAacEnc";
+            this.useNeroAacEnc.Size = new System.Drawing.Size(119, 17);
+            this.useNeroAacEnc.TabIndex = 46;
+            this.useNeroAacEnc.Text = "Enable NeroAacEnc";
+            this.useNeroAacEnc.UseVisualStyleBackColor = true;
+            this.useNeroAacEnc.CheckedChanged += new System.EventHandler(this.useNeroAacEnc_CheckedChanged);
+            // 
+            // lblNero
+            // 
+            this.lblNero.AutoSize = true;
+            this.lblNero.Enabled = false;
+            this.lblNero.Location = new System.Drawing.Point(11, 31);
+            this.lblNero.Name = "lblNero";
+            this.lblNero.Size = new System.Drawing.Size(47, 13);
+            this.lblNero.TabIndex = 45;
+            this.lblNero.Text = "Location";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.btnClearMP4TempDirectory);
+            this.groupBox4.Controls.Add(this.tempDirMP4);
+            this.groupBox4.Location = new System.Drawing.Point(3, 176);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(467, 77);
+            this.groupBox4.TabIndex = 31;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Temp Directory for MP4 Muxer";
+            // 
+            // btnClearMP4TempDirectory
+            // 
+            this.btnClearMP4TempDirectory.Location = new System.Drawing.Point(436, 34);
+            this.btnClearMP4TempDirectory.Name = "btnClearMP4TempDirectory";
+            this.btnClearMP4TempDirectory.Size = new System.Drawing.Size(24, 23);
+            this.btnClearMP4TempDirectory.TabIndex = 42;
+            this.btnClearMP4TempDirectory.Text = "x";
+            this.btnClearMP4TempDirectory.Click += new System.EventHandler(this.btnClearMP4TempDirectory_Click);
+            // 
+            // vobGroupBox
+            // 
+            this.vobGroupBox.Controls.Add(this.useDGIndexNV);
+            this.vobGroupBox.Controls.Add(this.cbAutoLoadDG);
+            this.vobGroupBox.Controls.Add(this.percentLabel);
+            this.vobGroupBox.Controls.Add(this.forceFilmPercentage);
+            this.vobGroupBox.Controls.Add(this.autoForceFilm);
+            this.vobGroupBox.Location = new System.Drawing.Point(4, 84);
+            this.vobGroupBox.Name = "vobGroupBox";
+            this.vobGroupBox.Size = new System.Drawing.Size(467, 76);
+            this.vobGroupBox.TabIndex = 29;
+            this.vobGroupBox.TabStop = false;
+            this.vobGroupBox.Text = " DGIndex Tools";
+            // 
+            // useDGIndexNV
+            // 
+            this.useDGIndexNV.AutoSize = true;
+            this.useDGIndexNV.Location = new System.Drawing.Point(12, 24);
+            this.useDGIndexNV.Name = "useDGIndexNV";
+            this.useDGIndexNV.Size = new System.Drawing.Size(116, 17);
+            this.useDGIndexNV.TabIndex = 47;
+            this.useDGIndexNV.Text = "Enable DGIndexNV";
+            this.useDGIndexNV.UseVisualStyleBackColor = true;
+            // 
+            // cbAutoLoadDG
+            // 
+            this.cbAutoLoadDG.AutoSize = true;
+            this.cbAutoLoadDG.Location = new System.Drawing.Point(225, 51);
+            this.cbAutoLoadDG.Name = "cbAutoLoadDG";
+            this.cbAutoLoadDG.Size = new System.Drawing.Size(179, 17);
+            this.cbAutoLoadDG.TabIndex = 7;
+            this.cbAutoLoadDG.Text = "autoload VOB files incrementally";
+            this.cbAutoLoadDG.UseVisualStyleBackColor = true;
+            // 
+            // percentLabel
+            // 
+            this.percentLabel.Location = new System.Drawing.Point(397, 28);
+            this.percentLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.percentLabel.Name = "percentLabel";
+            this.percentLabel.Size = new System.Drawing.Size(50, 13);
+            this.percentLabel.TabIndex = 4;
+            this.percentLabel.Text = "Percent";
+            this.percentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // forceFilmPercentage
+            // 
+            this.forceFilmPercentage.Location = new System.Drawing.Point(351, 24);
+            this.forceFilmPercentage.Name = "forceFilmPercentage";
+            this.forceFilmPercentage.Size = new System.Drawing.Size(40, 21);
+            this.forceFilmPercentage.TabIndex = 3;
+            this.forceFilmPercentage.Value = new decimal(new int[] {
+            95,
+            0,
+            0,
+            0});
+            // 
+            // autoForceFilm
+            // 
+            this.autoForceFilm.Location = new System.Drawing.Point(225, 24);
+            this.autoForceFilm.Name = "autoForceFilm";
+            this.autoForceFilm.Size = new System.Drawing.Size(120, 17);
+            this.autoForceFilm.TabIndex = 2;
+            this.autoForceFilm.Text = "Auto Force Film at";
             // 
             // audioExtLabel
             // 
@@ -1927,44 +1386,99 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
-            // tbFlac
+            // toolTipHelp
             // 
-            this.tbFlac.Location = new System.Drawing.Point(91, 141);
-            this.tbFlac.Name = "tbFlac";
-            this.tbFlac.ReadOnly = true;
-            this.tbFlac.Size = new System.Drawing.Size(322, 21);
-            this.tbFlac.TabIndex = 29;
-            this.tbFlac.Text = "flac.exe";
+            this.toolTipHelp.AutoPopDelay = 30000;
+            this.toolTipHelp.InitialDelay = 500;
+            this.toolTipHelp.IsBalloon = true;
+            this.toolTipHelp.ReshowDelay = 100;
+            this.toolTipHelp.ShowAlways = true;
             // 
-            // label4
+            // helpButton1
             // 
-            this.label4.Location = new System.Drawing.Point(5, 145);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(80, 13);
-            this.label4.TabIndex = 28;
-            this.label4.Text = "flac";
+            this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.helpButton1.ArticleName = "Settings";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(21, 418);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 1;
             // 
-            // selectFlacExecutableButton
+            // targetSizeSCBox1
             // 
-            this.selectFlacExecutableButton.Location = new System.Drawing.Point(419, 140);
-            this.selectFlacExecutableButton.Name = "selectFlacExecutableButton";
-            this.selectFlacExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectFlacExecutableButton.TabIndex = 30;
-            this.selectFlacExecutableButton.Text = "...";
-            this.selectFlacExecutableButton.Click += new System.EventHandler(this.selectFlacExecutableButton_Click);
+            this.targetSizeSCBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.targetSizeSCBox1.Location = new System.Drawing.Point(8, 56);
+            this.targetSizeSCBox1.MaximumSize = new System.Drawing.Size(1000, 28);
+            this.targetSizeSCBox1.MinimumSize = new System.Drawing.Size(64, 28);
+            this.targetSizeSCBox1.Name = "targetSizeSCBox1";
+            this.targetSizeSCBox1.NullString = "Modify custom file size values";
+            this.targetSizeSCBox1.SaveCustomValues = true;
+            this.targetSizeSCBox1.SelectedIndex = 0;
+            this.targetSizeSCBox1.Size = new System.Drawing.Size(273, 28);
+            this.targetSizeSCBox1.TabIndex = 44;
+            // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(8, 24);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(243, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
+            // 
+            // neroaacencLocation
+            // 
+            this.neroaacencLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.neroaacencLocation.Enabled = false;
+            this.neroaacencLocation.Filename = "";
+            this.neroaacencLocation.Filter = "NeroAacEnc|neroaacenc.exe";
+            this.neroaacencLocation.FilterIndex = 0;
+            this.neroaacencLocation.FolderMode = false;
+            this.neroaacencLocation.Location = new System.Drawing.Point(64, 26);
+            this.neroaacencLocation.Name = "neroaacencLocation";
+            this.neroaacencLocation.ReadOnly = true;
+            this.neroaacencLocation.SaveMode = false;
+            this.neroaacencLocation.Size = new System.Drawing.Size(399, 26);
+            this.neroaacencLocation.TabIndex = 44;
+            this.neroaacencLocation.Title = null;
+            // 
+            // tempDirMP4
+            // 
+            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tempDirMP4.Filename = "";
+            this.tempDirMP4.Filter = null;
+            this.tempDirMP4.FilterIndex = 0;
+            this.tempDirMP4.FolderMode = true;
+            this.tempDirMP4.Location = new System.Drawing.Point(13, 33);
+            this.tempDirMP4.Name = "tempDirMP4";
+            this.tempDirMP4.ReadOnly = true;
+            this.tempDirMP4.SaveMode = false;
+            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
+            this.tempDirMP4.TabIndex = 41;
+            this.tempDirMP4.Title = null;
+            this.tempDirMP4.FileSelected += new MeGUI.FileBarEventHandler(this.tempDirMP4_FileSelected);
             // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.ClientSize = new System.Drawing.Size(483, 446);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.saveButton);
-            this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "SettingsFormSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Location = global::MeGUI.Properties.Settings.Default.SettingsFormSize;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SettingsForm";
@@ -1977,10 +1491,9 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.audiosamplesperupdate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).EndInit();
-            this.vobGroupBox.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.gbDefaultOutput.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -1989,79 +1502,27 @@ namespace MeGUI
             this.gbVideoPreview.PerformLayout();
             this.autoUpdateGroupBox.ResumeLayout(false);
             this.autoUpdateGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).EndInit();
             this.outputExtensions.ResumeLayout(false);
             this.outputExtensions.PerformLayout();
             this.autoModeGroupbox.ResumeLayout(false);
             this.autoModeGroupbox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
             this.tabPage2.ResumeLayout(false);
-            this.tabControl2.ResumeLayout(false);
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
-            this.tabPage5.ResumeLayout(false);
-            this.tabPage5.PerformLayout();
-            this.tabPage6.ResumeLayout(false);
-            this.tabPage6.PerformLayout();
-            this.tabPage7.ResumeLayout(false);
-            this.tabPage7.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ffmsThreads)).EndInit();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.vobGroupBox.ResumeLayout(false);
+            this.vobGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
         #endregion
         #region button handlers
-        private bool selectExe(string exe)
-        {
-            openExecutableDialog.Filter = exe + " executable|" + exe +"*.exe|Any executable|*.exe";
-            openExecutableDialog.DefaultExt = "exe";
-            openExecutableDialog.FileName = exe + ".exe";
-            openExecutableDialog.Title = "Select " + exe + " executable";
-            return openExecutableDialog.ShowDialog() == DialogResult.OK;
-        }
-
-        private void selectMencoderExecutableButton_Click(object sender, System.EventArgs e)
-		{
-			if (selectExe("mencoder"))
-			{
-				mencoderPath.Text = openExecutableDialog.FileName;
-			}
-		}
-        private void selectAvisynthDir_Click(object sender, EventArgs e)
-        {
-            openFolderDialog.RootFolder = Environment.SpecialFolder.Desktop;
-            if (openFolderDialog.ShowDialog() == DialogResult.OK)
-            {
-                avisynthPluginsDir.Text = openFolderDialog.SelectedPath;
-                MeGUISettings.AvisynthPluginsPath = avisynthPluginsDir.Text;
-            }
-        }
-
-		private void selectMP4boxExecutableButton_Click(object sender, System.EventArgs e)
-		{
-			if (selectExe("mp4box"))
-			{
-				mp4boxPath.Text = openExecutableDialog.FileName;
-			}
-		}
-
-		private void selectDGIndexExecutable_Click(object sender, System.EventArgs e)
-		{
-			if (selectExe("DGIndex"))
-			{
-				dgIndexPath.Text = openExecutableDialog.FileName;
-			}
-            // modify PATH so that n00bs don't complain because they forgot to put dgdecode.dll in the MeGUI dir
-            string pathEnv = Environment.GetEnvironmentVariable("PATH");
-            pathEnv = Path.GetDirectoryName(dgIndexPath.Text) + ";" + pathEnv;
-            Environment.SetEnvironmentVariable("PATH", pathEnv); // Only available in .NET 2.0 !
-		}
-		private void selectMkvmergeExecutableButton_Click(object sender, System.EventArgs e)
-		{
-            if (selectExe("mkvmerge"))
-			{
-				mkvmergePath.Text = openExecutableDialog.FileName;
-			}
-		}
         private void configSourceDetector_Click(object sender, EventArgs e)
         {
             SourceDetectorConfigWindow sdcWindow = new SourceDetectorConfigWindow();
@@ -2069,160 +1530,11 @@ namespace MeGUI
             if (sdcWindow.ShowDialog() == DialogResult.OK)
                 sdSettings = sdcWindow.Settings;
         }
-        private void selectXvidEncrawButton_Click(object sender, EventArgs e)
-        {
-            if (selectExe("xvid_encraw"))
-            {
-                xvidEncrawPath.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (selectExe("neroAacEnc"))
-            {
-                tbNeroAacEnc.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (selectExe("lame"))
-            {
-                tbLame.Text = openExecutableDialog.FileName;
-            }
-        }
-		private void selectX264ExecutableButton_Click(object sender, System.EventArgs e)
-		{
-			if (selectExe("x264"))
-			{
-				x264ExePath.Text = openExecutableDialog.FileName;
-			}
-		}
-
-        private void selectAviMuxGUIExecutableButton_Click(object sender, EventArgs e)
-        {
-            if (selectExe("avimux_gui"))
-            {
-                aviMuxGUIPath.Text = openExecutableDialog.FileName;
-            }
-        }
-   
+  
         private void resetDialogs_Click(object sender, EventArgs e)
         {
             internalSettings.DialogSettings = new DialogSettings();
             MessageBox.Show(this, "Successfully reset all dialogs", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            if (selectExe("oggenc2"))
-            {
-                tbOggEnc.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            if (selectExe("enc_aacPlus"))
-            {
-                tbEncAacPlus.Text = openExecutableDialog.FileName;
-            }
-
-        }
-
-        private void button8_Click(object sender, EventArgs e)
-        {
-            if (selectExe("besplit"))
-            {
-                textBox8.Text = openExecutableDialog.FileName;
-            }
-        }
-
-
-        private void button10_Click(object sender, EventArgs e)
-        {
-            openFolderDialog.RootFolder = Environment.SpecialFolder.Desktop;
-            if (openFolderDialog.ShowDialog() == DialogResult.OK)
-            {
-                meguiUpdateCache.Text = openFolderDialog.SelectedPath;
-                MeGUISettings.MeGUIUpdateCache = meguiUpdateCache.Text;
-            }
-        }
-
-        private void button9_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog d = new OpenFileDialog();
-            d.Filter = "yadif library|yadif.dll|Any library|*.dll";
-            d.DefaultExt = "dll";
-            d.FileName = "yadif.dll";
-            d.Title = "Select yadif library";
-            if (d.ShowDialog() == DialogResult.OK)
-                textBox9.Text = d.FileName;
-        }
-
-        private void selectAftenExecutableButton_Click(object sender, EventArgs e)
-        {
-            if (selectExe("aften"))
-            {
-                tbAften.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void selectDGAIndexExecutable_Click(object sender, EventArgs e)
-        {
-            if ((selectExe("DGAVCIndex")) || (selectExe("DGAVCIndexNV")))
-            {
-                dgavcIndexPath.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void selectDGVIndexExecutable_Click(object sender, EventArgs e)
-        {
-            if (selectExe("DGVC1IndexNV"))
-            {
-                dgvc1IndexPath.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void selectDGMIndexExecutable_Click(object sender, EventArgs e)
-        {
-            if (selectExe("DGMPGIndexNV"))
-            {
-                dgmpgIndexPath.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void selectEAC3toExecutable_Click(object sender, EventArgs e)
-        {
-            if (selectExe("eac3to"))
-            {
-                eac3toPath.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void selectTSMuxerExecutableButton_Click(object sender, EventArgs e)
-        {
-            if (selectExe("tsmuxer"))
-            {
-                tsmuxerPath.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void selectDivXAVCExecButton_Click(object sender, EventArgs e)
-        {
-            if (selectExe("DivX264"))
-            {
-                DivXAVCPath.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void selectFlacExecutableButton_Click(object sender, EventArgs e)
-        {
-            if (selectExe("flac"))
-            {
-                tbFlac.Text = openExecutableDialog.FileName;
-            }
         }
 
         private void runCommand_CheckedChanged(object sender, EventArgs e)
@@ -2257,12 +1569,9 @@ namespace MeGUI
             using (MeGUI.core.gui.AutoUpdateServerConfigWindow w = new MeGUI.core.gui.AutoUpdateServerConfigWindow())
             {
                 w.ServerList = internalSettings.AutoUpdateServerLists;
-                w.ServerListIndex = internalSettings.AutoUpdateServerSubList;
+                w.ServerListIndex = cbAutoUpdateServerSubList.SelectedIndex;
                 if (w.ShowDialog() == DialogResult.OK)
-                {
                     internalSettings.AutoUpdateServerLists = w.ServerList;
-                    internalSettings.AutoUpdateServerSubList = w.ServerListIndex;
-                }
             }
         }
 
@@ -2286,34 +1595,36 @@ namespace MeGUI
 			get 
 			{
                 MeGUISettings settings = internalSettings;
-                settings.YadifPath = textBox9.Text;
                 settings.AudioSamplesPerUpdate = (ulong)audiosamplesperupdate.Value;
                 settings.AcceptableFPSError = acceptableFPSError.Value; 
-                settings.MaxServersToTry = (int)maxServersToTry.Value;
                 settings.AutoUpdate = useAutoUpdateCheckbox.Checked;
                 settings.AcceptableAspectErrorPercent = (int)acceptableAspectError.Value;
-				settings.MencoderPath = mencoderPath.Text;
                 settings.SourceDetectorSettings = sdSettings;
-                settings.NeroAacEncPath = tbNeroAacEnc.Text;
-                settings.LamePath = tbLame.Text;
-				settings.Mp4boxPath = mp4boxPath.Text;
-                settings.AviMuxGUIPath = aviMuxGUIPath.Text;
-				settings.MkvmergePath = mkvmergePath.Text;
-                settings.XviDEncrawPath = xvidEncrawPath.Text;
+                settings.NeroAacEncPath = neroaacencLocation.Filename;
                 settings.VideoExtension = videoExtension.Text;
                 settings.AudioExtension = audioExtension.Text;
                 settings.UseAdvancedTooltips = chkboxUseAdvancedTooltips.Checked;
-                settings.BeSplitPath = textBox8.Text;
-				settings.X264Path = x264ExePath.Text;
-				settings.DgIndexPath = dgIndexPath.Text;
 				settings.DefaultLanguage1 = defaultLanguage1.Text;
 				settings.DefaultLanguage2 = defaultLanguage2.Text;
 				settings.AutoForceFilm = autoForceFilm.Checked;
+                settings.AutoLoadDG = cbAutoLoadDG.Checked;
+                settings.EnsureCorrectPlaybackSpeed = chkEnsureCorrectPlaybackSpeed.Checked;
 				settings.ForceFilmThreshold = forceFilmPercentage.Value;
 				settings.DefaultPriority = (ProcessPriority)priority.SelectedIndex;
+                settings.OpenAVSInThread = cbOpenAVSinThread.Checked;
+                if (cbOpenAVSinThread.CheckState == CheckState.Checked)
+                    settings.OpenAVSInThreadDuringSession = true;
+                else
+                    settings.OpenAVSInThreadDuringSession = false;
 				settings.AutoStartQueue = this.autostartQueue.Checked;
-                if (donothing.Checked) settings.AfterEncoding = AfterEncoding.DoNothing;
-                else if (shutdown.Checked) settings.AfterEncoding = AfterEncoding.Shutdown;
+                settings.AutoStartQueueStartup = this.cbAutoStartQueueStartup.Checked;
+                settings.AlwaysMuxMKV = this.chkAlwaysMuxMKV.Checked;
+                if (donothing.Checked)
+                    settings.AfterEncoding = AfterEncoding.DoNothing;
+                else if (shutdown.Checked)
+                    settings.AfterEncoding = AfterEncoding.Shutdown;
+                else if (rbCloseMeGUI.Checked)
+                    settings.AfterEncoding = AfterEncoding.CloseMeGUI;
                 else
                 {
                     settings.AfterEncoding = AfterEncoding.RunCommand;
@@ -2327,9 +1638,7 @@ namespace MeGUI
 				settings.Keep2of3passOutput = keep2ndPassOutput.Checked;
 				settings.OverwriteStats = keep2ndPassLogFile.Checked;
 				settings.NbPasses = (int)nbPasses.Value;
-                settings.OggEnc2Path = tbOggEnc.Text;
-                settings.EncAacPlusPath = tbEncAacPlus.Text;
-                settings.AftenPath = tbAften.Text;
+                settings.AutoSelectHDStreams = chkSelectHDTracks.Checked;
                 settings.AedSettings = this.autoEncodeDefaults;
                 settings.AlwaysOnTop = chAlwaysOnTop.Checked;
                 settings.UseHttpProxy = cbx_usehttpproxy.Checked;
@@ -2338,42 +1647,33 @@ namespace MeGUI
                 settings.HttpProxyUid = txt_httpproxyuid.Text;
                 settings.HttpProxyPwd = txt_httpproxypwd.Text;
                 settings.DefaultOutputDir = defaultOutputDir.Filename;
+                settings.TempDirMP4 = tempDirMP4.Filename;
                 settings.AddTimePosition = cbAddTimePos.Checked;
-                settings.DgavcIndexPath = dgavcIndexPath.Text;
-                settings.Dgvc1IndexPath = dgvc1IndexPath.Text;
-                settings.DgmpgIndexPath = dgmpgIndexPath.Text;
-                settings.EAC3toPath = eac3toPath.Text;
-                settings.TSMuxerPath = tsmuxerPath.Text;
                 settings.AlwaysBackUpFiles = backupfiles.Checked;
                 settings.ForceRawAVCExtension = forcerawavcuse.Checked;
-                settings.DivXAVCPath = DivXAVCPath.Text;
-                settings.FlacPath = tbFlac.Text;
+                settings.AutoUpdateServerSubList = cbAutoUpdateServerSubList.SelectedIndex;
+                settings.Use64bitX264 = chkEnable64bitX264.Checked;
+                settings.FFMSThreads = Decimal.ToInt32(ffmsThreads.Value);
+                settings.AppendToForcedStreams = txtForcedName.Text;
+                settings.UseITUValues = cbUseITUValues.Checked;
+                settings.UseNeroAacEnc = useNeroAacEnc.Checked;
+                settings.UseDGIndexNV = useDGIndexNV.Checked;
 				return settings;
 			}
 			set
 			{
                 internalSettings = value;
                 MeGUISettings settings = value;
-                textBox9.Text = settings.YadifPath;
                 audiosamplesperupdate.Value = settings.AudioSamplesPerUpdate;
                 acceptableFPSError.Value = settings.AcceptableFPSError;
-                maxServersToTry.Value = settings.MaxServersToTry;
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;
                 acceptableAspectError.Value = (decimal)settings.AcceptableAspectErrorPercent;
-				mencoderPath.Text = settings.MencoderPath;      
-                tbNeroAacEnc.Text = settings.NeroAacEncPath;
-                tbLame.Text = settings.LamePath;
-                textBox8.Text = settings.BeSplitPath;
+                neroaacencLocation.Filename = settings.NeroAacEncPath;
                 sdSettings = settings.SourceDetectorSettings;
                 chkboxUseAdvancedTooltips.Checked = settings.UseAdvancedTooltips;
-				mp4boxPath.Text = settings.Mp4boxPath;
-				mkvmergePath.Text = settings.MkvmergePath;
-                xvidEncrawPath.Text = settings.XviDEncrawPath;
-                aviMuxGUIPath.Text = settings.AviMuxGUIPath;
                 videoExtension.Text = settings.VideoExtension;
                 audioExtension.Text = settings.AudioExtension;
-				x264ExePath.Text = settings.X264Path;
-				dgIndexPath.Text = settings.DgIndexPath;
+                chkEnsureCorrectPlaybackSpeed.Checked = settings.EnsureCorrectPlaybackSpeed;
 				int index = this.defaultLanguage1.Items.IndexOf(settings.DefaultLanguage1);
 				if (index != -1)
 					defaultLanguage1.SelectedIndex = index;
@@ -2381,12 +1681,19 @@ namespace MeGUI
 				if (index != -1)
 					defaultLanguage2.SelectedIndex = index;
 				autoForceFilm.Checked = settings.AutoForceFilm;
+                cbAutoLoadDG.Checked = settings.AutoLoadDG;
 				forceFilmPercentage.Value = settings.ForceFilmThreshold;
 				priority.SelectedIndex = (int)settings.DefaultPriority;
+                cbOpenAVSinThread.Checked = settings.OpenAVSInThread;
+                if (settings.OpenAVSInThread && !settings.OpenAVSInThreadDuringSession)
+                    cbOpenAVSinThread.CheckState = CheckState.Indeterminate;
 				autostartQueue.Checked = settings.AutoStartQueue;
+                cbAutoStartQueueStartup.Checked = settings.AutoStartQueueStartup;
+                chkAlwaysMuxMKV.Checked = settings.AlwaysMuxMKV;
                 donothing.Checked = settings.AfterEncoding == AfterEncoding.DoNothing;
                 shutdown.Checked = settings.AfterEncoding == AfterEncoding.Shutdown;
                 runCommand.Checked = settings.AfterEncoding == AfterEncoding.RunCommand;
+                rbCloseMeGUI.Checked = settings.AfterEncoding == AfterEncoding.CloseMeGUI;
                 command.Text = settings.AfterEncodingCommand;
 				deleteCompletedJobs.Checked = settings.DeleteCompletedJobs;
                 openScript.Checked = settings.AutoOpenScript;
@@ -2396,9 +1703,7 @@ namespace MeGUI
 				keep2ndPassOutput.Checked = settings.Keep2of3passOutput;
 				keep2ndPassLogFile.Checked = settings.OverwriteStats;
 				nbPasses.Value = (decimal)settings.NbPasses;
-                tbOggEnc.Text = settings.OggEnc2Path;
-                tbEncAacPlus.Text = settings.EncAacPlusPath;
-                tbAften.Text = settings.AftenPath;
+                chkSelectHDTracks.Checked = settings.AutoSelectHDStreams;
                 this.autoEncodeDefaults = settings.AedSettings;
                 chAlwaysOnTop.Checked = settings.AlwaysOnTop;
                 cbx_usehttpproxy.Checked = settings.UseHttpProxy;
@@ -2407,16 +1712,20 @@ namespace MeGUI
                 txt_httpproxyuid.Text = settings.HttpProxyUid;
                 txt_httpproxypwd.Text = settings.HttpProxyPwd;
                 defaultOutputDir.Filename = settings.DefaultOutputDir;
+                tempDirMP4.Filename = settings.TempDirMP4;
                 cbAddTimePos.Checked = settings.AddTimePosition;
-                dgavcIndexPath.Text = settings.DgavcIndexPath;
-                dgvc1IndexPath.Text = settings.Dgvc1IndexPath;
-                dgmpgIndexPath.Text = settings.DgmpgIndexPath;
-                eac3toPath.Text = settings.EAC3toPath;
-                tsmuxerPath.Text = settings.TSMuxerPath;
                 backupfiles.Checked = settings.AlwaysBackUpFiles;
                 forcerawavcuse.Checked = settings.ForceRawAVCExtension;
-                DivXAVCPath.Text = settings.DivXAVCPath;
-                tbFlac.Text = settings.FlacPath;
+                cbAutoUpdateServerSubList.SelectedIndex = settings.AutoUpdateServerSubList;
+                chkEnable64bitX264.Checked = settings.Use64bitX264;
+                txtForcedName.Text = settings.AppendToForcedStreams;
+                if (ffmsThreads.Maximum < settings.FFMSThreads)
+                    ffmsThreads.Value = ffmsThreads.Maximum;
+                else
+                    ffmsThreads.Value = settings.FFMSThreads;
+                cbUseITUValues.Checked = settings.UseITUValues;
+                useNeroAacEnc.Checked = settings.UseNeroAacEnc;
+                useDGIndexNV.Checked = settings.UseDGIndexNV;
 			}
 		}
 		#endregion
@@ -2425,8 +1734,8 @@ namespace MeGUI
         {
             if (!backupfiles.Checked)
             {
-                string meguiToolsFolder = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf('\\')) + "\\tools\\";
-                string meguiAvisynthFolder = MeGUISettings.AvisynthPluginsPath + "\\";
+                string meguiToolsFolder = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf('\\'));
+                string meguiAvisynthFolder = MainForm.Instance.Settings.AvisynthPluginsPath + "\\";
                 if (Directory.Exists(meguiToolsFolder))
                 {
                     try
@@ -2452,6 +1761,33 @@ namespace MeGUI
                     }
                 }
             }
+        }
+
+        private void btnClearMP4TempDirectory_Click(object sender, EventArgs e)
+        {
+            tempDirMP4.Filename = "";
+        }
+
+        private void btnClearOutputDirecoty_Click(object sender, EventArgs e)
+        {
+            defaultOutputDir.Filename = "";
+        }
+
+        private void tempDirMP4_FileSelected(FileBar sender, FileBarEventArgs args)
+        {
+            if (System.IO.Path.GetPathRoot(tempDirMP4.Filename).Equals(tempDirMP4.Filename, StringComparison.CurrentCultureIgnoreCase))
+            {
+                // mp4box has in some builds problems if the tmp directory is in the root of a drive
+                MessageBox.Show("A root folder cannot be selected!", "Wrong path", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                tempDirMP4.Filename = String.Empty;
+            }
+        }
+
+        private void useNeroAacEnc_CheckedChanged(object sender, EventArgs e)
+        {
+            neroaacencLocation.Enabled = lblNero.Enabled = useNeroAacEnc.Checked;
+            if (useNeroAacEnc.Checked && !internalSettings.UseNeroAacEnc)
+                MessageBox.Show("You have to restart MeGUI in order to get access to the NeroAacEnc profiles!", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 	}
 }

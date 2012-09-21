@@ -28,22 +28,28 @@ namespace MeGUI.packages.tools.calculator
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AudioTrackSizeTab));
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.audio1Bitrate = new System.Windows.Forms.NumericUpDown();
-            this.selectAudio1Button = new System.Windows.Forms.Button();
+            this.selectButton = new System.Windows.Forms.Button();
             this.audio1Type = new System.Windows.Forms.ComboBox();
             this.audio1TypeLabel = new System.Windows.Forms.Label();
-            this.clearAudio1Button = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.size = new MeGUI.core.gui.TargetSizeSCBox();
+            this.audioLabel = new System.Windows.Forms.Label();
+            this.name = new System.Windows.Forms.TextBox();
+            this.size = new System.Windows.Forms.TextBox();
+            this.removeLink = new System.Windows.Forms.LinkLabel();
+            this.removalToolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.audio1Bitrate)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 35);
+            this.label2.Location = new System.Drawing.Point(354, 8);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(27, 13);
             this.label2.TabIndex = 22;
@@ -51,8 +57,9 @@ namespace MeGUI.packages.tools.calculator
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 5);
+            this.label1.Location = new System.Drawing.Point(279, 8);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(37, 13);
             this.label1.TabIndex = 20;
@@ -60,93 +67,120 @@ namespace MeGUI.packages.tools.calculator
             // 
             // audio1Bitrate
             // 
-            this.audio1Bitrate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.audio1Bitrate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.audio1Bitrate.Enabled = false;
             this.audio1Bitrate.Increment = new decimal(new int[] {
             16,
             0,
             0,
             0});
-            this.audio1Bitrate.Location = new System.Drawing.Point(59, 3);
+            this.audio1Bitrate.Location = new System.Drawing.Point(282, 28);
             this.audio1Bitrate.Maximum = new decimal(new int[] {
             100000,
             0,
             0,
             0});
             this.audio1Bitrate.Name = "audio1Bitrate";
-            this.audio1Bitrate.Size = new System.Drawing.Size(196, 20);
-            this.audio1Bitrate.TabIndex = 21;
+            this.audio1Bitrate.Size = new System.Drawing.Size(66, 20);
+            this.audio1Bitrate.TabIndex = 2;
+            this.audio1Bitrate.ThousandsSeparator = true;
             this.audio1Bitrate.ValueChanged += new System.EventHandler(this.audio1Bitrate_ValueChanged);
             // 
-            // selectAudio1Button
+            // selectButton
             // 
-            this.selectAudio1Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.selectAudio1Button.Location = new System.Drawing.Point(150, 91);
-            this.selectAudio1Button.Name = "selectAudio1Button";
-            this.selectAudio1Button.Size = new System.Drawing.Size(75, 23);
-            this.selectAudio1Button.TabIndex = 28;
-            this.selectAudio1Button.Text = "Select";
-            this.selectAudio1Button.Click += new System.EventHandler(this.selectAudio1Button_Click);
+            this.selectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.selectButton.Location = new System.Drawing.Point(160, 27);
+            this.selectButton.Name = "selectButton";
+            this.selectButton.Size = new System.Drawing.Size(24, 21);
+            this.selectButton.TabIndex = 0;
+            this.selectButton.Text = "...";
+            this.selectButton.Click += new System.EventHandler(this.selectButton_Click);
             // 
             // audio1Type
             // 
-            this.audio1Type.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.audio1Type.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.audio1Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audio1Type.Location = new System.Drawing.Point(59, 64);
+            this.audio1Type.Location = new System.Drawing.Point(197, 27);
             this.audio1Type.Name = "audio1Type";
-            this.audio1Type.Size = new System.Drawing.Size(196, 21);
-            this.audio1Type.TabIndex = 27;
+            this.audio1Type.Size = new System.Drawing.Size(75, 21);
+            this.audio1Type.TabIndex = 1;
             this.audio1Type.SelectedIndexChanged += new System.EventHandler(this.audio1Type_SelectedIndexChanged);
             // 
             // audio1TypeLabel
             // 
-            this.audio1TypeLabel.Location = new System.Drawing.Point(3, 67);
+            this.audio1TypeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.audio1TypeLabel.Location = new System.Drawing.Point(194, 8);
             this.audio1TypeLabel.Name = "audio1TypeLabel";
             this.audio1TypeLabel.Size = new System.Drawing.Size(40, 16);
             this.audio1TypeLabel.TabIndex = 26;
             this.audio1TypeLabel.Text = "Type";
             // 
-            // clearAudio1Button
+            // audioLabel
             // 
-            this.clearAudio1Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.clearAudio1Button.Location = new System.Drawing.Point(231, 91);
-            this.clearAudio1Button.Name = "clearAudio1Button";
-            this.clearAudio1Button.Size = new System.Drawing.Size(24, 23);
-            this.clearAudio1Button.TabIndex = 29;
-            this.clearAudio1Button.Text = "X";
-            this.clearAudio1Button.Click += new System.EventHandler(this.clearAudio1Button_Click);
+            this.audioLabel.Location = new System.Drawing.Point(30, 8);
+            this.audioLabel.Name = "audioLabel";
+            this.audioLabel.Size = new System.Drawing.Size(40, 16);
+            this.audioLabel.TabIndex = 31;
+            this.audioLabel.Text = "Audio";
+            // 
+            // name
+            // 
+            this.name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.name.Location = new System.Drawing.Point(8, 28);
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            this.name.Size = new System.Drawing.Size(150, 20);
+            this.name.TabIndex = 32;
+            this.name.TabStop = false;
+            this.name.Enter += new System.EventHandler(this.selectButton_Click);
             // 
             // size
             // 
-            this.size.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.size.Enabled = false;
-            this.size.Location = new System.Drawing.Point(56, 29);
-            this.size.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.size.MinimumSize = new System.Drawing.Size(64, 29);
+            this.size.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.size.Location = new System.Drawing.Point(357, 28);
             this.size.Name = "size";
-            this.size.NullString = "";
-            this.size.SelectedIndex = 0;
-            this.size.Size = new System.Drawing.Size(202, 29);
-            this.size.TabIndex = 30;
-            this.size.SelectionChanged += new MeGUI.StringChanged(this.size_SelectionChanged);
+            this.size.ReadOnly = true;
+            this.size.Size = new System.Drawing.Size(70, 20);
+            this.size.TabIndex = 3;
+            this.size.TabStop = false;
+            // 
+            // removeLink
+            // 
+            this.removeLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.removeLink.Image = ((System.Drawing.Image)(resources.GetObject("removeLink.Image")));
+            this.removeLink.Location = new System.Drawing.Point(5, 3);
+            this.removeLink.Name = "removeLink";
+            this.removeLink.Padding = new System.Windows.Forms.Padding(16, 0, 3, 3);
+            this.removeLink.Size = new System.Drawing.Size(27, 23);
+            this.removeLink.TabIndex = 4;
+            this.removeLink.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.removalToolTip.SetToolTip(this.removeLink, "Audio track");
+            this.removeLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.removeLink_LinkClicked);
+            this.removeLink.Click += new System.EventHandler(this.removeLink_LinkClicked);
+            // 
+            // removalToolTip
+            // 
+            this.removalToolTip.AutomaticDelay = 300;
+            this.removalToolTip.ToolTipTitle = "Remove";
             // 
             // AudioTrackSizeTab
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.removeLink);
             this.Controls.Add(this.size);
+            this.Controls.Add(this.name);
+            this.Controls.Add(this.audioLabel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.audio1Bitrate);
-            this.Controls.Add(this.selectAudio1Button);
+            this.Controls.Add(this.selectButton);
             this.Controls.Add(this.audio1Type);
             this.Controls.Add(this.audio1TypeLabel);
-            this.Controls.Add(this.clearAudio1Button);
             this.Name = "AudioTrackSizeTab";
-            this.Size = new System.Drawing.Size(264, 123);
+            this.Size = new System.Drawing.Size(435, 50);
+            this.Enter += new System.EventHandler(this.AudioTrackSizeTab_Enter);
             ((System.ComponentModel.ISupportInitialize)(this.audio1Bitrate)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -158,11 +192,14 @@ namespace MeGUI.packages.tools.calculator
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown audio1Bitrate;
-        private System.Windows.Forms.Button selectAudio1Button;
+        private System.Windows.Forms.Button selectButton;
         private System.Windows.Forms.ComboBox audio1Type;
         private System.Windows.Forms.Label audio1TypeLabel;
-        private System.Windows.Forms.Button clearAudio1Button;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private MeGUI.core.gui.TargetSizeSCBox size;
+        private System.Windows.Forms.Label audioLabel;
+        private System.Windows.Forms.TextBox name;
+        private System.Windows.Forms.TextBox size;
+        private System.Windows.Forms.LinkLabel removeLink;
+        private System.Windows.Forms.ToolTip removalToolTip;
     }
 }

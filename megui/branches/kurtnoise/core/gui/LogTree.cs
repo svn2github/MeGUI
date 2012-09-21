@@ -196,5 +196,18 @@ namespace MeGUI.core.gui
                 VistaStuff.SetWindowTheme(treeView.Handle, "explorer", null);
             }
         }
+
+        private void resetOverlayIcon_Click(object sender, EventArgs e)
+        {
+           MainForm.Instance.setOverlayIcon(null);
+        }
+
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            if (MainForm.Instance.IsOverlayIconActive)
+                resetOverlayIcon.Visible = true;
+            else
+                resetOverlayIcon.Visible = false;
+        }
     }
 }

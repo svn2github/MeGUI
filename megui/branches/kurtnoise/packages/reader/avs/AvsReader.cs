@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Windows.Forms;
 
 using MeGUI.core.util;
 
@@ -44,7 +45,7 @@ namespace MeGUI
 
         public int HandleLevel(string file)
         {
-            if (file.ToLower().EndsWith(".avs"))
+            if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avs"))
                 return 10;
             return -1;
         }
@@ -66,7 +67,7 @@ namespace MeGUI
         private AviSynthScriptEnvironment enviroment = null;
         private IAudioReader audioReader;
         private IVideoReader videoReader;
-        private MediaFileInfo info;
+        private VideoInformation info;
         #region construction
         public AviSynthClip Clip
         {
@@ -95,16 +96,21 @@ namespace MeGUI
 
                 checked
                 {
-                    ulong width = (ulong)clip.VideoWidth;
-                    ulong height = (ulong)clip.VideoHeight;
-                    info = new MediaFileInfo(
-                        clip.HasVideo, width, height,
-                        new Dar(clip.GetIntVariable("MeGUI_darx", -1),
-                              clip.GetIntVariable("MeGUI_dary", -1),
-                              width, height),
-                              (ulong)clip.num_frames,
-                              ((double)clip.raten) / ((double)clip.rated),
-                              (clip.SamplesCount != 0));
+                    if (clip.HasVideo)
+                    {
+                        ulong width = (ulong)clip.VideoWidth;
+                        ulong height = (ulong)clip.VideoHeight;
+                        info = new VideoInformation(
+                            clip.HasVideo, width, height,
+                            new Dar(clip.GetIntVariable("MeGUI_darx", -1),
+                                  clip.GetIntVariable("MeGUI_dary", -1),
+                                  width, height),
+                                  (ulong)clip.num_frames,
+                                  ((double)clip.raten) / ((double)clip.rated),
+                                  clip.raten, clip.rated);
+                    }
+                    else
+                        info = new VideoInformation(false, 0, 0, Dar.A1x1, (ulong)clip.SamplesCount, (double)clip.AudioSampleRate, 0, 0);
                 }
             }
             catch (Exception)
@@ -116,6 +122,7 @@ namespace MeGUI
 
         private void cleanup()
         {
+            System.Threading.Thread.Sleep(100);
             if (this.clip != null)
             {
                 (this.clip as IDisposable).Dispose();
@@ -130,7 +137,7 @@ namespace MeGUI
         }
         #endregion
         #region properties
-        public MediaFileInfo Info
+        public VideoInformation VideoInfo
         {
             get { return info; }
         }
@@ -145,7 +152,7 @@ namespace MeGUI
         #endregion
         public IAudioReader GetAudioReader(int track)
         {
-            if (track != 0 || !info.HasAudio)
+            if (track != 0 || !clip.HasAudio)
                 throw new Exception(string.Format("Can't read audio track {0}, because it can't be found", track));
             if (audioReader == null)
                 lock (this)
@@ -157,13 +164,13 @@ namespace MeGUI
         }
         public IVideoReader GetVideoReader()
         {
-            if (!this.Info.HasVideo)
+            if (!this.VideoInfo.HasVideo)
                 throw new Exception("Can't get Video Reader, since there is no video stream!");
             if (videoReader == null)
                 lock (this)
                 {
                     if (videoReader == null)
-                        videoReader = new AvsVideoReader(clip, (int)Info.Width, (int)Info.Height);
+                        videoReader = new AvsVideoReader(clip, (int)VideoInfo.Width, (int)VideoInfo.Height);
                 }
             return videoReader;
         }
@@ -208,6 +215,16 @@ namespace MeGUI
                     }
                     bmp.RotateFlip(RotateFlipType.Rotate180FlipX);
                     return bmp;
+                }
+                catch (System.Runtime.InteropServices.SEHException)
+                {
+                    bmp.Dispose();
+                    if (MainForm.Instance.Settings.OpenAVSInThreadDuringSession)
+                    {
+                        MainForm.Instance.Settings.OpenAVSInThreadDuringSession = false;
+                        MessageBox.Show("External AviSynth Error. As a result during this session the option \"Improved AVS opening\" in the settings is now disabled. Please disable it there completly if necessary.", "AviSynth Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    throw;
                 }
                 catch (Exception)
                 {

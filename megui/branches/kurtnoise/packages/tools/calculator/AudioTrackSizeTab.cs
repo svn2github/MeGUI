@@ -35,6 +35,8 @@ namespace MeGUI.packages.tools.calculator
 {
     public partial class AudioTrackSizeTab : UserControl
     {
+        public event EventHandler SomethingChanged;
+
         private bool updating = false;
 
         public AudioTrackSizeTab()
@@ -45,14 +47,11 @@ namespace MeGUI.packages.tools.calculator
             DragDropUtil.RegisterSingleFileDragDrop(this, selectAudioFile, this.filter);
         }
 
-        public AudioJob Job
+        public void SetAudioJob(AudioJob job)
         {
-            set
-            {
-                audio1Bitrate.Value = value.Settings.Bitrate;
-                if (value.Type != null && audio1Type.Items.Contains(value.Type))
-                    audio1Type.SelectedItem = value.Type;
-            }
+            audio1Bitrate.Value = job.Settings.Bitrate;
+            if (job.Type != null && audio1Type.Items.Contains(job.Type))
+                audio1Type.SelectedItem = job.Type;
         }
 
         private long length;
@@ -80,7 +79,8 @@ namespace MeGUI.packages.tools.calculator
                 audio1Type.SelectedItem = AudioType.VBRMP3;
             double bytesPerSecond = (double)bitrate * 1000.0 / 8.0;
             FileSize f = new FileSize((ulong)(length * bytesPerSecond));
-            size.CertainValue = f;
+            //size.CertainValue = f;
+            size.Text = f.ToString();
             raiseEvent();
             updating = false;
         }
@@ -91,42 +91,39 @@ namespace MeGUI.packages.tools.calculator
                 SomethingChanged(this, EventArgs.Empty);
         }
 
-        private void clearAudio1Button_Click(object sender, EventArgs e)
-        {
-            audio1Bitrate.Value = 0;
-            size.CertainValue = FileSize.Empty;
-            audio1Type.SelectedIndex = -1;
-        }
-
         private void selectAudioFile(string file)
         {
             FileSize f = FileSize.Of2(file) ?? FileSize.Empty;
-            size.CertainValue = f;
+            //size.CertainValue = f;
+            size.Text = f.ToString();
+            audio1Bitrate.Value = (length > 0) ? (long)(f.Bytes * 8) / 1000L / length : 0;
+            name.Text = System.IO.Path.GetFileName(file);
 
             AudioType aud2Type = VideoUtil.guessAudioType(file);
             if (audio1Type.Items.Contains(aud2Type))
                 audio1Type.SelectedItem = aud2Type;
 
-            MediaInfo info;
-            try
-            {
-                info = new MediaInfo(file);
-                MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
-                if (atrack.Format == "DTS" && (atrack.BitRate == "768000" || atrack.BitRate == "1536000"))
-                {
-                    audio1Bitrate.Value = (Convert.ToInt32(atrack.BitRate) / 1000);
-                }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + file + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);                
-            }
+            //MediaInfo info;
+            //try
+            //{
+            //    info = new MediaInfo(file);
+            //    MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
+            //    //this.length = atrack.Duration
+            //    if (atrack.Format == "DTS" && (atrack.BitRate == "768000" || atrack.BitRate == "1536000"))
+            //    {
+            //        audio1Bitrate.Value = (Convert.ToInt32(atrack.BitRate) / 1000);
+            //    }
+            //}
+            //catch (Exception i)
+            //{
+            //    MessageBox.Show("The following error ocurred when trying to get Media info for file " + file + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);                
+            //}
 
         }
 
         private readonly string filter = VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
 
-        private void selectAudio1Button_Click(object sender, EventArgs e)
+        private void selectButton_Click(object sender, EventArgs e)
         {
             openFileDialog.Filter = this.filter;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -143,14 +140,13 @@ namespace MeGUI.packages.tools.calculator
                 {
                     AudioBitrateCalculationStream stream = new AudioBitrateCalculationStream();
                     stream.Type = stream.AType = audio1Type.SelectedItem as AudioType;
-                    stream.Size = size.CertainValue;
+                    //stream.Size = size.CertainValue;
+                    stream.Size = FileSize.Parse(size.Text);
                     return stream;
                 }
                 return null;
             }
         }
-
-        public event EventHandler SomethingChanged;
 
         private void size_SelectionChanged(object sender, string val)
         {
@@ -162,7 +158,7 @@ namespace MeGUI.packages.tools.calculator
 
             updating = true;
 
-            FileSize s = size.CertainValue;
+            FileSize s = FileSize.Parse(size.Text); //size.CertainValue;
             if (s > FileSize.Empty && audio1Type.SelectedIndex == -1)
                 audio1Type.SelectedItem = AudioType.VBRMP3;
 
@@ -185,6 +181,16 @@ namespace MeGUI.packages.tools.calculator
             size.Enabled = en;
 
             raiseEvent();
+        }
+
+        private void removeLink_LinkClicked(object sender, EventArgs e)
+        {
+            if (this.Parent != null) this.Parent.Controls.Remove(this);
+        }
+
+        private void AudioTrackSizeTab_Enter(object sender, EventArgs e)
+        {
+            selectButton.Focus();
         }
 
     }

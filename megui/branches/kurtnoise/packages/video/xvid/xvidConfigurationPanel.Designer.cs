@@ -28,7 +28,48 @@ namespace MeGUI.packages.video.xvid
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(xvidConfigurationPanel));
+            this.xvidOtherGroupBox = new System.Windows.Forms.GroupBox();
+            this.xvidVbvPeakRateLabel = new System.Windows.Forms.Label();
+            this.xvidVbvMaxRateLabel = new System.Windows.Forms.Label();
+            this.xvidVbvBufferLabel = new System.Windows.Forms.Label();
+            this.xvidVbvPeakRate = new System.Windows.Forms.TextBox();
+            this.xvidVbvMaxRate = new System.Windows.Forms.TextBox();
+            this.xvidVbvBuffer = new System.Windows.Forms.TextBox();
+            this.xvidProfile = new System.Windows.Forms.ComboBox();
+            this.xvidProfileLabel = new System.Windows.Forms.Label();
+            this.xvidMotionSearchPrecision = new System.Windows.Forms.ComboBox();
+            this.xvidMotionSearchPrecisionLabel = new System.Windows.Forms.Label();
+            this.xvidPackedBitstream = new System.Windows.Forms.CheckBox();
+            this.xvidPackedBitstreamLabel = new System.Windows.Forms.Label();
+            this.xvidNbBFrames = new System.Windows.Forms.NumericUpDown();
+            this.xvidNbBframesLabel = new System.Windows.Forms.Label();
+            this.xvidKeyframeInterval = new System.Windows.Forms.TextBox();
+            this.xvidKeyframeIntervalLabel = new System.Windows.Forms.Label();
+            this.xvidThreadsLabel = new System.Windows.Forms.Label();
+            this.nbThreads = new System.Windows.Forms.NumericUpDown();
+            this.xvidInterlaced = new System.Windows.Forms.CheckBox();
+            this.xvidTrellisQuant = new System.Windows.Forms.CheckBox();
+            this.fourCCLabel = new System.Windows.Forms.Label();
+            this.fourCC = new System.Windows.Forms.ComboBox();
+            this.xvidCodecToolsGroupBox = new System.Windows.Forms.GroupBox();
+            this.HVSMasking = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cqmComboBox1 = new MeGUI.core.gui.FileSCBox();
+            this.xvidUseVHQForBframes = new System.Windows.Forms.CheckBox();
+            this.xvidUseVHQForBframesLabel = new System.Windows.Forms.Label();
+            this.xvidClosedGop = new System.Windows.Forms.CheckBox();
+            this.xvidClosedGopLabel = new System.Windows.Forms.Label();
+            this.xvidQuantTypeLabel = new System.Windows.Forms.Label();
+            this.xvidChromaMotion = new System.Windows.Forms.CheckBox();
+            this.xvidChromaMotionLabel = new System.Windows.Forms.Label();
+            this.xvidCartoonMode = new System.Windows.Forms.CheckBox();
+            this.xvidCartoonModeLabel = new System.Windows.Forms.Label();
+            this.xvidGMC = new System.Windows.Forms.CheckBox();
+            this.xvidGMCLabel = new System.Windows.Forms.Label();
+            this.xvidQpel = new System.Windows.Forms.CheckBox();
+            this.xvidQPelLabel = new System.Windows.Forms.Label();
+            this.xvidVHQ = new System.Windows.Forms.ComboBox();
+            this.xvidVHQLabel = new System.Windows.Forms.Label();
             this.xvidGeneralOptionsGroupBox = new System.Windows.Forms.GroupBox();
             this.logfile = new System.Windows.Forms.TextBox();
             this.logfileOpenButton = new System.Windows.Forms.Button();
@@ -37,6 +78,7 @@ namespace MeGUI.packages.video.xvid
             this.xvidBitrateQuantLabel = new System.Windows.Forms.Label();
             this.xvidTurbo = new System.Windows.Forms.CheckBox();
             this.xvidEncodingMode = new System.Windows.Forms.ComboBox();
+            this.xvidModeLabel = new System.Windows.Forms.Label();
             this.xvidOtherOptionsGroupbox = new System.Windows.Forms.GroupBox();
             this.xvidFrameDropRatio = new System.Windows.Forms.NumericUpDown();
             this.xvidFrameDropRatioLabel = new System.Windows.Forms.Label();
@@ -97,58 +139,12 @@ namespace MeGUI.packages.video.xvid
             this.xvidCustomCommandlineOptionsLabel = new System.Windows.Forms.Label();
             this.xvidCustomCommandlineOptions = new System.Windows.Forms.TextBox();
             this.quantizerMatrixGroupbox = new System.Windows.Forms.GroupBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.gradientPanel1 = new MeGUI.GradientPanel();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.gbThreads = new System.Windows.Forms.GroupBox();
-            this.nbThreads = new System.Windows.Forms.NumericUpDown();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.xvidOtherGroupBox = new System.Windows.Forms.GroupBox();
-            this.xvidVbvPeakRateLabel = new System.Windows.Forms.Label();
-            this.xvidVbvMaxRateLabel = new System.Windows.Forms.Label();
-            this.xvidVbvBufferLabel = new System.Windows.Forms.Label();
-            this.xvidVbvPeakRate = new System.Windows.Forms.TextBox();
-            this.xvidVbvMaxRate = new System.Windows.Forms.TextBox();
-            this.xvidVbvBuffer = new System.Windows.Forms.TextBox();
-            this.xvidMotionSearchPrecision = new System.Windows.Forms.ComboBox();
-            this.xvidMotionSearchPrecisionLabel = new System.Windows.Forms.Label();
-            this.xvidPackedBitstream = new System.Windows.Forms.CheckBox();
-            this.xvidPackedBitstreamLabel = new System.Windows.Forms.Label();
-            this.xvidNbBFrames = new System.Windows.Forms.NumericUpDown();
-            this.xvidNbBframesLabel = new System.Windows.Forms.Label();
-            this.xvidKeyframeInterval = new System.Windows.Forms.TextBox();
-            this.xvidKeyframeIntervalLabel = new System.Windows.Forms.Label();
-            this.xvidInterlaced = new System.Windows.Forms.CheckBox();
-            this.xvidTrellisQuant = new System.Windows.Forms.CheckBox();
-            this.xvidAdaptiveQuant = new System.Windows.Forms.CheckBox();
-            this.xvidCodecToolsGroupBox = new System.Windows.Forms.GroupBox();
-            this.cqmComboBox1 = new MeGUI.core.gui.FileSCBox();
-            this.xvidUseVHQForBframes = new System.Windows.Forms.CheckBox();
-            this.xvidUseVHQForBframesLabel = new System.Windows.Forms.Label();
-            this.xvidClosedGop = new System.Windows.Forms.CheckBox();
-            this.xvidClosedGopLabel = new System.Windows.Forms.Label();
-            this.xvidQuantTypeLabel = new System.Windows.Forms.Label();
-            this.xvidChromaMotion = new System.Windows.Forms.CheckBox();
-            this.xvidChromaMotionLabel = new System.Windows.Forms.Label();
-            this.xvidCartoonMode = new System.Windows.Forms.CheckBox();
-            this.xvidCartoonModeLabel = new System.Windows.Forms.Label();
-            this.xvidGMC = new System.Windows.Forms.CheckBox();
-            this.xvidGMCLabel = new System.Windows.Forms.Label();
-            this.xvidQpel = new System.Windows.Forms.CheckBox();
-            this.xvidQPelLabel = new System.Windows.Forms.Label();
-            this.xvidVHQ = new System.Windows.Forms.ComboBox();
-            this.xvidVHQLabel = new System.Windows.Forms.Label();
-            this.gbASPProfiles = new System.Windows.Forms.GroupBox();
-            this.xvidProfile = new System.Windows.Forms.ComboBox();
-            this.gbFourCC = new System.Windows.Forms.GroupBox();
-            this.fourCC = new System.Windows.Forms.ComboBox();
-            this.chAdvancedSettings = new System.Windows.Forms.CheckBox();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.label2 = new System.Windows.Forms.Label();
-            this.HVSMasking = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
+            this.xvidOtherGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).BeginInit();
+            this.xvidCodecToolsGroupBox.SuspendLayout();
             this.xvidGeneralOptionsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xvidBitrateQuantizer)).BeginInit();
             this.xvidOtherOptionsGroupbox.SuspendLayout();
@@ -176,45 +172,470 @@ namespace MeGUI.packages.video.xvid
             this.advancedTabPage.SuspendLayout();
             this.gbx264CustomCmd.SuspendLayout();
             this.quantizerMatrixGroupbox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.gradientPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            this.gbThreads.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).BeginInit();
-            this.tabPage1.SuspendLayout();
-            this.xvidOtherGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).BeginInit();
-            this.xvidCodecToolsGroupBox.SuspendLayout();
-            this.gbASPProfiles.SuspendLayout();
-            this.gbFourCC.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // commandline
-            // 
-            this.commandline.Location = new System.Drawing.Point(0, 432);
-            this.commandline.Size = new System.Drawing.Size(503, 59);
-            this.commandline.Text = " ";
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.advancedTabPage);
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Location = new System.Drawing.Point(3, 105);
-            this.tabControl1.Size = new System.Drawing.Size(500, 324);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
-            this.tabControl1.Controls.SetChildIndex(this.tabPage1, 0);
+            this.tabControl1.Size = new System.Drawing.Size(500, 458);
             this.tabControl1.Controls.SetChildIndex(this.advancedTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.mainTabPage, 0);
             // 
+            // commandline
+            // 
+            this.commandline.Location = new System.Drawing.Point(4, 464);
+            this.commandline.Size = new System.Drawing.Size(496, 59);
+            this.commandline.Text = " ";
+            // 
             // mainTabPage
             // 
-            this.mainTabPage.Controls.Add(this.helpButton1);
-            this.mainTabPage.Controls.Add(this.gbThreads);
-            this.mainTabPage.Controls.Add(this.chAdvancedSettings);
-            this.mainTabPage.Controls.Add(this.gbFourCC);
+            this.mainTabPage.Controls.Add(this.xvidOtherGroupBox);
+            this.mainTabPage.Controls.Add(this.xvidCodecToolsGroupBox);
             this.mainTabPage.Controls.Add(this.xvidGeneralOptionsGroupBox);
-            this.mainTabPage.Controls.Add(this.gbASPProfiles);
-            this.mainTabPage.Size = new System.Drawing.Size(492, 298);
+            this.mainTabPage.Size = new System.Drawing.Size(492, 432);
+            // 
+            // xvidOtherGroupBox
+            // 
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvPeakRateLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvMaxRateLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvBufferLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvPeakRate);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvMaxRate);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvBuffer);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidProfile);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidProfileLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidMotionSearchPrecision);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidMotionSearchPrecisionLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidPackedBitstream);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidPackedBitstreamLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidNbBFrames);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidNbBframesLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidKeyframeInterval);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidKeyframeIntervalLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidThreadsLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.nbThreads);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidInterlaced);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidTrellisQuant);
+            this.xvidOtherGroupBox.Controls.Add(this.fourCCLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.fourCC);
+            this.xvidOtherGroupBox.Location = new System.Drawing.Point(326, 3);
+            this.xvidOtherGroupBox.Name = "xvidOtherGroupBox";
+            this.xvidOtherGroupBox.Size = new System.Drawing.Size(162, 423);
+            this.xvidOtherGroupBox.TabIndex = 24;
+            this.xvidOtherGroupBox.TabStop = false;
+            this.xvidOtherGroupBox.Text = "Other Settings";
+            // 
+            // xvidVbvPeakRateLabel
+            // 
+            this.xvidVbvPeakRateLabel.AutoSize = true;
+            this.xvidVbvPeakRateLabel.Location = new System.Drawing.Point(8, 392);
+            this.xvidVbvPeakRateLabel.Name = "xvidVbvPeakRateLabel";
+            this.xvidVbvPeakRateLabel.Size = new System.Drawing.Size(32, 13);
+            this.xvidVbvPeakRateLabel.TabIndex = 23;
+            this.xvidVbvPeakRateLabel.Text = "Peak";
+            // 
+            // xvidVbvMaxRateLabel
+            // 
+            this.xvidVbvMaxRateLabel.Location = new System.Drawing.Point(8, 358);
+            this.xvidVbvMaxRateLabel.Name = "xvidVbvMaxRateLabel";
+            this.xvidVbvMaxRateLabel.Size = new System.Drawing.Size(42, 23);
+            this.xvidVbvMaxRateLabel.TabIndex = 22;
+            this.xvidVbvMaxRateLabel.Text = "Max";
+            // 
+            // xvidVbvBufferLabel
+            // 
+            this.xvidVbvBufferLabel.Location = new System.Drawing.Point(8, 324);
+            this.xvidVbvBufferLabel.Name = "xvidVbvBufferLabel";
+            this.xvidVbvBufferLabel.Size = new System.Drawing.Size(42, 23);
+            this.xvidVbvBufferLabel.TabIndex = 21;
+            this.xvidVbvBufferLabel.Text = "Buffer";
+            // 
+            // xvidVbvPeakRate
+            // 
+            this.xvidVbvPeakRate.Enabled = false;
+            this.xvidVbvPeakRate.Location = new System.Drawing.Point(56, 389);
+            this.xvidVbvPeakRate.Name = "xvidVbvPeakRate";
+            this.xvidVbvPeakRate.Size = new System.Drawing.Size(100, 20);
+            this.xvidVbvPeakRate.TabIndex = 20;
+            this.xvidVbvPeakRate.Text = "0";
+            this.xvidVbvPeakRate.TextChanged += new System.EventHandler(this.xvidVbvPeakRate_TextChanged);
+            // 
+            // xvidVbvMaxRate
+            // 
+            this.xvidVbvMaxRate.Enabled = false;
+            this.xvidVbvMaxRate.Location = new System.Drawing.Point(56, 355);
+            this.xvidVbvMaxRate.Name = "xvidVbvMaxRate";
+            this.xvidVbvMaxRate.Size = new System.Drawing.Size(100, 20);
+            this.xvidVbvMaxRate.TabIndex = 19;
+            this.xvidVbvMaxRate.Text = "0";
+            this.xvidVbvMaxRate.TextChanged += new System.EventHandler(this.xvidVbvMaxRate_TextChanged);
+            // 
+            // xvidVbvBuffer
+            // 
+            this.xvidVbvBuffer.Enabled = false;
+            this.xvidVbvBuffer.Location = new System.Drawing.Point(56, 321);
+            this.xvidVbvBuffer.Name = "xvidVbvBuffer";
+            this.xvidVbvBuffer.Size = new System.Drawing.Size(100, 20);
+            this.xvidVbvBuffer.TabIndex = 18;
+            this.xvidVbvBuffer.Text = "0";
+            this.xvidVbvBuffer.TextChanged += new System.EventHandler(this.xvidVbvBuffer_TextChanged);
+            // 
+            // xvidProfile
+            // 
+            this.xvidProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.xvidProfile.DropDownWidth = 145;
+            this.xvidProfile.Items.AddRange(new object[] {
+            "Unrestricted",
+            "Home Theatre",
+            "Hi-Def (720p)",
+            "Hi-Def (1080p)",
+            "Handheld",
+            "Portable",
+            "Custom"});
+            this.xvidProfile.Location = new System.Drawing.Point(11, 287);
+            this.xvidProfile.Name = "xvidProfile";
+            this.xvidProfile.Size = new System.Drawing.Size(145, 21);
+            this.xvidProfile.TabIndex = 17;
+            this.xvidProfile.SelectedIndexChanged += new System.EventHandler(this.xvidProfile_SelectedIndexChanged);
+            // 
+            // xvidProfileLabel
+            // 
+            this.xvidProfileLabel.Location = new System.Drawing.Point(8, 271);
+            this.xvidProfileLabel.Name = "xvidProfileLabel";
+            this.xvidProfileLabel.Size = new System.Drawing.Size(136, 24);
+            this.xvidProfileLabel.TabIndex = 16;
+            this.xvidProfileLabel.Text = "Profile:";
+            // 
+            // xvidMotionSearchPrecision
+            // 
+            this.xvidMotionSearchPrecision.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.xvidMotionSearchPrecision.Items.AddRange(new object[] {
+            "0 - None",
+            "1 - Very Low",
+            "2 - Low",
+            "3 - Medium",
+            "4 - High",
+            "5 - Very High",
+            "6 - Ultra High"});
+            this.xvidMotionSearchPrecision.Location = new System.Drawing.Point(11, 244);
+            this.xvidMotionSearchPrecision.Name = "xvidMotionSearchPrecision";
+            this.xvidMotionSearchPrecision.Size = new System.Drawing.Size(145, 21);
+            this.xvidMotionSearchPrecision.TabIndex = 15;
+            this.xvidMotionSearchPrecision.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidMotionSearchPrecisionLabel
+            // 
+            this.xvidMotionSearchPrecisionLabel.Location = new System.Drawing.Point(8, 225);
+            this.xvidMotionSearchPrecisionLabel.Name = "xvidMotionSearchPrecisionLabel";
+            this.xvidMotionSearchPrecisionLabel.Size = new System.Drawing.Size(136, 24);
+            this.xvidMotionSearchPrecisionLabel.TabIndex = 14;
+            this.xvidMotionSearchPrecisionLabel.Text = "Motion Search Precision :";
+            // 
+            // xvidPackedBitstream
+            // 
+            this.xvidPackedBitstream.Location = new System.Drawing.Point(11, 87);
+            this.xvidPackedBitstream.Name = "xvidPackedBitstream";
+            this.xvidPackedBitstream.Size = new System.Drawing.Size(16, 24);
+            this.xvidPackedBitstream.TabIndex = 13;
+            this.xvidPackedBitstream.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidPackedBitstreamLabel
+            // 
+            this.xvidPackedBitstreamLabel.Location = new System.Drawing.Point(27, 92);
+            this.xvidPackedBitstreamLabel.Name = "xvidPackedBitstreamLabel";
+            this.xvidPackedBitstreamLabel.Size = new System.Drawing.Size(100, 23);
+            this.xvidPackedBitstreamLabel.TabIndex = 12;
+            this.xvidPackedBitstreamLabel.Text = "Packed Bitstream";
+            // 
+            // xvidNbBFrames
+            // 
+            this.xvidNbBFrames.Location = new System.Drawing.Point(116, 144);
+            this.xvidNbBFrames.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.xvidNbBFrames.Name = "xvidNbBFrames";
+            this.xvidNbBFrames.Size = new System.Drawing.Size(40, 20);
+            this.xvidNbBFrames.TabIndex = 11;
+            this.xvidNbBFrames.ValueChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidNbBframesLabel
+            // 
+            this.xvidNbBframesLabel.Location = new System.Drawing.Point(8, 146);
+            this.xvidNbBframesLabel.Name = "xvidNbBframesLabel";
+            this.xvidNbBframesLabel.Size = new System.Drawing.Size(83, 23);
+            this.xvidNbBframesLabel.TabIndex = 10;
+            this.xvidNbBframesLabel.Text = "Nb of B-frames";
+            // 
+            // xvidKeyframeInterval
+            // 
+            this.xvidKeyframeInterval.Location = new System.Drawing.Point(116, 119);
+            this.xvidKeyframeInterval.Name = "xvidKeyframeInterval";
+            this.xvidKeyframeInterval.Size = new System.Drawing.Size(40, 20);
+            this.xvidKeyframeInterval.TabIndex = 9;
+            this.xvidKeyframeInterval.Text = "300";
+            this.xvidKeyframeInterval.TextChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidKeyframeIntervalLabel
+            // 
+            this.xvidKeyframeIntervalLabel.Location = new System.Drawing.Point(8, 119);
+            this.xvidKeyframeIntervalLabel.Name = "xvidKeyframeIntervalLabel";
+            this.xvidKeyframeIntervalLabel.Size = new System.Drawing.Size(104, 25);
+            this.xvidKeyframeIntervalLabel.TabIndex = 8;
+            this.xvidKeyframeIntervalLabel.Text = "Max Keyframe Int.";
+            // 
+            // xvidThreadsLabel
+            // 
+            this.xvidThreadsLabel.AutoSize = true;
+            this.xvidThreadsLabel.Location = new System.Drawing.Point(8, 172);
+            this.xvidThreadsLabel.Name = "xvidThreadsLabel";
+            this.xvidThreadsLabel.Size = new System.Drawing.Size(46, 13);
+            this.xvidThreadsLabel.TabIndex = 4;
+            this.xvidThreadsLabel.Text = "Threads";
+            // 
+            // nbThreads
+            // 
+            this.nbThreads.Location = new System.Drawing.Point(84, 170);
+            this.nbThreads.Name = "nbThreads";
+            this.nbThreads.Size = new System.Drawing.Size(72, 20);
+            this.nbThreads.TabIndex = 5;
+            this.nbThreads.ValueChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidInterlaced
+            // 
+            this.xvidInterlaced.Location = new System.Drawing.Point(11, 64);
+            this.xvidInterlaced.Name = "xvidInterlaced";
+            this.xvidInterlaced.Size = new System.Drawing.Size(104, 24);
+            this.xvidInterlaced.TabIndex = 3;
+            this.xvidInterlaced.Text = "Interlaced";
+            this.xvidInterlaced.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidTrellisQuant
+            // 
+            this.xvidTrellisQuant.Location = new System.Drawing.Point(11, 16);
+            this.xvidTrellisQuant.Name = "xvidTrellisQuant";
+            this.xvidTrellisQuant.Size = new System.Drawing.Size(104, 24);
+            this.xvidTrellisQuant.TabIndex = 0;
+            this.xvidTrellisQuant.Text = "Trellis Quant";
+            this.xvidTrellisQuant.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // fourCCLabel
+            // 
+            this.fourCCLabel.Location = new System.Drawing.Point(8, 199);
+            this.fourCCLabel.Name = "fourCCLabel";
+            this.fourCCLabel.Size = new System.Drawing.Size(46, 18);
+            this.fourCCLabel.TabIndex = 6;
+            this.fourCCLabel.Text = "FourCC";
+            // 
+            // fourCC
+            // 
+            this.fourCC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.fourCC.Items.AddRange(new object[] {
+            "XVID",
+            "DIVX",
+            "DX50",
+            "MP4V"});
+            this.fourCC.Location = new System.Drawing.Point(84, 196);
+            this.fourCC.Name = "fourCC";
+            this.fourCC.Size = new System.Drawing.Size(72, 21);
+            this.fourCC.TabIndex = 7;
+            this.fourCC.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidCodecToolsGroupBox
+            // 
+            this.xvidCodecToolsGroupBox.Controls.Add(this.HVSMasking);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.label1);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.cqmComboBox1);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidUseVHQForBframes);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidUseVHQForBframesLabel);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidClosedGop);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidClosedGopLabel);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidQuantTypeLabel);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidChromaMotion);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidChromaMotionLabel);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidCartoonMode);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidCartoonModeLabel);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidGMC);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidGMCLabel);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidQpel);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidQPelLabel);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidVHQ);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidVHQLabel);
+            this.xvidCodecToolsGroupBox.Location = new System.Drawing.Point(0, 136);
+            this.xvidCodecToolsGroupBox.Name = "xvidCodecToolsGroupBox";
+            this.xvidCodecToolsGroupBox.Size = new System.Drawing.Size(320, 290);
+            this.xvidCodecToolsGroupBox.TabIndex = 23;
+            this.xvidCodecToolsGroupBox.TabStop = false;
+            this.xvidCodecToolsGroupBox.Text = "Tools";
+            // 
+            // HVSMasking
+            // 
+            this.HVSMasking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.HVSMasking.FormattingEnabled = true;
+            this.HVSMasking.Items.AddRange(new object[] {
+            "None",
+            "Lumi"});
+            this.HVSMasking.Location = new System.Drawing.Point(192, 184);
+            this.HVSMasking.Name = "HVSMasking";
+            this.HVSMasking.Size = new System.Drawing.Size(121, 21);
+            this.HVSMasking.TabIndex = 18;
+            this.HVSMasking.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 187);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(72, 13);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "HVS Masking";
+            // 
+            // cqmComboBox1
+            // 
+            this.cqmComboBox1.Filter = "";
+            this.cqmComboBox1.Location = new System.Drawing.Point(10, 241);
+            this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
+            this.cqmComboBox1.Name = "cqmComboBox1";
+            this.cqmComboBox1.SelectedIndex = -1;
+            this.cqmComboBox1.SelectedItem = null;
+            this.cqmComboBox1.Size = new System.Drawing.Size(302, 29);
+            this.cqmComboBox1.TabIndex = 16;
+            this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
+            // 
+            // xvidUseVHQForBframes
+            // 
+            this.xvidUseVHQForBframes.Location = new System.Drawing.Point(296, 37);
+            this.xvidUseVHQForBframes.Name = "xvidUseVHQForBframes";
+            this.xvidUseVHQForBframes.Size = new System.Drawing.Size(16, 24);
+            this.xvidUseVHQForBframes.TabIndex = 3;
+            this.xvidUseVHQForBframes.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidUseVHQForBframesLabel
+            // 
+            this.xvidUseVHQForBframesLabel.Location = new System.Drawing.Point(8, 46);
+            this.xvidUseVHQForBframesLabel.Name = "xvidUseVHQForBframesLabel";
+            this.xvidUseVHQForBframesLabel.Size = new System.Drawing.Size(120, 16);
+            this.xvidUseVHQForBframesLabel.TabIndex = 2;
+            this.xvidUseVHQForBframesLabel.Text = "Use VHQ for Bframes";
+            // 
+            // xvidClosedGop
+            // 
+            this.xvidClosedGop.Checked = true;
+            this.xvidClosedGop.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.xvidClosedGop.Location = new System.Drawing.Point(296, 154);
+            this.xvidClosedGop.Name = "xvidClosedGop";
+            this.xvidClosedGop.Size = new System.Drawing.Size(16, 24);
+            this.xvidClosedGop.TabIndex = 15;
+            this.xvidClosedGop.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidClosedGopLabel
+            // 
+            this.xvidClosedGopLabel.Location = new System.Drawing.Point(8, 159);
+            this.xvidClosedGopLabel.Name = "xvidClosedGopLabel";
+            this.xvidClosedGopLabel.Size = new System.Drawing.Size(100, 16);
+            this.xvidClosedGopLabel.TabIndex = 14;
+            this.xvidClosedGopLabel.Text = "Closed GOP";
+            // 
+            // xvidQuantTypeLabel
+            // 
+            this.xvidQuantTypeLabel.Location = new System.Drawing.Point(8, 222);
+            this.xvidQuantTypeLabel.Name = "xvidQuantTypeLabel";
+            this.xvidQuantTypeLabel.Size = new System.Drawing.Size(100, 16);
+            this.xvidQuantTypeLabel.TabIndex = 12;
+            this.xvidQuantTypeLabel.Text = "Quantization Type";
+            // 
+            // xvidChromaMotion
+            // 
+            this.xvidChromaMotion.Checked = true;
+            this.xvidChromaMotion.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.xvidChromaMotion.Location = new System.Drawing.Point(296, 133);
+            this.xvidChromaMotion.Name = "xvidChromaMotion";
+            this.xvidChromaMotion.Size = new System.Drawing.Size(16, 24);
+            this.xvidChromaMotion.TabIndex = 11;
+            this.xvidChromaMotion.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidChromaMotionLabel
+            // 
+            this.xvidChromaMotionLabel.Location = new System.Drawing.Point(8, 134);
+            this.xvidChromaMotionLabel.Name = "xvidChromaMotionLabel";
+            this.xvidChromaMotionLabel.Size = new System.Drawing.Size(100, 16);
+            this.xvidChromaMotionLabel.TabIndex = 10;
+            this.xvidChromaMotionLabel.Text = "Chroma motion";
+            // 
+            // xvidCartoonMode
+            // 
+            this.xvidCartoonMode.Location = new System.Drawing.Point(296, 109);
+            this.xvidCartoonMode.Name = "xvidCartoonMode";
+            this.xvidCartoonMode.Size = new System.Drawing.Size(16, 24);
+            this.xvidCartoonMode.TabIndex = 9;
+            this.xvidCartoonMode.Visible = false;
+            this.xvidCartoonMode.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidCartoonModeLabel
+            // 
+            this.xvidCartoonModeLabel.Location = new System.Drawing.Point(8, 112);
+            this.xvidCartoonModeLabel.Name = "xvidCartoonModeLabel";
+            this.xvidCartoonModeLabel.Size = new System.Drawing.Size(100, 16);
+            this.xvidCartoonModeLabel.TabIndex = 8;
+            this.xvidCartoonModeLabel.Text = "Cartoon mode";
+            this.xvidCartoonModeLabel.Visible = false;
+            // 
+            // xvidGMC
+            // 
+            this.xvidGMC.Location = new System.Drawing.Point(296, 85);
+            this.xvidGMC.Name = "xvidGMC";
+            this.xvidGMC.Size = new System.Drawing.Size(16, 24);
+            this.xvidGMC.TabIndex = 7;
+            this.xvidGMC.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidGMCLabel
+            // 
+            this.xvidGMCLabel.Location = new System.Drawing.Point(8, 90);
+            this.xvidGMCLabel.Name = "xvidGMCLabel";
+            this.xvidGMCLabel.Size = new System.Drawing.Size(100, 16);
+            this.xvidGMCLabel.TabIndex = 6;
+            this.xvidGMCLabel.Text = "GMC";
+            // 
+            // xvidQpel
+            // 
+            this.xvidQpel.Location = new System.Drawing.Point(296, 61);
+            this.xvidQpel.Name = "xvidQpel";
+            this.xvidQpel.Size = new System.Drawing.Size(16, 24);
+            this.xvidQpel.TabIndex = 5;
+            this.xvidQpel.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidQPelLabel
+            // 
+            this.xvidQPelLabel.Location = new System.Drawing.Point(8, 68);
+            this.xvidQPelLabel.Name = "xvidQPelLabel";
+            this.xvidQPelLabel.Size = new System.Drawing.Size(100, 16);
+            this.xvidQPelLabel.TabIndex = 4;
+            this.xvidQPelLabel.Text = "QPel";
+            // 
+            // xvidVHQ
+            // 
+            this.xvidVHQ.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.xvidVHQ.Items.AddRange(new object[] {
+            "0 - Off",
+            "1 - Mode Decision",
+            "2 - Limited Search",
+            "3 - Medium Search",
+            "4 - Wide Search"});
+            this.xvidVHQ.Location = new System.Drawing.Point(192, 16);
+            this.xvidVHQ.Name = "xvidVHQ";
+            this.xvidVHQ.Size = new System.Drawing.Size(121, 21);
+            this.xvidVHQ.TabIndex = 1;
+            this.xvidVHQ.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidVHQLabel
+            // 
+            this.xvidVHQLabel.Location = new System.Drawing.Point(8, 24);
+            this.xvidVHQLabel.Name = "xvidVHQLabel";
+            this.xvidVHQLabel.Size = new System.Drawing.Size(100, 16);
+            this.xvidVHQLabel.TabIndex = 0;
+            this.xvidVHQLabel.Text = "VHQ mode";
             // 
             // xvidGeneralOptionsGroupBox
             // 
@@ -225,25 +646,26 @@ namespace MeGUI.packages.video.xvid
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidBitrateQuantLabel);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidTurbo);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidEncodingMode);
-            this.xvidGeneralOptionsGroupBox.Location = new System.Drawing.Point(6, 3);
+            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidModeLabel);
+            this.xvidGeneralOptionsGroupBox.Location = new System.Drawing.Point(0, 3);
             this.xvidGeneralOptionsGroupBox.Name = "xvidGeneralOptionsGroupBox";
-            this.xvidGeneralOptionsGroupBox.Size = new System.Drawing.Size(314, 171);
+            this.xvidGeneralOptionsGroupBox.Size = new System.Drawing.Size(320, 127);
             this.xvidGeneralOptionsGroupBox.TabIndex = 22;
             this.xvidGeneralOptionsGroupBox.TabStop = false;
-            this.xvidGeneralOptionsGroupBox.Text = "Modes";
+            this.xvidGeneralOptionsGroupBox.Text = "General";
             // 
             // logfile
             // 
-            this.logfile.Location = new System.Drawing.Point(59, 98);
+            this.logfile.Location = new System.Drawing.Point(57, 77);
             this.logfile.Name = "logfile";
             this.logfile.ReadOnly = true;
-            this.logfile.Size = new System.Drawing.Size(212, 20);
+            this.logfile.Size = new System.Drawing.Size(225, 20);
             this.logfile.TabIndex = 15;
             this.logfile.Text = "2pass.stats";
             // 
             // logfileOpenButton
             // 
-            this.logfileOpenButton.Location = new System.Drawing.Point(282, 95);
+            this.logfileOpenButton.Location = new System.Drawing.Point(288, 75);
             this.logfileOpenButton.Name = "logfileOpenButton";
             this.logfileOpenButton.Size = new System.Drawing.Size(24, 23);
             this.logfileOpenButton.TabIndex = 16;
@@ -252,36 +674,36 @@ namespace MeGUI.packages.video.xvid
             // 
             // logfileLabel
             // 
-            this.logfileLabel.Location = new System.Drawing.Point(9, 101);
+            this.logfileLabel.Location = new System.Drawing.Point(8, 80);
             this.logfileLabel.Name = "logfileLabel";
-            this.logfileLabel.Size = new System.Drawing.Size(44, 20);
+            this.logfileLabel.Size = new System.Drawing.Size(56, 20);
             this.logfileLabel.TabIndex = 14;
             this.logfileLabel.Text = "Logfile";
             // 
             // xvidBitrateQuantizer
             // 
-            this.xvidBitrateQuantizer.Location = new System.Drawing.Point(241, 43);
+            this.xvidBitrateQuantizer.Location = new System.Drawing.Point(192, 43);
             this.xvidBitrateQuantizer.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
             this.xvidBitrateQuantizer.Name = "xvidBitrateQuantizer";
-            this.xvidBitrateQuantizer.Size = new System.Drawing.Size(65, 20);
+            this.xvidBitrateQuantizer.Size = new System.Drawing.Size(120, 20);
             this.xvidBitrateQuantizer.TabIndex = 13;
             this.xvidBitrateQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // xvidBitrateQuantLabel
             // 
-            this.xvidBitrateQuantLabel.Location = new System.Drawing.Point(183, 45);
+            this.xvidBitrateQuantLabel.Location = new System.Drawing.Point(8, 48);
             this.xvidBitrateQuantLabel.Name = "xvidBitrateQuantLabel";
-            this.xvidBitrateQuantLabel.Size = new System.Drawing.Size(42, 24);
+            this.xvidBitrateQuantLabel.Size = new System.Drawing.Size(100, 24);
             this.xvidBitrateQuantLabel.TabIndex = 3;
             this.xvidBitrateQuantLabel.Text = "Bitrate";
             // 
             // xvidTurbo
             // 
-            this.xvidTurbo.Location = new System.Drawing.Point(12, 19);
+            this.xvidTurbo.Location = new System.Drawing.Point(120, 16);
             this.xvidTurbo.Name = "xvidTurbo";
             this.xvidTurbo.Size = new System.Drawing.Size(64, 24);
             this.xvidTurbo.TabIndex = 1;
@@ -297,11 +719,19 @@ namespace MeGUI.packages.video.xvid
             "2pass - 1st pass",
             "2pass - 2nd pass",
             "Automated 2pass"});
-            this.xvidEncodingMode.Location = new System.Drawing.Point(186, 16);
+            this.xvidEncodingMode.Location = new System.Drawing.Point(192, 16);
             this.xvidEncodingMode.Name = "xvidEncodingMode";
             this.xvidEncodingMode.Size = new System.Drawing.Size(121, 21);
             this.xvidEncodingMode.TabIndex = 2;
             this.xvidEncodingMode.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidModeLabel
+            // 
+            this.xvidModeLabel.Location = new System.Drawing.Point(8, 24);
+            this.xvidModeLabel.Name = "xvidModeLabel";
+            this.xvidModeLabel.Size = new System.Drawing.Size(100, 24);
+            this.xvidModeLabel.TabIndex = 0;
+            this.xvidModeLabel.Text = "Mode";
             // 
             // xvidOtherOptionsGroupbox
             // 
@@ -943,7 +1373,7 @@ namespace MeGUI.packages.video.xvid
             this.advancedTabPage.Controls.Add(this.xvidCBRRcGroupBox);
             this.advancedTabPage.Location = new System.Drawing.Point(4, 22);
             this.advancedTabPage.Name = "advancedTabPage";
-            this.advancedTabPage.Size = new System.Drawing.Size(492, 298);
+            this.advancedTabPage.Size = new System.Drawing.Size(492, 432);
             this.advancedTabPage.TabIndex = 3;
             this.advancedTabPage.Text = "Advanced";
             this.advancedTabPage.UseVisualStyleBackColor = true;
@@ -995,542 +1425,20 @@ namespace MeGUI.packages.video.xvid
             this.quantizerMatrixGroupbox.TabStop = false;
             this.quantizerMatrixGroupbox.Text = "Other Options";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(344, 18);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(119, 44);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
-            // 
-            // gradientPanel1
-            // 
-            this.gradientPanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("gradientPanel1.BackgroundImage")));
-            this.gradientPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.gradientPanel1.Controls.Add(this.pictureBox2);
-            this.gradientPanel1.Controls.Add(this.label1);
-            this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
-            this.gradientPanel1.Name = "gradientPanel1";
-            this.gradientPanel1.PageEndColor = System.Drawing.Color.Empty;
-            this.gradientPanel1.PageStartColor = System.Drawing.Color.SlateGray;
-            this.gradientPanel1.Size = new System.Drawing.Size(503, 90);
-            this.gradientPanel1.TabIndex = 43;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(355, 21);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(109, 50);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 1;
-            this.pictureBox2.TabStop = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(23, 34);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(207, 17);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Adjust your Settings here...";
-            // 
-            // gbThreads
-            // 
-            this.gbThreads.Controls.Add(this.nbThreads);
-            this.gbThreads.Location = new System.Drawing.Point(326, 120);
-            this.gbThreads.Name = "gbThreads";
-            this.gbThreads.Size = new System.Drawing.Size(160, 54);
-            this.gbThreads.TabIndex = 44;
-            this.gbThreads.TabStop = false;
-            this.gbThreads.Text = "Threads";
-            // 
-            // nbThreads
-            // 
-            this.nbThreads.Location = new System.Drawing.Point(14, 19);
-            this.nbThreads.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nbThreads.Name = "nbThreads";
-            this.nbThreads.Size = new System.Drawing.Size(140, 20);
-            this.nbThreads.TabIndex = 7;
-            this.nbThreads.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.xvidOtherGroupBox);
-            this.tabPage1.Controls.Add(this.xvidCodecToolsGroupBox);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(492, 298);
-            this.tabPage1.TabIndex = 4;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // xvidOtherGroupBox
-            // 
-            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvPeakRateLabel);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvMaxRateLabel);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvBufferLabel);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvPeakRate);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvMaxRate);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvBuffer);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidMotionSearchPrecision);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidMotionSearchPrecisionLabel);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidPackedBitstream);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidPackedBitstreamLabel);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidNbBFrames);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidNbBframesLabel);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidKeyframeInterval);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidKeyframeIntervalLabel);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidInterlaced);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidTrellisQuant);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidAdaptiveQuant);
-            this.xvidOtherGroupBox.Location = new System.Drawing.Point(332, 13);
-            this.xvidOtherGroupBox.Name = "xvidOtherGroupBox";
-            this.xvidOtherGroupBox.Size = new System.Drawing.Size(162, 423);
-            this.xvidOtherGroupBox.TabIndex = 25;
-            this.xvidOtherGroupBox.TabStop = false;
-            this.xvidOtherGroupBox.Text = "Other Settings";
-            // 
-            // xvidVbvPeakRateLabel
-            // 
-            this.xvidVbvPeakRateLabel.AutoSize = true;
-            this.xvidVbvPeakRateLabel.Location = new System.Drawing.Point(8, 392);
-            this.xvidVbvPeakRateLabel.Name = "xvidVbvPeakRateLabel";
-            this.xvidVbvPeakRateLabel.Size = new System.Drawing.Size(32, 13);
-            this.xvidVbvPeakRateLabel.TabIndex = 23;
-            this.xvidVbvPeakRateLabel.Text = "Peak";
-            // 
-            // xvidVbvMaxRateLabel
-            // 
-            this.xvidVbvMaxRateLabel.Location = new System.Drawing.Point(8, 358);
-            this.xvidVbvMaxRateLabel.Name = "xvidVbvMaxRateLabel";
-            this.xvidVbvMaxRateLabel.Size = new System.Drawing.Size(42, 23);
-            this.xvidVbvMaxRateLabel.TabIndex = 22;
-            this.xvidVbvMaxRateLabel.Text = "Max";
-            // 
-            // xvidVbvBufferLabel
-            // 
-            this.xvidVbvBufferLabel.Location = new System.Drawing.Point(8, 324);
-            this.xvidVbvBufferLabel.Name = "xvidVbvBufferLabel";
-            this.xvidVbvBufferLabel.Size = new System.Drawing.Size(42, 23);
-            this.xvidVbvBufferLabel.TabIndex = 21;
-            this.xvidVbvBufferLabel.Text = "Buffer";
-            // 
-            // xvidVbvPeakRate
-            // 
-            this.xvidVbvPeakRate.Enabled = false;
-            this.xvidVbvPeakRate.Location = new System.Drawing.Point(56, 389);
-            this.xvidVbvPeakRate.Name = "xvidVbvPeakRate";
-            this.xvidVbvPeakRate.Size = new System.Drawing.Size(100, 20);
-            this.xvidVbvPeakRate.TabIndex = 20;
-            this.xvidVbvPeakRate.Text = "0";
-            // 
-            // xvidVbvMaxRate
-            // 
-            this.xvidVbvMaxRate.Enabled = false;
-            this.xvidVbvMaxRate.Location = new System.Drawing.Point(56, 355);
-            this.xvidVbvMaxRate.Name = "xvidVbvMaxRate";
-            this.xvidVbvMaxRate.Size = new System.Drawing.Size(100, 20);
-            this.xvidVbvMaxRate.TabIndex = 19;
-            this.xvidVbvMaxRate.Text = "0";
-            // 
-            // xvidVbvBuffer
-            // 
-            this.xvidVbvBuffer.Enabled = false;
-            this.xvidVbvBuffer.Location = new System.Drawing.Point(56, 321);
-            this.xvidVbvBuffer.Name = "xvidVbvBuffer";
-            this.xvidVbvBuffer.Size = new System.Drawing.Size(100, 20);
-            this.xvidVbvBuffer.TabIndex = 18;
-            this.xvidVbvBuffer.Text = "0";
-            // 
-            // xvidMotionSearchPrecision
-            // 
-            this.xvidMotionSearchPrecision.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.xvidMotionSearchPrecision.Items.AddRange(new object[] {
-            "0 - None",
-            "1 - Very Low",
-            "2 - Low",
-            "3 - Medium",
-            "4 - High",
-            "5 - Very High",
-            "6 - Ultra High"});
-            this.xvidMotionSearchPrecision.Location = new System.Drawing.Point(11, 244);
-            this.xvidMotionSearchPrecision.Name = "xvidMotionSearchPrecision";
-            this.xvidMotionSearchPrecision.Size = new System.Drawing.Size(145, 21);
-            this.xvidMotionSearchPrecision.TabIndex = 15;
-            // 
-            // xvidMotionSearchPrecisionLabel
-            // 
-            this.xvidMotionSearchPrecisionLabel.Location = new System.Drawing.Point(8, 225);
-            this.xvidMotionSearchPrecisionLabel.Name = "xvidMotionSearchPrecisionLabel";
-            this.xvidMotionSearchPrecisionLabel.Size = new System.Drawing.Size(136, 24);
-            this.xvidMotionSearchPrecisionLabel.TabIndex = 14;
-            this.xvidMotionSearchPrecisionLabel.Text = "Motion Search Precision :";
-            // 
-            // xvidPackedBitstream
-            // 
-            this.xvidPackedBitstream.Location = new System.Drawing.Point(11, 87);
-            this.xvidPackedBitstream.Name = "xvidPackedBitstream";
-            this.xvidPackedBitstream.Size = new System.Drawing.Size(16, 24);
-            this.xvidPackedBitstream.TabIndex = 13;
-            // 
-            // xvidPackedBitstreamLabel
-            // 
-            this.xvidPackedBitstreamLabel.Location = new System.Drawing.Point(27, 92);
-            this.xvidPackedBitstreamLabel.Name = "xvidPackedBitstreamLabel";
-            this.xvidPackedBitstreamLabel.Size = new System.Drawing.Size(100, 23);
-            this.xvidPackedBitstreamLabel.TabIndex = 12;
-            this.xvidPackedBitstreamLabel.Text = "Packed Bitstream";
-            // 
-            // xvidNbBFrames
-            // 
-            this.xvidNbBFrames.Location = new System.Drawing.Point(116, 144);
-            this.xvidNbBFrames.Maximum = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.xvidNbBFrames.Name = "xvidNbBFrames";
-            this.xvidNbBFrames.Size = new System.Drawing.Size(40, 20);
-            this.xvidNbBFrames.TabIndex = 11;
-            // 
-            // xvidNbBframesLabel
-            // 
-            this.xvidNbBframesLabel.Location = new System.Drawing.Point(8, 146);
-            this.xvidNbBframesLabel.Name = "xvidNbBframesLabel";
-            this.xvidNbBframesLabel.Size = new System.Drawing.Size(83, 23);
-            this.xvidNbBframesLabel.TabIndex = 10;
-            this.xvidNbBframesLabel.Text = "Nb of B-frames";
-            // 
-            // xvidKeyframeInterval
-            // 
-            this.xvidKeyframeInterval.Location = new System.Drawing.Point(116, 119);
-            this.xvidKeyframeInterval.Name = "xvidKeyframeInterval";
-            this.xvidKeyframeInterval.Size = new System.Drawing.Size(40, 20);
-            this.xvidKeyframeInterval.TabIndex = 9;
-            this.xvidKeyframeInterval.Text = "300";
-            // 
-            // xvidKeyframeIntervalLabel
-            // 
-            this.xvidKeyframeIntervalLabel.Location = new System.Drawing.Point(8, 119);
-            this.xvidKeyframeIntervalLabel.Name = "xvidKeyframeIntervalLabel";
-            this.xvidKeyframeIntervalLabel.Size = new System.Drawing.Size(104, 25);
-            this.xvidKeyframeIntervalLabel.TabIndex = 8;
-            this.xvidKeyframeIntervalLabel.Text = "Max Keyframe Int.";
-            // 
-            // xvidInterlaced
-            // 
-            this.xvidInterlaced.Location = new System.Drawing.Point(11, 64);
-            this.xvidInterlaced.Name = "xvidInterlaced";
-            this.xvidInterlaced.Size = new System.Drawing.Size(104, 24);
-            this.xvidInterlaced.TabIndex = 3;
-            this.xvidInterlaced.Text = "Interlaced";
-            // 
-            // xvidTrellisQuant
-            // 
-            this.xvidTrellisQuant.Location = new System.Drawing.Point(11, 16);
-            this.xvidTrellisQuant.Name = "xvidTrellisQuant";
-            this.xvidTrellisQuant.Size = new System.Drawing.Size(104, 24);
-            this.xvidTrellisQuant.TabIndex = 0;
-            this.xvidTrellisQuant.Text = "Trellis Quant";
-            // 
-            // xvidAdaptiveQuant
-            // 
-            this.xvidAdaptiveQuant.Location = new System.Drawing.Point(11, 40);
-            this.xvidAdaptiveQuant.Name = "xvidAdaptiveQuant";
-            this.xvidAdaptiveQuant.Size = new System.Drawing.Size(136, 24);
-            this.xvidAdaptiveQuant.TabIndex = 1;
-            this.xvidAdaptiveQuant.Text = "Adaptive Quantization";
-            // 
-            // xvidCodecToolsGroupBox
-            // 
-            this.xvidCodecToolsGroupBox.Controls.Add(this.HVSMasking);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.label2);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.cqmComboBox1);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidUseVHQForBframes);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidUseVHQForBframesLabel);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidClosedGop);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidClosedGopLabel);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidQuantTypeLabel);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidChromaMotion);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidChromaMotionLabel);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidCartoonMode);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidCartoonModeLabel);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidGMC);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidGMCLabel);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidQpel);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidQPelLabel);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidVHQ);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidVHQLabel);
-            this.xvidCodecToolsGroupBox.Location = new System.Drawing.Point(6, 17);
-            this.xvidCodecToolsGroupBox.Name = "xvidCodecToolsGroupBox";
-            this.xvidCodecToolsGroupBox.Size = new System.Drawing.Size(320, 275);
-            this.xvidCodecToolsGroupBox.TabIndex = 24;
-            this.xvidCodecToolsGroupBox.TabStop = false;
-            this.xvidCodecToolsGroupBox.Text = "Tools";
-            // 
-            // cqmComboBox1
-            // 
-            this.cqmComboBox1.Filter = "";
-            this.cqmComboBox1.Location = new System.Drawing.Point(10, 240);
-            this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
-            this.cqmComboBox1.Name = "cqmComboBox1";
-            this.cqmComboBox1.SelectedIndex = -1;
-            this.cqmComboBox1.SelectedItem = null;
-            this.cqmComboBox1.Size = new System.Drawing.Size(302, 29);
-            this.cqmComboBox1.TabIndex = 16;
-            // 
-            // xvidUseVHQForBframes
-            // 
-            this.xvidUseVHQForBframes.Location = new System.Drawing.Point(296, 37);
-            this.xvidUseVHQForBframes.Name = "xvidUseVHQForBframes";
-            this.xvidUseVHQForBframes.Size = new System.Drawing.Size(16, 24);
-            this.xvidUseVHQForBframes.TabIndex = 3;
-            // 
-            // xvidUseVHQForBframesLabel
-            // 
-            this.xvidUseVHQForBframesLabel.Location = new System.Drawing.Point(8, 46);
-            this.xvidUseVHQForBframesLabel.Name = "xvidUseVHQForBframesLabel";
-            this.xvidUseVHQForBframesLabel.Size = new System.Drawing.Size(120, 16);
-            this.xvidUseVHQForBframesLabel.TabIndex = 2;
-            this.xvidUseVHQForBframesLabel.Text = "Use VHQ for Bframes";
-            // 
-            // xvidClosedGop
-            // 
-            this.xvidClosedGop.Checked = true;
-            this.xvidClosedGop.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.xvidClosedGop.Location = new System.Drawing.Point(296, 154);
-            this.xvidClosedGop.Name = "xvidClosedGop";
-            this.xvidClosedGop.Size = new System.Drawing.Size(16, 24);
-            this.xvidClosedGop.TabIndex = 15;
-            // 
-            // xvidClosedGopLabel
-            // 
-            this.xvidClosedGopLabel.Location = new System.Drawing.Point(8, 159);
-            this.xvidClosedGopLabel.Name = "xvidClosedGopLabel";
-            this.xvidClosedGopLabel.Size = new System.Drawing.Size(100, 16);
-            this.xvidClosedGopLabel.TabIndex = 14;
-            this.xvidClosedGopLabel.Text = "Closed GOP";
-            // 
-            // xvidQuantTypeLabel
-            // 
-            this.xvidQuantTypeLabel.Location = new System.Drawing.Point(8, 221);
-            this.xvidQuantTypeLabel.Name = "xvidQuantTypeLabel";
-            this.xvidQuantTypeLabel.Size = new System.Drawing.Size(100, 16);
-            this.xvidQuantTypeLabel.TabIndex = 12;
-            this.xvidQuantTypeLabel.Text = "Quantization Type";
-            // 
-            // xvidChromaMotion
-            // 
-            this.xvidChromaMotion.Checked = true;
-            this.xvidChromaMotion.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.xvidChromaMotion.Location = new System.Drawing.Point(296, 133);
-            this.xvidChromaMotion.Name = "xvidChromaMotion";
-            this.xvidChromaMotion.Size = new System.Drawing.Size(16, 24);
-            this.xvidChromaMotion.TabIndex = 11;
-            // 
-            // xvidChromaMotionLabel
-            // 
-            this.xvidChromaMotionLabel.Location = new System.Drawing.Point(8, 134);
-            this.xvidChromaMotionLabel.Name = "xvidChromaMotionLabel";
-            this.xvidChromaMotionLabel.Size = new System.Drawing.Size(100, 16);
-            this.xvidChromaMotionLabel.TabIndex = 10;
-            this.xvidChromaMotionLabel.Text = "Chroma motion";
-            // 
-            // xvidCartoonMode
-            // 
-            this.xvidCartoonMode.Location = new System.Drawing.Point(296, 109);
-            this.xvidCartoonMode.Name = "xvidCartoonMode";
-            this.xvidCartoonMode.Size = new System.Drawing.Size(16, 24);
-            this.xvidCartoonMode.TabIndex = 9;
-            this.xvidCartoonMode.Visible = false;
-            // 
-            // xvidCartoonModeLabel
-            // 
-            this.xvidCartoonModeLabel.Location = new System.Drawing.Point(8, 112);
-            this.xvidCartoonModeLabel.Name = "xvidCartoonModeLabel";
-            this.xvidCartoonModeLabel.Size = new System.Drawing.Size(100, 16);
-            this.xvidCartoonModeLabel.TabIndex = 8;
-            this.xvidCartoonModeLabel.Text = "Cartoon mode";
-            this.xvidCartoonModeLabel.Visible = false;
-            // 
-            // xvidGMC
-            // 
-            this.xvidGMC.Location = new System.Drawing.Point(296, 85);
-            this.xvidGMC.Name = "xvidGMC";
-            this.xvidGMC.Size = new System.Drawing.Size(16, 24);
-            this.xvidGMC.TabIndex = 7;
-            // 
-            // xvidGMCLabel
-            // 
-            this.xvidGMCLabel.Location = new System.Drawing.Point(8, 90);
-            this.xvidGMCLabel.Name = "xvidGMCLabel";
-            this.xvidGMCLabel.Size = new System.Drawing.Size(100, 16);
-            this.xvidGMCLabel.TabIndex = 6;
-            this.xvidGMCLabel.Text = "GMC";
-            // 
-            // xvidQpel
-            // 
-            this.xvidQpel.Location = new System.Drawing.Point(296, 61);
-            this.xvidQpel.Name = "xvidQpel";
-            this.xvidQpel.Size = new System.Drawing.Size(16, 24);
-            this.xvidQpel.TabIndex = 5;
-            // 
-            // xvidQPelLabel
-            // 
-            this.xvidQPelLabel.Location = new System.Drawing.Point(8, 68);
-            this.xvidQPelLabel.Name = "xvidQPelLabel";
-            this.xvidQPelLabel.Size = new System.Drawing.Size(100, 16);
-            this.xvidQPelLabel.TabIndex = 4;
-            this.xvidQPelLabel.Text = "QPel";
-            // 
-            // xvidVHQ
-            // 
-            this.xvidVHQ.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.xvidVHQ.Items.AddRange(new object[] {
-            "0 - Off",
-            "1 - Mode Decision",
-            "2 - Limited Search",
-            "3 - Medium Search",
-            "4 - Wide Search"});
-            this.xvidVHQ.Location = new System.Drawing.Point(192, 16);
-            this.xvidVHQ.Name = "xvidVHQ";
-            this.xvidVHQ.Size = new System.Drawing.Size(121, 21);
-            this.xvidVHQ.TabIndex = 1;
-            // 
-            // xvidVHQLabel
-            // 
-            this.xvidVHQLabel.Location = new System.Drawing.Point(8, 24);
-            this.xvidVHQLabel.Name = "xvidVHQLabel";
-            this.xvidVHQLabel.Size = new System.Drawing.Size(100, 16);
-            this.xvidVHQLabel.TabIndex = 0;
-            this.xvidVHQLabel.Text = "VHQ mode";
-            // 
-            // gbASPProfiles
-            // 
-            this.gbASPProfiles.Controls.Add(this.xvidProfile);
-            this.gbASPProfiles.Location = new System.Drawing.Point(326, 3);
-            this.gbASPProfiles.Name = "gbASPProfiles";
-            this.gbASPProfiles.Size = new System.Drawing.Size(160, 50);
-            this.gbASPProfiles.TabIndex = 45;
-            this.gbASPProfiles.TabStop = false;
-            this.gbASPProfiles.Text = "ASP Profiles";
-            // 
-            // xvidProfile
-            // 
-            this.xvidProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.xvidProfile.DropDownWidth = 145;
-            this.xvidProfile.Items.AddRange(new object[] {
-            "Unrestricted",
-            "Home Theatre",
-            "Hi-Def (720p)",
-            "Hi-Def (1080p)",
-            "Handheld",
-            "Portable",
-            "Custom"});
-            this.xvidProfile.Location = new System.Drawing.Point(9, 16);
-            this.xvidProfile.Name = "xvidProfile";
-            this.xvidProfile.Size = new System.Drawing.Size(145, 21);
-            this.xvidProfile.TabIndex = 18;
-            // 
-            // gbFourCC
-            // 
-            this.gbFourCC.Controls.Add(this.fourCC);
-            this.gbFourCC.Location = new System.Drawing.Point(326, 59);
-            this.gbFourCC.Name = "gbFourCC";
-            this.gbFourCC.Size = new System.Drawing.Size(160, 55);
-            this.gbFourCC.TabIndex = 46;
-            this.gbFourCC.TabStop = false;
-            this.gbFourCC.Text = "FourCC";
-            // 
-            // fourCC
-            // 
-            this.fourCC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.fourCC.Items.AddRange(new object[] {
-            "XVID",
-            "DIVX",
-            "DX50",
-            "MP4V"});
-            this.fourCC.Location = new System.Drawing.Point(9, 18);
-            this.fourCC.Name = "fourCC";
-            this.fourCC.Size = new System.Drawing.Size(145, 21);
-            this.fourCC.TabIndex = 8;
-            // 
-            // chAdvancedSettings
-            // 
-            this.chAdvancedSettings.AutoSize = true;
-            this.chAdvancedSettings.Location = new System.Drawing.Point(19, 199);
-            this.chAdvancedSettings.Name = "chAdvancedSettings";
-            this.chAdvancedSettings.Size = new System.Drawing.Size(116, 17);
-            this.chAdvancedSettings.TabIndex = 47;
-            this.chAdvancedSettings.Text = "Advanced Settings";
-            this.chAdvancedSettings.UseVisualStyleBackColor = true;
-            this.chAdvancedSettings.CheckedChanged += new System.EventHandler(this.chAdvancedSettings_CheckedChanged);
-            // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = null;
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(441, 199);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(39, 23);
-            this.helpButton1.TabIndex = 48;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 188);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(72, 13);
-            this.label2.TabIndex = 17;
-            this.label2.Text = "HVS Masking";
-            // 
-            // HVSMasking
-            // 
-            this.HVSMasking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.HVSMasking.FormattingEnabled = true;
-            this.HVSMasking.Items.AddRange(new object[] {
-            "None",
-            "Lumi",
-            "Variance"});
-            this.HVSMasking.Location = new System.Drawing.Point(192, 185);
-            this.HVSMasking.Name = "HVSMasking";
-            this.HVSMasking.Size = new System.Drawing.Size(120, 21);
-            this.HVSMasking.TabIndex = 18;
-            this.HVSMasking.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
-            // 
             // xvidConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.gradientPanel1);
             this.Name = "xvidConfigurationPanel";
-            this.Size = new System.Drawing.Size(503, 491);
-            this.Controls.SetChildIndex(this.commandline, 0);
-            this.Controls.SetChildIndex(this.tabControl1, 0);
-            this.Controls.SetChildIndex(this.gradientPanel1, 0);
+            this.Size = new System.Drawing.Size(503, 526);
             this.tabControl1.ResumeLayout(false);
             this.mainTabPage.ResumeLayout(false);
-            this.mainTabPage.PerformLayout();
+            this.xvidOtherGroupBox.ResumeLayout(false);
+            this.xvidOtherGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).EndInit();
+            this.xvidCodecToolsGroupBox.ResumeLayout(false);
+            this.xvidCodecToolsGroupBox.PerformLayout();
             this.xvidGeneralOptionsGroupBox.ResumeLayout(false);
             this.xvidGeneralOptionsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xvidBitrateQuantizer)).EndInit();
@@ -1563,20 +1471,6 @@ namespace MeGUI.packages.video.xvid
             this.gbx264CustomCmd.PerformLayout();
             this.quantizerMatrixGroupbox.ResumeLayout(false);
             this.quantizerMatrixGroupbox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.gradientPanel1.ResumeLayout(false);
-            this.gradientPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            this.gbThreads.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).EndInit();
-            this.tabPage1.ResumeLayout(false);
-            this.xvidOtherGroupBox.ResumeLayout(false);
-            this.xvidOtherGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).EndInit();
-            this.xvidCodecToolsGroupBox.ResumeLayout(false);
-            this.xvidCodecToolsGroupBox.PerformLayout();
-            this.gbASPProfiles.ResumeLayout(false);
-            this.gbFourCC.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1584,10 +1478,32 @@ namespace MeGUI.packages.video.xvid
 
         #endregion
 
+        private System.Windows.Forms.GroupBox xvidOtherGroupBox;
+        private System.Windows.Forms.CheckBox xvidInterlaced;
+        private System.Windows.Forms.CheckBox xvidTrellisQuant;
+        private System.Windows.Forms.Label fourCCLabel;
+        private System.Windows.Forms.ComboBox fourCC;
+        private System.Windows.Forms.GroupBox xvidCodecToolsGroupBox;
+        private System.Windows.Forms.CheckBox xvidUseVHQForBframes;
+        private System.Windows.Forms.Label xvidUseVHQForBframesLabel;
+        private System.Windows.Forms.CheckBox xvidClosedGop;
+        private System.Windows.Forms.Label xvidClosedGopLabel;
+        private System.Windows.Forms.Label xvidQuantTypeLabel;
+        private System.Windows.Forms.CheckBox xvidChromaMotion;
+        private System.Windows.Forms.Label xvidChromaMotionLabel;
+        private System.Windows.Forms.CheckBox xvidCartoonMode;
+        private System.Windows.Forms.Label xvidCartoonModeLabel;
+        private System.Windows.Forms.CheckBox xvidGMC;
+        private System.Windows.Forms.Label xvidGMCLabel;
+        private System.Windows.Forms.CheckBox xvidQpel;
+        private System.Windows.Forms.Label xvidQPelLabel;
+        private System.Windows.Forms.ComboBox xvidVHQ;
+        private System.Windows.Forms.Label xvidVHQLabel;
         private System.Windows.Forms.GroupBox xvidGeneralOptionsGroupBox;
         private System.Windows.Forms.Label xvidBitrateQuantLabel;
         private System.Windows.Forms.CheckBox xvidTurbo;
         private System.Windows.Forms.ComboBox xvidEncodingMode;
+        private System.Windows.Forms.Label xvidModeLabel;
         private System.Windows.Forms.GroupBox xvidOtherOptionsGroupbox;
         private System.Windows.Forms.NumericUpDown xvidFrameDropRatio;
         private System.Windows.Forms.Label xvidFrameDropRatioLabel;
@@ -1643,64 +1559,35 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.TabPage advancedTabPage;
+        private System.Windows.Forms.Label xvidThreadsLabel;
+        private System.Windows.Forms.NumericUpDown nbThreads;
         private System.Windows.Forms.NumericUpDown xvidBitrateQuantizer;
+        private MeGUI.core.gui.FileSCBox cqmComboBox1;
         private System.Windows.Forms.GroupBox quantizerMatrixGroupbox;
         private System.Windows.Forms.TextBox xvidCustomCommandlineOptions;
         private System.Windows.Forms.Label xvidCustomCommandlineOptionsLabel;
+        private System.Windows.Forms.TextBox xvidKeyframeInterval;
+        private System.Windows.Forms.Label xvidKeyframeIntervalLabel;
+        private System.Windows.Forms.NumericUpDown xvidNbBFrames;
+        private System.Windows.Forms.Label xvidNbBframesLabel;
+        private System.Windows.Forms.CheckBox xvidPackedBitstream;
+        private System.Windows.Forms.Label xvidPackedBitstreamLabel;
+        private System.Windows.Forms.ComboBox xvidMotionSearchPrecision;
+        private System.Windows.Forms.Label xvidMotionSearchPrecisionLabel;
         private System.Windows.Forms.TextBox logfile;
         private System.Windows.Forms.Button logfileOpenButton;
         private System.Windows.Forms.Label logfileLabel;
         private System.Windows.Forms.GroupBox gbx264CustomCmd;
         private System.Windows.Forms.TextBox customCommandlineOptions;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private GradientPanel gradientPanel1;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox gbThreads;
-        private System.Windows.Forms.NumericUpDown nbThreads;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.GroupBox xvidOtherGroupBox;
-        private System.Windows.Forms.Label xvidVbvPeakRateLabel;
-        private System.Windows.Forms.Label xvidVbvMaxRateLabel;
-        private System.Windows.Forms.Label xvidVbvBufferLabel;
+        private System.Windows.Forms.ComboBox xvidProfile;
+        private System.Windows.Forms.Label xvidProfileLabel;
         private System.Windows.Forms.TextBox xvidVbvPeakRate;
         private System.Windows.Forms.TextBox xvidVbvMaxRate;
         private System.Windows.Forms.TextBox xvidVbvBuffer;
-        private System.Windows.Forms.ComboBox xvidMotionSearchPrecision;
-        private System.Windows.Forms.Label xvidMotionSearchPrecisionLabel;
-        private System.Windows.Forms.CheckBox xvidPackedBitstream;
-        private System.Windows.Forms.Label xvidPackedBitstreamLabel;
-        private System.Windows.Forms.NumericUpDown xvidNbBFrames;
-        private System.Windows.Forms.Label xvidNbBframesLabel;
-        private System.Windows.Forms.TextBox xvidKeyframeInterval;
-        private System.Windows.Forms.Label xvidKeyframeIntervalLabel;
-        private System.Windows.Forms.CheckBox xvidInterlaced;
-        private System.Windows.Forms.CheckBox xvidTrellisQuant;
-        private System.Windows.Forms.CheckBox xvidAdaptiveQuant;
-        private System.Windows.Forms.GroupBox xvidCodecToolsGroupBox;
-        private MeGUI.core.gui.FileSCBox cqmComboBox1;
-        private System.Windows.Forms.CheckBox xvidUseVHQForBframes;
-        private System.Windows.Forms.Label xvidUseVHQForBframesLabel;
-        private System.Windows.Forms.CheckBox xvidClosedGop;
-        private System.Windows.Forms.Label xvidClosedGopLabel;
-        private System.Windows.Forms.Label xvidQuantTypeLabel;
-        private System.Windows.Forms.CheckBox xvidChromaMotion;
-        private System.Windows.Forms.Label xvidChromaMotionLabel;
-        private System.Windows.Forms.CheckBox xvidCartoonMode;
-        private System.Windows.Forms.Label xvidCartoonModeLabel;
-        private System.Windows.Forms.CheckBox xvidGMC;
-        private System.Windows.Forms.Label xvidGMCLabel;
-        private System.Windows.Forms.CheckBox xvidQpel;
-        private System.Windows.Forms.Label xvidQPelLabel;
-        private System.Windows.Forms.ComboBox xvidVHQ;
-        private System.Windows.Forms.Label xvidVHQLabel;
-        private System.Windows.Forms.GroupBox gbASPProfiles;
-        private System.Windows.Forms.ComboBox xvidProfile;
-        private System.Windows.Forms.GroupBox gbFourCC;
-        private System.Windows.Forms.ComboBox fourCC;
-        private System.Windows.Forms.CheckBox chAdvancedSettings;
-        private MeGUI.core.gui.HelpButton helpButton1;
+        private System.Windows.Forms.Label xvidVbvPeakRateLabel;
+        private System.Windows.Forms.Label xvidVbvMaxRateLabel;
+        private System.Windows.Forms.Label xvidVbvBufferLabel;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox HVSMasking;
-        private System.Windows.Forms.Label label2;
     }
 }

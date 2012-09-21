@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,6 +26,9 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
+using ICSharpCode.SharpZipLib.Zip;
+using SevenZip;
+
 using MeGUI.core.util;
 
 
@@ -33,9 +36,9 @@ namespace MeGUI
 {
     class UpdateCacher
     {
-        public static void flushOldCachedFilesAsync(List<string> urls)
+        public static void flushOldCachedFilesAsync(List<string> urls, UpdateWindow oUpdate)
         {
-            string updateCache = MeGUISettings.MeGUIUpdateCache;
+            string updateCache = MainForm.Instance.Settings.MeGUIUpdateCache;
             if (string.IsNullOrEmpty(updateCache)
                 || !Directory.Exists(updateCache))
                 return;
@@ -45,62 +48,113 @@ namespace MeGUI
 
             for (int i = 0; i < urls.Count; ++i)
             {
-                urls[i] = urls[i].ToLower();
+                urls[i] = urls[i].ToLower(System.Globalization.CultureInfo.InvariantCulture);
             }
 
             foreach (FileInfo f in files)
             {
-                if (urls.IndexOf(f.Name.ToLower()) < 0)
+                if (urls.IndexOf(f.Name.ToLower(System.Globalization.CultureInfo.InvariantCulture)) < 0)
                 {
-                    if (DateTime.Now - f.LastWriteTime > new TimeSpan(7, 0, 0, 0, 0))
+                    if (DateTime.Now - f.LastWriteTime > new TimeSpan(60, 0, 0, 0, 0))
+                    {
                         f.Delete();
+                        oUpdate.AddTextToLog("Deleted cached file " + f.Name, ImageType.Information);
+                    }
                 }
             }
         }
 
         private static void ensureSensibleCacheFolderExists()
         {
-            if (string.IsNullOrEmpty(MeGUISettings.MeGUIUpdateCache))
-                setSensibleCacheFolder();
-
-            try
-            {
-                FileUtil.ensureDirectoryExists(MeGUISettings.MeGUIUpdateCache);
-            }
-            catch (IOException)
-            {
-                setSensibleCacheFolder();
-                FileUtil.ensureDirectoryExists(MeGUISettings.MeGUIUpdateCache);
-            }
-        }
-
-
-        private static void setSensibleCacheFolder()
-        {
-            MeGUISettings.MeGUIUpdateCache = Path.Combine(MainForm.Instance.MeGUIPath, "update_cache");
+            FileUtil.ensureDirectoryExists(MainForm.Instance.Settings.MeGUIUpdateCache);
         }
 
         public static UpdateWindow.ErrorState DownloadFile(string url, Uri serverAddress,
-            out Stream str, DownloadProgressChangedEventHandler wc_DownloadProgressChanged)
+            out Stream str, DownloadProgressChangedEventHandler wc_DownloadProgressChanged, UpdateWindow oUpdate)
         {
             ensureSensibleCacheFolderExists();
             UpdateWindow.ErrorState er = UpdateWindow.ErrorState.Successful;
-            string updateCache = MeGUISettings.MeGUIUpdateCache;
+            string updateCache = MainForm.Instance.Settings.MeGUIUpdateCache;
 
             string localFilename = Path.Combine(updateCache, url);
-            FileInfo finfo = new FileInfo(localFilename);
-            if (File.Exists(localFilename) && (finfo.Length == 0))
+
+            if (File.Exists(localFilename))
             {
-                try
+                FileInfo finfo = new FileInfo(localFilename);
+                if (finfo.Length == 0)
                 {
-                    finfo.Delete();
+                    oUpdate.AddTextToLog(localFilename + " is empty. Deleting file.", ImageType.Information);
+                    UpdateCacher.FlushFile(localFilename, oUpdate);
                 }
-                catch (IOException) { }
+
+                // check the zip file
+                if (localFilename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".zip"))
+                {
+                    try
+                    {
+                        ZipFile zipFile = new ZipFile(localFilename);
+                        if (zipFile.TestArchive(true) == false)
+                        {
+                            oUpdate.AddTextToLog("Could not unzip " + localFilename + ". Deleting file.", ImageType.Information);
+                            UpdateCacher.FlushFile(localFilename, oUpdate);
+                        }
+                        else
+                            goto gotLocalFile;
+                    }
+                    catch
+                    {
+                        oUpdate.AddTextToLog("Could not unzip " + localFilename + ". Deleting file.", ImageType.Error);
+                        UpdateCacher.FlushFile(localFilename, oUpdate);
+                    }
+                }
+                else if (localFilename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".7z")) // check the 7-zip file
+                {
+                    try
+                    {
+                        SevenZipExtractor oArchive = new SevenZipExtractor(localFilename);
+                        if (oArchive.Check() == false)
+                        {
+                            oUpdate.AddTextToLog("Could not extract " + localFilename + ". Deleting file.", ImageType.Information);
+                            UpdateCacher.FlushFile(localFilename, oUpdate);
+                        }
+                        else
+                            goto gotLocalFile;
+                    }
+                    catch
+                    {
+                        oUpdate.AddTextToLog("Could not extract " + localFilename + ". Deleting file.", ImageType.Error);
+                        UpdateCacher.FlushFile(localFilename, oUpdate);
+                    }
+                }
+                else
+                {
+                    goto gotLocalFile;
+                }
             }
-            else if (File.Exists(localFilename))
-                goto gotLocalFile;
 
             WebClient wc = new WebClient();
+
+            // check for proxy authentication...
+            if (MainForm.Instance.Settings.UseHttpProxy == true)
+            {
+                WebProxy wprox = null;
+                ICredentials icred = null;
+
+                if (MainForm.Instance.Settings.HttpProxyUid != null)
+                {
+                    icred = new NetworkCredential(MainForm.Instance.Settings.HttpProxyUid, MainForm.Instance.Settings.HttpProxyPwd);
+                }
+
+                wprox = new WebProxy(MainForm.Instance.Settings.HttpProxyAddress + ":" + MainForm.Instance.Settings.HttpProxyPort, true, null, icred);
+
+                WebRequest.DefaultWebProxy = wprox;
+                wc.Proxy = wprox;
+            }
+            else
+            {
+                wc.Proxy = null;
+            }
+
             ManualResetEvent mre = new ManualResetEvent(false);
             wc.DownloadFileCompleted += delegate(object sender, AsyncCompletedEventArgs e)
             {
@@ -118,12 +172,6 @@ namespace MeGUI
         gotLocalFile:
             try
             {
-                File.SetLastWriteTime(localFilename, DateTime.Now);
-            }
-            catch (IOException) { }
-
-            try
-            {
                 str = File.OpenRead(localFilename);
             }
             catch (IOException)
@@ -135,14 +183,17 @@ namespace MeGUI
             return er;
         }
 
-        public static void FlushFile(string p)
+        public static void FlushFile(string p, UpdateWindow oUpdate)
         {
-            string localFilename = Path.Combine(MeGUISettings.MeGUIUpdateCache, p);
+            string localFilename = Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, p);
             try
             {
                 File.Delete(localFilename);
             }
-            catch (IOException) { }
+            catch (IOException) 
+            {
+                oUpdate.AddTextToLog("Could not delete file " + localFilename, ImageType.Error);
+            }
         }
     }
 }

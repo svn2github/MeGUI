@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -85,20 +85,6 @@ namespace MeGUI.core.util
             CatchAndTellUser<Exception>(action);
         }
 
-        public static void SetSize(Form f, Size s, FormWindowState state)
-        {
-            f.WindowState = state;
-            if (f.WindowState == FormWindowState.Normal)
-                f.ClientSize = s;
-        }
-
-        public static void SaveSize(Form f, Setter<Size> size, Setter<FormWindowState> state)
-        {
-            size(f.ClientSize);
-            state(f.WindowState);
-        }
-
-
         public static void ThreadSafeRun(Control c, MethodInvoker m)
         {
             if (c != null && c.InvokeRequired)
@@ -125,7 +111,8 @@ namespace MeGUI.core.util
                         File.Delete(path);
                     }
                     catch (IOException) { }
-                    Console.Write(e.Message);
+                    LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("XmlSerialize: " + path, e, ImageType.Error);
                 }
             }
         }
@@ -142,15 +129,11 @@ namespace MeGUI.core.util
                     {
                         return (T)ser.Deserialize(s);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-                        DialogResult r = MessageBox.Show("File '" + path + "' could not be loaded. Delete?", "Error loading Job", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                        if (r == DialogResult.Yes)
-                        {
-                            try { s.Close(); File.Delete(path); }
-                            catch (Exception) { }
-                        }
-                        Console.Write(e.Message);
+                        s.Close();
+                        MessageBox.Show("File '" + path + "' could not be loaded!\n\nIt will be moved to the backup directory.", "Error loading File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        FileUtil.BackupFile(path, true);
                         return null;
                     }
                 }
@@ -158,15 +141,15 @@ namespace MeGUI.core.util
             else return new T();
         }
 
-        public static object XmlDeserialize(string path, Type t)
+        public static object XmlDeserialize(string path, Type t, bool bSilentError)
         {
             MethodInfo ms = (MethodInfo)Array.Find(typeof(Util).GetMember("XmlDeserialize"),
                 delegate(MemberInfo m) { return (m is MethodInfo) && (m as MethodInfo).IsGenericMethod; });
             ms = ms.MakeGenericMethod(t);
-            return ms.Invoke(null, new object[] { path });
+            return ms.Invoke(null, new object[] { path, bSilentError });
         }
 
-        public static T XmlDeserialize<T>(string path)
+        public static T XmlDeserialize<T>(string path, bool bSilentError)
             where T : class
         {
             XmlSerializer ser = new XmlSerializer(typeof(T));
@@ -180,13 +163,14 @@ namespace MeGUI.core.util
                     }
                     catch (Exception e)
                     {
-                        DialogResult r = MessageBox.Show("File '" + path + "' could not be loaded. Delete?", "Error loading Job", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                        if (r == DialogResult.Yes)
+                        s.Close();
+                        if (!bSilentError)
                         {
-                            try { s.Close(); File.Delete(path); }
-                            catch (Exception) { }
+                            MessageBox.Show("File '" + path + "' could not be loaded!\n\nIt will be moved to the backup directory.", "Error loading File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            FileUtil.BackupFile(path, true);
                         }
-                        Console.Write(e.Message);
+                        LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                        _oLog.LogValue("XmlDeserialize: " + path, e, ImageType.Error);
                         return null;
                     }
                 }
@@ -220,15 +204,18 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// Formats the decimal according to what looks nice in MeGUI (ensures consistency
-        /// and not too many decimal places)
+        /// Formats the decimal according to what looks nice in MeGUI 
+        /// (ensures consistency and not too many decimal places)
         /// </summary>
         /// <param name="d"></param>
         /// <returns></returns>
-        public static string ToString(decimal? d)
+        public static string ToString(decimal? d, bool bNoDecimalPlaces)
         {
             if (!d.HasValue) return null;
-            return d.Value.ToString("#####.##");
+            if (bNoDecimalPlaces)
+                return d.Value.ToString("0");
+            else
+                return d.Value.ToString("0.00");
         }
 
         public static string ToStringOrNull<T>(T t)
@@ -516,7 +503,8 @@ namespace MeGUI.core.util
                     }
                     catch (Exception e) // integer parsing error
                     {
-                        Console.Write(e.Message);
+                        LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                        _oLog.LogValue("getTimeCode: " + timecode, e, ImageType.Error);
                         return -1;
                     }
                 }

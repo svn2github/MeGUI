@@ -179,12 +179,14 @@ namespace MeGUI.core.gui
             this.avisynthScript.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.avisynthScript.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.avisynthScript.Location = new System.Drawing.Point(3, 32);
             this.avisynthScript.Multiline = true;
             this.avisynthScript.Name = "avisynthScript";
-            this.avisynthScript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.avisynthScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.avisynthScript.Size = new System.Drawing.Size(388, 312);
             this.avisynthScript.TabIndex = 46;
+            this.avisynthScript.WordWrap = false;
             // 
             // label1
             // 
@@ -252,7 +254,7 @@ namespace MeGUI.core.gui
             this.mpegOptGroupBox.Controls.Add(this.mpeg2Deblocking);
             this.mpegOptGroupBox.Location = new System.Drawing.Point(8, 98);
             this.mpegOptGroupBox.Name = "mpegOptGroupBox";
-            this.mpegOptGroupBox.Size = new System.Drawing.Size(383, 68);
+            this.mpegOptGroupBox.Size = new System.Drawing.Size(197, 79);
             this.mpegOptGroupBox.TabIndex = 12;
             this.mpegOptGroupBox.TabStop = false;
             this.mpegOptGroupBox.Text = "Mpeg Options";
@@ -281,7 +283,7 @@ namespace MeGUI.core.gui
             this.filtersGroupbox.Controls.Add(this.resizeFilterType);
             this.filtersGroupbox.Location = new System.Drawing.Point(8, 8);
             this.filtersGroupbox.Name = "filtersGroupbox";
-            this.filtersGroupbox.Size = new System.Drawing.Size(383, 84);
+            this.filtersGroupbox.Size = new System.Drawing.Size(400, 84);
             this.filtersGroupbox.TabIndex = 1;
             this.filtersGroupbox.TabStop = false;
             this.filtersGroupbox.Text = "Filters";

@@ -63,7 +63,6 @@ namespace MeGUI.core.details.audio
                     )
                                 :
                     new object[]{
-                                ChannelMode.KeepOriginal,
                                 ChannelMode.StereoDownmix,
                                 ChannelMode.DPLDownmix,
                                 ChannelMode.DPLIIDownmix,
@@ -72,6 +71,7 @@ namespace MeGUI.core.details.audio
                     );
 
             InitializeComponent();
+            this.primaryDecoding.DataSource = EnumProxy.CreateArray(new object[]{AudioDecodingEngine.NicAudio, AudioDecodingEngine.FFAudioSource, AudioDecodingEngine.DirectShow});
             this.besweetDownmixMode.DataSource = _avisynthChannelSet;
             this.besweetDownmixMode.BindingContext = new BindingContext();
             this.cbSampleRate.SelectedIndex = 0;
@@ -135,7 +135,7 @@ namespace MeGUI.core.details.audio
 			get
 			{
                 AudioCodecSettings fas = CodecSettings;
-                fas.ForceDecodingViaDirectShow = forceDShowDecoding.Checked;
+                fas.PreferredDecoder = (AudioDecodingEngine)primaryDecoding.SelectedIndex;
                 EnumProxy o = besweetDownmixMode.SelectedItem as EnumProxy;
 			    if(o != null)
 				    fas.DownmixMode = (ChannelMode)o.RealValue ;
@@ -149,7 +149,7 @@ namespace MeGUI.core.details.audio
 			{
 				AudioCodecSettings fas = value;
                 besweetDownmixMode.SelectedItem = EnumProxy.Create(fas.DownmixMode);
-                forceDShowDecoding.Checked = fas.ForceDecodingViaDirectShow;
+                primaryDecoding.SelectedIndex = (int)fas.PreferredDecoder;
 				autoGain.Checked = fas.AutoGain;
                 cbSampleRate.SelectedIndex = fas.SampleRateType;
                 applyDRC.Checked = fas.ApplyDRC;

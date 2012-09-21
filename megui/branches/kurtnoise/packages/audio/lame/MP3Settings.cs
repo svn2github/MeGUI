@@ -28,19 +28,52 @@ namespace MeGUI
 	public class MP3Settings : AudioCodecSettings
 	{
         public static readonly string ID = "LAME MP3";
-		int quality;
+        public static readonly int[] SupportedBitrates = new int[] {
+            32,
+            40,
+            48,
+            56,
+            64,
+            80,
+            96,
+            112,
+            128,
+            160,
+            192,
+            224,
+            256,
+            320};
+
+		private int quality;
+        private int abrBitrate;
 		public MP3Settings()
             : base(ID, AudioCodec.MP3, AudioEncoderType.LAME, 128)
 		{
-			quality = 8;
+			quality = 4;
+            base.DownmixMode = ChannelMode.StereoDownmix;
 		}
 		/// <summary>
 		/// gets / sets the quality for vbr mode
 		/// </summary>
 		public int Quality
 		{
-			get {return quality;}
+			get 
+            {
+                if (quality > 9)
+                    return quality / 10;
+                else
+                    return quality;
+            }
 			set {quality = value;}
 		}
+
+        /// <summary>
+        /// gets / sets the bitrate for abr mode
+        /// </summary>
+        public int AbrBitrate
+        {
+            get { return abrBitrate; }
+            set { abrBitrate = value; }
+        }
 	}
 }

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -35,21 +35,22 @@ namespace MeGUI
         public string CutFile;
 		public AudioCodecSettings Settings;
         public int Delay;
+        public string Language;
+        public string Name;
 
-        public AudioJob() : this(null, null, null, null, 0) { }
+        public AudioJob() : this(null, null, null, null, 0, null, null) { }
 
-        public AudioJob(string input, string output, string cutfile, AudioCodecSettings settings, int delay)
+        public AudioJob(string input, string output, string cutfile, AudioCodecSettings settings, int delay, string strLanguage, string strName)
             :base(input, output)
         {
             CutFile = cutfile;
             Settings = settings;
             Delay = delay;
+            Language = strLanguage;
+            Name = strName;
         }
 
         public long SizeBytes;
-
-        public TrackInfo TrackInfo;
-
 
         public MuxableType ToMuxableType()
         {
@@ -58,7 +59,7 @@ namespace MeGUI
 
         public MuxStream ToMuxStream()
         {
-            return new MuxStream(Output, TrackInfo, 0); 
+            return new MuxStream(Output, Language, Name, 0, false, false, null); 
             // no delay correction is required since the audio job will fix the delay
         }
 

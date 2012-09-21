@@ -109,7 +109,7 @@ namespace MeGUI.core.gui
             // 
             this.shutDownToolStripMenuItem.Name = "shutDownToolStripMenuItem";
             this.shutDownToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.shutDownToolStripMenuItem.Text = "Shut down";
+            this.shutDownToolStripMenuItem.Text = "Shut down worker now";
             this.shutDownToolStripMenuItem.Click += new System.EventHandler(this.shutDownToolStripMenuItem_Click);
             // 
             // showProgressWindowToolStripMenuItem

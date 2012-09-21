@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -53,28 +53,44 @@ namespace MeGUI.core.gui
         private MainForm mainForm;
         private XmlDocument ContextHelp = new XmlDocument();
 
-        public ProfileImporter(MainForm mf)
-            :this(mf, askForZipFile())
+        public ProfileImporter(MainForm mf, bool bSilentError)
+            :this(mf, askForZipFile(), bSilentError)
         {}
 
-        public ProfileImporter(MainForm mf, string filename)
-            : this(mf, File.OpenRead(filename))
+        public ProfileImporter(MainForm mf, string filename, bool bSilentError)
+            : this(mf, File.OpenRead(filename), bSilentError)
         {}
 
-        public ProfileImporter(MainForm mf, Stream s)
+        public ProfileImporter(MainForm mf, Stream s, bool bSilentError)
         {
             InitializeComponent();
             
             mainForm = mf;
+            mainForm.ImportProfileSuccessful = false;
 
             tempFolder = FileUtil.CreateTempDirectory();
             FileUtil.ExtractZipFile(s, tempFolder.FullName);
 
             extraFiles = FileUtil.ensureDirectoryExists(Path.Combine(tempFolder.FullName, "extra"));
-            List<Profile> ps = ProfileManager.ReadAllProfiles(tempFolder.FullName);
+            List<Profile> ps = ProfileManager.ReadAllProfiles(tempFolder.FullName, bSilentError);
+
             fixFileNames(ps, createInitSubTable());
 
             Profiles = ps.ToArray();
+        }
+
+        public bool ErrorDuringInit()
+        {
+            if (Profiles.Length == 0)
+                return true;
+            else
+                return false;
+        }
+
+        public void AutoImport()
+        {
+            checkAllToolStripMenuItem_Click(null, null);
+            import_Click(null, null);
         }
 
         private Dictionary<string, string> createInitSubTable()
@@ -103,6 +119,9 @@ namespace MeGUI.core.gui
                 mainForm.Profiles.AddAll(ps.ToArray(), mainForm.DialogManager);
 
                 DialogResult = DialogResult.OK;
+                mainForm.ImportProfileSuccessful = true;
+
+                this.Close();
             });
         }
 

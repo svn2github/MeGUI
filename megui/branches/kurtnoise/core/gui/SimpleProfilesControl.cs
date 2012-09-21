@@ -54,13 +54,15 @@ namespace MeGUI.core.gui
         public void SelectProfile(string fqname)
         {
             foreach (Named<Profile> n in comboBox1.Items)
+            {
                 if (n.Data.FQName == fqname)
                 {
                     comboBox1.SelectedItem = n;
                     return;
                 }
-
-            throw new ProfileCouldntBeSelectedException(fqname);
+            }
+            if (comboBox1.Items.Count > 0)
+                comboBox1.SelectedIndex = 0;
         }
 
         public void SelectProfile(Profile prof)
@@ -124,7 +126,11 @@ namespace MeGUI.core.gui
         protected void RefreshProfiles()
         {
             comboBox1.Items.Clear();
-            comboBox1.Items.AddRange(Util.ToArray(Manager.Profiles(ProfileSet)));
+            foreach (Named<Profile> oProfile in Manager.Profiles(ProfileSet))
+            {
+                if (!(oProfile.Data.BaseSettings is NeroAACSettings) || MainForm.Instance.Settings.IsNeroAACEncAvailable())
+                    comboBox1.Items.Add(oProfile);
+            }
             SelectProfile(Manager.GetSelectedProfile(ProfileSet));
         }
 

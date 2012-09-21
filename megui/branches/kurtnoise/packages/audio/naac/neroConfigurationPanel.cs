@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -32,6 +32,16 @@ namespace MeGUI.packages.audio.naac
 {
     public partial class neroConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<NeroAACSettings>
     {
+        public TrackBar vQuality;
+        public RadioButton rbtnVBR;
+        public TrackBar vBitrate;
+        public RadioButton rbtnCBR;
+        private ComboBox comboBox1;
+        private Label label1;
+        public RadioButton rbtnABR;
+		#region variables
+
+        #endregion
         #region start / stop
         public neroConfigurationPanel():base()
 		{
@@ -39,8 +49,12 @@ namespace MeGUI.packages.audio.naac
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-            cbProfile.Items.AddRange(EnumProxy.CreateArray(NeroAACSettings.SupportedProfiles));
+            comboBox1.Items.AddRange(EnumProxy.CreateArray(NeroAACSettings.SupportedProfiles));
+            rbtnABR_CheckedChanged(null, null);
+            vBitrate_ValueChanged(null, null);
 		}
+
+
 		#endregion
 		#region Windows Form Designer generated code
 		/// <summary>
@@ -49,235 +63,120 @@ namespace MeGUI.packages.audio.naac
 		/// </summary>
 		private void InitializeComponent()
 		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(neroConfigurationPanel));
-            this.gradientPanel1 = new MeGUI.GradientPanel();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.gbQuality = new System.Windows.Forms.GroupBox();
-            this.tbQuality = new System.Windows.Forms.TrackBar();
-            this.gbBitrate = new System.Windows.Forms.GroupBox();
-            this.cbCBR = new System.Windows.Forms.CheckBox();
-            this.tbBitrate = new System.Windows.Forms.TrackBar();
-            this.gbTarget = new System.Windows.Forms.GroupBox();
-            this.rbQuality = new System.Windows.Forms.RadioButton();
-            this.rbBitrate = new System.Windows.Forms.RadioButton();
-            this.gbProfile = new System.Windows.Forms.GroupBox();
-            this.cbProfile = new System.Windows.Forms.ComboBox();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.tabPage1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.gradientPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            this.gbQuality.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbQuality)).BeginInit();
-            this.gbBitrate.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbBitrate)).BeginInit();
-            this.gbTarget.SuspendLayout();
-            this.gbProfile.SuspendLayout();
+            this.vQuality = new System.Windows.Forms.TrackBar();
+            this.rbtnVBR = new System.Windows.Forms.RadioButton();
+            this.vBitrate = new System.Windows.Forms.TrackBar();
+            this.rbtnCBR = new System.Windows.Forms.RadioButton();
+            this.rbtnABR = new System.Windows.Forms.RadioButton();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.encoderGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.vQuality)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vBitrate)).BeginInit();
             this.SuspendLayout();
+            // 
+            // encoderGroupBox
+            // 
+            this.encoderGroupBox.Controls.Add(this.label1);
+            this.encoderGroupBox.Controls.Add(this.comboBox1);
+            this.encoderGroupBox.Controls.Add(this.vQuality);
+            this.encoderGroupBox.Controls.Add(this.rbtnVBR);
+            this.encoderGroupBox.Controls.Add(this.vBitrate);
+            this.encoderGroupBox.Controls.Add(this.rbtnCBR);
+            this.encoderGroupBox.Controls.Add(this.rbtnABR);
+            this.encoderGroupBox.Location = new System.Drawing.Point(0, 140);
+            this.encoderGroupBox.Size = new System.Drawing.Size(394, 210);
+            this.encoderGroupBox.TabIndex = 1;
+            this.encoderGroupBox.Text = " NeroDigital AAC Options ";
             // 
             // besweetOptionsGroupbox
             // 
-            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(392, 212);
             this.besweetOptionsGroupbox.TabIndex = 0;
             // 
-            // tabPage1
+            // vQuality
             // 
-            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage1.Controls.Add(this.linkLabel1);
-            this.tabPage1.Controls.Add(this.gbProfile);
-            this.tabPage1.Controls.Add(this.gbQuality);
-            this.tabPage1.Controls.Add(this.gbBitrate);
-            this.tabPage1.Controls.Add(this.gbTarget);
-            this.tabPage1.Size = new System.Drawing.Size(394, 298);
-            this.tabPage1.UseVisualStyleBackColor = false;
+            this.vQuality.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.vQuality.Location = new System.Drawing.Point(3, 123);
+            this.vQuality.Maximum = 100;
+            this.vQuality.Name = "vQuality";
+            this.vQuality.Size = new System.Drawing.Size(388, 45);
+            this.vQuality.TabIndex = 4;
+            this.vQuality.TickFrequency = 5;
+            this.vQuality.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.vQuality.ValueChanged += new System.EventHandler(this.vBitrate_ValueChanged);
             // 
-            // tabControl1
+            // rbtnVBR
             // 
-            this.tabControl1.Location = new System.Drawing.Point(4, 96);
-            this.tabControl1.Size = new System.Drawing.Size(402, 324);
+            this.rbtnVBR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rbtnVBR.Location = new System.Drawing.Point(13, 106);
+            this.rbtnVBR.Name = "rbtnVBR";
+            this.rbtnVBR.Size = new System.Drawing.Size(267, 22);
+            this.rbtnVBR.TabIndex = 3;
+            this.rbtnVBR.Text = "Variable Bitrate";
+            this.rbtnVBR.CheckedChanged += new System.EventHandler(this.rbtnABR_CheckedChanged);
             // 
-            // gradientPanel1
+            // vBitrate
             // 
-            this.gradientPanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("gradientPanel1.BackgroundImage")));
-            this.gradientPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.gradientPanel1.Controls.Add(this.pictureBox2);
-            this.gradientPanel1.Controls.Add(this.label3);
-            this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
-            this.gradientPanel1.Name = "gradientPanel1";
-            this.gradientPanel1.PageEndColor = System.Drawing.Color.Empty;
-            this.gradientPanel1.PageStartColor = System.Drawing.Color.SlateGray;
-            this.gradientPanel1.Size = new System.Drawing.Size(409, 90);
-            this.gradientPanel1.TabIndex = 45;
+            this.vBitrate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.vBitrate.Location = new System.Drawing.Point(3, 59);
+            this.vBitrate.Maximum = 640;
+            this.vBitrate.Minimum = 16;
+            this.vBitrate.Name = "vBitrate";
+            this.vBitrate.Size = new System.Drawing.Size(388, 45);
+            this.vBitrate.TabIndex = 2;
+            this.vBitrate.TickFrequency = 8;
+            this.vBitrate.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.vBitrate.Value = 16;
+            this.vBitrate.ValueChanged += new System.EventHandler(this.vBitrate_ValueChanged);
             // 
-            // pictureBox2
+            // rbtnCBR
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(283, 21);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(100, 47);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox2.TabIndex = 1;
-            this.pictureBox2.TabStop = false;
+            this.rbtnCBR.Location = new System.Drawing.Point(13, 39);
+            this.rbtnCBR.Name = "rbtnCBR";
+            this.rbtnCBR.Size = new System.Drawing.Size(320, 22);
+            this.rbtnCBR.TabIndex = 1;
+            this.rbtnCBR.Text = "Constant Bitrate";
+            this.rbtnCBR.CheckedChanged += new System.EventHandler(this.rbtnABR_CheckedChanged);
             // 
-            // label3
+            // rbtnABR
             // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(23, 34);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(207, 17);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Adjust your Settings here...";
+            this.rbtnABR.Location = new System.Drawing.Point(13, 22);
+            this.rbtnABR.Name = "rbtnABR";
+            this.rbtnABR.Size = new System.Drawing.Size(302, 16);
+            this.rbtnABR.TabIndex = 0;
+            this.rbtnABR.Text = "Adaptive Bitrate";
+            this.rbtnABR.CheckedChanged += new System.EventHandler(this.rbtnABR_CheckedChanged);
             // 
-            // gbQuality
+            // comboBox1
             // 
-            this.gbQuality.Controls.Add(this.tbQuality);
-            this.gbQuality.Location = new System.Drawing.Point(6, 139);
-            this.gbQuality.Name = "gbQuality";
-            this.gbQuality.Size = new System.Drawing.Size(385, 75);
-            this.gbQuality.TabIndex = 5;
-            this.gbQuality.TabStop = false;
-            this.gbQuality.Text = "Quality";
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(106, 165);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(266, 20);
+            this.comboBox1.TabIndex = 6;
             // 
-            // tbQuality
+            // label1
             // 
-            this.tbQuality.Location = new System.Drawing.Point(6, 24);
-            this.tbQuality.Maximum = 100;
-            this.tbQuality.Name = "tbQuality";
-            this.tbQuality.Size = new System.Drawing.Size(373, 45);
-            this.tbQuality.TabIndex = 0;
-            this.tbQuality.TickFrequency = 5;
-            this.tbQuality.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.tbQuality.Scroll += new System.EventHandler(this.tbQuality_Scroll);
-            // 
-            // gbBitrate
-            // 
-            this.gbBitrate.Controls.Add(this.cbCBR);
-            this.gbBitrate.Controls.Add(this.tbBitrate);
-            this.gbBitrate.Location = new System.Drawing.Point(6, 58);
-            this.gbBitrate.Name = "gbBitrate";
-            this.gbBitrate.Size = new System.Drawing.Size(385, 75);
-            this.gbBitrate.TabIndex = 4;
-            this.gbBitrate.TabStop = false;
-            this.gbBitrate.Text = "Bitrate";
-            // 
-            // cbCBR
-            // 
-            this.cbCBR.AutoSize = true;
-            this.cbCBR.Location = new System.Drawing.Point(41, 52);
-            this.cbCBR.Name = "cbCBR";
-            this.cbCBR.Size = new System.Drawing.Size(195, 17);
-            this.cbCBR.TabIndex = 1;
-            this.cbCBR.Text = "Restrict Encoder to Constant Bitrate";
-            this.cbCBR.UseVisualStyleBackColor = true;
-            // 
-            // tbBitrate
-            // 
-            this.tbBitrate.Location = new System.Drawing.Point(6, 19);
-            this.tbBitrate.Maximum = 640;
-            this.tbBitrate.Minimum = 16;
-            this.tbBitrate.Name = "tbBitrate";
-            this.tbBitrate.Size = new System.Drawing.Size(373, 45);
-            this.tbBitrate.TabIndex = 0;
-            this.tbBitrate.TickFrequency = 16;
-            this.tbBitrate.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.tbBitrate.Value = 16;
-            this.tbBitrate.Scroll += new System.EventHandler(this.tbBitrate_Scroll);
-            // 
-            // gbTarget
-            // 
-            this.gbTarget.Controls.Add(this.rbQuality);
-            this.gbTarget.Controls.Add(this.rbBitrate);
-            this.gbTarget.Location = new System.Drawing.Point(6, 6);
-            this.gbTarget.Name = "gbTarget";
-            this.gbTarget.Size = new System.Drawing.Size(385, 46);
-            this.gbTarget.TabIndex = 3;
-            this.gbTarget.TabStop = false;
-            this.gbTarget.Text = "Target";
-            // 
-            // rbQuality
-            // 
-            this.rbQuality.AutoSize = true;
-            this.rbQuality.Checked = true;
-            this.rbQuality.Location = new System.Drawing.Point(240, 19);
-            this.rbQuality.Name = "rbQuality";
-            this.rbQuality.Size = new System.Drawing.Size(57, 17);
-            this.rbQuality.TabIndex = 21;
-            this.rbQuality.TabStop = true;
-            this.rbQuality.Text = "Quality";
-            this.rbQuality.UseVisualStyleBackColor = true;
-            this.rbQuality.CheckedChanged += new System.EventHandler(this.target_CheckedChanged);
-            // 
-            // rbBitrate
-            // 
-            this.rbBitrate.AutoSize = true;
-            this.rbBitrate.Location = new System.Drawing.Point(117, 19);
-            this.rbBitrate.Name = "rbBitrate";
-            this.rbBitrate.Size = new System.Drawing.Size(55, 17);
-            this.rbBitrate.TabIndex = 20;
-            this.rbBitrate.Text = "Bitrate";
-            this.rbBitrate.UseVisualStyleBackColor = true;
-            this.rbBitrate.CheckedChanged += new System.EventHandler(this.target_CheckedChanged);
-            // 
-            // gbProfile
-            // 
-            this.gbProfile.Controls.Add(this.cbProfile);
-            this.gbProfile.Location = new System.Drawing.Point(6, 220);
-            this.gbProfile.Name = "gbProfile";
-            this.gbProfile.Size = new System.Drawing.Size(149, 75);
-            this.gbProfile.TabIndex = 6;
-            this.gbProfile.TabStop = false;
-            this.gbProfile.Text = "Profile";
-            // 
-            // cbProfile
-            // 
-            this.cbProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbProfile.FormattingEnabled = true;
-            this.cbProfile.Location = new System.Drawing.Point(13, 30);
-            this.cbProfile.Name = "cbProfile";
-            this.cbProfile.Size = new System.Drawing.Size(121, 21);
-            this.cbProfile.TabIndex = 0;
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(198, 253);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(169, 13);
-            this.linkLabel1.TabIndex = 7;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Nero Digital Audio Official Website";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 168);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(63, 12);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "AAC Profile";
             // 
             // neroConfigurationPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.Controls.Add(this.gradientPanel1);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.Name = "neroConfigurationPanel";
-            this.Size = new System.Drawing.Size(409, 433);
-            this.Controls.SetChildIndex(this.tabControl1, 0);
-            this.Controls.SetChildIndex(this.gradientPanel1, 0);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
-            this.gradientPanel1.ResumeLayout(false);
-            this.gradientPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            this.gbQuality.ResumeLayout(false);
-            this.gbQuality.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbQuality)).EndInit();
-            this.gbBitrate.ResumeLayout(false);
-            this.gbBitrate.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbBitrate)).EndInit();
-            this.gbTarget.ResumeLayout(false);
-            this.gbTarget.PerformLayout();
-            this.gbProfile.ResumeLayout(false);
+            this.Size = new System.Drawing.Size(394, 379);
+            this.encoderGroupBox.ResumeLayout(false);
+            this.encoderGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.vQuality)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vBitrate)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -291,39 +190,55 @@ namespace MeGUI.packages.audio.naac
 			get
 			{
 				NeroAACSettings nas = new NeroAACSettings();
-                if (rbBitrate.Checked)
-                {
-                    if (cbCBR.Checked)
-                        nas.BitrateMode = BitrateManagementMode.CBR;
-                    else
-                        nas.BitrateMode = BitrateManagementMode.ABR;
-                    nas.Bitrate = this.tbBitrate.Value;
-                }
-                else
-                {
-                    nas.BitrateMode = BitrateManagementMode.VBR;
-                    nas.Quality = (Decimal)this.tbQuality.Value / this.tbQuality.Maximum;
-                } 
-                nas.Profile = (AacProfile)(cbProfile.SelectedItem as EnumProxy).RealValue;
+                if (rbtnABR.Checked) nas.BitrateMode = BitrateManagementMode.ABR;
+                if (rbtnCBR.Checked) nas.BitrateMode = BitrateManagementMode.CBR;
+                if (rbtnVBR.Checked) nas.BitrateMode = BitrateManagementMode.VBR;
+                nas.Bitrate = vBitrate.Value;
+                nas.Quality= (Decimal)vQuality.Value/vQuality.Maximum;
+                nas.Profile = (AacProfile)(comboBox1.SelectedItem as EnumProxy).RealValue;
 				return nas;
 			}
 			set
 			{
                 NeroAACSettings nas = (NeroAACSettings)value;
-                switch (nas.BitrateMode)
-                {
-                    case BitrateManagementMode.VBR: rbQuality.Checked = true; cbCBR.Checked = false; break;
-                    case BitrateManagementMode.ABR: rbBitrate.Checked = true; cbCBR.Checked = false; break;
-                    case BitrateManagementMode.CBR: rbBitrate.Checked = true; cbCBR.Checked = true; break;
-                }
-                tbBitrate.Value = Math.Max(Math.Min(nas.Bitrate, tbBitrate.Maximum), tbBitrate.Minimum);
-                tbQuality.Value = (int)(nas.Quality * (Decimal)tbQuality.Maximum);
-                cbProfile.SelectedItem = EnumProxy.Create(nas.Profile);
-
-                target_CheckedChanged(null, null);
+                vBitrate.Value = Math.Max(Math.Min(nas.Bitrate, vBitrate.Maximum), vBitrate.Minimum);
+                vQuality.Value = (int)(nas.Quality * (Decimal)vQuality.Maximum);
+                rbtnABR.Checked = nas.BitrateMode == BitrateManagementMode.ABR;
+                rbtnCBR.Checked = nas.BitrateMode == BitrateManagementMode.CBR;
+                rbtnVBR.Checked = nas.BitrateMode == BitrateManagementMode.VBR;
+                comboBox1.SelectedItem = EnumProxy.Create(nas.Profile);
 			}
 		}
 		#endregion
+
+        private void rbtnABR_CheckedChanged(object sender, EventArgs e)
+        {
+            vBitrate.Enabled = !(vQuality.Enabled = rbtnVBR.Checked);
+            vBitrate_ValueChanged(sender, e);
+        }
+
+        private void vBitrate_ValueChanged(object sender, EventArgs e)
+        {
+            if (rbtnVBR.Checked)
+            {
+                rbtnABR.Text = "Adaptive Bitrate";
+                rbtnCBR.Text = "Constant Bitrate";
+                Decimal q = ((Decimal)vQuality.Value) / vQuality.Maximum;
+                rbtnVBR.Text = String.Format("Variable Bitrate (Q={0}) ", q);
+            }
+            else if (rbtnABR.Checked)
+            {
+                rbtnABR.Text = String.Format("Adaptive Bitrate @ {0} kbit/s", vBitrate.Value);
+                rbtnCBR.Text = "Constant Bitrate";
+                rbtnVBR.Text = "Variable Bitrate";
+            }
+            else
+            {
+                rbtnABR.Text = "Adaptive Bitrate";
+                rbtnCBR.Text = String.Format("Constant Bitrate @ {0} kbit/s", vBitrate.Value);
+                rbtnVBR.Text = "Variable Bitrate";
+            }
+        }
 
         #region Editable<NeroAACSettings> Members
 
@@ -340,53 +255,6 @@ namespace MeGUI.packages.audio.naac
         }
 
         #endregion
-
-        private void tbBitrate_Scroll(object sender, EventArgs e)
-        {
-            gbBitrate.Text = String.Format("Bitrate ({0} kbps)", tbBitrate.Value); 
-        }
-
-        private void tbQuality_Scroll(object sender, EventArgs e)
-        {
-            gbQuality.Text = String.Format("Quality (Q = {0})", ((Decimal)tbQuality.Value / tbQuality.Maximum));
-        }
-
-        private void target_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbBitrate.Checked)
-            {
-                gbQuality.Enabled = false;
-                gbBitrate.Enabled = true;
-            }
-            else
-            {
-                gbBitrate.Enabled = false;
-                gbQuality.Enabled = true;
-            }
-
-            tbBitrate_Scroll(null, null);
-            tbQuality_Scroll(null, null);
-        }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                VisitLink();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Unable to open link that was clicked.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void VisitLink()
-        {
-            //Call the Process.Start method to open the default browser 
-            //with a URL:
-            System.Diagnostics.Process.Start("http://www.nero.com/enu/technologies-aac-codec.html");
-        }
-
     }
 }
 

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ namespace MeGUI
             subtitleTracks.Items.Clear();
             uint nbPGC = IFOparser.getPGCnb(fileName);
             pgc.Maximum = nbPGC;
-            subtitleTracks.Items.AddRange(IFOparser.GetSubtitlesStreamsInfos(input.Filename));
+            subtitleTracks.Items.AddRange(IFOparser.GetSubtitlesStreamsInfos(input.Filename, Convert.ToInt32(pgc.Value), chkShowAllStreams.Checked));
             demuxSelectedTracks.Checked = !keepAllTracks.Checked;
         }
         private void checkIndexIO()
@@ -152,6 +152,22 @@ namespace MeGUI
 
         private void output_FileSelected(FileBar sender, FileBarEventArgs args)
         {
+            checkIndexIO();
+        }
+
+        private void chkShowAllStreams_CheckedChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(input.Filename))
+                return;
+            openVideo(input.Filename);
+            checkIndexIO();
+        }
+
+        private void pgc_ValueChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(input.Filename))
+                return;
+            openVideo(input.Filename);
             checkIndexIO();
         }
     }

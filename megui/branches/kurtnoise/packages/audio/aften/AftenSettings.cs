@@ -26,19 +26,25 @@ namespace MeGUI
 {
     public class AftenSettings : AudioCodecSettings
     {
-        public static readonly string ID = "AC-3";
+        public static object[] SupportedBitrates = new object[] { 64, 128, 160, 192, 224, 256, 288, 320, 352, 384, 448, 512, 576, 640 };
+        public static readonly string ID = "Aften AC-3";
 
         public AftenSettings()
-            : base(ID, AudioCodec.AC3, AudioEncoderType.AFTEN, 384, BitrateManagementMode.CBR)
+            : base(ID, AudioCodec.AC3, AudioEncoderType.AFTEN, 384)
         {
-            Quality = 240;
+            base.supportedBitrates = Array.ConvertAll<object, int>(SupportedBitrates, delegate(object o) { return (int)o; });
         }
 
-        private int quality;
-        public int Quality
+        public override BitrateManagementMode BitrateMode
         {
-            get { return quality; }
-            set { quality = value; }
+            get
+            {
+                return BitrateManagementMode.CBR;
+            }
+            set
+            {
+                // Do Nothing
+            }
         }
     }
 }

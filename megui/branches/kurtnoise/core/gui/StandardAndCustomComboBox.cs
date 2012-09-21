@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -48,8 +48,10 @@ namespace MeGUI.core.gui
     public partial class StandardAndCustomComboBox : MeGUI.core.gui.NiceComboBox
     {
         private NiceComboBoxNormalItem clearItem;
-        int numStandardItems, numCustomItems;
+        private int numStandardItems, numCustomItems, numOpener;
         protected Getter<object> Getter;
+        protected Getter<object> GetterFolder;
+        protected bool bSaveEveryItem;
 
         public StandardAndCustomComboBox() : base() { }
 
@@ -57,6 +59,8 @@ namespace MeGUI.core.gui
             : base()
         {
             InitializeComponent();
+
+            numOpener = 1;
 
             clearItem = new NiceComboBoxNormalItem(
                 clearText,
@@ -71,31 +75,112 @@ namespace MeGUI.core.gui
                 {
                     object o = Getter();
                     if (o != null)
+                    {
+                        AddCustomItem(o);
                         SelectedObject = o;
+                    }
                 }));
         }
 
+        public void SetFileSCBoxType(string chooseNewText, string chooseNewFolder, MeGUI.core.gui.FileSCBox.FileSCBoxType oType)
+        {
+            if (oType == FileSCBox.FileSCBoxType.OC_FILE_AND_FOLDER || oType == FileSCBox.FileSCBoxType.OC_FILE)
+            {
+                Items.Clear();
+                clearItem = null;
+
+                numOpener = 1;
+
+                Items.Add(new NiceComboBoxNormalItem(
+                    chooseNewText, null,
+                    delegate(NiceComboBoxNormalItem i, EventArgs e)
+                    {
+                        object o = Getter();
+                        if (o != null)
+                        {
+                            AddCustomItem(o);
+                            SelectedObject = o;
+                        }
+                    }));
+            }
+            if (oType == FileSCBox.FileSCBoxType.OC_FILE_AND_FOLDER)
+            {
+                numOpener = 2;
+
+                Items.Add(new NiceComboBoxNormalItem(
+                    chooseNewFolder, null,
+                    delegate(NiceComboBoxNormalItem i, EventArgs e)
+                    {
+                        object o = GetterFolder();
+                        if (o != null)
+                        {
+                            AddCustomItem(o);
+                            SelectedObject = o;
+                        }
+                    }));
+            }
+            numStandardItems = numCustomItems = 0;
+        }
+
+        public void SetTargetSizeSCBoxType(string clearText, string chooseCustomSize)
+        {
+            Items.Clear();
+            numOpener = 1;
+            numStandardItems = numCustomItems = 0;
+
+            Items.Add(new NiceComboBoxNormalItem(
+                chooseCustomSize, null,
+                delegate(NiceComboBoxNormalItem i, EventArgs e)
+                {
+                    object o = Getter();
+                    if (o != null)
+                    {
+                        if (bSaveEveryItem)
+                        {
+                            AddCustomItem(o);
+                            SelectedObject = o;
+                        }
+                        else
+                        {
+                            oTemporaryItem.Tag = o;
+                            SelectedItem = null;
+                        }
+                    }
+                }));
+
+            clearItem = new NiceComboBoxNormalItem(
+                    clearText,
+                    delegate(NiceComboBoxNormalItem i, EventArgs e)
+                    {
+                        clearCustomItems();
+                    });
+
+            if (!bSaveEveryItem)
+                clearItem = null;
+        }
 
         public void AddStandardItem(object o)
         {
             if (numStandardItems == 0)
                 Items.Insert(0, new NiceComboBoxSeparator());
 
-            Items.Insert(numStandardItems,
-                new NiceComboBoxNormalItem(new SCItem(o, true)));
+            Items.Insert(numStandardItems, new NiceComboBoxNormalItem(new SCItem(o, true)));
             numStandardItems++;
         }
 
-        private void AddCustomItem(object name)
+        public void AddCustomItem(object name)
         {
             if (numCustomItems == 0)
             {
-                Items.Insert(Items.Count - 1, new NiceComboBoxSeparator());
-                Items.Insert(Items.Count - 1, clearItem);
+                Items.Insert(Items.Count - numOpener, new NiceComboBoxSeparator());
+                if (clearItem != null)
+                    Items.Insert(Items.Count - numOpener, clearItem);
             }
 
-            Items.Insert(Items.Count - 3,
-                new NiceComboBoxNormalItem(new SCItem(name, false)));
+            if (clearItem != null)
+                Items.Insert(Items.Count - 2 - numOpener, new NiceComboBoxNormalItem(new SCItem(name, false)));
+            else
+                Items.Insert(Items.Count - 1 - numOpener, new NiceComboBoxNormalItem(new SCItem(name, false)));
             numCustomItems++;
         }
 
@@ -118,7 +203,8 @@ namespace MeGUI.core.gui
             if (numCustomItems > 0)
             {
                 Items.RemoveAt(start);
-                Items.RemoveAt(start);
+                if (clearItem != null)
+                    Items.RemoveAt(start);
             }
 
             numCustomItems = 0;
@@ -190,6 +276,8 @@ namespace MeGUI.core.gui
             }
             set
             {
+                oTemporaryItem.Tag = null;
+
                 if (value == null)
                     return;
 
@@ -204,8 +292,16 @@ namespace MeGUI.core.gui
                         return;
                     }
                 }
-                AddCustomItem(value);
-                SelectedObject = value;
+                if (bSaveEveryItem)
+                {
+                    AddCustomItem(value);
+                    SelectedObject = value;
+                }
+                else
+                {
+                    oTemporaryItem.Tag = value;
+                    SelectedItem = null;
+                }
             }
         }
 
@@ -215,7 +311,12 @@ namespace MeGUI.core.gui
         {
             get
             {
-                if (SelectedItem == null) SelectedIndex = 0;
+                if (oTemporaryItem.Tag != null && SelectedItem == null)
+                    return oTemporaryItem;
+
+                if (SelectedItem == null) 
+                    SelectedIndex = 0;
+
                 return (SCItem)SelectedItem.Tag;
             }
         }

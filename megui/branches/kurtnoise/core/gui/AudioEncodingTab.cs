@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -46,6 +46,12 @@ namespace MeGUI.core.gui
         {
             get { return queueAudioButton.Text; }
             set { queueAudioButton.Text = value; }
+        }
+
+        public string AudioContainer
+        {
+            get { return audioContainer.Text; }
+            set { audioContainer.Text = value; }
         }
 
         public AudioEncoderProvider AudioEncoderProvider
@@ -108,13 +114,7 @@ namespace MeGUI.core.gui
             if (stream == null)
                 return "Audio input, audio output, and audio settings must all be configured";
 
-            string fileErr = MainForm.verifyInputFile(this.AudioInput);
-            if (fileErr != null)
-            {
-                return "Problem with audio input filename:\n" + fileErr;
-            }
-
-            fileErr = MainForm.verifyOutputFile(this.AudioOutput);
+            string fileErr = MainForm.verifyOutputFile(this.AudioOutput);
             if (fileErr != null)
             {
                 return "Problem with audio output filename:\n" + fileErr;
@@ -143,14 +143,19 @@ namespace MeGUI.core.gui
             if (!string.IsNullOrEmpty(audioInput.Filename)) openAudioFile(audioInput.Filename);
         }
 
+        private bool bInitialStart = true;
         private void audioContainer_SelectedIndexChanged(object sender, EventArgs e)
         {
-             if (!string.IsNullOrEmpty(audioInput.Filename))
-            {
-             AudioType currentType = (AudioType)audioContainer.SelectedItem;
-             audioOutput.Filter = currentType.OutputFilterString;
-             AudioOutput = Path.ChangeExtension(AudioOutput, currentType.Extension);
-            }
+            AudioType currentType = (AudioType)audioContainer.SelectedItem;
+            audioOutput.Filter = currentType.OutputFilterString;
+            AudioOutput = Path.ChangeExtension(AudioOutput, currentType.Extension);
+            if (!String.IsNullOrEmpty(audioInput.Filename))
+                if (audioInput.Filename.Equals(audioOutput.Filename) || File.Exists(AudioOutput))
+                    AudioOutput = Path.Combine(Path.GetDirectoryName(AudioOutput), Path.GetFileNameWithoutExtension(AudioOutput) + "_new." + currentType.Extension);
+            if (!bInitialStart)
+                MainForm.Instance.Settings.MainAudioFormat = audioContainer.Text;
+            else
+                bInitialStart = false;
         }
 
         private void deleteAudioButton_Click(object sender, EventArgs e)
@@ -180,7 +185,7 @@ namespace MeGUI.core.gui
                     return null;
 
                 return new AudioJob(this.AudioInput, this.AudioOutput, this.cuts.Filename,
-                    this.AudCodecSettings, (int)delay.Value);
+                    this.AudCodecSettings, (int)delay.Value, null, null);
             }
             set
             {
@@ -238,13 +243,6 @@ namespace MeGUI.core.gui
                 return;
 
             lastCodec = AudCodecSettings.EncoderType;
-            if (AudCodecSettings.Codec.ID.Equals("ALL"))
-            {
-                audioContainer.Items.Clear();
-                audioContainer.Items.Add(AudCodecSettings.CustomExtension.ToString());
-                audioContainer.SelectedIndex = 0;
-            }
-            else
             Util.ChangeItemsKeepingSelectedSame(audioContainer, AudioEncoderProvider.GetSupportedOutput(lastCodec));
         }
 

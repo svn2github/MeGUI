@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -146,12 +146,6 @@ namespace MeGUI.packages.video.xvid
                     this.xvidOverflowControlStrength.Minimum = 0;
                     this.xvidMaxOverflowDegradation.Minimum = 0;
                     this.xvidMaxOverflowImprovement.Minimum = 0;
-                    if ((this.xvidOverflowControlStrength.Value == 10) & (this.xvidMaxOverflowDegradation.Value == 10) & (this.xvidMaxOverflowImprovement.Value == 10))
-                    {
-                        this.xvidOverflowControlStrength.Value = 5;
-                        this.xvidMaxOverflowDegradation.Value = 5;
-                        this.xvidMaxOverflowImprovement.Value = 5;
-                    }
                     this.xvidInterlaced.Enabled = true;
                     this.xvidVbvBuffer.Enabled = false;
                     this.xvidVbvMaxRate.Enabled = false;
@@ -330,7 +324,6 @@ namespace MeGUI.packages.video.xvid
                 cqmComboBox1.SelectedIndex = 0;
             if (HVSMasking.SelectedIndex == -1)
                 HVSMasking.SelectedIndex = 0;
-            chAdvancedSettings_CheckedChanged(null, null);
         }
 
         /// <summary>
@@ -391,7 +384,6 @@ namespace MeGUI.packages.video.xvid
                 xs.MaxBQuant = (int)xvidMaxBQuant.Value;
                 xs.CreditsQuantizer = (int)xvidCreditsQuantizer.Value;
                 xs.Trellis = xvidTrellisQuant.Checked;
-                xs.AdaptiveQuant = xvidAdaptiveQuant.Checked;
                 xs.BQuantRatio = (int)xvidBframeQuantRatio.Value;
                 xs.BQuantOffset = (int)xvidBframeQuantOffset.Value;
                 xs.KeyFrameBoost = (int)xvidIframeBoost.Value;
@@ -433,6 +425,9 @@ namespace MeGUI.packages.video.xvid
                 xvidNbBFrames.Value = xs.NbBframes;
                 xvidPackedBitstream.Checked = xs.PackedBitstream;
                 xvidProfile.SelectedIndex = xs.XvidProfile;
+                xvidVbvBuffer.Text = xs.VbvBuffer.ToString();
+                xvidVbvMaxRate.Text = xs.VbvMaxRate.ToString();
+                xvidVbvPeakRate.Text = xs.VbvPeakRate.ToString();
                 xvidMotionSearchPrecision.SelectedIndex = xs.MotionSearchPrecision;
                 xvidVHQ.SelectedIndex = xs.VHQMode;
                 xvidUseVHQForBframes.Checked = xs.VHQForBframes;
@@ -449,7 +444,6 @@ namespace MeGUI.packages.video.xvid
                 xvidMaxBQuant.Value = xs.MaxBQuant;
                 xvidCreditsQuantizer.Value = xs.CreditsQuantizer;
                 xvidTrellisQuant.Checked = xs.Trellis;
-                xvidAdaptiveQuant.Checked = xs.AdaptiveQuant;
                 xvidBframeQuantRatio.Value = xs.BQuantRatio;
                 xvidBframeQuantOffset.Value = xs.BQuantOffset;
                 xvidIframeBoost.Value = xs.KeyFrameBoost;
@@ -518,24 +512,6 @@ namespace MeGUI.packages.video.xvid
         private void xvidVbvPeakRate_TextChanged(object sender, EventArgs e)
         {
             genericUpdate();
-        }
-
-        private void chAdvancedSettings_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chAdvancedSettings.Checked)
-            {
-                if (!tabControl1.TabPages.Contains(advancedTabPage))
-                    tabControl1.TabPages.Add(advancedTabPage);
-                if (!tabControl1.TabPages.Contains(tabPage1))
-                    tabControl1.TabPages.Add(tabPage1);
-            }
-            else
-            {
-                if (tabControl1.TabPages.Contains(advancedTabPage))
-                    tabControl1.TabPages.Remove(advancedTabPage);
-                if (tabControl1.TabPages.Contains(tabPage1))
-                    tabControl1.TabPages.Remove(tabPage1);
-            }
         }
     }
 }

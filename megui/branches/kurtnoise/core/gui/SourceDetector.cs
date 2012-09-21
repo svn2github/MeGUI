@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ namespace MeGUI
         public int decimateM;
         public bool majorityFilm;
         public bool isAnime;
+        public string analysisResult;
     }
 
     public enum SourceType
@@ -145,13 +146,13 @@ namespace MeGUI
                 using (AvsFile af = AvsFile.ParseScript(scriptBlock))
                 {
                     int i = 0;
-                    int frameCount = (int)af.Info.FrameCount;
+                    int frameCount = (int)af.VideoInfo.FrameCount;
                     bool running = true;
                     new Thread(new ThreadStart(delegate
                     {
                         if (analyseUpdate != null)
                         {
-                            while (running)
+                            while (running && continueWorking)
                             {
                                 analyseUpdate(i, frameCount);
                                 Thread.Sleep(500);
@@ -171,8 +172,7 @@ namespace MeGUI
             catch (Exception ex)
             {
                 error = true;
-                errorMessage = "Error opening analysis script " + ex.Message + "\r\n" +
-                    "Check to make sure you have TIVTC.dll in your AviSynth plugins directory.\r\n" + ex.Message;
+                errorMessage = "Error opening analysis script:\r\n" + ex.Message;
                 finishProcessing();
             }
         }
@@ -185,7 +185,7 @@ namespace MeGUI
             {
                 using (AvsFile af = AvsFile.ParseScript(script))
                 {
-                    numFrames = (int)af.Info.FrameCount;
+                    numFrames = (int)af.VideoInfo.FrameCount;
                 }
             }
             catch (Exception e)
@@ -221,8 +221,6 @@ namespace MeGUI
             }
 
             string logFileName = getLogFileName((scriptType == 1) ? "ff_interlace-" + Guid.NewGuid().ToString("N") + ".log" : "interlace-" + Guid.NewGuid().ToString("N") + ".log");
-
-
 
             if (File.Exists(logFileName))
                 File.Delete(logFileName);
@@ -313,7 +311,7 @@ namespace MeGUI
             string line = instream.ReadLine();
             while (line != null)
             {
-                if (count != 0) //Scene change -> ignore
+                if (count != 0 && line.IndexOf("-1.#IND00") == -1) //Scene change or unexptected value -> ignore
                 {
                     string[] contents = line.Split(new char[] { '-' });
                     try
@@ -326,10 +324,9 @@ namespace MeGUI
                         error = true;
                         errorMessage = "Unexpected value in file " + filename + "\r\n" +
                             "This error should not have occurred. Please report it on \r\n" +
-                            "post it on http://forum.doom9.org/showthread.php?t=105160 or " +
-                            "http://sourceforge.net/projects/megui with the file named above.";
+                            "post it on http://sourceforge.net/projects/megui with the file named above.";
                         errorMessage += "\r\nMore debugging info:\r\n" +
-                            "Line contents: " + "\r\n";
+                            "Line contents: " + line + "\r\n";
                         finishProcessing();
                         return;
                     }
@@ -562,7 +559,7 @@ namespace MeGUI
             int[] array = new int[] { numInt, numProg, numTC };
             Array.Sort(array);
 
-            analysis = string.Format("For your reference:\r\nProgressive sections: {0}\r\nInterlaced sections: {1}\r\nPartially Static Sections: {2}\r\nFilm Sections: {3}\r\n", numProg, numInt, numUseless, numTC);
+            analysis = string.Format("Progressive sections: {0}\r\nInterlaced sections: {1}\r\nPartially Static Sections: {2}\r\nFilm Sections: {3}\r\n", numProg, numInt, numUseless, numTC);
 
             if (numInt + numProg + numTC < settings.MinimumUsefulSections)
             {
@@ -726,7 +723,7 @@ namespace MeGUI
             info.decimateM = decimateM;
             info.fieldOrder = fieldOrder;
             info.majorityFilm = majorityFilm;
-           
+            info.analysisResult = analysis;
 
             finishedAnalysis(info, false, null);
 

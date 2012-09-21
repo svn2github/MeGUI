@@ -179,6 +179,7 @@ namespace MeGUI
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QuantizerMatrixDialog));
             this.predefinedMatrixLabel = new System.Windows.Forms.Label();
             this.predefinedMatrix = new System.Windows.Forms.ComboBox();
             this.mat1x1 = new System.Windows.Forms.TextBox();
@@ -1049,6 +1050,7 @@ namespace MeGUI
             this.Controls.Add(this.saveMatrixButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "QuantizerMatrixDialog";
             this.Text = "MeGUI - Quantizer Matrix Editor";
@@ -1771,7 +1773,8 @@ namespace MeGUI
 				}
 				catch (Exception e)
 				{
-					Console.Write(e.Message);
+                    MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("convertStringToMatrix: " + matrix, e, MeGUI.core.util.ImageType.Error);
 					MessageBox.Show("Invalid quantizer detected: " + quantizer + "\nUsing 16 instead", "Invalid quantizer", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 				retval[line, column] = val;
@@ -1918,7 +1921,8 @@ namespace MeGUI
 				}
 				catch (Exception f)
 				{
-					Console.Write(f.Message);
+                    MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("Error", f, MeGUI.core.util.ImageType.Error);
 				}
 				finally
 				{
@@ -1930,7 +1934,8 @@ namespace MeGUI
 						}
 						catch (Exception f)
 						{
-							Console.Write(f.Message);
+                            MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                            _oLog.LogValue("Error", f, MeGUI.core.util.ImageType.Error);
 						}
 					}
 				}
@@ -1995,7 +2000,8 @@ namespace MeGUI
 				}
 				catch (Exception f)
 				{
-					Console.Write(f.Message);
+                    MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("Error", f, MeGUI.core.util.ImageType.Error);
 				}
 				finally
 				{
@@ -2007,7 +2013,8 @@ namespace MeGUI
 						}
 						catch (Exception f)
 						{
-							Console.Write(f.Message);
+                            MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                            _oLog.LogValue("Error", f, MeGUI.core.util.ImageType.Error);
 						}
 					}
 				}

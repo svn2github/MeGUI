@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -50,11 +50,19 @@ namespace MeGUI
         [EnumTitle("Upmix 2 to 5.1 with center channel dialog")]
         UpmixWithCenterChannelDialog
 	};
- 
+    public enum AudioDecodingEngine
+    {
+        NicAudio,
+        FFAudioSource,
+        DirectShow
+    };
+     
     [
-        XmlInclude(typeof(WinAmpAACSettings)), 
+        XmlInclude(typeof(MP2Settings)),
+        XmlInclude(typeof(AC3Settings)), 
         XmlInclude(typeof(NeroAACSettings)), 
         XmlInclude(typeof(MP3Settings)), 
+        XmlInclude(typeof(FaacSettings)), 
         XmlInclude(typeof(OggVorbisSettings)),
         XmlInclude(typeof(AftenSettings)),
         XmlInclude(typeof(FlacSettings))
@@ -74,14 +82,10 @@ namespace MeGUI
         public int delay;
 		public bool delayEnabled;
         private bool autoGain;
-        private bool forceDirectShow;
         private bool applyDRC;
         private AudioCodec audioCodec;
         private AudioEncoderType audioEncoderType;
-        private string encoderPath;
-        private string extension;
-        private string command;
-
+        private AudioDecodingEngine preferredDecoder;
 
         [XmlIgnore()]
         public AudioCodec Codec
@@ -114,36 +118,50 @@ namespace MeGUI
 			delay = 0;
 			delayEnabled = false;
 			autoGain = true;
-            forceDirectShow = false;
             applyDRC = false;
             sampleRateType = 0;
             normalize = 100;
-            encoderPath = "";
-            extension = "";
-            command = "";
+            preferredDecoder = AudioDecodingEngine.NicAudio;
 		}
 
-	    public bool ForceDecodingViaDirectShow
-	    {
-            get { return forceDirectShow; }
-            set { forceDirectShow = value; }
-	    }
-	    
+        [XmlIgnore()]
+        public AudioDecodingEngine PreferredDecoder
+        {
+            get { return preferredDecoder; }
+            set { preferredDecoder = value; }
+        }
+
+        // for profile import/export in case the enum changes
+        public string PreferredDecoderString
+        {
+            get { return preferredDecoder.ToString(); }
+            set 
+            {
+                if (value.Equals("FFAudioSource"))
+                    preferredDecoder = AudioDecodingEngine.FFAudioSource;
+                else if (value.Equals("DirectShow"))
+                    preferredDecoder = AudioDecodingEngine.DirectShow;
+            }
+        }
+
 		public ChannelMode DownmixMode
 		{
 			get { return downmixMode; }
 			set { downmixMode = value; }
 		}
+
 		public virtual BitrateManagementMode BitrateMode
 		{
 			get { return bitrateMode; }
 			set { bitrateMode = value; }
 		}
+
 		public virtual int Bitrate
 		{
 			get { return NormalizeVar(bitrate, supportedBitrates); }
 			set { bitrate = value; }
 		}
+
 		public bool AutoGain
 		{
 			get { return autoGain; }
@@ -166,24 +184,6 @@ namespace MeGUI
         {
             get { return normalize; }
             set { normalize = value; }
-        }
-
-        public string EncoderPath
-        {
-            get { return encoderPath; }
-            set { encoderPath = value; }
-        }
-
-        public string CustomExtension
-        {
-            get { return extension; }
-            set { extension = value; }
-        }
-
-        public string CustomCommand
-        {
-            get { return command; }
-            set { command = value; }
         }
 
         object ICloneable.Clone()

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ namespace MeGUI
     {
         #region variables
         protected TJob job;
-        DateTime startTime;
+        protected DateTime startTime;
         protected bool isProcessing = false;
         protected Process proc = new Process(); // the encoder process
         protected string executable; // path and filename of the commandline encoder to be used
@@ -51,6 +51,7 @@ namespace MeGUI
         protected Thread readFromStdErrThread;
         protected Thread readFromStdOutThread;
         protected List<string> tempFiles = new List<string>();
+        protected bool bRunSecondTime = false;
 
         #endregion
 
@@ -92,7 +93,15 @@ namespace MeGUI
         }
 
         protected virtual void doExitConfig()
-        { }
+        {
+            if (su.HasError || su.WasAborted)
+                return;
+
+            if (!String.IsNullOrEmpty(job.Output) && File.Exists(job.Output))
+            {
+                MediaInfoFile oInfo = new MediaInfoFile(job.Output, ref log);
+            }
+        }
 
         // returns true if the exit code yields a meaningful answer
         protected virtual bool checkExitCode
@@ -105,7 +114,6 @@ namespace MeGUI
             get;
         }
 
-
         /// <summary>
         /// handles the encoder process existing
         /// </summary>
@@ -116,14 +124,39 @@ namespace MeGUI
             mre.Set();  // Make sure nothing is waiting for pause to stop
             stdoutDone.WaitOne(); // wait for stdout to finish processing
             stderrDone.WaitOne(); // wait for stderr to finish processing
-            if (checkExitCode && proc.ExitCode != 0) // check the exitcode because x264.exe sometimes exits with error but without
-                su.HasError = true; // any commandline indication as to why
+
+            // check the exitcode because x264.exe sometimes exits with error but without
+            // any commandline indication as to why
+            if (checkExitCode && proc.ExitCode != 0) 
+            {
+                string strError = WindowUtil.GetErrorText(proc.ExitCode);
+                if (!su.WasAborted)
+                {
+                    su.HasError = true;
+                    log.LogEvent("Process exits with error: " + strError, ImageType.Error);
+                }
+                else
+                {
+                    log.LogEvent("Process exits with error: " + strError);
+                }
+            }
 
             log.LogValue("Standard output stream", stdoutBuilder);
             log.LogValue("Standard error stream", stderrBuilder);
-            su.IsComplete = true;
-            doExitConfig();
-            StatusUpdate(su);
+
+            if (bRunSecondTime)
+            {
+                stdoutBuilder = new StringBuilder();
+                stderrBuilder = new StringBuilder();
+                bRunSecondTime = false;
+                start();
+            }
+            else
+            {
+                su.IsComplete = true;
+                doExitConfig();
+                StatusUpdate(su);
+            }
         }
 
         #region IVideoEncoder overridden Members
@@ -143,7 +176,6 @@ namespace MeGUI
 
             this.su = su;
             checkJobIO();
-
         }
 
         public void start()
@@ -172,7 +204,7 @@ namespace MeGUI
                 readFromStdOutThread.Start();
                 readFromStdErrThread.Start();
                 new System.Windows.Forms.MethodInvoker(this.RunStatusCycle).BeginInvoke(null, null);
-                this.changePriority(MainForm.Instance.Settings.DefaultPriority);
+                this.changePriority(MainForm.Instance.Settings.ProcessingPriority);
             }
             catch (Exception e)
             {
@@ -189,6 +221,12 @@ namespace MeGUI
                     mre.Set(); // if it's paused, then unpause
                     su.WasAborted = true;
                     proc.Kill();
+                    while (!proc.HasExited) // wait until the process has terminated without locking the GUI
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                        System.Threading.Thread.Sleep(100);
+                    }
+                    proc.WaitForExit();
                     return;
                 }
                 catch (Exception e)
@@ -250,6 +288,8 @@ namespace MeGUI
 						    	proc.PriorityClass = ProcessPriorityClass.RealTime;
 								break;
 					}
+                    VistaStuff.SetProcessPriority(proc.Handle, proc.PriorityClass);
+                    MainForm.Instance.Settings.ProcessingPriority = priority;
 				    return;
                 }
                 catch (Exception e) // process could not be running anymore
@@ -292,7 +332,8 @@ namespace MeGUI
                 }
                 catch (Exception e)
                 {
-                    ProcessLine("Exception in readStdErr: " + e.Message, str);
+                    log.LogValue("Exception in readStream", e, ImageType.Error);
+                    ProcessLine("Exception in readStream. Line cannot be processed", str);
                 }
                 rEvent.Set();
             }

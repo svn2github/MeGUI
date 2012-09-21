@@ -73,7 +73,7 @@ namespace MeGUI.core.gui
             // 
             // audioContainerLabel
             // 
-            this.audioContainerLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.audioContainerLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.audioContainerLabel.Location = new System.Drawing.Point(3, 112);
             this.audioContainerLabel.Name = "audioContainerLabel";
             this.audioContainerLabel.Size = new System.Drawing.Size(86, 28);
@@ -89,7 +89,7 @@ namespace MeGUI.core.gui
             this.queueAudioButton.Name = "queueAudioButton";
             this.queueAudioButton.Size = new System.Drawing.Size(60, 23);
             this.queueAudioButton.TabIndex = 27;
-            this.queueAudioButton.Text = "Enqueue";
+            this.queueAudioButton.Text = "Queue";
             this.queueAudioButton.Click += new System.EventHandler(this.queueAudioButton_Click);
             // 
             // audioInputLabel
@@ -124,8 +124,7 @@ namespace MeGUI.core.gui
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
             this.label2.Location = new System.Drawing.Point(244, 112);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(34, 28);
@@ -153,8 +152,7 @@ namespace MeGUI.core.gui
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Top;
             this.label3.Location = new System.Drawing.Point(433, 112);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(20, 28);

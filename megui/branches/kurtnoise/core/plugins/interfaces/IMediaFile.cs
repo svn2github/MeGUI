@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -150,39 +150,9 @@ namespace MeGUI
         int HandleLevel(string file);
     }
 
-
-    public class MediaFileInfo
-    {
-        public bool HasVideo;
-        public ulong Width;
-        public ulong Height;
-        public Dar DAR;
-        public ulong FrameCount;
-        public double FPS;
-        public bool HasAudio;
-
-        public MediaFileInfo(bool hasVideo, 
-            ulong width, ulong height,
-            Dar dar, ulong frameCount,
-            double fps, bool hasAudio)
-        {
-            HasVideo = hasVideo;
-            Width = width;
-            Height = height;
-            DAR = dar;
-            FrameCount = frameCount;
-            FPS = fps;
-            HasAudio = hasAudio;
-        }
-
-        public MediaFileInfo Clone()
-        {
-            return (MediaFileInfo)this.MemberwiseClone();
-        }
-    }
     public interface IMediaFile : IDisposable
     {
-        MediaFileInfo Info
+        VideoInformation VideoInfo
         {
             get;
         }
@@ -191,13 +161,14 @@ namespace MeGUI
         {
             get;
         }
+
         bool CanReadAudio
         {
             get;
         }
+
         IVideoReader GetVideoReader();
         IAudioReader GetAudioReader(int track);
-
     }
     
     public interface IAudioReader

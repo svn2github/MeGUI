@@ -30,9 +30,7 @@ namespace MeGUI.packages.audio.flac
 {
     public partial class FlacConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<FlacSettings>
     {
-        private MainForm mainform = MainForm.Instance;    
-
-        public FlacConfigurationPanel():base()
+       public FlacConfigurationPanel():base()
         {
             InitializeComponent();
         }
@@ -46,30 +44,13 @@ namespace MeGUI.packages.audio.flac
             get
             {
                 FlacSettings nas = new FlacSettings();
-               /* if (rbBitrate.Checked)
-                {
-                    nas.BitrateMode = BitrateManagementMode.CBR;
-                    nas.Bitrate = this.tbBitrate.Value;
-                }
-                else
-                {
-                    nas.BitrateMode = BitrateManagementMode.VBR;
-                    nas.Quality = this.tbQuality.Value;
-                } */
+                nas.CompressionLevel = tbQuality.Value;
                 return nas;
             }
             set
             {
                 FlacSettings nas = value as FlacSettings;
-               /* switch (nas.BitrateMode)
-                {
-                    case BitrateManagementMode.VBR: rbQuality.Checked = true; break;
-                    case BitrateManagementMode.CBR: rbBitrate.Checked = true; break;
-                }
-                tbBitrate.Value = Math.Max(Math.Min(nas.Bitrate, tbBitrate.Maximum), tbBitrate.Minimum);
-                tbQuality.Value = (int)(nas.Quality);
-
-                target_CheckedChanged(null, null);*/
+                tbQuality.Value = nas.CompressionLevel;
             }
         }
         #endregion
@@ -89,31 +70,6 @@ namespace MeGUI.packages.audio.flac
         }
 
         #endregion
-
-        private void tbQuality_Scroll(object sender, EventArgs e)
-        {
-            gbQuality.Text = String.Format("Compression Level ({0})", tbQuality.Value);
-        }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                VisitLink();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Unable to open link that was clicked.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void VisitLink()
-        {
-            //Call the Process.Start method to open the default browser 
-            //with a URL:
-            System.Diagnostics.Process.Start("http://flac.sourceforge.net");
-        }
-
     }
 }
 

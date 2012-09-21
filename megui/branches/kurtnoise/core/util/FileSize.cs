@@ -137,7 +137,7 @@ namespace MeGUI.core.util
         {
             Unit u = BestUnit;
             decimal d = InUnitsExact(u);
-            return (Math.Round(d, 2)).ToString() + " " + UnitSuffixes[(ushort)u];
+            return (Math.Round(d, 2)).ToString("0.00") + " " + UnitSuffixes[(ushort)u];
         }
         public static FileSize Parse(string s)
         {

@@ -48,8 +48,6 @@ namespace MeGUI.core.gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.button1);
             this.Name = "HelpButton";
             this.Size = new System.Drawing.Size(39, 23);

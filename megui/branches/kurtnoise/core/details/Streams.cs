@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,52 +26,38 @@ using MeGUI.core.util;
 
 namespace MeGUI.core.details
 {
-    public class TrackInfo
-    {
-        public string Language;
-        public string Name;
-
-        public TrackInfo(string language, string name)
-        {
-            Language = language;
-            Name = name;
-        }
-
-        public TrackInfo() : this("", "") { }
-    }
-
     public class MuxStream
     {
+        private string _language;
+        private string _name;
         public string path;
-        public TrackInfo TrackInfo;
         public int delay;
+        public bool bDefaultTrack;
+        public bool bForceTrack;
+        public TrackInfo MuxOnlyInfo;
 
-        public MuxStream(string path, TrackInfo info, int delay)
+        public MuxStream(string path, string language, string name, int delay, bool bDefaultTrack, bool bForceTrack, TrackInfo MuxOnlyInfo)
         {
+            this._language = language;
+            this._name = name;
             this.path = path;
-            TrackInfo = info;
             this.delay = delay;
+            this.bDefaultTrack = bDefaultTrack;
+            this.bForceTrack = bForceTrack;
+            this.MuxOnlyInfo = MuxOnlyInfo;
         }
 
-        public MuxStream(string path, string language, string name, int delay)
-            :
-            this(path, new TrackInfo(language, name), delay) { }
-
-        public MuxStream() : this(null, new TrackInfo(), 0) { }
+        public MuxStream() : this(null, null, null, 0, false, false, null) { }
 
         public string language
         {
             get
             {
-                if (TrackInfo == null)
-                    return null;
-                return TrackInfo.Language;
+                return _language;
             }
             set
             {
-                if (TrackInfo == null)
-                    TrackInfo = new TrackInfo();
-                TrackInfo.Language = value;
+                _language = value;
             }
         }
 
@@ -79,15 +65,11 @@ namespace MeGUI.core.details
         {
             get
             {
-                if (TrackInfo == null)
-                    return null;
-                return TrackInfo.Name;
+                return _name;
             }
             set
             {
-                if (TrackInfo == null)
-                    TrackInfo = new TrackInfo();
-                TrackInfo.Name = value;
+                _name = value;
             }
         }
     }

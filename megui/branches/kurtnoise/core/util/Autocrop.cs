@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,16 +28,37 @@ namespace MeGUI.core.util
 {
     public class Autocrop
     {
+        public static bool autocrop(out CropValues cropValues, IVideoReader reader, bool signalAR, mod16Method cropMethod)
+        {
+            cropValues = Autocrop.autocrop(reader);
+
+            if (signalAR)
+            {
+                if (cropMethod == mod16Method.overcrop)
+                    ScriptServer.overcrop(ref cropValues);
+                else if (cropMethod == mod16Method.mod4Horizontal)
+                    ScriptServer.cropMod4Horizontal(ref cropValues);
+                else if (cropMethod == mod16Method.undercrop)
+                    ScriptServer.undercrop(ref cropValues);
+            }
+
+            if (cropValues.left < 0)
+                return false;
+            else
+                return true;
+        }
+
         public static CropValues autocrop(IVideoReader reader)
         {
-            int pos = reader.FrameCount / 4;
-            int tenPercent = reader.FrameCount / 20;
-            CropValues[] cropValues = new CropValues[10];
-            for (int i = 0; i < 10; i++)
+            /// start at 10% of the video, then advance by 6,66% and analyze 11 frames in total
+            int pos = reader.FrameCount / 10;
+            int step = reader.FrameCount / 15;
+            CropValues[] cropValues = new CropValues[11];
+            for (int i = 0; i < 11; i++)
             {
                 Bitmap b = reader.ReadFrameBitmap(pos);
                 cropValues[i] = getAutoCropValues(b);
-                pos += tenPercent;
+                pos += step;
             }
             bool error = false;
             CropValues final = getFinalAutocropValues(cropValues);
@@ -56,55 +77,85 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// iterates through a set of CropValues and tries to find a majority of matching crop values. If a match is found, the crop values are returned
+        /// iterates through a set of CropValues and tries to find a majority of matching crop values. 
+        /// if a match is found, the crop values are returned
         /// if not, the minimum found value is returned for the value in question
         /// </summary>
         /// <param name="values">the CropValues array to be analyzed</param>
         /// <returns>the final CropValues</returns>
         public static CropValues getFinalAutocropValues(CropValues[] values)
         {
-            int matchingLeftValues = 0, matchingTopValues = 0, matchingRightValues = 0, matchingBottomValues = 0;
-            int minLeft = values[0].left, minTop = values[0].top, minRight = values[0].right, minBottom = values[0].bottom;
             CropValues retval = values[0].Clone();
-            for (int i = 1; i < values.Length; i++)
+            Dictionary<int, int> topValues = new Dictionary<int, int>();
+            Dictionary<int, int> leftValues = new Dictionary<int, int>();
+            Dictionary<int, int> rightValues = new Dictionary<int, int>();
+            Dictionary<int, int> bottomValues = new Dictionary<int, int>();
+            
+            // group crop values
+            for (int i = 0; i < values.Length; i++)
             {
-                if (values[i].left == values[i - 1].left)
-                {
+                if (leftValues.ContainsKey(values[i].left))
+                    leftValues[values[i].left]++;
+                else
+                    leftValues.Add(values[i].left, 1);
+                if (topValues.ContainsKey(values[i].top))
+                    topValues[values[i].top]++;
+                else
+                    topValues.Add(values[i].top, 1);
+                if (rightValues.ContainsKey(values[i].right))
+                    rightValues[values[i].right]++;
+                else
+                    rightValues.Add(values[i].right, 1);
+                if (bottomValues.ContainsKey(values[i].bottom))
+                    bottomValues[values[i].bottom]++;
+                else
+                    bottomValues.Add(values[i].bottom, 1);
+
+                // set min values found
+                if (values[i].left < retval.left)
                     retval.left = values[i].left;
-                    matchingLeftValues++;
-                }
-                if (values[i].top == values[i - 1].top)
-                {
+                if (values[i].top < retval.top)
                     retval.top = values[i].top;
-                    matchingTopValues++;
-                }
-                if (values[i].right == values[i - 1].right)
-                {
+                if (values[i].right < retval.right)
                     retval.right = values[i].right;
-                    matchingRightValues++;
-                }
-                if (values[i].bottom == values[i - 1].bottom)
-                {
+                if (values[i].bottom < retval.bottom)
                     retval.bottom = values[i].bottom;
-                    matchingBottomValues++;
-                }
-                if (values[i].left < minLeft)
-                    minLeft = values[i].left;
-                if (values[i].top < minTop)
-                    minTop = values[i].top;
-                if (values[i].right < minRight)
-                    minRight = values[i].right;
-                if (values[i].bottom < minBottom)
-                    minBottom = values[i].bottom;
             }
-            if (matchingLeftValues < values.Length / 2) // we have less than 50% matching values, use minimum found
-                retval.left = minLeft;
-            if (matchingTopValues < values.Length / 2)
-                retval.top = minTop;
-            if (matchingRightValues < values.Length / 2)
-                retval.right = minRight;
-            if (matchingBottomValues < values.Length / 2)
-                retval.bottom = minBottom;
+
+            // get "best match" values
+            foreach (KeyValuePair<int, int> kvp in leftValues)
+            {
+                if (kvp.Value > values.Length / 2) // we have more than 50% matching values, use value found
+                {
+                    retval.left = kvp.Key;
+                    break;
+                }
+            }
+            foreach (KeyValuePair<int, int> kvp in topValues)
+            {
+                if (kvp.Value > values.Length / 2) // we have more than 50% matching values, use value found
+                {
+                    retval.top = kvp.Key;
+                    break;
+                }
+            }
+            foreach (KeyValuePair<int, int> kvp in rightValues)
+            {
+                if (kvp.Value > values.Length / 2) // we have more than 50% matching values, use value found
+                {
+                    retval.right = kvp.Key;
+                    break;
+                }
+            }
+            foreach (KeyValuePair<int, int> kvp in bottomValues)
+            {
+                if (kvp.Value > values.Length / 2) // we have more than 50% matching values, use value found
+                {
+                    retval.bottom = kvp.Key;
+                    break;
+                }
+            }
+
             return retval;
         }
 
@@ -114,6 +165,7 @@ namespace MeGUI.core.util
             int res = pixel & comp;
             return (res != 0);
         }
+
         /// <summary>
         /// iterates through the lines and columns of the bitmap and compares the pixel values with the value of the upper left corner pixel
         /// if a pixel that doesn't have the same color value is found, it is assumed that this is the first line that does not need to be cropped away

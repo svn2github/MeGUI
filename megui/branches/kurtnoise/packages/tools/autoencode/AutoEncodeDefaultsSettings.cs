@@ -42,7 +42,7 @@ namespace MeGUI
             noTargetSizeMode = false;
             addAdditionalContent = false;
             container = "MP4";
-            deviceType = "";
+            deviceType = "Standard";
             bitrate = 700;
         }
         #region properties

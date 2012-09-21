@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,11 +28,7 @@ namespace MeGUI
 	/// <summary>
 	/// Contains basic codec settings, basically all the settings that are often used by codecs like bitrate, encoding mode, etc.
 	/// </summary>
-	[XmlInclude(typeof(x264Settings)), 
-     XmlInclude(typeof(snowSettings)), 
-     XmlInclude(typeof(xvidSettings)), 
-     XmlInclude(typeof(hfyuSettings)),
-     XmlInclude(typeof(DivXAVCSettings))]
+	[XmlInclude(typeof(x264Settings)), XmlInclude(typeof(xvidSettings)), XmlInclude(typeof(hfyuSettings))]
     public abstract class VideoCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
 	{
         private string id;
@@ -62,7 +58,7 @@ namespace MeGUI
         public enum Mode : int { CBR = 0, CQ, twopass1, twopass2, twopassAutomated, threepass1, threepass2, threepass3, threepassAutomated, quality };
         int encodingMode, bitrateQuantizer, keyframeInterval, nbBframes, minQuantizer, maxQuantizer, fourCC,
             maxNumberOfPasses, nbThreads;
-		bool turbo, v4mv, qpel, trellis;
+		bool v4mv, qpel, trellis;
 		decimal creditsQuantizer;
 		private string logfile, customEncoderOptions, videoName;
         private string[] fourCCs;
@@ -121,11 +117,6 @@ namespace MeGUI
 			get { return maxQuantizer; }
 			set { maxQuantizer = value; }
 		}
-		public bool Turbo
-		{
-			get { return turbo; }
-			set { turbo = value; }
-		}
 		public bool V4MV
 		{
 			get { return v4mv; }
@@ -176,7 +167,32 @@ namespace MeGUI
 		/// </summary>
 		public string CustomEncoderOptions
 		{
-			get { return customEncoderOptions; }
+			get 
+            {
+                if (EncoderType.ID.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("x264"))
+                {
+                    // update custom command line if necessary
+                    String strNewCommandLine = "", strNewCommand = "";
+                    foreach (String strCommand in System.Text.RegularExpressions.Regex.Split(customEncoderOptions, "--"))
+                    {
+                        if (strCommand.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("nal-hrd"))
+                            strNewCommand = "nal-hrd vbr";
+                        else if (strCommand.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("open-gop none"))
+                            strNewCommand = String.Empty;
+                        else if (strCommand.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("open-gop normal"))
+                            strNewCommand = "open-gop";
+                        else if (strCommand.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("open-gop bluray"))
+                            strNewCommand = "open-gop --bluray-compat";
+                        else
+                            strNewCommand = strCommand.Trim();
+                        if (!String.IsNullOrEmpty(strNewCommand))
+                            strNewCommandLine += " --" + strNewCommand;
+                    }
+                    return strNewCommandLine.Trim();
+                }
+                else
+                    return customEncoderOptions;
+            }
 			set { customEncoderOptions = value; }
 		}
 		/// <summary>
@@ -244,7 +260,6 @@ namespace MeGUI
 		public int startFrame;
 		public int endFrame;
 		public ZONEMODE mode;
-        public decimal value;
-		public string modifier;
+		public decimal modifier;
 	}
 }

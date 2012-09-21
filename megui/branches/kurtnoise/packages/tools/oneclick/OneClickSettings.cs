@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,12 +20,23 @@
 
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
 
 namespace MeGUI
 {
+    public enum AudioEncodingMode
+    {
+        [EnumTitle("Always")]
+        Always,
+        [EnumTitle("If codec does not match")]
+        IfCodecDoesNotMatch,
+        [EnumTitle("Never")]
+        Never
+    };
+
 	/// <summary>
 	/// Summary description for OneClickDefaults.
 	/// </summary>
@@ -56,13 +67,6 @@ namespace MeGUI
             set { videoProfileName = value; }
         }
 
-        private string audioProfileName;
-        public string AudioProfileName
-        {
-            get { return audioProfileName; }
-            set { audioProfileName = value; }
-        }
-
         private string avsProfileName;
         public string AvsProfileName
         {
@@ -77,11 +81,53 @@ namespace MeGUI
             set { prerenderVideo = value; }
         }
 
-        private bool dontEncodeAudio;
-        public bool DontEncodeAudio
+        private string audioProfileName;
+        public string AudioProfileName
         {
-            get { return dontEncodeAudio; }
-            set { dontEncodeAudio = value; }
+            get { return "migrated"; }
+            set { audioProfileName = value; }
+        }
+
+        // for profile import/export in case the enum changes
+        public string AudioEncodingModeString
+        {
+            get { return "migrated"; }
+            set
+            {
+                if (value.Equals("migrated"))
+                    return;
+
+                AudioEncodingMode audioEncodingMode = AudioEncodingMode.Always;
+                if (value.Equals("Never"))
+                    audioEncodingMode = AudioEncodingMode.Never;
+                else if (value.Equals("IfCodecDoesNotMatch"))
+                    audioEncodingMode = AudioEncodingMode.IfCodecDoesNotMatch;
+
+                audioSettings = new List<OneClickAudioSettings>();
+                audioSettings.Add(new OneClickAudioSettings("[default]", audioProfileName, audioEncodingMode));
+            }
+        }
+
+        private List<OneClickAudioSettings> audioSettings;
+        [XmlIgnore()]
+        [PropertyEqualityIgnoreAttribute()]
+        public List<OneClickAudioSettings> AudioSettings
+        {
+            get { return audioSettings; }
+            set { audioSettings = value; }
+        }
+
+        public OneClickAudioSettings[] AudioSettingsString
+        {
+            get { return audioSettings.ToArray(); }
+            set { audioSettings = new List<OneClickAudioSettings>(value); }
+        }
+
+        private bool dontEncodeVideo;
+        public bool DontEncodeVideo
+        {
+            get { return dontEncodeVideo; }
+            set { dontEncodeVideo = value; }
         }
 
         private bool signalAR;
@@ -147,11 +193,91 @@ namespace MeGUI
             set { deviceType = value; }
         }
 
+        private string workingNameReplace;
+        public string WorkingNameReplace
+        {
+            get { return workingNameReplace; }
+            set { workingNameReplace = value; }
+        }
+
+        private string workingNameReplaceWith;
+        public string WorkingNameReplaceWith
+        {
+            get { return workingNameReplaceWith; }
+            set { workingNameReplaceWith = value; }
+        }
+
         private bool useChaptersMarks;
         public bool UseChaptersMarks
         {
             get { return useChaptersMarks; }
             set { useChaptersMarks = value; }
+        }
+
+        private bool useNoLanguagesAsFallback;
+        public bool UseNoLanguagesAsFallback
+        {
+            get { return useNoLanguagesAsFallback; }
+            set { useNoLanguagesAsFallback = value; }
+        }
+
+        private string defaultWorkingDirectory;
+        public string DefaultWorkingDirectory
+        {
+            get { return defaultWorkingDirectory; }
+            set { defaultWorkingDirectory = value; }
+        }
+
+        private string defaultOutputDirectory;
+        public string DefaultOutputDirectory
+        {
+            get { return defaultOutputDirectory; }
+            set { defaultOutputDirectory = value; }
+        }
+
+        private List<string> defaultAudioLanguage;
+        [XmlIgnore()]
+        [PropertyEqualityIgnoreAttribute()]
+        public List<string> DefaultAudioLanguage
+        {
+            get { return defaultAudioLanguage; }
+            set { defaultAudioLanguage = value; }
+        }
+
+        public string[] DefaultAudioLanguageString
+        {
+            get { return defaultAudioLanguage.ToArray(); }
+            set { defaultAudioLanguage = new List<string>(value); }
+        }
+
+        private List<string> defaultSubtitleLanguage;
+        [XmlIgnore()]
+        [PropertyEqualityIgnoreAttribute()]
+        public List<string> DefaultSubtitleLanguage
+        {
+            get { return defaultSubtitleLanguage; }
+            set { defaultSubtitleLanguage = value; }
+        }
+
+        public string[] DefaultSubtitleLanguageString
+        {
+            get { return defaultSubtitleLanguage.ToArray(); }
+            set { defaultSubtitleLanguage = new List<string>(value); }
+        }
+
+        private List<string> indexerPriority;
+        [XmlIgnore()]
+        [PropertyEqualityIgnoreAttribute()]
+        public List<string> IndexerPriority
+        {
+            get { return indexerPriority; }
+            set { indexerPriority = value; }
+        }
+
+        public string[] IndexerPriorityString
+        {
+            get { return indexerPriority.ToArray(); }
+            set { indexerPriority = new List<string>(value); }
         }
 
         object ICloneable.Clone()
@@ -171,22 +297,45 @@ namespace MeGUI
 
 		public OneClickSettings()
 		{
-			VideoProfileName = "";
-			AudioProfileName = "";
-            AvsProfileName = "";
-            AutomaticDeinterlacing = true;
-            PrerenderVideo = false;
-			DontEncodeAudio = false;
-			SignalAR = false;
-            AutoCrop = true;
-            KeepInputResolution = false;
-			OutputResolution = 640;
-            SplitSize = null;
-            ContainerCandidates = new string[0];
+			videoProfileName = "";
+            avsProfileName = "";
+            automaticDeinterlacing = true;
+            prerenderVideo = false;
+            dontEncodeVideo = false;
+            useChaptersMarks = true;
+			signalAR = false;
+            autoCrop = true;
+            keepInputResolution = false;
+			outputResolution = 720;
+            splitSize = null;
+            containerCandidates = new string[] {"MKV"};
+            defaultAudioLanguage = new List<string>();
+            defaultSubtitleLanguage = new List<string>();
+            indexerPriority = new List<string>();
+            defaultWorkingDirectory = "";
+            workingNameReplace = "";
+            workingNameReplaceWith = "";
+            audioSettings = new List<OneClickAudioSettings>();
+
+            if (MainForm.Instance != null)
+            {
+                if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultLanguage1))
+                {
+                    DefaultAudioLanguage.Add(MainForm.Instance.Settings.DefaultLanguage1);
+                    DefaultSubtitleLanguage.Add(MainForm.Instance.Settings.DefaultLanguage1);
+                }
+                if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultLanguage2) && !DefaultAudioLanguage.Contains(MainForm.Instance.Settings.DefaultLanguage2))
+                    DefaultAudioLanguage.Add(MainForm.Instance.Settings.DefaultLanguage2);
+                if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultLanguage2) && !DefaultSubtitleLanguage.Contains(MainForm.Instance.Settings.DefaultLanguage2))
+                    DefaultSubtitleLanguage.Add(MainForm.Instance.Settings.DefaultLanguage2);
+            }
+            IndexerPriority.Add(FileIndexerWindow.IndexType.DGI.ToString());
+            IndexerPriority.Add(FileIndexerWindow.IndexType.DGA.ToString());
+            IndexerPriority.Add(FileIndexerWindow.IndexType.D2V.ToString());
+            IndexerPriority.Add(FileIndexerWindow.IndexType.FFMS.ToString());
 		}
 
         #region GenericSettings Members
-
 
         public string[] RequiredFiles
         {
@@ -195,7 +344,7 @@ namespace MeGUI
 
         public string[] RequiredProfiles
         {
-            get { return new string[]{VideoProfileName, AudioProfileName};}
+            get { return new string[]{VideoProfileName, AudioSettings[0].Profile};}
         }
 
         #endregion

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -63,15 +63,21 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
             }
             catch (Exception e)
             {
-                log.LogValue("Exception in getPercentage(" + line + ")", e, MeGUI.core.util.ImageType.Warning);
+                log.LogValue("Exception in getPercentage(" + line + ")", e, ImageType.Warning);
                 return null;
             }
         }
         #endregion
 
+        protected override void checkJobIO()
+        {
+            su.Status = "Muxing MKV...";
+            base.checkJobIO();
+        }
+
         protected override bool checkExitCode
         {
-            get { return false; }
+            get { return true; }
         }
 
         public override void ProcessLine(string line, StreamType stream)
@@ -101,104 +107,208 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
 
                 if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
-                    if (settings.VideoInput.ToLower().EndsWith(".mp4") || settings.VideoInput.ToLower().EndsWith(".mkv"))
-                         trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
-                    else trackID = 0;
+                    MediaInfoFile oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
+                    if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
+                        trackID = oVideoInfo.VideoInfo.Track.MMGTrackID;
+                    else
+                        trackID = 0;
+
                     sb.Append(" --engage keep_bitstream_ar_info"); // assuming that SAR info is already in the stream...
                     if (!string.IsNullOrEmpty(settings.VideoName))
-                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
+                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName.Replace("\"","\\\"") + "\"");
                     if (settings.Framerate.HasValue)
                         sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
-                    sb.Append(" -d " + trackID + " -A -S \"" + settings.VideoInput + "\"");                    
+                    sb.Append(" \"--compression\" \"" + trackID + ":none\"");
+                    sb.Append(" -d \"" + trackID + "\" --no-chapters -A -S \"" + settings.VideoInput + "\"");                    
                 }
-                
-                if (!string.IsNullOrEmpty(settings.MuxedInput))
+                else if(!string.IsNullOrEmpty(settings.MuxedInput))
                 {
-                    if (settings.MuxedInput.ToLower().EndsWith(".mp4") || settings.MuxedInput.ToLower().EndsWith(".mkv"))
-                         trackID = VideoUtil.getIDFromFirstVideoStream(settings.MuxedInput);
-                    else trackID = 0;
+                    MediaInfoFile oVideoInfo = new MediaInfoFile(settings.MuxedInput, ref log);
+                    if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
+                        trackID = oVideoInfo.VideoInfo.Track.MMGTrackID;
+                    else
+                        trackID = 0;
+
                     if (settings.DAR.HasValue)
                         sb.Append(" --aspect-ratio " + trackID + ":" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
                     else
                         sb.Append(" --engage keep_bitstream_ar_info");
                     if (!string.IsNullOrEmpty(settings.VideoName))
-                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
+                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName.Replace("\"", "\\\"") + "\"");
                     if (settings.Framerate.HasValue)
                         sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
-                    sb.Append(" -d " + trackID + " -A -S \"" + settings.MuxedInput + "\""); 
+                    sb.Append(" \"--compression\" \"" + trackID + ":none\"");
+                    sb.Append(" -d \"" + trackID + "\" -A -S \"" + settings.MuxedInput + "\""); 
                 }
 
                 foreach (object o in settings.AudioStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    trackID = 0; int heaac_flag = 0; 
-                    if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
+                    MediaInfoFile oAudioInfo = new MediaInfoFile(stream.path, ref log);
+
+                    if (!oAudioInfo.HasAudio)
                     {
-                        trackID = VideoUtil.getIDFromAudioStream(stream.path);
-                        heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
-                        if (heaac_flag > 0)
+                        log.LogEvent("No audio track found: " + stream.path, ImageType.Warning);
+                        continue;
+                    }
+
+                    if (oAudioInfo.ContainerFileType == ContainerType.MP4 || oAudioInfo.ContainerFileType == ContainerType.MKV)
+                        trackID = oAudioInfo.AudioInfo.GetFirstTrackID();
+                    else
+                        trackID = 0;
+
+                    int heaac_flag = 0;
+                    if (oAudioInfo.ContainerFileType == ContainerType.MP4)
+                    {
+                        heaac_flag = -1;
+                        if (oAudioInfo.AudioInfo.Tracks.Count > 0)
+                        {
+                            heaac_flag = oAudioInfo.AudioInfo.Tracks[0].AACFlag;
+                        }
+                        if (heaac_flag == 1)
                             sb.Append(" --aac-is-sbr "+ trackID + ":1");
+                        else if (heaac_flag == 0)
+                            sb.Append(" --aac-is-sbr " + trackID + ":0");
                     }
-                    if (stream.path.ToLower().EndsWith(".aac"))
+                    else if (oAudioInfo.AudioInfo.Codecs[0] == AudioCodec.AAC)
                     {
-                        heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
-                        if (heaac_flag > 0)
+                        heaac_flag = -1;
+                        if (oAudioInfo.AudioInfo.Tracks.Count > 0)
+                            heaac_flag = oAudioInfo.AudioInfo.Tracks[0].AACFlag;
+                        if (heaac_flag == 1)
                             sb.Append(" --aac-is-sbr 0:1");
+                        else if (heaac_flag == 0)
+                            sb.Append(" --aac-is-sbr 0");
                     }
-                     if (!string.IsNullOrEmpty(stream.language))
-                        sb.Append(" --language " + trackID + ":" + stream.language);
+
+                    if (!string.IsNullOrEmpty(stream.language))
+                    {
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        {
+                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                            {
+                                sb.Append(" --language " + trackID + ":" + strLanguage.Value);
+                                break;
+                            }
+                        }
+                    }
                     if (!string.IsNullOrEmpty(stream.name))
-                        sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
+                        sb.Append(" --track-name \"" + trackID + ":" + stream.name.Replace("\"", "\\\"") + "\"");
                     if (stream.delay != 0)
                         sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
-                    sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
+                    sb.Append(" \"--compression\" \"" + trackID + ":none\"");
+                    sb.Append(" -a " + trackID + " --no-chapters -D -S \"" + stream.path + "\"");
                 }
 
                 foreach (object o in settings.SubtitleStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    List<SubtitleInfo> subTracks;
-                    idxReader.readFileProperties(stream.path, out subTracks);
-                    trackID = 0; int nb = 0; int nt = 0;
-                    if (stream.path.ToLower().EndsWith(".idx"))
+
+                    trackID = 0;
+                    if (System.IO.File.Exists(stream.path))
                     {
+                        MediaInfoFile oSubtitleInfo = new MediaInfoFile(stream.path, ref log);
+                        if (oSubtitleInfo.ContainerFileType == ContainerType.MP4 || oSubtitleInfo.ContainerFileType == ContainerType.MKV)
+                            trackID = oSubtitleInfo.SubtitleInfo.GetFirstTrackID();      
+                    }
+
+                    if (stream.MuxOnlyInfo != null)
+                    {
+                        trackID = stream.MuxOnlyInfo.MMGTrackID;
+                        if (!string.IsNullOrEmpty(stream.MuxOnlyInfo.Language))
+                            sb.Append(" --language " + trackID + ":" + stream.MuxOnlyInfo.Language);
+                        if (!string.IsNullOrEmpty(stream.MuxOnlyInfo.Name))
+                            sb.Append(" --track-name \"" + trackID + ":" + stream.MuxOnlyInfo.Name.Replace("\"", "\\\"") + "\"");
+                        if (stream.delay != 0)
+                            sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
+                        if (stream.MuxOnlyInfo.DefaultTrack)
+                            sb.Append(" --default-track \"" + trackID + ":yes\"");
+                        else
+                            sb.Append(" --default-track \"" + trackID + ":no\"");
+                        if (stream.MuxOnlyInfo.ForcedTrack)
+                            sb.Append(" --forced-track \"" + trackID + ":yes\"");
+                        else
+                            sb.Append(" --forced-track \"" + trackID + ":no\"");
+                        sb.Append(" -s " + trackID + " -D -A -T --no-global-tags --no-chapters \"" + stream.MuxOnlyInfo.SourceFileName + "\"");
+                    }
+                    else if (stream.path.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".idx"))
+                    {
+                        List<SubtitleInfo> subTracks;
+                        idxReader.readFileProperties(stream.path, out subTracks);
+                        if (subTracks.Count == 0)
+                        {
+                            log.LogEvent("No subtitle track found: " + stream.path, ImageType.Warning);
+                            continue;
+                        }
                         foreach (SubtitleInfo strack in subTracks)
                         {
-                            if (nt > 0)
-                            {
-                                if (!string.IsNullOrEmpty(stream.language))
-                                     sb.Append(" --language " + strack.Index.ToString() + ":" + stream.language);
-                                else sb.Append(" --language " + strack.Index.ToString() + ":" + stream.name);
-                                if (!string.IsNullOrEmpty(stream.name))
-                                    sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
+                            foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                            {  
+                                if (trackID == 0 && !string.IsNullOrEmpty(stream.language) 
+                                    && stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                                {
+                                    sb.Append(" --language " + trackID + ":" + strLanguage.Value);
+                                    break;
+                                }
+                                else if (((trackID == 0 && string.IsNullOrEmpty(stream.language)) || trackID > 0) 
+                                    && LanguageSelectionContainer.Short2FullLanguageName(strack.Name).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                                {
+                                    sb.Append(" --language " + trackID + ":" + strLanguage.Value);
+                                    break;
+                                }
                             }
+                            if (!string.IsNullOrEmpty(stream.name))
+                                sb.Append(" --track-name \"" + trackID + ":" + stream.name.Replace("\"", "\\\"") + "\"");
+                            if (stream.delay != 0)
+                                sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
+                            if (stream.bDefaultTrack && trackID == 0)
+                                sb.Append(" --default-track 0:yes");
                             else
-                            {
-                                if (!string.IsNullOrEmpty(stream.language))
-                                     sb.Append(" --language " + "0:" + stream.language);
-                                else sb.Append(" --language " + "0:" + strack.Name);
-                                if (!string.IsNullOrEmpty(stream.name))
-                                    sb.Append(" --track-name \"" + "0:" + stream.name + "\"");
-                            }
-                            ++nt;
+                                sb.Append(" --default-track " + trackID + ":no");
+                            if (stream.bForceTrack)
+                                sb.Append(" --forced-track " + trackID + ":yes");
+                            else
+                                sb.Append(" --forced-track " + trackID + ":no");
+                            ++trackID;
                         }
+                        trackID = 0;
                         sb.Append(" -s ");
                         foreach (SubtitleInfo strack in subTracks)
                         {
-                            if (nb > 0)
-                                 sb.Append("," + strack.Index.ToString());
-                            else sb.Append("0");
-                            ++nb;
+                            if (trackID > 0)
+                                sb.Append("," + trackID);
+                            else 
+                                sb.Append("0");
+                            ++trackID;
                         }
                         sb.Append(" -D -A \"" + stream.path + "\"");
                     }
                     else
                     {
                         if (!string.IsNullOrEmpty(stream.language))
-                             sb.Append(" --language " + trackID + ":" + stream.language);
+                        {
+                            foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                            {
+                                if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                                {
+                                    sb.Append(" --language " + trackID + ":" + strLanguage.Value);
+                                    break;
+                                }
+                            }
+                        }
                         if (!string.IsNullOrEmpty(stream.name))
-                             sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
-                        sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
+                            sb.Append(" --track-name \"" + trackID + ":" + stream.name.Replace("\"", "\\\"") + "\"");
+                        if (stream.delay != 0)
+                            sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
+                        if (stream.bDefaultTrack)
+                            sb.Append(" --default-track \"" + trackID + ":yes\"");
+                        else
+                            sb.Append(" --default-track \"" + trackID + ":no\"");
+                        if (stream.bForceTrack)
+                            sb.Append(" --forced-track \"" + trackID + ":yes\"");
+                        else
+                            sb.Append(" --forced-track \"" + trackID + ":no\"");
+                        sb.Append(" -s " + trackID + " -D -A \"" + stream.path + "\"");
                     }
                 }
                 if (!string.IsNullOrEmpty(settings.ChapterFile)) // a chapter file is defined
@@ -207,7 +317,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 if (settings.SplitSize.HasValue)
                     sb.Append(" --split " + (settings.SplitSize.Value.MB) + "M");
 
-                sb.Append(" --no-clusters-in-meta-seek"); // ensures lower overhead
+                sb.Append(" --ui-language en");
 
                 return sb.ToString();
             }

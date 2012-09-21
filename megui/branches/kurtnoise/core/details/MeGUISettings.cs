@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,8 +20,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Xml.Serialization;
 
 using MeGUI.core.util;
+using MeGUI.core.gui;
 
 namespace MeGUI
 {
@@ -32,61 +35,99 @@ namespace MeGUI
     public class MeGUISettings
     {
         #region variables
+        public enum OCGUIMode
+        {
+            [EnumTitle("Show Basic Settings")]
+            Basic,
+            [EnumTitle("Show Default Settings")]
+            Default,
+            [EnumTitle("Show Advanced Settings")]
+            Advanced
+        };
         private string[][] autoUpdateServerLists;
-        private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, 
-                       encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, 
-                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath,
-                       dgmpgIndexPath, eac3toPath, tsmuxerPath, divxavcPath, flacPath,
+        private string faacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
+                       ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
+                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath,
+                       eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
-                       httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
+                       strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4, flacPath,
+                       httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath,
+                       mkvExtractPath, appendToForcedStreams, pgcDemuxPath, lastUsedOneClickFolder;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
-                     overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
-                     deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoscroll, 
-                     alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition, alwaysbackupfiles,
-                     forcerawavcextension;
+                     overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
+                     deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
+                     alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles, bUseITU,
+                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264,
+                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc, bExternalProgramsSet;
         private ulong audioSamplesPerUpdate;
-        private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
-		private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList;
+        private int nbPasses, acceptableAspectError, autoUpdateServerSubList, minComplexity, updateFormSplitter,
+                    maxComplexity, jobColumnWidth, inputColumnWidth, outputColumnWidth, codecColumnWidth,
+                    modeColumnWidth, statusColumnWidth, ownerColumnWidth, startColumnWidth, endColumnWidth, fpsColumnWidth,
+                    updateFormUpdateColumnWidth, updateFormNameColumnWidth, updateFormLocalVersionColumnWidth, 
+                    updateFormServerVersionColumnWidth, updateFormLocalDateColumnWidth, updateFormServerDateColumnWidth, 
+                    updateFormPlatformColumnWidth, updateFormStatusColumnWidth, ffmsThreads;
         private SourceDetectorSettings sdSettings;
         private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;
         private ProcessPriority defaultPriority;
+        private Point mainFormLocation, updateFormLocation;
+        private Size mainFormSize, updateFormSize, jobWorkerSize;
+        private FileSize[] customFileSizes;
+        private FPS[] customFPSs;
+        private Dar[] customDARs;
+        private OCGUIMode ocGUIMode;
+        private AfterEncoding afterEncoding;
         #endregion
         public MeGUISettings()
 		{
+            strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
-                new string[] { "Development", "http://kurtnoise.free.fr/MeGUI/" } };
+                new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
             acceptableFPSError = 0.01M;
             autoUpdateServerSubList = 0;
-            maxServersToTry = 5;
+            autoUpdate = true;
             dialogSettings = new DialogSettings();
             sdSettings = new SourceDetectorSettings();
             AedSettings = new AutoEncodeDefaultsSettings();
-            autoUpdate = true;
             useadvancedtooltips = true;
             audioSamplesPerUpdate = 100000;
-            aviMuxGUIPath = "avimux_gui.exe";
+            aviMuxGUIPath = getDownloadPath(@"tools\avimux_gui\avimux_gui.exe");
             besplitPath = "besplit.exe";
-            faacPath = "faac.exe";
-            mencoderPath = "mencoder.exe";
-			mp4boxPath = "mp4box.exe";
-			mkvmergePath = "mkvmerge.exe";
-			x264Path = "x264.exe";
-            dgIndexPath = "dgindex.exe";
-            xvidEncrawPath = "xvid_encraw.exe";
-            lamePath = "lame.exe";
-            neroAacEncPath = "neroAacEnc.exe";
-            oggEnc2Path = "oggenc2.exe";
-            encAudXPath = "enc_AudX_CLI.exe";
-            encAacPlusPath = "enc_aacPlus.exe";
-            ffmpegPath = "ffmpeg.exe";
-            aftenPath = "aften.exe";
-            yadifPath = "yadif.dll";
+            faacPath = getDownloadPath(@"tools\faac\faac.exe");
+			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
+			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
+            mkvExtractPath = getDownloadPath(@"tools\mkvmerge\mkvextract.exe");
+            pgcDemuxPath = getDownloadPath(@"tools\pgcdemux\pgcdemux.exe");
+#if x64
+            x264Path = getDownloadPath(@"tools\x264\x264_64.exe");
+            b64bitX264 = true;
+
+#endif
+#if x86
+            x264Path = getDownloadPath(@"tools\x264\x264.exe");
+            if (OSInfo.isWow64())
+                b64bitX264 = true;
+#endif
+            dgIndexPath = getDownloadPath(@"tools\dgindex\dgindex.exe");
+            ffmsIndexPath = getDownloadPath(@"tools\ffms\ffmsindex.exe");
+            xvidEncrawPath = getDownloadPath(@"tools\xvid_encraw\xvid_encraw.exe");
+            lamePath = getDownloadPath(@"tools\lame\lame.exe");
+            neroAacEncPath = strMeGUIPath + @"\tools\eac3to\neroAacEnc.exe";
+            oggEnc2Path = getDownloadPath(@"tools\oggenc2\oggenc2.exe");
+            ffmpegPath = getDownloadPath(@"tools\ffmpeg\ffmpeg.exe");
+            aftenPath = getDownloadPath(@"tools\aften\aften.exe");
+            flacPath = getDownloadPath(@"tools\flac\flac.exe");
+            yadifPath = getDownloadPath(@"tools\yadif\yadif.dll");
+            vobSubPath = getDownloadPath(@"tools\vobsub\vobsub.dll");
+            besplitPath = getDownloadPath(@"tools\besplit\besplit.exe");
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
-			autoStartQueue = false;
+            bAutoLoadDG = true;
+			autoStartQueue = true;
+            bAlwaysMuxMKV = true;
+            bAutoStartQueueStartup = false;
 			forceFilmThreshold = new decimal(95);
 			defaultLanguage1 = "";
 			defaultLanguage2 = "";
@@ -101,6 +142,7 @@ namespace MeGUI
 			nbPasses = 2;
 			deleteIntermediateFiles = true;
 			deleteAbortedOutput = true;
+            autoSelectHDStreams = true;
 			openProgressWindow = true;
             videoExtension = "";
             audioExtension = "";
@@ -112,28 +154,245 @@ namespace MeGUI
             httpproxyuid = "";
             httpproxypwd = "";
             defaultOutputDir = "";
+            tempDirMP4 = "";
             addTimePosition = true;
-            dgavcIndexPath = "dgavcindex.exe";
-            dgvc1IndexPath = "dgvc1index.exe";
-            dgmpgIndexPath = "dgmpgindex.exe";
-            eac3toPath = "eac3to.exe";
-            tsmuxerPath = "tsmuxer.exe";
+            dgavcIndexPath = getDownloadPath(@"tools\dgavcindex\dgavcindex.exe");
+            dgnvIndexPath = getDownloadPath(@"tools\dgindexnv\dgindexnv.exe");
+            eac3toPath = getDownloadPath(@"tools\eac3to\eac3to.exe");
+            tsmuxerPath = getDownloadPath(@"tools\tsmuxer\tsmuxer.exe");
             alwaysbackupfiles = true;
             forcerawavcextension = false;
-            divxavcPath = "DivX264.exe";
-            flacPath = "flac.exe";
+            meguiupdatecache = System.IO.Path.Combine(strMeGUIPath, "update_cache");
+            avisynthpluginspath = System.IO.Path.Combine(strMeGUIPath, @"tools\avisynth_plugin");
+            strMainFileFormat = "";
+            strMainAudioFormat = "";
+            strLastSourcePath = "";
+            strLastDestinationPath = "";
+            minComplexity = 72;
+            maxComplexity = 78;
+            mainFormLocation = new Point(0, 0);
+            mainFormSize = new Size(524, 558);
+            updateFormLocation = new Point(0, 0);
+            updateFormSize = new Size(710, 313);
+            updateFormSplitter = 180;
+            updateFormUpdateColumnWidth = 47;
+            updateFormNameColumnWidth = 105;
+            updateFormLocalVersionColumnWidth = 117; 
+            updateFormServerVersionColumnWidth = 117;
+            updateFormLocalDateColumnWidth = 70;
+            updateFormServerDateColumnWidth = 70;
+            updateFormPlatformColumnWidth = 52;
+            updateFormStatusColumnWidth = 111;
+            jobWorkerSize = new Size(565, 498);
+            jobColumnWidth = 40;
+            inputColumnWidth = 89;
+            outputColumnWidth = 89;
+            codecColumnWidth = 43;
+            ModeColumnWidth = 75;
+            statusColumnWidth = 51;
+            ownerColumnWidth = 60;
+            startColumnWidth = 55;
+            endColumnWidth = 55;
+            fpsColumnWidth = 35;
+            bEnsureCorrectPlaybackSpeed = bUseDGIndexNV = bUseNeroAacEnc = bExternalProgramsSet = false;
+            ffmsThreads = 1;
+            appendToForcedStreams = "";
+            ocGUIMode = OCGUIMode.Default;
+            bUseITU = true;
+            bOpenAVSInThread = true;
+            lastUsedOneClickFolder = "";
         }
+
+        private string getDownloadPath(string strPath)
+        {
+            strPath = System.IO.Path.Combine(strMeGUIPath, @strPath);
+            return strPath;
+        }
+
         #region properties
         public string YadifPath
         {
             get { return yadifPath; }
-            set { yadifPath = value; }
+        }
+
+        public Point MainFormLocation
+        {
+            get { return mainFormLocation; }
+            set { mainFormLocation = value; }
+        }
+
+        public Size MainFormSize
+        {
+            get { return mainFormSize; }
+            set { mainFormSize = value; }
+        }
+
+        public Point UpdateFormLocation
+        {
+            get { return updateFormLocation; }
+            set { updateFormLocation = value; }
+        }
+
+        public Size UpdateFormSize
+        {
+            get { return updateFormSize; }
+            set { updateFormSize = value; }
+        }
+
+        public int UpdateFormSplitter
+        {
+            get { return updateFormSplitter; }
+            set { updateFormSplitter = value; }
+        }
+
+        public int UpdateFormUpdateColumnWidth
+        {
+            get { return updateFormUpdateColumnWidth; }
+            set { updateFormUpdateColumnWidth = value; }
+        }
+
+        public int UpdateFormNameColumnWidth
+        {
+            get { return updateFormNameColumnWidth; }
+            set { updateFormNameColumnWidth = value; }
+        }
+
+        public int UpdateFormLocalVersionColumnWidth
+        {
+            get { return updateFormLocalVersionColumnWidth; }
+            set { updateFormLocalVersionColumnWidth = value; }
+        }
+
+        public int UpdateFormServerVersionColumnWidth
+        {
+            get { return updateFormServerVersionColumnWidth; }
+            set { updateFormServerVersionColumnWidth = value; }
+        }
+
+        public int UpdateFormLocalDateColumnWidth
+        {
+            get { return updateFormLocalDateColumnWidth; }
+            set { updateFormLocalDateColumnWidth = value; }
+        }
+                
+        public int UpdateFormServerDateColumnWidth
+        {
+            get { return updateFormServerDateColumnWidth; }
+            set { updateFormServerDateColumnWidth = value; }
+        }
+
+        public int UpdateFormPlatformColumnWidth
+        {
+            get { return updateFormPlatformColumnWidth; }
+            set { updateFormPlatformColumnWidth = value; }
+        }
+
+        public int UpdateFormStatusColumnWidth
+        {
+            get { return updateFormStatusColumnWidth; }
+            set { updateFormStatusColumnWidth = value; }
+        }
+
+        public Size JobWorkerSize
+        {
+            get { return jobWorkerSize; }
+            set { jobWorkerSize = value; }
+        }
+
+        public int JobColumnWidth
+        {
+            get { return jobColumnWidth; }
+            set { jobColumnWidth = value; }
+        }
+
+        public int InputColumnWidth
+        {
+            get { return inputColumnWidth; }
+            set { inputColumnWidth = value; }
+        }
+
+        public int OutputColumnWidth
+        {
+            get { return outputColumnWidth; }
+            set { outputColumnWidth = value; }
+        }
+
+        public int CodecColumnWidth
+        {
+            get { return codecColumnWidth; }
+            set { codecColumnWidth = value; }
+        }
+
+        public int ModeColumnWidth
+        {
+            get { return modeColumnWidth; }
+            set { modeColumnWidth = value; }
+        }
+
+        public int StatusColumnWidth
+        {
+            get { return statusColumnWidth; }
+            set { statusColumnWidth = value; }
+        }
+
+        public int OwnerColumnWidth
+        {
+            get { return ownerColumnWidth; }
+            set { ownerColumnWidth = value; }
+        }
+
+        public int StartColumnWidth
+        {
+            get { return startColumnWidth; }
+            set { startColumnWidth = value; }
+        }
+
+        public int EndColumnWidth
+        {
+            get { return endColumnWidth; }
+            set { endColumnWidth = value; }
+        }
+
+        public int FPSColumnWidth
+        {
+            get { return fpsColumnWidth; }
+            set { fpsColumnWidth = value; }
+        }
+
+        public FileSize[] CustomFileSizes
+        {
+            get { return customFileSizes; }
+            set { customFileSizes = value; }
+        }
+
+        public FPS[] CustomFPSs
+        {
+            get { return customFPSs; }
+            set { customFPSs = value; }
+        }
+
+        public Dar[] CustomDARs
+        {
+            get { return customDARs; }
+            set { customDARs = value; }
         }
 
         public ulong AudioSamplesPerUpdate
         {
             get { return audioSamplesPerUpdate; }
             set { audioSamplesPerUpdate = value; }
+        }
+
+        public string LastSourcePath
+        {
+            get { return strLastSourcePath; }
+            set { strLastSourcePath = value; }
+        }
+
+        public string LastDestinationPath
+        {
+            get { return strLastDestinationPath; }
+            set { strLastDestinationPath = value; }
         }
 
         /// <summary>
@@ -143,6 +402,24 @@ namespace MeGUI
         {
             get { return autoscroll; }
             set { autoscroll = value; }
+        }
+
+        /// <summary>
+        /// Gets / sets whether the one-click advanced settings will be shown
+        /// </summary>
+        public OCGUIMode OneClickGUIMode
+        {
+            get { return ocGUIMode; }
+            set { ocGUIMode = value; }
+        }
+
+        /// <summary>
+        /// Gets / sets whether the playback speed in video preview should match the fps
+        /// </summary>
+        public bool EnsureCorrectPlaybackSpeed
+        {
+            get { return bEnsureCorrectPlaybackSpeed; }
+            set { bEnsureCorrectPlaybackSpeed = value; }
         }
 
         public bool SafeProfileAlteration
@@ -159,15 +436,6 @@ namespace MeGUI
             get { return acceptableFPSError; }
             set { acceptableFPSError = value; }
         }
-
-        /// <summary>
-        /// Maximum servers that auto update should try before aborting.
-        /// </summary>
-        public int MaxServersToTry
-        {
-            get { return maxServersToTry; }
-            set { maxServersToTry = value; }
-        }
         /// <summary>
         /// Which sublist to look in for the update servers
         /// </summary>
@@ -181,13 +449,31 @@ namespace MeGUI
         /// </summary>
         public string[][] AutoUpdateServerLists
         {
-            get { return autoUpdateServerLists; }
+            get 
+            {
+                if (autoUpdateServerLists.Length > 2)
+                {
+                    autoUpdateServerLists[0] = new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" };
+                    autoUpdateServerLists[1] = new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" };
+                }
+                else
+                {
+                    autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
+                                                             new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] {"Custom"}};
+                }
+#if DEBUG
+                autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/" },
+                                                         new string[] { "Development", "http://megui.org/auto/" },
+                                                         new string[] { "Custom", "http://megui.org/auto/" }};
+#endif
+                return autoUpdateServerLists;
+            }
             set { autoUpdateServerLists = value; }
         }
-            /// <summary>
-            /// What to do after all encodes are finished
-            /// </summary>
-            public AfterEncoding AfterEncoding
+        /// <summary>
+        /// What to do after all encodes are finished
+        /// </summary>
+        public AfterEncoding AfterEncoding
         {
             get { return afterEncoding; }
             set { afterEncoding = value; }
@@ -216,6 +502,14 @@ namespace MeGUI
             get { return useadvancedtooltips; }
             set { useadvancedtooltips = value; }
         }
+        /// <summary>
+        /// bool to decide whether to use 64bit x264
+        /// </summary>
+        public bool Use64bitX264
+        {
+            get { return b64bitX264; }
+            set { b64bitX264 = value; }
+        }
         ///<summary>
         /// gets / sets whether megui puts the Video Preview Form "Alwyas on Top" or not
         /// </summary>
@@ -240,14 +534,25 @@ namespace MeGUI
             get { return defaultOutputDir; }
             set { defaultOutputDir = value; }
         }
-
+        /// <summary>
+        /// gets / sets the temp directory for MP4 Muxer
+        /// </summary>
+        public string TempDirMP4
+        {
+            get 
+            {
+                if (String.IsNullOrEmpty(tempDirMP4) || System.IO.Path.GetPathRoot(tempDirMP4).Equals(tempDirMP4, StringComparison.CurrentCultureIgnoreCase))
+                    return String.Empty;
+                return tempDirMP4;
+            }
+            set { tempDirMP4 = value; }
+        }
         /// <summary>
         /// path of besplit.exe
         /// </summary>
         public string BeSplitPath
         {
             get { return besplitPath; }
-            set { besplitPath = value; }
         }
 
         /// <summary>
@@ -256,83 +561,55 @@ namespace MeGUI
         public string FFMpegPath
         {
             get { return ffmpegPath; }
-            set { ffmpegPath = value; }
+        }
+
+        /// <summary>
+        /// filename and full path of the vobsub dll
+        /// </summary>
+        public string VobSubPath
+        {
+            get { return vobSubPath; }
         }
         
-        /// <summary>
-        /// filename and full path of the enc_aacPlus executable
-        /// </summary>
-        public string EncAacPlusPath
-        {
-            get { return encAacPlusPath; }
-            set { encAacPlusPath = value; }
-        }
-
-        /// <summary>
-        /// filename and full path of the enc_AudX_CLI executable
-        /// </summary>
-        public string EncAudXPath
-        {
-            get { return encAudXPath; }
-            set { encAudXPath = value; }
-        }
-
         /// <summary>
         /// filename and full path of the oggenc2 executable
         /// </summary>
         public string OggEnc2Path
         {
             get { return oggEnc2Path; }
-            set { oggEnc2Path = value; }
         }
-		/// <summary>
-		/// filename and full path of the mencoder executable
-		/// </summary>
-		public string MencoderPath
-		{
-			get {return mencoderPath;}
-			set {mencoderPath = value;}
-		}
+
         /// <summary>
         /// filename and full path of the faac executable
         /// </summary>
         public string FaacPath
         {
             get { return faacPath; }
-            set { faacPath = value; }
         }
+
         /// <summary>
         /// filename and full path of the faac executable
         /// </summary>
         public string LamePath
         {
             get { return lamePath; }
-            set { lamePath = value; }
-        }
-        /// <summary>
-        /// filename and full path of the faac executable
-        /// </summary>
-        public string NeroAacEncPath
-        {
-            get { return neroAacEncPath; }
-            set { neroAacEncPath = value; }
-        }
-        /// <summary>
-        /// filename and full path of the flac executable
-        /// </summary>
-        public string FlacPath
-        {
-            get { return flacPath; }
-            set { flacPath = value; }
-        }
+        }	
+	    
 	    /// <summary>
-		/// filename and full path of the mkvemerge executable
+		/// filename and full path of the mkvmerge executable
 		/// </summary>
 		public string MkvmergePath
 		{
 			get {return mkvmergePath;}
-			set {mkvmergePath = value;}
 		}
+
+        /// <summary>
+        /// filename and full path of the mkvextract executable
+        /// </summary>
+        public string MkvExtractPath
+        {
+            get { return mkvExtractPath; }
+        }
 
         /// <summary>
 		/// filename and full path of the mp4creator executable
@@ -340,31 +617,44 @@ namespace MeGUI
 		public string Mp4boxPath
 		{
 			get {return mp4boxPath;}
-			set {mp4boxPath = value;}
 		}
+
+        /// <summary>
+        /// filename and full path of the pgcdemux executable
+        /// </summary>
+        public string PgcDemuxPath
+        {
+            get { return pgcDemuxPath; }
+        }
+
 		/// <summary>
 		/// filename and full path of the x264 executable
 		/// </summary>
 		public string X264Path
 		{
 			get {return x264Path;}
-			set {x264Path = value;}
 		}
+
 		/// <summary>
 		/// filename and full path of the dgindex executable
 		/// </summary>
 		public string DgIndexPath
 		{
 			get {return dgIndexPath;}
-			set {dgIndexPath = value;}
 		}
+        /// <summary>
+        /// filename and full path of the ffmsindex executable
+        /// </summary>
+        public string FFMSIndexPath
+        {
+            get { return ffmsIndexPath; }
+        }
         /// <summary>
         /// filename and full path of the xvid_encraw executable
         /// </summary>
         public string XviDEncrawPath
         {
             get { return xvidEncrawPath; }
-            set { xvidEncrawPath = value; }
         }
         /// <summary>
         /// gets / sets the path of the avimuxgui executable
@@ -372,7 +662,6 @@ namespace MeGUI
         public string AviMuxGUIPath
         {
             get { return aviMuxGUIPath; }
-            set { aviMuxGUIPath = value; }
         }
         /// <summary>
         /// filename and full path of the aften executable
@@ -380,31 +669,27 @@ namespace MeGUI
         public string AftenPath
         {
             get { return aftenPath; }
-            set { aftenPath = value; }
-        }	
+        }
+        /// <summary>
+        /// filename and full path of the flac executable
+        /// </summary>
+        public string FlacPath
+        {
+            get { return flacPath; }
+        }
         /// <summary>
         /// filename and full path of the dgavcindex executable
         /// </summary>
         public string DgavcIndexPath
         {
             get { return dgavcIndexPath; }
-            set { dgavcIndexPath = value; }
-        }
-        /// <summary>
-        /// filename and full path of the dgvc1index executable
-        /// </summary>
-        public string Dgvc1IndexPath
-        {
-            get { return dgvc1IndexPath; }
-            set { dgvc1IndexPath = value; }
         }
         /// <summary>
         /// filename and full path of the dgmpgindex executable
         /// </summary>
-        public string DgmpgIndexPath
+        public string DgnvIndexPath
         {
-            get { return dgmpgIndexPath; }
-            set { dgmpgIndexPath = value; }
+            get { return dgnvIndexPath; }
         }
         /// <summary>
         /// filename and full path of the eac3to executable
@@ -412,7 +697,6 @@ namespace MeGUI
         public string EAC3toPath
         {
             get { return eac3toPath; }
-            set { eac3toPath = value; }
         }
         /// <summary>
         /// filename and full path of the tsmuxer executable
@@ -420,15 +704,6 @@ namespace MeGUI
         public string TSMuxerPath
         {
             get { return tsmuxerPath; }
-            set { tsmuxerPath = value; }
-        }
-        /// <summary>
-        /// filename and full path of the DivX264 executable
-        /// </summary>
-        public string DivXAVCPath
-        {
-            get { return divxavcPath; }
-            set { divxavcPath = value; }
         }
         ///<summary>
         /// gets / sets whether megui backup files from updater or not
@@ -446,28 +721,6 @@ namespace MeGUI
         {
             get { return forcerawavcextension; }
             set { forcerawavcextension = value; }
-        }
-
-        /// <summary>
-        /// Winamp Path
-        /// </summary>
-        public static string WinampPath
-        {
-            get
-            {
-                try
-                {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\winamp.exe");
-                    if (key == null)
-                        return null;
-                    else
-                        return (string)key.GetValue("Path");
-                }
-                catch
-                {
-                    return null;
-                }
-            }
         }
 
         /// <summary>
@@ -499,88 +752,17 @@ namespace MeGUI
         /// <summary>
         /// folder containing the avisynth plugins
         /// </summary>
-        public static string AvisynthPluginsPath
+        public string AvisynthPluginsPath
         {
-            get
-            {
-                try
-                {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth");
-
-                    if (key == null)
-                        key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\AviSynth");
-                    
-                    if (key == null)
-                        return null;
-                    else
-                        return (string)key.GetValue("plugindir2_5");
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-            set 
-            {
-                if(!System.IO.Path.IsPathRooted(value))
-                    throw new ArgumentException("Path must be absolute");
-                if(!System.IO.Directory.Exists(value))
-                    throw new ArgumentException("Directory " + value + " does not exists");
-                try
-                {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth", true);
-                    if (key == null)
-                        key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\AviSynth", true);
-
-                    if (key != null)
-                        key.SetValue("plugindir2_5", value);
-                }
-                catch
-                {
-                    // Swallow the error
-                }
-            }
+            get { return avisynthpluginspath; }
         }
 
         /// <summary>
         /// folder containing local copies of update files
         /// </summary>
-        public static string MeGUIUpdateCache
+        public string MeGUIUpdateCache
         {
-            get
-            {
-                try
-                {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\MeGUI");
-                    if (key == null)
-                        key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\MeGUI");
-                    if (key == null)
-                        return null;
-                    else
-                        return (string)key.GetValue("update_cache");
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-            set
-            {
-                if (!System.IO.Path.IsPathRooted(value))
-                    throw new ArgumentException("Path must be absolute");
-                try
-                {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\MeGUI");
-                    if (key == null)
-                        key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Wow6432Node\MeGUI");
-                    if (key != null)
-                        key.SetValue("update_cache", value);
-                }
-                catch
-                {
-                    // Swallow the error
-                }
-            }
+            get { return meguiupdatecache; }
         }
 
         /// <summary>
@@ -599,6 +781,38 @@ namespace MeGUI
 			get {return autoForceFilm;}
 			set {autoForceFilm = value;}
 		}
+        /// <summary>
+        /// should the file autoloaded incrementally if VOB
+        /// </summary>
+        public bool AutoLoadDG
+        {
+            get { return bAutoLoadDG; }
+            set { bAutoLoadDG = value; }
+        }
+        /// <summary>
+        /// true if HD Streams Extractor should automatically select tracks
+        /// </summary>
+        public bool AutoSelectHDStreams
+        {
+            get { return autoSelectHDStreams; }
+            set { autoSelectHDStreams = value; }
+        }
+        /// <summary>
+		/// gets / sets whether pressing Queue should automatically start encoding at startup
+		/// </summary>
+		public bool AutoStartQueueStartup
+		{
+            get { return bAutoStartQueueStartup; }
+            set { bAutoStartQueueStartup = value; }
+		}
+        /// <summary>
+        /// gets / sets whether MKV files should always be muxed with mkvmerge even if x264 can output it directly
+        /// </summary>
+        public bool AlwaysMuxMKV
+        {
+            get { return bAlwaysMuxMKV; }
+            set { bAlwaysMuxMKV = value; }
+        }
 		/// <summary>
 		/// gets / sets whether pressing Queue should automatically start encoding
 		/// </summary>
@@ -657,6 +871,52 @@ namespace MeGUI
 			get {return defaultPriority;}
 			set {defaultPriority = value;}
 		}
+        private ProcessPriority processingPriority;
+        private bool processingPrioritySet;
+        /// <summary>
+        /// default priority for all new processes during this session
+        /// </summary>
+        [XmlIgnore()]
+        public ProcessPriority ProcessingPriority
+        {
+            get 
+            {
+                if (!processingPrioritySet)
+                {
+                    processingPriority = defaultPriority;
+                    processingPrioritySet = true;
+                }
+                return processingPriority; 
+            }
+            set { processingPriority = value; }
+        }
+        /// <summary>
+        /// open AVS files in a thread
+        /// </summary>
+        public bool OpenAVSInThread
+        {
+            get { return bOpenAVSInThread; }
+            set { bOpenAVSInThread = value; }
+        }
+        private bool bOpenAVSInThreadDuringSession;
+        private bool bOpenAVSInThreadDuringSessionSet;
+        /// <summary>
+        /// default priority for all new processes during this session
+        /// </summary>
+        [XmlIgnore()]
+        public bool OpenAVSInThreadDuringSession
+        {
+            get
+            {
+                if (!bOpenAVSInThreadDuringSessionSet)
+                {
+                    bOpenAVSInThreadDuringSession = bOpenAVSInThread;
+                    bOpenAVSInThreadDuringSessionSet = true;
+                }
+                return bOpenAVSInThreadDuringSession;
+            }
+            set { bOpenAVSInThreadDuringSession = value; }
+        }
 		/// <summary>
 		/// enables no spec compliant mp3 in mp4 muxing
 		/// </summary>
@@ -728,13 +988,11 @@ namespace MeGUI
             get { return autoUpdate; }
             set { autoUpdate = value; }
         }
-
         public DialogSettings DialogSettings
         {
             get { return dialogSettings; }
             set { dialogSettings = value; }
         }
-
         public SourceDetectorSettings SourceDetectorSettings
         {
             get { return sdSettings; }
@@ -788,7 +1046,161 @@ namespace MeGUI
             get { return httpproxypwd; }
             set { httpproxypwd = value; }
         }
+
+        /// <summary>
+        /// gets / sets the text to append to forced streams
+        /// </summary>
+        public string AppendToForcedStreams
+        {
+            get { return appendToForcedStreams; }
+            set { appendToForcedStreams = value; }
+        }
+
+        public string MainAudioFormat
+        {
+            get { return strMainAudioFormat; }
+            set { strMainAudioFormat = value; }
+        }
+
+        public string MainFileFormat
+        {
+            get { return strMainFileFormat; }
+            set { strMainFileFormat = value; }
+        }
+
+        public string LastUsedOneClickFolder
+        {
+            get { return lastUsedOneClickFolder; }
+            set { lastUsedOneClickFolder = value; }
+        }
+
+        public int MinComplexity
+        {
+            get { return minComplexity; }
+            set { minComplexity = value; }
+        }
+
+        public int MaxComplexity
+        {
+            get { return maxComplexity; }
+            set { maxComplexity = value; }
+        }
+
+        public int FFMSThreads
+        {
+            get { return ffmsThreads; }
+            set { ffmsThreads = value; }
+        }
+
+        public bool UseITUValues
+        {
+            get { return bUseITU; }
+            set { bUseITU = value; }
+        }
+
+        public bool UseDGIndexNV
+        {
+            get 
+            {
+                if (!bExternalProgramsSet)
+                    SetExternalPrograms();
+                return bUseDGIndexNV; 
+            }
+            set { bUseDGIndexNV = value; }
+        }
+
+        /// <summary>
+        /// filename and full path of the neroaacenc executable
+        /// </summary>
+        public string NeroAacEncPath
+        {
+            get { return neroAacEncPath; }
+            set
+            {
+                if (!System.IO.File.Exists(value))
+                    neroAacEncPath = strMeGUIPath + @"\tools\eac3to\neroAacEnc.exe";
+                else
+                    neroAacEncPath = value;
+            }
+        }	
+
+        public bool UseNeroAacEnc
+        {
+            get 
+            {
+                if (!bExternalProgramsSet)
+                    SetExternalPrograms();
+                return bUseNeroAacEnc; 
+            }
+            set { bUseNeroAacEnc = value; }
+        }
+
+        /// <summary>
+        /// if the external programs (nero & dgindexnv) have been already set
+        /// </summary>
+        public bool ExternalProgramsSet
+        {
+            get { return bExternalProgramsSet; }
+            set { bExternalProgramsSet = value; }
+        }
+
+        #endregion
+
+        private bool bAutoUpdateSession;
+        /// <summary>
+        /// automatic update process
+        /// </summary>
+        [XmlIgnore()]
+        public bool AutoUpdateSession
+        {
+            get { return bAutoUpdateSession; }
+            set { bAutoUpdateSession = value; }
+        }
+
+        #region Methods
+#warning Deprecated after next stable release
+        private void SetExternalPrograms()
+        {
+            // check NeroAacEnc
+            bUseNeroAacEnc = System.IO.File.Exists(neroAacEncPath);
+
+            // check if the DGIndexNV license file is available
+            if (System.IO.File.Exists(MainForm.Instance.Settings.DgnvIndexPath) && 
+                System.IO.File.Exists(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "license.txt")))
+                bUseDGIndexNV = true;
+            else
+                bUseDGIndexNV = false;
+
+            bExternalProgramsSet = true;
+        }
+
+        public bool IsNeroAACEncAvailable()
+        {
+            if (!bExternalProgramsSet)
+                SetExternalPrograms();
+            return bUseNeroAacEnc && System.IO.File.Exists(neroAacEncPath);
+        }
+
+        public bool IsDGIIndexerAvailable()
+        {
+            if (!bUseDGIndexNV)
+                return false;
+
+            // check if the license file is available
+            if (!System.IO.File.Exists(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "license.txt")))
+                return false;
+
+            // DGI is not available in a RDP connection
+            if (System.Windows.Forms.SystemInformation.TerminalServerSession == true)
+                return false;
+
+            // check if the indexer is available
+            if (!System.IO.File.Exists(MainForm.Instance.Settings.DgnvIndexPath))
+                return false;
+
+            return true;
+        }
         #endregion
     }
-    public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2 }
+    public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2, CloseMeGUI = 3 }
 }

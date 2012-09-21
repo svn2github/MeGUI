@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,8 +26,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using System.Text.RegularExpressions;
 
 using MeGUI.core.util;
 using MeGUI.core.gui;
@@ -41,6 +43,7 @@ namespace MeGUI.core.details
         private MainForm mainForm;
         private WorkerSummary summary;
         private AfterEncoding currentAfterEncoding;
+        private Semaphore resourceLock;
 
         #region public interface: process windows, start/stop/abort
         public void ShowAllProcessWindows()
@@ -48,7 +51,6 @@ namespace MeGUI.core.details
             foreach (JobWorker w in workers.Values)
                 if (w.IsProgressWindowAvailable) w.ShowProcessWindow();
         }
-
 
         public void HideAllProcessWindows()
         {
@@ -65,12 +67,23 @@ namespace MeGUI.core.details
 
         public void StartAll(bool restartStopping)
         {
+            // check for missing components
+            if (UpdateWindow.isComponentMissing(false))
+            {
+                mainForm.startUpdateCheck();
+                return;
+            }
+
             if (workers.Values.Count == 0)
               NewWorker(freeWorkerName(), false);
 
             foreach (JobWorker w in workers.Values)
-                if (!w.IsEncoding) w.StartEncoding(false);
-                else if (restartStopping && w.Status == JobWorkerStatus.Stopping) w.SetRunning();
+            {
+                if (!w.IsEncoding)
+                    w.StartEncoding(false);
+                else if (restartStopping && w.Status == JobWorkerStatus.Stopping)
+                    w.SetRunning();
+            }
             refresh();
         }
 
@@ -90,6 +103,13 @@ namespace MeGUI.core.details
             addSendToTemporaryWorkerMenuItem();
             jobQueue.RequestJobDeleted = new RequestJobDeleted(this.DeleteJob);
             summary = new WorkerSummary(this);
+            resourceLock = new Semaphore(1, 1);
+        }
+
+        public Semaphore ResourceLock
+        {
+            get { return resourceLock; }
+            set { resourceLock = value; }
         }
 
         private void addSendToTemporaryWorkerMenuItem()
@@ -114,6 +134,7 @@ namespace MeGUI.core.details
                     }
                     this.refresh();
                     w.Mode = JobWorkerMode.CloseOnLocalListCompleted;
+                    w.IsTemporaryWorker = true;
                     w.StartEncoding(true);
                 }));
         }
@@ -126,7 +147,7 @@ namespace MeGUI.core.details
             workers[j.OwningWorker].RemoveJobFromQueue(j);
             j.OwningWorker = null;
             if (!jobQueue.HasJob(j))
-                jobQueue.enqueueJob(j);
+                jobQueue.queueJob(j);
             refresh();
         }
 
@@ -138,7 +159,7 @@ namespace MeGUI.core.details
             {
                 foreach (TaggedJob j in jobs)
                 {
-                    if (j.Status == JobStatus.PROCESSING)
+                    if (j.Status == JobStatus.PROCESSING || j.Status == JobStatus.ABORTING)
                     {
                         MessageBox.Show("Can't move '" + j.Name + "' because it is currently processing.", "Can't move job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         continue;
@@ -197,6 +218,15 @@ namespace MeGUI.core.details
                 return false;
             }
         }
+        public bool IsAnyWorkerEncodingAudio
+        {
+            get
+            {
+                foreach (JobWorker w in workers.Values)
+                    if (w.IsEncodingAudio) return true;
+                return false;
+            }
+        }
         public AfterEncoding CurrentAfterEncoding
         {
             get
@@ -238,7 +268,7 @@ namespace MeGUI.core.details
         #region deleting jobs
         internal void DeleteJob(TaggedJob job)
         {
-            if (job.Status == JobStatus.PROCESSING)
+            if (job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING)
             {
                 MessageBox.Show("You cannot delete a job while it is being processed.", "Deleting job failed", MessageBoxButtons.OK);
                 return;
@@ -284,8 +314,28 @@ namespace MeGUI.core.details
 
         private void reallyDeleteJob(TaggedJob job)
         {
-            if (job.Status == JobStatus.PROCESSING) return;
+            if (job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING) 
+                return;
 
+            if (job.Status != JobStatus.DONE && MainForm.Instance.Settings.DeleteIntermediateFiles)
+            {
+                List<string> filesToDelete = new List<string>();
+                if (job.Job.FilesToDelete.Count > 0)
+                    filesToDelete.AddRange(job.Job.FilesToDelete);
+                if (job.Job is CleanupJob && ((CleanupJob)job.Job).files.Count > 0)
+                    filesToDelete.AddRange(((CleanupJob)job.Job).files);
+                if (filesToDelete.Count > 0)
+                {
+                    LogItem oLog = FileUtil.DeleteIntermediateFiles(filesToDelete, false);
+                    if (oLog != null)
+                    {
+                        LogItem log = mainForm.Log.Info(string.Format("Log for {0} ({1}, {2} -> {3})", job.Name, job.Job.EncodingMode, job.InputFileName, job.OutputFileName));
+                        log.Add(oLog);
+                    }
+                }
+            }
+
+            mainForm.Jobs.ResourceLock.WaitOne(10000, false);
             if (job.OwningWorker != null && workers.ContainsKey(job.OwningWorker))
                 workers[job.OwningWorker].RemoveJobFromQueue(job);
 
@@ -304,6 +354,7 @@ namespace MeGUI.core.details
                 File.Delete(fileName);
             
             allJobs.Remove(job.Name);
+            mainForm.Jobs.ResourceLock.Release();
         }
 
         private void deleteAllDependantJobs(TaggedJob job)
@@ -321,6 +372,13 @@ namespace MeGUI.core.details
             summary.RefreshInfo();
         }
 
+        public void StartPostponedWorkers()
+        {
+            foreach (JobWorker w in workers.Values)
+                if (w.Status == JobWorkerStatus.Postponed)
+                    w.StartEncoding(false);
+        }
+
         #region saving / loading jobs
         internal List<string> toStringList(IEnumerable<TaggedJob> jobList)
         {
@@ -334,13 +392,14 @@ namespace MeGUI.core.details
         /// </summary>
         public void saveJobs()
         {
+            mainForm.Jobs.ResourceLock.WaitOne(10000, false);
             foreach (TaggedJob job in allJobs.Values)
             {
                 job.EnabledJobNames = toStringList(job.EnabledJobs);
                 job.RequiredJobNames = toStringList(job.RequiredJobs);
                 saveJob(job, mainForm.MeGUIPath);
             }
-
+            mainForm.Jobs.ResourceLock.Release();
             saveJobLists();
         }
 
@@ -354,6 +413,7 @@ namespace MeGUI.core.details
         {
             JobListSerializer s = new JobListSerializer();
 
+            mainForm.Jobs.ResourceLock.WaitOne(10000, false);
             s.mainJobList = toStringList(jobQueue.JobList);
 
             foreach (JobWorker w in workers.Values)
@@ -363,6 +423,7 @@ namespace MeGUI.core.details
             string path = Path.Combine(mainForm.MeGUIPath, "joblists.xml");
 
             Util.XmlSerialize(s, path);
+            mainForm.Jobs.ResourceLock.Release();
         }
 
         private void loadJobLists()
@@ -375,16 +436,34 @@ namespace MeGUI.core.details
             foreach (Pair<string, List<string>> p in s.workersAndTheirJobLists)
             {
                 JobWorkerMode mode = JobWorkerMode.RequestNewJobs;
+                bool bIsTemporaryWorker = false;
                 if (p.fst.StartsWith("Temporary worker "))
                 {
                     if (p.snd.Count == 0) continue;
                     mode = JobWorkerMode.CloseOnLocalListCompleted;
+                    bIsTemporaryWorker = true;
                 }
                 JobWorker w = NewWorker(p.fst, false);
                 w.Mode = mode;
+                w.IsTemporaryWorker = bIsTemporaryWorker;
+
+                // check if there are any unassigned jobs which belongs to this worker
+                foreach (TaggedJob oJob in allJobs.Values)
+                {
+                    if (w.Name.Equals(oJob.OwningWorker) && !p.snd.Contains(oJob.Name))
+                        p.snd.Add(oJob.Name);
+                }
+
                 IEnumerable<TaggedJob> list = toJobList(p.snd);
                 foreach (TaggedJob j in list)
                     w.AddJob(j);
+            }
+
+            // check if there are any assigned jobs which have no existing worker
+            foreach (TaggedJob oJob in allJobs.Values)
+            {
+                if (oJob.OwningWorker != null && !workers.ContainsKey(oJob.OwningWorker))
+                    oJob.OwningWorker = null;
             }
         }
 
@@ -402,7 +481,7 @@ namespace MeGUI.core.details
             {
                 string fileName = fi.FullName;
                 TaggedJob job = loadJob(fileName);
-                if (job != null)
+                if (job != null && job.Name != null)
                 {
                     if (allJobs.ContainsKey(job.Name))
                         MessageBox.Show("A job named " + job.Name + " is already in the queue.\nThe job defined in " + fileName + "\nwill be discarded", "Duplicate job name detected",
@@ -414,7 +493,7 @@ namespace MeGUI.core.details
 
             foreach (TaggedJob job in allJobs.Values)
             {
-                if (job.Status == JobStatus.PROCESSING)
+                if (job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING)
                     job.Status = JobStatus.ABORTED;
 
                 job.RequiredJobs = toJobList(job.RequiredJobNames);
@@ -477,7 +556,8 @@ namespace MeGUI.core.details
                         try { s.Close(); File.Delete(name); }
                         catch (Exception) { }
                     }
-                    Console.Write(e.Message);
+                    LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("loadJob: " + name, e, ImageType.Error);
                     return null;
                 }
             }
@@ -493,17 +573,12 @@ namespace MeGUI.core.details
         private string getFreeJobName()
         {
             int jobNr = 1;
+            string name = "";
             while (true)
             {
-                string name = "job" + jobNr;
-                bool found = false;
-                foreach (string jobName in allJobs.Keys)
-                    if (jobName.StartsWith(name))
-                    {
-                        found = true;
-                        break;
-                    }
-                if (!found) return name;
+                name = "job" + jobNr;
+                if (!allJobs.ContainsKey(name))
+                    return name;
                 jobNr++;
             }
         }
@@ -512,6 +587,9 @@ namespace MeGUI.core.details
         #region adding jobs to queue
         public void addJobsWithDependencies(JobChain c)
         {
+            if (c == null)
+                return;
+
             foreach (TaggedJob j in c.Jobs)
                 addJob(j);
             saveJobs();
@@ -536,9 +614,11 @@ namespace MeGUI.core.details
 
         private void addJob(TaggedJob job)
         {
+            mainForm.Jobs.ResourceLock.WaitOne(10000, false);
             job.Name = getFreeJobName();
             allJobs[job.Name] = job;
-            jobQueue.enqueueJob(job);
+            jobQueue.queueJob(job);
+            mainForm.Jobs.ResourceLock.Release();
         }
         #endregion
 
@@ -551,7 +631,10 @@ namespace MeGUI.core.details
         {
             currentAfterEncoding = Settings.AfterEncoding;
             cbAfterEncoding.SelectedIndex = (int) currentAfterEncoding;
-            cbAfterEncoding.Items[2] = "Run '" + Settings.AfterEncodingCommand + "'";
+            if (String.IsNullOrEmpty(Settings.AfterEncodingCommand))
+                cbAfterEncoding.Items[2] = "Run command (command not specified!)";
+            else
+                cbAfterEncoding.Items[2] = "Run '" + Settings.AfterEncodingCommand + "'";
         }
 
 
@@ -594,6 +677,7 @@ namespace MeGUI.core.details
                     if (job.Status == JobStatus.WAITING &&
                         job.OwningWorker == null &&
                         areDependenciesMet(job))
+                        //(!IsAnyWorkerEncodingAudio || !job.Job.EncodingMode.Equals("audio")))
                         return job;
                 }
                 return null;
@@ -704,8 +788,10 @@ namespace MeGUI.core.details
 
         void WorkerFinishedJobs(object sender, EventArgs e)
         {
+            mainForm.Jobs.StartPostponedWorkers();
+
             foreach (JobWorker w in workers.Values)
-                if (w.Status != JobWorkerStatus.Idle)
+                if (w.IsEncoding)
                     return;
 
             mainForm.runAfterEncodingCommands();
@@ -747,7 +833,7 @@ namespace MeGUI.core.details
         internal void ShutDown(JobWorker w)
         {
             workers.Remove(w.Name);
-            if (w.Visible) w.Close();
+            if (w.Visible) Util.ThreadSafeRun(w, delegate { w.Close(); });
             summary.Remove(w.Name);
         }
 

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ namespace MeGUI
         private const int PRODUCT_ULTIMATE = 0x00000001;
         private const int PRODUCT_HOME_BASIC = 0x00000002;
         private const int PRODUCT_HOME_PREMIUM = 0x00000003;
-        private const int PRODUCT_ENTREPRISE = 0x00000004;
+        private const int PRODUCT_ENTERPRISE = 0x00000004;
         private const int PRODUCT_HOME_BASIC_N = 0x00000005;
         private const int PRODUCT_BUSINESS = 0x00000006;
         private const int PRODUCT_BUSINESS_N = 0x00000010;
@@ -87,15 +87,18 @@ namespace MeGUI
         /// </summary>
         /// <returns>a boolean</returns>
         public static bool isWow64()
-        {           
-             Process p = Process.GetCurrentProcess();
-             IntPtr handle = p.Handle;
-             bool isWow64;
-             bool success = IsWow64Process(handle, out isWow64);
-             if ((!success) && (IntPtr.Size != 8))
-                 throw new Exception();
-             else
-                 return isWow64;
+        {
+            if (Environment.OSVersion.Version.Major == 5 && Environment.OSVersion.Version.Minor == 0)
+                return false;   // windows 2000
+
+            Process p = Process.GetCurrentProcess();
+            IntPtr handle = p.Handle;
+            bool isWow64;
+            bool success = IsWow64Process(handle, out isWow64);
+            if ((!success) && (IntPtr.Size != 8))
+                throw new Exception();
+            else
+                return isWow64;
         }
 
         /// <summary>
@@ -201,7 +204,7 @@ namespace MeGUI
                                                     if ((osVersionInfo.wSuiteMask & VER_SUITE_DATACENTER) == VER_SUITE_DATACENTER)
                                                          osName = "Windows Server 2003 DataCenter Edition";
                                                     else if ((osVersionInfo.wSuiteMask & VER_SUITE_ENTERPRISE) == VER_SUITE_ENTERPRISE)
-                                                         osName = "Windows Server 2003 Entreprise Edition";
+                                                         osName = "Windows Server 2003 Enterprise Edition";
                                                     else if ((osVersionInfo.wSuiteMask & VER_SUITE_BLADE) == VER_SUITE_BLADE)
                                                          osName = "Windows Server 2003 Web Edition";
                                                     else osName = "Windows Server 2003 Standard Edition";
@@ -234,7 +237,7 @@ namespace MeGUI
                                                                         case PRODUCT_HOME_BASIC:
                                                                         case PRODUCT_HOME_BASIC_N: osName = "Windows Vista Home Basic Edition"; break;
                                                                         case PRODUCT_HOME_PREMIUM: osName = "Windows Vista Premium Edition";    break;
-                                                                        case PRODUCT_ENTREPRISE:   osName = "Windows Vista Entreprise Edition"; break;
+                                                                        case PRODUCT_ENTERPRISE:   osName = "Windows Vista Enterprise Edition"; break;
                                                                         case PRODUCT_BUSINESS:
                                                                         case PRODUCT_BUSINESS_N:   osName = "Windows Vista Business Edition";   break;
                                                                         case PRODUCT_STARTER:      osName = "Windows Vista Starter Edition";    break;
@@ -265,15 +268,15 @@ namespace MeGUI
                                                     {
                                                         switch (edition)
                                                         {
-                                                            case PRODUCT_ULTIMATE: osName = "Windows Seven Ultimate Edition"; break;
+                                                            case PRODUCT_ULTIMATE: osName = "Windows 7 Ultimate Edition"; break;
                                                             case PRODUCT_HOME_BASIC:
-                                                            case PRODUCT_HOME_BASIC_N: osName = "Windows Seven Home Basic Edition"; break;
-                                                            case PRODUCT_HOME_PREMIUM: osName = "Windows Seven Premium Edition"; break;
-                                                            case PRODUCT_ENTREPRISE: osName = "Windows Seven Entreprise Edition"; break;
+                                                            case PRODUCT_HOME_BASIC_N: osName = "Windows 7 Home Basic Edition"; break;
+                                                            case PRODUCT_HOME_PREMIUM: osName = "Windows 7 Premium Edition"; break;
+                                                            case PRODUCT_ENTERPRISE: osName = "Windows 7 Enterprise Edition"; break;
                                                             case PRODUCT_BUSINESS:
-                                                            case PRODUCT_BUSINESS_N: osName = "Windows Seven Professional Edition"; break;
-                                                            case PRODUCT_STARTER: osName = "Windows Seven Starter Edition"; break;
-                                                            default: osName = "Windows Seven"; break;
+                                                            case PRODUCT_BUSINESS_N: osName = "Windows 7 Professional Edition"; break;
+                                                            case PRODUCT_STARTER: osName = "Windows 7 Starter Edition"; break;
+                                                            default: osName = "Windows 7"; break;
                                                         }
                                                     } break;
                                                 }
@@ -284,15 +287,17 @@ namespace MeGUI
                         }
                 }
             }
+#if x64
+            osName += " x64";
+#endif
 #if x86
             if (x64Detection)
             {
-                if (isWow64())
-                     osName += " x64";
-                else osName += " x86";
+                if (!isWow64())
+                    osName += " x86";
+                else
+                    osName += " x64";
             }
-#else
-            osName += " x64";
 #endif
             return osName;
         }
@@ -321,7 +326,22 @@ namespace MeGUI
                     {
                         Microsoft.Win32.RegistryKey key = componentsKey.OpenSubKey(instComp);
                         string version = (string)key.GetValue("Version");
-                        versions.Add(version);                                                  
+
+                        if (!String.IsNullOrEmpty(version))
+                        {
+                            versions.Add(version);
+                        }
+                        else
+                        {
+                            foreach (string strRegKey in key.GetSubKeyNames())
+                            {
+                                Microsoft.Win32.RegistryKey strKey = key.OpenSubKey(strRegKey);
+                                string strVersion = (string)strKey.GetValue("Version");
+                                if (!String.IsNullOrEmpty(strVersion)) 
+                                    versions.Add(strVersion);
+                            }
+                        }
+                          
                     }
 
                     IEnumerator etr = versions.GetEnumerator();
@@ -345,119 +365,135 @@ namespace MeGUI
         public static string DotNetVersionFormated(string dotNetVersion)
         {
             string dnvf = "unknown";
+            string major = string.Empty;
+            string minor = string.Empty;
+            string build = string.Empty;
+            string revision = string.Empty;
 
-            if (dotNetVersion != "unknown")
+            try
             {
-                string[] versions = dotNetVersion.Split('.');
-                string major = versions[0].ToString();
-                string minor = versions[1].ToString();
-                string build = versions[2].ToString();
-                string revision = string.Empty;
-                if (versions.Length > 3)
-                    revision = versions[3].ToString();
-
-                switch (major)
+                if (dotNetVersion != "unknown")
                 {
-                    case "1":
-                        {
-                            switch (minor)
+                    string[] versions = dotNetVersion.Split('.');
+
+                    if (versions.Length >= 1)
+                        major = versions[0].ToString();
+                    if (versions.Length > 1)
+                        minor = versions[1].ToString();
+                    if (versions.Length > 2)
+                        build = versions[2].ToString();
+                    if (versions.Length > 3)
+                        revision = versions[3].ToString();
+
+                    switch (major)
+                    {
+                        case "1":
                             {
-                                case "0":
-                                    {
-                                        switch (revision)
+                                switch (minor)
+                                {
+                                    case "0":
                                         {
-                                            case "209": dnvf = "1.0 SP1"; break;
-                                            case "288": dnvf = "1.0 SP2"; break;
-                                            case "6018": dnvf = "1.0 SP3"; break;
-                                            default: dnvf = "1.0"; break;
+                                            switch (revision)
+                                            {
+                                                case "209": dnvf = "1.0 SP1"; break;
+                                                case "288": dnvf = "1.0 SP2"; break;
+                                                case "6018": dnvf = "1.0 SP3"; break;
+                                                default: dnvf = "1.0"; break;
+                                            }
                                         }
-                                    }
-                                    break;
-                                case "1":
-                                    {
-                                        switch (revision)
+                                        break;
+                                    case "1":
                                         {
-                                            case "2032":
-                                            case "2300": dnvf = "1.1 SP1"; break;
-                                            default: dnvf = "1.1"; break;
+                                            switch (revision)
+                                            {
+                                                case "2032":
+                                                case "2300": dnvf = "1.1 SP1"; break;
+                                                default: dnvf = "1.1"; break;
+                                            }
                                         }
-                                    }
-                                    break;
+                                        break;
+                                    default: dnvf = "1.x"; break;
+                                }
+                                break;
+                            }
+                        case "2":
+                            {
+                                switch (revision)
+                                {
+                                    case "1433":
+                                    case "1434": dnvf = "2.0 SP1"; break;
+                                    case "2407":
+                                    case "3053":
+                                    case "3074":
+                                    case "4016":
+                                    case "4927": dnvf = "2.0 SP2"; break;
+                                    default: dnvf = "2.0"; break;
+                                }
                             }
                             break;
-                        }
-                    case "2":
-                        {
-                            switch (revision)
+                        case "3":
                             {
-                                case "1433":
-                                case "1434": dnvf = "2.0 SP1"; break;
-                                case "2407": 
-                                case "3053":
-                                case "3074":
-                                case "4016":
-                                case "4927": dnvf = "2.0 SP2"; break;
-                                default: dnvf = "2.0"; break;
+                                switch (minor)
+                                {
+                                    case "0":
+                                        {
+                                            switch (revision)
+                                            {
+                                                case "648": dnvf = "3.0 SP1"; break;
+                                                case "1453":
+                                                case "2123":
+                                                case "4000":
+                                                case "4037":
+                                                case "4902": // Se7en
+                                                case "4926": // Se7en
+                                                    dnvf = "3.0 SP2"; break;
+                                                default: dnvf = "3.0"; break;
+                                            }
+                                        }
+                                        break;
+                                    case "5":
+                                        {
+                                            switch (revision)
+                                            {
+                                                case "4926": // Se7en
+                                                case "1": dnvf = "3.5 SP1"; break;
+                                                default: dnvf = "3.5"; break;
+                                            }
+                                        }
+                                        break;
+                                    default: dnvf = "3.x"; break;
+                                }
                             }
-                        }
-                        break;
-                    case "3":
-                        {
-                            switch (minor)
+                            break;
+                        case "4":
                             {
-                                case "0":
-                                    {
-                                        switch (revision)
+                                switch (minor)
+                                {
+                                    case "0":
                                         {
-                                            case "648":  dnvf = "3.0 SP1"; break;
-                                            case "1453":
-                                            case "2123":
-                                            case "4000":
-                                            case "4037":
-                                            case "4902": // Se7en
-                                            case "4926": // Se7en
-                                                         dnvf = "3.0 SP2"; break;
-                                            default: dnvf = "3.0"; break;
+                                            switch (build)
+                                            {
+                                                default: dnvf = "4.0"; break;
+                                            }
                                         }
-                                    }
-                                    break;
-                                case "5":
-                                    {
-                                        switch (revision)
-                                        {
-                                            case "4926": // Se7en
-                                            case "1": dnvf = "3.5 SP1"; break;
-                                            default: dnvf = "3.5"; break;
-                                        }
-                                    }
-                                    break;
+                                        break;
+                                    default: dnvf = "4.x"; break;
+                                }
                             }
-                        }
-                        break;
-                    case "4":
-                        {
-                            switch (minor)
-                            {
-                                case "0":
-                                    {
-                                        switch (build)
-                                        {
-                                            case "20506": dnvf = "4.0 Beta 1"; break;
-                                            default: dnvf = "4.0"; break;
-                                        }
-                                    }
-                                    break;
-                            }
-                        }
-                        break;
+                            break;
+                        default: dnvf = major + ".x"; break;
+                    }
+
+                    if (string.IsNullOrEmpty(revision))
+                        dnvf += " (" + major + "." + minor + "." + build + ")";
+                    else
+                        dnvf += " (" + major + "." + minor + "." + build + "." + revision + ")";
                 }
-
-                if (string.IsNullOrEmpty(revision))
-                    dnvf += " (" + major + "." + minor + "." + build + ")";
-                else
-                    dnvf += " (" + major + "." + minor + "." + build + "." + revision + ")";
             }
-
+            catch
+            {
+                dnvf = "unknown: " + dotNetVersion;
+            }
             return dnvf;
         }
 

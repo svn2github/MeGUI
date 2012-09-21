@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -170,17 +170,29 @@ namespace MeGUI.core.details
             List<TaggedJob> jobs = new List<TaggedJob>();
             JobChain last = null;
 
-            foreach (JobChain c in chains)
+            for (int i = 0; i < chains.Length; i++ )
             {
-                TaggedJob[] cjobs = c.Jobs;
+                if (chains[i] == null || chains[i].Jobs.Length == 0)
+                    continue;
+                TaggedJob[] cjobs = chains[i].Jobs;
                 if (last != null)
-                    c.MakeStartDepend(new MakeDependant(last.MakeJobDependOnChain));
+                    chains[i].MakeStartDepend(new MakeDependant(last.MakeJobDependOnChain));
                 jobs.AddRange(cjobs);
-                last = c;
+                last = chains[i];
             }
             this.jobs = jobs.ToArray();
-            first = chains[0];
-            this.last = chains[chains.Length - 1];
+            for (int i = 0; i < chains.Length; i++)
+            {
+                this.first = chains[i];
+                if (chains[i] != null && chains[i].Jobs.Length > 0)
+                    break;
+            }
+            for (int i = chains.Length - 1; i >= 0; i--)
+            {
+                this.last = chains[i];
+                if (chains[i] != null && chains[i].Jobs.Length > 0)
+                    break;
+            }
         }
 
         internal override TaggedJob[] Jobs
@@ -201,5 +213,4 @@ namespace MeGUI.core.details
     }
     
     #endregion
-
 }

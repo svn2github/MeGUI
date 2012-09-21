@@ -1,38 +1,23 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeGUI", "MeGUI.csproj", "{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-		test|Any CPU = test|Any CPU
-		test|x64 = test|x64
-		test|x86 = test|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Debug|x64.ActiveCfg = Debug|x64
 		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Debug|x64.Build.0 = Debug|x64
 		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Debug|x86.ActiveCfg = Debug|x86
 		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Debug|x86.Build.0 = Debug|x86
-		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Release|x64.ActiveCfg = Release|x64
 		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Release|x64.Build.0 = Release|x64
 		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Release|x86.ActiveCfg = Release|x86
 		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Release|x86.Build.0 = Release|x86
-		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.test|Any CPU.ActiveCfg = Debug|Any CPU
-		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.test|Any CPU.Build.0 = Debug|Any CPU
-		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.test|x64.ActiveCfg = test|x64
-		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.test|x64.Build.0 = test|x64
-		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.test|x86.ActiveCfg = test|x86
-		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.test|x86.Build.0 = test|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

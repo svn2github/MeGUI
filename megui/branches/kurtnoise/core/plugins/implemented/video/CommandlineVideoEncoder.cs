@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ namespace MeGUI
         ulong numberOfFrames;
         ulong? currentFrameNumber;
         protected int hres = 0, vres = 0;
+        protected int fps_n = 0, fps_d = 0;
         Dar? dar;
         protected bool usesSAR = false;
         #endregion
@@ -48,7 +49,18 @@ namespace MeGUI
         protected override void checkJobIO()
         {
             base.checkJobIO();
-
+            if (File.Exists(job.Input) && Path.GetExtension(job.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
+            {
+                string strAVSFile = String.Empty;
+                try
+                {
+                    StreamReader sr = new StreamReader(job.Input, Encoding.Default);
+                    strAVSFile = sr.ReadToEnd();
+                    sr.Close();
+                }
+                catch (Exception) {}
+                log.LogValue("Avisynth input script", strAVSFile);
+            }
             su.Status = "Encoding video...";
             getInputProperties(job);
         }
@@ -63,7 +75,7 @@ namespace MeGUI
         {
             double fps;
             Dar d;
-            JobUtil.GetAllInputProperties( out numberOfFrames, out fps, out hres, out vres,out d, job.Input);
+            JobUtil.GetAllInputProperties(out numberOfFrames, out fps, out fps_n, out fps_d, out hres, out vres, out d, job.Input);
             dar = job.DAR;
             su.NbFramesTotal = numberOfFrames;
             su.ClipLength = TimeSpan.FromSeconds((double)numberOfFrames / fps);
@@ -73,11 +85,13 @@ namespace MeGUI
         {
             if (!su.HasError && !su.WasAborted)
                 compileFinalStats();
+
+            base.doExitConfig();
         }
         /// <summary>
         /// compiles final bitrate statistics
         /// </summary>
-        private void compileFinalStats()
+        protected void compileFinalStats()
         {
             try
             {
@@ -95,16 +109,12 @@ namespace MeGUI
 
                     LogItem stats = log.Info("Final statistics");
 
-                    if (job.Settings.SettingsID != "DivX264")
-                    {
-                        if (job.Settings.EncodingMode == 1) // QP mode
-                            stats.LogValue("Constant Quantizer Mode", "Quantizer " + job.Settings.BitrateQuantizer + " computed...");
-                        else if (job.Settings.EncodingMode == 9) // CRF mode
-                            stats.LogValue("Constant Quality Mode", "Quality " + job.Settings.BitrateQuantizer + " computed...");
-                        else
-                            stats.LogValue("Video Bitrate Desired", job.Settings.BitrateQuantizer + " kbit/s");
-                    }
-                    else stats.LogValue("Video Bitrate Desired", job.Settings.BitrateQuantizer + " kbit/s");
+                    if (job.Settings.EncodingMode == 1) // QP mode
+                        stats.LogValue("Constant Quantizer Mode", "Quantizer " + job.Settings.BitrateQuantizer + " computed...");
+                    else if (job.Settings.EncodingMode == 9) // CRF mode
+                        stats.LogValue("Constant Quality Mode", "Quality " + job.Settings.BitrateQuantizer + " computed...");
+                    else
+                        stats.LogValue("Video Bitrate Desired", job.Settings.BitrateQuantizer + " kbit/s");
 
                     stats.LogValue("Video Bitrate Obtained (approximate)", bitrate + " kbit/s");
                 }
@@ -124,17 +134,18 @@ namespace MeGUI
             {
                 int currentFrameNumber;
                 if (int.TryParse(frameString, out currentFrameNumber))
-                    this.currentFrameNumber = (ulong)currentFrameNumber;
+                    if (currentFrameNumber < 0)
+                        this.currentFrameNumber = 0;
+                    else
+                        this.currentFrameNumber = (ulong)currentFrameNumber;
             }
             if (!string.IsNullOrEmpty(errorString))
             {
                 su.HasError = true;
                 log.LogValue("An error occurred", errorString, ImageType.Error);
             }
-            if (errorString == null && frameString == null)
-            {
+            if (frameString == null)
                 base.ProcessLine(line, stream);
-            }
         }
 
         public abstract string GetFrameString(string line, StreamType stream);

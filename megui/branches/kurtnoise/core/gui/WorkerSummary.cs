@@ -44,15 +44,7 @@ namespace MeGUI.core.gui
             panel1.Width = width;
             panel1.Location = new Point(0, 0);
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            Util.SetSize(this, MeGUI.Properties.Settings.Default.WorkerSummarySize, MeGUI.Properties.Settings.Default.WorkerSummaryWindowState);
-            Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
             this.jobs = jobs;
-        }
-
-        void Application_ApplicationExit(object sender, EventArgs e)
-        {
-            Util.SaveSize(this, delegate(System.Drawing.Size s) { MeGUI.Properties.Settings.Default.WorkerSummarySize = s; },
-                delegate(FormWindowState s) { MeGUI.Properties.Settings.Default.WorkerSummaryWindowState = s; });
         }
 
         JobControl jobs;

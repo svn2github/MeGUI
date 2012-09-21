@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ namespace MeGUI.core.gui
     public enum PauseResumeMode { Pause, Resume, Disabled };
     public enum Dependencies { DeleteAll, RemoveDependencies }
 
-    public partial class JobQueue : UserControl, IPersistComponentSettings
+    public partial class JobQueue : UserControl
     {
         #region pause/play image
 #if CSC
@@ -161,11 +161,11 @@ namespace MeGUI.core.gui
             }
         }
 
-        internal void enqueueJob(TaggedJob j)
+        internal void queueJob(TaggedJob j)
         {
             if (InvokeRequired)
             {
-                Invoke(new MethodInvoker(delegate { enqueueJob(j); }));
+                Invoke(new MethodInvoker(delegate { queueJob(j); }));
                 return;
             }
 
@@ -304,11 +304,7 @@ namespace MeGUI.core.gui
             StartStopMode = StartStopMode.Start;
             PauseResumeMode = PauseResumeMode.Disabled;
             
-            settings = new JobQueueSettings(this, Name);
             this.LoadComponentSettings();
-            this.Disposed += delegate(object _, EventArgs __) {
-                SaveComponentSettings();
-            };
         }
 
         #region job deletion
@@ -448,6 +444,25 @@ namespace MeGUI.core.gui
         }
 
         /// <summary>
+        /// Tells if the current selection can be edited.
+        /// Checks:
+        ///     if one job actually selected
+        ///     whether the selected job is waiting or postponed
+        /// </summary>
+        /// <returns></returns>
+        private bool isSelectionEditable()
+        {
+            if (queueListView.SelectedItems.Count != 1)
+                return false;
+
+            TaggedJob job = jobs[queueListView.SelectedItems[0].Text];
+            if (job.Status != JobStatus.WAITING && job.Status != JobStatus.POSTPONED)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
         /// Tells if the given list of indices is consecutive; if so, sets min and 
         /// max to the min and max indices
         /// </summary>
@@ -477,27 +492,37 @@ namespace MeGUI.core.gui
         {
             upButton.Enabled = isSelectionMovable(Direction.Up);
             downButton.Enabled = isSelectionMovable(Direction.Down);
+
+            editJobButton.Enabled = isSelectionEditable();
         }
 
         #endregion
 
         #region load/update
-        private void loadJobButton_Click(object sender, EventArgs e)
+        private void editJobButton_Click(object sender, EventArgs e)
         {
+            bool bJobCanBeEdited = false;
+
             if (queueListView.SelectedItems.Count != 1)
                 return;
 
             TaggedJob job = jobs[queueListView.SelectedItems[0].Text];
-
-            if (job.Status != JobStatus.WAITING)
+            if (job.Status != JobStatus.WAITING && job.Status != JobStatus.POSTPONED)
                 return;
 
             foreach (IDable<ReconfigureJob> i in MainForm.Instance.PackageSystem.JobConfigurers.Values)
             {
                 Job j = i.Data(job.Job);
                 if (j != null)
+                {
+                    bJobCanBeEdited = true;
                     job.Job = j;
+                }
             }
+
+            if (!bJobCanBeEdited)
+                MessageBox.Show("This kind of job cannot be edited.", "Cannot edit job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
         }
         #endregion
 
@@ -552,6 +577,8 @@ namespace MeGUI.core.gui
             {
                 int position = this.queueListView.SelectedItems[0].Index;
                 TaggedJob job = jobs[this.queueListView.SelectedItems[0].Text];
+                if (job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING) // job is being processed -> do nothing
+                    return;
                 if (job.Status == JobStatus.WAITING) // waiting -> postponed
                     job.Status = JobStatus.POSTPONED;
                 else
@@ -633,10 +660,10 @@ namespace MeGUI.core.gui
             AbortMenuItem.Enabled = AllJobsHaveStatus(JobStatus.PROCESSING) || AllJobsHaveStatus(JobStatus.ABORTED);
             AbortMenuItem.Checked = AllJobsHaveStatus(JobStatus.ABORTED);
 
-            LoadMenuItem.Enabled = this.queueListView.SelectedItems.Count == 1;
-            LoadMenuItem.Checked = false;
+            EditMenuItem.Enabled = isSelectionEditable();
+            EditMenuItem.Checked = false;
 
-            bool canModifySelectedJobs = !AnyJobsHaveStatus(JobStatus.PROCESSING) && this.queueListView.SelectedItems.Count > 0;
+            bool canModifySelectedJobs = !AnyJobsHaveStatus(JobStatus.PROCESSING) && !AnyJobsHaveStatus(JobStatus.ABORTING) && this.queueListView.SelectedItems.Count > 0;
             DeleteMenuItem.Enabled = PostponedMenuItem.Enabled = WaitingMenuItem.Enabled = canModifySelectedJobs;
 
             DeleteMenuItem.Checked = false;
@@ -726,7 +753,7 @@ namespace MeGUI.core.gui
                     item.SubItems[8].Text = "";
                     item.SubItems[9].Text = "";
                 }
-                if (job.Status == JobStatus.DONE || job.Status == JobStatus.PROCESSING)
+                if (job.Status == JobStatus.DONE || job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING)
                     item.SubItems[7].Text = job.Start.ToLongTimeString();
                 else
                     item.SubItems[7].Text = "";
@@ -767,78 +794,57 @@ namespace MeGUI.core.gui
 
         private void queueListView_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Control && e.KeyCode.Equals(Keys.A))
+            {
+                foreach (ListViewItem item in this.queueListView.Items)
+                    item.Selected = true;
+                return;
+            }
+
             switch (e.KeyCode)
             {
                 case Keys.Delete: deleteJobButton_Click(sender, e); break;
-                case Keys.Up: if (upButton.Enabled) upButton_Click(sender, e); break;
-                case Keys.Down: if (downButton.Enabled) downButton_Click(sender, e); break;
+                case Keys.Up: if (upButton.Enabled && e.Shift) upButton_Click(sender, e); break;
+                case Keys.Down: if (downButton.Enabled && e.Shift) downButton_Click(sender, e); break;
                 case Keys.Escape:
-                case Keys.Enter: startStopButton_Click(sender, e); break;               
+                case Keys.Enter: startStopButton_Click(sender, e); break;
             }
         }
 
         #region IPersistComponentSettings Members
-        JobQueueSettings settings;
 
         public void LoadComponentSettings()
         {
-            JobQueueSettings s = settings;
-            jobColumHeader.Width = s.JobColumnWidth;
-            inputColumnHeader.Width = s.InputColumnWidth;
-            outputColumnHeader.Width = s.OutputColumnWidth;
-            codecHeader.Width = s.CodecColumnWidth;
-            modeHeader.Width = s.ModeColumnWidth;
-            statusColumn.Width = s.StatusColumnWidth;
-            ownerHeader.Width = s.OwnerColumnWidth;
-            startColumn.Width = s.StartColumnWidth;
-            endColumn.Width = s.EndColumnWidth;
-            fpsColumn.Width = s.FPSColumnWidth;
-        }
+            if (MainForm.Instance == null) // Designer fix
+                return;
 
-        public void ResetComponentSettings()
-        {
-            settings.Reset();
+            jobColumHeader.Width = MainForm.Instance.Settings.JobColumnWidth;
+            inputColumnHeader.Width = MainForm.Instance.Settings.InputColumnWidth;
+            outputColumnHeader.Width = MainForm.Instance.Settings.OutputColumnWidth;
+            codecHeader.Width = MainForm.Instance.Settings.CodecColumnWidth;
+            modeHeader.Width = MainForm.Instance.Settings.ModeColumnWidth;
+            statusColumn.Width = MainForm.Instance.Settings.StatusColumnWidth;
+            ownerHeader.Width = MainForm.Instance.Settings.OwnerColumnWidth;
+            startColumn.Width = MainForm.Instance.Settings.StartColumnWidth;
+            endColumn.Width = MainForm.Instance.Settings.EndColumnWidth;
+            fpsColumn.Width = MainForm.Instance.Settings.FPSColumnWidth;
         }
 
         public void SaveComponentSettings()
         {
-            settings.JobColumnWidth = jobColumHeader.Width;
-            settings.InputColumnWidth = inputColumnHeader.Width;
-            settings.OutputColumnWidth = outputColumnHeader.Width;
-            settings.CodecColumnWidth = codecHeader.Width;
-            settings.ModeColumnWidth = modeHeader.Width;
-            settings.StatusColumnWidth = statusColumn.Width;
-            settings.OwnerColumnWidth = ownerHeader.Width;
-            settings.StartColumnWidth = startColumn.Width;
-            settings.EndColumnWidth = endColumn.Width;
-            settings.FPSColumnWidth = fpsColumn.Width;
-            
-            settings.Save();
-        }
+            if (MainForm.Instance == null) // Designer fix
+                return;
 
-       
-        public bool SaveSettings
-        {
-            get
-            {
-                return true;
-            }
-            set
-            {
-            }
-        }
-
-        public string SettingsKey
-        {
-            get
-            {
-                return Name;
-            }
-            set
-            {
-                if (settings != null)
-                    settings.SettingsKey = value;
-            }
+            MainForm.Instance.Settings.JobColumnWidth = jobColumHeader.Width;
+            MainForm.Instance.Settings.InputColumnWidth = inputColumnHeader.Width;
+            MainForm.Instance.Settings.OutputColumnWidth = outputColumnHeader.Width;
+            MainForm.Instance.Settings.CodecColumnWidth = codecHeader.Width;
+            MainForm.Instance.Settings.ModeColumnWidth = modeHeader.Width;
+            MainForm.Instance.Settings.StatusColumnWidth = statusColumn.Width;
+            MainForm.Instance.Settings.OwnerColumnWidth = ownerHeader.Width;
+            MainForm.Instance.Settings.StartColumnWidth = startColumn.Width;
+            MainForm.Instance.Settings.EndColumnWidth = endColumn.Width;
+            MainForm.Instance.Settings.FPSColumnWidth = fpsColumn.Width;
         }
 
         #endregion
@@ -851,152 +857,10 @@ namespace MeGUI.core.gui
                 VistaStuff.SetWindowTheme(queueListView.Handle, "explorer", null);
             }
         }
-    }
 
-    class JobQueueSettings : ApplicationSettingsBase
-    {
-        public JobQueueSettings(IComponent c, string k)
-            :base(k)
-        {}
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("40")]
-        public int JobColumnWidth
+        private void queueListView_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
         {
-            get
-            {
-                return ((int)(this["JobColumnWidth"]));
-            }
-            set
-            {
-                this["JobColumnWidth"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("89")]
-        public int InputColumnWidth
-        {
-            get
-            {
-                return ((int)(this["InputColumnWidth"]));
-            }
-            set
-            {
-                this["InputColumnWidth"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("89")]
-        public int OutputColumnWidth
-        {
-            get
-            {
-                return ((int)(this["OutputColumnWidth"]));
-            }
-            set
-            {
-                this["OutputColumnWidth"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("43")]
-        public int CodecColumnWidth
-        {
-            get
-            {
-                return ((int)(this["CodecColumnWidth"]));
-            }
-            set
-            {
-                this["CodecColumnWidth"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("75")]
-        public int ModeColumnWidth
-        {
-            get
-            {
-                return ((int)(this["ModeColumnWidth"]));
-            }
-            set
-            {
-                this["ModeColumnWidth"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSetting()]
-        [global::System.Configuration.DefaultSettingValue("60")]
-        public int OwnerColumnWidth
-        {
-            get
-            {
-                return ((int)(this["OwnerColumnWidth"]));
-            }
-            set
-            {
-                this["OwnerColumnWidth"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("51")]
-        public int StatusColumnWidth
-        {
-            get
-            {
-                return ((int)(this["StatusColumnWidth"]));
-            }
-            set
-            {
-                this["StatusColumnWidth"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("55")]
-        public int StartColumnWidth
-        {
-            get
-            {
-                return ((int)(this["StartColumnWidth"]));
-            }
-            set
-            {
-                this["StartColumnWidth"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("55")]
-        public int EndColumnWidth
-        {
-            get
-            {
-                return ((int)(this["EndColumnWidth"]));
-            }
-            set
-            {
-                this["EndColumnWidth"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("35")]
-        public int FPSColumnWidth
-        {
-            get
-            {
-                return ((int)(this["FPSColumnWidth"]));
-            }
-            set
-            {
-                this["FPSColumnWidth"] = value;
-            }
+            this.SaveComponentSettings();
         }
     }
 

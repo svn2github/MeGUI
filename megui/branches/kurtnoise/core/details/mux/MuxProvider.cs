@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -129,17 +129,14 @@ namespace MeGUI
                 List<ContainerType> outputTypes = muxerInterface.GetSupportedContainers();
                 foreach (ContainerType type in outputTypes)
                 {
-                    if (type.ID != "M2TS") // M2TS not available for the Bitrate Calculator yet
-                    {
-                        if (!supportedContainers.Contains(type))
-                            supportedContainers.Add(type);
-                    }
+                    if (!supportedContainers.Contains(type))
+                        supportedContainers.Add(type);
                 }
             }
             return supportedContainers;
         }
 
-        public List<DeviceType> GetSupportedDevices()
+        public List<DeviceType> GetSupportedDevices(ContainerType oType)
         {
             List<DeviceType> supportedDevices = new List<DeviceType>();
             foreach (IMuxing muxerInterface in mainForm.PackageSystem.MuxerProviders.Values)
@@ -147,12 +144,14 @@ namespace MeGUI
                 List<DeviceType> outputTypes = muxerInterface.GetSupportedDeviceTypes();
                 foreach (DeviceType type in outputTypes)
                 {
-                    if (!supportedDevices.Contains(type))
-                        supportedDevices.Add(type);
+                    if (type.ContainerType == oType)
+                        if (!supportedDevices.Contains(type))
+                            supportedDevices.Add(type);
                 }
             }
             return supportedDevices;
         }
+
         /// <summary>
         /// gets all the containers that can be supported given the video and a list of audio types
         /// this is used to limit the container dropdown in the autoencode window
@@ -374,8 +373,7 @@ namespace MeGUI
         {
             if (currentMuxPath.IsCompleted())
                 return currentMuxPath;
-
-            
+        
             List<MuxableType> handledInputTypes;
             List<MuxableType> unhandledInputTypes;
             List<MuxPath> allMuxPaths = new List<MuxPath>();
@@ -469,6 +467,7 @@ namespace MeGUI
             base.type = MuxerType.MP4BOX;
             maxFilesOfType = new int[] { 1, -1, -1, 1, 1};
             name = "MP4 Muxer";
+            shortcut = System.Windows.Forms.Shortcut.Ctrl5;
         }
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -497,13 +496,19 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.MP2);
             supportedAudioTypes.Add(AudioType.AC3);
             supportedAudioTypes.Add(AudioType.DTS);
+            supportedAudioTypes.Add(AudioType.WAV);
             supportedAudioTypes.Add(AudioType.EAC3);
+            supportedAudioTypes.Add(AudioType.FLAC);
+            supportedAudioTypes.Add(AudioType.THD);
+            supportedAudioTypes.Add(AudioType.DTSHD);
+            supportedAudioTypes.Add(AudioType.DTSMA);
             supportsAnyInputtableAudioCodec = true;
             supportsAnyInputtableVideoCodec = true;
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
             supportedSubtitleTypes.Add(SubtitleType.SSA);
             supportedSubtitleTypes.Add(SubtitleType.ASS);
+            supportedSubtitleTypes.Add(SubtitleType.BDSUP);
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
             supportedChapterTypes.Add(ChapterType.MKV_XML);
             supportedContainers.Add(ContainerType.MKV);
@@ -512,7 +517,8 @@ namespace MeGUI
             supportedContainerInputTypes.Add(ContainerType.MKV);
             maxFilesOfType = new int[] { -1, -1, -1, 1, 0};
             base.type = MuxerType.MKVMERGE;
-            name = "MKV muxer";
+            name = "MKV Muxer";
+            shortcut = System.Windows.Forms.Shortcut.Ctrl4;
         }
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -535,7 +541,8 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.MP2);
             supportedAudioTypes.Add(AudioType.RAWAAC);
             supportsAnyInputtableAudioCodec = true;
-            
+
+            supportedDeviceTypes.Add(DeviceType.PC);
             
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             
@@ -543,9 +550,10 @@ namespace MeGUI
 
             supportedContainerInputTypes.Add(ContainerType.AVI);
             
-            maxFilesOfType = new int[] { 1, -1, -1, 0, 0};
+            maxFilesOfType = new int[] { 1, -1, -1, 0, 1};
             base.type = MuxerType.AVIMUXGUI;
             name = "AVI Muxer";
+            shortcut = System.Windows.Forms.Shortcut.Ctrl2;
         }
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -562,10 +570,17 @@ namespace MeGUI
             supportedVideoTypes.Add(VideoType.RAWAVC);
             supportedVideoTypes.Add(VideoType.RAWAVC2);
             supportedVideoTypes.Add(VideoType.VC1);
+            supportedVideoTypes.Add(VideoType.MP4);
             supportedAudioTypes.Add(AudioType.AC3);
             supportedAudioTypes.Add(AudioType.DTS);
             supportedAudioTypes.Add(AudioType.EAC3);
             supportedAudioTypes.Add(AudioType.RAWAAC);
+            supportedAudioTypes.Add(AudioType.THD);
+            supportedAudioTypes.Add(AudioType.DTSHD);
+            supportedAudioTypes.Add(AudioType.DTSMA);
+            supportedAudioTypes.Add(AudioType.MP4AAC);
+            supportedAudioTypes.Add(AudioType.WAV);
+            supportedAudioTypes.Add(AudioType.PCM);
             supportedVideoCodecs.Add(VideoCodec.AVC);
             supportedAudioCodecs.Add(AudioCodec.AAC);
             supportedAudioCodecs.Add(AudioCodec.AC3);
@@ -577,13 +592,14 @@ namespace MeGUI
             supportedContainerInputTypes.Add(ContainerType.MKV);
             supportedContainerInputTypes.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.M2TS);
-           // supportedDeviceTypes.Add(DeviceType.AVCHD);
+            supportedDeviceTypes.Add(DeviceType.AVCHD);
             supportedDeviceTypes.Add(DeviceType.BD);
             supportsAnyInputtableAudioCodec = true;
             supportsAnyInputtableVideoCodec = true;
             base.type = MuxerType.TSMUXER;
             maxFilesOfType = new int[] { 1, -1, -1, 1, 1};
             name = "M2TS Muxer";
+            shortcut = System.Windows.Forms.Shortcut.Ctrl3;
         }
  
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -610,6 +626,7 @@ namespace MeGUI
         protected string videoInputFilter, audioInputFilter, subtitleInputFilter;
         protected int[] maxFilesOfType;
         protected string name;
+        protected System.Windows.Forms.Shortcut shortcut;
         protected string id;
         protected MuxerType type;
         public MuxerProvider(string id)
@@ -669,6 +686,11 @@ namespace MeGUI
         public MuxerType MuxerType
         {
             get { return type; }
+        }
+
+        public System.Windows.Forms.Shortcut Shortcut
+        {
+            get { return shortcut; }
         }
 
         public List<VideoType> GetSupportedVideoTypes()
@@ -1056,10 +1078,8 @@ namespace MeGUI
         public VideoEncoderProvider()
             : base()
         {
-            this.RegisterEncoder(new SnowMencoderEncoderProvider());
             this.RegisterEncoder(new X264EncoderProvider());
             this.RegisterEncoder(new XviDEncoderProvider());
-            this.RegisterEncoder(new DivX264EncoderProvider());
         }
     }
     public class AudioEncoderProvider : AllEncoderProvider<AudioCodec, AudioType, AudioEncoderType>
@@ -1067,10 +1087,12 @@ namespace MeGUI
         public AudioEncoderProvider()
             : base()
         {
-            RegisterEncoder(new WinAmpAACEncodingProvider());
             RegisterEncoder(new NeroAACEncodingProvider());
             RegisterEncoder(new LameMP3EncodingProvider());
+            RegisterEncoder(new FAACEncodingProvider());
             RegisterEncoder(new VorbisEncodingProvider());
+            RegisterEncoder(new AC3EncodingProvider());
+            RegisterEncoder(new MP2EncodingProvider());
             RegisterEncoder(new AftenEncodingProvider());
             RegisterEncoder(new FlacEncodingProvider());
         }
@@ -1110,50 +1132,8 @@ namespace MeGUI
             return new x264Encoder(settings.X264Path);
         }
     }
-
-    public class DivX264EncoderProvider : EncodingProvider<VideoCodec, VideoType, VideoEncoderType>
-    {
-        public DivX264EncoderProvider()
-        {
-            supportedCodecs.Add(VideoCodec.AVC);
-            supportedTypes.Add(VideoType.RAWAVC);
-            supportedEncoderTypes.Add(VideoEncoderType.DIVXAVC);
-        }
-
-        public override IJobProcessor CreateEncoder(MeGUISettings settings)
-        {
-            return new DivXAVCEncoder(settings.DivXAVCPath);
-        }
-    }
-
-    public class SnowMencoderEncoderProvider : EncodingProvider<VideoCodec, VideoType, VideoEncoderType>
-    {
-        public SnowMencoderEncoderProvider()
-        {
-            supportedCodecs.Add(VideoCodec.SNOW);
-            supportedTypes.Add(VideoType.AVI);
-            supportedEncoderTypes.Add(VideoEncoderType.SNOW);
-        }
-
-        public override IJobProcessor CreateEncoder(MeGUISettings settings)
-        {
-            return new mencoderEncoder(settings.MencoderPath);
-        }
-    }
     #endregion
     #region audio encoding providers
-    public class WinAmpAACEncodingProvider : AudioEncodingProvider
-    {
-        public WinAmpAACEncodingProvider()
-            : base()
-        {
-            supportedCodecs.Add(AudioCodec.AAC);
-            supportedTypes.Add(AudioType.M4A);
-            supportedTypes.Add(AudioType.MP4AAC);
-            supportedEncoderTypes.Add(AudioEncoderType.WAAC);
-        }
-    }
-
     public class NeroAACEncodingProvider : AudioEncodingProvider
     {
         public NeroAACEncodingProvider()
@@ -1177,6 +1157,19 @@ namespace MeGUI
         }
     }
 
+    public class FAACEncodingProvider : AudioEncodingProvider
+    {
+        public FAACEncodingProvider()
+            : base()
+        {
+            supportedCodecs.Add(AudioCodec.AAC);
+            supportedTypes.Add(AudioType.MP4AAC);
+            supportedTypes.Add(AudioType.M4A);
+            supportedTypes.Add(AudioType.RAWAAC);
+            supportedEncoderTypes.Add(AudioEncoderType.FAAC);
+        }
+    }
+
     public class VorbisEncodingProvider : AudioEncodingProvider
     {
         public VorbisEncodingProvider()
@@ -1185,6 +1178,28 @@ namespace MeGUI
             supportedCodecs.Add(AudioCodec.VORBIS);
             supportedTypes.Add(AudioType.VORBIS);
             supportedEncoderTypes.Add(AudioEncoderType.VORBIS);
+        }
+    }
+
+    public class AC3EncodingProvider : AudioEncodingProvider
+    {
+        public AC3EncodingProvider()
+            : base()
+        {
+            supportedCodecs.Add(AudioCodec.AC3);
+            supportedTypes.Add(AudioType.AC3);
+            supportedEncoderTypes.Add(AudioEncoderType.FFAC3);
+        }
+    }
+
+    public class MP2EncodingProvider : AudioEncodingProvider
+    {
+        public MP2EncodingProvider()
+            : base()
+        {
+            supportedCodecs.Add(AudioCodec.DTS);
+            supportedTypes.Add(AudioType.MP2);
+            supportedEncoderTypes.Add(AudioEncoderType.FFMP2);
         }
     }
 
@@ -1204,10 +1219,11 @@ namespace MeGUI
         public FlacEncodingProvider()
             : base()
         {
-            supportedCodecs.Add(AudioCodec.LOSSLESS);
+            supportedCodecs.Add(AudioCodec.FLAC);
             supportedTypes.Add(AudioType.FLAC);
             supportedEncoderTypes.Add(AudioEncoderType.FLAC);
         }
     }
+
     #endregion
 }

@@ -54,7 +54,7 @@ namespace MeGUI
             this.openButton.Margin = new System.Windows.Forms.Padding(3, 1, 1, 1);
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(26, 23);
-            this.openButton.TabIndex = 6;
+            this.openButton.TabIndex = 1;
             this.openButton.Text = "...";
             this.openButton.Click += new System.EventHandler(this.openButton_Click);
             // 

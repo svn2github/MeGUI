@@ -48,6 +48,11 @@ namespace MeGUI.core.gui
         public event StringChanged SelectionChanged;
 
         /// <summary>
+        /// Temporary Item if the value should not be stored permanently
+        /// </summary>
+        public SCItem oTemporaryItem;
+
+        /// <summary>
         /// Index of the selected item, or -1 if the selected item isn't on the list
         /// or if it is in a submenu.
         /// </summary>
@@ -89,9 +94,11 @@ namespace MeGUI.core.gui
                     value.Ticked = true;
                 
                 selectedItem = value;
-                
+
                 if (value != null)
                     textBox1.Text = value.Name;
+                else if (oTemporaryItem.Tag != null)
+                    textBox1.Text = oTemporaryItem.Tag.ToString();
                 else
                     textBox1.Text = "";
 
@@ -112,6 +119,7 @@ namespace MeGUI.core.gui
         public NiceComboBox()
         {
             InitializeComponent();
+            oTemporaryItem = new SCItem(null, false);
         }
 
         private NiceComboBoxItem selectedItem;

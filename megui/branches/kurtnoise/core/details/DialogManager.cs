@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -108,6 +108,31 @@ namespace MeGUI
             return (sResult.Equals("true"));
         }
 
+        /// <summary>
+        /// Shows a custom dialog built on the MessageBoxEx system
+        /// </summary>
+        /// <param name="text">The text to display</param>
+        /// <param name="caption">The window title to display</param>
+        /// <param name="button1Text">The text on the first button</param>
+        /// <param name="button2Text">The text on the second button</param>
+        /// <param name="button2Text">The text on the third button</param>
+        /// <param name="icon">The icon to display</param>
+        /// <returns>0, 1 or 2 depending on the button pressed</returns>
+        private int askAbout3(string text, string caption, string button1Text, string button2Text,
+            string button3Text, MessageBoxIcon icon)
+        {
+            MessageBoxEx msgBox = createMessageBox(text, caption, icon);
+
+            msgBox.AddButton(button1Text, "0");
+            msgBox.AddButton(button2Text, "1");
+            msgBox.AddButton(button3Text, "2");
+
+            msgBox.AllowSaveResponse = false;
+
+            string sResult = msgBox.Show();
+            return Int32.Parse(sResult);
+        }
+
         public bool overwriteJobOutput(string outputname)
         {
             if (mainForm.Settings.DialogSettings.AskAboutOverwriteJobOutput)
@@ -127,34 +152,66 @@ namespace MeGUI
         {
             if (mainForm.Settings.DialogSettings.AskAboutDuplicates)
             {
-                bool askAgain;
-                bool bResult = askAbout("Problem adding profile '"
-                    + profname + "':\r\none with the same name already exists. \r\nWhat do you want to do?",
-                     "Duplicate profile", "Overwrite profile", "Skip profile", MessageBoxIcon.Exclamation, out askAgain);
+                if (!MainForm.Instance.Settings.AutoUpdateSession)
+                {
+                    bool askAgain;
+                    bool bResult = askAbout("Problem adding profile '"
+                        + profname + "':\r\none with the same name already exists. \r\nWhat do you want to do?",
+                         "Duplicate profile", "Overwrite profile", "Skip profile", MessageBoxIcon.Exclamation, out askAgain);
 
-                mainForm.Settings.DialogSettings.AskAboutDuplicates = askAgain;
-                mainForm.Settings.DialogSettings.DuplicateResponse = bResult;
-                return bResult;
+                    mainForm.Settings.DialogSettings.AskAboutDuplicates = askAgain;
+                    mainForm.Settings.DialogSettings.DuplicateResponse = bResult;
+                    return bResult;
+                }
+                else
+                    return false; 
             }
             return mainForm.Settings.DialogSettings.DuplicateResponse;
         }
          
-
         public bool useOneClick()
         {
             if (mainForm.Settings.DialogSettings.AskAboutVOBs)
             {
                 bool askAgain;
                 bool bResult = askAbout("Do you want to open this with the One Click\r\n" +
-                    "Encoder (automated, easy to use) or the D2V\r\n" +
-                    "Creator (manual, advanced)?", "Please choose your weapon", 
-                    "One Click Encoder", "D2V Creator", MessageBoxIcon.Question, out askAgain);
+                    "Encoder (automated, easy to use) or the File\r\n" +
+                    "Indexer (manual, advanced)?", "Please choose your weapon", 
+                    "One Click Encoder", "File Indexer", MessageBoxIcon.Question, out askAgain);
 
                 mainForm.Settings.DialogSettings.AskAboutVOBs = askAgain;
                 mainForm.Settings.DialogSettings.UseOneClick = bResult;
                 return bResult;
             }
             return mainForm.Settings.DialogSettings.UseOneClick;
+        }
+
+        public int AVSCreatorOpen(string videoInput)
+        {
+            int iResult = -1;
+            MediaInfoFile iFile = new MediaInfoFile(videoInput);
+            FileIndexerWindow.IndexType oIndexer;
+
+            if (!iFile.recommendIndexer(out oIndexer))
+                return iResult;
+
+            if (iFile.ContainerFileTypeString.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVI"))
+            {
+                iResult = askAbout3("Do you want to open this file with\r\n" +
+                    "- One Click Encoder (full automated, easy to use) or\r\n" +
+                    "- File Indexer (manual, advanced) or \r\n" +
+                    "- AviSource (manual, expert, may cause problems)?", "Please choose your prefered way to open this file",
+                    "One Click Encoder", "File Indexer", "AviSource", MessageBoxIcon.Question);
+            }
+            else
+            {
+                iResult = askAbout3("Do you want to open this file with\r\n" +
+                    "- One Click Encoder (full automated, easy to use) or\r\n" +
+                    "- File Indexer (manual, advanced) or \r\n" +
+                    "- DirectShowSource (manual, expert, may cause problems)?", "Please choose your prefered way to open this file",
+                    "One Click Encoder", "File Indexer", "DirectShowSource", MessageBoxIcon.Question);
+            }
+            return iResult;
         }
 
         public bool createJobs(string error)
@@ -187,77 +244,5 @@ namespace MeGUI
             }
             return mainForm.Settings.DialogSettings.AddConvertToYV12;
         }
-
-        public void runCUVIDServer()
-        {
-            string filePath = string.Empty;
-            if (mainForm.Settings.DgavcIndexPath != "" && Path.GetFileName(mainForm.Settings.DgavcIndexPath).ToLower().ToString() == "dgavcindexnv.exe")
-                filePath = Path.GetDirectoryName(mainForm.Settings.DgavcIndexPath);
-
-            if (string.IsNullOrEmpty(filePath))
-            {
-                if (mainForm.Settings.DgmpgIndexPath != "" && Path.GetFileName(mainForm.Settings.DgmpgIndexPath).ToLower().ToString() == "dgmpgindexnv.exe")
-                    filePath = Path.GetDirectoryName(mainForm.Settings.DgmpgIndexPath);
-
-                else if (mainForm.Settings.Dgvc1IndexPath != "" && Path.GetFileName(mainForm.Settings.Dgvc1IndexPath).ToLower().ToString() == "dgvc1indexnv.exe")
-                    filePath = Path.GetDirectoryName(mainForm.Settings.Dgvc1IndexPath);
-            }
-
-            if (!string.IsNullOrEmpty(filePath)) System.Diagnostics.Process.Start(Path.Combine(filePath, "CUVIDServer.exe"));
-            else MessageBox.Show("Cannot run CUVID Server executable...\nAre you sure is it installed ?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
-        public bool FindProcess(string name)
-        {
-            Process[] processlist = Process.GetProcesses();
-            //here we're going to get a list of all running processes on
-            //the computer
-            foreach (Process myProcess in processlist)
-            {
-                //now we're going to see if any of the running processes
-                //match the currently running processes by using the StartsWith Method,
-                //this prevents us from incluing the .EXE for the process we're looking for.
-                //. Be sure to not
-                //add the .exe to the name you provide, i.e: NOTEPAD,
-                //not NOTEPAD.EXE or false is always returned even if
-                //notepad is running
-                if (myProcess.ProcessName.ToUpper().ToString() == name)
-                    return true;
-            }
-            //process not found, return false
-            return false;
-        }
-
-        public bool FindAndKillProcess(string name)
-        {
-            Process[] processlist = Process.GetProcesses();
-            //here we're going to get a list of all running processes on
-            //the computer
-            foreach (Process myProcess in processlist)
-            {
-                //now we're going to see if any of the running processes
-                //match the currently running processes by using the StartsWith Method,
-                //this prevents us from incluing the .EXE for the process we're looking for.
-                //. Be sure to not
-                //add the .exe to the name you provide, i.e: NOTEPAD,
-                //not NOTEPAD.EXE or false is always returned even if
-                //notepad is running
-                if (myProcess.ProcessName.ToUpper().ToString() == name)
-                {
-                    //since we found the proccess we now need to use the
-                    //Kill Method to kill the process. Remember, if you have
-                    //the process running more than once, say IE open 4
-                    //times the loop thr way it is now will close all 4,
-                    //if you want it to just close the first one it finds
-                    //then add a return; after the Kill
-                    myProcess.Kill();
-                    //process killed, return true
-                    return true;
-                }
-            }
-            //process not found, return false
-            return false;
-        }
-
     }
 }

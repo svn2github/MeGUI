@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2008  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ namespace eac3to
 
             VideoStream videoStream = new VideoStream(s);
 
-            switch (videoStream.Name.ToUpper())
+            switch (videoStream.Name.ToUpper(System.Globalization.CultureInfo.InvariantCulture))
             {
                 case "AVC":
                     videoStream.VType = VStreamType.AVC;

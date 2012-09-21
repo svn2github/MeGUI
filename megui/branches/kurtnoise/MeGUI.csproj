@@ -1,7 +1,8 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -25,10 +26,10 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <SignManifests>false</SignManifests>
+    <ApplicationManifest>app_x86.manifest</ApplicationManifest>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -43,87 +44,11 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <ApplicationManifest>app_x86.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
-    <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>full</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <DebugSymbols>false</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
-    <Optimize>true</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>none</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'test|AnyCPU' ">
-    <OutputPath>bin\test\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>
-    </DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
-    <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>1</WarningLevel>
-    <DebugType>full</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;x86</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
@@ -142,22 +67,12 @@
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <ErrorReport>none</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'test|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\test\</OutputPath>
-    <BaseAddress>285212672</BaseAddress>
-    <WarningLevel>1</WarningLevel>
-    <FileAlignment>4096</FileAlignment>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;x64</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
@@ -165,10 +80,11 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <NoStdLib>false</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;x64</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
@@ -178,21 +94,14 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'test|x64' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\test\</OutputPath>
-    <BaseAddress>285212672</BaseAddress>
-    <WarningLevel>1</WarningLevel>
-    <FileAlignment>4096</FileAlignment>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqBridge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2b14eb747628076, processorArchitecture=MSIL">
+      <HintPath>lib\LinqBridge.dll</HintPath>
     </Reference>
     <Reference Include="MediaInfoWrapper, Version=0.7.4.4, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -202,14 +111,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\MessageBoxExLib.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="SevenZipSharp">
+      <HintPath>lib\SevenZipSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -226,9 +134,6 @@
     </Reference>
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -257,15 +162,35 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="App.ico" />
-    <Content Include="AvisynthWrapper.dll">
+    <None Include="Changelog.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="gpl.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib_x64\7z.dll" Condition=" '$(Platform)' == 'x64' ">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\ContextHelp.xml">
+    <Content Include="lib_x64\AvisynthWrapper.dll" Condition=" '$(Platform)' == 'x64' ">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="MediaInfo.dll">
+    <Content Include="lib_x86\7z.dll" Condition=" '$(Platform)' == 'x86' ">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lib_x86\AvisynthWrapper.dll" Condition=" '$(Platform)' == 'x86' ">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\ContextHelp.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="lib_x64\MediaInfo.dll" Condition=" '$(Platform)' == 'x64' ">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib_x86\MediaInfo.dll" Condition=" '$(Platform)' == 'x86' ">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="core\details\AudioTrackInfo.cs" />
     <Compile Include="core\details\CleanupJob.cs" />
     <Compile Include="core\details\CodecManager.cs" />
     <Compile Include="core\details\CommandlineParser.cs" />
@@ -279,7 +204,6 @@
       <DependentUpon>JobControl.cs</DependentUpon>
     </Compile>
     <Compile Include="core\details\MediaFileFactory.cs" />
-    <Compile Include="core\details\MeGUIInfo.cs" />
     <Compile Include="core\details\MeGUISettings.cs" />
     <Compile Include="core\details\mux\baseMuxWindow.cs">
       <SubType>Form</SubType>
@@ -305,13 +229,10 @@
     <Compile Include="core\details\ProfileManager.cs" />
     <Compile Include="core\details\StatusUpdate.cs" />
     <Compile Include="core\details\Streams.cs" />
+    <Compile Include="core\details\SubtitleTrackInfo.cs" />
     <Compile Include="core\details\TaggedJob.cs" />
-    <Compile Include="core\details\video\GradientPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="core\details\video\GradientPanel.Designer.cs">
-      <DependentUpon>GradientPanel.cs</DependentUpon>
-    </Compile>
+    <Compile Include="core\details\TrackInfo.cs" />
+    <Compile Include="core\details\VideoTrackInfo.cs" />
     <Compile Include="core\details\video\VideoCodecSettings.cs" />
     <Compile Include="core\details\video\VideoConfigurationPanel.cs">
       <SubType>UserControl</SubType>
@@ -437,6 +358,9 @@
     <Compile Include="core\gui\LogTree.Designer.cs">
       <DependentUpon>LogTree.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\NiceComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -475,6 +399,7 @@
     </Compile>
     <Compile Include="core\gui\Profiles.cs">
     </Compile>
+    <Compile Include="core\gui\ProgressTaskbar.cs" />
     <Compile Include="core\gui\ProgressWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -521,6 +446,12 @@
     <Compile Include="core\gui\VideoPlayer.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="core\gui\VideoPlayerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\VideoPlayerControl.designer.cs">
+      <DependentUpon>VideoPlayerControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\WorkerSummary.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -550,9 +481,9 @@
     <Compile Include="core\plugins\interfaces\Job.cs" />
     <Compile Include="core\plugins\interfaces\JobProcessorManager.cs" />
     <Compile Include="core\plugins\interfaces\Profile.cs" />
+    <Compile Include="core\util\AudioUtil.cs" />
     <Compile Include="core\util\Autocrop.cs" />
     <Compile Include="core\util\BitrateCalculatorPreProcessor.cs" />
-    <Compile Include="core\util\CustomUserSettings.cs" />
     <Compile Include="core\util\DAR.cs" />
     <Compile Include="core\util\DeinterlaceFilter.cs" />
     <Compile Include="core\util\DirectShow.cs" />
@@ -594,13 +525,34 @@
     </Compile>
     <Compile Include="packages\audio\AudioJob.cs" />
     <Compile Include="packages\audio\AudioEncoderInterface.cs" />
-    <Compile Include="packages\audio\flac\FlacSettings.cs" />
+    <Compile Include="packages\audio\faac\faacConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\faac\faacConfigurationPanel.Designer.cs">
+      <DependentUpon>faacConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\audio\ffac3\AC3ConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\ffac3\AC3ConfigurationPanel.Designer.cs">
+      <DependentUpon>AC3ConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\audio\ffac3\AC3Settings.cs" />
+    <Compile Include="packages\audio\faac\FaacSettings.cs" />
+    <Compile Include="packages\audio\ffmp2\MP2ConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\ffmp2\MP2ConfigurationPanel.Designer.cs">
+      <DependentUpon>MP2ConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\audio\ffmp2\MP2Settings.cs" />
     <Compile Include="packages\audio\flac\FlacConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\audio\flac\FlacConfigurationPanel.Designer.cs">
       <DependentUpon>FlacConfigurationPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\audio\flac\FlacSettings.cs" />
     <Compile Include="packages\audio\lame\lameConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -622,15 +574,12 @@
       <DependentUpon>OggVorbisConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\vorbis\OggVorbisSettings.cs" />
-    <Compile Include="packages\audio\waac\WinAmpAACConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\audio\waac\WinAmpAACConfigurationPanel.Designer.cs">
-      <DependentUpon>WinAmpAACConfigurationPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
+    <Compile Include="packages\demuxer\mkvextract\MkvExtract.cs" />
+    <Compile Include="packages\demuxer\mkvextract\MkvExtractJob.cs" />
+    <Compile Include="packages\demuxer\mkvextract\MkvInfo.cs" />
+    <Compile Include="packages\demuxer\pgcdemux\PgcDemux.cs" />
+    <Compile Include="packages\demuxer\pgcdemux\PgcDemuxJob.cs" />
     <Compile Include="packages\muxer\avimuxgui\AMGMuxer.cs" />
-    <Compile Include="packages\muxer\mencoder\MencoderMuxer.cs" />
     <Compile Include="packages\muxer\mkvmerge\MkvMergeMuxer.cs" />
     <Compile Include="packages\muxer\mp4box\MP4BoxMuxer.cs" />
     <Compile Include="packages\muxer\tsmuxer\tsMuxeR.cs" />
@@ -640,9 +589,9 @@
     </Compile>
     <Compile Include="packages\reader\d2v\d2vReader.cs" />
     <Compile Include="packages\reader\dga\dgaReader.cs" />
-    <Compile Include="packages\reader\dgm\dgmReader.cs" />
-    <Compile Include="packages\reader\dgv\dgvReader.cs" />
+    <Compile Include="packages\reader\dgi\dgiReader.cs" />
     <Compile Include="packages\reader\dvddecrypter\DVDD_File.cs" />
+    <Compile Include="packages\reader\ffms\ffmsReader.cs" />
     <Compile Include="packages\reader\mediainfo\MediaInfoFile.cs" />
     <Compile Include="packages\reader\video\VideoReader.cs" />
     <Compile Include="packages\reader\vobsub\idxReader.cs" />
@@ -681,9 +630,18 @@
     <Compile Include="packages\tools\calculator\AudioTrackSizeTab.Designer.cs">
       <DependentUpon>AudioTrackSizeTab.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\tools\calculator\BitrateCalculator.cs" />
+    <Compile Include="packages\tools\calculator\CalcData.cs" />
     <Compile Include="packages\tools\calculator\Calculator.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\calculator\Calculator.Designer.cs">
+      <DependentUpon>Calculator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\tools\calculator\ExtraSizeTab.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\tools\calculator\ExtraSizeTab.Designer.cs">
+      <DependentUpon>ExtraSizeTab.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\tools\chaptercreator\BDInfoExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\BDInfo\LanguageCodes.cs" />
@@ -704,11 +662,9 @@
     <Compile Include="packages\tools\chaptercreator\frmStreamSelect.designer.cs">
       <DependentUpon>frmStreamSelect.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\tools\chaptercreator\HddvdExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\IfoExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\MplsExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\TextExtractor.cs" />
-    <Compile Include="packages\tools\chaptercreator\XplExtractor.cs" />
     <Compile Include="packages\tools\cqmeditor\QuantizerMatrixDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -718,38 +674,25 @@
     <Compile Include="packages\tools\cutter\Cutter.Designer.cs">
       <DependentUpon>Cutter.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\tools\d2vcreator\DGIndexer.cs" />
-    <Compile Include="packages\tools\d2vcreator\IndexJob.cs" />
-    <Compile Include="packages\tools\d2vcreator\VobinputWindow.cs">
+    <Compile Include="packages\tools\fileindexer\FileIndexerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="packages\tools\dgacreator\DGAIndexJob.cs" />
-    <Compile Include="packages\tools\dgacreator\DGAinputWindow.cs">
-      <SubType>Form</SubType>
+    <Compile Include="packages\tools\fileindexer\FileIndexerWindow.Designer.cs">
+      <DependentUpon>FileIndexerWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\tools\dgacreator\DGAinputWindow.Designer.cs">
-      <DependentUpon>DGAinputWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\tools\dgacreator\DGAVCIndexer.cs" />
-    <Compile Include="packages\tools\dgmcreator\DGMIndexJob.cs" />
-    <Compile Include="packages\tools\dgmcreator\DGMinputWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="packages\tools\dgmcreator\DGMinputWindow.Designer.cs">
-      <DependentUpon>DGMinputWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\tools\dgmcreator\DGMPGIndexer.cs" />
-    <Compile Include="packages\tools\dgvcreator\DGVC1Indexer.cs" />
-    <Compile Include="packages\tools\dgvcreator\DGVIndexJob.cs" />
-    <Compile Include="packages\tools\dgvcreator\DGVinputWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="packages\tools\dgvcreator\DGVinputWindow.Designer.cs">
-      <DependentUpon>DGVinputWindow.cs</DependentUpon>
-    </Compile>
+    <Compile Include="packages\tools\fileindexer\IndexJob.cs" />
+    <Compile Include="packages\tools\fileindexer\FFMSIndexJob.cs" />
+    <Compile Include="packages\tools\fileindexer\FFMSIndexer.cs" />
+    <Compile Include="packages\tools\fileindexer\D2VIndexer.cs" />
+    <Compile Include="packages\tools\fileindexer\DGIIndexer.cs" />
+    <Compile Include="packages\tools\fileindexer\DGIIndexJob.cs" />
+    <Compile Include="packages\tools\fileindexer\D2VIndexJob.cs" />
+    <Compile Include="packages\tools\fileindexer\DGAIndexJob.cs" />
+    <Compile Include="packages\tools\fileindexer\DGAIndexer.cs" />
     <Compile Include="packages\tools\hdbdextractor\CustomDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="packages\tools\hdbdextractor\Eac3ToInfo.cs" />
     <Compile Include="packages\tools\hdbdextractor\eac3to\AudioStream.cs" />
     <Compile Include="packages\tools\hdbdextractor\eac3to\AudioStreamType.cs" />
     <Compile Include="packages\tools\hdbdextractor\eac3to\Chapter.cs" />
@@ -768,22 +711,36 @@
     <Compile Include="packages\tools\hdbdextractor\HDBDStreamExtractor.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="packages\tools\hdbdextractor\HDBDStreamExtractor.Designer.cs">
+      <DependentUpon>HDBDStreamExtractor.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\tools\hdbdextractor\HDStreamExtractorIndexer.cs" />
     <Compile Include="packages\tools\hdbdextractor\HDStreamsExJob.cs" />
-    <Compile Include="packages\tools\oneclick\AudioConfigControl.cs">
+    <Compile Include="packages\tools\oneclick\OneClickAudioControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="packages\tools\oneclick\AudioConfigControl.Designer.cs">
-      <DependentUpon>AudioConfigControl.cs</DependentUpon>
+    <Compile Include="packages\tools\oneclick\OneClickAudioControl.Designer.cs">
+      <DependentUpon>OneClickAudioControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\tools\oneclick\DGIndexPostprocessingProperties.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickProcessing.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickStreamControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\tools\oneclick\OneClickStreamControl.Designer.cs">
+      <DependentUpon>OneClickStreamControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\tools\oneclick\OneClickAudioTrack.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickPostprocessingProperties.cs" />
     <Compile Include="packages\tools\oneclick\OneClickConfigPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\tools\oneclick\OneClickConfigPanel.Designer.cs">
       <DependentUpon>OneClickConfigPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\tools\oneclick\OneClickPostProcessing.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickPostProcessingJob.cs" />
     <Compile Include="packages\tools\oneclick\OneClickSettings.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickStream.cs" />
     <Compile Include="packages\tools\oneclick\OneClickWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -798,29 +755,16 @@
     <Compile Include="packages\tools\vobsub\VobSubIndexWindow.Designer.cs">
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\video\divxavc\DivXAVCConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\video\divxavc\DivXAVCConfigurationPanel.Designer.cs">
-      <DependentUpon>DivXAVCConfigurationPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\video\divxavc\DivXAVCEncoder.cs" />
-    <Compile Include="packages\video\divxavc\DivXAVCSettings.cs" />
     <Compile Include="packages\video\huffyuv\hfyuSettings.cs" />
-    <Compile Include="packages\video\mencoder\mencoderEncoder.cs" />
-    <Compile Include="packages\video\snow\snowConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\video\snow\snowConfigurationPanel.Designer.cs">
-      <DependentUpon>snowConfigurationPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\video\snow\snowSettings.cs" />
+    <Compile Include="packages\video\ffmpeg\ffmpegEncoder.cs" />
     <Compile Include="packages\video\x264\x264ConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\video\x264\x264ConfigurationPanel.Designer.cs">
       <DependentUpon>x264ConfigurationPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\video\x264\x264Device.cs" />
+    <Compile Include="packages\video\x264\x264SettingsHandler.cs" />
     <Compile Include="packages\video\x264\x264Encoder.cs" />
     <Compile Include="packages\video\x264\x264Settings.cs" />
     <Compile Include="packages\video\xvid\xvidConfigurationPanel.cs">
@@ -833,11 +777,6 @@
     <Compile Include="packages\video\xvid\xvidSettings.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -925,6 +864,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>NumberChooser.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\ProfileConfigurationWindow.resx">
+      <DependentUpon>ProfileConfigurationWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ProfileExporter.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ProfileExporter.cs</DependentUpon>
@@ -969,6 +912,9 @@
       <DependentUpon>VideoPlayer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\VideoPlayerControl.resx">
+      <DependentUpon>VideoPlayerControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="core\gui\WorkerSummary.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WorkerSummary.cs</DependentUpon>
@@ -989,6 +935,18 @@
       <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\faac\faacConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>faacConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\ffac3\AC3ConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AC3ConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\ffmp2\MP2ConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MP2ConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\flac\FlacConfigurationPanel.resx">
       <DependentUpon>FlacConfigurationPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1004,10 +962,6 @@
     <EmbeddedResource Include="packages\audio\vorbis\OggVorbisConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>OggVorbisConfigurationPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\audio\waac\WinAmpAACConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>WinAmpAACConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\autoencode\AutoEncodeDefaults.resx">
       <DependentUpon>AutoEncodeDefaults.cs</DependentUpon>
@@ -1033,13 +987,16 @@
       <DependentUpon>Calculator.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\calculator\ExtraSizeTab.resx">
+      <DependentUpon>ExtraSizeTab.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\chaptercreator\ChapterCreator.resx">
       <DependentUpon>ChapterCreator.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\chaptercreator\frmStreamSelect.resx">
       <DependentUpon>frmStreamSelect.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\cqmeditor\QuantizerMatrixDialog.resx">
       <DependentUpon>QuantizerMatrixDialog.cs</DependentUpon>
@@ -1049,29 +1006,20 @@
       <SubType>Designer</SubType>
       <DependentUpon>Cutter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\tools\d2vcreator\VobinputWindow.resx">
-      <DependentUpon>VobinputWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\tools\dgacreator\DGAinputWindow.resx">
-      <DependentUpon>DGAinputWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\tools\dgmcreator\DGMinputWindow.resx">
-      <DependentUpon>DGMinputWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\tools\dgvcreator\DGVinputWindow.resx">
-      <DependentUpon>DGVinputWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="packages\tools\fileindexer\FileIndexerWindow.resx">
+      <DependentUpon>FileIndexerWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\hdbdextractor\HDBDStreamExtractor.resx">
       <DependentUpon>HDBDStreamExtractor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\tools\oneclick\AudioConfigControl.resx">
+    <EmbeddedResource Include="packages\tools\oneclick\OneClickAudioControl.resx">
+      <DependentUpon>OneClickAudioControl.cs</DependentUpon>
       <SubType>Designer</SubType>
-      <DependentUpon>AudioConfigControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\oneclick\OneClickStreamControl.resx">
+      <DependentUpon>OneClickStreamControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\oneclick\OneClickConfigPanel.resx">
       <SubType>Designer</SubType>
@@ -1085,14 +1033,6 @@
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\video\divxavc\DivXAVCConfigurationPanel.resx">
-      <DependentUpon>DivXAVCConfigurationPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\video\snow\snowConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>snowConfigurationPanel.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="packages\video\x264\x264ConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>x264ConfigurationPanel.cs</DependentUpon>
@@ -1103,14 +1043,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="pause.ico" />
     <EmbeddedResource Include="play.ico" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="app_x64.manifest" />
     <None Include="app_x86.manifest" />
     <None Include="Properties\Settings.settings">
@@ -1150,11 +1087,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PreBuildEvent>cmd /c "SubWCRev $(ProjectDir) $(ProjectDir)AssemblyInfo.template $(ProjectDir)AssemblyInfo.cs&amp;&amp;exit 0"
+</PreBuildEvent>
+    <PostBuildEvent>MOVE /Y "$(TargetDir)lib_$(PlatformName)\*.*" "$(TargetDir)"
+RD /S /Q "$(TargetDir)lib_$(PlatformName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

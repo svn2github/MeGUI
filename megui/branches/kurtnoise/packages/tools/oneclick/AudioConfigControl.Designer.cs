@@ -28,25 +28,15 @@ namespace MeGUI.packages.tools.oneclick
         /// </summary>
         private void InitializeComponent()
         {
-            this.dontEncodeAudio = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.delay = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.cbAudioEncoding = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.audioProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             ((System.ComponentModel.ISupportInitialize)(this.delay)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dontEncodeAudio
-            // 
-            this.dontEncodeAudio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dontEncodeAudio.AutoSize = true;
-            this.dontEncodeAudio.Location = new System.Drawing.Point(107, 35);
-            this.dontEncodeAudio.Name = "dontEncodeAudio";
-            this.dontEncodeAudio.Size = new System.Drawing.Size(114, 17);
-            this.dontEncodeAudio.TabIndex = 38;
-            this.dontEncodeAudio.Text = "Keep original track";
-            this.dontEncodeAudio.CheckedChanged += new System.EventHandler(this.dontEncodeAudio_CheckedChanged);
             // 
             // label3
             // 
@@ -93,10 +83,33 @@ namespace MeGUI.packages.tools.oneclick
             this.label1.Text = "Codec";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // cbAudioEncoding
+            // 
+            this.cbAudioEncoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAudioEncoding.FormattingEnabled = true;
+            this.cbAudioEncoding.Items.AddRange(new object[] {
+            "always",
+            "if codec does not match",
+            "never"});
+            this.cbAudioEncoding.Location = new System.Drawing.Point(188, 31);
+            this.cbAudioEncoding.Name = "cbAudioEncoding";
+            this.cbAudioEncoding.Size = new System.Drawing.Size(178, 21);
+            this.cbAudioEncoding.TabIndex = 46;
+            this.cbAudioEncoding.SelectedIndexChanged += new System.EventHandler(this.dontEncodeAudio_CheckedChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(104, 34);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(78, 13);
+            this.label4.TabIndex = 47;
+            this.label4.Text = "encode audio: ";
+            // 
             // audioProfile
             // 
-            this.audioProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.audioProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.audioProfile.Location = new System.Drawing.Point(107, 3);
             this.audioProfile.Name = "audioProfile";
             this.audioProfile.ProfileSet = "Audio";
@@ -108,12 +121,13 @@ namespace MeGUI.packages.tools.oneclick
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.cbAudioEncoding);
             this.Controls.Add(this.audioProfile);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.delay);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.dontEncodeAudio);
             this.Name = "AudioConfigControl";
             this.Size = new System.Drawing.Size(416, 90);
             ((System.ComponentModel.ISupportInitialize)(this.delay)).EndInit();
@@ -124,11 +138,12 @@ namespace MeGUI.packages.tools.oneclick
 
         #endregion
 
-        private System.Windows.Forms.CheckBox dontEncodeAudio;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown delay;
         private System.Windows.Forms.Label label2;
         private MeGUI.core.gui.ConfigableProfilesControl audioProfile;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbAudioEncoding;
+        private System.Windows.Forms.Label label4;
     }
 }

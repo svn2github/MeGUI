@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2008  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ namespace eac3to
 
             AudioStream audioStream = new AudioStream(s);
 
-            switch (audioStream.Name.ToUpper())
+            switch (audioStream.Name.ToUpper(System.Globalization.CultureInfo.InvariantCulture))
             {
                 case "AC3":
                 case "AC3 EX":
@@ -139,6 +139,7 @@ namespace eac3to
                     audioStream.AudioType = AudioStreamType.RAW;
                     break;
             }
+            audioStream.Language = (s.IndexOf(',') == s.LastIndexOf(',')) ? s.Substring(s.IndexOf(',') + 1).Trim() : s.Substring(s.IndexOf(',') + 1, s.LastIndexOf(',') - s.IndexOf(',') - 1).Trim();
 
             return audioStream;
         }

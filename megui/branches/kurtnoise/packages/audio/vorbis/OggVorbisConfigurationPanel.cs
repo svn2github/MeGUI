@@ -33,6 +33,7 @@ namespace MeGUI.packages.audio.vorbis
         public OggVorbisConfigurationPanel():base()
         {
             InitializeComponent();
+            vQuality_ValueChanged(null, null);
         }
         #region properties
         /// <summary>
@@ -43,33 +44,21 @@ namespace MeGUI.packages.audio.vorbis
             get
             {
                 OggVorbisSettings nas = new OggVorbisSettings();
-                if (rbBitrate.Checked)
-                {
-                    nas.BitrateMode = BitrateManagementMode.ABR;
-                    nas.Bitrate = this.tbBitrate.Value;
-                }
-                else
-                {
-                    nas.BitrateMode = BitrateManagementMode.VBR;
-                    nas.Quality = (Decimal)tbQuality.Value * 10.0M / tbQuality.Maximum;
-                }
+                nas.Quality = (Decimal)vQuality.Value * 10.0M / vQuality.Maximum;
                 return nas;
             }
             set
             {
                 OggVorbisSettings nas = value as OggVorbisSettings;
-                switch (nas.BitrateMode)
-                {
-                    case BitrateManagementMode.ABR: rbBitrate.Checked = true; break;
-                    case BitrateManagementMode.VBR: rbQuality.Checked = true; break;
-                }
-                tbQuality.Value = (int)(nas.Quality / 10.0M * (Decimal)tbQuality.Maximum);
-                tbBitrate.Value = nas.Bitrate;
-
-                target_CheckedChanged(null, null);
+                vQuality.Value = (int)(nas.Quality / 10.0M * (Decimal)vQuality.Maximum);
             }
         }
         #endregion
+        private void vQuality_ValueChanged(object sender, EventArgs e)
+        {
+            Decimal q = ((Decimal)vQuality.Value) * 10.0M / vQuality.Maximum;
+            label1.Text = String.Format("Variable Bitrate (Q={0}) ", q);
+        }
 
         #region Editable<OggVorbisSettings> Members
 
@@ -86,52 +75,6 @@ namespace MeGUI.packages.audio.vorbis
         }
 
         #endregion
-
-        private void tbBitrate_Scroll(object sender, EventArgs e)
-        {
-            gbBitrate.Text = String.Format("Bitrate ({0} kbps)", tbBitrate.Value); 
-        }
-
-        private void tbQuality_Scroll(object sender, EventArgs e)
-        {
-            gbQuality.Text = String.Format("Quality (Q = {0})", ((Decimal)tbQuality.Value) * 10.0M / tbQuality.Maximum);
-        }
-
-        private void target_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbBitrate.Checked)
-            {
-                gbQuality.Enabled = false;
-                gbBitrate.Enabled = true;
-            }
-            else
-            {
-                gbBitrate.Enabled = false;
-                gbQuality.Enabled = true;
-            }
-
-            tbBitrate_Scroll(null, null);
-            tbQuality_Scroll(null, null);            
-        }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                VisitLink();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Unable to open link that was clicked.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void VisitLink()
-        {
-            //Call the Process.Start method to open the default browser 
-            //with a URL:
-            System.Diagnostics.Process.Start("http://www.vorbis.com");
-        }
     }
 }
 

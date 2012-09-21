@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -54,20 +54,20 @@ namespace MeGUI
 		private System.Windows.Forms.ColumnHeader timecodeColumn;
 		private System.Windows.Forms.ColumnHeader nameColumn;
 		private System.Windows.Forms.Label startTimeLabel;
-        private System.Windows.Forms.Label chapterNameLabel;
+		private System.Windows.Forms.Label chapterNameLabel;
+		private System.Windows.Forms.Button saveButton;
 		private System.Windows.Forms.TextBox startTime;
 		private System.Windows.Forms.TextBox chapterName;
 		private System.Windows.Forms.ListView chapterListView;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog;
-        private GroupBox gbInput;
-        private RadioButton rbFromFile;
-        private RadioButton rbFromDisk;
-        private Button btInput;
-        private TextBox input;
-        private Button saveButton;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.GroupBox gbInput;
+        private System.Windows.Forms.RadioButton rbFromFile;
+        private System.Windows.Forms.RadioButton rbFromDisk;
+        private System.Windows.Forms.Button btInput;
+        private System.Windows.Forms.TextBox input;
         private MeGUI.core.gui.HelpButton helpButton1;
-        private CheckBox closeOnQueue;
+        private System.Windows.Forms.CheckBox closeOnQueue; 
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -89,7 +89,12 @@ namespace MeGUI
                 LangCode = string.Empty
             };
 		}
-
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (player != null)
+                player.Close();
+            base.OnClosing(e);
+        }
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -117,8 +122,8 @@ namespace MeGUI
             this.chapterName = new System.Windows.Forms.TextBox();
             this.chapterNameLabel = new System.Windows.Forms.Label();
             this.chapterListView = new System.Windows.Forms.ListView();
-            this.timecodeColumn = new System.Windows.Forms.ColumnHeader();
-            this.nameColumn = new System.Windows.Forms.ColumnHeader();
+            this.timecodeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.nameColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.startTime = new System.Windows.Forms.TextBox();
             this.startTimeLabel = new System.Windows.Forms.Label();
             this.addZoneButton = new System.Windows.Forms.Button();
@@ -266,7 +271,7 @@ namespace MeGUI
             // saveFileDialog
             // 
             this.saveFileDialog.DefaultExt = "txt";
-            this.saveFileDialog.Filter = "x264 qp Files (.qpf)|*.qpf|Chapter Files (*.txt)|*.txt|Matroska Chapters files (*" +
+            this.saveFileDialog.Filter = "x264 qp Files (*.qpf)|*.qpf|Chapter Files (*.txt)|*.txt|Matroska Chapters files (*" +
                 ".xml)|*.xml|All supported Files (*.qpf;*.txt;*.xml)|*.qpf;*.txt;*.xml";
             this.saveFileDialog.FilterIndex = 4;
             // 
@@ -334,7 +339,7 @@ namespace MeGUI
             // 
             // helpButton1
             // 
-            this.helpButton1.ArticleName = "Chapter creator";
+            this.helpButton1.ArticleName = "Chapter Creator";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(12, 428);
@@ -367,7 +372,6 @@ namespace MeGUI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChapterCreator";
-            this.ShowInTaskbar = false;
             this.Text = "MeGUI - Chapter Creator";
             this.Load += new System.EventHandler(this.ChapterCreator_Load);
             this.chaptersGroupbox.ResumeLayout(false);
@@ -435,6 +439,7 @@ namespace MeGUI
 		private void removeZoneButton_Click(object sender, System.EventArgs e)
 		{
             if (chapterListView.Items.Count < 1 || pgc.Chapters.Count < 1) return;
+            if (chapterListView.SelectedIndices.Count == 0) return;
             intIndex = chapterListView.SelectedIndices[0];
             pgc.Chapters.Remove(pgc.Chapters[intIndex]);
             if (intIndex != 0) intIndex--;
@@ -444,8 +449,9 @@ namespace MeGUI
 
 		private void clearZonesButton_Click(object sender, System.EventArgs e)
 		{
-			this.chapterListView.Items.Clear();
-			this.chapters = new Chapter[0];
+            pgc.Chapters.Clear();
+            FreshChapterView();
+            intIndex = 0;
 		}
 
 		private void chapterListView_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -493,13 +499,12 @@ namespace MeGUI
             updateTimeLine();
 		}
 		#endregion
-		#region loading / saving files
-
+		#region saving files
 		private void saveButton_Click(object sender, System.EventArgs e)
 		{
 			if (this.saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
-                string ext = Path.GetExtension(saveFileDialog.FileName).ToLower();
+                string ext = Path.GetExtension(saveFileDialog.FileName).ToLower(System.Globalization.CultureInfo.InvariantCulture);
                 if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(saveFileDialog.FileName)))
                 {
                     if (ext == ".qpf")
@@ -512,13 +517,115 @@ namespace MeGUI
                 else
                     MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(saveFileDialog.FileName) + "\n" +
                 "Please, select another output path to save your project...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
 			}
 
             if (this.closeOnQueue.Checked)
                 this.Close();
 		}
 		#endregion
+
+        private void btInput_Click(object sender, EventArgs e)
+        {
+            if (rbFromFile.Checked)
+            {
+                openFileDialog.Filter = "IFO Files (*.ifo)|*.ifo|MPLS Files (*.mpls)|*.mpls|Text Files (*.txt)|*.txt|All Files supported (*.ifo,*.mpls,*.txt)|*.ifo;*.mpls;*.txt";
+                openFileDialog.FilterIndex = 4;
+
+               if (this.openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    input.Text = openFileDialog.FileName;
+
+                    if (input.Text.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("ifo"))
+                    {
+                        ChapterExtractor ex = new DvdExtractor();
+                        using (frmStreamSelect frm = new frmStreamSelect(ex))
+                        {
+                            if (ex is DvdExtractor)
+                                frm.Text = "Select your PGC";
+                            else
+                                frm.Text = "Select your Playlist";
+                            ex.GetStreams(input.Text);
+                            if (frm.ChapterCount == 1 || frm.ShowDialog(this) == DialogResult.OK)
+                            {
+                                pgc = frm.SelectedSingleChapterInfo;
+                                if (pgc.FramesPerSecond == 0)
+                                    pgc.FramesPerSecond = 25.0;
+                                if (String.IsNullOrEmpty(pgc.LangCode))
+                                    pgc.LangCode = "und";
+                            }
+                        }
+                        FreshChapterView();
+                        updateTimeLine();
+                    }
+                    else if (input.Text.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("mpls"))
+                    {
+                        ChapterExtractor ex = new MplsExtractor();
+                        pgc = ex.GetStreams(input.Text)[0];
+                        FreshChapterView();
+                        updateTimeLine();
+                    }
+                    else
+                    {
+                        ChapterExtractor ex = new TextExtractor();
+                        pgc = ex.GetStreams(input.Text)[0];
+                        FreshChapterView();
+                        updateTimeLine();
+                    }
+                }
+            }
+            else
+            {
+                using (FolderBrowserDialog d = new FolderBrowserDialog())
+                {
+                    d.ShowNewFolderButton = false;
+                    d.Description = "Select DVD, BluRay disc, or folder.";
+                    if (d.ShowDialog() == DialogResult.OK)
+                    {
+                        input.Text = d.SelectedPath;                       
+                        try
+                        {
+                            ChapterExtractor ex =
+                              Directory.Exists(Path.Combine(input.Text, "VIDEO_TS")) ?
+                              new DvdExtractor() as ChapterExtractor :
+                              File.Exists(Path.Combine(input.Text, "VIDEO_TS.IFO")) ?
+                              new DvdExtractor() as ChapterExtractor :
+                              Directory.Exists(Path.Combine(Path.Combine(input.Text, "BDMV"), "PLAYLIST")) ?
+                              new BlurayExtractor() as ChapterExtractor :
+                              null;
+
+                            if (ex == null)
+                                throw new Exception("The location was not detected as DVD, or Blu-Ray.");
+
+                            using (frmStreamSelect frm = new frmStreamSelect(ex))
+                            {
+                                if (ex is DvdExtractor)
+                                    frm.Text = "Select your Title";
+                                else
+                                    frm.Text = "Select your Playlist";
+                                ex.GetStreams(input.Text);
+                                if (frm.ChapterCount == 1 || frm.ShowDialog(this) == DialogResult.OK)
+                                {
+                                    pgc = frm.SelectedSingleChapterInfo;
+                                    if (pgc.FramesPerSecond == 0) 
+                                        pgc.FramesPerSecond = 25.0;
+                                    if (String.IsNullOrEmpty(pgc.LangCode)) 
+                                        pgc.LangCode = "und";
+                                }
+                            }
+                            FreshChapterView();
+                            updateTimeLine();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                    }
+                }
+            }
+
+            if (chapterListView.Items.Count != 0)
+                chapterListView.Items[0].Selected = true;
+        }
 
 		private void showVideoButton_Click(object sender, System.EventArgs e)
 		{
@@ -536,12 +643,16 @@ namespace MeGUI
 							player.IntroEnd = this.introEndFrame;
 						if (creditsStartFrame > 0)
 							player.CreditsStart = this.creditsStartFrame;
-						player.Show();
+                        player.Show();
+                        player.SetScreenSize();
+                        this.TopMost = player.TopMost = true;
+                        if (!mainForm.Settings.AlwaysOnTop)
+                            this.TopMost = player.TopMost = false;
 					}
 					else
 						return;
 				}
-				if (chapterListView.SelectedItems.Count == 1) // a zone has been selected, show that zone
+                if (chapterListView.SelectedItems.Count == 1 && chapterListView.SelectedItems[0].Tag != null) // a zone has been selected, show that zone
 				{
 					Chapter chap = (Chapter)chapterListView.SelectedItems[0].Tag;
 					int time = Util.getTimeCode(chap.timecode);
@@ -601,11 +712,16 @@ namespace MeGUI
 
 		private void player_ChapterSet(int frameNumber)
 		{
+            string strChapter;
             startTime.Text = Util.converFrameNumberToTimecode(frameNumber, player.Framerate);
-            if (chapterListView.Items.Count < 9)
-                 chapterName.Text = "Chapter 0" + Convert.ToString(chapterListView.Items.Count+1);
-            else chapterName.Text = "Chapter " + Convert.ToString(chapterListView.Items.Count+1);
-			addZoneButton_Click(null, null);
+            if (chapterListView.SelectedIndices.Count == 0)
+                strChapter = "Chapter " + (chapterListView.Items.Count + 1).ToString("00");
+            else
+                strChapter = "Chapter " + (chapterListView.SelectedIndices[0] + 1).ToString("00");            
+            if (!chapterName.Text.Equals(strChapter))
+                chapterName.Text = strChapter;
+            if (chapterListView.SelectedIndices.Count == 0)
+                addZoneButton_Click(null, null);
 		}
 
         private void ChapterCreator_Load(object sender, EventArgs e)
@@ -621,6 +737,8 @@ namespace MeGUI
         {
             try
             {
+                if (chapterListView.SelectedIndices.Count == 0)
+                    return;
                 intIndex = chapterListView.SelectedIndices[0];
                 pgc.Chapters[intIndex] = new Chapter()
                 {
@@ -638,101 +756,6 @@ namespace MeGUI
                                 + Environment.NewLine + parse.Message, "Incorrect timecode", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-        }
-
-        private void btInput_Click(object sender, EventArgs e)
-        {
-            if (rbFromFile.Checked)
-            {
-                openFileDialog.Filter = "IFO Files (*.ifo)|*.ifo|Blu-ray MPLS Playlist Files (*.mpls)|*.mpls|Text Files (*.txt)|*.txt|HD-DVD Xml Playlist Files (*.xpl)|*.xpl|All Files supported (*.ifo,*.mpls,*.txt,*.xpl)|*.ifo;*.mpls;*.txt;*.xpl";
-                openFileDialog.FilterIndex = 5;
-
-                if (this.openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    input.Text = openFileDialog.FileName;
-
-                    if (input.Text.ToLower().EndsWith("ifo"))
-                    {
-                        ChapterExtractor ex = new IfoExtractor();
-                        pgc = ex.GetStreams(input.Text)[0];
-                        FreshChapterView();
-                        updateTimeLine();
-                    }
-                    else if (input.Text.ToLower().EndsWith("mpls"))
-                    {
-                        ChapterExtractor ex = new MplsExtractor();
-                        pgc = ex.GetStreams(input.Text)[0];
-                        FreshChapterView();
-                        updateTimeLine();
-                    }
-                    else if (input.Text.ToLower().EndsWith("xpl"))
-                    {
-                        ChapterExtractor ex = new XplExtractor();
-                        pgc = ex.GetStreams(input.Text)[0];
-                        FreshChapterView();
-                        updateTimeLine();
-                    }
-                    else
-                    {
-                        ChapterExtractor ex = new TextExtractor();
-                        pgc = ex.GetStreams(input.Text)[0];
-                        FreshChapterView();
-                        updateTimeLine();
-                    }
-                }
-            }
-            else
-            {
-                using (FolderBrowserDialog d = new FolderBrowserDialog())
-                {
-                    d.ShowNewFolderButton = false;
-                    d.Description = "Select DVD, BluRay disc, or folder.";
-                    if (d.ShowDialog() == DialogResult.OK)
-                    {
-                        input.Text = d.SelectedPath;                       
-                        try
-                        {
-                            ChapterExtractor ex =
-                              Directory.Exists(Path.Combine(input.Text, "VIDEO_TS")) ?
-                              new DvdExtractor() as ChapterExtractor : 
-                              Directory.Exists(Path.Combine(d.SelectedPath, "ADV_OBJ")) ?
-                              new HddvdExtractor() as ChapterExtractor :
-                              Directory.Exists(Path.Combine(Path.Combine(input.Text, "BDMV"), "PLAYLIST")) ?
-                              new BlurayExtractor() as ChapterExtractor :
-                              null;
-
-                            if (ex == null)
-                                throw new Exception("The location was not detected as DVD, or Blu-Ray.");
-
-
-                            using (frmStreamSelect frm = new frmStreamSelect(ex))
-                            {
-                                if (ex is DvdExtractor)
-                                    frm.Text = "Select your PGC";
-                                else
-                                    frm.Text = "Select your Playlist";
-                                ex.GetStreams(input.Text);
-                                if (frm.ShowDialog(this) == DialogResult.OK)
-                                {
-                                    pgc = frm.ProgramChain;
-                                    if (pgc.FramesPerSecond == 0) pgc.FramesPerSecond = 25.0;
-                                    if (pgc.LangCode == null) pgc.LangCode = "und";
-                                }
-                            }
-                            FreshChapterView();
-                            updateTimeLine();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-                    }
-                }
-            }
-
-
-            if (chapterListView.Items.Count != 0)
-                chapterListView.Items[0].Selected = true;
         }
 	}
 	public struct Chapter

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ namespace MeGUI
         private AudioEncoderType[] knownAudioTypes;
 
         public AdaptiveMuxWindow(MainForm mainForm)
-            : base(mainForm)
+            : base(mainForm, null)
         {
             InitializeComponent();
             jobUtil = new JobUtil(mainForm);
@@ -51,9 +51,11 @@ namespace MeGUI
             audioTracks[0].Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
             subtitleTracks[0].Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.SubtitleTypes.ValuesArray);
             vInput.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.VideoTypes.ValuesArray);
+            chapters.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.ChapterTypes.ValuesArray);
             cbContainer.Visible = true;
             lbContainer.Visible = true;
 
+            subtitleTracks[0].chkDefaultStream.CheckedChanged += new System.EventHandler(base.chkDefaultStream_CheckedChanged);
             this.cbContainer.SelectedIndexChanged += new System.EventHandler(this.cbContainer_SelectedIndexChanged);
         }
 
@@ -75,6 +77,17 @@ namespace MeGUI
                 output.Filter = (cbContainer.SelectedItem as ContainerType).OutputFilterString;
             else
                 output.Filter = "";
+
+            foreach (MuxStreamControl oStream in subtitleTracks)
+            {
+                if ((this.cbContainer.SelectedItem as ContainerType).Extension.Equals("mkv"))
+                    oStream.ShowDefaultSubtitleStream = oStream.ShowForceSubtitleStream = oStream.ShowDelay = true;
+                else
+                    oStream.ShowDefaultSubtitleStream = oStream.ShowForceSubtitleStream = oStream.ShowDelay = false;
+            }
+
+            if ((this.cbContainer.SelectedItem as ContainerType).Extension.Equals("mkv"))
+                subtitleTracks[0].chkDefaultStream.Checked = true;
         }
 
         private void getTypes(out AudioEncoderType[] aCodec, out MuxableType[] audioTypes, out MuxableType[] subtitleTypes)
@@ -124,9 +137,29 @@ namespace MeGUI
 
         private void updateDeviceTypes()
         {
-            if (this.cbContainer.Text != "MP4")
+            if (this.cbContainer.Text == "MKV")
                 this.cbType.Enabled = false;
-            else this.cbType.Enabled = true;
+            else 
+                this.cbType.Enabled = true;
+
+            List<DeviceType> supportedOutputDeviceTypes = this.muxProvider.GetSupportedDevices((ContainerType)cbContainer.SelectedItem);
+            this.cbType.Items.Clear();
+            this.cbType.Items.Add("Standard");
+            this.cbType.Items.AddRange(supportedOutputDeviceTypes.ToArray());
+
+            if (cbContainer.SelectedItem.ToString().Equals(mainForm.Settings.AedSettings.Container))
+            {
+                foreach (object o in cbType.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+                {
+                    if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                    {
+                        cbType.SelectedItem = o;
+                        break;
+                    }
+                }
+            }
+            else
+                this.cbType.SelectedIndex = 0;
         }
 
         private void updatePossibleContainers()
@@ -158,10 +191,26 @@ namespace MeGUI
             getTypes(out audioCodecs, out audioTypes, out subTypes);
 
             List<MuxableType> allTypes = new List<MuxableType>();
+            List<MuxableType> tempTypes = new List<MuxableType>();
+            tempTypes.AddRange(audioTypes);
+            tempTypes.AddRange(subTypes);
+
             if (videoType != null)
                 allTypes.Add(videoType);
-            allTypes.AddRange(audioTypes);
-            allTypes.AddRange(subTypes);
+            foreach (MuxableType oType in tempTypes)
+            {
+                bool bFound = false;
+                foreach (MuxableType oAllType in allTypes)
+                {
+                    if (oType.outputType.ID.Equals(oAllType.outputType.ID))
+                    {
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (!bFound)
+                    allTypes.Add(oType);
+            }
 
             List<ContainerType> supportedOutputTypes;
 
@@ -249,20 +298,20 @@ namespace MeGUI
         /// <param name="audioStreams">the audio streams whose languages have to be assigned</param>
         /// <param name="output">the output file</param>
         /// <param name="splitSize">the output split size</param>
-        public void setMinimizedMode(string videoInput, VideoEncoderType videoType, double framerate, MuxStream[] audioStreams, AudioEncoderType[] audioTypes, string output,
+        public void setMinimizedMode(string videoInput, string videoName, VideoEncoderType videoType, double framerate, MuxStream[] audioStreams, AudioEncoderType[] audioTypes, string output,
             FileSize? splitSize, ContainerType cft)
         {
-            base.setConfig(videoInput, (decimal)framerate, audioStreams, new MuxStream[0], null, output, splitSize, null, null);
+            base.setConfig(videoInput, videoName, (decimal)framerate, audioStreams, new MuxStream[0], null, output, splitSize, null, null);
 
             minimizedMode = true;
             knownVideoType = videoType;
             knownAudioTypes = audioTypes;
 
-            // disable everything
+            // disable controls where required
             videoGroupbox.Enabled = false;
 
             for (int i = 0; i < audioStreams.Length; ++i)
-                audioTracks[i].Enabled = false;
+                audioTracks[i].SetAutoEncodeMode();
 
             this.output.Filename = output;
             this.splitting.Value = splitSize;

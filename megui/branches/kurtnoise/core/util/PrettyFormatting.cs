@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -29,14 +29,14 @@ namespace MeGUI.core.util
 {
     public class PrettyFormatting
     {
-        public static string ExtractWorkingName(string fileName)
+        public static string ExtractWorkingName(string fileName, string strReplace, string strReplaceWith)
         {
             string A = Path.GetFileNameWithoutExtension(fileName); // In case they all fail
 
             int count = 0;
             while (!string.IsNullOrEmpty(Path.GetDirectoryName(fileName)) && count < 3)
             {
-                string temp = Path.GetFileNameWithoutExtension(fileName).ToLower();
+                string temp = Path.GetFileNameWithoutExtension(fileName);
                 // Fix to only assume extracted DVD source in fileName starts with video_/vts_/audio_
                 if (!temp.StartsWith("vts_") && !temp.StartsWith("video_") && !temp.StartsWith("audio_"))
                 {
@@ -55,7 +55,8 @@ namespace MeGUI.core.util
             }
 
             // Format it nicely:
-            A = A.Replace("_", " ");
+            if (!String.IsNullOrEmpty(strReplace))
+                A = A.Replace(strReplace, strReplaceWith);
             return A;
         }
 
@@ -119,24 +120,17 @@ namespace MeGUI.core.util
         public static string ReplaceFPSValue(string fpsIn)
         {
             string fpsOut = "25";
+            fpsIn = fpsIn.Replace(',', '.');
 
             switch (fpsIn)
             {
-                case "23,976" : 
                 case "23.976" : fpsOut = "24000/1001"; break;
-                case "24,0"   :
                 case "24.0"   : fpsOut = "24"; break;
-                case "25,0"   :
                 case "25.0"   : fpsOut = "25"; break;
-                case "29,97"  :
                 case "29.97"  : fpsOut = "30000/1001"; break;
-                case "30,0"   :
                 case "30.0"   : fpsOut = "30"; break;
-                case "50,0"   :
                 case "50.0"   : fpsOut = "50"; break;
-                case "59,94"  :
                 case "59.94"  : fpsOut = "60000/1001"; break;
-                case "60,0"   :
                 case "60.0"   : fpsOut = "60"; break;
                 default       : fpsOut = fpsIn; break;
             }

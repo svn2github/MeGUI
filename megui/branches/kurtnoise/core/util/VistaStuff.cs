@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,9 +21,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
+using System.Threading;
 
 namespace MeGUI.core.util
 {
@@ -40,6 +42,44 @@ namespace MeGUI.core.util
                 return Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6;
             }
         }
+
+        /// <value>
+        /// Sets the memory and I/O priority on Windows Vista or newer operating systems
+        /// </value>
+        [Browsable(false)]
+        public static void SetProcessPriority(IntPtr handle, ProcessPriorityClass priority)
+        {
+            if (IsVistaOrNot)
+            {
+                int prioIO = VistaStuff.PRIORITY_IO_NORMAL;
+                int prioMemory = VistaStuff.PRIORITY_MEMORY_NORMAL;
+                if (priority == ProcessPriorityClass.Idle || priority == ProcessPriorityClass.BelowNormal)
+                {
+                    prioIO = VistaStuff.PRIORITY_IO_LOW;
+                    prioMemory = VistaStuff.PRIORITY_MEMORY_LOW;
+                    SetPriorityClass(handle, PROCESS_MODE_BACKGROUND_BEGIN);
+                }
+                else
+                    SetPriorityClass(handle, PROCESS_MODE_BACKGROUND_END);
+                NtSetInformationProcess(handle, PROCESS_INFORMATION_IO_PRIORITY, ref prioIO, Marshal.SizeOf(prioIO));
+                NtSetInformationProcess(handle, PROCESS_INFORMATION_MEMORY_PRIORITY, ref prioMemory, Marshal.SizeOf(prioMemory));
+            }
+        }
+
+        /// <value>
+        /// Sets the memory and I/O priority on Windows Vista or newer operating systems
+        /// </value>
+        [Browsable(false)]
+        public static void SetThreadPriority(IntPtr handle, ThreadPriority priority)
+        {
+            if (IsVistaOrNot)
+            {
+                if (priority == ThreadPriority.Lowest || priority == ThreadPriority.BelowNormal)
+                    SetThreadPriority(handle, THREAD_MODE_BACKGROUND_BEGIN);
+                else
+                    SetThreadPriority(handle, THREAD_MODE_BACKGROUND_END);
+            }
+        }
         
         public const int BS_COMMANDLINK = 0x0000000E;
         public const int BCM_SETNOTE = 0x00001609;
@@ -54,6 +94,17 @@ namespace MeGUI.core.util
         public const int TVS_EX_FADEINOUTEXPANDOS = 0x0040;
         public const int GWL_STYLE = -16;
 
+        private const int PROCESS_INFORMATION_MEMORY_PRIORITY = 0x27;
+        private const int PROCESS_INFORMATION_IO_PRIORITY = 0x21;
+        private const int PRIORITY_MEMORY_NORMAL = 5;
+        private const int PRIORITY_MEMORY_LOW = 3;
+        private const int PRIORITY_IO_NORMAL = 2;
+        private const int PRIORITY_IO_LOW = 1;
+        private const uint PROCESS_MODE_BACKGROUND_BEGIN = 0x00100000;
+        private const uint PROCESS_MODE_BACKGROUND_END = 0x00200000;
+        private const int THREAD_MODE_BACKGROUND_BEGIN = 0x00010000;
+        private const int THREAD_MODE_BACKGROUND_END = 0x00020000;
+
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         internal static extern int SendMessage(IntPtr hWnd, UInt32 Msg, int wParam, int lParam);
 
@@ -61,8 +112,20 @@ namespace MeGUI.core.util
         internal static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, string lParam);
         
         [DllImport("uxtheme.dll", CharSet = CharSet.Unicode)]
-        public extern static int SetWindowTheme(IntPtr hWnd, string pszSubAppName, string pszSubIdList);
+        public static extern int SetWindowTheme(IntPtr hWnd, string pszSubAppName, string pszSubIdList);
         
+        [DllImport("ntdll", CharSet = CharSet.Unicode)]
+        private static extern int NtSetInformationProcess(IntPtr hProcess, int processInformationClass, ref int processInformation, int processInformationLength);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern bool SetPriorityClass(IntPtr handle, uint priorityClass);
+
+        [DllImport("Kernel32.dll", ExactSpelling = true)]
+        private static extern IntPtr GetCurrentThread();
+
+        [DllImport("Kernel32.dll", ExactSpelling = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetThreadPriority(IntPtr hThread, int nPriority);
 
         #region General Definitions
 

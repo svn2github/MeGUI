@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ using System.Windows.Forms;
 using MeGUI.core.details;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
+using MeGUI.packages.tools.calculator;
 
 namespace MeGUI
 {
@@ -87,12 +88,6 @@ namespace MeGUI
         {
             this.vInfo = vInfo;
             mainForm.Log.Add(log);
-            if (videoStream.Settings.EncodingMode == 1 || videoStream.Settings.EncodingMode == 9) // CQ and CRF -- no bitrate possible
-            {
-                averageBitrateRadio.Enabled = false;
-                FileSizeRadio.Enabled = false;
-                noTargetRadio.Checked = true;
-            }
             this.videoStream = videoStream;
             this.audioStreams = audioStreams;
             this.prerender = prerender;
@@ -129,11 +124,11 @@ namespace MeGUI
             this.container.Items.AddRange(supportedOutputTypes.ToArray());
             this.container.SelectedIndex = 0;
 
-            List<DeviceType> supportedOutputDeviceTypes = this.muxProvider.GetSupportedDevices();
+            List<DeviceType> supportedOutputDeviceTypes = this.muxProvider.GetSupportedDevices((ContainerType)container.SelectedItem);
             this.device.Items.AddRange(supportedOutputDeviceTypes.ToArray());
             this.device.SelectedIndex = 0;
 
-            if (this.container.Text != "MP4")
+            if (this.container.Text == "MKV")
                 this.device.Enabled = false;
             else
                 this.device.Enabled = true;
@@ -143,7 +138,7 @@ namespace MeGUI
             this.muxedOutput.Filename = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
 
             splitting.Value = mainForm.Settings.AedSettings.SplitSize;
-            if (mainForm.Settings.AedSettings.FileSizeMode && FileSizeRadio.Enabled)
+            if (mainForm.Settings.AedSettings.FileSizeMode)
             {
                 FileSizeRadio.Checked = true;
                 targetSize.Value = mainForm.Settings.AedSettings.FileSize;
@@ -162,6 +157,14 @@ namespace MeGUI
                 if (o.ToString().Equals(mainForm.Settings.AedSettings.Container))
                 {
                     container.SelectedItem = o;
+                    break;
+                }
+            }
+            foreach (object o in device.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+            {
+                if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                {
+                    device.SelectedItem = o;
                     break;
                 }
             }
@@ -193,10 +196,12 @@ namespace MeGUI
 		{
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label label1;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutoEncodeWindow));
             this.AutomaticEncodingGroup = new System.Windows.Forms.GroupBox();
             this.videoSize = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.projectedBitrateKBits = new System.Windows.Forms.TextBox();
+            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.noTargetRadio = new System.Windows.Forms.RadioButton();
             this.averageBitrateRadio = new System.Windows.Forms.RadioButton();
             this.FileSizeRadio = new System.Windows.Forms.RadioButton();
@@ -205,16 +210,15 @@ namespace MeGUI
             this.OutputGroupBox = new System.Windows.Forms.GroupBox();
             this.device = new System.Windows.Forms.ComboBox();
             this.DeviceLabel = new System.Windows.Forms.Label();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
             this.container = new System.Windows.Forms.ComboBox();
             this.containerLabel = new System.Windows.Forms.Label();
             this.muxedOutputLabel = new System.Windows.Forms.Label();
+            this.muxedOutput = new MeGUI.FileBar();
             this.cancelButton = new System.Windows.Forms.Button();
             this.addSubsNChapters = new System.Windows.Forms.CheckBox();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
-            this.muxedOutput = new MeGUI.FileBar();
-            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             label1 = new System.Windows.Forms.Label();
             this.AutomaticEncodingGroup.SuspendLayout();
             this.OutputGroupBox.SuspendLayout();
@@ -272,6 +276,19 @@ namespace MeGUI
             this.projectedBitrateKBits.TabIndex = 9;
             this.projectedBitrateKBits.TextChanged += new System.EventHandler(this.projectedBitrate_TextChanged);
             this.projectedBitrateKBits.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
+            // 
+            // targetSize
+            // 
+            this.targetSize.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.targetSize.Location = new System.Drawing.Point(116, 15);
+            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.targetSize.Name = "targetSize";
+            this.targetSize.NullString = "Not calculated";
+            this.targetSize.SelectedIndex = 0;
+            this.targetSize.Size = new System.Drawing.Size(208, 29);
+            this.targetSize.TabIndex = 25;
+            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // noTargetRadio
             // 
@@ -366,6 +383,18 @@ namespace MeGUI
             this.DeviceLabel.TabIndex = 37;
             this.DeviceLabel.Text = "Device";
             // 
+            // splitting
+            // 
+            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.splitting.Location = new System.Drawing.Point(243, 16);
+            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitting.Name = "splitting";
+            this.splitting.NullString = "No splitting";
+            this.splitting.SelectedIndex = 0;
+            this.splitting.Size = new System.Drawing.Size(208, 29);
+            this.splitting.TabIndex = 26;
+            // 
             // container
             // 
             this.container.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -394,6 +423,20 @@ namespace MeGUI
             this.muxedOutputLabel.TabIndex = 23;
             this.muxedOutputLabel.Text = "Name of output";
             // 
+            // muxedOutput
+            // 
+            this.muxedOutput.Filename = "";
+            this.muxedOutput.Filter = null;
+            this.muxedOutput.FilterIndex = 0;
+            this.muxedOutput.FolderMode = false;
+            this.muxedOutput.Location = new System.Drawing.Point(97, 74);
+            this.muxedOutput.Name = "muxedOutput";
+            this.muxedOutput.ReadOnly = false;
+            this.muxedOutput.SaveMode = true;
+            this.muxedOutput.Size = new System.Drawing.Size(352, 26);
+            this.muxedOutput.TabIndex = 36;
+            this.muxedOutput.Title = null;
+            // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -421,51 +464,13 @@ namespace MeGUI
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.helpButton1.ArticleName = "AutoEncode window";
+            this.helpButton1.ArticleName = "AutoEncode";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(10, 228);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 21;
-            // 
-            // splitting
-            // 
-            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.splitting.Location = new System.Drawing.Point(243, 16);
-            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitting.Name = "splitting";
-            this.splitting.NullString = "No splitting";
-            this.splitting.SelectedIndex = 0;
-            this.splitting.Size = new System.Drawing.Size(208, 29);
-            this.splitting.TabIndex = 26;
-            // 
-            // muxedOutput
-            // 
-            this.muxedOutput.Filename = "";
-            this.muxedOutput.Filter = null;
-            this.muxedOutput.FilterIndex = 0;
-            this.muxedOutput.FolderMode = false;
-            this.muxedOutput.Location = new System.Drawing.Point(97, 74);
-            this.muxedOutput.Name = "muxedOutput";
-            this.muxedOutput.ReadOnly = false;
-            this.muxedOutput.SaveMode = true;
-            this.muxedOutput.Size = new System.Drawing.Size(352, 26);
-            this.muxedOutput.TabIndex = 36;
-            this.muxedOutput.Title = null;
-            // 
-            // targetSize
-            // 
-            this.targetSize.Location = new System.Drawing.Point(116, 15);
-            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.targetSize.Name = "targetSize";
-            this.targetSize.NullString = "Not calculated";
-            this.targetSize.SelectedIndex = 0;
-            this.targetSize.Size = new System.Drawing.Size(208, 29);
-            this.targetSize.TabIndex = 25;
-            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // AutoEncodeWindow
             // 
@@ -479,10 +484,10 @@ namespace MeGUI
             this.Controls.Add(this.queueButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AutoEncodeWindow";
-            this.ShowInTaskbar = false;
             this.Text = "MeGUI - Automatic Encoding";
             this.AutomaticEncodingGroup.ResumeLayout(false);
             this.AutomaticEncodingGroup.PerformLayout();
@@ -505,9 +510,30 @@ namespace MeGUI
             this.muxedOutput.Filter = cot.OutputFilterString;
             if (!String.IsNullOrEmpty (muxedOutput.Filename))
             {
-                if (this.container.Text != "MP4")
+                if (this.container.Text == "MKV")
                     this.device.Enabled = false;
-                else this.device.Enabled = true;
+                else 
+                    this.device.Enabled = true;
+
+                List<DeviceType> supportedOutputDeviceTypes = this.muxProvider.GetSupportedDevices(cot);
+                this.device.Items.Clear();
+                this.device.Items.Add("Standard");
+                this.device.Items.AddRange(supportedOutputDeviceTypes.ToArray());
+
+                if (container.SelectedItem.ToString().Equals(mainForm.Settings.AedSettings.Container))
+                {
+                    foreach (object o in device.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+                    {
+                        if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                        {
+                            device.SelectedItem = o;
+                            break;
+                        }
+                    }
+                }
+                else
+                    this.device.SelectedIndex = 0;
+
                 this.muxedOutput.Filename = Path.ChangeExtension(muxedOutput.Filename, (this.container.SelectedItem as ContainerType).Extension);
             }
         }
@@ -537,7 +563,7 @@ namespace MeGUI
 		/// <param name="muxable">muxable Audio Streams with the path filled out and a blank language</param>
         private void separateEncodableAndMuxableAudioStreams(out AudioJob[] encodable, out MuxStream[] muxable, out AudioEncoderType[] muxTypes)
 		{
-			encodable = this.getConfiguredAudioJobs(); // discards improperly configured ones
+			encodable = AudioUtil.getConfiguredAudioJobs(audioStreams.ToArray()); // discards improperly configured ones
 			// the rest of the job is all encodeable
 			muxable = new MuxStream[encodable.Length];
             muxTypes = new AudioEncoderType[encodable.Length];
@@ -558,28 +584,25 @@ namespace MeGUI
         {
             try
             {
-                ulong desiredSizeBytes;
-                checked { desiredSizeBytes = targetSize.Value.Value.Bytes; }
-                ulong videoSize;
+                CalcData data = GetCalcData();
+                data.TotalSize = new FileSize(targetSize.Value.Value.Bytes);
+                data.CalcByTotalSize();
 
-                int bitrateKbits = BitrateCalculator.CalculateBitrateKBits(videoStream.Settings.Codec,
-                    (videoStream.Settings.NbBframes > 0),
-                    ((ContainerType)container.SelectedItem),
-                    getAudioStreamsForBitrate(),
-                    desiredSizeBytes,
-                    videoStream.NumberOfFrames,
-                    (double)videoStream.Framerate,
-                    out videoSize,
-                    string.Empty);
-
-                this.videoSize.Text = new FileSize(Unit.KB, videoSize).ToString();
-                this.projectedBitrateKBits.Text = bitrateKbits.ToString();
+                this.videoSize.Text = data.VideoSize.ToString();
+                this.projectedBitrateKBits.Text = ((int)data.VideoBitrate).ToString();
             }
             catch (Exception)
             {
                 this.projectedBitrateKBits.Text = "";
                 videoSize.Text = "";
             }
+        }
+
+        private CalcData GetCalcData()
+        {
+            CalcData data = new CalcData((long)videoStream.NumberOfFrames, videoStream.Framerate, (ContainerType)container.SelectedItem,
+                videoStream.Settings.Codec, videoStream.Settings.NbBframes > 0, getAudioStreamsForBitrate());
+            return data;
         }
 
         private AudioBitrateCalculationStream[] getAudioStreamsForBitrate()
@@ -597,20 +620,11 @@ namespace MeGUI
 		{
 			try
             {
-                int desiredBitrate = Int32.Parse(this.projectedBitrateKBits.Text);
-                long outputSize = 0;
-                int rawVideoSize = 0;
-                outputSize = BitrateCalculator.CalculateFileSizeKB(videoStream.Settings.Codec,
-                    (videoStream.Settings.NbBframes > 0),
-                    ((ContainerType)container.SelectedItem),
-                    getAudioStreamsForBitrate(),
-                    desiredBitrate,
-                    videoStream.NumberOfFrames,
-                    (double)videoStream.Framerate,
-                    out rawVideoSize,
-                    string.Empty) / 1024L ;
-                this.videoSize.Text = new FileSize(Unit.KB, rawVideoSize).ToString();
-                this.targetSize.Value = new FileSize(Unit.MB, outputSize);
+                CalcData data = GetCalcData();
+                data.VideoBitrate = Int32.Parse(this.projectedBitrateKBits.Text);
+                data.CalcByVideoSize();
+                this.videoSize.Text = data.VideoSize.ToString();
+                this.targetSize.Value = new FileSize(Unit.MB, data.TotalSize.MBExact);
             }
             catch (Exception)
             {
@@ -643,31 +657,11 @@ namespace MeGUI
             }
         }
 		#endregion
-
-		/// <summary>
-		/// returns all audio streams that can be encoded or muxed
-		/// </summary>
-		/// <returns></returns>
-        private AudioJob[] getConfiguredAudioJobs()
-		{
-            List<AudioJob> list = new List<AudioJob>();
-            foreach (AudioJob stream in audioStreams)
-			{
-                if (String.IsNullOrEmpty(stream.Input))
-                {
-                    // no audio is ok, just skip
-                    break;
-                }
-                list.Add(stream);
-
-			}
-            return list.ToArray();
-		}
 		#endregion
 		#region button events
 		/// <summary>
 		/// handles the go button for automated encoding
-		/// checks if we're in automated 2 pass video mode and that we're not using the snow codec
+		/// checks if we're in automated 2 pass video mode
 		/// then the video and audio configuration is checked, and if it checks out
 		/// the audio job, video jobs and muxing job are generated, audio and video job are linked
 		/// and encoding is started
@@ -700,10 +694,23 @@ namespace MeGUI
                 string muxedOutput = this.muxedOutput.Filename;
                 ContainerType cot = this.container.SelectedItem as ContainerType;
 
+                // determine audio language 
+                foreach (MuxStream stream in audio)
+                {
+                    foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                    {
+                        if (Path.GetFileNameWithoutExtension(stream.path).ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                        {
+                            stream.language = strLanguage.Key;
+                            break;
+                        }
+                    }
+                }
+
                 if (addSubsNChapters.Checked)
 				{
                     AdaptiveMuxWindow amw = new AdaptiveMuxWindow(mainForm);
-                    amw.setMinimizedMode(videoOutput, videoStream.Settings.EncoderType, jobUtil.getFramerate(videoInput), audio,
+                    amw.setMinimizedMode(videoOutput, "", videoStream.Settings.EncoderType, jobUtil.getFramerate(videoInput), audio,
                         muxTypes, muxedOutput, splitSize, cot);
                     if (amw.ShowDialog() == DialogResult.OK)
                         amw.getAdditionalStreams(out audio, out subtitles, out chapters, out muxedOutput, out cot);
@@ -712,7 +719,7 @@ namespace MeGUI
                 }
                 removeStreamsToBeEncoded(ref audio, aStreams);
                 mainForm.Jobs.addJobsWithDependencies(vUtil.GenerateJobSeries(this.videoStream, muxedOutput, aStreams, subtitles, chapters,
-                    desiredSize, splitSize, cot, this.prerender, audio, log, this.device.Text));
+                    desiredSize, splitSize, cot, this.prerender, audio, log, this.device.Text, vInfo.Zones, null, null));
                 this.Close();
 			}
 		}
@@ -732,11 +739,13 @@ namespace MeGUI
                 {
                     if (stream.path == a.Output)
                     {
-                        matchFound = true; // In this case we have found a file which needs to be encoded
+                        matchFound = true;              // found a file which needs to be encoded
+                        a.Language = stream.language;   // set language
+                        a.Name = stream.name;           // set track name
                         break;
                     }
                 }
-                if (!matchFound) // in this case we have not found any files which will be encoded first to produce this file
+                if (!matchFound) // not found any files which will be encoded first to produce this file
                 {
                     newAudio.Add(stream);
                 }

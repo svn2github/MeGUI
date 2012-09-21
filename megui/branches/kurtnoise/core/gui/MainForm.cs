@@ -1,6 +1,6 @@
-// ****************************************************************************
+﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,15 +19,10 @@
 // ****************************************************************************
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -36,16 +31,13 @@ using MeGUI.core.details;
 using MeGUI.core.gui;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
-using MeGUI.packages.tools.besplitter;
-using MeGUI.packages.tools.cutter;
-using MeGUI.packages.tools.hdbdextractor;
 
 namespace MeGUI
 {
     public delegate void UpdateGUIStatusCallback(StatusUpdate su); // catches the UpdateGUI events fired from the encoder
     public enum FileType
     {
-        VIDEOINPUT, AUDIOINPUT, DGINDEX, OTHERVIDEO, ZIPPED_PROFILES, NONE
+        VIDEOINPUT, AUDIOINPUT, INDEXABLEVIDEO, OTHERVIDEO, ZIPPED_PROFILES, NONE
     };
     public enum ProcessingStatus
     {
@@ -53,85 +45,33 @@ namespace MeGUI
     }
 
     /// <summary>
-    /// Form1 is the main GUI of the program
+    /// MainForm is the main GUI of the program
     /// it contains all the elements required to start encoding and contains the application intelligence as well.
     /// </summary>
-    public class MainForm : System.Windows.Forms.Form
+    public partial class MainForm : Form
     {
         // This instance is to be used by the serializers that can't be passed a MainForm as a parameter
         public static MainForm Instance;
 
         #region variable declaration
         private List<string> filesToDeleteOnClosing = new List<string>();
-        private System.Windows.Forms.TabPage inputTab;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.MainMenu mainMenu1;
-        private System.Windows.Forms.MenuItem mnuFile;
-        private System.Windows.Forms.MenuItem mnuFileExit;
-        private System.Windows.Forms.MenuItem mnuTools;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog;
-        private System.Windows.Forms.MenuItem mnuView;
-        private System.Windows.Forms.MenuItem progressMenu;
-        private MenuItem mnuViewMinimizeToTray;
-        private NotifyIcon trayIcon;
-        private System.Windows.Forms.MenuItem mnuMuxers;
-        private MenuItem mnuFileOpen;
-        private ContextMenuStrip trayMenu;
-        private ToolStripMenuItem openMeGUIToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator1;
-        private ToolStripMenuItem exitMeGUIToolStripMenuItem;
-        private MenuItem mnuFileImport;
-        private MenuItem mnuFileExport;
-        private MenuItem mnuToolsAdaptiveMuxer;
-        #endregion
-        private AudioEncodingComponent audioEncodingComponent1;
-        private VideoEncodingComponent videoEncodingComponent1;
-        private TabPage tabPage2;
-        private JobControl jobControl1;
-        private MenuItem mnuHelp;
-        private MenuItem menuItem1;
-        private MenuItem createNewWorker;
-        private MenuItem menuItem6;
-        private MenuItem workersMenu;
-        private MenuItem showAllWorkers;
-        private MenuItem hideAllWorkers;
-        private MenuItem separator;
-        private MenuItem menuItem2;
-        private MenuItem viewSummary;
-        private MenuItem showAllProgressWindows;
-        private MenuItem hideAllProgressWindows;
-        private MenuItem separator2;
-        private MenuItem menuItem7;
-
         private List<Form> allForms = new List<Form>();
-        private MenuItem menuItem3;
-        private MenuItem mnuDoc;
-        private MenuItem mnuWebsite;
-        private MenuItem mnuHome;
-        private MenuItem mnuForum;
-        private MenuItem mnuBugTracker;
-        private MenuItem mnuFeaturesReq;
-        private MenuItem mnuOptions;
-        private MenuItem mnuOptionsSettings;
-        private TabPage logTab;
-        private LogTree logTree1;
-        private SplitContainer splitContainer1;
-        private FlowLayoutPanel flowLayoutPanel1;
-        private FlowLayoutPanel flowLayoutPanel2;
-        private Button autoEncodeButton;
-        private Button resetButton;
-        private Button OneClickEncButton;
-        private Button HelpButton;
-        private SplitContainer splitContainer2;
-        private MenuItem mnudgIndexers;
-        private MenuItem mnutoolsD2VCreator;
-        private MenuItem mnutoolsdgaCreator;
-        private MenuItem mnutoolsdgmCreator;
-        private MenuItem mnutoolsdgvCreator;
         private List<Form> formsToReopen = new List<Form>();
-
+        private ITaskbarList3 taskbarItem;
+        private Icon taskbarIcon;
+        private string strLogFile;
+        private Semaphore logLock;
+        private int avsLock;
+        private LogItem _oneClickLog;
+        private LogItem _updateLog;
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
+        public bool IsOverlayIconActive { get { return taskbarIcon != null; } }
+        public string LogFile { get { return strLogFile; } }
+        public Semaphore LogLock { get { return logLock; } set { logLock = value; } }
+        public int AvsLock { get { return avsLock; } set { avsLock = value; } }
+        public LogItem OneClickLog { get { return _oneClickLog; } set { _oneClickLog = value; } }
+        public LogItem UpdateLog { get { return _updateLog; } set { _updateLog = value; } }
+        #endregion
 
         public void RegisterForm(Form f)
         {
@@ -143,652 +83,6 @@ namespace MeGUI
         }
 
         /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-        #region Windows Form Designer generated code
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            this.components = new System.ComponentModel.Container();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.inputTab = new System.Windows.Forms.TabPage();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.videoEncodingComponent1 = new MeGUI.VideoEncodingComponent();
-            this.audioEncodingComponent1 = new MeGUI.AudioEncodingComponent();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.resetButton = new System.Windows.Forms.Button();
-            this.HelpButton = new System.Windows.Forms.Button();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.autoEncodeButton = new System.Windows.Forms.Button();
-            this.OneClickEncButton = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.jobControl1 = new MeGUI.core.details.JobControl();
-            this.logTab = new System.Windows.Forms.TabPage();
-            this.logTree1 = new MeGUI.core.gui.LogTree();
-            this.mnuMuxers = new System.Windows.Forms.MenuItem();
-            this.mnuToolsAdaptiveMuxer = new System.Windows.Forms.MenuItem();
-            this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
-            this.mnuFile = new System.Windows.Forms.MenuItem();
-            this.mnuFileOpen = new System.Windows.Forms.MenuItem();
-            this.mnuFileImport = new System.Windows.Forms.MenuItem();
-            this.mnuFileExport = new System.Windows.Forms.MenuItem();
-            this.mnuFileExit = new System.Windows.Forms.MenuItem();
-            this.mnuView = new System.Windows.Forms.MenuItem();
-            this.progressMenu = new System.Windows.Forms.MenuItem();
-            this.showAllProgressWindows = new System.Windows.Forms.MenuItem();
-            this.hideAllProgressWindows = new System.Windows.Forms.MenuItem();
-            this.separator2 = new System.Windows.Forms.MenuItem();
-            this.menuItem7 = new System.Windows.Forms.MenuItem();
-            this.mnuViewMinimizeToTray = new System.Windows.Forms.MenuItem();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.createNewWorker = new System.Windows.Forms.MenuItem();
-            this.menuItem6 = new System.Windows.Forms.MenuItem();
-            this.workersMenu = new System.Windows.Forms.MenuItem();
-            this.showAllWorkers = new System.Windows.Forms.MenuItem();
-            this.hideAllWorkers = new System.Windows.Forms.MenuItem();
-            this.separator = new System.Windows.Forms.MenuItem();
-            this.menuItem2 = new System.Windows.Forms.MenuItem();
-            this.menuItem3 = new System.Windows.Forms.MenuItem();
-            this.viewSummary = new System.Windows.Forms.MenuItem();
-            this.mnuTools = new System.Windows.Forms.MenuItem();
-            this.mnudgIndexers = new System.Windows.Forms.MenuItem();
-            this.mnutoolsD2VCreator = new System.Windows.Forms.MenuItem();
-            this.mnutoolsdgaCreator = new System.Windows.Forms.MenuItem();
-            this.mnutoolsdgmCreator = new System.Windows.Forms.MenuItem();
-            this.mnutoolsdgvCreator = new System.Windows.Forms.MenuItem();
-            this.mnuOptions = new System.Windows.Forms.MenuItem();
-            this.mnuOptionsSettings = new System.Windows.Forms.MenuItem();
-            this.mnuHelp = new System.Windows.Forms.MenuItem();
-            this.mnuDoc = new System.Windows.Forms.MenuItem();
-            this.mnuWebsite = new System.Windows.Forms.MenuItem();
-            this.mnuHome = new System.Windows.Forms.MenuItem();
-            this.mnuForum = new System.Windows.Forms.MenuItem();
-            this.mnuBugTracker = new System.Windows.Forms.MenuItem();
-            this.mnuFeaturesReq = new System.Windows.Forms.MenuItem();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.openMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabControl1.SuspendLayout();
-            this.inputTab.SuspendLayout();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.flowLayoutPanel2.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.logTab.SuspendLayout();
-            this.trayMenu.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.inputTab);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.logTab);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(516, 501);
-            this.tabControl1.TabIndex = 0;
-            // 
-            // inputTab
-            // 
-            this.inputTab.BackColor = System.Drawing.Color.Transparent;
-            this.inputTab.Controls.Add(this.splitContainer2);
-            this.inputTab.Controls.Add(this.splitContainer1);
-            this.inputTab.Location = new System.Drawing.Point(4, 22);
-            this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(508, 475);
-            this.inputTab.TabIndex = 0;
-            this.inputTab.Text = "Input";
-            this.inputTab.UseVisualStyleBackColor = true;
-            // 
-            // splitContainer2
-            // 
-            this.splitContainer2.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.videoEncodingComponent1);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.audioEncodingComponent1);
-            this.splitContainer2.Size = new System.Drawing.Size(508, 443);
-            this.splitContainer2.SplitterDistance = 169;
-            this.splitContainer2.TabIndex = 4;
-            // 
-            // videoEncodingComponent1
-            // 
-            this.videoEncodingComponent1.BackColor = System.Drawing.SystemColors.Control;
-            this.videoEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.videoEncodingComponent1.Location = new System.Drawing.Point(0, 0);
-            this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(500, 168);
-            this.videoEncodingComponent1.Name = "videoEncodingComponent1";
-            this.videoEncodingComponent1.PrerenderJob = false;
-            this.videoEncodingComponent1.Size = new System.Drawing.Size(508, 169);
-            this.videoEncodingComponent1.TabIndex = 0;
-            this.videoEncodingComponent1.VideoInput = "";
-            this.videoEncodingComponent1.VideoOutput = "";
-            // 
-            // audioEncodingComponent1
-            // 
-            this.audioEncodingComponent1.AutoScroll = true;
-            this.audioEncodingComponent1.BackColor = System.Drawing.SystemColors.Control;
-            this.audioEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 0);
-            this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 192);
-            this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(508, 270);
-            this.audioEncodingComponent1.TabIndex = 1;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 443);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.flowLayoutPanel1);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel2);
-            this.splitContainer1.Size = new System.Drawing.Size(508, 32);
-            this.splitContainer1.SplitterDistance = 248;
-            this.splitContainer1.TabIndex = 3;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
-            this.flowLayoutPanel1.Controls.Add(this.resetButton);
-            this.flowLayoutPanel1.Controls.Add(this.HelpButton);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(248, 32);
-            this.flowLayoutPanel1.TabIndex = 0;
-            // 
-            // resetButton
-            // 
-            this.resetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.resetButton.AutoSize = true;
-            this.resetButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.resetButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.resetButton.Location = new System.Drawing.Point(3, 3);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(45, 23);
-            this.resetButton.TabIndex = 4;
-            this.resetButton.Text = "Reset";
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
-            // 
-            // HelpButton
-            // 
-            this.HelpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.HelpButton.AutoSize = true;
-            this.HelpButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.HelpButton.Location = new System.Drawing.Point(54, 3);
-            this.HelpButton.Name = "HelpButton";
-            this.HelpButton.Size = new System.Drawing.Size(38, 23);
-            this.HelpButton.TabIndex = 5;
-            this.HelpButton.Text = "Help";
-            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
-            // 
-            // flowLayoutPanel2
-            // 
-            this.flowLayoutPanel2.AutoSize = true;
-            this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flowLayoutPanel2.BackColor = System.Drawing.SystemColors.Control;
-            this.flowLayoutPanel2.Controls.Add(this.autoEncodeButton);
-            this.flowLayoutPanel2.Controls.Add(this.OneClickEncButton);
-            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(256, 32);
-            this.flowLayoutPanel2.TabIndex = 5;
-            // 
-            // autoEncodeButton
-            // 
-            this.autoEncodeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.autoEncodeButton.AutoSize = true;
-            this.autoEncodeButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.autoEncodeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.autoEncodeButton.Location = new System.Drawing.Point(178, 3);
-            this.autoEncodeButton.Name = "autoEncodeButton";
-            this.autoEncodeButton.Size = new System.Drawing.Size(75, 23);
-            this.autoEncodeButton.TabIndex = 2;
-            this.autoEncodeButton.Text = "AutoEncode";
-            this.autoEncodeButton.Click += new System.EventHandler(this.autoEncodeButton_Click);
-            // 
-            // OneClickEncButton
-            // 
-            this.OneClickEncButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.OneClickEncButton.AutoSize = true;
-            this.OneClickEncButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.OneClickEncButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.OneClickEncButton.Location = new System.Drawing.Point(110, 3);
-            this.OneClickEncButton.Name = "OneClickEncButton";
-            this.OneClickEncButton.Size = new System.Drawing.Size(62, 23);
-            this.OneClickEncButton.TabIndex = 3;
-            this.OneClickEncButton.Text = "One-Click";
-            this.OneClickEncButton.Click += new System.EventHandler(this.OneClickEncButton_Click);
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.jobControl1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(508, 475);
-            this.tabPage2.TabIndex = 12;
-            this.tabPage2.Text = "Queue";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // jobControl1
-            // 
-            this.jobControl1.BackColor = System.Drawing.SystemColors.Control;
-            this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jobControl1.Location = new System.Drawing.Point(0, 0);
-            this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(508, 475);
-            this.jobControl1.TabIndex = 0;
-            // 
-            // logTab
-            // 
-            this.logTab.Controls.Add(this.logTree1);
-            this.logTab.Location = new System.Drawing.Point(4, 22);
-            this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(508, 475);
-            this.logTab.TabIndex = 13;
-            this.logTab.Text = "Log";
-            this.logTab.UseVisualStyleBackColor = true;
-            // 
-            // logTree1
-            // 
-            this.logTree1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logTree1.Location = new System.Drawing.Point(0, 0);
-            this.logTree1.Name = "logTree1";
-            this.logTree1.Size = new System.Drawing.Size(508, 475);
-            this.logTree1.TabIndex = 0;
-            // 
-            // mnuMuxers
-            // 
-            this.mnuMuxers.Index = 0;
-            this.mnuMuxers.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuToolsAdaptiveMuxer});
-            this.mnuMuxers.Text = "Muxer";
-            // 
-            // mnuToolsAdaptiveMuxer
-            // 
-            this.mnuToolsAdaptiveMuxer.Index = 0;
-            this.mnuToolsAdaptiveMuxer.Text = "Adaptive Muxer";
-            this.mnuToolsAdaptiveMuxer.Click += new System.EventHandler(this.mnuToolsAdaptiveMuxer_Click);
-            // 
-            // mainMenu1
-            // 
-            this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuFile,
-            this.mnuView,
-            this.menuItem1,
-            this.mnuTools,
-            this.mnuOptions,
-            this.mnuHelp});
-            // 
-            // mnuFile
-            // 
-            this.mnuFile.Index = 0;
-            this.mnuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuFileOpen,
-            this.mnuFileImport,
-            this.mnuFileExport,
-            this.mnuFileExit});
-            this.mnuFile.Text = "&File";
-            // 
-            // mnuFileOpen
-            // 
-            this.mnuFileOpen.Index = 0;
-            this.mnuFileOpen.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
-            this.mnuFileOpen.Text = "&Open";
-            this.mnuFileOpen.Click += new System.EventHandler(this.mnuFileOpen_Click);
-            // 
-            // mnuFileImport
-            // 
-            this.mnuFileImport.Index = 1;
-            this.mnuFileImport.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
-            this.mnuFileImport.Text = "&Import Presets";
-            this.mnuFileImport.Click += new System.EventHandler(this.mnuFileImport_Click);
-            // 
-            // mnuFileExport
-            // 
-            this.mnuFileExport.Index = 2;
-            this.mnuFileExport.Shortcut = System.Windows.Forms.Shortcut.CtrlE;
-            this.mnuFileExport.Text = "&Export Presets";
-            this.mnuFileExport.Click += new System.EventHandler(this.mnuFileExport_Click);
-            // 
-            // mnuFileExit
-            // 
-            this.mnuFileExit.Index = 3;
-            this.mnuFileExit.Shortcut = System.Windows.Forms.Shortcut.CtrlX;
-            this.mnuFileExit.Text = "E&xit";
-            this.mnuFileExit.Click += new System.EventHandler(this.mnuFileExit_Click);
-            // 
-            // mnuView
-            // 
-            this.mnuView.Index = 1;
-            this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.progressMenu,
-            this.mnuViewMinimizeToTray});
-            this.mnuView.Text = "&View";
-            this.mnuView.Popup += new System.EventHandler(this.mnuView_Popup);
-            // 
-            // progressMenu
-            // 
-            this.progressMenu.Index = 0;
-            this.progressMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.showAllProgressWindows,
-            this.hideAllProgressWindows,
-            this.separator2,
-            this.menuItem7});
-            this.progressMenu.Text = "&Process Status";
-            // 
-            // showAllProgressWindows
-            // 
-            this.showAllProgressWindows.Index = 0;
-            this.showAllProgressWindows.Text = "Show all";
-            this.showAllProgressWindows.Click += new System.EventHandler(this.showAllProgressWindows_Click);
-            // 
-            // hideAllProgressWindows
-            // 
-            this.hideAllProgressWindows.Index = 1;
-            this.hideAllProgressWindows.Text = "Hide all";
-            this.hideAllProgressWindows.Click += new System.EventHandler(this.hideAllProgressWindows_Click);
-            // 
-            // separator2
-            // 
-            this.separator2.Index = 2;
-            this.separator2.Text = "-";
-            // 
-            // menuItem7
-            // 
-            this.menuItem7.Index = 3;
-            this.menuItem7.Text = "(List of progress windows goes here)";
-            // 
-            // mnuViewMinimizeToTray
-            // 
-            this.mnuViewMinimizeToTray.Index = 1;
-            this.mnuViewMinimizeToTray.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
-            this.mnuViewMinimizeToTray.Text = "&Minimize to Tray";
-            this.mnuViewMinimizeToTray.Click += new System.EventHandler(this.mnuViewMinimizeToTray_Click);
-            // 
-            // menuItem1
-            // 
-            this.menuItem1.Index = 2;
-            this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.createNewWorker,
-            this.menuItem6,
-            this.workersMenu,
-            this.viewSummary});
-            this.menuItem1.Text = "Workers";
-            this.menuItem1.Popup += new System.EventHandler(this.showAllWorkers_Popup);
-            // 
-            // createNewWorker
-            // 
-            this.createNewWorker.Index = 0;
-            this.createNewWorker.Text = "Create new worker";
-            this.createNewWorker.Click += new System.EventHandler(this.createNewWorker_Click);
-            // 
-            // menuItem6
-            // 
-            this.menuItem6.Index = 1;
-            this.menuItem6.Text = "-";
-            // 
-            // workersMenu
-            // 
-            this.workersMenu.Index = 2;
-            this.workersMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.showAllWorkers,
-            this.hideAllWorkers,
-            this.separator,
-            this.menuItem2,
-            this.menuItem3});
-            this.workersMenu.Text = "Workers";
-            // 
-            // showAllWorkers
-            // 
-            this.showAllWorkers.Index = 0;
-            this.showAllWorkers.Text = "Show all";
-            this.showAllWorkers.Click += new System.EventHandler(this.showAllWorkers_Click);
-            // 
-            // hideAllWorkers
-            // 
-            this.hideAllWorkers.Index = 1;
-            this.hideAllWorkers.Text = "Hide all";
-            this.hideAllWorkers.Click += new System.EventHandler(this.hideAllWorkers_Click);
-            // 
-            // separator
-            // 
-            this.separator.Index = 2;
-            this.separator.Text = "-";
-            // 
-            // menuItem2
-            // 
-            this.menuItem2.Index = 3;
-            this.menuItem2.Text = "(List of workers goes here)";
-            // 
-            // menuItem3
-            // 
-            this.menuItem3.Index = 4;
-            this.menuItem3.Text = "ao";
-            // 
-            // viewSummary
-            // 
-            this.viewSummary.Index = 3;
-            this.viewSummary.Text = "Worker summary";
-            this.viewSummary.Click += new System.EventHandler(this.viewSummary_Click);
-            // 
-            // mnuTools
-            // 
-            this.mnuTools.Index = 3;
-            this.mnuTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuMuxers,
-            this.mnudgIndexers});
-            this.mnuTools.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
-            this.mnuTools.Text = "&Tools";
-            // 
-            // mnudgIndexers
-            // 
-            this.mnudgIndexers.Index = 1;
-            this.mnudgIndexers.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnutoolsD2VCreator,
-            this.mnutoolsdgaCreator,
-            this.mnutoolsdgmCreator,
-            this.mnutoolsdgvCreator});
-            this.mnudgIndexers.Text = "DG Indexer";
-            // 
-            // mnutoolsD2VCreator
-            // 
-            this.mnutoolsD2VCreator.Index = 0;
-            this.mnutoolsD2VCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlF2;
-            this.mnutoolsD2VCreator.Text = "D2V Creator";
-            this.mnutoolsD2VCreator.Click += new System.EventHandler(this.menuItem5_Click);
-            // 
-            // mnutoolsdgaCreator
-            // 
-            this.mnutoolsdgaCreator.Index = 1;
-            this.mnutoolsdgaCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlF3;
-            this.mnutoolsdgaCreator.Text = "DGA Creator";
-            this.mnutoolsdgaCreator.Click += new System.EventHandler(this.mnutoolsdgaCreator_Click);
-            // 
-            // mnutoolsdgmCreator
-            // 
-            this.mnutoolsdgmCreator.Index = 2;
-            this.mnutoolsdgmCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlF4;
-            this.mnutoolsdgmCreator.Text = "DGM Creator";
-            this.mnutoolsdgmCreator.Click += new System.EventHandler(this.mnutoolsdgmCreator_Click);
-            // 
-            // mnutoolsdgvCreator
-            // 
-            this.mnutoolsdgvCreator.Index = 3;
-            this.mnutoolsdgvCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlF5;
-            this.mnutoolsdgvCreator.Text = "DGV Creator";
-            this.mnutoolsdgvCreator.Click += new System.EventHandler(this.mnutoolsdgvCreator_Click);
-            // 
-            // mnuOptions
-            // 
-            this.mnuOptions.Index = 4;
-            this.mnuOptions.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuOptionsSettings});
-            this.mnuOptions.Text = "&Options";
-            // 
-            // mnuOptionsSettings
-            // 
-            this.mnuOptionsSettings.Index = 0;
-            this.mnuOptionsSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
-            this.mnuOptionsSettings.Text = "Settings";
-            this.mnuOptionsSettings.Click += new System.EventHandler(this.mnuOptionsSettings_Click);
-            // 
-            // mnuHelp
-            // 
-            this.mnuHelp.Index = 5;
-            this.mnuHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuDoc,
-            this.mnuWebsite});
-            this.mnuHelp.Text = "&Help";
-            // 
-            // mnuDoc
-            // 
-            this.mnuDoc.Index = 0;
-            this.mnuDoc.Text = "Wiki - User Guides";
-            this.mnuDoc.Click += new System.EventHandler(this.mnuDoc_Click);
-            // 
-            // mnuWebsite
-            // 
-            this.mnuWebsite.Index = 1;
-            this.mnuWebsite.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuHome,
-            this.mnuForum,
-            this.mnuBugTracker,
-            this.mnuFeaturesReq});
-            this.mnuWebsite.Text = "Website";
-            // 
-            // mnuHome
-            // 
-            this.mnuHome.Index = 0;
-            this.mnuHome.Text = "Homepage";
-            this.mnuHome.Click += new System.EventHandler(this.mnuHome_Click);
-            // 
-            // mnuForum
-            // 
-            this.mnuForum.Index = 1;
-            this.mnuForum.Text = "Forum";
-            this.mnuForum.Click += new System.EventHandler(this.mnuForum_Click);
-            // 
-            // mnuBugTracker
-            // 
-            this.mnuBugTracker.Index = 2;
-            this.mnuBugTracker.Text = "Bugs Tracker";
-            this.mnuBugTracker.Click += new System.EventHandler(this.mnuBugTracker_Click);
-            // 
-            // mnuFeaturesReq
-            // 
-            this.mnuFeaturesReq.Index = 3;
-            this.mnuFeaturesReq.Text = "Feature Requests";
-            this.mnuFeaturesReq.Click += new System.EventHandler(this.mnuFeaturesReq_Click);
-            // 
-            // trayIcon
-            // 
-            this.trayIcon.BalloonTipText = "meGUI is still working...";
-            this.trayIcon.BalloonTipTitle = "meGUI";
-            this.trayIcon.ContextMenuStrip = this.trayMenu;
-            this.trayIcon.Text = "MeGUI";
-            this.trayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.trayIcon_MouseDoubleClick);
-            // 
-            // trayMenu
-            // 
-            this.trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openMeGUIToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.exitMeGUIToolStripMenuItem});
-            this.trayMenu.Name = "trayMenu";
-            this.trayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.trayMenu.Size = new System.Drawing.Size(143, 54);
-            // 
-            // openMeGUIToolStripMenuItem
-            // 
-            this.openMeGUIToolStripMenuItem.Name = "openMeGUIToolStripMenuItem";
-            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.openMeGUIToolStripMenuItem.Text = "Open MeGUI";
-            this.openMeGUIToolStripMenuItem.Click += new System.EventHandler(this.openMeGUIToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
-            // 
-            // exitMeGUIToolStripMenuItem
-            // 
-            this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
-            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
-            this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
-            // 
-            // MainForm
-            // 
-            this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(516, 501);
-            this.Controls.Add(this.tabControl1);
-            this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Location = global::MeGUI.Properties.Settings.Default.MainFormLocation;
-            this.Menu = this.mainMenu1;
-            this.MinimumSize = new System.Drawing.Size(524, 537);
-            this.Name = "MainForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Load += new System.EventHandler(this.MeGUI_Load);
-            this.Shown += new System.EventHandler(this.MainForm_Shown);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
-            this.tabControl1.ResumeLayout(false);
-            this.inputTab.ResumeLayout(false);
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            this.splitContainer2.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.Panel2.PerformLayout();
-            this.splitContainer1.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
-            this.flowLayoutPanel2.ResumeLayout(false);
-            this.flowLayoutPanel2.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.logTab.ResumeLayout(false);
-            this.trayMenu.ResumeLayout(false);
-            this.ResumeLayout(false);
-
-        }
-        #endregion
-        /// <summary>
         /// launches the megui wiki in the default browser
         /// </summary>
         /// <param name="sender"></param>
@@ -797,13 +91,65 @@ namespace MeGUI
         {
             System.Diagnostics.Process.Start("http://mewiki.project357.com/wiki/Main_Page");
         }
- 
+        /// <summary>
+        /// launches the encoder gui forum in the default browser
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuItem2_Click(object sender, EventArgs e)
+        {
+
+        }
+        /// <summary>
+        /// shows the changelog dialog window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mnuChangelog_Click(object sender, EventArgs e)
+        {
+            string strChangeLog = Path.Combine(Application.StartupPath, "changelog.txt");
+
+            if (File.Exists(strChangeLog))
+            {
+                try
+                {
+                    Process oProcess = new Process();
+                    oProcess.StartInfo.FileName = strChangeLog;
+                    oProcess.StartInfo.UseShellExecute = true;
+                    oProcess.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(strChangeLog + " cannot be opened:\r\n" + ex.Message, "Process error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show(strChangeLog + " not found", "Changelog not found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         public MainForm()
         {
+            // Log File Handling
+            string strMeGUILogPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\logs";
+            FileUtil.ensureDirectoryExists(strMeGUILogPath);
+            strLogFile = strMeGUILogPath + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
+            logLock = new Semaphore(1, 1);
+            avsLock = 0;
+            try
+            {
+                logLock.WaitOne(10000, false);
+                File.WriteAllText(strLogFile, "Preliminary log file only. During closing of MeGUI the well formed log file will be written.\r\n\r\n");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Log File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            logLock.Release();
             Instance = this;
             constructMeGUIInfo();
             InitializeComponent();
-            Util.SetSize(this, MeGUI.Properties.Settings.Default.MainFormSize, MeGUI.Properties.Settings.Default.MainFormWindowState);
             System.Reflection.Assembly myAssembly = this.GetType().Assembly;
             string name = this.GetType().Namespace + ".";
 #if CSC
@@ -812,9 +158,38 @@ namespace MeGUI
             string[] resources = myAssembly.GetManifestResourceNames();
             this.trayIcon.Icon = new Icon(myAssembly.GetManifestResourceStream(name + "App.ico"));
             this.Icon = trayIcon.Icon;
-            this.TitleText = Application.ProductName + " " + Application.ProductVersion;
+            this.TitleText = Application.ProductName + " " + new System.Version(Application.ProductVersion).Build;
+#if x64
+            this.TitleText += " x64";
+#endif
+            if (MainForm.Instance.Settings.AutoUpdate == true && MainForm.Instance.Settings.AutoUpdateServerSubList == 1)
+                this.TitleText += " DEVELOPMENT UPDATE SERVER";
             setGUIInfo();
             Jobs.showAfterEncodingStatus(Settings);
+            this.videoEncodingComponent1.FileType = MainForm.Instance.Settings.MainFileFormat;
+
+            this.ClientSize = settings.MainFormSize;
+            this.Location = settings.MainFormLocation;
+            this.splitContainer2.SplitterDistance = (int)(0.42 * (this.splitContainer2.Panel1.Height + this.splitContainer2.Panel2.Height));
+
+            Size oSizeScreen = Screen.GetWorkingArea(this).Size;
+            Point oLocation = Screen.GetWorkingArea(this).Location;
+            int iScreenHeight = oSizeScreen.Height - 2 * SystemInformation.FixedFrameBorderSize.Height;
+            int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
+
+            if (this.Size.Height >= iScreenHeight)
+                this.Location = new Point(this.Location.X, oLocation.Y);
+            else if (this.Location.Y <= oLocation.Y)
+                this.Location = new Point(this.Location.X, oLocation.Y);
+            else if (this.Location.Y + this.Size.Height > iScreenHeight)
+                this.Location = new Point(this.Location.X, iScreenHeight - this.Size.Height);
+
+            if (this.Size.Width >= iScreenWidth)
+                this.Location = new Point(oLocation.X, this.Location.Y);
+            else if (this.Location.X <= oLocation.X)
+                this.Location = new Point(oLocation.X, this.Location.Y);
+            else if (this.Location.X + this.Size.Width > iScreenWidth)
+                this.Location = new Point(iScreenWidth - this.Size.Width, this.Location.Y);
         }
 
         #region GUI properties
@@ -835,7 +210,7 @@ namespace MeGUI
         {
             get { return audioEncodingComponent1; }
         }
-       #endregion
+        #endregion
         /// <summary>
         /// initializes all the dropdown elements in the GUI to their default values
         /// </summary>
@@ -845,35 +220,18 @@ namespace MeGUI
         /// saves all jobs, stops the currently active job and saves all profiles as well
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             if (jobControl1.IsAnyWorkerEncoding)
             {
-                DialogResult dr = MessageBox.Show("Are you sure you want to quit?", "Job in progress", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (dr == DialogResult.No)
-                    e.Cancel = true; // abort closing
-                else
-                    jobControl1.AbortAll();
+                e.Cancel = true; // abort closing
+                MessageBox.Show("Please close running jobs before you close MeGUI.", "Job in progress", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             if (!e.Cancel)
             {
                 CloseSilent();
             }
             base.OnClosing(e);
-        }
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            base.Dispose(disposing);
         }
         #region reset
         private void resetButton_Click(object sender, System.EventArgs e)
@@ -970,7 +328,8 @@ namespace MeGUI
                 }
                 catch (Exception e)
                 {
-                    Console.Write(e.Message);
+                    LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("saveSettings", e, ImageType.Error);
                 }
             }
         }
@@ -989,16 +348,12 @@ namespace MeGUI
                     try
                     {
                         this.settings = (MeGUISettings)ser.Deserialize(s);
-
-                        // modify PATH so that n00bs don't complain because they forgot to put dgdecode.dll in the MeGUI dir
-                        string pathEnv = Environment.GetEnvironmentVariable("PATH");
-                        pathEnv = Path.GetDirectoryName(settings.DgIndexPath) + ";" + pathEnv;
-                        Environment.SetEnvironmentVariable("PATH", pathEnv);
                     }
                     catch (Exception e)
                     {
+                        LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                        _oLog.LogValue("loadSettings", e, ImageType.Error);
                         MessageBox.Show("Settings could not be loaded.", "Error loading profile", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Console.Write(e.Message);
                     }
                 }
             }
@@ -1058,7 +413,12 @@ namespace MeGUI
 
                 }
             }
-            else
+            else if (Jobs.CurrentAfterEncoding == AfterEncoding.CloseMeGUI)
+            {
+                this.CloseSilent();
+                Application.Exit();
+            }
+            else if (Jobs.CurrentAfterEncoding == AfterEncoding.RunCommand && !String.IsNullOrEmpty(settings.AfterEncodingCommand))
             {
                 string filename = MeGUIPath + @"\after_encoding.bat";
                 try
@@ -1083,7 +443,6 @@ namespace MeGUI
             get { return logTree1.Log; }
         }
 
-
         /// <summary>
         /// saves the whole content of the log into a logfile
         /// </summary>
@@ -1092,14 +451,16 @@ namespace MeGUI
             string text = Log.ToString();
             try
             {
-                string logDirectory = path + @"\logs";
-                FileUtil.ensureDirectoryExists(logDirectory);
-                string fileName = logDirectory + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
-                File.WriteAllText(fileName, text);
+                logLock.WaitOne(10000, false);
+                File.WriteAllText(strLogFile, text);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.Write(e.Message);
+                MessageBox.Show("Log file cannot be saved", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                logLock.Release();
             }
         }
         private void exitMeGUIToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1120,13 +481,14 @@ namespace MeGUI
         #region menu actions
         private void mnuFileOpen_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter = "AviSynth Scripts (*.avs)|*.avs|" +
-                "Audio Files (*.ac3, *.mp2, *.mpa, *.wav)|*.ac3;*.mp2;*.mpa;*.wav|" +
+            openFileDialog.Filter =
+                "All supported encodable files|" +
+                "*.avs;*.ac3;*.dts;*.mp2;*.mpa;*.wav;*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
+                "AviSynth Scripts (*.avs)|*.avs|" +
+                "Audio Files (*.ac3, *.dts, *.mp2, *.mpa, *.wav)|*.ac3;*.dts;*.mp2;*.mpa;*.wav|" +
                 "MPEG-2 Files (*.vob, *.mpg, *.mpeg, *.m2t*, *.m2v, *.mpv, *.tp, *.ts, *.trp, *.pva, *.vro)|" +
                 "*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro|" +
-                "Other Video Files (*.d2v, *.avi, *.mp4, *.mkv, *.rmvb)|*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
-                "All supported encodable files|" +
-                "*.avs;*.ac3;*.mp2;*.mpa;*.wav;*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
+                "Other Video Files (*.d2v, *.avi, *.flv, *.mp4, *.mkv, *.rmvb)|*.d2v;*.avi;*.flv;*.mp4;*.mkv;*.rmvb|" +
                 "All files|*.*";
             openFileDialog.Title = "Select your input file";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -1143,7 +505,20 @@ namespace MeGUI
         {
             this.Close();
         }
- 
+
+        private void mnuToolsSettings_Click(object sender, System.EventArgs e)
+        {
+            using (SettingsForm sform = new SettingsForm())
+            {
+                sform.Settings = this.settings;
+                if (sform.ShowDialog() == DialogResult.OK)
+                {
+                    this.settings = sform.Settings;
+                    this.saveSettings();
+                    Jobs.showAfterEncodingStatus(settings);
+                }
+            }
+        }
         private void mnuTool_Click(object sender, System.EventArgs e)
         {
             if ((!(sender is System.Windows.Forms.MenuItem)) || (!((sender as MenuItem).Tag is ITool)))
@@ -1162,14 +537,8 @@ namespace MeGUI
         {
             if ((!(sender is System.Windows.Forms.MenuItem)) || (!((sender as MenuItem).Tag is IMuxing)))
                 return;
-            using (MuxWindow mw = new MuxWindow((IMuxing)((sender as MenuItem).Tag),this))
-            {
-                if (mw.ShowDialog() == DialogResult.OK)
-                {
-                    MuxJob job = mw.Job;
-                    Jobs.addJobsToQueue(job);
-                }
-            }
+            MuxWindow mw = new MuxWindow((IMuxing)((sender as MenuItem).Tag), this);
+            mw.Show();
         }
 
         private void mnuView_Popup(object sender, System.EventArgs e)
@@ -1228,7 +597,7 @@ namespace MeGUI
 
             if (progressMenu.Checked)
                 Jobs.ShowAllProcessWindows();
-            trayIcon.Visible = false;            
+            trayIcon.Visible = false;
         }
         private void openMeGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1253,19 +622,19 @@ namespace MeGUI
         }
         public void openOneClickFile(string fileName)
         {
-            OneClickWindow ocmt = new OneClickWindow(this, jobUtil, videoEncodingComponent1.VideoEncoderProvider, new AudioEncoderProvider());
-            ocmt.openInput(fileName);
+            OneClickWindow ocmt = new OneClickWindow(this);
+            ocmt.setInput(fileName);
             ocmt.ShowDialog();
         }
         public void openD2VCreatorFile(string fileName)
         {
-            VobinputWindow mpegInput = new VobinputWindow(this);
+            FileIndexerWindow mpegInput = new FileIndexerWindow(this);
             mpegInput.setConfig(fileName, null, 2, true, true, true, false);
-            mpegInput.ShowDialog();
+            mpegInput.Show();
         }
         private FileType getFileType(string fileName)
         {
-            switch (Path.GetExtension(fileName.ToLower()))
+            switch (Path.GetExtension(fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
             {
                 case ".avs":
                     return FileType.VIDEOINPUT;
@@ -1276,34 +645,25 @@ namespace MeGUI
                 case ".caf":
                 case ".bwf":
                 case ".dtsma":
-                case ".dtshd":               
+                case ".dtshd":
                 case ".dts":
                 case ".mp2":
-                case ".mp3": 
+                case ".mp3":
                 case ".mpa":
                 case ".wav":
                 case ".w64":
                 case ".eac3":
                 case ".ddp":
-                   return FileType.AUDIOINPUT;
-                case ".vob":
-                case ".mpg":
-                case ".mpeg":
-                case ".m2v":
-                case ".mpv":
-                case ".tp":
-                case ".ts":
-                case ".trp":
-                case ".pva":
-                case ".vro":
-                    return FileType.DGINDEX;
-
+                    return FileType.AUDIOINPUT;
                 case ".zip":
                     return FileType.ZIPPED_PROFILES;
-
-                default:
-                    return FileType.OTHERVIDEO;
             }
+
+            MediaInfoFile iFile = new MediaInfoFile(fileName);
+            if (iFile.isD2VIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable() || iFile.isFFMSIndexable())
+                return FileType.INDEXABLEVIDEO;
+            else
+                return FileType.OTHERVIDEO;
         }
         public void openFile(string file)
         {
@@ -1315,16 +675,13 @@ namespace MeGUI
                 case FileType.AUDIOINPUT:
                     audioEncodingComponent1.openAudioFile(file);
                     break;
-
-                case FileType.DGINDEX:
+                case FileType.INDEXABLEVIDEO:
                     openDGIndexFile(file);
                     break;
-
                 case FileType.OTHERVIDEO:
                     openOtherVideoFile(file);
                     audioEncodingComponent1.openAudioFile(file); // for Non-MPEG OneClick fudge
                     break;
-
                 case FileType.ZIPPED_PROFILES:
                     importProfiles(file);
                     break;
@@ -1333,7 +690,7 @@ namespace MeGUI
 
         private void importProfiles(string file)
         {
-            new ProfileImporter(this, file).ShowDialog();
+            new ProfileImporter(this, file, false).ShowDialog();
         }
         #endregion
         #region Drag 'n' Drop
@@ -1363,16 +720,37 @@ namespace MeGUI
         {
             Util.ThreadSafeRun(this, delegate
             {
-                ProfileImporter importer = new ProfileImporter(this, data);
-                importer.ShowDialog();
+                ProfileImporter importer = new ProfileImporter(this, data, true);
+                if (importer.ErrorDuringInit())
+                    return;
+                if (MainForm.Instance.settings.AutoUpdateSession)
+                {
+                    importer.AutoImport();
+                }
+                else
+                {
+                    importer.Show();
+                    while (importer.Visible == true)    // wait until the profiles have been imported
+                    {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(100);
+                    }
+                }
             });
+        }
+
+        private bool bImportProfileSuccessful = false;
+        public bool ImportProfileSuccessful
+        {
+            get { return bImportProfileSuccessful; }
+            set { bImportProfileSuccessful = value; }
         }
 
         private void mnuFileImport_Click(object sender, EventArgs e)
         {
             try
             {
-                new ProfileImporter(this).ShowDialog();
+                new ProfileImporter(this, false).ShowDialog();
             }
             catch (CancelledException) { }
         }
@@ -1393,44 +771,73 @@ namespace MeGUI
         private void MeGUI_Load(object sender, EventArgs e)
         {
             RegisterForm(this);
-         //   DriveInfo[] allDrives = DriveInfo.GetDrives();
-
-           // i = Log.Info("Hardware");
-           // i.LogValue("CPU ", string.Format("{0}", OSInfo.GetMOStuff("Win32_Processor")));
-            /*
-                        foreach (DriveInfo d in allDrives)   //OSInfo.GetMOStuff("Win32_OperatingSystem")
-                        {
-                            if ((d.DriveType == DriveType.Fixed) && (d.DriveFormat != null)) 
-                            {
-                                try
-                                {
-                                    long freespace = long.Parse(d.AvailableFreeSpace.ToString()) / 1073741824;
-                                    long totalsize = long.Parse(d.TotalSize.ToString()) / 1073741824;
-
-                                    if (d.VolumeLabel.ToString() == "")
-                                        d.VolumeLabel = "Local Disk";
-
-                                    i.LogValue("HDD ", string.Format("{0} ({1})  -  {2} Go free of {3} Go", d.VolumeLabel, d.Name, Convert.ToString(freespace), Convert.ToString(totalsize)));
-                                }
-                                catch (Exception)
-                                {
-                                    MessageBox.Show("MeGUI cannot access to the disk " + d.Name);
-                                }
-                            }
-                        }
-            */
-            //Log.LogValue("Settings", Settings, ImageType.Information);
         }
 
         private void beginUpdateCheck()
         {
+#if x86
+            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
+#endif
+#if x64
+            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
+#endif
+            if (File.Exists(strLocalUpdateXML))
+                MainForm.Instance.Settings.AutoUpdateSession = true;
+
             UpdateWindow update = new UpdateWindow(this, this.Settings);
             update.GetUpdateData(true);
-            if (update.HasUpdatableFiles()) // If there are updated files, display the window
+            bool bIsComponentMissing = UpdateWindow.isComponentMissing(true);
+            if (bIsComponentMissing || update.HasUpdatableFiles()) // If there are updated or missing files, display the window
             {
-                if (MessageBox.Show("There are updated files available. Do you wish to update to the latest versions?",
-                    "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    update.ShowDialog();
+                if (MainForm.Instance.Settings.AutoUpdateSession)
+                {
+                    update.Visible = true;
+                    update.StartAutoUpdate();
+                    while (update.Visible == true)
+                    {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(100);
+                    }
+                }
+                else
+                {
+                    if (bIsComponentMissing)
+                    {
+                        if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
+                        {
+                            if (filesToReplace.Keys.Count > 0) // restart required
+                            {
+                                this.Restart = true;
+                                this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+                                return;
+                            }
+                        }
+                        else
+                            return;
+                    }
+                    if (MessageBox.Show("There are updated files available that may be necessary for MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live e.g. in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
+                            "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        update.ShowDialog();
+                }
+                if (UpdateWindow.isComponentMissing(true) && !this.Restart)
+                {
+                    if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
+                    {
+                        if (filesToReplace.Keys.Count > 0) // restart required
+                        {
+                            this.Restart = true;
+                            this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+                            return;
+                        }
+                        else
+                            beginUpdateCheck();
+                    }
+                }
+            }
+            else
+            {
+                if (File.Exists(strLocalUpdateXML))
+                    File.Delete(strLocalUpdateXML);
             }
         }
 
@@ -1440,12 +847,12 @@ namespace MeGUI
             update.ShowDialog();
         }
 
-        internal void AddFileToReplace(string iUpgradeableName, string tempFilename, string filename, string newVersion)
+        internal void AddFileToReplace(string iUpgradeableName, string tempFilename, string filename, string newUploadDate)
         {
             CommandlineUpgradeData data = new CommandlineUpgradeData();
             data.filename.Add(filename);
             data.tempFilename.Add(tempFilename);
-            data.newVersion = newVersion;
+            data.newUploadDate = newUploadDate;
             if (filesToReplace.ContainsKey(iUpgradeableName))
             {
                 filesToReplace[iUpgradeableName].tempFilename.Add(tempFilename);
@@ -1470,7 +877,6 @@ namespace MeGUI
         void Application_ApplicationExit(object sender, EventArgs e)
         {
             MeGUI.Properties.Settings.Default.Save();
-            MeGUI.core.util.CustomUserSettings.Default.Save();
         }
 
         private void saveApplicationSettings()
@@ -1492,7 +898,7 @@ namespace MeGUI
 
         public void OpenVideoFile(string p)
         {
-            if (p.ToLower().EndsWith(".avs"))
+            if (p.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avs"))
                 Video.openVideoFile(p);
             else
             {
@@ -1515,6 +921,11 @@ namespace MeGUI
         private MeGUISettings settings = new MeGUISettings();
         private ProfileManager profileManager;
 
+        //public MeGUISettings Settings
+        //{
+        //    get { return settings; }
+        //}
+
         public MuxProvider MuxProvider
         {
             get { return muxProvider; }
@@ -1532,7 +943,7 @@ namespace MeGUI
             {
                 UpdateWindow update = new UpdateWindow(this, Settings);
                 foreach (string file in parser.upgradeData.Keys)
-                    update.UpdateVersionNumber(file, parser.upgradeData[file]);
+                    update.UpdateUploadDate(file, parser.upgradeData[file]);
                 update.SaveSettings();
             }
         }
@@ -1569,6 +980,7 @@ namespace MeGUI
         {
             // Fill the muxing menu
             mnuMuxers.MenuItems.Clear();
+            mnuToolsAdaptiveMuxer.Shortcut = Shortcut.Ctrl1;
             mnuMuxers.MenuItems.Add(mnuToolsAdaptiveMuxer);
             int index = 1;
             foreach (IMuxing muxer in PackageSystem.MuxerProviders.Values)
@@ -1577,27 +989,23 @@ namespace MeGUI
                 newMenuItem.Text = muxer.Name;
                 newMenuItem.Tag = muxer;
                 newMenuItem.Index = index;
+                newMenuItem.Shortcut = muxer.Shortcut;
                 index++;
                 mnuMuxers.MenuItems.Add(newMenuItem);
                 newMenuItem.Click += new System.EventHandler(this.mnuMuxer_Click);
             }
-            mnudgIndexers.MenuItems.Clear();
-            mnudgIndexers.MenuItems.Add(mnutoolsD2VCreator);
-            mnudgIndexers.MenuItems.Add(mnutoolsdgaCreator);
-            mnudgIndexers.MenuItems.Add(mnutoolsdgmCreator);
-            mnudgIndexers.MenuItems.Add(mnutoolsdgvCreator);
-            
+
             // Fill the tools menu
             mnuTools.MenuItems.Clear();
             List<MenuItem> toolsItems = new List<MenuItem>();
             List<Shortcut> usedShortcuts = new List<Shortcut>();
+            toolsItems.Add(mnutoolsD2VCreator);
             toolsItems.Add(mnuMuxers);
-            toolsItems.Add(mnudgIndexers);
             usedShortcuts.Add(mnuMuxers.Shortcut);
-            
+
             foreach (ITool tool in PackageSystem.Tools.Values)
             {
-                if (tool.Name != "D2V Creator")
+                if (tool.Name != "File Indexer")
                 {
                     MenuItem newMenuItem = new MenuItem();
                     newMenuItem.Text = tool.Name;
@@ -1674,61 +1082,63 @@ namespace MeGUI
         {
             PackageSystem.JobProcessors.Register(AviSynthAudioEncoder.Factory);
 
-            PackageSystem.JobProcessors.Register(mencoderEncoder.Factory);
+            PackageSystem.JobProcessors.Register(ffmpegEncoder.Factory);
             PackageSystem.JobProcessors.Register(x264Encoder.Factory);
             PackageSystem.JobProcessors.Register(XviDEncoder.Factory);
-            PackageSystem.JobProcessors.Register(DivXAVCEncoder.Factory);
-            
+
             PackageSystem.JobProcessors.Register(MkvMergeMuxer.Factory);
             PackageSystem.JobProcessors.Register(MP4BoxMuxer.Factory);
             PackageSystem.JobProcessors.Register(AMGMuxer.Factory);
             PackageSystem.JobProcessors.Register(tsMuxeR.Factory);
+
+            PackageSystem.JobProcessors.Register(MkvExtract.Factory);
+            PackageSystem.JobProcessors.Register(PgcDemux.Factory);
+            PackageSystem.JobProcessors.Register(OneClickPostProcessing.Factory);
             PackageSystem.JobProcessors.Register(CleanupJobRunner.Factory);
 
             PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
-            PackageSystem.JobProcessors.Register(DGIndexer.Factory);
-            PackageSystem.JobProcessors.Register(DGAVCIndexer.Factory);
-            PackageSystem.JobProcessors.Register(DGVC1Indexer.Factory);
-            PackageSystem.JobProcessors.Register(DGMPGIndexer.Factory);
+            PackageSystem.JobProcessors.Register(D2VIndexer.Factory);
+            PackageSystem.JobProcessors.Register(DGAIndexer.Factory);
+            PackageSystem.JobProcessors.Register(DGIIndexer.Factory);
+            PackageSystem.JobProcessors.Register(FFMSIndexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
-            PackageSystem.JobProcessors.Register(Joiner.Factory);
+            PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Joiner.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
             PackageSystem.JobProcessors.Register(HDStreamExtractorIndexer.Factory);
             PackageSystem.MuxerProviders.Register(new AVIMuxGUIMuxerProvider());
-            PackageSystem.MuxerProviders.Register(new TSMuxerProvider());            
+            PackageSystem.MuxerProviders.Register(new TSMuxerProvider());
             PackageSystem.MuxerProviders.Register(new MKVMergeMuxerProvider());
             PackageSystem.MuxerProviders.Register(new MP4BoxMuxerProvider());
-            PackageSystem.Tools.Register(new CutterTool());
+            PackageSystem.Tools.Register(new MeGUI.packages.tools.cutter.CutterTool());
             PackageSystem.Tools.Register(new AviSynthWindowTool());
             PackageSystem.Tools.Register(new AutoEncodeTool());
             PackageSystem.Tools.Register(new CQMEditorTool());
             PackageSystem.Tools.Register(new CalculatorTool());
             PackageSystem.Tools.Register(new ChapterCreatorTool());
             PackageSystem.Options.Register(new UpdateOptions());
-            PackageSystem.Tools.Register(new BesplitterTool());
+            PackageSystem.Tools.Register(new MeGUI.packages.tools.besplitter.BesplitterTool());
             PackageSystem.Tools.Register(new OneClickTool());
             PackageSystem.Tools.Register(new D2VCreatorTool());
             PackageSystem.Tools.Register(new AVCLevelTool());
             PackageSystem.Tools.Register(new VobSubTool());
-            PackageSystem.Tools.Register(new HdBdExtractorTool());
+            PackageSystem.Tools.Register(new MeGUI.packages.tools.hdbdextractor.HdBdExtractorTool());
             PackageSystem.MediaFileTypes.Register(new AvsFileFactory());
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new dgaFileFactory());
-            PackageSystem.MediaFileTypes.Register(new dgvFileFactory());
-            PackageSystem.MediaFileTypes.Register(new dgmFileFactory());
+            PackageSystem.MediaFileTypes.Register(new dgiFileFactory());
+            PackageSystem.MediaFileTypes.Register(new ffmsFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
             PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
-            PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(dgavcIndexJobPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(dgvc1IndexJobPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(dgmpgIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(d2vIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(dgaIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(dgiIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(ffmsIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(CleanupJobRunner.DeleteIntermediateFilesPostProcessor);
             PackageSystem.JobConfigurers.Register(MuxWindow.Configurer);
             PackageSystem.JobConfigurers.Register(AudioEncodingWindow.Configurer);
         }
 
-        private static Mutex mySingleInstanceMutex = new Mutex(true, "MeGUI_D9D0C224154B489784998BF97B9C9414");
+        private static Mutex mySingleInstanceMutex = new Mutex(true, "MeGUI_mutex");
 
         /// <summary>
         /// The main entry point for the application.
@@ -1736,12 +1146,45 @@ namespace MeGUI
         [STAThread]
         static void Main(string[] args)
         {
+            // Parse for the need to run the program elevated
+            Boolean bRunElevated = false, bForceAdmin = false;
+            foreach (string strParam in args)
+            {
+                if (strParam.Equals("-elevate"))
+                    bRunElevated = true;
+                else if (strParam.Equals("-forceadmin"))
+                    bForceAdmin = true;
+            }
+
+            // Check if the program can write to the program and avisynth plugin dir
+            if (!FileUtil.IsDirWriteable(Path.GetDirectoryName(Application.ExecutablePath)))
+                bForceAdmin = true;
+
+            // If needed run as elevated process
+            if (bForceAdmin && !bRunElevated)
+            {
+                try
+                {
+                    Process p = new Process();
+                    p.StartInfo.FileName = Application.ExecutablePath;
+                    p.StartInfo.Arguments = "-elevate";
+                    p.StartInfo.Verb = "runas";
+                    p.Start();
+                    return;
+                }
+                catch
+                {
+                }
+            }
+
             System.Windows.Forms.Application.EnableVisualStyles();
+#if !DEBUG
             if (!mySingleInstanceMutex.WaitOne(0, false))
             {
                 if (DialogResult.Yes != MessageBox.Show("Running MeGUI instance detected!\n\rThere's not really much point in running multiple copies of MeGUI, and it can cause problems.\n\rDo You still want to run yet another MeGUI instance?", "Running MeGUI instance detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
                     return;
             }
+#endif
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             CommandlineParser parser = new CommandlineParser();
@@ -1759,9 +1202,15 @@ namespace MeGUI
 
         static void HandleUnhandledException(Exception e)
         {
+            LogItem i = MainForm.Instance.Log.Error("Unhandled error");
+            i.LogValue("Exception message", e.Message);
+            i.LogValue("Stacktrace", e.StackTrace);
+            i.LogValue("Inner exception", e.InnerException);
+            foreach (System.Collections.DictionaryEntry info in e.Data)
+                i.LogValue(info.Key.ToString(), info.Value);
+
             MessageBox.Show("MeGUI encountered a fatal error and may not be able to proceed. Reason: " + e.Message
-                + " Source of exception: " + e.Source + " stacktrace: " + e.StackTrace, "Fatal error",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                , "Fatal error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
@@ -1778,7 +1227,7 @@ namespace MeGUI
             pstart.FileName = Path.Combine(Application.StartupPath, "updatecopier.exe");
             foreach (string file in filesToReplace.Keys)
             {
-                pstart.Arguments += string.Format("--component \"{0}\" \"{1}\" ", file, filesToReplace[file].newVersion);
+                pstart.Arguments += string.Format("--component \"{0}\" \"{1}\" ", file, filesToReplace[file].newUploadDate);
                 for (int i = 0; i < filesToReplace[file].filename.Count; i++)
                 {
                     pstart.Arguments += string.Format("\"{0}\" \"{1}\" ",
@@ -1787,13 +1236,23 @@ namespace MeGUI
                 }
             }
             if (restart)
-                pstart.Arguments += "--restart ";
+                pstart.Arguments += "--restart";
             else
-                pstart.Arguments += "--app ";
-            pstart.Arguments += "\"" + Application.ExecutablePath + "\"";
+                pstart.Arguments += "--no-restart";
 
-            pstart.CreateNoWindow = true;
-            pstart.UseShellExecute = false;
+            // Check if the program can write to the program dir
+            if (FileUtil.IsDirWriteable(Path.GetDirectoryName(Application.ExecutablePath)))
+            {
+                pstart.CreateNoWindow = true;
+                pstart.UseShellExecute = false;
+            }
+            else
+            {
+                // Need admin permissions
+                proc.StartInfo.Verb = "runas";
+                pstart.UseShellExecute = true;
+            }
+
             proc.StartInfo = pstart;
             try
             {
@@ -1828,7 +1287,7 @@ namespace MeGUI
             get { return this.path; }
         }
         #endregion
-#endregion
+        #endregion
 
         internal void ClosePlayer()
         {
@@ -1859,7 +1318,7 @@ namespace MeGUI
         private void showAllWorkers_Popup(object sender, EventArgs e)
         {
             viewSummary.Checked = Jobs.SummaryVisible;
-            
+
             List<Pair<string, bool>> workers = Jobs.ListWorkers();
             workersMenu.MenuItems.Clear();
             workersMenu.MenuItems.Add(showAllWorkers);
@@ -1886,7 +1345,7 @@ namespace MeGUI
 
         void mnuWorker_Click(object sender1, EventArgs e)
         {
-            MenuItem sender = (MenuItem) sender1;
+            MenuItem sender = (MenuItem)sender1;
             Jobs.SetWorkerVisible(sender.Text, !sender.Checked);
         }
 
@@ -1919,14 +1378,6 @@ namespace MeGUI
             Jobs.HideAllProcessWindows();
         }
 
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Util.SaveSize(this,
-                delegate(System.Drawing.Size s) { MeGUI.Properties.Settings.Default.MainFormSize = s; },
-                delegate(FormWindowState s) { MeGUI.Properties.Settings.Default.MainFormWindowState = s; });
-
-            DialogManager.FindAndKillProcess("CUVIDSERVER"); // close CUVIDServer from DGxxxNV tools if is running
-        }
         private void mnuForum_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.doom9.org/forumdisplay.php?f=78");
@@ -1968,51 +1419,129 @@ namespace MeGUI
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            this.Size = MeGUI.Properties.Settings.Default.MainFormSize;
-            this.Location = MeGUI.Properties.Settings.Default.MainFormLocation;
-            this.WindowState = MeGUI.Properties.Settings.Default.MainFormWindowState;
+            this.ClientSize = settings.MainFormSize;
 
+            getVersionInformation();
+
+            if (settings.AutoUpdate)
+                startUpdateCheck();
+
+            if (settings.AutoStartQueueStartup)
+                jobControl1.StartAll(false);
+
+            if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1)
+                || Environment.OSVersion.Version.Major > 6)
+                taskbarItem = (ITaskbarList3)new ProgressTaskbar();
+        }
+
+        public void startUpdateCheck()
+        {
+            // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
+            Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
+            updateCheck.IsBackground = true;
+            updateCheck.Start();
+        }
+
+        private void getVersionInformation()
+        {
             LogItem i = Log.Info("Versions");
-            i.LogValue("MeGUI kbr Version ", Application.ProductVersion);
-            i.LogValue("OS ", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
-            i.LogValue("Latest .Net Framework installed ", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
+#if x86
+            i.LogValue("MeGUI", new System.Version(Application.ProductVersion).Build);
+#endif
+#if x64
+            i.LogValue("MeGUI Version ", new System.Version(Application.ProductVersion).Build + " x64");
+#endif
+            i.LogValue("Operating System", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
+            i.LogValue(".Net Framework", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
 
-            if (OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion()).Substring(0, 1) == "2")
-                MessageBox.Show("The .Net Framework you have is not fully compatible with all tools provided in this build.\n"+
-                                "To be up-to-date, upgrade to the version 3.5 at least...", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-            string avisynthversion = string.Empty;
-            bool PropExists = false;
-            VideoUtil.getAvisynthVersion(out avisynthversion, out PropExists);
-            
-            if (string.IsNullOrEmpty(MeGUISettings.AvisynthPluginsPath))
+            bool bAviSynthExists;
+            VideoUtil.getAvisynthVersion(ref i, out bAviSynthExists);
+            if (!bAviSynthExists)
             {
-                if (!PropExists)
+#if x86
+                if (File.Exists(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Avisynth_258.exe")))
+                {
+                    if (AskToInstallAvisynth() == true)
+                        System.Diagnostics.Process.Start(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Avisynth_258.exe"));
+                }
+                else
                 {
                     if (AskToDownloadAvisynth() == true)
                         System.Diagnostics.Process.Start("http://www.avisynth.org");
                 }
+#endif
+#if x64
+                if (AskToDownloadAvisynth() == true)
+                    System.Diagnostics.Process.Start("http://forum.doom9.org/showthread.php?t=152800");
+#endif
             }
-            
-            if (PropExists)
-            { // launch the updater only if avisynth is found to avoid installation issues
-                if (settings.AutoUpdate)
-                {
-                    // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
-                    Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
-                    updateCheck.IsBackground = true;
-                    updateCheck.Start();
-                }
 
-                if (!string.IsNullOrEmpty(avisynthversion))
-                    i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString());
+            FileUtil.GetFileInformation("AvisynthWrapper", Path.GetDirectoryName(Application.ExecutablePath) + @"\AvisynthWrapper.dll", ref i);
+            FileUtil.GetFileInformation("ICSharpCode.SharpZipLib", Path.GetDirectoryName(Application.ExecutablePath) + @"\ICSharpCode.SharpZipLib.dll", ref i);
+            FileUtil.GetFileInformation("LinqBridge", Path.GetDirectoryName(Application.ExecutablePath) + @"\LinqBridge.dll", ref i);
+            FileUtil.GetFileInformation("MediaInfo", Path.GetDirectoryName(Application.ExecutablePath) + @"\MediaInfo.dll", ref i);
+            FileUtil.GetFileInformation("MediaInfoWrapper", Path.GetDirectoryName(Application.ExecutablePath) + @"\MediaInfoWrapper.dll", ref i);
+            FileUtil.GetFileInformation("MessageBoxExLib", Path.GetDirectoryName(Application.ExecutablePath) + @"\MessageBoxExLib.dll", ref i);
+            FileUtil.GetFileInformation("SevenZipSharp", Path.GetDirectoryName(Application.ExecutablePath) + @"\SevenZipSharp.dll", ref i);
+            FileUtil.GetFileInformation("7z", Path.GetDirectoryName(Application.ExecutablePath) + @"\7z.dll", ref i);
+
+        }
+
+        public void setOverlayIcon(Icon oIcon)
+        {
+            if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 0)
+                || Environment.OSVersion.Version.Major < 6)
+                return;
+
+            if (oIcon == null)
+            {
+                // remove the overlay icon
+                Util.ThreadSafeRun(this, delegate { taskbarItem.SetOverlayIcon(this.Handle, IntPtr.Zero, null); });
+                taskbarIcon = null;
+                return;
+            }
+
+            if (taskbarIcon != null && oIcon.Handle == taskbarIcon.Handle)
+                return;
+
+            if (oIcon == System.Drawing.SystemIcons.Warning && taskbarIcon == System.Drawing.SystemIcons.Error)
+                return;
+
+            if (taskbarItem != null)
+            {
+                Util.ThreadSafeRun(this, delegate { taskbarItem.SetOverlayIcon(this.Handle, oIcon.Handle, null); });
+                taskbarIcon = oIcon;
             }
         }
 
         private bool AskToDownloadAvisynth()
         {
-            if (MessageBox.Show("MeGUI cannot find Avisynth on your system. Without this, it won't run properly. May I ask you to install it first ?\n", "Warning",
+            if (MessageBox.Show("MeGUI cannot find AviSynth on your system.\nWithout AviSynth, MeGUI will not run properly.\nDo you want to download and install it now?", "AviSynth missing",
                                      MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                return true;
+            else
+                return false;
+        }
+
+        private bool AskToInstallAvisynth()
+        {
+            if (MessageBox.Show("MeGUI cannot find AviSynth on your system.\nWithout AviSynth, MeGUI will not run properly.\nDo you want to install it now?", "AviSynth missing",
+                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                return true;
+            else
+                return false;
+        }
+
+        private bool AskToInstallComponents(bool bRestartRequired)
+        {
+            string strQuestionText;
+
+            if (bRestartRequired)
+                strQuestionText = "MeGUI cannot find at least one required component. Without these components, MeGUI will not run properly (e.g. no job can be started).\n\nDo you want to restart MeGUI now?";
+            else
+                strQuestionText = "MeGUI cannot find at least one required component. Without these components, MeGUI will not run properly (e.g. no job can be started).\n\nDo you want to search now online for updates?";
+
+            if (MessageBox.Show(strQuestionText, "MeGUI component(s) missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 return true;
             else
                 return false;
@@ -2030,33 +1559,27 @@ namespace MeGUI
 
         private void menuItem5_Click(object sender, EventArgs e)
         {
-            VobinputWindow d2vc = new VobinputWindow(this);
-            d2vc.ShowDialog();
+            FileIndexerWindow d2vc = new FileIndexerWindow(this);
+            d2vc.Show();
         }
 
-        private void mnutoolsdgaCreator_Click(object sender, EventArgs e)
+        private void MainForm_Move(object sender, EventArgs e)
         {
-            DGAinputWindow dgac = new DGAinputWindow(this);
-            dgac.ShowDialog();
+            if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
+                settings.MainFormLocation = this.Location;
         }
 
-        private void mnutoolsdgvCreator_Click(object sender, EventArgs e)
+        private void MainForm_Resize(object sender, EventArgs e)
         {
-            DGVinputWindow dgvc = new DGVinputWindow(this);
-            dgvc.ShowDialog();
-        }
-
-        private void mnutoolsdgmCreator_Click(object sender, EventArgs e)
-        {
-            DGMinputWindow dgmc = new DGMinputWindow(this);
-            dgmc.ShowDialog();
+            if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
+                settings.MainFormSize = this.ClientSize;
         }
     }
     public class CommandlineUpgradeData
     {
         public List<string> filename = new List<string>();
         public List<string> tempFilename = new List<string>();
-        public string newVersion;
+        public string newUploadDate;
     }
 }
         #endregion

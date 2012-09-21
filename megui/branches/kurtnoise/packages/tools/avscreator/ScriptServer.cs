@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -135,12 +135,11 @@ namespace MeGUI
             return newScript;
         }
 
-        public static string GetInputLine(string input, bool interlaced, PossibleSources sourceType,
+        public static string GetInputLine(string input, string indexFile, bool interlaced, PossibleSources sourceType,
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps, bool dss2)
         {
             string inputLine = "#input";
-            int c;
-            string dgdecodenv = DGDecodeNVdllPath(out c);
+            string strDLLPath = "";
 
             switch (sourceType)
             {
@@ -148,41 +147,58 @@ namespace MeGUI
                     inputLine = "Import(\"" + input + "\")";
                     break;
                 case PossibleSources.d2v:
-                    inputLine = "DGDecode_mpeg2source(\"" + input + "\"";
+                    if (String.IsNullOrEmpty(indexFile))
+                        indexFile = input;
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath), "DGDecode.dll");
+                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGDecode_mpeg2source(\"" + indexFile + "\"";
                     if (mpeg2deblock)
                         inputLine += ", cpu=4";
                     if (colormatrix)
                         inputLine += ", info=3";
                     inputLine += ")";
                     if (colormatrix)
-                        inputLine += string.Format("\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
+                        inputLine += string.Format("\r\nLoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "ColorMatrix.dll") + "\")\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
                     break;
                 case PossibleSources.dga:
-                case PossibleSources.dgm:
-                case PossibleSources.dgv:
-                    {
-                        switch (c)
-                        {
-                            case 1: inputLine = "DGSource(\"" + input + "\""; break;
-                            case 2: inputLine = "LoadPlugin(\"" + dgdecodenv + "\")\r\nDGSource(\"" + input + "\""; break;
-                            default: inputLine = "AVCSource(\"" + input + "\""; break;
-                        }
-                    }
+                    if (String.IsNullOrEmpty(indexFile))
+                        indexFile = input;
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath), "DGAVCDecode.dll");
+                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nAVCSource(\"" + indexFile + "\")"; 
+                    break;
+                case PossibleSources.dgi:
+                    if (String.IsNullOrEmpty(indexFile))
+                        indexFile = input;
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "DGDecodeNV.dll");
+                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGSource(\"" + indexFile + "\"";
+                    if (MainForm.Instance.Settings.AutoForceFilm &&
+                        MainForm.Instance.Settings.ForceFilmThreshold <= (decimal)dgiFile.GetFilmPercent(indexFile))
+                        inputLine += ",fieldop=1";
+                    else
+                        inputLine += ",fieldop=0";
+                    break;
+                case PossibleSources.ffindex:
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
+                    if (input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
+                    else if (!String.IsNullOrEmpty(indexFile))
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\"" + (!string.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty) + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")" + VideoUtil.getAssumeFPS(fps, input);
+                    else
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
                     break;
                 case PossibleSources.vdr:
-                        inputLine = "AVISource(\"" + input + "\", audio=false)";
+                    inputLine = "AVISource(\"" + input + "\", audio=false)" + VideoUtil.getAssumeFPS(fps, input);
                     break;
                 case PossibleSources.directShow:
-                    if (input.ToLower().EndsWith(".avi"))
+                    if (input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avi"))
                     {
-                        inputLine = "AVISource(\"" + input + "\", audio=false)";
+                        inputLine = "AVISource(\"" + input + "\", audio=false)" + VideoUtil.getAssumeFPS(fps, input);
                     }
                     else
                     {
                         if (dss2)
-                            inputLine = "LoadPlugin(\"" + MeGUISettings.HaaliMSPath + "\\avss.dll" + "\")\r\ndss2(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ")";
+                            inputLine = "LoadPlugin(\"" + MeGUISettings.HaaliMSPath + "\\avss.dll" + "\")\r\ndss2(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ")" + VideoUtil.getAssumeFPS(fps, input);
                         else
-                        inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)";
+                            inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)" + VideoUtil.getAssumeFPS(fps, input);
                         if (flipVertical)
                             inputLine = inputLine + "\r\nFlipVertical()";
                     }
@@ -191,84 +207,45 @@ namespace MeGUI
             return inputLine;
         }
 
-        public static string DGDecodeNVdllPath(out int Counter)
-        {
-            bool flag = false;
-            string dgdecodenv = string.Empty;
-            Counter = 0;
-            
-            if (!string.IsNullOrEmpty(MeGUISettings.AvisynthPluginsPath))
-            {
-                dgdecodenv = MeGUISettings.AvisynthPluginsPath + "\\DGDecodeNV.dll";
-                if (File.Exists(dgdecodenv))
-                {
-                    flag = true;
-                    Counter = 1;
-                }
-            }
-            
-            if (!flag) // check somewhere else
-            {
-                mainForm = MainForm.Instance;
-                if (!string.IsNullOrEmpty(mainForm.Settings.DgavcIndexPath))
-                {
-                    dgdecodenv = Path.GetDirectoryName(mainForm.Settings.DgavcIndexPath) + "\\DGDecodeNV.dll";
-                    if (File.Exists(dgdecodenv))
-                    {
-                        flag = true;
-                        Counter = 2;
-                    }
-                }
-                if (!string.IsNullOrEmpty(mainForm.Settings.DgmpgIndexPath) && (!flag))
-                {
-                    dgdecodenv = Path.GetDirectoryName(mainForm.Settings.DgmpgIndexPath) + "\\DGDecodeNV.dll";
-                    if (File.Exists(dgdecodenv))
-                    {
-                        flag = true;
-                        Counter = 2;
-                    }
-                }
-                if (!string.IsNullOrEmpty(mainForm.Settings.Dgvc1IndexPath) && (!flag))
-                {
-                    dgdecodenv = Path.GetDirectoryName(mainForm.Settings.Dgvc1IndexPath) + "\\DGDecodeNV.dll";
-                    if (File.Exists(dgdecodenv))
-                    {
-                        flag = true;
-                        Counter = 2;
-                    }
-                }
-
-                if (Path.GetFileName(mainForm.Settings.DgavcIndexPath.ToLower().ToString()) == "dgavcindex.exe")
-                {
-                    flag = false;
-                    Counter = 0;
-                }
-            }
-            return dgdecodenv;
-        }
-
         public static string GetCropLine(bool crop, CropValues cropValues)
         {
-            return GetCropLine(crop, cropValues.left, cropValues.top, cropValues.right, cropValues.bottom);
-        }
-
-        public static string GetCropLine(bool crop, int cropLeft, int cropTop, int cropRight, int cropBottom)
-        {
             string cropLine = "#crop";
-            if (crop)
+            if (crop & cropValues.isCropped())
             {
-                cropLine = string.Format("crop( {0}, {1}, {2}, {3}){4}",cropLeft, cropTop, -cropRight, -cropBottom, Environment.NewLine );
+                cropLine = string.Format("crop({0}, {1}, {2}, {3})", cropValues.left, cropValues.top, -cropValues.right, -cropValues.bottom);
             }
             return cropLine;
         }
 
-        public static string GetResizeLine(bool resize, int hres, int vres, ResizeFilterType type)
+        public static string GetResizeLine(bool resize, int hres, int vres, int hresWithBorder, int vresWithBorder, ResizeFilterType type, bool crop, CropValues cropValues, int originalHRes, int originalVRes)
         {
-            if (!resize)
-                return "#resize";
+            int iInputHresAfterCrop = originalHRes;
+            int iInputVresAfterCrop = originalVRes;
+            if (crop)
+            {
+                iInputHresAfterCrop = iInputHresAfterCrop - cropValues.left - cropValues.right;
+                iInputVresAfterCrop = iInputVresAfterCrop - cropValues.top - cropValues.bottom;
+            }
+
+            // only resize if necessary
+            if (!resize || (hres == iInputHresAfterCrop && vres == iInputVresAfterCrop))
+            {
+                if (hresWithBorder > iInputHresAfterCrop || vresWithBorder > iInputVresAfterCrop)
+                    return string.Format("AddBorders({0},{1},{2},{3})",
+                        Math.Floor((hresWithBorder - iInputHresAfterCrop) / 2.0), Math.Floor((vresWithBorder - iInputVresAfterCrop) / 2.0),
+                        Math.Ceiling((hresWithBorder - iInputHresAfterCrop) / 2.0), Math.Ceiling((vresWithBorder - iInputVresAfterCrop) / 2.0));
+                else
+                    return "#resize";
+            }
+                
             EnumProxy p = EnumProxy.Create(type);
             if (p.Tag != null)
-                return string.Format(p.Tag + " # {2}", hres, vres, p);
+                if (hresWithBorder > hres || vresWithBorder > vres)
+                    return string.Format(p.Tag + ".AddBorders({3},{4},{5},{6}) # {2}", hres, vres, p, 
+                        Math.Floor((hresWithBorder - hres) / 2.0), Math.Floor((vresWithBorder - vres) / 2.0), 
+                        Math.Ceiling((hresWithBorder - hres) / 2.0), Math.Ceiling((vresWithBorder - vres) / 2.0));
+                else
+                    return string.Format(p.Tag + " # {2}", hres, vres, p);
             else
                 return "#resize - " + p;
         }
@@ -276,11 +253,20 @@ namespace MeGUI
         public static string GetDenoiseLines(bool denoise, DenoiseFilterType type)
         {
             string denoiseLines = "#denoise";
+            string strPath = "";
             if (denoise)
             {
                 EnumProxy p = EnumProxy.Create(type);
                 if (p.Tag != null)
-                    denoiseLines = string.Format(p.Tag + " # " + p);
+                {
+                    if (p.Tag.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("undot"))
+                        strPath = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "UnDot.dll") + "\")\r\n";
+                    else if (p.Tag.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("fluxsmoothst"))
+                        strPath = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "FluxSmooth.dll") + "\")\r\n";
+                    else if (p.Tag.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("convolution3d"))
+                        strPath = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "Convolution3DYV12.dll") + "\")\r\n";
+                    denoiseLines = string.Format(strPath + p.Tag + " # " + p);
+                }
                 else
                     denoiseLines = "#denoise - " + p;
             }
@@ -382,14 +368,16 @@ namespace MeGUI
         {
             filters.Add(new DeinterlaceFilter(
                 "LeakKernelDeint",
-                string.Format("LeakKernelDeint(order={0},sharp=true)", Order(order))));
+                string.Format("LoadPlugin(\"{0}\"){1}LeakKernelDeint(order={2},sharp=true)", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "LeakKernelDeint.dll"), Environment.NewLine, Order(order))));
         }
 
         public static void AddTDeint(FieldOrder order, List<DeinterlaceFilter> filters, bool processAll, bool eedi2, bool bob)
         {
             StringBuilder script = new StringBuilder();
+            script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TDeint.dll") + "\")\r\n");
             if (eedi2)
             {
+                script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "EEDI2.dll") + "\")\r\n");
                 script.Append("edeintted = last.");
                 if (order == FieldOrder.TFF)
                     script.Append("AssumeTFF().");
@@ -422,6 +410,7 @@ namespace MeGUI
                 name = "FieldDeinterlace (no blend)";
 
             StringBuilder script = new StringBuilder();
+            script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "Decomb.dll") + "\")\r\n");
             if (order == FieldOrder.TFF)
                 script.Append("AssumeTFF().");
             else if (order == FieldOrder.BFF)
@@ -448,7 +437,7 @@ namespace MeGUI
         {
             filters.Add(new DeinterlaceFilter(
                 "TomsMoComp",
-                string.Format("TomsMoComp({0},5,1)", Order(order))));
+                string.Format("LoadPlugin(\"{0}\"){1}TomsMoComp({2},5,1)", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TomsMoComp.dll"), Environment.NewLine, Order(order))));
         }
 
         public static void Portionize(List<DeinterlaceFilter> filters, string trimLine)
@@ -471,8 +460,11 @@ namespace MeGUI
             FieldOrder fieldOrder, List<DeinterlaceFilter> filters)
         {
             StringBuilder script = new StringBuilder();
+            script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TIVTC.dll") + "\")\r\n");
             if (advancedDeinterlacing)
             {
+                script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "EEDI2.dll") + "\")\r\n");
+                script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TDeint.dll") + "\")\r\n");
                 script.Append("edeintted = ");
                 if (fieldOrder == FieldOrder.TFF)
                     script.Append("AssumeTFF().");
@@ -519,6 +511,7 @@ namespace MeGUI
             List<DeinterlaceFilter> filters)
         {
             StringBuilder script = new StringBuilder();
+            script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "Decomb.dll") + "\")\r\n");
             if (order == FieldOrder.TFF)
                 script.Append("AssumeTFF().");
             else if (order == FieldOrder.BFF)
@@ -549,13 +542,14 @@ namespace MeGUI
         {
             filters.Add(new DeinterlaceFilter(
                 "Tritical Decimate",
-                string.Format("TDecimate(cycleR={0})", decimateM)));
+                string.Format("LoadPlugin(\"{0}\"){1}TDecimate(cycleR={2})", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TIVTC.dll"), Environment.NewLine, decimateM)));
         }
         #endregion
         #region analysis scripting
         private const string DetectionScript =
 @"{0} #original script
 {1} #trimming
+{5} #LoadPlugin
 global unused_ = blankclip(pixel_type=""yv12"", length=10).TFM()
 file=""{2}""
 global sep=""-""
@@ -591,7 +585,7 @@ SelectRangeEvery({3},{4},0)
         public static string getScript(int scriptType, string originalScript, string trimLine, string logFileName, int selectEvery, int selectLength)
         {
             if (scriptType == 0) // detection
-                return string.Format(DetectionScript, originalScript, trimLine, logFileName, selectEvery, selectLength);
+                return string.Format(DetectionScript, originalScript, trimLine, logFileName, selectEvery, selectLength, "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TIVTC.dll") + "\")");
             else if (scriptType == 1) // field order
                 return string.Format(FieldOrderScript, originalScript, trimLine, logFileName, selectEvery, selectLength);
             else

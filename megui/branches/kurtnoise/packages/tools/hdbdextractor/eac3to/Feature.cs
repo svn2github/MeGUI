@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2008  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -95,10 +95,10 @@ namespace eac3to
             feature.Description = s.Substring(s.IndexOf(")") + 1).Trim();
             feature.Duration = TimeSpan.Parse(s.Substring(s.LastIndexOf(',') + 1).Trim());
 
-            if (s.ToUpper().Contains(".M2TS,")) // Blu-ray
+            if (s.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains(".M2TS,")) // Blu-ray
                 foreach (string file in s.Substring(s.IndexOf(",") + 1, s.LastIndexOf(',') - s.IndexOf(",") - 1).Split("+".ToCharArray()))
                     feature.Files.Add(new File(file.Trim(), feature.Files.Count + 1));
-            else if (s.ToUpper().Contains(".EVO,")) // HD-DVD
+            else if (s.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains(".EVO,")) // HD-DVD
                 foreach (string file in s.Substring(s.IndexOf(")") + 1, s.IndexOf(',') - s.IndexOf(")") - 1).Split("+".ToCharArray()))
                     feature.Files.Add(new File(file.Trim(), feature.Files.Count + 1));
 

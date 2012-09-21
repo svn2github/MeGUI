@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ namespace MeGUI
 
         public int HandleLevel(string file)
         {
-            if (file.ToLower().EndsWith(".dga"))
+            if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".dga"))
                 return 11;
             return -1;
         }
@@ -64,7 +64,7 @@ namespace MeGUI
     {
         private AvsFile reader;
         private string fileName;
-        private MediaFileInfo info;
+        private VideoInformation info;
 
         /// <summary>
         /// initializes the dga reader
@@ -73,14 +73,9 @@ namespace MeGUI
         public dgaFile(string fileName)
         {
             this.fileName = fileName;
-            int c;
-            string dgdecodenv = ScriptServer.DGDecodeNVdllPath(out c);
-            switch (c)
-            {
-                case 1: reader = AvsFile.ParseScript("DGSource(\"" + this.fileName + "\")"); break;
-                case 2: reader = AvsFile.ParseScript("LoadPlugin(\"" + dgdecodenv + "\")\r\nDGSource(\"" + this.fileName + "\")"); break;
-                default: reader = AvsFile.ParseScript("AVCSource(\"" + this.fileName + "\")"); break;
-            }
+            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
+            string strDLL = Path.Combine(strPath, "DGAVCDecode.dll");
+            reader = AvsFile.ParseScript("LoadPlugin(\"" + strDLL + "\")\r\nAVCSource(\"" + this.fileName + "\")");
             this.readFileProperties();
         }
 
@@ -89,13 +84,29 @@ namespace MeGUI
         /// </summary>
         private void readFileProperties()
         {
-            info = reader.Info.Clone();
-            Dar dar = new Dar(reader.Info.Width, reader.Info.Height);
- 
-            info.DAR = dar;
+            info = reader.VideoInfo.Clone();
+            using (StreamReader sr = new StreamReader(fileName))
+            {
+                int iLineCount = 0;
+                string line = null;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    iLineCount++;
+                    if (iLineCount == 3)
+                    {
+                        string strSourceFile = line;
+                        if (File.Exists(strSourceFile))
+                        {
+                            MediaInfoFile oInfo = new MediaInfoFile(strSourceFile);
+                            info.DAR = oInfo.VideoInfo.DAR;
+                        }
+                        break;
+                    }
+                }
+            }
         }
         #region properties
-        public MediaFileInfo Info
+        public VideoInformation VideoInfo
         {
             get { return info; }
         }

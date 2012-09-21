@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,8 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading;
 
 using MeGUI.core.util;
@@ -34,16 +32,11 @@ namespace MeGUI.core.details
 
         private CleanupJob() { }
 
-        public static JobChain AddAfter(JobChain other, List<string> files)
-        {
-            return AddAfter(other, null, files);
-        }
-
-        public static JobChain AddAfter(JobChain other, string type, List<string> files)
+        public static JobChain AddAfter(JobChain other, List<string> files, string strInput)
         {
             CleanupJob j = new CleanupJob();
             j.files = files;
-            j.type = type;
+            j.Input = strInput;
             return new SequentialChain(other, j);
         }
 
@@ -52,7 +45,6 @@ namespace MeGUI.core.details
             get { return ""; }
         }
 
-        private string type;
         public override string EncodingMode
         {
             get { return "cleanup"; }
@@ -73,34 +65,10 @@ namespace MeGUI.core.details
             delegate(MainForm mf, Job j)
             {
                 if (mf.Settings.DeleteIntermediateFiles)
-                    return deleteIntermediateFiles(j.FilesToDelete);
+                    return FileUtil.DeleteIntermediateFiles(j.FilesToDelete, true);
                 return null;
             }
             , "DeleteIntermediateFiles");
-
-
-        
-        /// <summary>
-        /// Attempts to delete all files listed in job.FilesToDelete if settings.DeleteIntermediateFiles is checked
-        /// </summary>
-        /// <param name="job">the job which should just have been completed</param>
-        private static LogItem deleteIntermediateFiles(List<string> files)
-        {
-            LogItem i = new LogItem("Deleting intermediate files");
-            foreach (string file in files)
-            {
-                try
-                {
-                    File.Delete(file);
-                    i.LogEvent("Successfully deleted " + file);
-                }
-                catch (IOException e)
-                {
-                    i.LogValue("Error deleting " + file, e, ImageType.Error);
-                }
-            }
-            return i;
-        }
 
         #region IJobProcessor Members
 
@@ -124,11 +92,13 @@ namespace MeGUI.core.details
 
         void run()
         {
+            su.Status = "Cleanup files...";
+
             Thread.Sleep(2000); // just so that the job has properly registered as starting
 
             log.LogValue("Delete Intermediate Files option set", mf.Settings.DeleteIntermediateFiles);
             if (mf.Settings.DeleteIntermediateFiles)
-                log.Add(deleteIntermediateFiles(files));
+                log.Add(FileUtil.DeleteIntermediateFiles(files, true));
 
             su.IsComplete = true;
             statusUpdate(su);

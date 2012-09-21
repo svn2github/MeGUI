@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -34,8 +34,6 @@ using System.Windows.Forms;
 using MeGUI.core.details.video;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
-
-using MediaInfoWrapper;
 
 namespace MeGUI
 {
@@ -72,10 +70,12 @@ namespace MeGUI
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage optionsTab;
         private System.Windows.Forms.TabPage editTab;
-        private System.Windows.Forms.GroupBox videoGroupBox;
+		private System.Windows.Forms.GroupBox videoGroupBox;
+        private System.Windows.Forms.Label videoInputLabel;
         private System.Windows.Forms.Label inputDARLabel;
         private System.Windows.Forms.Label tvTypeLabel;
-        private System.Windows.Forms.SaveFileDialog saveAvisynthScriptDialog;
+		private System.Windows.Forms.SaveFileDialog saveAvisynthScriptDialog;
+        private System.Windows.Forms.TextBox avisynthScript;
 		private System.Windows.Forms.NumericUpDown horizontalResolution;
 		private System.Windows.Forms.NumericUpDown verticalResolution;
 		private System.Windows.Forms.NumericUpDown cropLeft;
@@ -115,7 +115,9 @@ namespace MeGUI
         private MeGUI.core.gui.ARChooser arChooser;
         private MeGUI.core.gui.ConfigableProfilesControl avsProfile;
         private Label label6;
+        private CheckBox chAutoPreview;
         private GroupBox gbOutput;
+        private Label label7;
         private FileBar videoOutput;
         private FileBar input;
         private CheckBox onSaveLoadScript;
@@ -142,18 +144,6 @@ namespace MeGUI
         private CheckBox dss2;
         private Label label8;
         private ComboBox cbCharset;
-        private ComboBox cbLang;
-        private Label lbLang;
-        private TabControl tabControl2;
-        private TabPage tabPage4;
-        private TextBox VideoScript;
-        private TabPage tabPage5;
-        private TextBox AudioScript;
-        private CheckBox chAudioInputStreams;
-        private GradientPanel gradientPanel1;
-        private PictureBox pictureBox1;
-        private Label label9;
-        private CheckBox chAutoPreview;
         private CheckBox nvResize;
 
 		/// <summary>
@@ -182,7 +172,7 @@ namespace MeGUI
             this.controlsToDisable.Add(arChooser);
             this.controlsToDisable.Add(inputDARLabel);
             this.controlsToDisable.Add(signalAR);
-            this.controlsToDisable.Add(VideoScript);
+            this.controlsToDisable.Add(avisynthScript);
             this.controlsToDisable.Add(openDLLButton);
             this.controlsToDisable.Add(dgOptions);
 
@@ -215,6 +205,9 @@ namespace MeGUI
             this.noiseFilterType.SelectedIndexChanged += new System.EventHandler(this.noiseFilterType_SelectedIndexChanged);
             this.resizeFilterType.SelectedIndexChanged += new System.EventHandler(this.resizeFilterType_SelectedIndexChanged);
             this.cbNvDeInt.SelectedIndexChanged += new System.EventHandler(this.cbNvDeInt_SelectedIndexChanged);
+
+            this.originalScript = String.Empty;
+            this.isPreviewMode = false;
 
 			player = null;
 			this.crop.Checked = false;
@@ -282,6 +275,7 @@ namespace MeGUI
             System.Windows.Forms.Label label5;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AviSynthWindow));
             this.resNCropGroupbox = new System.Windows.Forms.GroupBox();
+            this.chAutoPreview = new System.Windows.Forms.CheckBox();
             this.resize = new System.Windows.Forms.CheckBox();
             this.suggestResolution = new System.Windows.Forms.CheckBox();
             this.cropLeft = new System.Windows.Forms.NumericUpDown();
@@ -296,8 +290,8 @@ namespace MeGUI
             this.optionsTab = new System.Windows.Forms.TabPage();
             this.gbOutput = new System.Windows.Forms.GroupBox();
             this.videoOutput = new MeGUI.FileBar();
+            this.label7 = new System.Windows.Forms.Label();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
-            this.chAudioInputStreams = new System.Windows.Forms.CheckBox();
             this.input = new MeGUI.FileBar();
             this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.arChooser = new MeGUI.core.gui.ARChooser();
@@ -307,6 +301,7 @@ namespace MeGUI
             this.tvTypeLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.inputDARLabel = new System.Windows.Forms.Label();
+            this.videoInputLabel = new System.Windows.Forms.Label();
             this.filterTab = new System.Windows.Forms.TabPage();
             this.tabSources = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -333,8 +328,6 @@ namespace MeGUI
             this.deinterlace = new System.Windows.Forms.CheckBox();
             this.deinterlaceType = new System.Windows.Forms.ComboBox();
             this.filtersGroupbox = new System.Windows.Forms.GroupBox();
-            this.cbLang = new System.Windows.Forms.ComboBox();
-            this.lbLang = new System.Windows.Forms.Label();
             this.cbCharset = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.openSubtitlesButton = new System.Windows.Forms.Button();
@@ -345,14 +338,10 @@ namespace MeGUI
             this.resizeFilterType = new System.Windows.Forms.ComboBox();
             this.resizeFilterLabel = new System.Windows.Forms.Label();
             this.editTab = new System.Windows.Forms.TabPage();
-            this.tabControl2 = new System.Windows.Forms.TabControl();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.VideoScript = new System.Windows.Forms.TextBox();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.AudioScript = new System.Windows.Forms.TextBox();
             this.openDLLButton = new System.Windows.Forms.Button();
             this.dllPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.avisynthScript = new System.Windows.Forms.TextBox();
             this.saveAvisynthScriptDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFilterDialog = new System.Windows.Forms.OpenFileDialog();
             this.openSubsDialog = new System.Windows.Forms.OpenFileDialog();
@@ -362,11 +351,7 @@ namespace MeGUI
             this.onSaveLoadScript = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.previewAvsButton = new System.Windows.Forms.Button();
-            this.gradientPanel1 = new MeGUI.GradientPanel();
-            this.label9 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.chAutoPreview = new System.Windows.Forms.CheckBox();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -395,12 +380,7 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.deintM)).BeginInit();
             this.filtersGroupbox.SuspendLayout();
             this.editTab.SuspendLayout();
-            this.tabControl2.SuspendLayout();
-            this.tabPage4.SuspendLayout();
-            this.tabPage5.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.gradientPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -432,8 +412,8 @@ namespace MeGUI
             // 
             // label5
             // 
-            label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             label5.AutoSize = true;
             label5.Location = new System.Drawing.Point(342, 50);
             label5.Name = "label5";
@@ -443,8 +423,9 @@ namespace MeGUI
             // 
             // resNCropGroupbox
             // 
-            this.resNCropGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.resNCropGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.resNCropGroupbox.Controls.Add(this.chAutoPreview);
             this.resNCropGroupbox.Controls.Add(this.resize);
             this.resNCropGroupbox.Controls.Add(this.suggestResolution);
             this.resNCropGroupbox.Controls.Add(this.cropLeft);
@@ -456,17 +437,28 @@ namespace MeGUI
             this.resNCropGroupbox.Controls.Add(this.verticalResolution);
             this.resNCropGroupbox.Controls.Add(this.horizontalResolution);
             this.resNCropGroupbox.Enabled = false;
-            this.resNCropGroupbox.Location = new System.Drawing.Point(3, 191);
+            this.resNCropGroupbox.Location = new System.Drawing.Point(3, 196);
             this.resNCropGroupbox.Name = "resNCropGroupbox";
-            this.resNCropGroupbox.Size = new System.Drawing.Size(449, 158);
+            this.resNCropGroupbox.Size = new System.Drawing.Size(450, 158);
             this.resNCropGroupbox.TabIndex = 0;
             this.resNCropGroupbox.TabStop = false;
             this.resNCropGroupbox.Text = "Crop && Resize";
             // 
+            // chAutoPreview
+            // 
+            this.chAutoPreview.AutoSize = true;
+            this.chAutoPreview.Location = new System.Drawing.Point(11, 124);
+            this.chAutoPreview.Name = "chAutoPreview";
+            this.chAutoPreview.Size = new System.Drawing.Size(119, 17);
+            this.chAutoPreview.TabIndex = 10;
+            this.chAutoPreview.Text = "Apply auto Preview";
+            this.chAutoPreview.UseVisualStyleBackColor = true;
+            this.chAutoPreview.CheckedChanged += new System.EventHandler(this.chAutoPreview_CheckedChanged);
+            // 
             // resize
             // 
             this.resize.AutoSize = true;
-            this.resize.Location = new System.Drawing.Point(11, 104);
+            this.resize.Location = new System.Drawing.Point(11, 80);
             this.resize.Name = "resize";
             this.resize.Size = new System.Drawing.Size(57, 17);
             this.resize.TabIndex = 9;
@@ -476,7 +468,7 @@ namespace MeGUI
             // 
             // suggestResolution
             // 
-            this.suggestResolution.Location = new System.Drawing.Point(238, 104);
+            this.suggestResolution.Location = new System.Drawing.Point(238, 80);
             this.suggestResolution.Name = "suggestResolution";
             this.suggestResolution.Size = new System.Drawing.Size(168, 17);
             this.suggestResolution.TabIndex = 8;
@@ -585,7 +577,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.verticalResolution.Location = new System.Drawing.Point(168, 103);
+            this.verticalResolution.Location = new System.Drawing.Point(168, 79);
             this.verticalResolution.Maximum = new decimal(new int[] {
             1200,
             0,
@@ -609,7 +601,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.horizontalResolution.Location = new System.Drawing.Point(114, 103);
+            this.horizontalResolution.Location = new System.Drawing.Point(114, 79);
             this.horizontalResolution.Maximum = new decimal(new int[] {
             1920,
             0,
@@ -627,12 +619,11 @@ namespace MeGUI
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.optionsTab);
             this.tabControl1.Controls.Add(this.filterTab);
             this.tabControl1.Controls.Add(this.editTab);
-            this.tabControl1.Location = new System.Drawing.Point(0, 102);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(463, 459);
@@ -647,42 +638,50 @@ namespace MeGUI
             this.optionsTab.Name = "optionsTab";
             this.optionsTab.Size = new System.Drawing.Size(455, 433);
             this.optionsTab.TabIndex = 0;
-            this.optionsTab.Text = "Options";
+            this.optionsTab.Text = "I/O";
             this.optionsTab.UseVisualStyleBackColor = true;
             // 
             // gbOutput
             // 
-            this.gbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbOutput.Controls.Add(this.videoOutput);
-            this.gbOutput.Location = new System.Drawing.Point(3, 355);
+            this.gbOutput.Controls.Add(this.label7);
+            this.gbOutput.Location = new System.Drawing.Point(3, 360);
             this.gbOutput.Name = "gbOutput";
-            this.gbOutput.Size = new System.Drawing.Size(450, 52);
+            this.gbOutput.Size = new System.Drawing.Size(450, 55);
             this.gbOutput.TabIndex = 13;
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
             // 
             // videoOutput
             // 
-            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.videoOutput.Filename = "";
             this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
             this.videoOutput.FilterIndex = 0;
             this.videoOutput.FolderMode = false;
-            this.videoOutput.Location = new System.Drawing.Point(8, 17);
+            this.videoOutput.Location = new System.Drawing.Point(96, 17);
             this.videoOutput.Name = "videoOutput";
             this.videoOutput.ReadOnly = true;
             this.videoOutput.SaveMode = true;
-            this.videoOutput.Size = new System.Drawing.Size(436, 26);
+            this.videoOutput.Size = new System.Drawing.Size(348, 26);
             this.videoOutput.TabIndex = 7;
             this.videoOutput.Title = null;
             // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(8, 24);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(80, 13);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "Video Output";
+            // 
             // videoGroupBox
             // 
-            this.videoGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoGroupBox.Controls.Add(this.chAudioInputStreams);
+            this.videoGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.videoGroupBox.Controls.Add(this.input);
             this.videoGroupBox.Controls.Add(this.avsProfile);
             this.videoGroupBox.Controls.Add(this.arChooser);
@@ -692,46 +691,36 @@ namespace MeGUI
             this.videoGroupBox.Controls.Add(this.tvTypeLabel);
             this.videoGroupBox.Controls.Add(this.label6);
             this.videoGroupBox.Controls.Add(this.inputDARLabel);
-            this.videoGroupBox.Location = new System.Drawing.Point(2, 3);
+            this.videoGroupBox.Controls.Add(this.videoInputLabel);
+            this.videoGroupBox.Location = new System.Drawing.Point(3, 8);
             this.videoGroupBox.Name = "videoGroupBox";
             this.videoGroupBox.Size = new System.Drawing.Size(450, 182);
             this.videoGroupBox.TabIndex = 5;
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Input";
             // 
-            // chAudioInputStreams
-            // 
-            this.chAudioInputStreams.AutoSize = true;
-            this.chAudioInputStreams.Location = new System.Drawing.Point(11, 88);
-            this.chAudioInputStreams.Name = "chAudioInputStreams";
-            this.chAudioInputStreams.Size = new System.Drawing.Size(143, 17);
-            this.chAudioInputStreams.TabIndex = 23;
-            this.chAudioInputStreams.Text = "Audio Streams detection";
-            this.chAudioInputStreams.UseVisualStyleBackColor = true;
-            this.chAudioInputStreams.Click += new System.EventHandler(this.chAudioInputStreams_Click);
-            // 
             // input
             // 
             this.input.AllowDrop = true;
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.input.Filename = "";
             this.input.Filter = resources.GetString("input.Filter");
             this.input.FilterIndex = 6;
             this.input.FolderMode = false;
-            this.input.Location = new System.Drawing.Point(11, 15);
+            this.input.Location = new System.Drawing.Point(77, 15);
             this.input.Name = "input";
             this.input.ReadOnly = true;
             this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(433, 26);
+            this.input.Size = new System.Drawing.Size(367, 26);
             this.input.TabIndex = 1;
             this.input.Title = "Select a source file";
             this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
             // 
             // avsProfile
             // 
-            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.avsProfile.Location = new System.Drawing.Point(96, 147);
             this.avsProfile.Name = "avsProfile";
             this.avsProfile.ProfileSet = "AviSynth";
@@ -743,7 +732,7 @@ namespace MeGUI
             // 
             this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
             this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(74, 49);
+            this.arChooser.Location = new System.Drawing.Point(96, 76);
             this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
             this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
             this.arChooser.Name = "arChooser";
@@ -756,11 +745,11 @@ namespace MeGUI
             // 
             this.reopenOriginal.AutoSize = true;
             this.reopenOriginal.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.reopenOriginal.Location = new System.Drawing.Point(307, 51);
+            this.reopenOriginal.Location = new System.Drawing.Point(77, 47);
             this.reopenOriginal.Name = "reopenOriginal";
-            this.reopenOriginal.Size = new System.Drawing.Size(99, 23);
+            this.reopenOriginal.Size = new System.Drawing.Size(157, 23);
             this.reopenOriginal.TabIndex = 20;
-            this.reopenOriginal.Text = "Re-open Preview";
+            this.reopenOriginal.Text = "Re-open original video player";
             this.reopenOriginal.UseVisualStyleBackColor = true;
             this.reopenOriginal.Click += new System.EventHandler(this.reopenOriginal_Click);
             // 
@@ -775,7 +764,7 @@ namespace MeGUI
             "Encode non-mod16",
             "Crop mod4 horizontally",
             "Undercrop to achieve mod16"});
-            this.mod16Box.Location = new System.Drawing.Point(238, 110);
+            this.mod16Box.Location = new System.Drawing.Point(249, 119);
             this.mod16Box.Name = "mod16Box";
             this.mod16Box.Size = new System.Drawing.Size(157, 21);
             this.mod16Box.TabIndex = 19;
@@ -784,7 +773,7 @@ namespace MeGUI
             // signalAR
             // 
             this.signalAR.AutoSize = true;
-            this.signalAR.Location = new System.Drawing.Point(11, 111);
+            this.signalAR.Location = new System.Drawing.Point(11, 121);
             this.signalAR.Name = "signalAR";
             this.signalAR.Size = new System.Drawing.Size(190, 17);
             this.signalAR.TabIndex = 11;
@@ -793,11 +782,10 @@ namespace MeGUI
             // 
             // tvTypeLabel
             // 
-            this.tvTypeLabel.Location = new System.Drawing.Point(399, 53);
+            this.tvTypeLabel.Location = new System.Drawing.Point(316, 82);
             this.tvTypeLabel.Name = "tvTypeLabel";
-            this.tvTypeLabel.Size = new System.Drawing.Size(36, 23);
+            this.tvTypeLabel.Size = new System.Drawing.Size(48, 23);
             this.tvTypeLabel.TabIndex = 10;
-            this.tvTypeLabel.Visible = false;
             // 
             // label6
             // 
@@ -810,11 +798,19 @@ namespace MeGUI
             // 
             // inputDARLabel
             // 
-            this.inputDARLabel.Location = new System.Drawing.Point(8, 56);
+            this.inputDARLabel.Location = new System.Drawing.Point(8, 83);
             this.inputDARLabel.Name = "inputDARLabel";
-            this.inputDARLabel.Size = new System.Drawing.Size(60, 22);
+            this.inputDARLabel.Size = new System.Drawing.Size(72, 13);
             this.inputDARLabel.TabIndex = 7;
             this.inputDARLabel.Text = "Input DAR";
+            // 
+            // videoInputLabel
+            // 
+            this.videoInputLabel.Location = new System.Drawing.Point(8, 24);
+            this.videoInputLabel.Name = "videoInputLabel";
+            this.videoInputLabel.Size = new System.Drawing.Size(80, 13);
+            this.videoInputLabel.TabIndex = 0;
+            this.videoInputLabel.Text = "Video Input";
             // 
             // filterTab
             // 
@@ -852,8 +848,8 @@ namespace MeGUI
             // 
             // mpegOptGroupBox
             // 
-            this.mpegOptGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.mpegOptGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.mpegOptGroupBox.Controls.Add(this.colourCorrect);
             this.mpegOptGroupBox.Controls.Add(this.mpeg2Deblocking);
             this.mpegOptGroupBox.Enabled = false;
@@ -894,8 +890,8 @@ namespace MeGUI
             // 
             // aviOptGroupBox
             // 
-            this.aviOptGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.aviOptGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.aviOptGroupBox.Controls.Add(this.dss2);
             this.aviOptGroupBox.Controls.Add(this.fpsBox);
             this.aviOptGroupBox.Controls.Add(this.fpsLabel);
@@ -920,8 +916,8 @@ namespace MeGUI
             // 
             // fpsBox
             // 
-            this.fpsBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.fpsBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fpsBox.DecimalPlaces = 3;
             this.fpsBox.Location = new System.Drawing.Point(40, 43);
             this.fpsBox.Maximum = new decimal(new int[] {
@@ -974,8 +970,8 @@ namespace MeGUI
             // 
             // dgOptions
             // 
-            this.dgOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgOptions.Controls.Add(this.nvResize);
             this.dgOptions.Controls.Add(this.cbNvDeInt);
             this.dgOptions.Controls.Add(this.nvDeInt);
@@ -988,19 +984,19 @@ namespace MeGUI
             // nvResize
             // 
             this.nvResize.AutoSize = true;
-            this.nvResize.Location = new System.Drawing.Point(10, 48);
+            this.nvResize.Location = new System.Drawing.Point(10, 52);
             this.nvResize.Name = "nvResize";
             this.nvResize.Size = new System.Drawing.Size(93, 17);
             this.nvResize.TabIndex = 2;
             this.nvResize.Text = "Nvidia Resizer";
             this.nvResize.UseVisualStyleBackColor = true;
-            this.nvResize.Click += new System.EventHandler(this.nvDeInt_Click);
             this.nvResize.CheckedChanged += new System.EventHandler(this.nvResize_CheckedChanged);
+            this.nvResize.Click += new System.EventHandler(this.nvDeInt_Click);
             // 
             // cbNvDeInt
             // 
-            this.cbNvDeInt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbNvDeInt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbNvDeInt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbNvDeInt.Enabled = false;
             this.cbNvDeInt.FormattingEnabled = true;
@@ -1019,13 +1015,13 @@ namespace MeGUI
             this.nvDeInt.TabIndex = 0;
             this.nvDeInt.Text = "Nvidia Deinterlacer";
             this.nvDeInt.UseVisualStyleBackColor = true;
-            this.nvDeInt.Click += new System.EventHandler(this.nvDeInt_Click);
             this.nvDeInt.CheckedChanged += new System.EventHandler(this.nvDeInt_CheckedChanged);
+            this.nvDeInt.Click += new System.EventHandler(this.nvDeInt_Click);
             // 
             // deinterlacingGroupBox
             // 
-            this.deinterlacingGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deinterlacingGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.deinterlacingGroupBox.Controls.Add(label5);
             this.deinterlacingGroupBox.Controls.Add(this.deintM);
             this.deinterlacingGroupBox.Controls.Add(this.deintFieldOrder);
@@ -1047,8 +1043,8 @@ namespace MeGUI
             // 
             // deintM
             // 
-            this.deintM.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deintM.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.deintM.Location = new System.Drawing.Point(367, 47);
             this.deintM.Name = "deintM";
             this.deintM.Size = new System.Drawing.Size(76, 21);
@@ -1057,8 +1053,8 @@ namespace MeGUI
             // 
             // deintFieldOrder
             // 
-            this.deintFieldOrder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deintFieldOrder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.deintFieldOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deintFieldOrder.FormattingEnabled = true;
             this.deintFieldOrder.Location = new System.Drawing.Point(97, 76);
@@ -1069,8 +1065,8 @@ namespace MeGUI
             // 
             // deintSourceType
             // 
-            this.deintSourceType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deintSourceType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.deintSourceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deintSourceType.FormattingEnabled = true;
             this.deintSourceType.Location = new System.Drawing.Point(97, 47);
@@ -1092,8 +1088,8 @@ namespace MeGUI
             // 
             // analyseButton
             // 
-            this.analyseButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.analyseButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.analyseButton.Location = new System.Drawing.Point(345, 17);
             this.analyseButton.Name = "analyseButton";
             this.analyseButton.Size = new System.Drawing.Size(98, 23);
@@ -1113,8 +1109,8 @@ namespace MeGUI
             // 
             // deinterlaceType
             // 
-            this.deinterlaceType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deinterlaceType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.deinterlaceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deinterlaceType.Enabled = false;
             this.deinterlaceType.Items.AddRange(new object[] {
@@ -1130,10 +1126,8 @@ namespace MeGUI
             // 
             // filtersGroupbox
             // 
-            this.filtersGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.filtersGroupbox.Controls.Add(this.cbLang);
-            this.filtersGroupbox.Controls.Add(this.lbLang);
+            this.filtersGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.filtersGroupbox.Controls.Add(this.cbCharset);
             this.filtersGroupbox.Controls.Add(this.label8);
             this.filtersGroupbox.Controls.Add(this.openSubtitlesButton);
@@ -1150,28 +1144,6 @@ namespace MeGUI
             this.filtersGroupbox.TabIndex = 9;
             this.filtersGroupbox.TabStop = false;
             this.filtersGroupbox.Text = "Filters";
-            // 
-            // cbLang
-            // 
-            this.cbLang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbLang.Enabled = false;
-            this.cbLang.FormattingEnabled = true;
-            this.cbLang.Location = new System.Drawing.Point(277, 108);
-            this.cbLang.Name = "cbLang";
-            this.cbLang.Size = new System.Drawing.Size(133, 21);
-            this.cbLang.TabIndex = 13;
-            this.cbLang.SelectedIndexChanged += new System.EventHandler(this.cbLang_SelectedIndexChanged);
-            this.cbLang.Leave += new System.EventHandler(this.cbLang_Leave);
-            // 
-            // lbLang
-            // 
-            this.lbLang.AutoSize = true;
-            this.lbLang.Enabled = false;
-            this.lbLang.Location = new System.Drawing.Point(233, 110);
-            this.lbLang.Name = "lbLang";
-            this.lbLang.Size = new System.Drawing.Size(34, 13);
-            this.lbLang.TabIndex = 12;
-            this.lbLang.Text = "Lang:";
             // 
             // cbCharset
             // 
@@ -1198,7 +1170,7 @@ namespace MeGUI
             "Russian",
             "Mac",
             "Baltic"});
-            this.cbCharset.Location = new System.Drawing.Point(97, 107);
+            this.cbCharset.Location = new System.Drawing.Point(151, 108);
             this.cbCharset.Name = "cbCharset";
             this.cbCharset.Size = new System.Drawing.Size(121, 21);
             this.cbCharset.TabIndex = 11;
@@ -1207,7 +1179,7 @@ namespace MeGUI
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(9, 110);
+            this.label8.Location = new System.Drawing.Point(96, 111);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(49, 13);
             this.label8.TabIndex = 10;
@@ -1243,8 +1215,8 @@ namespace MeGUI
             // 
             // noiseFilterType
             // 
-            this.noiseFilterType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.noiseFilterType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.noiseFilterType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.noiseFilterType.Enabled = false;
             this.noiseFilterType.Location = new System.Drawing.Point(97, 44);
@@ -1264,8 +1236,8 @@ namespace MeGUI
             // 
             // resizeFilterType
             // 
-            this.resizeFilterType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.resizeFilterType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.resizeFilterType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.resizeFilterType.Location = new System.Drawing.Point(97, 17);
             this.resizeFilterType.Name = "resizeFilterType";
@@ -1284,70 +1256,16 @@ namespace MeGUI
             // 
             // editTab
             // 
-            this.editTab.Controls.Add(this.tabControl2);
             this.editTab.Controls.Add(this.openDLLButton);
             this.editTab.Controls.Add(this.dllPath);
             this.editTab.Controls.Add(this.label1);
+            this.editTab.Controls.Add(this.avisynthScript);
             this.editTab.Location = new System.Drawing.Point(4, 22);
             this.editTab.Name = "editTab";
             this.editTab.Size = new System.Drawing.Size(455, 433);
             this.editTab.TabIndex = 1;
             this.editTab.Text = "Script";
             this.editTab.UseVisualStyleBackColor = true;
-            // 
-            // tabControl2
-            // 
-            this.tabControl2.Controls.Add(this.tabPage4);
-            this.tabControl2.Controls.Add(this.tabPage5);
-            this.tabControl2.Location = new System.Drawing.Point(12, 14);
-            this.tabControl2.Name = "tabControl2";
-            this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(435, 379);
-            this.tabControl2.TabIndex = 4;
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.Controls.Add(this.VideoScript);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(427, 353);
-            this.tabPage4.TabIndex = 0;
-            this.tabPage4.Text = "Video";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // VideoScript
-            // 
-            this.VideoScript.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.VideoScript.Location = new System.Drawing.Point(6, 6);
-            this.VideoScript.Multiline = true;
-            this.VideoScript.Name = "VideoScript";
-            this.VideoScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.VideoScript.Size = new System.Drawing.Size(415, 341);
-            this.VideoScript.TabIndex = 1;
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.AudioScript);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(427, 353);
-            this.tabPage5.TabIndex = 1;
-            this.tabPage5.Text = "Audio";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // AudioScript
-            // 
-            this.AudioScript.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.AudioScript.Location = new System.Drawing.Point(6, 6);
-            this.AudioScript.Multiline = true;
-            this.AudioScript.Name = "AudioScript";
-            this.AudioScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.AudioScript.Size = new System.Drawing.Size(415, 341);
-            this.AudioScript.TabIndex = 2;
             // 
             // openDLLButton
             // 
@@ -1361,8 +1279,8 @@ namespace MeGUI
             // 
             // dllPath
             // 
-            this.dllPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dllPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dllPath.Location = new System.Drawing.Point(65, 399);
             this.dllPath.Name = "dllPath";
             this.dllPath.ReadOnly = true;
@@ -1377,6 +1295,18 @@ namespace MeGUI
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Load DLL";
+            // 
+            // avisynthScript
+            // 
+            this.avisynthScript.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.avisynthScript.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.avisynthScript.Location = new System.Drawing.Point(8, 15);
+            this.avisynthScript.Multiline = true;
+            this.avisynthScript.Name = "avisynthScript";
+            this.avisynthScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.avisynthScript.Size = new System.Drawing.Size(439, 356);
+            this.avisynthScript.TabIndex = 0;
             // 
             // saveAvisynthScriptDialog
             // 
@@ -1399,9 +1329,9 @@ namespace MeGUI
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.deintProgressBar,
             this.deintStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 606);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 511);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(465, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(463, 22);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -1421,7 +1351,7 @@ namespace MeGUI
             this.onSaveLoadScript.AutoSize = true;
             this.onSaveLoadScript.Checked = true;
             this.onSaveLoadScript.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.onSaveLoadScript.Location = new System.Drawing.Point(86, 567);
+            this.onSaveLoadScript.Location = new System.Drawing.Point(84, 478);
             this.onSaveLoadScript.Name = "onSaveLoadScript";
             this.onSaveLoadScript.Size = new System.Drawing.Size(210, 17);
             this.onSaveLoadScript.TabIndex = 18;
@@ -1432,7 +1362,7 @@ namespace MeGUI
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.AutoSize = true;
             this.saveButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.saveButton.Location = new System.Drawing.Point(415, 570);
+            this.saveButton.Location = new System.Drawing.Point(413, 475);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(41, 23);
             this.saveButton.TabIndex = 20;
@@ -1444,79 +1374,28 @@ namespace MeGUI
             this.previewAvsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.previewAvsButton.AutoSize = true;
             this.previewAvsButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.previewAvsButton.Location = new System.Drawing.Point(302, 570);
+            this.previewAvsButton.Location = new System.Drawing.Point(300, 475);
             this.previewAvsButton.Name = "previewAvsButton";
             this.previewAvsButton.Size = new System.Drawing.Size(107, 23);
             this.previewAvsButton.TabIndex = 19;
             this.previewAvsButton.Text = "Preview AVS Script";
             this.previewAvsButton.Click += new System.EventHandler(this.previewButton_Click);
             // 
-            // gradientPanel1
-            // 
-            this.gradientPanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("gradientPanel1.BackgroundImage")));
-            this.gradientPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.gradientPanel1.Controls.Add(this.label9);
-            this.gradientPanel1.Controls.Add(this.pictureBox1);
-            this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
-            this.gradientPanel1.Name = "gradientPanel1";
-            this.gradientPanel1.PageEndColor = System.Drawing.Color.Empty;
-            this.gradientPanel1.PageStartColor = System.Drawing.Color.SlateGray;
-            this.gradientPanel1.Size = new System.Drawing.Size(465, 90);
-            this.gradientPanel1.TabIndex = 21;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.Transparent;
-            this.label9.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(18, 35);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(290, 14);
-            this.label9.TabIndex = 1;
-            this.label9.Text = "Create avs scripts according to your sources...";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(397, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(45, 64);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.helpButton1.ArticleName = "Avisynth script creator";
+            this.helpButton1.ArticleName = "Avisynth script Creator";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(15, 567);
+            this.helpButton1.Location = new System.Drawing.Point(15, 472);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 17;
             // 
-            // chAutoPreview
-            // 
-            this.chAutoPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.chAutoPreview.AutoSize = true;
-            this.chAutoPreview.Location = new System.Drawing.Point(86, 586);
-            this.chAutoPreview.Name = "chAutoPreview";
-            this.chAutoPreview.Size = new System.Drawing.Size(119, 17);
-            this.chAutoPreview.TabIndex = 22;
-            this.chAutoPreview.Text = "Apply auto Preview";
-            this.chAutoPreview.UseVisualStyleBackColor = true;
-            // 
             // AviSynthWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(465, 628);
-            this.Controls.Add(this.chAutoPreview);
-            this.Controls.Add(this.gradientPanel1);
+            this.ClientSize = new System.Drawing.Size(463, 533);
             this.Controls.Add(this.onSaveLoadScript);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.previewAvsButton);
@@ -1559,16 +1438,8 @@ namespace MeGUI
             this.filtersGroupbox.PerformLayout();
             this.editTab.ResumeLayout(false);
             this.editTab.PerformLayout();
-            this.tabControl2.ResumeLayout(false);
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
-            this.tabPage5.ResumeLayout(false);
-            this.tabPage5.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.gradientPanel1.ResumeLayout(false);
-            this.gradientPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1581,18 +1452,19 @@ namespace MeGUI
             openVideoSource(input.Filename);
             if (chAutoPreview.Checked == true)
                 previewButton_Click(sender, args);
+            signalAR_Checkedchanged(null, null);
 		}
 		private void openDLLButton_Click(object sender, System.EventArgs e)
 		{
-            this.openFilterDialog.InitialDirectory = MeGUISettings.AvisynthPluginsPath;
+            this.openFilterDialog.InitialDirectory = MainForm.Instance.Settings.AvisynthPluginsPath;
 			if (this.openFilterDialog.ShowDialog() == DialogResult.OK)
 			{
 				dllPath.Text = openFilterDialog.FileName;
-                string temp = VideoScript.Text;
+                string temp = avisynthScript.Text;
 				script = new StringBuilder();
 				script.Append("LoadPlugin(\"" + openFilterDialog.FileName + "\")\r\n");
 				script.Append(temp);
-				VideoScript.Text = script.ToString();
+				avisynthScript.Text = script.ToString();
 			}
 		}
 		private void previewButton_Click(object sender, System.EventArgs e)
@@ -1602,14 +1474,18 @@ namespace MeGUI
             if (player == null || player.IsDisposed) 
                 player = new VideoPlayer();
 
-            bool videoLoaded = player.loadVideo(mainForm, VideoScript.Text, PREVIEWTYPE.REGULAR, false, true, player.CurrentFrame);
+            bool videoLoaded = player.loadVideo(mainForm, avisynthScript.Text, PREVIEWTYPE.REGULAR, false, true, player.CurrentFrame, true);
 			if (videoLoaded)
 			{
 				player.disableIntroAndCredits();
                 reader = player.Reader;
                 isPreviewMode = true;
                 sendCropValues();
-				player.Show();
+                player.Show();
+                player.SetScreenSize();
+                this.TopMost = player.TopMost = true;
+                if (!mainForm.Settings.AlwaysOnTop)
+                    this.TopMost = player.TopMost = false;
 			}
 		}
 		private void saveButton_Click(object sender, System.EventArgs e)
@@ -1622,12 +1498,6 @@ namespace MeGUI
 				    player.Close();
 				this.Close();
                 OpenScript(fileName);
-                if (chAudioInputStreams.Checked)
-                {
-                    // to autoload the script in the Audio Tab
-                    string audioScript = Path.ChangeExtension(fileName, "_audio.avs");
-                    mainForm.Audio.openAudioFile(audioScript);
-                }
             }
 		}
 		#endregion
@@ -1647,6 +1517,7 @@ namespace MeGUI
 
             double fps = (double)fpsBox.Value;
             inputLine = ScriptServer.GetInputLine(this.input.Filename, 
+                                                  null,
                                                   deinterlace.Checked, 
                                                   sourceType, 
                                                   colourCorrect.Checked, 
@@ -1666,7 +1537,8 @@ namespace MeGUI
                 deinterlaceLines = ((DeinterlaceFilter)deinterlaceType.SelectedItem).Script;
             cropLine = ScriptServer.GetCropLine(crop.Checked, Cropping);
             if (!nvResize.Checked)
-                resizeLine = ScriptServer.GetResizeLine(resize.Checked, (int)horizontalResolution.Value, (int)verticalResolution.Value, (ResizeFilterType)(resizeFilterType.SelectedItem as EnumProxy).RealValue);
+                resizeLine = ScriptServer.GetResizeLine(resize.Checked, (int)horizontalResolution.Value, (int)verticalResolution.Value, 0, 0, (ResizeFilterType)(resizeFilterType.SelectedItem as EnumProxy).RealValue,
+                                                        crop.Checked, Cropping, (int)horizontalResolution.Maximum, (int)verticalResolution.Maximum);
             denoiseLines = ScriptServer.GetDenoiseLines(noiseFilter.Checked, (DenoiseFilterType)(noiseFilterType.SelectedItem as EnumProxy).RealValue);
 
             string newScript = ScriptServer.CreateScriptFromTemplate(GetProfileSettings().Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
@@ -1677,17 +1549,14 @@ namespace MeGUI
 
             if (this.SubtitlesPath.Text != "")
             {
+                newScript += "\r\nLoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "VSFilter.dll") + "\")";
                 if (cbCharset.Enabled)
                 {
                     string charset = CharsetValue();
                     newScript += "\r\nTextSub(\"" + SubtitlesPath.Text + "\"" + ", " + charset + ")\r\n";
                 }
                 else
-                {
-                    if (File.Exists(Path.GetDirectoryName(SubtitlesPath.Text)+Path.GetFileNameWithoutExtension(SubtitlesPath.Text) + "-backup.idx"))
-                        SubtitlesPath.Text = Path.GetDirectoryName(SubtitlesPath.Text)+Path.GetFileNameWithoutExtension(SubtitlesPath.Text) + "-backup.idx";
                     newScript += "\r\nVobSub(\"" + SubtitlesPath.Text + "\")\r\n";
-                }
             }
             return newScript;
 		}
@@ -1700,7 +1569,7 @@ namespace MeGUI
 		private void showScript()
 		{
 			string text = this.generateScript();
-			VideoScript.Text = text;
+			avisynthScript.Text = text;
 		}
 		#endregion
 		#region helper methods
@@ -1716,7 +1585,7 @@ namespace MeGUI
                 projectPath = Path.GetDirectoryName(videoInput);
             videoOutput.Filename = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".avs"));
             
-            string ext = Path.GetExtension(videoInput).ToLower();
+            string ext = Path.GetExtension(videoInput).ToLower(System.Globalization.CultureInfo.InvariantCulture);
             switch (ext)
             {
                 case ".avs":
@@ -1730,47 +1599,52 @@ namespace MeGUI
                     break;
                 case ".dga":
                     sourceType = PossibleSources.dga;                    
-                    if (Path.GetFileName(mainForm.Settings.DgavcIndexPath.ToLower().ToString()) == "dgavcindexnv.exe")
-                    {
-                        if (VideoUtil.manageCUVIDServer())
-                            openVideo(videoInput);                        
-                    }
-                    else openVideo(videoInput);
+                    openVideo(videoInput);
                     break;
-                case ".dgm":
-                    sourceType = PossibleSources.dgm;
-                    if (VideoUtil.manageCUVIDServer())
-                        openVideo(videoInput); 
+                case ".dgi":
+                    sourceType = PossibleSources.dgi;
+                    openVideo(videoInput); 
                     break;
-                case ".dgv":
-                    sourceType = PossibleSources.dgv;
-                    if (VideoUtil.manageCUVIDServer())
-                        openVideo(videoInput); 
-                    break;
-                case ".mpeg": // include case variants 
-                case ".mpg":
-                case ".m2v":
-                case ".m2p":
-                case ".mpv":
-              //  case ".ts":
-                case ".tp":
-                case ".vob":
-                    sourceType = PossibleSources.mpeg2;
-                    if (gotoD2vCreator(videoInput) == DialogResult.Cancel )
-                    {
-                        sourceType = PossibleSources.directShow;
-                        openDirectShow(videoInput);
-                    }
+                case ".ffindex":
+                    sourceType = PossibleSources.ffindex;
+                    openVideo(videoInput.Substring(0, videoInput.Length - 8));
                     break;
                 case ".vdr":
                     sourceType = PossibleSources.vdr;
                     openVDubFrameServer(videoInput);
                     break;
                 default:
-                    sourceType = PossibleSources.directShow;
-                    openDirectShow(videoInput);
+                    if (File.Exists(videoInput + ".ffindex"))
+                    {
+                        sourceType = PossibleSources.ffindex;
+                        openVideo(videoInput);
+                    }
+                    else
+                    {
+                        int iResult = mainForm.DialogManager.AVSCreatorOpen(videoInput);
+                        switch (iResult)
+                        {
+                            case 0:
+                                OneClickWindow ocmt = new OneClickWindow(mainForm);
+                                ocmt.setInput(videoInput);
+                                ocmt.Show();
+                                this.Close();
+                                break;
+                            case 1:
+                                FileIndexerWindow fileIndexer = new FileIndexerWindow(mainForm);
+                                fileIndexer.setConfig(videoInput, null, 2, true, true, true, false);
+                                fileIndexer.Show();
+                                this.Close();
+                                break;
+                            default:
+                                sourceType = PossibleSources.directShow;
+                                openDirectShow(videoInput);
+                                break;
+                        }
+                    }
                     break;
             }
+
             setSourceInterface();
         }
 		/// <summary>
@@ -1783,16 +1657,7 @@ namespace MeGUI
 			{
 				using (StreamWriter sw = new StreamWriter(path, false, Encoding.Default))
                 {
-				    sw.Write(VideoScript.Text);
-                    if (chAudioInputStreams.Checked)
-                    {
-                        string audioAvsScript = Path.ChangeExtension(path, "_audio.avs");
-                        using (StreamWriter sw2 = new StreamWriter(audioAvsScript, false, Encoding.Default))
-                        {
-                            sw2.Write(AudioScript.Text);
-                            sw2.Close();
-                        }
-                    }
+				    sw.Write(avisynthScript.Text);
 				    sw.Close();
                 }
 			}
@@ -1812,6 +1677,7 @@ namespace MeGUI
             switch (this.sourceType)
             {            
                 case PossibleSources.d2v:
+                case PossibleSources.dga:
                 case PossibleSources.mpeg2:
                     this.mpeg2Deblocking.Enabled = true;
                     this.colourCorrect.Enabled = true;
@@ -1821,7 +1687,7 @@ namespace MeGUI
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = false;
                     this.nvDeInt.Checked = false;
-                    this.nvResize.Enabled = false;
+                    this.nvResize.Enabled = false;                    
                     this.nvResize.Checked = false;
                     this.dss2.Enabled = false;
                     this.tabSources.SelectedTab = tabPage1;
@@ -1836,6 +1702,21 @@ namespace MeGUI
                     this.flipVertical.Checked = false;
                     this.dss2.Enabled = false;
                     this.fpsBox.Enabled = false;
+                    this.cbNvDeInt.Enabled = false;
+                    this.nvDeInt.Enabled = false;
+                    this.nvDeInt.Checked = false;
+                    this.nvResize.Enabled = false;
+                    this.nvResize.Checked = false;
+                    this.tabSources.SelectedTab = tabPage1;
+                    break;
+                case PossibleSources.ffindex:
+                    this.mpeg2Deblocking.Checked = false;
+                    this.mpeg2Deblocking.Enabled = false;
+                    this.colourCorrect.Enabled = false;
+                    this.colourCorrect.Checked = false;
+                    this.dss2.Enabled = false;
+                    this.fpsBox.Enabled = false;
+                    this.flipVertical.Enabled = true;
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = false;
                     this.nvDeInt.Checked = false;
@@ -1858,9 +1739,7 @@ namespace MeGUI
                     this.nvResize.Checked = false;
                     this.tabSources.SelectedTab = tabPage2;
                     break;
-                case PossibleSources.dga:
-                case PossibleSources.dgm:
-                case PossibleSources.dgv:
+                case PossibleSources.dgi:
                     this.mpeg2Deblocking.Checked = false;
                     this.mpeg2Deblocking.Enabled = false;
                     this.colourCorrect.Enabled = false;
@@ -1893,9 +1772,11 @@ namespace MeGUI
                 string line = sr.ReadLine();
                 switch (this.sourceType)
                 {
-                    case PossibleSources.dga: if (line.Contains("DGAVCIndexFileNV")) flag = true; break;
-                    case PossibleSources.dgm: if (line.Contains("DGMPGIndexFileNV")) flag = true; break;
-                    case PossibleSources.dgv: if (line.Contains("DGVC1IndexFileNV")) flag = true; break; 
+                    case PossibleSources.dgi:
+                        if (line.Contains("DGMPGIndexFileNV")) flag = true;
+                        if (line.Contains("DGAVCIndexFileNV")) flag = true;
+                        if (line.Contains("DGVC1IndexFileNV")) flag = true; 
+                        break; 
                 }
             }
             if (!flag)
@@ -1979,15 +1860,16 @@ namespace MeGUI
                     try
                     {
                         MediaInfoFile info = new MediaInfoFile(fileName);
-                        if (info.Info.HasVideo && info.Info.FPS > 0)
-                            frameRateString = info.Info.FPS.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        if (info.VideoInfo.HasVideo && info.VideoInfo.FPS > 0)
+                            frameRateString = info.VideoInfo.FPS.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     }
                     catch (Exception)
                     { }
                     string tempAvs = string.Format(
-                            @"DirectShowSource(""{0}"", audio=false{1}, convertfps=true){2}",
+                            @"DirectShowSource(""{0}"", audio=false{1}, convertfps=true){2}{3}",
                             fileName,
                             frameRateString == null ? string.Empty : (", fps=" + frameRateString),
+                            VideoUtil.getAssumeFPS(0, fileName),
                             this.flipVertical.Checked ? ".FlipVertical()" : string.Empty
                             );
                     if (file != null)
@@ -2028,16 +1910,6 @@ namespace MeGUI
                 openVideo("Import(\"" + fileName + "\")\r\n", fileName, true);
             }
         }
-        /// <summary>
-        ///  call the d2v creator which will pass a queued job back to the main form
-        /// </summary>
-        /// <param name="fileName"></param>
-        private DialogResult gotoD2vCreator(string fileName)
-        {
-            return MessageBox.Show("You can't open such files with the AviSynth Script Creator. You'll have to index it first with a DG indexer, and open the created project file here.",
-                "Can't open files", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-        }
-
         private void enableControls(bool enable)
         {
             foreach (Control ctrl in this.controlsToDisable)
@@ -2058,17 +1930,21 @@ namespace MeGUI
 
         private bool showOriginal()
         {
+            int iCurrentFrame = -1;
             if (player == null || player.IsDisposed)
-            {
                 player = new VideoPlayer();
-            }
+            else
+                iCurrentFrame = player.CurrentFrame;
             this.isPreviewMode = false;
-            if (player.loadVideo(mainForm, originalScript, PREVIEWTYPE.REGULAR, false, originalInlineAvs, player.CurrentFrame))
+            if (player.loadVideo(mainForm, originalScript, PREVIEWTYPE.REGULAR, false, originalInlineAvs, iCurrentFrame, true))
             {
-                player.Show();
                 reader = player.Reader;
                 sendCropValues();
-                if (mainForm.Settings.AlwaysOnTop) player.TopMost = true;
+                player.Show();
+                player.SetScreenSize();
+                this.TopMost = player.TopMost = true;
+                if (!mainForm.Settings.AlwaysOnTop)
+                    this.TopMost = player.TopMost = false;
                 return true;
             }
             else
@@ -2080,14 +1956,14 @@ namespace MeGUI
         }
 
 		/// <summary>
-		/// opens a given DGIndex script
+		/// opens a given script
 		/// </summary>
-		/// <param name="videoInput">the DGIndex script to be opened</param>
-		private void openVideo(string videoInput, string textBoxName, bool inlineAvs)
+		/// <param name="videoInput">the script to be opened</param>
+		private void openVideo(string videoInputScript, string strSourceFileName, bool inlineAvs)
 		{
 			this.crop.Checked = false;
             this.input.Filename = "";
-            this.originalScript = videoInput;
+            this.originalScript = videoInputScript;
             this.originalInlineAvs = inlineAvs;
             if (player != null)
                 player.Dispose();
@@ -2095,22 +1971,28 @@ namespace MeGUI
             enableControls(videoLoaded);
 			if (videoLoaded)
 			{
-                this.input.Filename = textBoxName;
+                this.input.Filename = strSourceFileName;
                 file = player.File;
                 reader = player.Reader;
-                this.fpsBox.Value = (decimal)file.Info.FPS;
-                if (file.Info.FPS.Equals(25.0)) // disable ivtc for pal sources
+                this.fpsBox.Value = (decimal)file.VideoInfo.FPS;
+                if (file.VideoInfo.FPS.Equals(25.0)) // disable ivtc for pal sources
 					this.tvTypeLabel.Text = "PAL";
 				else
 					this.tvTypeLabel.Text = "NTSC";
-                horizontalResolution.Maximum = file.Info.Width;
-                verticalResolution.Maximum = file.Info.Height;
-                horizontalResolution.Value = file.Info.Width;
-                verticalResolution.Value = file.Info.Height;
-                arChooser.Value = file.Info.DAR;
+                horizontalResolution.Maximum = file.VideoInfo.Width;
+                verticalResolution.Maximum = file.VideoInfo.Height;
+                horizontalResolution.Value = file.VideoInfo.Width;
+                verticalResolution.Value = file.VideoInfo.Height;
+                if (File.Exists(strSourceFileName))
+                {
+                    MediaInfoFile oInfo = new MediaInfoFile(strSourceFileName);
+                    arChooser.Value = oInfo.VideoInfo.DAR;
+                }
+                else
+                    arChooser.Value = file.VideoInfo.DAR;
 
-                cropLeft.Maximum = cropRight.Maximum = file.Info.Width / 2;
-                cropTop.Maximum = cropBottom.Maximum = file.Info.Height / 2;
+                cropLeft.Maximum = cropRight.Maximum = file.VideoInfo.Width / 2;
+                cropTop.Maximum = cropBottom.Maximum = file.VideoInfo.Height / 2;
                 /// Commented out to ensure to keep the source file resolution when opening it
                 /// if (resize.Enabled && resize.Checked)
                 ///    suggestResolution.Checked = true;
@@ -2203,6 +2085,7 @@ namespace MeGUI
                 this.suggestResolution.Checked = true;
                 if (mod16Box.SelectedIndex == -1)
                     mod16Box.SelectedIndex = 0;
+                mod16Box_SelectedIndexChanged(null, null);
                 suggestResolution_CheckedChanged(null, null);
             }
             else
@@ -2218,6 +2101,7 @@ namespace MeGUI
         {
             this.showScript();
         }
+
 		#endregion
 		#region comboboxes
 		private void resizeFilterType_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -2243,8 +2127,6 @@ namespace MeGUI
 		#region autocrop
 		/// <summary>
 		/// gets the autocrop values
-		/// we start at 25% of the video, then advance by 5% and analyze 10 frames in total
-		/// (thus at position 25%, 30%, 35%, ... 70%)
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2256,22 +2138,39 @@ namespace MeGUI
                     "AutoCropping not possible",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 return;
             }
-            CropValues final = Autocrop.autocrop(reader);
-			bool error = (final.left == -1);
-			if (!error)
-			{
-				cropLeft.Value = final.left;
-				cropTop.Value = final.top;
-				cropRight.Value = final.right;
-				cropBottom.Value = final.bottom;
-				if (!crop.Checked)
-					crop.Checked = true;
+
+            // don't lock up the GUI, start a new thread
+            this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(delegate
+            {
+                CropValues final = Autocrop.autocrop(reader);
+                Invoke(new MethodInvoker(delegate
+                {
+                    setCropValues(final);
+                }));
+            }));
+            t.IsBackground = true;
+            t.Start();
+		}
+
+        private void setCropValues(CropValues cropValues)
+        {
+            this.Cursor = System.Windows.Forms.Cursors.Default;
+            bool error = (cropValues.left == -1);
+            if (!error)
+            {
+                cropLeft.Value = cropValues.left;
+                cropTop.Value = cropValues.top;
+                cropRight.Value = cropValues.right;
+                cropBottom.Value = cropValues.bottom;
+                if (!crop.Checked)
+                    crop.Checked = true;
                 chAutoPreview_CheckedChanged(null, null);
                 this.showScript();
-			}
-			else
-				MessageBox.Show("I'm afraid I was unable to find 3 frames that have matching crop values");
-		}
+            }
+            else
+                MessageBox.Show("I'm afraid I was unable to find more than 5 frames that have matching crop values");
+        }
 
 		/// <summary>
 		/// if enabled, each change of the horizontal resolution triggers this method
@@ -2281,7 +2180,8 @@ namespace MeGUI
 		/// <param name="e"></param>
         private void suggestResolution_CheckedChanged(object sender, System.EventArgs e)
         {
-            if (file == null) return;
+            if (file == null) 
+                return;
 
             try
             {
@@ -2290,7 +2190,7 @@ namespace MeGUI
                 Dar? suggestedDar;
 
                 bool signalAR = this.signalAR.Checked;
-                int scriptVerticalResolution = Resolution.suggestResolution((int)file.Info.Height, (int)file.Info.Width, dar,
+                int scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar,
                     Cropping, (int)horizontalResolution.Value, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
 
 
@@ -2303,7 +2203,7 @@ namespace MeGUI
                         do
                         {
                             hres -= 16;
-                            scriptVerticalResolution = Resolution.suggestResolution((int)file.Info.Height, (int)file.Info.Width, dar, Cropping, hres, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
+                            scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping, hres, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
                         }
                         while (scriptVerticalResolution > verticalResolution.Maximum && hres > 0);
                         eventsOn = false;
@@ -2354,6 +2254,7 @@ namespace MeGUI
                 this.mod16Box.SelectedIndex = (int)value.Mod16Method;
                 this.signalAR.Checked = (value.Mod16Method != mod16Method.none);
                 this.dss2.Checked = value.DSS2;
+                mod16Box_SelectedIndexChanged(null, null);
 				this.showScript();
 			}
         }
@@ -2397,8 +2298,9 @@ namespace MeGUI
             {
                 if (detector == null) // We want to start the analysis
                 {
-                    string source = ScriptServer.GetInputLine(input.Filename, false, sourceType, false, false, false, 25, false);
-                    if (nvDeInt.Enabled) source += ")";
+                    string source = ScriptServer.GetInputLine(input.Filename, null, false, sourceType, false, false, false, 25, false);
+                    if (nvDeInt.Enabled) 
+                        source += ")";
                     detector = new SourceDetector(source,
                         input.Filename, deintIsAnime.Checked,
                         mainForm.Settings.SourceDetectorSettings,
@@ -2425,14 +2327,21 @@ namespace MeGUI
         public void finishedAnalysis(SourceInfo info, bool error, string errorMessage)
         {
             if (error)
+            {
+                detector.stop();
                 Invoke(new MethodInvoker(delegate
                 {
                     MessageBox.Show(this, errorMessage, "Error in analysis", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    deintStatusLabel.Text = "Analysis failed!";
+                    analyseButton.Text = "Analyse";
+                    this.deintProgressBar.Value = 0;
                 }));
+            }
             else
             {
                 try
                 {
+                    info.isAnime = deintIsAnime.Checked;
                     Invoke(new MethodInvoker(delegate
                     {
                         deintProgressBar.Enabled = false;
@@ -2477,7 +2386,10 @@ namespace MeGUI
             {
                 this.horizontalResolution.Enabled = true;
                 this.verticalResolution.Enabled = !suggestResolution.Checked;
-                this.suggestResolution.Enabled = true;
+                if (Mod16Method == mod16Method.resize)
+                    this.suggestResolution.Enabled = false;
+                else
+                    this.suggestResolution.Enabled = true;
             }
             else
             {
@@ -2580,20 +2492,10 @@ namespace MeGUI
             {
                 if (this.SubtitlesPath.Text != openSubsDialog.FileName)
                 {
+                    string ext = Path.GetExtension(openSubsDialog.FileName).ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture);
                     this.SubtitlesPath.Text = openSubsDialog.FileName;
-                    if (this.SubtitlesPath.Text.ToLower().EndsWith(".idx"))
-                    {
+                    if (ext == ".idx")
                         cbCharset.Enabled = false;
-                        lbLang.Enabled = true;
-                        cbLang.Enabled = true;
-                        List<SubtitleInfo> subTracks;
-                        idxReader.readFileProperties(this.SubtitlesPath.Text, out subTracks);
-                        foreach (SubtitleInfo strack in subTracks)
-                        {
-                            cbLang.Items.Add(LanguageSelectionContainer.Short2FullLanguageName(strack.Name));
-                        }
-                        cbLang.SelectedIndex = idxReader.defaultLangIdx(this.SubtitlesPath.Text);
-                    }
                     MessageBox.Show("Subtitles successfully added to the script...", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else MessageBox.Show("The subtitles you chosen was already added...", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2634,129 +2536,9 @@ namespace MeGUI
             return c;
         }
 
-        private void createAudioAVSScript(string FileName)
-        {
-            int nb = VideoUtil.getAudioStreamsNb(FileName);
-            string frameCount = "";
-            double fps = (double)fpsBox.Value;
-
-            if (File.Exists(FileName))
-            {
-                MediaInfo info = new MediaInfo(FileName);
-                if (info.Video.Count > 0)
-                {
-                    MediaInfoWrapper.VideoTrack vtrack = info.Video[0];
-                    frameCount = vtrack.FrameCount;
-                }
-            }
-
-            string tempAudioAvs = "";
-
-            switch (nb)
-            {
-                case 0: if (MessageBox.Show("MeGUI cannot find any audio stream in " +
-                                        Path.GetFileName(FileName) + "...", "Information", MessageBoxButtons.OK,
-                                        MessageBoxIcon.Information) == DialogResult.OK)
-                        chAudioInputStreams.Checked = false;
-                    break;
-                case 1:
-                    {
-                        bool avifileExt = Path.GetExtension(FileName).ToLower() == ".avi" ? true : false;
-
-                        tempAudioAvs = string.Format(@"{0}(""{1}"", audio=true{2})",
-                                                     avifileExt == true ? "AVISource" : "DirectShowSource",
-                                                     FileName,
-                                                     avifileExt == true ? "" : ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) + ", framecount=" + frameCount);
-                        tempAudioAvs += "\r\nEnsureVBRMP3Sync()"; // ensure syncing
-                        tempAudioAvs += "\r\nTrim(0,0)";          // ensure audio length match
-
-                        if (File.Exists(Path.ChangeExtension(input.Filename, "_audio.avs")))
-                            File.Delete(Path.ChangeExtension(input.Filename, "_audio.avs")); // cleanup
-
-                        AudioScript.Text = tempAudioAvs;
-                    }
-                    break;
-                default: if (MessageBox.Show("MeGUI finds several audio streams in " +
-                                       Path.GetFileName(FileName) + "...Use an other tool to demux each streams.",
-                                       "Information", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
-                        chAudioInputStreams.Checked = false;
-                    break;
-            }
-
-        }
-
-        private void overrideDefaultLngIndex(string idxFile, int index)
-        {
-            StringBuilder result = new StringBuilder();
-
-            if (File.Exists(idxFile))
-            {
-                FileStream inputFile = new FileStream(idxFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                FileStream outputFile = new FileStream(Path.Combine(Path.GetDirectoryName(idxFile) ,Path.GetFileNameWithoutExtension(idxFile)+"-backup.idx"),  FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
-               // StreamWriter wr = new StreamWriter(outputFile);
-
-                try
-                {
-                   /* using (StreamReader sr = new StreamReader(inputFile))
-                    {
-                        string line = sr.ReadLine();
-                        string newLine = string.Empty;
-                        while (line != null)
-                        {
-                            line = sr.ReadLine();
-                            if (line != null)
-                            {
-                                if (line.StartsWith("langidx:"))
-                                {
-                                    newLine = newLine.Replace(line, "langidx: " + Convert.ToInt32(index));
-                                    result.Append(newLine);
-                                }
-                            }
-                        }
-                    }*/
-
-                    TextReader reader = new StreamReader(inputFile);
-                    TextWriter writer = new StreamWriter(outputFile);
-                    for (; ; )
-                    {
-                        string s = reader.ReadLine();
-                        if (s == null)
-                            break;
-                        if (s.StartsWith("langidx:"))
-                            s = s.Replace(s, "langidx: " + Convert.ToInt32(index));
-                        writer.WriteLine(s);
-                    }
-                    writer.Flush();
-                    writer.Close();
-                    reader.Close();
-                    
-                }
-                catch (Exception i)
-                {
-                    MessageBox.Show("The following error ocurred when parsing the idx file " + idxFile + "\r\n" + i.Message, "Error parsing idx file", MessageBoxButtons.OK);
-                }
-            }
-        }
-
         private void cbCharset_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.showScript();
-        }
-
-        private void cbLang_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //overrideDefaultLngIndex(this.SubtitlesPath.Text, cbLang.SelectedIndex);
-        }
-
-        private void cbLang_Leave(object sender, EventArgs e)
-        {
-            overrideDefaultLngIndex(this.SubtitlesPath.Text, cbLang.SelectedIndex);
-        }
-
-        private void chAudioInputStreams_Click(object sender, EventArgs e)
-        {
-            if ((chAudioInputStreams.Checked) && (!string.IsNullOrEmpty(input.Filename)))
-                createAudioAVSScript(input.Filename);
         }
 
         private void nvResize_CheckedChanged(object sender, EventArgs e)
@@ -2765,7 +2547,7 @@ namespace MeGUI
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
-    public enum PossibleSources { d2v, dga, dgm, dgv, mpeg2, vdr, directShow, avs };
+    public enum PossibleSources { d2v, dga, dgi, mpeg2, vdr, directShow, avs, ffindex };
     public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal, undercrop };
 
     public class AviSynthWindowTool : MeGUI.core.plugins.interfaces.ITool

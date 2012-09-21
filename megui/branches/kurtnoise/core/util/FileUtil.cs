@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,8 +20,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 using ICSharpCode.SharpZipLib.Zip;
 
@@ -42,6 +44,19 @@ namespace MeGUI.core.util
                     MainForm.Instance.DeleteOnClosing(file);
                     return Directory.CreateDirectory(file);
                 }
+            }
+        }
+
+        public static bool DeleteFile(string strFile)
+        {
+            try
+            {
+                File.Delete(strFile);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -98,9 +113,12 @@ namespace MeGUI.core.util
 
         public static DirectoryInfo ensureDirectoryExists(string p)
         {
-            if (Directory.Exists(p)) return new DirectoryInfo(p);
-            if (string.IsNullOrEmpty(p)) throw new IOException("Can't create directory");
+            if (Directory.Exists(p)) 
+                return new DirectoryInfo(p);
+            if (string.IsNullOrEmpty(p)) 
+                throw new IOException("Can't create directory");
             ensureDirectoryExists(Path.GetDirectoryName(p));
+            System.Threading.Thread.Sleep(100);
             return Directory.CreateDirectory(p);
         }
         /// <summary>
@@ -195,8 +213,8 @@ namespace MeGUI.core.util
         public static string AddToFileName(string filename, string extra)
         {
             return Path.Combine(
-                    Path.GetDirectoryName(filename),
-                    Path.GetFileNameWithoutExtension(filename) + extra + Path.GetExtension(filename));
+                Path.GetDirectoryName(filename),
+                Path.GetFileNameWithoutExtension(filename) + extra + Path.GetExtension(filename));
         }
 
         /// <summary>
@@ -211,8 +229,10 @@ namespace MeGUI.core.util
             if (string.IsNullOrEmpty(filter))
                 return true;
 
-            filter = filter.ToLower();
-            filename = Path.GetFileName(filename).ToLower();
+            bool bIsFolder = Directory.Exists(filename);
+
+            filter = filter.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            filename = Path.GetFileName(filename).ToLower(System.Globalization.CultureInfo.InvariantCulture);
             string[] filters = filter.Split('|');
             
             for (int i = 1; i < filters.Length; i += 2)
@@ -226,6 +246,9 @@ namespace MeGUI.core.util
                             throw new Exception("Invalid filter format");
 
                         if (f == "*.*" && filename.IndexOf('.') > -1)
+                            return true;
+
+                        if (f == "*." && bIsFolder)
                             return true;
 
                         string extension = f.Substring(1);
@@ -267,10 +290,158 @@ namespace MeGUI.core.util
                 }
             }
             else
+                MessageBox.Show("Source path does not exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        /// <summary>
+        /// Backup File
+        /// </summary>
+        /// <param name"sourcePath">Path of the Source file</param>
+        /// <param name="overwrite"></param>
+        public static void BackupFile(string sourcePath, bool overwrite)
+        {
+            try
             {
-                Console.WriteLine("Source path does not exist!");
+                if (File.Exists(sourcePath))
+                {
+                    String targetPath;
+                    if (sourcePath.Contains(System.Windows.Forms.Application.StartupPath))
+                        targetPath = sourcePath.Replace(System.Windows.Forms.Application.StartupPath, System.Windows.Forms.Application.StartupPath + @"\backup");
+                    else
+                        targetPath = System.Windows.Forms.Application.StartupPath + @"\backup\" + (new FileInfo(sourcePath)).Name;
+                    if (File.Exists(targetPath))
+                        File.Delete(targetPath);
+
+                    FileUtil.ensureDirectoryExists(Path.GetDirectoryName(targetPath));
+
+                    File.Move(sourcePath,targetPath);
+                }
+            } catch (Exception ex)
+            {
+                MessageBox.Show("Error while moving file: \n" + sourcePath + "\n" + ex.Message, "Error moving file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Checks if a directory is writable
+        /// </summary>
+        /// <param name"strPath">path to check</param>
+        public static bool IsDirWriteable(string strPath)
+        {
+            try
+            {
+                bool bDirectoryCreated = false;
+
+                // does the root directory exists
+                if (!Directory.Exists(strPath))
+                {
+                    Directory.CreateDirectory(strPath);
+                    bDirectoryCreated = true;
+                }
+
+                string newFilePath = string.Empty;
+                // combine the random file name with the path
+                do
+                    newFilePath = Path.Combine(strPath, Path.GetRandomFileName());
+                while (File.Exists(newFilePath));
+
+                // create & delete the file
+                FileStream fs = File.Create(newFilePath);
+                fs.Close();
+                File.Delete(newFilePath);
+
+                if (bDirectoryCreated)
+                    Directory.Delete(strPath);
+
+                return true; 
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to delete all files and directories listed 
+        /// in job.FilesToDelete if settings.DeleteIntermediateFiles is checked
+        /// </summary>
+        /// <param name="job">the job which should just have been completed</param>
+        public static LogItem DeleteIntermediateFiles(List<string> files, bool bAlwaysAddLog)
+        {
+            bool bShowLog = false;
+            LogItem i = new LogItem("Deleting intermediate files");
+            
+            // delete all files first
+            foreach (string file in files)
+            {
+                try
+                {
+                    if (Directory.Exists(file))
+                        continue;
+                    else if (!File.Exists(file))
+                        continue;
+                    bShowLog = true;
+                    File.Delete(file);
+                    i.LogEvent("Successfully deleted " + file);
+                }
+                catch (IOException e)
+                {
+                    i.LogValue("Error deleting " + file, e, ImageType.Error);
+                }
             }
 
+            // delete empty directories
+            foreach (string file in files)
+            {
+                try
+                {
+                    if (Directory.Exists(file))
+                    {
+                        bShowLog = true;
+                        if (Directory.GetFiles(file, "*.*", SearchOption.AllDirectories).Length == 0)
+                        {
+                            Directory.Delete(file, true);
+                            i.LogEvent("Successfully deleted directory " + file);
+                        }
+                        else
+                            i.LogEvent("Did not delete " + file + " as the directory is not empty.");
+                    }  
+                }
+                catch (IOException e)
+                {
+                    i.LogValue("Error deleting directory " + file, e, ImageType.Error);
+                }
+            }
+            if (bAlwaysAddLog || bShowLog)
+                return i;
+            return null;
+        }
+
+        /// <summary>
+        /// Detects the file version/date and writes it into the log
+        /// </summary>
+        /// <param name="strName">the name in the log</param>
+        /// <param name="strFile">the file to check</param>
+        /// <param name="oLog">the LogItem where the information should be added</param>
+        public static void GetFileInformation(string strName, string strFile, ref LogItem oLog)
+        {
+            string fileVersion = string.Empty;
+            string fileDate = string.Empty;
+            if (File.Exists(strFile))
+            {
+                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(strFile);
+                fileVersion = FileProperties.FileVersion;
+                fileDate = File.GetLastWriteTimeUtc(strFile).ToString();
+
+                if (string.IsNullOrEmpty(fileVersion))
+                    oLog.LogValue(strName, fileDate);
+                else
+                    oLog.LogValue(strName, fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")");
+            }
+            else
+            {
+                oLog.LogValue(strName, "not installed");
+            }
         }
     }
 }

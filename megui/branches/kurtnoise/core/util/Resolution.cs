@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ namespace MeGUI.core.util
 {
     public class Resolution
     {
-        		/// <summary>
+        /// <summary>
 		/// if enabled, each change of the horizontal resolution triggers this method
 		/// it calculates the ideal mod 16 vertical resolution that matches the desired horizontal resolution
 		/// </summary>

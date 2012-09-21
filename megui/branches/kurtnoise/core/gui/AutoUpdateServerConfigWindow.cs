@@ -47,6 +47,9 @@ namespace MeGUI.core.gui
                 "http://yourserver.org/path/to/update/folder/");
             if (serverName == null) return;
             serverName = serverName.Trim();
+            if (!serverName.EndsWith("/"))
+                serverName += "/";
+
             if (serverList.Items.Contains(serverName))
             {
                 MessageBox.Show("Server already listed. Adding nothing", "Server already listed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -56,6 +59,12 @@ namespace MeGUI.core.gui
             {
                 MessageBox.Show("Only http servers are supported", "Server not http", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }
+            UpdateWindow oUpdateWindow = new UpdateWindow(MainForm.Instance, MainForm.Instance.Settings, true);
+            if (oUpdateWindow.GetUpdateXML(false, serverName) != UpdateWindow.ErrorState.Successful)
+            {
+                if (MessageBox.Show("The server or the XML file is not available.\r\nShould it be added nevertheless?", "No connection to server", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != System.Windows.Forms.DialogResult.Yes)
+                    return;
             }
             serverList.Items.Add(serverName);
         }
@@ -128,6 +137,10 @@ namespace MeGUI.core.gui
             oldIndex = subList.SelectedIndex;
             if (oldIndex > -1) 
                 littleServerList = serverLists[subList.SelectedIndex];
+            if (subList.SelectedIndex < 2)
+                addServerButton.Enabled = removeSelectedServersButton.Enabled = false;
+            else
+                addServerButton.Enabled = removeSelectedServersButton.Enabled = true;
         }
     }
 }

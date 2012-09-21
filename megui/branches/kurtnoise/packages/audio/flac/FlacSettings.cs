@@ -29,9 +29,10 @@ namespace MeGUI
         public static readonly string ID = "Flac";
 
         public FlacSettings()
-            : base(ID, AudioCodec.LOSSLESS, AudioEncoderType.FLAC, 0)
+            : base(ID, AudioCodec.FLAC, AudioEncoderType.FLAC, 0)
         {
-            CompressionLevel = 4;
+            CompressionLevel = 5;
+            base.AutoGain = false;
         }
 
         private int level;

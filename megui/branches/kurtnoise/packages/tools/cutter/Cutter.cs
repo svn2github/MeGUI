@@ -64,6 +64,10 @@ namespace MeGUI.packages.tools.cutter
             player.AllowClose = false;
             player.ZoneSet += new ZoneSetCallback(player_ZoneSet);
             player.Show();
+            player.SetScreenSize();
+            this.TopMost = player.TopMost = true;
+            if (!mainForm.Settings.AlwaysOnTop)
+                this.TopMost = player.TopMost = false;
         }
 
         /// <summary>
@@ -262,6 +266,14 @@ namespace MeGUI.packages.tools.cutter
             
         }
 
+        private void sections_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (sections.SelectedItems.Count != 1)
+                return;
+
+            startFrame.Value = ((CutSection)sections.SelectedItems[0].Tag).startFrame;
+            endFrame.Value = ((CutSection)sections.SelectedItems[0].Tag).endFrame;
+        }
     }
 
     public class CutterTool : MeGUI.core.plugins.interfaces.ITool
@@ -279,7 +291,6 @@ namespace MeGUI.packages.tools.cutter
             d.Filter = "AviSynth scripts (*.avs)|*.avs";
             d.Title = "Select the input video";
             if (d.ShowDialog() != DialogResult.OK) return;
-
             (new Cutter(info, d.FileName)).Show();
         }
 

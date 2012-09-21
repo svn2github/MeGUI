@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2008  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ namespace MeGUI.packages.tools.hdbdextractor
         public static string ToPascal(string value)
         {
             var s = value;
-            s = s.Trim().ToLower();
+            s = s.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture);
            
             if (s.Length == 0)
                 return value;
@@ -86,7 +86,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             {
                 for (int i = 0; i < ar.Length; i++)
                     if (ar[i].Trim().Length > 0)
-                        s += ar[i].Substring(0, 1).ToUpper() + ar[i].Substring(1);
+                        s += ar[i].Substring(0, 1).ToUpper(System.Globalization.CultureInfo.InvariantCulture) + ar[i].Substring(1);
 
                 return s;
             }
@@ -99,7 +99,7 @@ namespace MeGUI.packages.tools.hdbdextractor
         public static string ToCamel(string value)
         {
             var s = value;
-            s = s.Trim().ToLower();
+            s = s.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture);
            
             if (s.Length == 0)
                 return value;
@@ -120,7 +120,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                         if (i == 0)
                             s = ar[i];
                         else
-                            s += ar[i].Substring(0, 1).ToUpper() + ar[i].Substring(1);
+                            s += ar[i].Substring(0, 1).ToUpper(System.Globalization.CultureInfo.InvariantCulture) + ar[i].Substring(1);
                     }
                 }
 
@@ -136,7 +136,7 @@ namespace MeGUI.packages.tools.hdbdextractor
         public static string Capitalize(string value)
         {
             var s = value;
-            s = s.Trim().ToLower();
+            s = s.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture);
            
             if (s.Length == 0)
                 return value;
@@ -148,7 +148,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             {
                 for (int i = 0; i < ar.Length; i++)
                     if (ar[i].Trim().Length > 0)
-                        s += ar[i].Trim().Substring(0, 1).ToUpper() + ar[i].Trim().Substring(1) + ". ";
+                        s += ar[i].Trim().Substring(0, 1).ToUpper(System.Globalization.CultureInfo.InvariantCulture) + ar[i].Trim().Substring(1) + ". ";
 
                 return s;
             }
@@ -162,7 +162,7 @@ namespace MeGUI.packages.tools.hdbdextractor
         public static string CapitalizeAll(string value)
         {
             var s = value;
-            s = s.Trim().ToLower();
+            s = s.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture);
            
             if (s.Length == 0)
                 return value;
@@ -174,7 +174,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             {
                 for (int i = 0; i < ar.Length; i++)
                     if (ar[i].Trim().Length > 0)
-                        s += ar[i].Trim().Substring(0, 1).ToUpper() + ar[i].Trim().Substring(1) + " ";
+                        s += ar[i].Trim().Substring(0, 1).ToUpper(System.Globalization.CultureInfo.InvariantCulture) + ar[i].Trim().Substring(1) + " ";
 
                 return s;
             }

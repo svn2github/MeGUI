@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,10 +23,10 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 
 namespace MeGUI
 {
-
     public enum AviSynthColorspace:int
     {
         Unknown = 0,
@@ -40,8 +40,6 @@ namespace MeGUI
 
 	public class AviSynthException:ApplicationException
 	{
-
-
 		public AviSynthException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
@@ -58,7 +56,6 @@ namespace MeGUI
 		{
 		}
 	}
-
 
 	public enum AudioSampleType:int
 	{
@@ -108,8 +105,7 @@ namespace MeGUI
 		public AviSynthClip ParseScript(string script)
 		{
             return ParseScript(script, AviSynthColorspace.RGB24);
-        }
-		
+        }		
 
 		void IDisposable.Dispose()
 		{
@@ -277,6 +273,7 @@ namespace MeGUI
 				return _vi.width;
 			}
 		}
+
 		public int VideoHeight
 		{
 			get
@@ -284,6 +281,7 @@ namespace MeGUI
 				return _vi.height;
 			}
 		}
+
 		public int raten
 		{
 			get
@@ -291,6 +289,7 @@ namespace MeGUI
 				return _vi.raten;
 			}
 		}
+
 		public int rated
 		{
 			get
@@ -298,6 +297,7 @@ namespace MeGUI
 				return _vi.rated;
 			}
 		}
+
 		public int aspectn
 		{
 			get
@@ -305,6 +305,7 @@ namespace MeGUI
 				return _vi.aspectn;
 			}
 		}
+
 		public int aspectd
 		{
 			get
@@ -312,6 +313,7 @@ namespace MeGUI
 				return _vi.aspectd;
 			}
 		}
+
 		public int interlaced_frame
 		{
 			get
@@ -319,6 +321,7 @@ namespace MeGUI
 				return _vi.interlaced_frame;
 			}
 		}
+
 		public int top_field_first
 		{
 			get
@@ -326,6 +329,7 @@ namespace MeGUI
 				return _vi.top_field_first;
 			}
 		}
+
 		public int num_frames
 		{
 			get
@@ -333,7 +337,16 @@ namespace MeGUI
 				return _vi.num_frames;
 			}
 		}
+
 		// Audio
+        public bool HasAudio
+        {
+            get
+            {
+                return _vi.num_audio_samples != 0;
+            }
+        }
+
 		public int AudioSampleRate
 		{
 			get
@@ -349,6 +362,7 @@ namespace MeGUI
 				return _vi.num_audio_samples;
 			}
 		}
+
 		public AudioSampleType SampleType
 		{
 			get
@@ -356,6 +370,7 @@ namespace MeGUI
 				return _vi.sample_type;
 			}
 		}
+
 		public short ChannelsCount
 		{
 			get
@@ -379,6 +394,7 @@ namespace MeGUI
                 return _colorSpace;
             }
         }
+
         public AudioSampleType OriginalSampleType
         {
             get
@@ -386,7 +402,6 @@ namespace MeGUI
                 return _sampleType;
             }
         }
-
 
 		#endregion
 
@@ -404,7 +419,6 @@ namespace MeGUI
 		{
             if (0 != dimzon_avs_getaframe(_avs, addr, offset, count))
 				throw new AviSynthException(getLastError());
-			
 		}
 
 		public void ReadAudio(byte buffer, long offset, int count)
@@ -428,19 +442,46 @@ namespace MeGUI
 
         public AviSynthClip(string func, string arg , AviSynthColorspace forceColorspace, AviSynthScriptEnvironment env)
 		{
-
 			_vi = new AVSDLLVideoInfo();
             _avs =  new IntPtr(0);
             _colorSpace = AviSynthColorspace.Unknown;
             _sampleType = AudioSampleType.Unknown;
-            if(0!=dimzon_avs_init_2(ref _avs, func, arg, ref _vi, ref _colorSpace, ref _sampleType, forceColorspace.ToString()))
+            bool bOpenSuccess = false;
+
+            if (MainForm.Instance.Settings.OpenAVSInThreadDuringSession)
+            {
+                MainForm.Instance.AvsLock++;
+
+                Thread t = new Thread(new ThreadStart(delegate
+                {
+                    System.Windows.Forms.Application.UseWaitCursor = true;
+                    if (0 == dimzon_avs_init_2(ref _avs, func, arg, ref _vi, ref _colorSpace, ref _sampleType, forceColorspace.ToString()))
+                        bOpenSuccess = true;
+                    MainForm.Instance.AvsLock--;
+                    if (MainForm.Instance.AvsLock == 0)
+                        System.Windows.Forms.Application.UseWaitCursor = false;
+                }));
+                t.Start();
+
+                while (t.ThreadState == ThreadState.Running)
+                {
+                    System.Windows.Forms.Application.DoEvents();
+                    Thread.Sleep(100);
+                }
+            }
+            else
+            {
+                if (0 == dimzon_avs_init_2(ref _avs, func, arg, ref _vi, ref _colorSpace, ref _sampleType, forceColorspace.ToString()))
+                    bOpenSuccess = true;
+            }
+
+            if (bOpenSuccess == false)
             {
                 string err = getLastError();
                 cleanup(false);
                 throw new AviSynthException(err);
             }
 		}
-
 
 		private void cleanup(bool disposing)
 		{

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace MeGUI
 {
@@ -30,6 +31,27 @@ namespace MeGUI
 	public class x264Settings: VideoCodecSettings
 	{
         public static string ID = "x264";
+
+        public enum x264PresetLevelModes : int 
+        { 
+            ultrafast = 0,
+            superfast = 1,
+            veryfast = 2,
+            faster = 3,
+            fast = 4,
+            medium = 5,
+            slow = 6,
+            slower = 7,
+            veryslow = 8,
+            placebo = 9
+        }
+
+        public enum x264InterlacedModes : int
+        {
+            progressive = 0,
+            tff = 1,
+            bff = 2
+        }
 
         public override void setAdjustedNbThreads(int nbThreads)
         {
@@ -55,43 +77,50 @@ namespace MeGUI
                 return list.ToArray();
             }
         }
-        int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
-			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
-            quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, preset, 
-            tune, lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid;
+        int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur,
+            bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
+            quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
+            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, x264Nalhrd,
+            colorMatrix, transfer, colorPrim, x264PullDown, sampleAR, _gopCalculation;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
-		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
-			chromaME, adaptiveDCT, lossless, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
-            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, constrainedIntra;
-		string quantizerMatrix, qpfile;
+		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, blurayCompat,
+			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
+            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass, picStruct, fakeInterlaced, nonDeterministic;
+		string quantizerMatrix, qpfile, openGop, range;
+        x264PresetLevelModes preset;
+        x264InterlacedModes interlacedMode;
+        x264Device targetDevice;
+        List<x264Device> x264DeviceList;
 		#region constructor
         /// <summary>
 		/// default constructor, initializes codec default values
 		/// </summary>
 		public x264Settings():base(ID, VideoEncoderType.X264)
 		{
+            x264DeviceList = x264Device.CreateDeviceList();
+            preset = x264PresetLevelModes.medium;
+            tune = 0;
             deadZoneInter = 21;
             deadZoneIntra = 11;
-            encodeInterlaced = false;
 			noFastPSkip = false;
             ssimCalc = false;
             psnrCalc = false;
 			EncodingMode = 9;
-			BitrateQuantizer = 23;
+			BitrateQuantizer = 20;
 			KeyframeInterval = 250;
 			nbRefFrames = 3;
 			noMixedRefs = false;
 			NbBframes = 3;
-			Turbo = false;
 			deblock = true;
 			alphaDeblock = 0;
 			betaDeblock = 0;
 			cabac = true;
 			weightedBPrediction = true;
+            weightedPPrediction = 2;
 			NewadaptiveBFrames = 1;
-			bFramePyramid = 0;
-			subPelRefinement = 6;
+			bFramePyramid = 2;
+			subPelRefinement = 7;
 			psyRDO = new decimal(1.0);
             psyTrellis = new decimal(0.0);
             macroBlockOptions = 3;
@@ -101,8 +130,8 @@ namespace MeGUI
 			p4x4mv = false;
 			i4x4mv = true;
 			i8x8mv = false;
-			MinQuantizer = 10;
-			MaxQuantizer = 51;
+			MinQuantizer = 0;
+			MaxQuantizer = 69;
 			maxQuantDelta = 4;
 			CreditsQuantizer = new decimal(40);
 			ipFactor = new decimal(1.4);
@@ -125,40 +154,103 @@ namespace MeGUI
 			adaptiveDCT = true;
 			quantizerMatrix = "";
 			quantizerMatrixType = 0; // none
-			profile = 3; // Autoguess. High if using default options.
-			lossless = false;
 			x264Trellis = 1;
-			level = 15;
             base.MaxNumberOfPasses = 3;
             AQMode = 1;
             AQStrength = new decimal(1.0);
             useQPFile = false;
             qpfile = "";
             FullRange = false;
-            preset = 3;
-            tune = 0;
+            range = "auto";
             advSet = false;
             lookahead = 40;
-            noMBTree = false;
+            noMBTree = true;
             threadInput = true;
             noPsy = false;
             scenecut = true;
             slicesnb = 0;
             maxSliceSyzeBytes = 0;
             maxSliceSyzeMBs = 0;
-            constrainedIntra = false;
+            x264Nalhrd = 0;
+            x264PullDown = 0;
+            sampleAR = 0;
+            colorMatrix = 0;
+            transfer = 0;
+            colorPrim = 0;
+            x264Aud = false;
+            profile = 3; // Autoguess. High if using default options.
+            level = 15;
+            x264SlowFirstpass = false;
+            openGop = "False";
+            picStruct = false;
+            fakeInterlaced = false;
+            nonDeterministic = false;
+            interlacedMode = x264InterlacedModes.progressive;
+            targetDevice = x264DeviceList[0];
+            blurayCompat = false;
+            _gopCalculation = 1;
 		}
 		#endregion
 		#region properties
+        public x264PresetLevelModes x264PresetLevel
+        {
+            get { return preset; }
+            set { preset = value; }
+        }
+        public int x264Tuning
+        {
+            get { return tune; }
+            set { tune = value; }
+        }
         public decimal QuantizerCRF
         {
             get { return quantizerCrf; }
             set { quantizerCrf = value; }
         }
-        public bool EncodeInterlaced
+        public x264InterlacedModes InterlacedMode
         {
-            get { return encodeInterlaced; }
-            set { encodeInterlaced = value; }
+            get { return interlacedMode; }
+            set { interlacedMode = value; }
+        }
+        [XmlIgnore()]
+        [MeGUI.core.plugins.interfaces.PropertyEqualityIgnoreAttribute()]
+        public x264Device TargetDevice
+        {
+            get { return targetDevice; }
+            set { targetDevice = value; }
+        }
+        // for profile import/export in case the enum changes
+        public string TargetDeviceXML
+        {
+            get { return targetDevice.ID.ToString(); }
+            set
+            {
+                // only support one device at the moment
+                targetDevice = x264DeviceList[0];
+                foreach (x264Device oDevice in x264DeviceList)
+                    if (oDevice.ID.ToString().Equals(value.Split(',')[0], StringComparison.CurrentCultureIgnoreCase))
+                        targetDevice = oDevice;
+            }
+        }
+        [XmlIgnore()]
+        public bool BlurayCompat
+        {
+            get { return blurayCompat; }
+            set { blurayCompat = value; }
+        }
+        /// <summary>
+        /// Only for XML export/import. For all other purposes use BlurayCompat()
+        /// </summary>
+        public string BlurayCompatXML
+        {
+            get { return blurayCompat.ToString(); }
+            set
+            {
+                if (value.Equals("True", StringComparison.CurrentCultureIgnoreCase))
+                    blurayCompat = true;
+                else
+                    blurayCompat = false;
+            }
         }
         public bool NoDCTDecimate
         {
@@ -251,16 +343,6 @@ namespace MeGUI
 			get { return minGOPSize; }
 			set { minGOPSize = value; }
 		}
-		public int Profile
-		{
-			get { return profile; }
-			set { profile = value; }
-		}
-		public int Level
-		{
-			get { return level; }
-			set { level = value; }
-		}
 		public decimal IPFactor
 		{
 			get { return ipFactor; }
@@ -341,16 +423,26 @@ namespace MeGUI
 			get { return weightedBPrediction; }
 			set { weightedBPrediction = value; }
 		}
+        public int WeightedPPrediction
+        {
+            get { return weightedPPrediction; }
+            set { weightedPPrediction = value; }
+        }
 		public int NewAdaptiveBFrames
 		{
 			get { return NewadaptiveBFrames; }
 			set { NewadaptiveBFrames = value; }
 		}
-		public int BFramePyramid
+		public int x264BFramePyramid
 		{
 			get { return bFramePyramid; }
 			set { bFramePyramid = value; }
 		}
+        public int x264GOPCalculation
+        {
+            get { return _gopCalculation; }
+            set { _gopCalculation = value; }
+        }
         public bool ChromaME
 		{
 			get { return chromaME; }
@@ -396,11 +488,6 @@ namespace MeGUI
             get { return ssimCalc; }
             set { ssimCalc = value; }
         }
-		public bool Lossless
-		{
-			get { return lossless; }
-			set { lossless = value; }
-		}
 		public string QuantizerMatrix
 		{
 			get { return quantizerMatrix; }
@@ -421,6 +508,62 @@ namespace MeGUI
             get { return deadZoneIntra; }
             set { deadZoneIntra = value; }
         }
+        /// <summary>
+        /// Only for XML export/import. For all other purposes use OpenGopValue()
+        /// </summary>
+        public string OpenGop
+        {
+            get { return openGop; }
+            set 
+            { 
+                if (value.Equals("True", StringComparison.CurrentCultureIgnoreCase) || value.Equals("1"))
+                    openGop = "True";
+                else if (value.Equals("2"))
+                {
+                    openGop = "True";
+                    blurayCompat = true;
+                }
+                else
+                    openGop = "False";
+            }
+        }
+        [XmlIgnore()]
+        public bool OpenGopValue
+        {
+            get 
+            {
+                if (openGop.Equals("True", StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+                else
+                    return false;
+            }
+            set { openGop = value.ToString(); }
+        }
+        public int X264PullDown
+        {
+            get { return x264PullDown; }
+            set { x264PullDown = value; }
+        }
+        public int SampleAR
+        {
+            get { return sampleAR; }
+            set { sampleAR = value; }
+        }
+        public int ColorMatrix
+        {
+            get { return colorMatrix; }
+            set { colorMatrix = value; }
+        }
+        public int ColorPrim
+        {
+            get { return colorPrim; }
+            set { colorPrim = value; }
+        }
+        public int Transfer
+        {
+            get { return transfer; }
+            set { transfer = value; }
+        }
         public int AQmode
         {
             get { return AQMode; }
@@ -436,20 +579,28 @@ namespace MeGUI
             get { return qpfile; }
             set { qpfile = value; }
         }
-        public bool fullRange
+#warning Deprecated since 2066; delete after next stable release
+        public string fullRange
         {
-            get { return FullRange; }
-            set { FullRange = value; }
+            get { return "migrated"; }
+            set
+            {
+                if (value.Equals("migrated"))
+                    return;
+                if (value.Equals("true"))
+                    range = "pc";
+            }
         }
-        public int x264Preset
+        public string Range
         {
-            get { return preset; }
-            set { preset = value; }
-        }
-        public int x264Tuning
-        {
-            get { return tune; }
-            set { tune = value; }
+            get 
+            {
+                if (!range.Equals("pc") && !range.Equals("tv"))
+                    return "auto";
+                else
+                    return range; 
+            }
+            set { range = value; }
         }
         public bool x264AdvancedSettings
         {
@@ -481,6 +632,36 @@ namespace MeGUI
             get { return scenecut; }
             set { scenecut = value; }
         }
+        public int Nalhrd
+        {
+            get { return x264Nalhrd; }
+            set { x264Nalhrd = value; }
+        }
+        public bool X264Aud
+        {
+            get { return x264Aud; }
+            set { x264Aud = value; }
+        }
+        public bool X264SlowFirstpass
+        {
+            get { return x264SlowFirstpass; }
+            set { x264SlowFirstpass = value; }
+        }
+        public bool PicStruct
+        {
+            get { return picStruct; }
+            set { picStruct = value; }
+        }
+        public bool FakeInterlaced
+        {
+            get { return fakeInterlaced; }
+            set { fakeInterlaced = value; }
+        }
+        public bool NonDeterministic
+        {
+            get { return nonDeterministic; }
+            set { nonDeterministic = value; }
+        }
         public int SlicesNb
         {
             get { return slicesnb; }
@@ -496,10 +677,15 @@ namespace MeGUI
             get { return maxSliceSyzeMBs; }
             set { maxSliceSyzeMBs = value; }
         }
-        public bool ConstrainedIntra
+        public int Profile
         {
-            get { return constrainedIntra; }
-            set { constrainedIntra = value; }
+            get { return profile; }
+            set { profile = value; }
+        }
+        public int Level
+        {
+            get { return level; }
+            set { level = value; }
         }
         #endregion
         public override bool UsesSAR
@@ -530,7 +716,8 @@ namespace MeGUI
                 this.BetaDeblock != otherSettings.BetaDeblock ||
                 this.BframeBias != otherSettings.BframeBias ||
                 this.BframePredictionMode != otherSettings.BframePredictionMode ||
-                this.BFramePyramid != otherSettings.BFramePyramid ||
+                this.x264BFramePyramid != otherSettings.x264BFramePyramid ||
+                this.x264GOPCalculation != otherSettings.x264GOPCalculation ||
                 this.BitrateVariance != otherSettings.BitrateVariance ||
                 this.PsyRDO != otherSettings.PsyRDO ||
                 this.PsyTrellis != otherSettings.PsyTrellis ||
@@ -545,7 +732,6 @@ namespace MeGUI
                 this.IPFactor != otherSettings.IPFactor ||
                 this.KeyframeInterval != otherSettings.KeyframeInterval ||
                 this.Level != otherSettings.Level ||
-                this.Lossless != otherSettings.Lossless ||
                 this.MaxQuantDelta != otherSettings.MaxQuantDelta ||
                 this.MaxQuantizer != otherSettings.MaxQuantizer ||
                 this.MERange != otherSettings.MERange ||
@@ -570,19 +756,22 @@ namespace MeGUI
                 this.TempQuanBlurCC != otherSettings.TempQuanBlurCC ||
                 this.TempQuantBlur != otherSettings.TempQuantBlur ||
                 this.Trellis != otherSettings.Trellis ||
-                this.Turbo != otherSettings.Turbo ||
+                this.x264SlowFirstpass != otherSettings.x264SlowFirstpass ||
                 this.V4MV != otherSettings.V4MV ||
                 this.VBVBufferSize != otherSettings.VBVBufferSize ||
                 this.VBVInitialBuffer != otherSettings.VBVInitialBuffer ||
                 this.VBVMaxBitrate != otherSettings.VBVMaxBitrate ||
                 this.WeightedBPrediction != otherSettings.WeightedBPrediction ||
+                this.WeightedPPrediction != otherSettings.WeightedPPrediction ||
                 this.X264Trellis != otherSettings.X264Trellis ||
                 this.AQmode != otherSettings.AQmode ||
                 this.AQstrength != otherSettings.AQstrength ||
                 this.UseQPFile != otherSettings.UseQPFile ||
-                this.fullRange != otherSettings.fullRange ||
+                this.QPFile != otherSettings.QPFile ||
+                this.FullRange != otherSettings.FullRange ||
+                this.Range != otherSettings.Range ||
                 this.MacroBlockOptions != otherSettings.MacroBlockOptions ||
-                this.x264Preset != otherSettings.x264Preset ||
+                this.x264PresetLevel != otherSettings.x264PresetLevel ||
                 this.x264Tuning != otherSettings.x264Tuning ||
                 this.x264AdvancedSettings != otherSettings.x264AdvancedSettings ||
                 this.Lookahead != otherSettings.Lookahead ||
@@ -591,9 +780,22 @@ namespace MeGUI
                 this.NoPsy != otherSettings.NoPsy ||
                 this.Scenecut != otherSettings.Scenecut ||
                 this.SlicesNb != otherSettings.SlicesNb ||
+                this.Nalhrd != otherSettings.Nalhrd ||
+                this.X264Aud != otherSettings.X264Aud ||
+                this.OpenGop != otherSettings.OpenGop ||
+                this.X264PullDown != otherSettings.X264PullDown ||
+                this.SampleAR != otherSettings.SampleAR ||
+                this.ColorMatrix != otherSettings.ColorMatrix ||
+                this.Transfer != otherSettings.Transfer ||
+                this.ColorPrim != otherSettings.ColorPrim ||
+                this.PicStruct != otherSettings.PicStruct ||
+                this.FakeInterlaced != otherSettings.FakeInterlaced ||
+                this.NonDeterministic != otherSettings.NonDeterministic ||
                 this.MaxSliceSyzeBytes != otherSettings.MaxSliceSyzeBytes ||
-                this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs ||
-                this.ConstrainedIntra != otherSettings.ConstrainedIntra
+                this.InterlacedMode != otherSettings.InterlacedMode ||
+                this.TargetDevice.ID != otherSettings.TargetDevice.ID ||
+                this.BlurayCompat != otherSettings.BlurayCompat ||
+                this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs
                 )
                 return true;
             else
@@ -608,46 +810,30 @@ namespace MeGUI
                     Cabac = false;
                     NbBframes = 0;
                     NewAdaptiveBFrames = 0;
-                    BFramePyramid = 0;
+                    x264BFramePyramid = 0;
                     I8x8mv = false;
                     AdaptiveDCT = false;
                     BframeBias = 0;
                     BframePredictionMode = 1; // default
                     QuantizerMatrixType = 0; // no matrix
                     QuantizerMatrix = "";
-                    Lossless = false;
+                    WeightedPPrediction = 0;
                     break;
                 case 1:
+                    x264BFramePyramid = 2;
                     I8x8mv = false;
                     AdaptiveDCT = false;
                     QuantizerMatrixType = 0; // no matrix
                     QuantizerMatrix = "";
+                    WeightedPPrediction = 0;
                     break;
                 case 2:
+                    x264BFramePyramid = 2;
+                    WeightedPPrediction = 1;
                     break;
             }
             if (EncodingMode != 2 && EncodingMode != 5)
-                Turbo = false;
-            if (Turbo)
-            {
-                NbRefFrames = 1;
-                SubPelRefinement = 1;
-                METype = 0; // diamond search
-                I4x4mv = false;
-                P4x4mv = false;
-                I8x8mv = false;
-                P8x8mv = false;
-                B8x8mv = false;
-                AdaptiveDCT = false;
-                NoMixedRefs = false;
-                Trellis = false;
-                NoFastPSkip = false;
-                WeightedBPrediction = false;
-            }
-            if (Profile != 2) // lossless requires High Profile
-                Lossless = false;
-            if (NbBframes < 2) // pyramid requires at least two b-frames
-                BFramePyramid = 0;
+                x264SlowFirstpass = false;
             if (NbBframes == 0)
             {
                 NewAdaptiveBFrames = 0;
@@ -657,11 +843,108 @@ namespace MeGUI
                 X264Trellis = 0;
             if (!P8x8mv) // p8x8 requires p4x4
                 P4x4mv = false;
-            if (Lossless) // This needs CQ 0
+        }
+
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, int oTuningMode, x264Device oDevice)
+        {
+            return GetDefaultNumberOfRefFrames(oPreset, oTuningMode, oDevice, -1, -1, -1);
+        }
+
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, int oTuningMode, x264Device oDevice, int iLevel, int hRes, int vRes)
+        {
+            int iDefaultSetting = 1;
+            switch (oPreset)
             {
-                EncodingMode = 1;
-                BitrateQuantizer = 0;
+                case x264Settings.x264PresetLevelModes.ultrafast:
+                case x264Settings.x264PresetLevelModes.superfast:
+                case x264Settings.x264PresetLevelModes.veryfast: iDefaultSetting = 1; break;
+                case x264Settings.x264PresetLevelModes.faster:
+                case x264Settings.x264PresetLevelModes.fast: iDefaultSetting = 2; break;
+                case x264Settings.x264PresetLevelModes.medium: iDefaultSetting = 3; break;
+                case x264Settings.x264PresetLevelModes.slow: iDefaultSetting = 5; break;
+                case x264Settings.x264PresetLevelModes.slower: iDefaultSetting = 8; break;
+                case x264Settings.x264PresetLevelModes.veryslow:
+                case x264Settings.x264PresetLevelModes.placebo: iDefaultSetting = 16; break;
             }
+            if (oTuningMode == 2 && iDefaultSetting > 1) // animation
+                iDefaultSetting *= 2;
+            if (iDefaultSetting > 16)
+                iDefaultSetting = 16;
+            if (oDevice != null && oDevice.ReferenceFrames > -1)
+                iDefaultSetting = Math.Min(oDevice.ReferenceFrames, iDefaultSetting);
+            if (iLevel > -1 && hRes > 0 && vRes > 0)
+            {
+                int iMaxRefForLevel = MeGUI.packages.video.x264.x264SettingsHandler.getMaxRefForLevel(iLevel, hRes, vRes);
+                if (iMaxRefForLevel > -1 && iMaxRefForLevel < iDefaultSetting)
+                    iDefaultSetting = iMaxRefForLevel;
+            }
+            return iDefaultSetting;
+        }
+
+        public static int GetDefaultNumberOfBFrames(x264PresetLevelModes oPresetLevel, int oTuningMode, int oAVCProfile, x264Device oDevice)
+        {
+            int iDefaultSetting = 0;
+            if (oAVCProfile == 0) // baseline
+                return iDefaultSetting;
+            switch (oPresetLevel)
+            {
+                case x264Settings.x264PresetLevelModes.ultrafast: iDefaultSetting = 0; break;
+                case x264Settings.x264PresetLevelModes.superfast:
+                case x264Settings.x264PresetLevelModes.veryfast:
+                case x264Settings.x264PresetLevelModes.faster:
+                case x264Settings.x264PresetLevelModes.fast:
+                case x264Settings.x264PresetLevelModes.medium:
+                case x264Settings.x264PresetLevelModes.slow:
+                case x264Settings.x264PresetLevelModes.slower: iDefaultSetting = 3; break;
+                case x264Settings.x264PresetLevelModes.veryslow: iDefaultSetting = 8; break;
+                case x264Settings.x264PresetLevelModes.placebo: iDefaultSetting = 16; break;
+            }
+            if (oTuningMode == 2) // animation
+                iDefaultSetting += 2;
+            if (iDefaultSetting > 16)
+                iDefaultSetting = 16;
+            if (oDevice != null && oDevice.BFrames > -1)
+                return Math.Min(oDevice.BFrames, iDefaultSetting);
+            else
+                return iDefaultSetting;
+        }
+
+        public static int GetDefaultNumberOfWeightp(x264PresetLevelModes oPresetLevel, int oTuningMode, int oAVCProfile, bool bBlurayCompat)
+        {
+            if (oAVCProfile == 0) // baseline
+                return 0;
+            if (oTuningMode == 6) // Fast Decode
+                return 0;
+
+            int iDefaultSetting = 0;
+            switch (oPresetLevel)
+            {
+                case x264Settings.x264PresetLevelModes.ultrafast:   iDefaultSetting = 0; break;
+                case x264Settings.x264PresetLevelModes.superfast:   
+                case x264Settings.x264PresetLevelModes.veryfast:
+                case x264Settings.x264PresetLevelModes.faster:
+                case x264Settings.x264PresetLevelModes.fast:        iDefaultSetting = 1; break;
+                case x264Settings.x264PresetLevelModes.medium:
+                case x264Settings.x264PresetLevelModes.slow:
+                case x264Settings.x264PresetLevelModes.slower: 
+                case x264Settings.x264PresetLevelModes.veryslow: 
+                case x264Settings.x264PresetLevelModes.placebo:     iDefaultSetting = 2; break;
+            }
+            if (bBlurayCompat)
+                return Math.Min(iDefaultSetting, 1);
+            else
+                return iDefaultSetting;
+        }
+
+        public static int GetDefaultAQMode(x264PresetLevelModes oPresetLevel, int oTuningMode)
+        {
+            if (oTuningMode == 5) // SSIM
+                return 2;
+
+            if (oTuningMode == 4 || oPresetLevel == x264Settings.x264PresetLevelModes.ultrafast) // PSNR
+                return 0;
+
+            return 1;
         }
 	}
 }

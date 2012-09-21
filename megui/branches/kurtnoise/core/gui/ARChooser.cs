@@ -33,7 +33,8 @@ namespace MeGUI.core.gui
 
         protected override void Dispose(bool disposing)
         {
-            CustomUserSettings.Default.CustomDARs = CustomDARs;
+            if (MainForm.Instance != null)  // Form designer fix
+                MainForm.Instance.Settings.CustomDARs = CustomDARs;
             base.Dispose(disposing);
         }
 
@@ -42,8 +43,10 @@ namespace MeGUI.core.gui
         public static readonly Named<Dar>[] ARs = new Named<Dar>[] {
                 new Named<Dar>("ITU 16:9 PAL (1.823361)", Dar.ITU16x9PAL),
                 new Named<Dar>("ITU 4:3 PAL (1.367521)", Dar.ITU4x3PAL),
-                new Named<Dar>("ITU 16:9 NTSC (1.822784)", Dar.ITU16x9NTSC),
-                new Named<Dar>("ITU 4:3 NTSC (1.367088)", Dar.ITU4x3NTSC),
+                new Named<Dar>("ITU 16:9 NTSC (1.823169)", Dar.ITU16x9NTSC),
+                new Named<Dar>("ITU 4:3 NTSC (1.367377)", Dar.ITU4x3NTSC),
+                new Named<Dar>("4:3 (1.333333)", Dar.STATIC4x3),
+                new Named<Dar>("16:9 (1.777778)", Dar.STATIC16x9),
                 new Named<Dar>("1:1", Dar.A1x1) };
 
         public ARChooser()
@@ -61,7 +64,9 @@ namespace MeGUI.core.gui
             };
 
             HasLater = true;
-            CustomDARs = CustomUserSettings.Default.CustomDARs;
+
+            if (MainForm.Instance != null)  // Form designer fix
+                CustomDARs = MainForm.Instance.Settings.CustomDARs;
         }
 
         bool hasLater;
