@@ -75,9 +75,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "FFmpegEncoder");
             }
             return null;
         }
+
+        protected override bool checkExitCode
+        {
+            get { return true; }
+        }
+
         public override string GetErrorString(string line, StreamType stream)
         {
-            if (line.IndexOf("error") != -1)
+            if (line.IndexOf("error") != -1 && line.IndexOf("Input/output error") == -1)
                 return line;
             return null;
         }

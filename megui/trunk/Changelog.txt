@@ -1,3 +1,4 @@
+2169 [FFMPEG] some adjustments for newer builds
 2164 [OneClick] added option to select different default audio settings for different languages
 2163 [OneClick] fixed muxing of external subtitle files
 2162 [OneClick] added up/down buttons for the indexer priority selection
