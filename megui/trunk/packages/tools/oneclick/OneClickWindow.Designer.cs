@@ -65,9 +65,11 @@ namespace MeGUI
             this.audioTab = new System.Windows.Forms.TabControl();
             this.audioPage0 = new System.Windows.Forms.TabPage();
             this.oneClickAudioStreamControl1 = new MeGUI.OneClickStreamControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.subtitlesTab = new System.Windows.Forms.TabControl();
             this.subPage0 = new System.Windows.Forms.TabPage();
             this.oneClickSubtitleStreamControl1 = new MeGUI.OneClickStreamControl();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
             this.subtitleMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.subtitleAddTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.subtitleRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
@@ -273,11 +275,14 @@ namespace MeGUI
             this.audioTab.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.audioTab.Controls.Add(this.audioPage0);
+            this.audioTab.Controls.Add(this.tabPage2);
             this.audioTab.Location = new System.Drawing.Point(6, 77);
             this.audioTab.Name = "audioTab";
             this.audioTab.SelectedIndex = 0;
             this.audioTab.Size = new System.Drawing.Size(452, 175);
             this.audioTab.TabIndex = 20;
+            this.audioTab.SelectedIndexChanged += new System.EventHandler(this.audioTab_SelectedIndexChanged);
+            this.audioTab.KeyUp += new System.Windows.Forms.KeyEventHandler(this.audioTab_KeyUp);
             this.audioTab.MouseClick += new System.Windows.Forms.MouseEventHandler(this.audioTab_MouseClick);
             this.audioTab.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.audioTab_MouseDoubleClick);
             // 
@@ -307,16 +312,29 @@ namespace MeGUI
             this.oneClickAudioStreamControl1.TabIndex = 0;
             this.oneClickAudioStreamControl1.FileUpdated += new System.EventHandler(this.oneClickAudioStreamControl_FileUpdated);
             // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(444, 149);
+            this.tabPage2.TabIndex = 3;
+            this.tabPage2.Text = "   +";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
             // subtitlesTab
             // 
             this.subtitlesTab.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.subtitlesTab.Controls.Add(this.subPage0);
+            this.subtitlesTab.Controls.Add(this.tabPage5);
             this.subtitlesTab.Location = new System.Drawing.Point(6, 258);
             this.subtitlesTab.Name = "subtitlesTab";
             this.subtitlesTab.SelectedIndex = 0;
             this.subtitlesTab.Size = new System.Drawing.Size(452, 115);
             this.subtitlesTab.TabIndex = 19;
+            this.subtitlesTab.SelectedIndexChanged += new System.EventHandler(this.subtitlesTab_SelectedIndexChanged);
+            this.subtitlesTab.KeyUp += new System.Windows.Forms.KeyEventHandler(this.subtitlesTab_KeyUp);
             this.subtitlesTab.MouseClick += new System.Windows.Forms.MouseEventHandler(this.subtitlesTab_MouseClick);
             this.subtitlesTab.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.subtitlesTab_MouseDoubleClick);
             // 
@@ -344,6 +362,16 @@ namespace MeGUI
             this.oneClickSubtitleStreamControl1.Size = new System.Drawing.Size(434, 90);
             this.oneClickSubtitleStreamControl1.StandardStreams = new object[0];
             this.oneClickSubtitleStreamControl1.TabIndex = 0;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(444, 89);
+            this.tabPage5.TabIndex = 3;
+            this.tabPage5.Text = "   +";
+            this.tabPage5.UseVisualStyleBackColor = true;
             // 
             // subtitleMenu
             // 
@@ -947,5 +975,7 @@ namespace MeGUI
         private core.gui.TargetSizeSCBox fileSize;
         private System.Windows.Forms.Label filesizeLabel;
         private System.Windows.Forms.ComboBox cbGUIMode;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage5;
     }
 }

@@ -1094,7 +1094,7 @@ namespace MeGUI
         // Subtitle Track Handling
         private void subtitleMenu_Opening(object sender, CancelEventArgs e)
         {
-            //subtitleRemoveTrack.Enabled = (subtitleTracks.Count > 1);
+            subtitleRemoveTrack.Enabled = (iSelectedSubtitleTabPage != subtitleTracks.Count);
         }
 
         private void subtitleAddTrack_Click(object sender, EventArgs e)
@@ -1129,23 +1129,26 @@ namespace MeGUI
             if (this.Visible)
                 a.enableDragDrop();
 
-            subtitlesTab.TabPages.Add(p);
+            subtitlesTab.TabPages.Insert(subtitlesTab.TabCount - 1, p);
             p.Controls.Add(a);
             subtitleTracks.Add(a);
+
+            subtitlesTab.SelectedTab = p;
         }
 
         private void SubtitleRemoveTrack(int iTabPageIndex)
         {
+            if (iTabPageIndex == subtitlesTab.TabCount - 1)
+                return;
+
             if (iTabPageIndex == 0 && subtitlesTab.TabCount == 1)
                 SubtitleAddTrack();
 
             subtitlesTab.TabPages.RemoveAt(iTabPageIndex);
             subtitleTracks.RemoveAt(iTabPageIndex);
 
-            for (int i = 0; i < subtitlesTab.TabCount; i++)
-            {
+            for (int i = 0; i < subtitlesTab.TabCount - 1; i++)
                 subtitlesTab.TabPages[i].Text = "Subtitle " + (i + 1);
-            }
         }
 
         private void chkDefaultStream_CheckedChanged(object sender, EventArgs e)
@@ -1225,8 +1228,8 @@ namespace MeGUI
             subtitleTracks[0].CustomStreams = new object[0];
             subtitleTracks[0].SelectedStreamIndex = 0;
 
-            // delete all tracks beside the first one
-            for (int i = subtitlesTab.TabCount; i > 1; i--)
+            // delete all tracks beside the first and last one
+            for (int i = subtitlesTab.TabCount - 1; i > 1; i--)
             {
                 subtitlesTab.TabPages.RemoveAt(i - 1);
                 subtitleTracks.RemoveAt(i - 1);
@@ -1270,7 +1273,7 @@ namespace MeGUI
         // Audio Track Handling
         private void audioMenu_Opening(object sender, CancelEventArgs e)
         {
-            //audioRemoveTrack.Enabled = (audioTracks.Count > 1);
+            audioRemoveTrack.Enabled = (iSelectedAudioTabPage != audioTracks.Count);
         }
 
         private void audioAddTrack_Click(object sender, EventArgs e)
@@ -1307,20 +1310,25 @@ namespace MeGUI
             if (this.Visible)
                 a.enableDragDrop();
 
-            audioTab.TabPages.Add(p);
+            audioTab.TabPages.Insert(audioTab.TabCount - 1, p);
             p.Controls.Add(a);
             audioTracks.Add(a);
+
+            audioTab.SelectedTab = p;
         }
 
         private void AudioRemoveTrack(int iTabPageIndex)
         {
-            if (iTabPageIndex == 0 && audioTab.TabCount == 1)
+            if (iTabPageIndex == audioTab.TabCount - 1)
+                return;
+
+            if (iTabPageIndex == 0 && subtitlesTab.TabCount == 1)
                 AudioAddTrack();
 
             audioTab.TabPages.RemoveAt(iTabPageIndex);
             audioTracks.RemoveAt(iTabPageIndex);
 
-            for (int i = 0; i < audioTab.TabCount; i++)
+            for (int i = 0; i < audioTab.TabCount - 1; i++)
                 audioTab.TabPages[i].Text = "Audio " + (i + 1);
         }
 
@@ -1398,8 +1406,8 @@ namespace MeGUI
             audioTracks[0].CustomStreams = new object[0];
             audioTracks[0].SelectedStreamIndex = 0;
 
-            // delete all tracks beside the first one
-            for (int i = audioTab.TabCount; i > 1; i--)
+            // delete all tracks beside the first and last one
+            for (int i = audioTab.TabCount - 1; i > 1; i--)
             {
                 audioTab.TabPages.RemoveAt(i - 1);
                 audioTracks.RemoveAt(i - 1);
@@ -1470,6 +1478,30 @@ namespace MeGUI
         {
             oneClickAudioStreamControl1.enableDragDrop();
             oneClickSubtitleStreamControl1.enableDragDrop();
+        }
+
+        private void audioTab_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (audioTab.SelectedTab.Text.Equals("   +"))
+                AudioAddTrack();
+        }
+
+        private void audioTab_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+                AudioRemoveTrack(audioTab.SelectedIndex);
+        }
+
+        private void subtitlesTab_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (subtitlesTab.SelectedTab.Text.Equals("   +"))
+                SubtitleAddTrack();
+        }
+
+        private void subtitlesTab_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+                SubtitleRemoveTrack(audioTab.SelectedIndex);
         }
     }
 
