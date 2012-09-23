@@ -64,6 +64,11 @@ namespace MeGUI.packages.tools.oneclick
                     MediaInfoFile iFileTemp = new MediaInfoFile(oFileToProcess.FilePath, ref _log, oFileToProcess.TrackNumber);
                     if (iFileTemp.recommendIndexer(oSettings.IndexerPriority))
                         iFile = iFileTemp;
+                    else if (iFileTemp.ContainerFileTypeString.Equals("AVS"))
+                    {
+                        iFile = iFileTemp;
+                        iFile.IndexerToUse = FileIndexerWindow.IndexType.NONE;
+                    }
                     else
                         _log.LogEvent(oFileToProcess.FilePath + " cannot be processed as no indexer can be used. skipping...");
                 }
@@ -229,6 +234,11 @@ namespace MeGUI.packages.tools.oneclick
                     MediaInfoFile iFileTemp = new MediaInfoFile(strFileName, ref _log);
                     if (iFileTemp.recommendIndexer(oSettings.IndexerPriority))
                         iFile = iFileTemp;
+                    else if (iFileTemp.ContainerFileTypeString.Equals("AVS"))
+                    {
+                        iFile = iFileTemp;
+                        iFile.IndexerToUse = FileIndexerWindow.IndexType.NONE;
+                    }
                     else
                         _log.LogEvent(strFileName + " cannot be processed as no indexer can be used. skipping...");
                 }
