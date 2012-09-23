@@ -154,7 +154,7 @@ namespace MeGUI
         }
         public static readonly AudioEncoderType LAME   = new AudioEncoderType("LAME", AudioCodec.MP3);
         public static readonly AudioEncoderType NAAC   = new AudioEncoderType("NAAC", AudioCodec.AAC);
-        public static readonly AudioEncoderType FAAC   = new AudioEncoderType("FAAC", AudioCodec.AAC);
+        public static readonly AudioEncoderType QAAC   = new AudioEncoderType("QAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType VORBIS = new AudioEncoderType("VORBIS", AudioCodec.VORBIS);
         public static readonly AudioEncoderType FFAC3  = new AudioEncoderType("FFAC3", AudioCodec.AC3);
         public static readonly AudioEncoderType FFMP2  = new AudioEncoderType("FFMP2", AudioCodec.MP2);
@@ -200,7 +200,7 @@ namespace MeGUI
                 VideoEncoderTypes.Register(VideoEncoderType.XVID)))
                 throw new Exception("Failed to register a standard video encoder type");
             if (!(
-                AudioEncoderTypes.Register(AudioEncoderType.FAAC)   &&
+                AudioEncoderTypes.Register(AudioEncoderType.QAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.FFAC3)  &&
                 AudioEncoderTypes.Register(AudioEncoderType.FFMP2)  &&
                 AudioEncoderTypes.Register(AudioEncoderType.LAME)   &&

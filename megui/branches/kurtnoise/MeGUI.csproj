@@ -525,12 +525,6 @@
     </Compile>
     <Compile Include="packages\audio\AudioJob.cs" />
     <Compile Include="packages\audio\AudioEncoderInterface.cs" />
-    <Compile Include="packages\audio\faac\faacConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\audio\faac\faacConfigurationPanel.Designer.cs">
-      <DependentUpon>faacConfigurationPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="packages\audio\ffac3\AC3ConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -538,7 +532,6 @@
       <DependentUpon>AC3ConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\ffac3\AC3Settings.cs" />
-    <Compile Include="packages\audio\faac\FaacSettings.cs" />
     <Compile Include="packages\audio\ffmp2\MP2ConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -567,6 +560,13 @@
     <Compile Include="packages\audio\naac\neroConfigurationPanel.Designer.cs">
       <DependentUpon>neroConfigurationPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\audio\qaac\qaacConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\qaac\qaacConfigurationPanel.Designer.cs">
+      <DependentUpon>qaacConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\audio\qaac\QaacSettings.cs" />
     <Compile Include="packages\audio\vorbis\OggVorbisConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -935,10 +935,6 @@
       <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\audio\faac\faacConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>faacConfigurationPanel.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\ffac3\AC3ConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AC3ConfigurationPanel.cs</DependentUpon>
@@ -958,6 +954,10 @@
     <EmbeddedResource Include="packages\audio\naac\neroConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>neroConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\qaac\qaacConfigurationPanel.resx">
+      <DependentUpon>qaacConfigurationPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\vorbis\OggVorbisConfigurationPanel.resx">
       <SubType>Designer</SubType>
@@ -1058,7 +1058,7 @@
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
-      <ProductName>.NET Framework Client Profile</ProductName>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

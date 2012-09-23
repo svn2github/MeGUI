@@ -1089,7 +1089,7 @@ namespace MeGUI
         {
             RegisterEncoder(new NeroAACEncodingProvider());
             RegisterEncoder(new LameMP3EncodingProvider());
-            RegisterEncoder(new FAACEncodingProvider());
+            RegisterEncoder(new QAACEncodingProvider());
             RegisterEncoder(new VorbisEncodingProvider());
             RegisterEncoder(new AC3EncodingProvider());
             RegisterEncoder(new MP2EncodingProvider());
@@ -1157,16 +1157,16 @@ namespace MeGUI
         }
     }
 
-    public class FAACEncodingProvider : AudioEncodingProvider
+    public class QAACEncodingProvider : AudioEncodingProvider
     {
-        public FAACEncodingProvider()
+        public QAACEncodingProvider()
             : base()
         {
             supportedCodecs.Add(AudioCodec.AAC);
             supportedTypes.Add(AudioType.MP4AAC);
             supportedTypes.Add(AudioType.M4A);
             supportedTypes.Add(AudioType.RAWAAC);
-            supportedEncoderTypes.Add(AudioEncoderType.FAAC);
+            supportedEncoderTypes.Add(AudioEncoderType.QAAC);
         }
     }
 

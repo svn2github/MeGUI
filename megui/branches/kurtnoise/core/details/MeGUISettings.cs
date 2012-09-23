@@ -45,7 +45,7 @@ namespace MeGUI
             Advanced
         };
         private string[][] autoUpdateServerLists;
-        private string faacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
+        private string qaacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
                        ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
@@ -95,7 +95,7 @@ namespace MeGUI
             audioSamplesPerUpdate = 100000;
             aviMuxGUIPath = getDownloadPath(@"tools\avimux_gui\avimux_gui.exe");
             besplitPath = "besplit.exe";
-            faacPath = getDownloadPath(@"tools\faac\faac.exe");
+            qaacPath = getDownloadPath(@"tools\qaac\qaac.exe");
 			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
             mkvExtractPath = getDownloadPath(@"tools\mkvmerge\mkvextract.exe");
@@ -580,15 +580,15 @@ namespace MeGUI
         }
 
         /// <summary>
-        /// filename and full path of the faac executable
+        /// filename and full path of the qaac executable
         /// </summary>
-        public string FaacPath
+        public string QaacPath
         {
-            get { return faacPath; }
+            get { return qaacPath; }
         }
 
         /// <summary>
-        /// filename and full path of the faac executable
+        /// filename and full path of the Lame executable
         /// </summary>
         public string LamePath
         {

@@ -147,7 +147,6 @@ namespace MeGUI
                     case "avimux_gui": arrPath.Add(MainForm.Instance.Settings.AviMuxGUIPath); break;
                     case "tsmuxer": arrPath.Add(MainForm.Instance.Settings.TSMuxerPath); break;
                     case "xvid_encraw": arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath); break;
-                    case "faac": arrPath.Add(MainForm.Instance.Settings.FaacPath); break;
                     case "mkvmerge":
                         arrPath.Add(MainForm.Instance.Settings.MkvmergePath);
                         arrPath.Add(MainForm.Instance.Settings.MkvExtractPath);
@@ -629,8 +628,6 @@ namespace MeGUI
                     {
                         case ("dgindex"):
                             return meGUISettings.DgIndexPath;
-                        case ("faac"):
-                            return meGUISettings.FaacPath;
                         case ("mkvmerge"):
                             return meGUISettings.MkvmergePath;
                         case ("lame"):
@@ -999,8 +996,6 @@ namespace MeGUI
             arrPath.Add(MainForm.Instance.Settings.TSMuxerPath);
             //xvid_encraw
             arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath);
-            //faac
-            arrPath.Add(MainForm.Instance.Settings.FaacPath);
             //mkvmerge
             arrPath.Add(MainForm.Instance.Settings.MkvmergePath);
             arrPath.Add(MainForm.Instance.Settings.MkvExtractPath);

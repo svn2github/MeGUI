@@ -29,7 +29,7 @@ using MeGUI.core.util;
 using MeGUI.packages.video.x264;
 using MeGUI.packages.video.xvid;
 using MeGUI.packages.audio.naac;
-using MeGUI.packages.audio.faac;
+using MeGUI.packages.audio.qaac;
 using MeGUI.packages.audio.ffac3;
 using MeGUI.packages.audio.ffmp2;
 using MeGUI.packages.audio.lame;

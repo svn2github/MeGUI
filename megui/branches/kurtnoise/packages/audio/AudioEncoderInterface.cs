@@ -47,7 +47,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 ((j as AudioJob).Settings is MP2Settings) ||
                 ((j as AudioJob).Settings is AC3Settings) ||
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
-                ((j as AudioJob).Settings is FaacSettings) ||
+                ((j as AudioJob).Settings is QaacSettings) ||
                 ((j as AudioJob).Settings is NeroAACSettings) ||
                 ((j as AudioJob).Settings is FlacSettings) ||
                 ((j as AudioJob).Settings is AftenSettings)))
@@ -1088,6 +1088,46 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _encoderExecutablePath = this._settings.OggEnc2Path;
                 _encoderCommandLine = "-Q --ignorelength --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
             }
+            if (audioJob.Settings is QaacSettings)
+            {
+                _mustSendWavHeaderToEncoderStdIn = true;
+                QaacSettings n = audioJob.Settings as QaacSettings;
+                QaacSettings qas = n;
+                _encoderExecutablePath = this._settings.QaacPath;
+                StringBuilder sb = new StringBuilder("--threading --ignorelength ");
+                switch (n.Profile)
+                {
+                    case QaacProfile.HE:
+                        if (n.Mode == QaacMode.TVBR)
+                             sb.Append(" ");
+                        else sb.Append("--he ");
+                        break;
+                    case QaacProfile.ALAC:
+                        sb.Append("-A ");
+                        break;
+                    default:
+                        break;
+                }
+                switch (n.Mode)
+                {
+                    case QaacMode.TVBR : 
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-V {0} ", n.Bitrate);
+                        break;
+                    case QaacMode.CVBR : 
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-v {0} ", n.Bitrate);
+                        break;
+                    case QaacMode.ABR :
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-a {0} ", n.Bitrate);
+                        break;
+                    case QaacMode.CBR:
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-c {0} ", n.Bitrate);
+                        break;
+                }
+
+                sb.Append("- -o \"{0}\"");
+
+                _encoderCommandLine = sb.ToString();
+            }
             if (audioJob.Settings is NeroAACSettings)
             {
                 _mustSendWavHeaderToEncoderStdIn = true;
@@ -1124,21 +1164,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 sb.Append("-if - -of \"{0}\"");
 
                 _encoderCommandLine = sb.ToString();
-            }
-            if (audioJob.Settings is FaacSettings)
-            {
-                FaacSettings f = audioJob.Settings as FaacSettings;
-                _encoderExecutablePath = this._settings.FaacPath;
-                _mustSendWavHeaderToEncoderStdIn = true;
-                switch (f.BitrateMode)
-                {
-                    case BitrateManagementMode.VBR:
-                        _encoderCommandLine = "-q " + f.Quality + " --mpeg-vers 4 -o \"{0}\" -"; 
-                        break;
-                    default:
-                        _encoderCommandLine = "-b " + f.Bitrate + " --mpeg-vers 4 -o \"{0}\" -";
-                        break;
-                }
             }
             if (audioJob.Settings is MP3Settings)
             {
