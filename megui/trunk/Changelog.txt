@@ -1,3 +1,4 @@
+2174 [OneClick] fixed included subtitle handling if input container is not MKV/VOB
 2172 [OneClick] support multiple input files per drag & drop
 2171 [OneClick] cosmetics #2
 2170 [OneClick] cosmetics

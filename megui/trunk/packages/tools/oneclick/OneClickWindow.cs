@@ -811,7 +811,7 @@ namespace MeGUI
                     {
                         oExtractMKVTrack.Add(oStreamControl.SelectedStream.TrackInfo);
                         bExtractMKVTrack = true;
-                    }                        
+                    }
                 }
                 else
                 {
@@ -910,11 +910,16 @@ namespace MeGUI
                             oStream.SelectedStream.DemuxFilePath = outputFile;
                             dpp.FilesToDelete.Add(outputFile);
                             dpp.FilesToDelete.Add(Path.ChangeExtension(outputFile, ".sub"));
+                            dpp.SubtitleTracks.Add(oStream.SelectedStream);
                         }
-                        else if (!dpp.Eac3toDemux)
+                        else if (inputContainer == ContainerType.MKV && !dpp.Eac3toDemux) // only if container MKV and no demux with eac3to
+                        {
                             oExtractMKVTrack.Add(oStream.SelectedStream.TrackInfo);
+                            dpp.SubtitleTracks.Add(oStream.SelectedStream);
+                        }
                     }
-                    dpp.SubtitleTracks.Add(oStream.SelectedStream);
+                    else
+                        dpp.SubtitleTracks.Add(oStream.SelectedStream);
                 }
             }
 
@@ -985,6 +990,15 @@ namespace MeGUI
                 OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(dpp.VideoInput, null, dpp);
                 finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(ocJob));
             }
+
+            _oLog.LogEvent("Video: " + dpp.VideoInput);
+
+            foreach (OneClickAudioTrack oTrack in dpp.AudioTracks)
+                _oLog.LogEvent("Audio: " + oTrack.AudioTrackInfo.SourceFileName);
+
+            foreach (OneClickStream oTrack in dpp.SubtitleTracks)
+                _oLog.LogEvent("Subtitle: " + oTrack.TrackInfo.SourceFileName);
+            
 
             mainForm.Jobs.addJobsWithDependencies(finalJobChain);
 
