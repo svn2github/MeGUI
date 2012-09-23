@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-20012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -50,7 +50,6 @@ namespace MeGUI.core.plugins.interfaces
         /// <returns></returns>
         string SettingsID { get; }
         
-
         /// <summary>
         /// Substitutes any filenames stored in this profile (eg quantizer matrices) according to
         /// the substitution table
@@ -104,9 +103,15 @@ namespace MeGUI.core.plugins.interfaces
                     continue;
 
                 object aVal = null, bVal = null;
-                try { aVal = info.GetValue(a, null); }
+                try 
+                { 
+                    aVal = info.GetValue(a, null); 
+                }
                 catch { }
-                try { bVal = info.GetValue(b, null); }
+                try 
+                { 
+                    bVal = info.GetValue(b, null); 
+                }
                 catch { }
                 if (!ArrayEqual(aVal, bVal)) 
                     return false;
@@ -146,5 +151,4 @@ namespace MeGUI.core.plugins.interfaces
             return true;
         }
     }
-
 }

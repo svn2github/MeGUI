@@ -24,6 +24,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using MeGUI.core.gui;
+using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
 
 namespace MeGUI
@@ -90,11 +91,8 @@ namespace MeGUI
         }
     }
 
-    public class OneClickAudioSettings
+    public class OneClickAudioSettings : GenericSettings
     {
-        public string Language;
-        public string Profile;
-
         public OneClickAudioSettings()
         {
 
@@ -102,10 +100,57 @@ namespace MeGUI
 
         public OneClickAudioSettings(string language, string profile, AudioEncodingMode mode)
         {
-            this.Language = language;
-            this.Profile = profile;
+            this.language = language;
+            this.profile = profile;
             this.audioEncodingMode = mode;
         }
+
+        #region GenericSettings Members
+
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        GenericSettings GenericSettings.Clone()
+        {
+            return Clone();
+        }
+
+        public OneClickSettings Clone()
+        {
+            return this.MemberwiseClone() as OneClickSettings;
+        }
+
+        public string[] RequiredFiles
+        {
+            get { return new string[0]; }
+        }
+
+        public string[] RequiredProfiles
+        {
+            get { return new string[0]; }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as GenericSettings);
+        }
+
+        public bool Equals(GenericSettings other)
+        {
+            return other == null ? false : PropertyEqualityTester.AreEqual(this, other);
+        }
+
+        public string SettingsID { get { return "OneClick"; } }
+        public virtual void FixFileNames(Dictionary<string, string> _) { }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        #endregion
 
         private AudioEncodingMode audioEncodingMode;
         [System.Xml.Serialization.XmlIgnore()]
@@ -128,6 +173,20 @@ namespace MeGUI
                 else
                     audioEncodingMode = AudioEncodingMode.Always;
             }
+        }
+
+        private string language;
+        public string Language
+        {
+            get { return language; }
+            set { language = value; }
+        }
+
+        private string profile;
+        public string Profile
+        {
+            get { return profile; }
+            set { profile = value; }
         }
     }
 }

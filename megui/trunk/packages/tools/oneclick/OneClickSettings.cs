@@ -42,24 +42,6 @@ namespace MeGUI
 	/// </summary>
     public class OneClickSettings : GenericSettings
 	{
-        public string SettingsID { get { return "OneClick"; } }
-
-        public virtual void FixFileNames(Dictionary<string, string> _) { }
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as GenericSettings);
-        }
-
-        public bool Equals(GenericSettings other)
-        {
-            return other == null ? false : PropertyEqualityTester.AreEqual(this, other);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         private string videoProfileName;
         public string VideoProfileName
         {
@@ -280,21 +262,6 @@ namespace MeGUI
             set { indexerPriority = new List<string>(value); }
         }
 
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
-
-        GenericSettings GenericSettings.Clone()
-        {
-            return Clone();
-        }
-        
-        public OneClickSettings Clone()
-        {
-            return this.MemberwiseClone() as OneClickSettings;
-        }
-
 		public OneClickSettings()
 		{
 			videoProfileName = "";
@@ -336,6 +303,39 @@ namespace MeGUI
 		}
 
         #region GenericSettings Members
+
+        public string SettingsID { get { return "OneClick"; } }
+        public virtual void FixFileNames(Dictionary<string, string> _) { }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as GenericSettings);
+        }
+
+        public bool Equals(GenericSettings other)
+        {
+            return other == null ? false : PropertyEqualityTester.AreEqual(this, other);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        GenericSettings GenericSettings.Clone()
+        {
+            return Clone();
+        }
+
+        public OneClickSettings Clone()
+        {
+            return this.MemberwiseClone() as OneClickSettings;
+        }
 
         public string[] RequiredFiles
         {
