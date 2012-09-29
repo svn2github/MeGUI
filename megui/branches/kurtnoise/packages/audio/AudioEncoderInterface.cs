@@ -1115,7 +1115,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     switch (n.Mode)
                     {
                         case QaacMode.TVBR:
-                            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-V {0} ", n.Bitrate);
+                            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-V {0} ", n.Quality);
                             break;
                         case QaacMode.CVBR:
                             sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-v {0} ", n.Bitrate);

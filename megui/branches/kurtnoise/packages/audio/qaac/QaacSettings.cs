@@ -54,7 +54,7 @@ namespace MeGUI
 		public QaacSettings() 
             : base(ID, AudioCodec.AAC, AudioEncoderType.QAAC, 0, BitrateManagementMode.VBR)
 		{
-            Quality = 0.5M;
+            Quality = 90;
             Mode = QaacMode.TVBR;
             Profile = QaacProfile.LC;
 		}
@@ -73,8 +73,8 @@ namespace MeGUI
             set { mode = value; }
         }
 
-        private decimal quality;
-        public Decimal Quality
+        private Int16 quality;
+        public Int16 Quality
         {
             get { return quality; }
             set { quality = value; }

@@ -39,6 +39,7 @@ namespace MeGUI.packages.audio.qaac
             cbMode.Items.AddRange(EnumProxy.CreateArray(QaacSettings.SupportedModes));
             cbProfile.Items.AddRange(EnumProxy.CreateArray(QaacSettings.SupportedProfiles));
             trackBar1_ValueChanged(null, null);
+            cbProfile_SelectedIndexChanged(null, null);
         }
 
         private void InitializeComponent()
@@ -109,6 +110,7 @@ namespace MeGUI.packages.audio.qaac
             this.cbProfile.Name = "cbProfile";
             this.cbProfile.Size = new System.Drawing.Size(121, 21);
             this.cbProfile.TabIndex = 4;
+            this.cbProfile.SelectedIndexChanged += new System.EventHandler(this.cbProfile_SelectedIndexChanged);
             // 
             // qaacConfigurationPanel
             // 
@@ -133,25 +135,31 @@ namespace MeGUI.packages.audio.qaac
             get
             {
                 QaacSettings qas = new QaacSettings();
-                qas.Bitrate = (int)trackBar1.Value;
                 if (cbMode.SelectedIndex == 0) qas.BitrateMode = BitrateManagementMode.VBR;
                 if (cbMode.SelectedIndex == 1) qas.BitrateMode = BitrateManagementMode.VBR;
                 if (cbMode.SelectedIndex == 2) qas.BitrateMode = BitrateManagementMode.ABR;
                 if (cbMode.SelectedIndex == 3) qas.BitrateMode = BitrateManagementMode.CBR;
                 qas.Mode = (QaacMode)(cbMode.SelectedItem as EnumProxy).RealValue;
                 qas.Profile = (QaacProfile)(cbProfile.SelectedItem as EnumProxy).RealValue;
+                if (qas.Mode == QaacMode.TVBR) 
+                     qas.Quality = (Int16)trackBar1.Value;
+                else 
+                    qas.Bitrate = (int)trackBar1.Value;
                 return qas;
             }
             set
             {
                 QaacSettings qas = value as QaacSettings;
-                trackBar1.Value = Math.Max(Math.Min(qas.Bitrate, trackBar1.Maximum), trackBar1.Minimum);
                 if (cbMode.SelectedIndex == 0) qas.BitrateMode = BitrateManagementMode.VBR;
                 if (cbMode.SelectedIndex == 1) qas.BitrateMode = BitrateManagementMode.VBR;
                 if (cbMode.SelectedIndex == 2) qas.BitrateMode = BitrateManagementMode.ABR;
                 if (cbMode.SelectedIndex == 3) qas.BitrateMode = BitrateManagementMode.CBR;
                 cbMode.SelectedItem = EnumProxy.Create(qas.Mode);
                 cbProfile.SelectedItem = EnumProxy.Create(qas.Profile);
+                if (cbMode.SelectedIndex == 0)
+                    trackBar1.Value = Math.Max(Math.Min(qas.Quality, trackBar1.Maximum), trackBar1.Minimum);  
+                else
+                    trackBar1.Value = Math.Max(Math.Min(qas.Bitrate, trackBar1.Maximum), trackBar1.Minimum);            
             }
         }
         #endregion
@@ -199,11 +207,22 @@ namespace MeGUI.packages.audio.qaac
                     encoderGroupBox.Text = String.Format("QAAC Options - Constant Bitrate  @ {0} kbit/s", trackBar1.Value);
                     break;
             }
+            if (cbProfile.SelectedIndex == 2) encoderGroupBox.Text = String.Format("QAAC Options");
         }
 
         private void cbMode_SelectedIndexChanged(object sender, EventArgs e)
         {
             trackBar1_ValueChanged(sender, e);
+        }
+
+        private void cbProfile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (cbProfile.SelectedIndex)
+            {
+                case 2: trackBar1.Enabled = false; cbMode.Enabled = false; break;
+                default: trackBar1.Enabled = true; cbMode.Enabled = true; break;
+            }
+            cbMode_SelectedIndexChanged(sender, e);
         }
 
     }
