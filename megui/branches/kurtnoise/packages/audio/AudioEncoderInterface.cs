@@ -45,7 +45,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             if (j is AudioJob &&
                 (((j as AudioJob).Settings is MP3Settings) ||
                 ((j as AudioJob).Settings is MP2Settings) ||
-                ((j as AudioJob).Settings is AC3Settings) ||
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
                 ((j as AudioJob).Settings is QaacSettings) ||
                 ((j as AudioJob).Settings is OpusSettings) ||
@@ -1064,15 +1063,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 FlacSettings n = audioJob.Settings as FlacSettings;
                 _encoderExecutablePath = this._settings.FlacPath;
                 _encoderCommandLine = "--force --force-raw-format --endian=little --sign=signed -" + n.CompressionLevel + " - -o \"{0}\""; 
-            }
-            if (audioJob.Settings is AC3Settings)
-            {
-                script.Append("6<=Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);
-                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine); // ffac3 encoder doesn't support 32bits streams
-                _mustSendWavHeaderToEncoderStdIn = true;
-                AC3Settings n = audioJob.Settings as AC3Settings;
-                _encoderExecutablePath = this._settings.FFMpegPath;
-                _encoderCommandLine = "-i - -y -acodec ac3 -ab " + n.Bitrate + "k \"{0}\"";
             }
             if (audioJob.Settings is MP2Settings)
             {

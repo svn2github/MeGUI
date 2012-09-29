@@ -157,7 +157,6 @@ namespace MeGUI
         public static readonly AudioEncoderType NAAC   = new AudioEncoderType("NAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType QAAC   = new AudioEncoderType("QAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType VORBIS = new AudioEncoderType("VORBIS", AudioCodec.VORBIS);
-        public static readonly AudioEncoderType FFAC3  = new AudioEncoderType("FFAC3", AudioCodec.AC3);
         public static readonly AudioEncoderType FFMP2  = new AudioEncoderType("FFMP2", AudioCodec.MP2);
         public static readonly AudioEncoderType AFTEN  = new AudioEncoderType("AFTEN", AudioCodec.AC3);
         public static readonly AudioEncoderType FLAC   = new AudioEncoderType("FLAC", AudioCodec.FLAC);
@@ -204,7 +203,6 @@ namespace MeGUI
                 throw new Exception("Failed to register a standard video encoder type");
             if (!(
                 AudioEncoderTypes.Register(AudioEncoderType.QAAC)   &&
-                AudioEncoderTypes.Register(AudioEncoderType.FFAC3)  &&
                 AudioEncoderTypes.Register(AudioEncoderType.FFMP2)  &&
                 AudioEncoderTypes.Register(AudioEncoderType.LAME)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.NAAC)   &&
