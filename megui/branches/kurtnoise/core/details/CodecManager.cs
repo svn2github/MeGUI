@@ -72,6 +72,7 @@ namespace MeGUI
         public static readonly AudioCodec DTSHD  = new AudioCodec("DTSHD");
         public static readonly AudioCodec DTSMA  = new AudioCodec("DTSMA");
         public static readonly AudioCodec FLAC   = new AudioCodec("FLAC");
+        public static readonly AudioCodec OPUS   = new AudioCodec("OPUS");
     }
     public class SubtitleCodec : ICodec, IIDable
     {
@@ -160,6 +161,7 @@ namespace MeGUI
         public static readonly AudioEncoderType FFMP2  = new AudioEncoderType("FFMP2", AudioCodec.MP2);
         public static readonly AudioEncoderType AFTEN  = new AudioEncoderType("AFTEN", AudioCodec.AC3);
         public static readonly AudioEncoderType FLAC   = new AudioEncoderType("FLAC", AudioCodec.FLAC);
+        public static readonly AudioEncoderType OPUS   = new AudioEncoderType("OPUS", AudioCodec.OPUS);
     }
     #endregion
     
@@ -192,6 +194,7 @@ namespace MeGUI
                 AudioCodecs.Register(AudioCodec.PCM)    &&
                 AudioCodecs.Register(AudioCodec.THD)    &&
                 AudioCodecs.Register(AudioCodec.FLAC)   &&
+                AudioCodecs.Register(AudioCodec.OPUS)   &&
                 AudioCodecs.Register(AudioCodec.WAV)))
                 throw new Exception("Failed to register a standard audio codec");
             if (!(
@@ -207,6 +210,7 @@ namespace MeGUI
                 AudioEncoderTypes.Register(AudioEncoderType.NAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.VORBIS) &&
                 AudioEncoderTypes.Register(AudioEncoderType.FLAC)   &&
+                AudioEncoderTypes.Register(AudioEncoderType.OPUS)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.AFTEN)))
                 throw new Exception("Failed to register a standard audio encoder type");
                 
@@ -273,6 +277,7 @@ namespace MeGUI
         public static readonly AudioType DTSMA  = new AudioType("DTSMA", "DTS Master Audio Files", "dtsma", null, AudioCodec.DTSMA);
         public static readonly AudioType FLAC   = new AudioType("FLAC", "FLAC Audio Lossless Files", "flac", null, AudioCodec.FLAC);
         public static readonly AudioType AVS    = new AudioType("AVS", "AviSynth Script Files", "avs", null, AudioCodec.PCM);
+        public static readonly AudioType OPUS   = new AudioType("OPUS", "Opus Files", "opus", null, AudioCodec.OPUS);
     }
     public class SubtitleType : OutputType
     {

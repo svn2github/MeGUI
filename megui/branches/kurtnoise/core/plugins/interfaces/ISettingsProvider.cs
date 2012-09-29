@@ -35,6 +35,7 @@ using MeGUI.packages.audio.ffmp2;
 using MeGUI.packages.audio.lame;
 using MeGUI.packages.audio.vorbis;
 using MeGUI.packages.audio.aften;
+using MeGUI.packages.audio.opus;
 
 namespace MeGUI
 {

@@ -45,7 +45,7 @@ namespace MeGUI
             Advanced
         };
         private string[][] autoUpdateServerLists;
-        private string qaacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
+        private string opusPath, qaacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
                        ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
@@ -100,6 +100,7 @@ namespace MeGUI
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
             mkvExtractPath = getDownloadPath(@"tools\mkvmerge\mkvextract.exe");
             pgcDemuxPath = getDownloadPath(@"tools\pgcdemux\pgcdemux.exe");
+            opusPath = getDownloadPath(@"tools\opus\opusenc.exe");
 #if x64
             x264Path = getDownloadPath(@"tools\x264\x264_64.exe");
             b64bitX264 = true;
@@ -585,6 +586,14 @@ namespace MeGUI
         public string QaacPath
         {
             get { return qaacPath; }
+        }
+
+        /// <summary>
+        /// filename and full path of the opus executable
+        /// </summary>
+        public string OpusPath
+        {
+            get { return opusPath; }
         }
 
         /// <summary>

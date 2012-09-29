@@ -48,6 +48,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 ((j as AudioJob).Settings is AC3Settings) ||
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
                 ((j as AudioJob).Settings is QaacSettings) ||
+                ((j as AudioJob).Settings is OpusSettings) ||
                 ((j as AudioJob).Settings is NeroAACSettings) ||
                 ((j as AudioJob).Settings is FlacSettings) ||
                 ((j as AudioJob).Settings is AftenSettings)))
@@ -1190,7 +1191,31 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         break;
                 }
             }
+            if (audioJob.Settings is OpusSettings)
+            {
+                _mustSendWavHeaderToEncoderStdIn = true;
+                OpusSettings n = audioJob.Settings as OpusSettings;
+                OpusSettings nas = n;
+                _encoderExecutablePath = this._settings.OpusPath;
+                StringBuilder sb = new StringBuilder("--ignorelength ");
 
+                switch (n.Mode)
+                {
+                    case OpusMode.VBR:
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "--vbr --bitrate {0} ", n.Bitrate);
+                        break;
+                    case OpusMode.CVBR:
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "--cvbr --bitrate {0} ", n.Bitrate);
+                        break;
+                    case OpusMode.HCBR:
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "--hard-cbr --bitrate {0} ", n.Bitrate);
+                        break;
+                }
+
+                sb.Append("- \"{0}\"");
+
+                _encoderCommandLine = sb.ToString();
+            }
             //Just check encoder existance
             _encoderExecutablePath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, _encoderExecutablePath);
             if (!File.Exists(_encoderExecutablePath))

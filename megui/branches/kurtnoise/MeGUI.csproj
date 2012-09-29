@@ -560,6 +560,13 @@
     <Compile Include="packages\audio\naac\neroConfigurationPanel.Designer.cs">
       <DependentUpon>neroConfigurationPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\audio\opus\OpusSettings.cs" />
+    <Compile Include="packages\audio\opus\OpusConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\opus\OpusConfigurationPanel.Designer.cs">
+      <DependentUpon>OpusConfigurationPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\audio\qaac\qaacConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -954,6 +961,10 @@
     <EmbeddedResource Include="packages\audio\naac\neroConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>neroConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\opus\OpusConfigurationPanel.resx">
+      <DependentUpon>OpusConfigurationPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\qaac\qaacConfigurationPanel.resx">
       <DependentUpon>qaacConfigurationPanel.cs</DependentUpon>
