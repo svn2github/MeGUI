@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -46,18 +46,18 @@ namespace MeGUI.packages.audio.qaac
         {
             this.label2 = new System.Windows.Forms.Label();
             this.cbMode = new System.Windows.Forms.ComboBox();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.trackBar = new System.Windows.Forms.TrackBar();
             this.label3 = new System.Windows.Forms.Label();
             this.cbProfile = new System.Windows.Forms.ComboBox();
             this.encoderGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // encoderGroupBox
             // 
             this.encoderGroupBox.Controls.Add(this.cbProfile);
             this.encoderGroupBox.Controls.Add(this.label3);
-            this.encoderGroupBox.Controls.Add(this.trackBar1);
+            this.encoderGroupBox.Controls.Add(this.trackBar);
             this.encoderGroupBox.Controls.Add(this.cbMode);
             this.encoderGroupBox.Controls.Add(this.label2);
             this.encoderGroupBox.Size = new System.Drawing.Size(390, 131);
@@ -82,16 +82,16 @@ namespace MeGUI.packages.audio.qaac
             this.cbMode.TabIndex = 1;
             this.cbMode.SelectedIndexChanged += new System.EventHandler(this.cbMode_SelectedIndexChanged);
             // 
-            // trackBar1
+            // trackBar
             // 
-            this.trackBar1.Location = new System.Drawing.Point(6, 50);
-            this.trackBar1.Maximum = 127;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(387, 45);
-            this.trackBar1.TabIndex = 2;
-            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.trackBar1.Value = 90;
-            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            this.trackBar.Location = new System.Drawing.Point(6, 50);
+            this.trackBar.Maximum = 127;
+            this.trackBar.Name = "trackBar";
+            this.trackBar.Size = new System.Drawing.Size(387, 45);
+            this.trackBar.TabIndex = 2;
+            this.trackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trackBar.Value = 90;
+            this.trackBar.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // label3
             // 
@@ -119,7 +119,7 @@ namespace MeGUI.packages.audio.qaac
             this.Size = new System.Drawing.Size(394, 300);
             this.encoderGroupBox.ResumeLayout(false);
             this.encoderGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -142,9 +142,9 @@ namespace MeGUI.packages.audio.qaac
                 qas.Mode = (QaacMode)(cbMode.SelectedItem as EnumProxy).RealValue;
                 qas.Profile = (QaacProfile)(cbProfile.SelectedItem as EnumProxy).RealValue;
                 if (qas.Mode == QaacMode.TVBR) 
-                     qas.Quality = (Int16)trackBar1.Value;
+                     qas.Quality = (Int16)trackBar.Value;
                 else 
-                    qas.Bitrate = (int)trackBar1.Value;
+                    qas.Bitrate = (int)trackBar.Value;
                 return qas;
             }
             set
@@ -157,9 +157,9 @@ namespace MeGUI.packages.audio.qaac
                 cbMode.SelectedItem = EnumProxy.Create(qas.Mode);
                 cbProfile.SelectedItem = EnumProxy.Create(qas.Profile);
                 if (cbMode.SelectedIndex == 0)
-                    trackBar1.Value = Math.Max(Math.Min(qas.Quality, trackBar1.Maximum), trackBar1.Minimum);  
+                    trackBar.Value = Math.Max(Math.Min(qas.Quality, trackBar.Maximum), trackBar.Minimum);  
                 else
-                    trackBar1.Value = Math.Max(Math.Min(qas.Bitrate, trackBar1.Maximum), trackBar1.Minimum);            
+                    trackBar.Value = Math.Max(Math.Min(qas.Bitrate, trackBar.Maximum), trackBar.Minimum);            
             }
         }
         #endregion
@@ -183,28 +183,28 @@ namespace MeGUI.packages.audio.qaac
             switch (cbMode.SelectedIndex)
             {
                 case 0 : // TVBR
-                    trackBar1.Minimum = 0;
-                    trackBar1.Maximum = 127;
-                    trackBar1.TickFrequency = 1;
-                    encoderGroupBox.Text =  String.Format("QAAC Options - (Q={0})", trackBar1.Value);
+                    trackBar.Minimum = 0;
+                    trackBar.Maximum = 127;
+                    trackBar.TickFrequency = 1;
+                    encoderGroupBox.Text =  String.Format("QAAC Options - (Q={0})", trackBar.Value);
                     break;
                 case 1 : // CVBR
-                    trackBar1.Minimum = 0;
-                    trackBar1.Maximum = 320;
-                    trackBar1.TickFrequency = 20;
-                    encoderGroupBox.Text = String.Format("QAAC Options - Constrained Variable Bitrate @ {0} kbit/s", trackBar1.Value);
+                    trackBar.Minimum = 0;
+                    trackBar.Maximum = 320;
+                    trackBar.TickFrequency = 20;
+                    encoderGroupBox.Text = String.Format("QAAC Options - Constrained Variable Bitrate @ {0} kbit/s", trackBar.Value);
                     break;
                 case 2 : // ABR
-                    trackBar1.Minimum = 0;
-                    trackBar1.Maximum = 320;
-                    trackBar1.TickFrequency = 20;
-                    encoderGroupBox.Text = String.Format("QAAC Options - Average Bitrate @ {0} kbit/s", trackBar1.Value);
+                    trackBar.Minimum = 0;
+                    trackBar.Maximum = 320;
+                    trackBar.TickFrequency = 20;
+                    encoderGroupBox.Text = String.Format("QAAC Options - Average Bitrate @ {0} kbit/s", trackBar.Value);
                     break;
                 case 3 : // CBR
-                    trackBar1.Minimum = 0;
-                    trackBar1.Maximum = 320;
-                    trackBar1.TickFrequency = 20;
-                    encoderGroupBox.Text = String.Format("QAAC Options - Constant Bitrate  @ {0} kbit/s", trackBar1.Value);
+                    trackBar.Minimum = 0;
+                    trackBar.Maximum = 320;
+                    trackBar.TickFrequency = 20;
+                    encoderGroupBox.Text = String.Format("QAAC Options - Constant Bitrate  @ {0} kbit/s", trackBar.Value);
                     break;
             }
             if (cbProfile.SelectedIndex == 2) encoderGroupBox.Text = String.Format("QAAC Options");
@@ -219,8 +219,8 @@ namespace MeGUI.packages.audio.qaac
         {
             switch (cbProfile.SelectedIndex)
             {
-                case 2: trackBar1.Enabled = false; cbMode.Enabled = false; break;
-                default: trackBar1.Enabled = true; cbMode.Enabled = true; break;
+                case 2: trackBar.Enabled = false; cbMode.Enabled = false; break;
+                default: trackBar.Enabled = true; cbMode.Enabled = true; break;
             }
             cbMode_SelectedIndexChanged(sender, e);
         }
