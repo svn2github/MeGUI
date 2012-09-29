@@ -162,6 +162,7 @@ namespace MeGUI
 #if x64
             this.TitleText += " x64";
 #endif
+            this.TitleText += " KBuild Testing";
             if (MainForm.Instance.Settings.AutoUpdate == true && MainForm.Instance.Settings.AutoUpdateServerSubList == 1)
                 this.TitleText += " DEVELOPMENT UPDATE SERVER";
             setGUIInfo();
