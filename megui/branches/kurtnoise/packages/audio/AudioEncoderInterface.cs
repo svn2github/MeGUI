@@ -1108,20 +1108,25 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     default:
                         break;
                 }
-                switch (n.Mode)
+
+                if (n.Profile == QaacProfile.ALAC) sb.Append("");
+                else
                 {
-                    case QaacMode.TVBR : 
-                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-V {0} ", n.Bitrate);
-                        break;
-                    case QaacMode.CVBR : 
-                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-v {0} ", n.Bitrate);
-                        break;
-                    case QaacMode.ABR :
-                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-a {0} ", n.Bitrate);
-                        break;
-                    case QaacMode.CBR:
-                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-c {0} ", n.Bitrate);
-                        break;
+                    switch (n.Mode)
+                    {
+                        case QaacMode.TVBR:
+                            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-V {0} ", n.Bitrate);
+                            break;
+                        case QaacMode.CVBR:
+                            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-v {0} ", n.Bitrate);
+                            break;
+                        case QaacMode.ABR:
+                            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-a {0} ", n.Bitrate);
+                            break;
+                        case QaacMode.CBR:
+                            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-c {0} ", n.Bitrate);
+                            break;
+                    }
                 }
 
                 sb.Append("- -o \"{0}\"");
