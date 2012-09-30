@@ -50,9 +50,16 @@ namespace MeGUI
         {
             if (Regex.IsMatch(line, "^[0-9]{1,3}$", RegexOptions.Compiled))
                 su.PercentageDoneExact = Int32.Parse(line);
+            else if (line.Contains("Project"))
+            {
+                su.Status = "Creating DGI...";
+                base.startTime = DateTime.Now;
+            }
             else
-                base.ProcessLine(line, stream);
-
+            {
+                su.Status = "Creating " + line;
+                base.startTime = DateTime.Now;
+            }
             lastLine = line;
         }
 
