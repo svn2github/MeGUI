@@ -1,3 +1,4 @@
+2182 [x264] increased the maximum value for --vbv-maxrate and --vbv-bufsize. Bug #3573545
 2181 [DGIndexNV] enhanced progress information (requires dgindexnv 2043+)
 2174 [OneClick] fixed included subtitle handling if input container is not MKV/VOB
 2172 [OneClick] support multiple input files per drag & drop

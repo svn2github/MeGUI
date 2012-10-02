@@ -92,7 +92,7 @@ namespace MeGUI.packages.video.x264
                     avcLevel.SelectedIndex = oTargetDevice.Level;
             }
             else if (updateDevice == true)
-                avcLevel.SelectedIndex = 15;
+                avcLevel.SelectedIndex = avcLevel.Items.Count - 1;
 
             // VBVBufsize
             if (oTargetDevice.VBVBufsize > -1)
@@ -1012,12 +1012,15 @@ namespace MeGUI.packages.video.x264
         }
         private void doAVCLevelAdjustments()
         {
+            if (this.avcLevel.SelectedIndex == this.avcLevel.Items.Count - 1)
+                return;
+
             AVCLevels avcLevel = new AVCLevels();
             int avcLevelVerify = avcLevel.Verifyx264Settings(this.Settings as x264Settings, this.avcLevel.SelectedIndex, this.BytesPerFrame);
             if (avcLevelVerify != 0)
             {
                 avcLevelDialog("Reverting to Unrestrained Level", avcLevelVerify);
-                this.avcLevel.SelectedIndex = 15;
+                this.avcLevel.SelectedIndex = this.avcLevel.Items.Count - 1;
             }
         }
         #endregion
@@ -1929,8 +1932,8 @@ namespace MeGUI.packages.video.x264
             this.x264BitrateQuantizer.Value = 20;
             this.x264Tunes.SelectedIndex = 0;
             this.tbx264Presets.Value = 5;
-            this.avcProfile.SelectedIndex = 2; 
-            this.avcLevel.SelectedIndex = 15;
+            this.avcProfile.SelectedIndex = 2;
+            this.avcLevel.SelectedIndex = this.avcLevel.Items.Count - 1;
             this.advancedSettings.Checked = true;
             this.targetDevice.SelectedIndex = 0;
 
