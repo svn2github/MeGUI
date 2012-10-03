@@ -122,9 +122,8 @@ namespace MeGUI
 
                         // write avs file
                         string strAudioAVSFile;
-                        strAudioAVSFile = job.Input + "_track_" + (oAudioTrack.TrackIndex + 1) + "_" + oAudioTrack.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture) + ".avs";
-                        if (!String.IsNullOrEmpty(job.Output))
-                            strAudioAVSFile = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileName(strAudioAVSFile));
+                        strAudioAVSFile = Path.GetFileNameWithoutExtension(job.Output) + "_track_" + (oAudioTrack.TrackIndex + 1) + "_" + oAudioTrack.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture) + ".avs";
+                        strAudioAVSFile = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileName(strAudioAVSFile));
                         try
                         {
                             strAVSScript.AppendLine(@"# detected channels: " + oAudioTrack.NbChannels);

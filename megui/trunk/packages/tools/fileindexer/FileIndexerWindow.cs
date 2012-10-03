@@ -40,7 +40,6 @@ namespace MeGUI
         };
 
         #region variables
-        private D2VIndexJob lastJob = null;
         private LogItem _oLog;
         private IndexType IndexerUsed = IndexType.D2V;
         private string strVideoCodec = "";
@@ -133,7 +132,7 @@ namespace MeGUI
                         if (this.demuxTracks.Checked)
                             this.demuxAll.Checked = true;
                         this.demuxTracks.Enabled = false;
-                        this.gbAudio.Enabled = true;
+                        //this.gbAudio.Enabled = true;
                         this.gbAudio.Text = " Audio Demux ";
                         this.gbOutput.Enabled = true;
                         this.demuxVideo.Enabled = true;
@@ -146,7 +145,7 @@ namespace MeGUI
                 case IndexType.DGA:
                     {
                         this.saveProjectDialog.Filter = "DGAVCIndex project files|*.dga";
-                        this.gbOutput.Enabled = true;
+                        //this.gbOutput.Enabled = true;
                         this.gbAudio.Enabled = true;
                         this.gbAudio.Text = " Audio Demux ";
                         if (this.demuxTracks.Checked)
@@ -161,7 +160,7 @@ namespace MeGUI
                     {
                         this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
                         this.demuxTracks.Enabled = true;
-                        this.gbOutput.Enabled = true;
+                        //this.gbOutput.Enabled = true;
                         this.gbAudio.Text = " Audio Demux ";
                         this.gbAudio.Enabled = true;
                         this.demuxVideo.Enabled = true;
@@ -172,7 +171,7 @@ namespace MeGUI
                 case IndexType.FFMS:
                     {
                         this.saveProjectDialog.Filter = "FFMSIndex project files|*.ffindex";
-                        this.gbOutput.Enabled = false;
+                        //this.gbOutput.Enabled = false;
                         this.gbAudio.Enabled = true;
                         if (this.demuxTracks.Checked)
                             this.demuxAll.Checked = true;
@@ -234,6 +233,20 @@ namespace MeGUI
             else
                 txtScanTypeInformation.Text = " " + strVideoScanType;
 
+            cbPGC.Items.Clear();
+            if (iFile.VideoInfo.PGCCount <= 0)
+                cbPGC.Items.Add("none");
+            else if (iFile.VideoInfo.PGCCount == 1)
+                cbPGC.Items.Add("all");
+            else
+            {
+                cbPGC.Items.Add("all");
+                for (int i = 1; i < iFile.VideoInfo.PGCCount; i++)
+                    cbPGC.Items.Add(i.ToString());
+            }
+            cbPGC.SelectedIndex = 0;
+            cbPGC.Enabled = iFile.VideoInfo.PGCCount > 1;
+
             if (input.Filename != fileName)
                 input.Filename = fileName;
 
@@ -257,9 +270,6 @@ namespace MeGUI
                 output.Text = "";
                 demuxNoAudiotracks.Checked = true;
             }
-
-            if (iFile.VideoInfo.PGCCount > 1)
-                MessageBox.Show("Source file has more than one PGC. This may lead to audio/video sync problems.", iFile.VideoInfo.PGCCount + " PGCs found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void generateAudioList()
@@ -317,22 +327,16 @@ namespace MeGUI
         {
             if (!String.IsNullOrEmpty(this.input.Filename))
             {
-                if (IndexerUsed == IndexType.FFMS)
+                string projectPath = "";
+                string fileNameNoPath = Path.GetFileName(this.input.Filename);
+                if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
+                    projectPath = Path.GetDirectoryName(this.input.Filename);
+                switch (IndexerUsed)
                 {
-                    this.output.Text = this.input.Filename + ".ffindex";
-                }
-                else
-                {
-                    string projectPath = "";
-                    string fileNameNoPath = Path.GetFileName(this.input.Filename);
-                    if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
-                        projectPath = Path.GetDirectoryName(this.input.Filename);
-                    switch (IndexerUsed)
-                    {
-                        case IndexType.D2V: output.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".d2v")); ; break;
-                        case IndexType.DGA: output.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dga")); ; break;
-                        case IndexType.DGI: output.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dgi")); ; break;
-                    }
+                    case IndexType.D2V: output.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".d2v")); ; break;
+                    case IndexType.DGA: output.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dga")); ; break;
+                    case IndexType.DGI: output.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dgi")); ; break;
+                    case IndexType.FFMS: output.Text = Path.Combine(projectPath, fileNameNoPath + ".ffindex"); break;
                 }
             }
         }
@@ -344,69 +348,98 @@ namespace MeGUI
         /// <param name="e"></param>
         private void queueButton_Click(object sender, System.EventArgs e)
         {
+            if (dialogMode)
+                return;
 
-            if (configured)
+            if (!configured)
             {
-                if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(output.Text)))
+                MessageBox.Show("You must select the input and output file to continue",
+                    "Configuration incomplete", MessageBoxButtons.OK);
+                return;
+            }
+
+            if (!Drives.ableToWriteOnThisDrive(Path.GetPathRoot(output.Text)))
+            {
+                MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(output.Text) + "\n" +
+                    "Please, select another output path to save your project...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            JobChain prepareJobs = null;
+            string videoInput = input.Filename;
+
+            // create pgcdemux job if needed
+            if (cbPGC.SelectedIndex > 0 
+                && Path.GetExtension(input.Filename.ToUpper(System.Globalization.CultureInfo.InvariantCulture)) == ".VOB")
+            {
+                string videoIFO;
+                // PGC numbers are not present in VOB, so we check the main IFO
+                if (Path.GetFileName(input.Filename).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
+                    videoIFO = input.Filename.Substring(0, input.Filename.LastIndexOf("_")) + "_0.IFO";
+                else
+                    videoIFO = Path.ChangeExtension(input.Filename, ".IFO");
+
+                if (File.Exists(videoIFO))
                 {
-                    if (!dialogMode)
+                    prepareJobs = new SequentialChain(new PgcDemuxJob(videoIFO, Path.GetDirectoryName(output.Text), cbPGC.SelectedIndex));
+                    videoInput = Path.Combine(Path.GetDirectoryName(output.Text), "VTS_01_1.VOB");
+                    for (int i = 1; i < 10; i++)
                     {
-                        switch (IndexerUsed)
+                        string file = Path.Combine(Path.GetDirectoryName(output.Text), "VTS_01_" + i + ".VOB");
+                        if (File.Exists(file))
                         {
-                            case IndexType.D2V:
-                                {
-                                    D2VIndexJob job = generateD2VIndexJob();
-                                    lastJob = job;
-                                    mainForm.Jobs.addJobsToQueue(job);
-                                    if (this.closeOnQueue.Checked)
-                                        this.Close();
-                                    break;
-                                }
-                            case IndexType.DGI:
-                                {
-                                    DGIIndexJob job = generateDGNVIndexJob();
-                                    //lastJob = job;
-                                    mainForm.Jobs.addJobsToQueue(job);
-                                    if (this.closeOnQueue.Checked)
-                                        this.Close();
-                                    break;
-                                }
-                            case IndexType.DGA:
-                                {
-                                    DGAIndexJob job = generateDGAIndexJob();
-                                    //lastJob = job;
-                                    mainForm.Jobs.addJobsToQueue(job);
-                                    if (this.closeOnQueue.Checked)
-                                        this.Close();
-                                    break;
-                                }
-                            case IndexType.FFMS:
-                                {
-                                    FFMSIndexJob job = generateFFMSIndexJob();
-                                    if (txtContainerInformation.Text.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
-                                    {
-                                        job.AudioTracksDemux = job.AudioTracks;
-                                        job.AudioTracks = new List<AudioTrackInfo>();
-                                        MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(this.input.Filename), job.AudioTracksDemux);
-                                        JobChain c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(job));
-                                        mainForm.Jobs.addJobsWithDependencies(c);
-                                    }
-                                    else
-                                        mainForm.Jobs.addJobsToQueue(job);
-                                    if (this.closeOnQueue.Checked)
-                                        this.Close();
-                                    break;
-                                }
+                            MessageBox.Show("The pgc demux file already exists: \n" + file + "\n\n" +
+                                "Please select another output path to save your project.", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
                         }
                     }
                 }
-                else
-                    MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(output.Text) + "\n" +
-                                                    "Please, select another output path to save your project...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            else
-                MessageBox.Show("You must select the input and output file to continue",
-                       "Configuration incomplete", MessageBoxButtons.OK);
+
+            switch (IndexerUsed)
+            {
+                case IndexType.D2V:
+                    {
+                        prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(generateD2VIndexJob(videoInput)));
+                        mainForm.Jobs.addJobsWithDependencies(prepareJobs);
+                        if (this.closeOnQueue.Checked)
+                            this.Close();
+                        break;
+                    }
+                case IndexType.DGI:
+                    {
+                        prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(generateDGNVIndexJob(videoInput)));
+                        mainForm.Jobs.addJobsWithDependencies(prepareJobs);
+                        if (this.closeOnQueue.Checked)
+                            this.Close();
+                        break;
+                    }
+                case IndexType.DGA:
+                    {
+                        prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(generateDGAIndexJob(videoInput)));
+                        mainForm.Jobs.addJobsWithDependencies(prepareJobs);
+                        if (this.closeOnQueue.Checked)
+                            this.Close();
+                        break;
+                    }
+                case IndexType.FFMS:
+                    {
+                        FFMSIndexJob job = generateFFMSIndexJob(videoInput);
+                        if (txtContainerInformation.Text.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") 
+                            && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
+                        {
+                            job.AudioTracksDemux = job.AudioTracks;
+                            job.AudioTracks = new List<AudioTrackInfo>();
+                            MkvExtractJob extractJob = new MkvExtractJob(videoInput, Path.GetDirectoryName(this.output.Text), job.AudioTracksDemux);
+                            prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(extractJob));
+                        }
+                        prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(job));
+                        mainForm.Jobs.addJobsWithDependencies(prepareJobs);
+                        if (this.closeOnQueue.Checked)
+                            this.Close();
+                        break;
+                    }
+            }              
         }
         #endregion
         #region helper methods
@@ -418,7 +451,7 @@ namespace MeGUI
             else
                 queueButton.DialogResult = DialogResult.None;
         }
-        private D2VIndexJob generateD2VIndexJob()
+        private D2VIndexJob generateD2VIndexJob(string videoInput)
         {
             int demuxType = 0;
             if (demuxTracks.Checked)
@@ -432,9 +465,9 @@ namespace MeGUI
             foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
                 audioTracks.Add(ati);
 
-            return new D2VIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
+            return new D2VIndexJob(videoInput, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
         }
-        private DGIIndexJob generateDGNVIndexJob()
+        private DGIIndexJob generateDGNVIndexJob(string videoInput)
         {
             int demuxType = 0;
             if (demuxTracks.Checked)
@@ -448,9 +481,9 @@ namespace MeGUI
             foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
                 audioTracks.Add(ati);
 
-            return new DGIIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
+            return new DGIIndexJob(videoInput, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
         }
-        private DGAIndexJob generateDGAIndexJob()
+        private DGAIndexJob generateDGAIndexJob(string videoInput)
         {
             int demuxType = 0;
             if (demuxTracks.Checked)
@@ -464,9 +497,9 @@ namespace MeGUI
             foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
                 audioTracks.Add(ati);
 
-            return new DGAIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
+            return new DGAIndexJob(videoInput, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
         }
-        private FFMSIndexJob generateFFMSIndexJob()
+        private FFMSIndexJob generateFFMSIndexJob(string videoInput)
         {
             int demuxType = 0;
             if (demuxTracks.Checked)
@@ -480,26 +513,7 @@ namespace MeGUI
             foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
                 audioTracks.Add(ati);
 
-            return new FFMSIndexJob(this.input.Filename, null, demuxType, audioTracks, loadOnComplete.Checked);
-        }
-        #endregion
-        #region properties
-        /// <summary>
-        /// gets the index job created from the current configuration
-        /// </summary>
-        public D2VIndexJob Job
-        {
-            get { return generateD2VIndexJob(); }
-        }
-
-        public D2VIndexJob LastJob
-        {
-            get { return lastJob; }
-            set { lastJob = value; }
-        }
-        public bool JobCreated
-        {
-            get { return lastJob != null; }
+            return new FFMSIndexJob(videoInput, output.Text, demuxType, audioTracks, loadOnComplete.Checked);
         }
         #endregion
 
@@ -711,7 +725,7 @@ namespace MeGUI
                 Util.ThreadSafeRun(mainForm, new MethodInvoker(
                     delegate
                     {
-                        AviSynthWindow asw = new AviSynthWindow(mainForm, job.Output);
+                        AviSynthWindow asw = new AviSynthWindow(mainForm, job.Input, job.Output);
                         asw.OpenScript += new OpenScriptCallback(mainForm.Video.openVideoFile);
                         asw.Show();
                     }));
