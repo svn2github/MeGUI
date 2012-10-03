@@ -47,7 +47,7 @@ namespace MeGUI
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
                        ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
-                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath,
+                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath, aviSynthPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4, flacPath,
@@ -94,7 +94,6 @@ namespace MeGUI
             useadvancedtooltips = true;
             audioSamplesPerUpdate = 100000;
             aviMuxGUIPath = getDownloadPath(@"tools\avimux_gui\avimux_gui.exe");
-            besplitPath = "besplit.exe";
             faacPath = getDownloadPath(@"tools\faac\faac.exe");
 			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
@@ -122,6 +121,13 @@ namespace MeGUI
             yadifPath = getDownloadPath(@"tools\yadif\yadif.dll");
             vobSubPath = getDownloadPath(@"tools\vobsub\vobsub.dll");
             besplitPath = getDownloadPath(@"tools\besplit\besplit.exe");
+            dgavcIndexPath = getDownloadPath(@"tools\dgavcindex\dgavcindex.exe");
+            dgnvIndexPath = getDownloadPath(@"tools\dgindexnv\dgindexnv.exe");
+            eac3toPath = getDownloadPath(@"tools\eac3to\eac3to.exe");
+            tsmuxerPath = getDownloadPath(@"tools\tsmuxer\tsmuxer.exe");
+            aviSynthPath = getDownloadPath(@"tools\avisynth\avisynth.dll");
+            meguiupdatecache = System.IO.Path.Combine(strMeGUIPath, "update_cache");
+            avisynthpluginspath = System.IO.Path.Combine(strMeGUIPath, @"tools\avisynth_plugin");
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
             bAutoLoadDG = true;
@@ -156,14 +162,8 @@ namespace MeGUI
             defaultOutputDir = "";
             tempDirMP4 = "";
             addTimePosition = true;
-            dgavcIndexPath = getDownloadPath(@"tools\dgavcindex\dgavcindex.exe");
-            dgnvIndexPath = getDownloadPath(@"tools\dgindexnv\dgindexnv.exe");
-            eac3toPath = getDownloadPath(@"tools\eac3to\eac3to.exe");
-            tsmuxerPath = getDownloadPath(@"tools\tsmuxer\tsmuxer.exe");
             alwaysbackupfiles = true;
             forcerawavcextension = false;
-            meguiupdatecache = System.IO.Path.Combine(strMeGUIPath, "update_cache");
-            avisynthpluginspath = System.IO.Path.Combine(strMeGUIPath, @"tools\avisynth_plugin");
             strMainFileFormat = "";
             strMainAudioFormat = "";
             strLastSourcePath = "";
@@ -461,6 +461,11 @@ namespace MeGUI
                     autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
                                                              new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] {"Custom"}};
                 }
+#if x64
+                autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" },
+                                                         new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" },
+                                                         new string[] { "Custom", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }};
+#endif
 #if DEBUG
                 autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/" },
                                                          new string[] { "Development", "http://megui.org/auto/" },
@@ -648,6 +653,13 @@ namespace MeGUI
         public string FFMSIndexPath
         {
             get { return ffmsIndexPath; }
+        }
+        /// <summary>
+        /// filename and full path of the avisynth dll
+        /// </summary>
+        public string AviSynthPath
+        {
+            get { return aviSynthPath; }
         }
         /// <summary>
         /// filename and full path of the xvid_encraw executable

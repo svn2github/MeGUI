@@ -439,9 +439,7 @@ namespace MeGUI.core.util
                     oLog.LogValue(strName, fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")");
             }
             else
-            {
-                oLog.LogValue(strName, "not installed");
-            }
+                oLog.LogValue(strName, "not installed", ImageType.Error);
         }
     }
 }

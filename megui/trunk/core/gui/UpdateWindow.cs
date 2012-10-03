@@ -188,6 +188,13 @@ namespace MeGUI
                     case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
                     case "vobsub": arrPath.Add(MainForm.Instance.Settings.VobSubPath); break;
                     case "besplit": arrPath.Add(MainForm.Instance.Settings.BeSplitPath); break;
+                    case "avisynth":
+                        {
+                            strPath = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
+                            arrPath.Add((Path.Combine(strPath, @"avisynth.dll")));
+                            arrPath.Add((Path.Combine(strPath, @"directshowsource.dll")));
+                            break;
+                        }
                     case "neroaacenc":
                         {
                             if (MainForm.Instance.Settings.UseNeroAacEnc)
@@ -643,6 +650,8 @@ namespace MeGUI
                             return meGUISettings.NeroAacEncPath;
                         case ("avimux_gui"):
                             return meGUISettings.AviMuxGUIPath;
+                        case ("avisynth"):
+                            return meGUISettings.AviSynthPath;
                         case ("x264"):
                             return meGUISettings.X264Path;
                         case ("xvid_encraw"):
@@ -1079,6 +1088,11 @@ namespace MeGUI
                 strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
                 arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
             }
+
+            // avisynth
+            arrPath.Add(MainForm.Instance.Settings.AviSynthPath);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
+            arrPath.Add(System.IO.Path.Combine(strPath, "directshowsource.dll"));
 
             bool bComponentMissing = false;
             foreach (string strAppPath in arrPath)
@@ -1798,11 +1812,12 @@ namespace MeGUI
                     File.Delete(strLocalUpdateXML);
             }
 
+            bool bFound;
+            VideoUtil.getAvisynthVersion(null, out bFound);
+
             List<string> files = new List<string>();
             foreach (iUpgradeable u in upgradeData)
-            {
                 files.Add(u.GetLatestVersion().Url);
-            }
             UpdateCacher.flushOldCachedFilesAsync(files, this);
 
             if (needsRestart)

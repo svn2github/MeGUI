@@ -181,7 +181,7 @@ namespace MeGUI
                     if (input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
                         inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
                     else if (!String.IsNullOrEmpty(indexFile))
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\"" + (!string.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty) + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")" + VideoUtil.getAssumeFPS(fps, input);
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\"" + (!string.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty) + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
                     else
                         inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
                     break;
@@ -198,7 +198,7 @@ namespace MeGUI
                         if (dss2)
                             inputLine = "LoadPlugin(\"" + MeGUISettings.HaaliMSPath + "\\avss.dll" + "\")\r\ndss2(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ")" + VideoUtil.getAssumeFPS(fps, input);
                         else
-                            inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)" + VideoUtil.getAssumeFPS(fps, input);
+                            inputLine = "LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll") + "\")\r\nDirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)" + VideoUtil.getAssumeFPS(fps, input);
                         if (flipVertical)
                             inputLine = inputLine + "\r\nFlipVertical()";
                     }

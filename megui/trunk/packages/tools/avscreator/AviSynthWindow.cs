@@ -1888,7 +1888,8 @@ namespace MeGUI
                     catch (Exception)
                     { }
                     string tempAvs = string.Format(
-                            @"DirectShowSource(""{0}"", audio=false{1}, convertfps=true){2}{3}",
+                            "LoadPlugin(\"{0}\")\r\nDirectShowSource(\"{1}\", audio=false{2}, convertfps=true){3}{4}",
+                            Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll"),
                             fileName,
                             frameRateString == null ? string.Empty : (", fps=" + frameRateString),
                             VideoUtil.getAssumeFPS(0, fileName),
