@@ -349,11 +349,9 @@ namespace MeGUI
                     {
                         this.settings = (MeGUISettings)ser.Deserialize(s);
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        LogItem _oLog = MainForm.Instance.Log.Info("Error");
-                        _oLog.LogValue("loadSettings", e, ImageType.Error);
-                        MessageBox.Show("Settings could not be loaded.", "Error loading profile", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("MeGUI settings could not be loaded. Default values will be applied now.", "Error loading MeGUI settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }

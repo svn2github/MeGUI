@@ -1,3 +1,4 @@
+2186 fixed a crash when using a corrupt settings.xml. Bug #3574768
 2185 [OneClick] fixed a crash when using external audio files. Bug #3574820
 2184 portable AviSynth will be used if AviSynth is not installed
 2183 [File Indexer] added selectable FFMS index file location
