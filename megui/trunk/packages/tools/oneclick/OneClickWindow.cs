@@ -994,10 +994,18 @@ namespace MeGUI
             _oLog.LogEvent("Video: " + dpp.VideoInput);
 
             foreach (OneClickAudioTrack oTrack in dpp.AudioTracks)
-                _oLog.LogEvent("Audio: " + oTrack.AudioTrackInfo.SourceFileName);
+            {
+                if (oTrack.AudioTrackInfo != null)
+                    _oLog.LogEvent("Audio: " + oTrack.AudioTrackInfo.SourceFileName);
+                else if (oTrack.AudioJob != null)
+                    _oLog.LogEvent("Audio: " + oTrack.AudioJob.Input);
+            }
 
             foreach (OneClickStream oTrack in dpp.SubtitleTracks)
-                _oLog.LogEvent("Subtitle: " + oTrack.TrackInfo.SourceFileName);
+            {
+                if (oTrack.TrackInfo != null)
+                    _oLog.LogEvent("Subtitle: " + oTrack.TrackInfo.SourceFileName);
+            }
             
 
             mainForm.Jobs.addJobsWithDependencies(finalJobChain);
