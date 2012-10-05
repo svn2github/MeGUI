@@ -188,7 +188,7 @@ namespace MeGUI
                     case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
                     case "vobsub": arrPath.Add(MainForm.Instance.Settings.VobSubPath); break;
                     case "besplit": arrPath.Add(MainForm.Instance.Settings.BeSplitPath); break;
-                    case "avisynth":
+                    case "avs":
                         {
                             strPath = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
                             arrPath.Add((Path.Combine(strPath, @"avisynth.dll")));
@@ -650,7 +650,7 @@ namespace MeGUI
                             return meGUISettings.NeroAacEncPath;
                         case ("avimux_gui"):
                             return meGUISettings.AviMuxGUIPath;
-                        case ("avisynth"):
+                        case ("avs"):
                             return meGUISettings.AviSynthPath;
                         case ("x264"):
                             return meGUISettings.X264Path;

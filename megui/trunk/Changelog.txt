@@ -1,3 +1,4 @@
+2188 [Updater] renamed "avisynth" package to "avs" to avoid confusion that AviSynth may not be installed
 2187 [HD Streams Extractor] fixed "File Mode" when using multiple input files
 2186 fixed a crash when using a corrupt settings.xml. Bug #3574768
 2185 [OneClick] fixed a crash when using external audio files. Bug #3574820

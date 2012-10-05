@@ -125,7 +125,7 @@ namespace MeGUI
             dgnvIndexPath = getDownloadPath(@"tools\dgindexnv\dgindexnv.exe");
             eac3toPath = getDownloadPath(@"tools\eac3to\eac3to.exe");
             tsmuxerPath = getDownloadPath(@"tools\tsmuxer\tsmuxer.exe");
-            aviSynthPath = getDownloadPath(@"tools\avisynth\avisynth.dll");
+            aviSynthPath = getDownloadPath(@"tools\avs\avisynth.dll");
             meguiupdatecache = System.IO.Path.Combine(strMeGUIPath, "update_cache");
             avisynthpluginspath = System.IO.Path.Combine(strMeGUIPath, @"tools\avisynth_plugin");
             recalculateMainMovieBitrate = false;
