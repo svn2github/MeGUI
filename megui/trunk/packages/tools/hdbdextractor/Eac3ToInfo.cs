@@ -89,7 +89,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                 _log = oLog.Add(new LogItem("eac3toInfo"));
                 _log.LogEvent("Input: " + strPath);
             }
-            if (!System.IO.File.Exists(strPath))
+            if (System.IO.Directory.Exists(strPath))
                 oMode = OperatingMode.FolderBased;
             else
                 oMode = OperatingMode.FileBased;
