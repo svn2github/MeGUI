@@ -1875,6 +1875,13 @@ namespace MeGUI
                 if (!ds.checkRender(fileName)) // make sure graphedit can render the file
                 {
                     MessageBox.Show("Unable to render the file.\r\nYou probably don't have the correct filters installed", "Direct Show Error", MessageBoxButtons.OK);
+                    return;
+                }
+
+                string tempAvs;
+                if (fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avi"))
+                {
+                    tempAvs = "AVISource(\"" + fileName + "\", audio=false)" + VideoUtil.getAssumeFPS(0, fileName);
                 }
                 else
                 {
@@ -1887,18 +1894,20 @@ namespace MeGUI
                     }
                     catch (Exception)
                     { }
-                    string tempAvs = string.Format(
-                            "LoadPlugin(\"{0}\")\r\nDirectShowSource(\"{1}\", audio=false{2}, convertfps=true){3}{4}",
-                            Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll"),
-                            fileName,
-                            frameRateString == null ? string.Empty : (", fps=" + frameRateString),
-                            VideoUtil.getAssumeFPS(0, fileName),
-                            this.flipVertical.Checked ? ".FlipVertical()" : string.Empty
-                            );
-                    if (file != null)
-                        file.Dispose();
-                   openVideo(tempAvs, fileName, true);
-                }
+
+                    tempAvs = string.Format(
+                        "LoadPlugin(\"{0}\")\r\nDirectShowSource(\"{1}\", audio=false{2}, convertfps=true){3}{4}",
+                        Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll"),
+                        fileName,
+                        frameRateString == null ? string.Empty : (", fps=" + frameRateString),
+                        VideoUtil.getAssumeFPS(0, fileName),
+                        this.flipVertical.Checked ? ".FlipVertical()" : string.Empty
+                        );
+                } 
+                if (file != null)
+                    file.Dispose();
+                openVideo(tempAvs, fileName, true);
+
             }
         }
         /// <summary>

@@ -195,6 +195,10 @@ namespace MeGUI
             if (!iFile.recommendIndexer(out oIndexer))
                 return iResult;
 
+            if (oIndexer != FileIndexerWindow.IndexType.D2V && oIndexer != FileIndexerWindow.IndexType.DGA &&
+                oIndexer != FileIndexerWindow.IndexType.DGI && oIndexer != FileIndexerWindow.IndexType.FFMS)
+                return iResult;
+
             if (iFile.ContainerFileTypeString.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVI"))
             {
                 iResult = askAbout3("Do you want to open this file with\r\n" +

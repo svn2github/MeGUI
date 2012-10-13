@@ -460,7 +460,7 @@ namespace MeGUI
                         int _mmgTrackID = 0;
                         Int32.TryParse(track.StreamOrder, out _mmgTrackID);
 
-                        VideoTrackInfo videoInfo = new VideoTrackInfo(_trackID, _mmgTrackID, track.LanguageString, track.Title, track.CodecString);
+                        VideoTrackInfo videoInfo = new VideoTrackInfo(_trackID, _mmgTrackID, track.LanguageString, track.Title, track.CodecString, track.Codec);
                         videoInfo.ContainerType = _strContainer;
                         _VideoInfo.Track = videoInfo;
 
@@ -499,9 +499,7 @@ namespace MeGUI
                             }
                         }
                         if (dar == null)
-                        {
                             dar = new Dar((decimal?)easyParseDouble(track.AspectRatio), _VideoInfo.Width, _VideoInfo.Height);
-                        }
                         _VideoInfo.DAR = (Dar)dar;
                     }
                 }
@@ -939,6 +937,11 @@ namespace MeGUI
                 !_VideoInfo.ScanType.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("PROGRESSIVE"))
                 return false;
 
+            // some codecs are not supported by FFMS
+            if (_VideoInfo.Track.CodecMediaInfo.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("DFSC/VFW")
+                || _VideoInfo.Track.CodecMediaInfo.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("CFHD/CINEFORM"))
+                return false;
+
             // only the following container formats are supported
             if (_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") ||
                 _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-TS") ||
@@ -956,6 +959,30 @@ namespace MeGUI
             return false;
         }
 
+        /// <summary>checks if the file is indexable by FFMSindex</summary>
+        /// <returns>true if indexable, false if not</returns>
+        public bool isAVISourceIndexable(bool bStrictFilesOnly)
+        {
+            // check if the file is a video file
+            if (!_VideoInfo.HasVideo)
+                return false;
+
+            // only the following container format is supported
+            if (!_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVI"))
+                return false;
+
+            // if all AVI files should be processed or only the ones where FFMS cannot handle them
+            if (!bStrictFilesOnly)
+                return true;
+
+            // some codecs are not supported by FFMS
+            if (_VideoInfo.Track.CodecMediaInfo.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("DFSC/VFW") ||
+                _VideoInfo.Track.CodecMediaInfo.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("CFHD/CINEFORM"))
+                return true;
+
+            return false;
+        }
+
         /// <summary>gets the recommended indexer</summary>
         /// <param name="oType">the recommended indexer</param>
         /// <returns>true if a indexer can be recommended, false if no indexer is available</returns>
@@ -967,6 +994,8 @@ namespace MeGUI
                 oType = FileIndexerWindow.IndexType.DGA;
             else if (isD2VIndexable())
                 oType = FileIndexerWindow.IndexType.D2V;
+            else if (isAVISourceIndexable(true))
+                oType = FileIndexerWindow.IndexType.AVISOURCE;
             else if (isFFMSIndexable())
                 oType = FileIndexerWindow.IndexType.FFMS;
             else
@@ -1022,6 +1051,15 @@ namespace MeGUI
                     if (isD2VIndexable())
                     {
                         oType = FileIndexerWindow.IndexType.D2V;
+                        break;
+                    }
+                    continue;
+                }
+                else if (strIndexer.Equals(FileIndexerWindow.IndexType.AVISOURCE.ToString()))
+                {
+                    if (isAVISourceIndexable(false))
+                    {
+                        oType = FileIndexerWindow.IndexType.AVISOURCE;
                         break;
                     }
                     continue;

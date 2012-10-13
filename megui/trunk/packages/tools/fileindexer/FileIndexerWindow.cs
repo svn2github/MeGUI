@@ -36,7 +36,7 @@ namespace MeGUI
     {
         public enum IndexType
         {
-            D2V, DGA, DGI, FFMS, NONE
+            D2V, DGA, DGI, FFMS, AVISOURCE, NONE
         };
 
         #region variables
@@ -257,7 +257,7 @@ namespace MeGUI
             btnDGI.Enabled = iFile.isDGIIndexable();
             btnFFMS.Enabled = iFile.isFFMSIndexable();
 
-            IndexType newType;
+            IndexType newType = IndexType.NONE;
             if (iFile.recommendIndexer(out newType))
             {
                 gbIndexer.Enabled = gbAudio.Enabled = gbOutput.Enabled = true;
@@ -269,6 +269,7 @@ namespace MeGUI
                 btnFFMS.Checked = btnD2V.Checked = btnDGA.Checked = btnDGI.Checked = false;
                 output.Text = "";
                 demuxNoAudiotracks.Checked = true;
+                MessageBox.Show("No indexer for this file found. Please try open it directly in the AVS Script Creator", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

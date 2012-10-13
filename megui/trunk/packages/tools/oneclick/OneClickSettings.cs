@@ -259,7 +259,15 @@ namespace MeGUI
         public string[] IndexerPriorityString
         {
             get { return indexerPriority.ToArray(); }
-            set { indexerPriority = new List<string>(value); }
+            set 
+            {
+                if (value.Length == 4)
+                {
+                    Array.Resize<string>(ref value, 5);
+                    value[4] = FileIndexerWindow.IndexType.AVISOURCE.ToString();
+                }
+                indexerPriority = new List<string>(value); 
+            }
         }
 
 		public OneClickSettings()
@@ -300,6 +308,7 @@ namespace MeGUI
             IndexerPriority.Add(FileIndexerWindow.IndexType.DGA.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.D2V.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.FFMS.ToString());
+            IndexerPriority.Add(FileIndexerWindow.IndexType.AVISOURCE.ToString());
 		}
 
         #region GenericSettings Members

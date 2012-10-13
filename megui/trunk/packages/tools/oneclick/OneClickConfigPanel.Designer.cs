@@ -808,7 +808,7 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox3.Size = new System.Drawing.Size(200, 111);
             this.groupBox3.TabIndex = 42;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = " Indexer Priority ";
+            this.groupBox3.Text = " Indexer / Opener Priority ";
             // 
             // btnIndexerDown
             // 

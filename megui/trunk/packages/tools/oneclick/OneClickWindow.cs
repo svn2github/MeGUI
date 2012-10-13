@@ -799,6 +799,12 @@ namespace MeGUI
                 if (oStreamControl.SelectedItem.IsStandard)
                 {
                     oAudioTrackInfo = (AudioTrackInfo)oStreamControl.SelectedStream.TrackInfo;
+                    if (dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
+                    {
+                        _oLog.LogEvent("Internal audio track " + oAudioTrackInfo.TrackID + " must be skipped as AVISOURCE is going to be used", ImageType.Warning);
+                        continue;
+                    }
+
                     arrAudioTrackInfo.Add(oAudioTrackInfo);
                     if (dpp.IndexType != FileIndexerWindow.IndexType.NONE && !dpp.Eac3toDemux)
                         aInput = "::" + oAudioTrackInfo.TrackID + "::";
@@ -991,8 +997,9 @@ namespace MeGUI
                 finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(ocJob));
             }
 
-            _oLog.LogEvent("Video: " + dpp.VideoInput);
 
+            // write all to be processed tracks into the log
+            _oLog.LogEvent("Video: " + dpp.VideoInput);
             foreach (OneClickAudioTrack oTrack in dpp.AudioTracks)
             {
                 if (oTrack.AudioTrackInfo != null)
@@ -1000,7 +1007,6 @@ namespace MeGUI
                 else if (oTrack.AudioJob != null)
                     _oLog.LogEvent("Audio: " + oTrack.AudioJob.Input);
             }
-
             foreach (OneClickStream oTrack in dpp.SubtitleTracks)
             {
                 if (oTrack.TrackInfo != null)
