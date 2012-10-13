@@ -1,0 +1,110 @@
+2193 [Updater] some minor enhancements for offline mode
+2192 [MediaInfo] ignore phantom TiVo audio tracks
+2191 [OneClick] added AviSource() as way to process AVI files
+     [File Indexer] added DFSC/VFW and CFHD/CINEFORM to the list of not by FFMS supported codecs
+2190 [FFMS] try to index audio tracks only if at least one audio track has been selected
+2188 [Updater] renamed "avisynth" package to "avs" to avoid confusion that AviSynth may not be installed
+2187 [HD Streams Extractor] fixed "File Mode" when using multiple input files
+2186 fixed a crash when using a corrupt settings.xml. Bug #3574768
+2185 [OneClick] fixed a crash when using external audio files. Bug #3574820
+2184 portable AviSynth will be used if AviSynth is not installed
+2183 [File Indexer] added selectable FFMS index file location
+                    added PGC handling
+2182 [x264] increased the maximum value for --vbv-maxrate and --vbv-bufsize. Bug #3573545
+2181 [DGIndexNV] enhanced progress information (requires dgindexnv 2043+)
+2174 [OneClick] fixed included subtitle handling if input container is not MKV/VOB
+2172 [OneClick] support multiple input files per drag & drop
+2171 [OneClick] cosmetics #2
+2170 [OneClick] cosmetics
+2169 [FFMPEG] some adjustments for newer builds
+2164 [OneClick] added option to select different default audio settings for different languages
+2163 [OneClick] fixed muxing of external subtitle files
+2162 [OneClick] added up/down buttons for the indexer priority selection
+2161 [OneClick] added option for the default output directory
+2160 [OneClick] added option to disable audio/video tracks completely by default
+2159 [OneClick] use the correct input file if using Blu-ray input with the option "don't encode video"
+2158 [HD Streams Extractor] fixed a crash
+2157 [OneClick] added an improved OneClick encoder with these changes:
+     - added subtitle control (including delay, language, name, forced/default flag). Feature request #2752988
+     - enhanced audio control (added delay, language, name)
+     - AVS files as video input supported. Feature request #3412229
+     - folder as input supported. Feature request #3429875/#2773587
+     - embedded VOB subtitle support (IFO must be available)
+     - every OneClick job will be stored in a unique working directory. Feature request #2798486
+     - added option to select default audio/subtitle languages
+     - added option to select default working directory
+     - added option to specify the indexer priority
+     - added option to define the project name settings
+     - the x264 target playback device settings will be used for resizing
+     - input DAR detection moved from postprocessing to initial opening step
+     - added DVD folder + file processing (including PGC support). Feature request #2817190
+     - convert TrueHD and DTS-HD tracks with eac3to when the track should be encoded
+     - added Blu-ray processing (Folder + Playlist)
+2156 [File Indexer] added warning if the input VOB file has multiple PGCs
+2155 [OneClick] added job status message during cleanup step
+2154 [MediaInfo] some adjustments for frame rate detection with MediaInfo 0.7.59+
+
+Changelog 2112 --> 2153
+
+Features/Changes:
+NeroAacEnc + DGIndexNV are now disabled by default as external dependencies are required.
+If they are already in use they will be enabled automatically, in all other cases
+they have to be enabled in "Options\Settings\External Program Configuration".
+[AutoEncode] enabled option to set the audio language and the track name
+[MediaInfo] improved information detection for DVD sources
+[Update] if a component is missing no jobs can be started
+
+Enhancements/Fixes:
+[Audio Encoder] cosmetics. Patch by andrewxeron929623
+[Audio Encoder] Import() will be used for AVS input files. Bug #3506283
+[Audio Encoder] NicAudio will be tried for DTS-MA decoding when DirectShowSource and FFAudioSource fail
+[AVS Script Creator] crop values will only be added to the script if necessary
+[AVS Script Creator] improved automatic cropping
+[Chapter Creator] added option to sort the title list
+[Chapter Creator] improved DVD PGC handling
+[DGA/DGI Indexer] + [MKV Muxer] + [VobSubber] added job status message during processing
+[DGI Indexer] fixed getting the film value
+[FFMS] prepared indexer for handling index files stored in other locations
+[Flac] changed input handling (PCM --> RAW) so that 24bit WAV files can be processed as well
+[HD Streams Extractor] fixed handling of English tracks in a MKV container when the track name contains a language
+[HD Streams Extractor] improved job queuing when no feature is selected
+[Job] improved aborting of jobs
+[Job] translate process exit codes to status messages
+[Log] added required DLLs to the version information block
+[Log] use system default encoding for AviSynth input script
+[MKV Muxer] adjusted (de)muxer to the recent mkvmerge changes (requires mkvmerge revision 5.3.0+)
+[MKV Muxer] improved handling of empty IDX subtitle files
+[MP4 Muxer] fixed muxing files with names containing #. Bug #3531735
+[OneClick] added some changes for the upcoming next release of the OneClick tool
+[OneClick] fixed encoding of AC3 tracks which should be muxed only
+[OneClick] fixed problem encoding WMA files
+[OneClick] fixed processing of audio files which cannot be demuxed
+[PGC Demux] added pgcdemux for DVD PGC processing
+[Progress Window] added job name. Feature request #3488205
+[Settings] cosmetics
+[VobSubber] improved detection of subtitle streams
+Fixed problems with Turkish characters in various places (e.g. in the File Indexer)
+
+
+Changelog 2106 --> 2112
+
+Features:
+[File Size Selector] removed some default values and added a control in the settings to add custom file size values
+[File Size Selector] all other controls will not save anymore custom values to avoid problems in AutoEncode + OneClick
+[Job] delete intermediate files also during job deletion if specified in the settings
+[Video Player] changed default start position to the middle if "Improved AVS opening" is selected
+[x264] force --keyint-min 1 with Blu-ray (requires x264 revision 2149+)
+[x264] replaced vfw4x264 with avs4x264mod. Details:
+[x264] http://forum.doom9.org/showthread.php?t=162656
+
+Enhancements:
+[AVS Script Creator] fixed opening of FFMS indexed files
+[XviD] fixed saving of custom vbv values. Bug #3483985
+
+
+Known Problems:
+- Unicode is not supported
+- M2TS bitrate calculator does not calculate correct values as the specifications are not known
+
+Full changelog: 
+http://megui.svn.sourceforge.net/viewvc/megui/megui/trunk/Changelog_full.txt

@@ -168,6 +168,18 @@
     <Content Include="gpl.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\App.ico" />
+    <Content Include="img\avisynth-logo-gears-mod.png" />
+    <Content Include="img\divxhdplus.png" />
+    <Content Include="img\flac.ico" />
+    <Content Include="img\lame_logo.gif" />
+    <Content Include="img\naac.jpg" />
+    <Content Include="img\pause.ico" />
+    <Content Include="img\play.ico" />
+    <Content Include="img\vorbis.png" />
+    <Content Include="img\waac.png" />
+    <Content Include="img\x264_logo.gif" />
+    <Content Include="img\XviD_logo.bmp" />
     <Content Include="lib_x64\7z.dll" Condition=" '$(Platform)' == 'x64' ">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -553,13 +565,13 @@
     <Compile Include="packages\audio\naac\neroConfigurationPanel.Designer.cs">
       <DependentUpon>neroConfigurationPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\audio\opus\OpusSettings.cs" />
     <Compile Include="packages\audio\opus\OpusConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\audio\opus\OpusConfigurationPanel.Designer.cs">
       <DependentUpon>OpusConfigurationPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\audio\opus\OpusSettings.cs" />
     <Compile Include="packages\audio\qaac\qaacConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -583,7 +595,6 @@
     <Compile Include="packages\muxer\mkvmerge\MkvMergeMuxer.cs" />
     <Compile Include="packages\muxer\mp4box\MP4BoxMuxer.cs" />
     <Compile Include="packages\muxer\tsmuxer\tsMuxeR.cs" />
-    <Compile Include="packages\reader\avi\AviReader.cs" />
     <Compile Include="packages\reader\avs\AvsReader.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -953,11 +964,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\opus\OpusConfigurationPanel.resx">
       <DependentUpon>OpusConfigurationPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\qaac\qaacConfigurationPanel.resx">
       <DependentUpon>qaacConfigurationPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\vorbis\OggVorbisConfigurationPanel.resx">
       <SubType>Designer</SubType>
@@ -1058,7 +1067,7 @@
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <ProductName>.NET Framework Client Profile</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

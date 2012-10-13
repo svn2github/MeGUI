@@ -42,7 +42,6 @@ namespace MeGUI
 
         #region IMediaFileFactory Members
 
-
         public int HandleLevel(string file)
         {
             if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avs"))

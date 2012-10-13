@@ -68,7 +68,7 @@ namespace MeGUI.core.details
         public void StartAll(bool restartStopping)
         {
             // check for missing components
-            if (UpdateWindow.isComponentMissing(false))
+            if (UpdateWindow.isComponentMissing())
             {
                 mainForm.startUpdateCheck();
                 return;

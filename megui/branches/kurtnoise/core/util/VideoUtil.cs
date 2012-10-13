@@ -816,48 +816,86 @@ namespace MeGUI
                 return allSmallFilters.ToString().TrimEnd('|');
         }
 
-        public static void getAvisynthVersion(ref LogItem i, out bool bFound)
+        public static void getAvisynthVersion(LogItem i, out bool bFound)
         {
             string fileVersion = string.Empty;
             string fileDate = string.Empty;
+            bool bLocal = false;
             bFound = false;
 
-            string systempath = Environment.GetFolderPath(Environment.SpecialFolder.System);
+            string syswow64path = Environment.GetFolderPath(Environment.SpecialFolder.System)
+                .ToLower(System.Globalization.CultureInfo.InvariantCulture).Replace("\\system32", "\\SysWOW64");
 
-            if (File.Exists(systempath + "\\avisynth.dll"))
+            if (File.Exists(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll")))
             {
-                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(systempath + "\\avisynth.dll");
+                string path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll");
+                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
                 fileVersion = FileProperties.FileVersion;
-                fileDate = File.GetLastWriteTimeUtc(systempath + "\\avisynth.dll").ToString();
-                bFound = true;
+                fileDate = File.GetLastWriteTimeUtc(path).ToString();
+                bLocal = true;
             }
 #if x86
-            else
+            // on x86, try the SysWOW64 folder first
+            else if (File.Exists(Path.Combine(syswow64path, "avisynth.dll")))
             {
-                // on x64, try the SysWOW64 folder
-                string syswow64path = Environment.GetFolderPath(Environment.SpecialFolder.System).Substring(0, 11) + "\\SysWOW64";
-                if (Directory.Exists(syswow64path))
+                string path = Path.Combine(syswow64path, "avisynth.dll");
+                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
+                fileVersion = FileProperties.FileVersion;
+                fileDate = File.GetLastWriteTimeUtc(path).ToString();
+                bFound = true;
+            }
+            else if (!Directory.Exists(syswow64path) 
+                && File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "avisynth.dll")))
+#endif
+#if x64
+            else if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "avisynth.dll")))
+#endif    
+            {
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "avisynth.dll");
+                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
+                fileVersion = FileProperties.FileVersion;
+                fileDate = File.GetLastWriteTimeUtc(path).ToString();
+                bFound = true;
+            }
+
+            if (!bFound && !bLocal)
+            {
+                if (File.Exists(MainForm.Instance.Settings.AviSynthPath))
                 {
-                    if (File.Exists(syswow64path + "\\avisynth.dll"))
+                    if (i != null)
+                        i.LogValue("AviSynth", "files will be copied into the MeGUI directory as AviSynth is not installed");
+                    string path = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
+                    try
                     {
-                        FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(syswow64path + "\\avisynth.dll");
+                        File.Copy(Path.Combine(path, "avisynth.dll"), Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll"), true);
+                        File.Copy(Path.Combine(path, "devil.dll"), Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "devil.dll"), true);
+                        path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll");
+                        FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
                         fileVersion = FileProperties.FileVersion;
-                        fileDate = File.GetLastWriteTimeUtc(syswow64path + "\\avisynth.dll").ToString();
-                        bFound = true;
+                        fileDate = File.GetLastWriteTimeUtc(path).ToString();
+                        bLocal = true;
                     }
+                    catch {}
+                }
+
+                if (!bLocal)
+                {
+                    if (i != null)
+                        i.LogValue("AviSynth", "not installed", ImageType.Error);
+                    return;
                 }
             }
-#endif
-            if (!bFound)
-            {
-                i.LogValue("AviSynth", "not installed");
-            }
-            else if (string.IsNullOrEmpty(fileVersion))
-                i.LogValue("AviSynth", fileDate);
+
+            if (i == null)
+                return;
+            string strVersion = string.Empty;
+            if (string.IsNullOrEmpty(fileVersion))
+                strVersion = fileDate;
             else
-                i.LogValue("AviSynth", fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")");
-
-
+                strVersion = fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")";
+            if (bLocal)
+                strVersion += " - portable";
+            i.LogValue("AviSynth", strVersion);
         }
 
         public static string getAssumeFPS(double fps, string strInput)

@@ -155,7 +155,7 @@ namespace MeGUI
                 input.Filter = "All supported files|*.avs;*.ifo;*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.ifo;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.vc1;*.mpls|All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All DGIndexNV supported files|*.264;*.h264;*.avc;*.m2v;*.mpv;*.vc1;*.mkv;*.vob;*.mpg;*.mpeg;*.m2t;*.m2ts;*.mts;*.tp;*.ts;*.trp|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|AviSynth Scripts|*.avs|IFO DVD files|*.ifo|Blu-Ray Playlist|*.mpls|All files|*.*";
             else
                 input.Filter = "All supported files|*.avs;*.ifo;*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.ifo;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.mpls|All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|AviSynth Scripts|*.avs|IFO DVD files|*.ifo|Blu-Ray Playlist|*.mpls|All files|*.*";
-            DragDropUtil.RegisterSingleFileDragDrop(input, setInput, delegate() { return input.Filter + "|All folders|*."; });
+            DragDropUtil.RegisterMultiFileDragDrop(input, setInput, delegate() { return input.Filter + "|All folders|*."; });
             DragDropUtil.RegisterSingleFileDragDrop(output, setOutput);
             DragDropUtil.RegisterSingleFileDragDrop(chapterFile, null, delegate() { return chapterFile.Filter; });
             DragDropUtil.RegisterSingleFileDragDrop(workingDirectory, setWorkingDirectory);
@@ -337,6 +337,29 @@ namespace MeGUI
             input.AddCustomItem(strFileorFolderName);
             input.SelectedObject = strFileorFolderName;
         }
+
+        public void setInput(string[] strFileorFolderName)
+        {
+            List<OneClickFilesToProcess> arrFilesToProcess = new List<OneClickFilesToProcess>();
+            foreach (string strFile in strFileorFolderName)
+                if (File.Exists(strFile))
+                    arrFilesToProcess.Add(new OneClickFilesToProcess(strFile, 1));
+            if (arrFilesToProcess.Count == 0)
+            {
+                MessageBox.Show("These files or folders cannot be used in OneClick mode.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
+            if (_oLog == null)
+            {
+                _oLog = mainForm.Log.Info("OneClick");
+                mainForm.OneClickLog = _oLog;
+            }
+
+            this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            goButton.Enabled = false;
+            OneClickProcessing oProcessor = new OneClickProcessing(this, arrFilesToProcess, _oSettings, _oLog);
+        }
         
         private void openInput(string fileName)
         {
@@ -383,7 +406,7 @@ namespace MeGUI
 
             if (!bAutomatedProcessing && arrFilesToProcess.Count > 0)
             {
-                string question = "Do you want to process all " + (arrFilesToProcess.Count + 1) + " files in the folder?\r\nAll files will be processed with the current settings\r\nin the OneClick profile \"" + oneclickProfile.SelectedProfile.Name + "\".";
+                string question = "Do you want to process all " + (arrFilesToProcess.Count + 1) + " files/tracks in the selection?\r\nThey all will be processed with the current settings\r\nin the OneClick profile \"" + oneclickProfile.SelectedProfile.Name + "\".";
                 DialogResult dr = MessageBox.Show(question, "Automated folder processing", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
@@ -391,13 +414,13 @@ namespace MeGUI
                     this.Settings = (OneClickSettings)oneclickProfile.SelectedProfile.BaseSettings;
                 }
             }
+            bLock = true;
             if (input.SelectedSCItem == null || !iFile.FileName.Equals((string)input.SelectedObject))
             {
-                bLock = true;
                 input.StandardItems = new object[] { iFile.FileName };
-                input.SelectedIndex = 0;
-                bLock = false;
+                input.SelectedIndex = 0; 
             }
+            bLock = false;
 
             _videoInputInfo = iFile;
 
@@ -776,6 +799,12 @@ namespace MeGUI
                 if (oStreamControl.SelectedItem.IsStandard)
                 {
                     oAudioTrackInfo = (AudioTrackInfo)oStreamControl.SelectedStream.TrackInfo;
+                    if (dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
+                    {
+                        _oLog.LogEvent("Internal audio track " + oAudioTrackInfo.TrackID + " must be skipped as AVISOURCE is going to be used", ImageType.Warning);
+                        continue;
+                    }
+
                     arrAudioTrackInfo.Add(oAudioTrackInfo);
                     if (dpp.IndexType != FileIndexerWindow.IndexType.NONE && !dpp.Eac3toDemux)
                         aInput = "::" + oAudioTrackInfo.TrackID + "::";
@@ -788,7 +817,7 @@ namespace MeGUI
                     {
                         oExtractMKVTrack.Add(oStreamControl.SelectedStream.TrackInfo);
                         bExtractMKVTrack = true;
-                    }                        
+                    }
                 }
                 else
                 {
@@ -887,11 +916,16 @@ namespace MeGUI
                             oStream.SelectedStream.DemuxFilePath = outputFile;
                             dpp.FilesToDelete.Add(outputFile);
                             dpp.FilesToDelete.Add(Path.ChangeExtension(outputFile, ".sub"));
+                            dpp.SubtitleTracks.Add(oStream.SelectedStream);
                         }
-                        else if (!dpp.Eac3toDemux)
+                        else if (inputContainer == ContainerType.MKV && !dpp.Eac3toDemux) // only if container MKV and no demux with eac3to
+                        {
                             oExtractMKVTrack.Add(oStream.SelectedStream.TrackInfo);
+                            dpp.SubtitleTracks.Add(oStream.SelectedStream);
+                        }
                     }
-                    dpp.SubtitleTracks.Add(oStream.SelectedStream);
+                    else
+                        dpp.SubtitleTracks.Add(oStream.SelectedStream);
                 }
             }
 
@@ -962,6 +996,23 @@ namespace MeGUI
                 OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(dpp.VideoInput, null, dpp);
                 finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(ocJob));
             }
+
+
+            // write all to be processed tracks into the log
+            _oLog.LogEvent("Video: " + dpp.VideoInput);
+            foreach (OneClickAudioTrack oTrack in dpp.AudioTracks)
+            {
+                if (oTrack.AudioTrackInfo != null)
+                    _oLog.LogEvent("Audio: " + oTrack.AudioTrackInfo.SourceFileName);
+                else if (oTrack.AudioJob != null)
+                    _oLog.LogEvent("Audio: " + oTrack.AudioJob.Input);
+            }
+            foreach (OneClickStream oTrack in dpp.SubtitleTracks)
+            {
+                if (oTrack.TrackInfo != null)
+                    _oLog.LogEvent("Subtitle: " + oTrack.TrackInfo.SourceFileName);
+            }
+            
 
             mainForm.Jobs.addJobsWithDependencies(finalJobChain);
 
@@ -1094,12 +1145,12 @@ namespace MeGUI
         // Subtitle Track Handling
         private void subtitleMenu_Opening(object sender, CancelEventArgs e)
         {
-            //subtitleRemoveTrack.Enabled = (subtitleTracks.Count > 1);
+            subtitleRemoveTrack.Enabled = (iSelectedSubtitleTabPage != subtitleTracks.Count);
         }
 
         private void subtitleAddTrack_Click(object sender, EventArgs e)
         {
-            SubtitleAddTrack();
+            SubtitleAddTrack(true);
         }
 
         private void subtitleRemoveTrack_Click(object sender, EventArgs e)
@@ -1107,7 +1158,7 @@ namespace MeGUI
             SubtitleRemoveTrack(iSelectedSubtitleTabPage);
         }
 
-        private void SubtitleAddTrack()
+        private void SubtitleAddTrack(bool bChangeFocus)
         {
             TabPage p = new TabPage("Subtitle " + (subtitleTracks.Count + 1));
             p.UseVisualStyleBackColor = subtitlesTab.TabPages[0].UseVisualStyleBackColor;
@@ -1129,23 +1180,27 @@ namespace MeGUI
             if (this.Visible)
                 a.enableDragDrop();
 
-            subtitlesTab.TabPages.Add(p);
+            subtitlesTab.TabPages.Insert(subtitlesTab.TabCount - 1, p);
             p.Controls.Add(a);
             subtitleTracks.Add(a);
+
+            if (bChangeFocus)
+                subtitlesTab.SelectedTab = p;
         }
 
         private void SubtitleRemoveTrack(int iTabPageIndex)
         {
+            if (iTabPageIndex == subtitlesTab.TabCount - 1)
+                return;
+
             if (iTabPageIndex == 0 && subtitlesTab.TabCount == 1)
-                SubtitleAddTrack();
+                SubtitleAddTrack(true);
 
             subtitlesTab.TabPages.RemoveAt(iTabPageIndex);
             subtitleTracks.RemoveAt(iTabPageIndex);
 
-            for (int i = 0; i < subtitlesTab.TabCount; i++)
-            {
+            for (int i = 0; i < subtitlesTab.TabCount - 1; i++)
                 subtitlesTab.TabPages[i].Text = "Subtitle " + (i + 1);
-            }
         }
 
         private void chkDefaultStream_CheckedChanged(object sender, EventArgs e)
@@ -1225,8 +1280,8 @@ namespace MeGUI
             subtitleTracks[0].CustomStreams = new object[0];
             subtitleTracks[0].SelectedStreamIndex = 0;
 
-            // delete all tracks beside the first one
-            for (int i = subtitlesTab.TabCount; i > 1; i--)
+            // delete all tracks beside the first and last one
+            for (int i = subtitlesTab.TabCount - 1; i > 1; i--)
             {
                 subtitlesTab.TabPages.RemoveAt(i - 1);
                 subtitleTracks.RemoveAt(i - 1);
@@ -1244,7 +1299,7 @@ namespace MeGUI
                     if (arrSubtitleTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                     {
                         if (iCounter > 0)
-                            SubtitleAddTrack();
+                            SubtitleAddTrack(false);
                         subtitleTracks[iCounter++].SelectedStreamIndex = i + 1;
                     }
                 }
@@ -1255,7 +1310,7 @@ namespace MeGUI
                 for (int i = 0; i < arrSubtitleTrackInfo.Count; i++)
                 {
                     if (iCounter > 0)
-                        SubtitleAddTrack();
+                        SubtitleAddTrack(false);
                     subtitleTracks[iCounter++].SelectedStreamIndex = i + 1;
                 }
             }
@@ -1263,19 +1318,19 @@ namespace MeGUI
 
         private void subtitlesTab_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            SubtitleAddTrack();
+            SubtitleAddTrack(true);
         }
 
 
         // Audio Track Handling
         private void audioMenu_Opening(object sender, CancelEventArgs e)
         {
-            //audioRemoveTrack.Enabled = (audioTracks.Count > 1);
+            audioRemoveTrack.Enabled = (iSelectedAudioTabPage != audioTracks.Count);
         }
 
         private void audioAddTrack_Click(object sender, EventArgs e)
         {
-           AudioAddTrack();
+           AudioAddTrack(true);
         }
 
         private void audioRemoveTrack_Click(object sender, EventArgs e)
@@ -1283,7 +1338,7 @@ namespace MeGUI
             AudioRemoveTrack(iSelectedAudioTabPage);
         }
 
-        private void AudioAddTrack()
+        private void AudioAddTrack(bool bChangeFocus)
         {
             TabPage p = new TabPage("Audio " + (audioTracks.Count + 1));
             p.UseVisualStyleBackColor = audioTab.TabPages[0].UseVisualStyleBackColor;
@@ -1307,20 +1362,26 @@ namespace MeGUI
             if (this.Visible)
                 a.enableDragDrop();
 
-            audioTab.TabPages.Add(p);
+            audioTab.TabPages.Insert(audioTab.TabCount - 1, p);
             p.Controls.Add(a);
             audioTracks.Add(a);
+
+            if (bChangeFocus)
+                audioTab.SelectedTab = p;
         }
 
         private void AudioRemoveTrack(int iTabPageIndex)
         {
-            if (iTabPageIndex == 0 && audioTab.TabCount == 1)
-                AudioAddTrack();
+            if (iTabPageIndex == audioTab.TabCount - 1)
+                return;
+
+            if (iTabPageIndex == 0 && subtitlesTab.TabCount == 1)
+                AudioAddTrack(true);
 
             audioTab.TabPages.RemoveAt(iTabPageIndex);
             audioTracks.RemoveAt(iTabPageIndex);
 
-            for (int i = 0; i < audioTab.TabCount; i++)
+            for (int i = 0; i < audioTab.TabCount - 1; i++)
                 audioTab.TabPages[i].Text = "Audio " + (i + 1);
         }
 
@@ -1398,8 +1459,8 @@ namespace MeGUI
             audioTracks[0].CustomStreams = new object[0];
             audioTracks[0].SelectedStreamIndex = 0;
 
-            // delete all tracks beside the first one
-            for (int i = audioTab.TabCount; i > 1; i--)
+            // delete all tracks beside the first and last one
+            for (int i = audioTab.TabCount - 1; i > 1; i--)
             {
                 audioTab.TabPages.RemoveAt(i - 1);
                 audioTracks.RemoveAt(i - 1);
@@ -1417,7 +1478,7 @@ namespace MeGUI
                     if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                     {
                         if (iCounter > 0)
-                            AudioAddTrack();
+                            AudioAddTrack(false);
                         audioTracks[iCounter++].SelectedStreamIndex = i + 1;
                     }
                 }
@@ -1428,7 +1489,7 @@ namespace MeGUI
                 for (int i = 0; i < arrAudioTrackInfo.Count; i++)
                 {
                     if (iCounter > 0)
-                        AudioAddTrack();
+                        AudioAddTrack(false);
                     audioTracks[iCounter++].SelectedStreamIndex = i + 1;
                 }
             }
@@ -1463,13 +1524,37 @@ namespace MeGUI
 
         private void audioTab_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            AudioAddTrack();
+            AudioAddTrack(true);
         }
 
         private void OneClickWindow_Shown(object sender, EventArgs e)
         {
             oneClickAudioStreamControl1.enableDragDrop();
             oneClickSubtitleStreamControl1.enableDragDrop();
+        }
+
+        private void audioTab_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (audioTab.SelectedTab.Text.Equals("   +"))
+                AudioAddTrack(true);
+        }
+
+        private void audioTab_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+                AudioRemoveTrack(audioTab.SelectedIndex);
+        }
+
+        private void subtitlesTab_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (subtitlesTab.SelectedTab.Text.Equals("   +"))
+                SubtitleAddTrack(true);
+        }
+
+        private void subtitlesTab_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+                SubtitleRemoveTrack(audioTab.SelectedIndex);
         }
     }
 

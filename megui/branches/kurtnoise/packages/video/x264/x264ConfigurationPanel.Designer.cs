@@ -1077,10 +1077,9 @@ namespace MeGUI.packages.video.x264
             // x264RateTolLabel
             // 
             this.x264RateTolLabel.AutoSize = true;
-            this.x264RateTolLabel.Location = new System.Drawing.Point(8, 93);
+            this.x264RateTolLabel.Location = new System.Drawing.Point(12, 95);
             this.x264RateTolLabel.Name = "x264RateTolLabel";
-            this.x264RateTolLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264RateTolLabel.Size = new System.Drawing.Size(88, 19);
+            this.x264RateTolLabel.Size = new System.Drawing.Size(82, 13);
             this.x264RateTolLabel.TabIndex = 6;
             this.x264RateTolLabel.Text = "Bitrate Variance";
             this.x264RateTolLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1112,10 +1111,9 @@ namespace MeGUI.packages.video.x264
             // x264VBVInitialBufferLabel
             // 
             this.x264VBVInitialBufferLabel.AutoSize = true;
-            this.x264VBVInitialBufferLabel.Location = new System.Drawing.Point(8, 68);
+            this.x264VBVInitialBufferLabel.Location = new System.Drawing.Point(12, 70);
             this.x264VBVInitialBufferLabel.Name = "x264VBVInitialBufferLabel";
-            this.x264VBVInitialBufferLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264VBVInitialBufferLabel.Size = new System.Drawing.Size(92, 19);
+            this.x264VBVInitialBufferLabel.Size = new System.Drawing.Size(86, 13);
             this.x264VBVInitialBufferLabel.TabIndex = 4;
             this.x264VBVInitialBufferLabel.Text = "VBV Initial Buffer";
             this.x264VBVInitialBufferLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1125,7 +1123,7 @@ namespace MeGUI.packages.video.x264
             this.x264VBVMaxRate.Enabled = false;
             this.x264VBVMaxRate.Location = new System.Drawing.Point(222, 43);
             this.x264VBVMaxRate.Maximum = new decimal(new int[] {
-            100000,
+            99999999,
             0,
             0,
             0});
@@ -1205,7 +1203,7 @@ namespace MeGUI.packages.video.x264
             this.x264VBVBufferSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.x264VBVBufferSize.Location = new System.Drawing.Point(222, 18);
             this.x264VBVBufferSize.Maximum = new decimal(new int[] {
-            100000,
+            99999999,
             0,
             0,
             0});
@@ -1217,10 +1215,9 @@ namespace MeGUI.packages.video.x264
             // x264TempQuantBlurLabel
             // 
             this.x264TempQuantBlurLabel.AutoSize = true;
-            this.x264TempQuantBlurLabel.Location = new System.Drawing.Point(8, 168);
+            this.x264TempQuantBlurLabel.Location = new System.Drawing.Point(12, 170);
             this.x264TempQuantBlurLabel.Name = "x264TempQuantBlurLabel";
-            this.x264TempQuantBlurLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264TempQuantBlurLabel.Size = new System.Drawing.Size(149, 19);
+            this.x264TempQuantBlurLabel.Size = new System.Drawing.Size(143, 13);
             this.x264TempQuantBlurLabel.TabIndex = 12;
             this.x264TempQuantBlurLabel.Text = "Temp. Blur of Quant after CC";
             this.x264TempQuantBlurLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1228,10 +1225,9 @@ namespace MeGUI.packages.video.x264
             // x264TempFrameComplexityBlurLabel
             // 
             this.x264TempFrameComplexityBlurLabel.AutoSize = true;
-            this.x264TempFrameComplexityBlurLabel.Location = new System.Drawing.Point(8, 143);
+            this.x264TempFrameComplexityBlurLabel.Location = new System.Drawing.Point(12, 145);
             this.x264TempFrameComplexityBlurLabel.Name = "x264TempFrameComplexityBlurLabel";
-            this.x264TempFrameComplexityBlurLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264TempFrameComplexityBlurLabel.Size = new System.Drawing.Size(180, 19);
+            this.x264TempFrameComplexityBlurLabel.Size = new System.Drawing.Size(174, 13);
             this.x264TempFrameComplexityBlurLabel.TabIndex = 10;
             this.x264TempFrameComplexityBlurLabel.Text = "Temp. Blur of est. Frame complexity";
             this.x264TempFrameComplexityBlurLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1239,10 +1235,9 @@ namespace MeGUI.packages.video.x264
             // x264QuantizerCompressionLabel
             // 
             this.x264QuantizerCompressionLabel.AutoSize = true;
-            this.x264QuantizerCompressionLabel.Location = new System.Drawing.Point(12, 117);
+            this.x264QuantizerCompressionLabel.Location = new System.Drawing.Point(12, 120);
             this.x264QuantizerCompressionLabel.Name = "x264QuantizerCompressionLabel";
-            this.x264QuantizerCompressionLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264QuantizerCompressionLabel.Size = new System.Drawing.Size(121, 19);
+            this.x264QuantizerCompressionLabel.Size = new System.Drawing.Size(115, 13);
             this.x264QuantizerCompressionLabel.TabIndex = 8;
             this.x264QuantizerCompressionLabel.Text = "Quantizer Compression";
             this.x264QuantizerCompressionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1251,10 +1246,9 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264VBVMaxRateLabel.AutoSize = true;
             this.x264VBVMaxRateLabel.Enabled = false;
-            this.x264VBVMaxRateLabel.Location = new System.Drawing.Point(8, 43);
+            this.x264VBVMaxRateLabel.Location = new System.Drawing.Point(12, 45);
             this.x264VBVMaxRateLabel.Name = "x264VBVMaxRateLabel";
-            this.x264VBVMaxRateLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264VBVMaxRateLabel.Size = new System.Drawing.Size(114, 19);
+            this.x264VBVMaxRateLabel.Size = new System.Drawing.Size(108, 13);
             this.x264VBVMaxRateLabel.TabIndex = 2;
             this.x264VBVMaxRateLabel.Text = "VBV Maximum Bitrate";
             this.x264VBVMaxRateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1262,10 +1256,9 @@ namespace MeGUI.packages.video.x264
             // x264VBVBufferSizeLabel
             // 
             this.x264VBVBufferSizeLabel.AutoSize = true;
-            this.x264VBVBufferSizeLabel.Location = new System.Drawing.Point(8, 18);
+            this.x264VBVBufferSizeLabel.Location = new System.Drawing.Point(12, 21);
             this.x264VBVBufferSizeLabel.Name = "x264VBVBufferSizeLabel";
-            this.x264VBVBufferSizeLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264VBVBufferSizeLabel.Size = new System.Drawing.Size(88, 19);
+            this.x264VBVBufferSizeLabel.Size = new System.Drawing.Size(82, 13);
             this.x264VBVBufferSizeLabel.TabIndex = 0;
             this.x264VBVBufferSizeLabel.Text = "VBV Buffer Size";
             this.x264VBVBufferSizeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1391,6 +1384,7 @@ namespace MeGUI.packages.video.x264
             this.cqmComboBox1.SelectedIndex = 0;
             this.cqmComboBox1.Size = new System.Drawing.Size(175, 29);
             this.cqmComboBox1.TabIndex = 5;
+            this.cqmComboBox1.Type = MeGUI.core.gui.FileSCBox.FileSCBoxType.Default;
             this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
             // 
             // x264QuantizerGroupBox

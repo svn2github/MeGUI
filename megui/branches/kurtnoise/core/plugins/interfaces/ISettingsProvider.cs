@@ -29,12 +29,12 @@ using MeGUI.core.util;
 using MeGUI.packages.video.x264;
 using MeGUI.packages.video.xvid;
 using MeGUI.packages.audio.naac;
-using MeGUI.packages.audio.qaac;
 using MeGUI.packages.audio.ffmp2;
 using MeGUI.packages.audio.lame;
 using MeGUI.packages.audio.vorbis;
 using MeGUI.packages.audio.aften;
 using MeGUI.packages.audio.opus;
+using MeGUI.packages.audio.qaac;
 
 namespace MeGUI
 {

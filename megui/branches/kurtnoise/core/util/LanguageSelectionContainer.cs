@@ -173,6 +173,7 @@ namespace MeGUI
             {
                 if (ci.ThreeLetterISOLanguageName == iso639dot2) // we found our language
                 {
+                    //if (ci.TwoLetterISOLanguageName.Length == 2) // sometimes we get 3 letter codes here, divxmux can't handle those
                         return ci.TwoLetterISOLanguageName;
                 }
             }

@@ -62,7 +62,7 @@ namespace MeGUI.core.util
 
         public static void RegisterMultiFileDragDrop(Control c, MultiFileReceiver r)
         {
-            RegisterMultiFileDragDrop(c, r, "*.*");
+            RegisterMultiFileDragDrop(c, r, "All files|*.*");
         }
 
         public static void RegisterMultiFileDragDrop(Control c, MultiFileReceiver r, string filter)

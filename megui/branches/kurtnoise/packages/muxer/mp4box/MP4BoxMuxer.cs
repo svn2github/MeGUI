@@ -247,7 +247,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                             case "iPod": sb.Append("-ipod "); break;
                             case "iPhone": sb.Append("-ipod -brand M4VP:1 "); break;
                             case "ISMA": sb.Append("-isma "); break;
-                            case "PSP": sb.Append("-psp -brand MSNV:1 "); break;
+                            case "PSP": sb.Append("-psp "); break;
                         }
                     }
 

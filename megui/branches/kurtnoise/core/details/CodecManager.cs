@@ -155,11 +155,11 @@ namespace MeGUI
         }
         public static readonly AudioEncoderType LAME   = new AudioEncoderType("LAME", AudioCodec.MP3);
         public static readonly AudioEncoderType NAAC   = new AudioEncoderType("NAAC", AudioCodec.AAC);
-        public static readonly AudioEncoderType QAAC   = new AudioEncoderType("QAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType VORBIS = new AudioEncoderType("VORBIS", AudioCodec.VORBIS);
         public static readonly AudioEncoderType FFMP2  = new AudioEncoderType("FFMP2", AudioCodec.MP2);
         public static readonly AudioEncoderType AFTEN  = new AudioEncoderType("AFTEN", AudioCodec.AC3);
         public static readonly AudioEncoderType FLAC   = new AudioEncoderType("FLAC", AudioCodec.FLAC);
+        public static readonly AudioEncoderType QAAC   = new AudioEncoderType("QAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType OPUS   = new AudioEncoderType("OPUS", AudioCodec.OPUS);
     }
     #endregion
@@ -193,8 +193,8 @@ namespace MeGUI
                 AudioCodecs.Register(AudioCodec.PCM)    &&
                 AudioCodecs.Register(AudioCodec.THD)    &&
                 AudioCodecs.Register(AudioCodec.FLAC)   &&
-                AudioCodecs.Register(AudioCodec.OPUS)   &&
-                AudioCodecs.Register(AudioCodec.WAV)))
+                AudioCodecs.Register(AudioCodec.WAV)    &&
+                AudioCodecs.Register(AudioCodec.OPUS)))
                 throw new Exception("Failed to register a standard audio codec");
             if (!(
                 VideoEncoderTypes.Register(VideoEncoderType.HFYU) &&
@@ -202,14 +202,14 @@ namespace MeGUI
                 VideoEncoderTypes.Register(VideoEncoderType.XVID)))
                 throw new Exception("Failed to register a standard video encoder type");
             if (!(
-                AudioEncoderTypes.Register(AudioEncoderType.QAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.FFMP2)  &&
                 AudioEncoderTypes.Register(AudioEncoderType.LAME)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.NAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.VORBIS) &&
                 AudioEncoderTypes.Register(AudioEncoderType.FLAC)   &&
-                AudioEncoderTypes.Register(AudioEncoderType.OPUS)   &&
-                AudioEncoderTypes.Register(AudioEncoderType.AFTEN)))
+                AudioEncoderTypes.Register(AudioEncoderType.AFTEN)  &&
+                AudioEncoderTypes.Register(AudioEncoderType.QAAC)   &&
+                AudioEncoderTypes.Register(AudioEncoderType.OPUS)))
                 throw new Exception("Failed to register a standard audio encoder type");
                 
         }
@@ -275,7 +275,7 @@ namespace MeGUI
         public static readonly AudioType DTSMA  = new AudioType("DTSMA", "DTS Master Audio Files", "dtsma", null, AudioCodec.DTSMA);
         public static readonly AudioType FLAC   = new AudioType("FLAC", "FLAC Audio Lossless Files", "flac", null, AudioCodec.FLAC);
         public static readonly AudioType AVS    = new AudioType("AVS", "AviSynth Script Files", "avs", null, AudioCodec.PCM);
-        public static readonly AudioType OPUS   = new AudioType("OPUS", "Opus Files", "opus", null, AudioCodec.OPUS);
+        public static readonly AudioType OPUS   = new AudioType("OPUS", "Opus Aufio Files", "ops", null, AudioCodec.OPUS);
     }
     public class SubtitleType : OutputType
     {

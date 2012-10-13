@@ -45,9 +45,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             if (j is AudioJob &&
                 (((j as AudioJob).Settings is MP3Settings) ||
                 ((j as AudioJob).Settings is MP2Settings) ||
+                ((j as AudioJob).Settings is OpusSettings) ||
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
                 ((j as AudioJob).Settings is QaacSettings) ||
-                ((j as AudioJob).Settings is OpusSettings) ||
                 ((j as AudioJob).Settings is NeroAACSettings) ||
                 ((j as AudioJob).Settings is FlacSettings) ||
                 ((j as AudioJob).Settings is AftenSettings)))
@@ -585,6 +585,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 if (oInfo.HasAudio)
                 {
+                    sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll"), Environment.NewLine);
                     if (oInfo.HasVideo)
                         sbOpen.AppendFormat("DirectShowSource(\"{0}\", video=false){1}", audioJob.Input, Environment.NewLine);
                     else 
@@ -1079,51 +1080,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _encoderExecutablePath = this._settings.OggEnc2Path;
                 _encoderCommandLine = "-Q --ignorelength --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
             }
-            if (audioJob.Settings is QaacSettings)
-            {
-                _mustSendWavHeaderToEncoderStdIn = true;
-                QaacSettings n = audioJob.Settings as QaacSettings;
-                QaacSettings qas = n;
-                _encoderExecutablePath = this._settings.QaacPath;
-                StringBuilder sb = new StringBuilder("--threading --ignorelength ");
-                switch (n.Profile)
-                {
-                    case QaacProfile.HE:
-                        if (n.Mode == QaacMode.TVBR)
-                             sb.Append(" ");
-                        else sb.Append("--he ");
-                        break;
-                    case QaacProfile.ALAC:
-                        sb.Append("-A ");
-                        break;
-                    default:
-                        break;
-                }
-
-                if (n.Profile == QaacProfile.ALAC) sb.Append("");
-                else
-                {
-                    switch (n.Mode)
-                    {
-                        case QaacMode.TVBR:
-                            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-V {0} ", n.Quality);
-                            break;
-                        case QaacMode.CVBR:
-                            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-v {0} ", n.Bitrate);
-                            break;
-                        case QaacMode.ABR:
-                            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-a {0} ", n.Bitrate);
-                            break;
-                        case QaacMode.CBR:
-                            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "-c {0} ", n.Bitrate);
-                            break;
-                    }
-                }
-
-                sb.Append("- -o \"{0}\"");
-
-                _encoderCommandLine = sb.ToString();
-            }
             if (audioJob.Settings is NeroAACSettings)
             {
                 _mustSendWavHeaderToEncoderStdIn = true;
@@ -1161,6 +1117,21 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                 _encoderCommandLine = sb.ToString();
             }
+            if (audioJob.Settings is QaacSettings)
+            {
+                QaacSettings f = audioJob.Settings as QaacSettings;
+                _encoderExecutablePath = this._settings.QaacPath;
+                _mustSendWavHeaderToEncoderStdIn = true;
+                switch (f.BitrateMode)
+                {
+                    case BitrateManagementMode.VBR:
+                        _encoderCommandLine = "-q " + f.Quality + " --mpeg-vers 4 -o \"{0}\" -"; 
+                        break;
+                    default:
+                        _encoderCommandLine = "-b " + f.Bitrate + " --mpeg-vers 4 -o \"{0}\" -";
+                        break;
+                }
+            }
             if (audioJob.Settings is MP3Settings)
             {
                 MP3Settings m = audioJob.Settings as MP3Settings;
@@ -1181,31 +1152,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         break;
                 }
             }
-            if (audioJob.Settings is OpusSettings)
-            {
-                _mustSendWavHeaderToEncoderStdIn = true;
-                OpusSettings n = audioJob.Settings as OpusSettings;
-                OpusSettings nas = n;
-                _encoderExecutablePath = this._settings.OpusPath;
-                StringBuilder sb = new StringBuilder("--ignorelength ");
 
-                switch (n.Mode)
-                {
-                    case OpusMode.VBR:
-                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "--vbr --bitrate {0} ", n.Bitrate);
-                        break;
-                    case OpusMode.CVBR:
-                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "--cvbr --bitrate {0} ", n.Bitrate);
-                        break;
-                    case OpusMode.HCBR:
-                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "--hard-cbr --bitrate {0} ", n.Bitrate);
-                        break;
-                }
-
-                sb.Append("- \"{0}\"");
-
-                _encoderCommandLine = sb.ToString();
-            }
             //Just check encoder existance
             _encoderExecutablePath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, _encoderExecutablePath);
             if (!File.Exists(_encoderExecutablePath))

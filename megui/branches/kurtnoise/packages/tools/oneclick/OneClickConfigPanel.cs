@@ -526,7 +526,7 @@ namespace MeGUI.packages.tools.oneclick
 
         private void audioTab_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (audioTab.SelectedIndex == audioTab.TabCount - 1)
+            if (audioTab.SelectedTab.Text.Equals("   +"))
                 AudioAddTrack(null);
         }
 
@@ -556,6 +556,16 @@ namespace MeGUI.packages.tools.oneclick
                 else
                     AudioAddTrack(o);
             }
+        }
+
+        private void audioTab_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            AudioAddTrack(null);
+        }
+
+        private void audioMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            audioRemoveTrack.Enabled = (iSelectedAudioTabPage != audioConfigurations.Count);
         }
     }
 }

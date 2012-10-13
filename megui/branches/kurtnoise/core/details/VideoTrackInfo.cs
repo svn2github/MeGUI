@@ -26,18 +26,29 @@ namespace MeGUI
 {
     public class VideoTrackInfo : TrackInfo
     {
-        public VideoTrackInfo() : this(0, 0, null, null, null)
+        private string _codecMediaInfo;
+
+        public VideoTrackInfo() : this(0, 0, null, null, null, null)
         {
         }
 
-        public VideoTrackInfo(int trackID, int mmgTrackID, string language, string name, string codec)
+        public VideoTrackInfo(int trackID, int mmgTrackID, string language, string name, string codecString, string codec)
         {
             base.TrackType = TrackType.Video;
             base.Language = language;
             base.Name = name;
             base.TrackID = trackID;
             base.MMGTrackID = mmgTrackID;
-            base.Codec = codec;
+            base.Codec = codecString;
+            _codecMediaInfo = codec + "/" + codecString;
+        }
+
+        /// <summary>
+        /// The Codec information from MediaInfo
+        /// </summary>
+        public string CodecMediaInfo
+        {
+            get { return _codecMediaInfo; }
         }
 
         public override string ToString()

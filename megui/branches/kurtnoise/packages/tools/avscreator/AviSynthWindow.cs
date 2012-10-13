@@ -44,12 +44,10 @@ namespace MeGUI
 	public class AviSynthWindow : System.Windows.Forms.Form
 	{
 		#region variable declaration
-        string originalScript;
-        bool originalInlineAvs;
-        bool loaded;
-
-
-        bool isPreviewMode = false;
+        private string originalScript;
+        private bool originalInlineAvs;
+        private bool loaded;
+        private bool isPreviewMode = false;
         private CultureInfo ci = new CultureInfo("en-us");
         private bool eventsOn = true;
 		private string path;
@@ -63,7 +61,8 @@ namespace MeGUI
         private JobUtil jobUtil;
         private PossibleSources sourceType;
         private SourceDetector detector;
-        
+        private string indexFile;
+    
         private System.Windows.Forms.GroupBox resNCropGroupbox;
 		private System.Windows.Forms.CheckBox crop;
         private System.Windows.Forms.Button autoCropButton;
@@ -228,6 +227,7 @@ namespace MeGUI
         {
             this.Settings = GetProfileSettings();
         }
+
 		/// <summary>
 		/// constructor that first initializes everything using the default constructor
 		/// then opens a preview window with the video given as parameter
@@ -235,8 +235,14 @@ namespace MeGUI
 		/// <param name="videoInput">the DGIndex script to be loaded</param>
 		public AviSynthWindow(MainForm mainForm, string videoInput) : this(mainForm)
 		{
-            openVideoSource(videoInput);
+            openVideoSource(videoInput, null);
 		}
+
+        public AviSynthWindow(MainForm mainForm, string videoInput, string indexFile)
+            : this(mainForm)
+        {
+            openVideoSource(videoInput, indexFile);
+        }
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
@@ -1449,7 +1455,7 @@ namespace MeGUI
         #region buttons
         private void input_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            openVideoSource(input.Filename);
+            openVideoSource(input.Filename, null);
             if (chAutoPreview.Checked == true)
                 previewButton_Click(sender, args);
             signalAR_Checkedchanged(null, null);
@@ -1517,7 +1523,7 @@ namespace MeGUI
 
             double fps = (double)fpsBox.Value;
             inputLine = ScriptServer.GetInputLine(this.input.Filename, 
-                                                  null,
+                                                  this.indexFile,
                                                   deinterlace.Checked, 
                                                   sourceType, 
                                                   colourCorrect.Checked, 
@@ -1577,15 +1583,28 @@ namespace MeGUI
         /// Opens a video source using the correct method based on the extension of the file name
         /// </summary>
         /// <param name="videoInput"></param>
-        private void openVideoSource (string videoInput)
+        private void openVideoSource (string videoInput, string indexFileTemp)
         {
-            string projectPath;
-            string fileNameNoPath = Path.GetFileName(videoInput);
-            if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
-                projectPath = Path.GetDirectoryName(videoInput);
+            string ext, projectPath, fileNameNoPath;
+
+            indexFile = indexFileTemp;
+            projectPath = mainForm.Settings.DefaultOutputDir;
+            if (String.IsNullOrEmpty(indexFile))
+            {
+                ext = Path.GetExtension(videoInput).ToLower(System.Globalization.CultureInfo.InvariantCulture);
+                if (string.IsNullOrEmpty(projectPath))
+                    projectPath = Path.GetDirectoryName(videoInput);
+                fileNameNoPath = Path.GetFileName(videoInput);
+            }
+            else
+            {
+                ext = Path.GetExtension(indexFile).ToLower(System.Globalization.CultureInfo.InvariantCulture);
+                if (string.IsNullOrEmpty(projectPath))
+                    projectPath = Path.GetDirectoryName(indexFile);
+                fileNameNoPath = Path.GetFileName(indexFile);
+            }           
             videoOutput.Filename = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".avs"));
-            
-            string ext = Path.GetExtension(videoInput).ToLower(System.Globalization.CultureInfo.InvariantCulture);
+
             switch (ext)
             {
                 case ".avs":
@@ -1607,7 +1626,10 @@ namespace MeGUI
                     break;
                 case ".ffindex":
                     sourceType = PossibleSources.ffindex;
-                    openVideo(videoInput.Substring(0, videoInput.Length - 8));
+                    if (videoInput.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
+                        openVideo(videoInput.Substring(0, videoInput.Length - 8));
+                    else
+                        openVideo(videoInput);
                     break;
                 case ".vdr":
                     sourceType = PossibleSources.vdr;
@@ -1853,6 +1875,13 @@ namespace MeGUI
                 if (!ds.checkRender(fileName)) // make sure graphedit can render the file
                 {
                     MessageBox.Show("Unable to render the file.\r\nYou probably don't have the correct filters installed", "Direct Show Error", MessageBoxButtons.OK);
+                    return;
+                }
+
+                string tempAvs;
+                if (fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avi"))
+                {
+                    tempAvs = "AVISource(\"" + fileName + "\", audio=false)" + VideoUtil.getAssumeFPS(0, fileName);
                 }
                 else
                 {
@@ -1865,17 +1894,20 @@ namespace MeGUI
                     }
                     catch (Exception)
                     { }
-                    string tempAvs = string.Format(
-                            @"DirectShowSource(""{0}"", audio=false{1}, convertfps=true){2}{3}",
-                            fileName,
-                            frameRateString == null ? string.Empty : (", fps=" + frameRateString),
-                            VideoUtil.getAssumeFPS(0, fileName),
-                            this.flipVertical.Checked ? ".FlipVertical()" : string.Empty
-                            );
-                    if (file != null)
-                        file.Dispose();
-                   openVideo(tempAvs, fileName, true);
-                }
+
+                    tempAvs = string.Format(
+                        "LoadPlugin(\"{0}\")\r\nDirectShowSource(\"{1}\", audio=false{2}, convertfps=true){3}{4}",
+                        Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll"),
+                        fileName,
+                        frameRateString == null ? string.Empty : (", fps=" + frameRateString),
+                        VideoUtil.getAssumeFPS(0, fileName),
+                        this.flipVertical.Checked ? ".FlipVertical()" : string.Empty
+                        );
+                } 
+                if (file != null)
+                    file.Dispose();
+                openVideo(tempAvs, fileName, true);
+
             }
         }
         /// <summary>

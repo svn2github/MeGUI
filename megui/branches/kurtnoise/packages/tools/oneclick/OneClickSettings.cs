@@ -42,24 +42,6 @@ namespace MeGUI
 	/// </summary>
     public class OneClickSettings : GenericSettings
 	{
-        public string SettingsID { get { return "OneClick"; } }
-
-        public virtual void FixFileNames(Dictionary<string, string> _) { }
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as GenericSettings);
-        }
-
-        public bool Equals(GenericSettings other)
-        {
-            return other == null ? false : PropertyEqualityTester.AreEqual(this, other);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         private string videoProfileName;
         public string VideoProfileName
         {
@@ -277,22 +259,15 @@ namespace MeGUI
         public string[] IndexerPriorityString
         {
             get { return indexerPriority.ToArray(); }
-            set { indexerPriority = new List<string>(value); }
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
-
-        GenericSettings GenericSettings.Clone()
-        {
-            return Clone();
-        }
-        
-        public OneClickSettings Clone()
-        {
-            return this.MemberwiseClone() as OneClickSettings;
+            set 
+            {
+                if (value.Length == 4)
+                {
+                    Array.Resize<string>(ref value, 5);
+                    value[4] = FileIndexerWindow.IndexType.AVISOURCE.ToString();
+                }
+                indexerPriority = new List<string>(value); 
+            }
         }
 
 		public OneClickSettings()
@@ -333,9 +308,43 @@ namespace MeGUI
             IndexerPriority.Add(FileIndexerWindow.IndexType.DGA.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.D2V.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.FFMS.ToString());
+            IndexerPriority.Add(FileIndexerWindow.IndexType.AVISOURCE.ToString());
 		}
 
         #region GenericSettings Members
+
+        public string SettingsID { get { return "OneClick"; } }
+        public virtual void FixFileNames(Dictionary<string, string> _) { }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as GenericSettings);
+        }
+
+        public bool Equals(GenericSettings other)
+        {
+            return other == null ? false : PropertyEqualityTester.AreEqual(this, other);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        GenericSettings GenericSettings.Clone()
+        {
+            return Clone();
+        }
+
+        public OneClickSettings Clone()
+        {
+            return this.MemberwiseClone() as OneClickSettings;
+        }
 
         public string[] RequiredFiles
         {

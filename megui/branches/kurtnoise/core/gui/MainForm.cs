@@ -162,7 +162,6 @@ namespace MeGUI
 #if x64
             this.TitleText += " x64";
 #endif
-            this.TitleText += " KBuild Testing";
             if (MainForm.Instance.Settings.AutoUpdate == true && MainForm.Instance.Settings.AutoUpdateServerSubList == 1)
                 this.TitleText += " DEVELOPMENT UPDATE SERVER";
             setGUIInfo();
@@ -350,11 +349,9 @@ namespace MeGUI
                     {
                         this.settings = (MeGUISettings)ser.Deserialize(s);
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        LogItem _oLog = MainForm.Instance.Log.Info("Error");
-                        _oLog.LogValue("loadSettings", e, ImageType.Error);
-                        MessageBox.Show("Settings could not be loaded.", "Error loading profile", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("MeGUI settings could not be loaded. Default values will be applied now.", "Error loading MeGUI settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -787,7 +784,7 @@ namespace MeGUI
 
             UpdateWindow update = new UpdateWindow(this, this.Settings);
             update.GetUpdateData(true);
-            bool bIsComponentMissing = UpdateWindow.isComponentMissing(true);
+            bool bIsComponentMissing = UpdateWindow.isComponentMissing();
             if (bIsComponentMissing || update.HasUpdatableFiles()) // If there are updated or missing files, display the window
             {
                 if (MainForm.Instance.Settings.AutoUpdateSession)
@@ -820,7 +817,7 @@ namespace MeGUI
                             "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         update.ShowDialog();
                 }
-                if (UpdateWindow.isComponentMissing(true) && !this.Restart)
+                if (UpdateWindow.isComponentMissing() && !this.Restart)
                 {
                     if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
                     {
@@ -1157,7 +1154,7 @@ namespace MeGUI
                     bForceAdmin = true;
             }
 
-            // Check if the program can write to the program and avisynth plugin dir
+            // Check if the program can write to the program dir
             if (!FileUtil.IsDirWriteable(Path.GetDirectoryName(Application.ExecutablePath)))
                 bForceAdmin = true;
 
@@ -1456,27 +1453,11 @@ namespace MeGUI
             i.LogValue(".Net Framework", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
 
             bool bAviSynthExists;
-            VideoUtil.getAvisynthVersion(ref i, out bAviSynthExists);
-            if (!bAviSynthExists)
-            {
-#if x86
-                if (File.Exists(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Avisynth_258.exe")))
-                {
-                    if (AskToInstallAvisynth() == true)
-                        System.Diagnostics.Process.Start(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Avisynth_258.exe"));
-                }
-                else
-                {
-                    if (AskToDownloadAvisynth() == true)
-                        System.Diagnostics.Process.Start("http://www.avisynth.org");
-                }
-#endif
-#if x64
-                if (AskToDownloadAvisynth() == true)
-                    System.Diagnostics.Process.Start("http://forum.doom9.org/showthread.php?t=152800");
-#endif
-            }
+            VideoUtil.getAvisynthVersion(i, out bAviSynthExists);
 
+            string devil = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "devil.dll");
+            if (File.Exists(devil))
+                FileUtil.GetFileInformation("DevIL", devil, ref i);
             FileUtil.GetFileInformation("AvisynthWrapper", Path.GetDirectoryName(Application.ExecutablePath) + @"\AvisynthWrapper.dll", ref i);
             FileUtil.GetFileInformation("ICSharpCode.SharpZipLib", Path.GetDirectoryName(Application.ExecutablePath) + @"\ICSharpCode.SharpZipLib.dll", ref i);
             FileUtil.GetFileInformation("LinqBridge", Path.GetDirectoryName(Application.ExecutablePath) + @"\LinqBridge.dll", ref i);
@@ -1485,7 +1466,6 @@ namespace MeGUI
             FileUtil.GetFileInformation("MessageBoxExLib", Path.GetDirectoryName(Application.ExecutablePath) + @"\MessageBoxExLib.dll", ref i);
             FileUtil.GetFileInformation("SevenZipSharp", Path.GetDirectoryName(Application.ExecutablePath) + @"\SevenZipSharp.dll", ref i);
             FileUtil.GetFileInformation("7z", Path.GetDirectoryName(Application.ExecutablePath) + @"\7z.dll", ref i);
-
         }
 
         public void setOverlayIcon(Icon oIcon)
@@ -1513,24 +1493,6 @@ namespace MeGUI
                 Util.ThreadSafeRun(this, delegate { taskbarItem.SetOverlayIcon(this.Handle, oIcon.Handle, null); });
                 taskbarIcon = oIcon;
             }
-        }
-
-        private bool AskToDownloadAvisynth()
-        {
-            if (MessageBox.Show("MeGUI cannot find AviSynth on your system.\nWithout AviSynth, MeGUI will not run properly.\nDo you want to download and install it now?", "AviSynth missing",
-                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                return true;
-            else
-                return false;
-        }
-
-        private bool AskToInstallAvisynth()
-        {
-            if (MessageBox.Show("MeGUI cannot find AviSynth on your system.\nWithout AviSynth, MeGUI will not run properly.\nDo you want to install it now?", "AviSynth missing",
-                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                return true;
-            else
-                return false;
         }
 
         private bool AskToInstallComponents(bool bRestartRequired)

@@ -1089,12 +1089,12 @@ namespace MeGUI
         {
             RegisterEncoder(new NeroAACEncodingProvider());
             RegisterEncoder(new LameMP3EncodingProvider());
-            RegisterEncoder(new QAACEncodingProvider());
+            RegisterEncoder(new QaacEncodingProvider());
             RegisterEncoder(new VorbisEncodingProvider());
+            RegisterEncoder(new OpusEncodingProvider());
             RegisterEncoder(new MP2EncodingProvider());
             RegisterEncoder(new AftenEncodingProvider());
             RegisterEncoder(new FlacEncodingProvider());
-            RegisterEncoder(new OpusEncodingProvider());
         }
     }
     #endregion
@@ -1157,18 +1157,6 @@ namespace MeGUI
         }
     }
 
-    public class QAACEncodingProvider : AudioEncodingProvider
-    {
-        public QAACEncodingProvider()
-            : base()
-        {
-            supportedCodecs.Add(AudioCodec.AAC);
-            supportedTypes.Add(AudioType.MP4AAC);
-            supportedTypes.Add(AudioType.M4A);
-            supportedEncoderTypes.Add(AudioEncoderType.QAAC);
-        }
-    }
-
     public class VorbisEncodingProvider : AudioEncodingProvider
     {
         public VorbisEncodingProvider()
@@ -1213,6 +1201,18 @@ namespace MeGUI
         }
     }
 
+    public class QaacEncodingProvider : AudioEncodingProvider
+    {
+        public QaacEncodingProvider()
+            : base()
+        {
+            supportedCodecs.Add(AudioCodec.AAC);
+            supportedTypes.Add(AudioType.M4A);
+            supportedTypes.Add(AudioType.MP4AAC);
+            supportedEncoderTypes.Add(AudioEncoderType.QAAC);
+        }
+    }
+
     public class OpusEncodingProvider : AudioEncodingProvider
     {
         public OpusEncodingProvider()
@@ -1223,5 +1223,6 @@ namespace MeGUI
             supportedEncoderTypes.Add(AudioEncoderType.OPUS);
         }
     }
+
     #endregion
 }

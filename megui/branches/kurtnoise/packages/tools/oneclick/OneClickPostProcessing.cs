@@ -463,6 +463,12 @@ namespace MeGUI
                 iMediaFile = new ffmsFile(inputFile, indexFile);
                 oPossibleSource = PossibleSources.ffindex;
             }
+            else if (job.PostprocessingProperties.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
+            {
+                string tempAvs = "AVISource(\"" + inputFile + "\", audio=false)" + VideoUtil.getAssumeFPS(0, inputFile);
+                iMediaFile = AvsFile.ParseScript(tempAvs);
+                oPossibleSource = PossibleSources.directShow;
+            }
             else
             {
                 iMediaFile = AvsFile.OpenScriptFile(inputFile);
@@ -803,7 +809,7 @@ namespace MeGUI
             _log.LogValue("Generated Avisynth script", newScript);
             string strOutputAVSFile;
             if (String.IsNullOrEmpty(indexFile))
-                strOutputAVSFile = Path.Combine(job.PostprocessingProperties.WorkingDirectory, Path.GetFileName(inputFile));
+                strOutputAVSFile = Path.ChangeExtension(Path.Combine(job.PostprocessingProperties.WorkingDirectory, Path.GetFileName(inputFile)), ".avs");
             else
                 strOutputAVSFile = Path.ChangeExtension(indexFile, ".avs");
 
