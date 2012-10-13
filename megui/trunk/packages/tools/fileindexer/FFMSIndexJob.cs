@@ -39,11 +39,17 @@ namespace MeGUI
             else
                 Output = indexFile;
 
-            DemuxMode = demuxType;
-            if (audioTracks == null)
+            if (audioTracks == null || audioTracks.Count == 0)
+            {
                 AudioTracks = new List<AudioTrackInfo>();
+                DemuxMode = 0;
+            }
             else
+            {
+                DemuxMode = demuxType;
                 AudioTracks = audioTracks;
+            }
+
             DemuxVideo = false;
         }
        
