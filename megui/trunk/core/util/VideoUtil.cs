@@ -816,22 +816,31 @@ namespace MeGUI
                 return allSmallFilters.ToString().TrimEnd('|');
         }
 
-        public static void getAvisynthVersion(LogItem i, out bool bFound)
+        public static void getAvisynthVersion(LogItem i)
         {
             string fileVersion = string.Empty;
             string fileDate = string.Empty;
             bool bLocal = false;
-            bFound = false;
+            bool bFound = false;
 
             string syswow64path = Environment.GetFolderPath(Environment.SpecialFolder.System)
                 .ToLower(System.Globalization.CultureInfo.InvariantCulture).Replace("\\system32", "\\SysWOW64");
 
             if (File.Exists(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll")))
             {
-                string path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll");
-                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
+                string pathRoot = Path.GetDirectoryName(Application.ExecutablePath);
+                if (File.Exists(MainForm.Instance.Settings.AviSynthPath))
+                {
+                    string pathTool = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
+                    if (File.GetLastWriteTimeUtc(Path.Combine(pathRoot, "avisynth.dll")) != File.GetLastWriteTimeUtc(Path.Combine(pathTool, "avisynth.dll")))
+                        File.Copy(Path.Combine(pathTool, "avisynth.dll"), Path.Combine(pathRoot, "Avisynth.dll"), true);
+                    if (!File.Exists(Path.Combine(pathRoot, "devil.dll")) ||
+                        File.GetLastWriteTimeUtc(Path.Combine(pathRoot, "devil.dll")) != File.GetLastWriteTimeUtc(Path.Combine(pathTool, "devil.dll")))
+                        File.Copy(Path.Combine(pathTool, "devil.dll"), Path.Combine(pathRoot, "DevIL.dll"), true);
+                }
+                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(Path.Combine(pathRoot, "avisynth.dll"));
                 fileVersion = FileProperties.FileVersion;
-                fileDate = File.GetLastWriteTimeUtc(path).ToString();
+                fileDate = File.GetLastWriteTimeUtc(Path.Combine(pathRoot, "avisynth.dll")).ToString();
                 bLocal = true;
             }
 #if x86
@@ -867,8 +876,8 @@ namespace MeGUI
                     string path = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
                     try
                     {
-                        File.Copy(Path.Combine(path, "avisynth.dll"), Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll"), true);
-                        File.Copy(Path.Combine(path, "devil.dll"), Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "devil.dll"), true);
+                        File.Copy(Path.Combine(path, "avisynth.dll"), Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Avisynth.dll"), true);
+                        File.Copy(Path.Combine(path, "devil.dll"), Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "DevIL.dll"), true);
                         path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll");
                         FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
                         fileVersion = FileProperties.FileVersion;

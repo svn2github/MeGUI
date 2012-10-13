@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,11 +19,6 @@
 // ****************************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MeGUI.core.gui
@@ -37,7 +32,8 @@ namespace MeGUI.core.gui
             this.resizeFilterType.BindingContext = new BindingContext();
             this.noiseFilterType.DataSource = ScriptServer.ListOfDenoiseFilterType;
             this.noiseFilterType.BindingContext = new BindingContext();
-            if (!string.IsNullOrEmpty(MeGUISettings.HaaliMSPath))
+            if (!string.IsNullOrEmpty(MeGUISettings.HaaliMSPath) 
+                && System.IO.File.Exists(System.IO.Path.Combine(MeGUISettings.HaaliMSPath, "avss.dll")))
                 dss2.Enabled = true;
         }
 

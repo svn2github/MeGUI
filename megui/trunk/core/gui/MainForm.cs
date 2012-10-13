@@ -1452,13 +1452,35 @@ namespace MeGUI
             i.LogValue("Operating System", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
             i.LogValue(".Net Framework", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
 
-            bool bAviSynthExists;
-            VideoUtil.getAvisynthVersion(i, out bAviSynthExists);
+            VideoUtil.getAvisynthVersion(i);
 
             string devil = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "devil.dll");
             if (File.Exists(devil))
                 FileUtil.GetFileInformation("DevIL", devil, ref i);
             FileUtil.GetFileInformation("AvisynthWrapper", Path.GetDirectoryName(Application.ExecutablePath) + @"\AvisynthWrapper.dll", ref i);
+
+            // check if Haali Matroska Muxer is properly installed
+            try
+            {
+                // A28F324B-DDC5-4999-AA25-D3A7E25EF7A8 = Haali Matroska Muxer x86
+                // 55DA30FC-F16B-49FC-BAA5-AE59FC65F82D = Haali Matroska Muxer x64
+#if x86
+                Type comtype = Type.GetTypeFromCLSID(new Guid("A28F324B-DDC5-4999-AA25-D3A7E25EF7A8"));
+                string fileName = "splitter.ax";
+#endif
+#if x64
+                Type comtype = Type.GetTypeFromCLSID(new Guid("55DA30FC-F16B-49FC-BAA5-AE59FC65F82D"));
+                string fileName = "splitter.x64.ax";
+#endif
+                object comobj = Activator.CreateInstance(comtype);
+                FileUtil.GetFileInformation("Haali Matroska Muxer", Path.Combine(MeGUISettings.HaaliMSPath, fileName), ref i);
+            }
+            catch (Exception)
+            {
+                i.LogEvent("Haali Matroska Muxer not installed properly. Therefore DSS2(), FFVideoSource() and the HD Streams Extractor may also not work.", ImageType.Error);
+            }
+
+            FileUtil.GetFileInformation("Haali DSS2", Path.Combine(MeGUISettings.HaaliMSPath, "avss.dll"), ref i);
             FileUtil.GetFileInformation("ICSharpCode.SharpZipLib", Path.GetDirectoryName(Application.ExecutablePath) + @"\ICSharpCode.SharpZipLib.dll", ref i);
             FileUtil.GetFileInformation("LinqBridge", Path.GetDirectoryName(Application.ExecutablePath) + @"\LinqBridge.dll", ref i);
             FileUtil.GetFileInformation("MediaInfo", Path.GetDirectoryName(Application.ExecutablePath) + @"\MediaInfo.dll", ref i);
@@ -1466,6 +1488,9 @@ namespace MeGUI
             FileUtil.GetFileInformation("MessageBoxExLib", Path.GetDirectoryName(Application.ExecutablePath) + @"\MessageBoxExLib.dll", ref i);
             FileUtil.GetFileInformation("SevenZipSharp", Path.GetDirectoryName(Application.ExecutablePath) + @"\SevenZipSharp.dll", ref i);
             FileUtil.GetFileInformation("7z", Path.GetDirectoryName(Application.ExecutablePath) + @"\7z.dll", ref i);
+
+            
+
         }
 
         public void setOverlayIcon(Icon oIcon)

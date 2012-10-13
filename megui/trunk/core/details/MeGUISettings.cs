@@ -744,19 +744,24 @@ namespace MeGUI
             {
                 try
                 {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\HaaliMkx");
-
+                    Microsoft.Win32.RegistryKey key = null;
+#if x86
+                    key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\HaaliMkx");
                     if (key == null)
+#endif
                         key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\HaaliMkx");
 
                     if (key == null)
-                        return null;
-                    else
-                        return (string)key.GetValue("Install_Dir");
+                        return String.Empty;
+
+                    string value = (string)key.GetValue("Install_Dir");
+                    if (value == null)
+                        return String.Empty;
+                    return value;
                 }
                 catch
                 {
-                    return null;
+                    return String.Empty;
                 }
             }
         }

@@ -30,7 +30,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription("GUI frontend for video encoding")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("MeGUI")]
-[assembly: AssemblyCompany("www.doom9.net")]
+[assembly: AssemblyCompany("http://sourceforge.net/projects/megui")]
 [assembly: AssemblyCopyright("Licensed under the GPL")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		

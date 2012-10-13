@@ -1,3 +1,4 @@
+2199 added check if Haali is correctly installed
 2193 [Updater] some minor enhancements for offline mode
 2192 [MediaInfo] ignore phantom TiVo audio tracks
 2191 [OneClick] added AviSource() as way to process AVI files

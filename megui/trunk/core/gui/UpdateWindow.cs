@@ -138,9 +138,6 @@ namespace MeGUI
                         arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);
                         strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
                         arrPath.Add(System.IO.Path.Combine(strPath, "ffms2.dll"));
-#if x64
-                        arrPath.Add(System.IO.Path.Combine(strPath, "ffms2-x64.dll"));
-#endif
                         break;
                     case "mp4box": arrPath.Add(MainForm.Instance.Settings.Mp4boxPath); break;
                     case "pgcdemux": arrPath.Add(MainForm.Instance.Settings.PgcDemuxPath); break;
@@ -193,6 +190,7 @@ namespace MeGUI
                             strPath = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
                             arrPath.Add((Path.Combine(strPath, @"avisynth.dll")));
                             arrPath.Add((Path.Combine(strPath, @"directshowsource.dll")));
+                            arrPath.Add((Path.Combine(strPath, @"devil.dll")));
                             break;
                         }
                     case "neroaacenc":
@@ -995,9 +993,6 @@ namespace MeGUI
             arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);
             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
             arrPath.Add(System.IO.Path.Combine(strPath, "ffms2.dll"));
-#if x64
-            arrPath.Add(System.IO.Path.Combine(strPath, "ffms2-x64.dll"));
-#endif
             //mp4box
             arrPath.Add(MainForm.Instance.Settings.Mp4boxPath);
             //pgcdemux
@@ -1093,6 +1088,7 @@ namespace MeGUI
             arrPath.Add(MainForm.Instance.Settings.AviSynthPath);
             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
             arrPath.Add(System.IO.Path.Combine(strPath, "directshowsource.dll"));
+            arrPath.Add(System.IO.Path.Combine(strPath, "devil.dll"));
 
             bool bComponentMissing = false;
             foreach (string strAppPath in arrPath)
@@ -1701,7 +1697,6 @@ namespace MeGUI
                 }
             }
 
-
             // Now update the files we can
             foreach (List<iUpgradeable> group in groups.Values)
             {
@@ -1810,8 +1805,8 @@ namespace MeGUI
                     File.Delete(strLocalUpdateXML);
             }
 
-            bool bFound;
-            VideoUtil.getAvisynthVersion(null, out bFound);
+            // call function so that avisynth dlls will be copied to the root if needed
+            VideoUtil.getAvisynthVersion(null);
 
             List<string> files = new List<string>();
             foreach (iUpgradeable u in upgradeData)
