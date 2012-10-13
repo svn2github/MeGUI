@@ -348,6 +348,10 @@ namespace MeGUI
                 {
                     MediaInfoWrapper.AudioTrack atrack = info.Audio[counter];
 
+                    if (atrack.Format.Equals("MPEG Audio") && String.IsNullOrEmpty(atrack.Delay) 
+                        && String.IsNullOrEmpty(atrack.SamplingRate) && String.IsNullOrEmpty(atrack.FormatProfile))
+                        continue;
+
                     _AudioInfo.Codecs[counter] = getAudioCodec(atrack.Format);
                     if (atrack.BitRateMode == "VBR")
                         _AudioInfo.BitrateModes[counter] = BitrateManagementMode.VBR;
