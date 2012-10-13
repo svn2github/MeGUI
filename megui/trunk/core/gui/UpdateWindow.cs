@@ -52,8 +52,8 @@ namespace MeGUI
         private XmlDocument upgradeXml = null;
         public bool needsRestart = false;
         private bool isOrHasDownloadedUpgradeData = false;
-        private string ServerAddress;
         private LogItem oLog;
+        private String ServerAddress;
 
         #region Classes
 
@@ -964,7 +964,7 @@ namespace MeGUI
             mainForm.Settings.UpdateFormStatusColumnWidth = colStatus.Width;
         }
 
-        public static bool isComponentMissing(bool bWriteLog)
+        public static bool isComponentMissing()
         {
             ArrayList arrPath = new ArrayList();
             string strPath;
@@ -1099,23 +1099,20 @@ namespace MeGUI
             {
                 if (String.IsNullOrEmpty(strAppPath))
                 {
-                    if (bWriteLog)
-                        MainForm.Instance.UpdateLog.LogEvent("No path to check for missing components!", ImageType.Error);
+                    MainForm.Instance.UpdateLog.LogEvent("No path to check for missing components!", ImageType.Error);
                     bComponentMissing = true;
                     continue;
                 }
                 else if (File.Exists(strAppPath) == false)
                 {
-                    if (bWriteLog)
-                        MainForm.Instance.UpdateLog.LogEvent("Component not found: " + strAppPath, ImageType.Error);
+                    MainForm.Instance.UpdateLog.LogEvent("Component not found: " + strAppPath, ImageType.Error);
                     bComponentMissing = true;
                     continue;
                 }
                 FileInfo fInfo = new FileInfo(strAppPath);
                 if (fInfo.Length == 0)
                 {
-                    if (bWriteLog)
-                        MainForm.Instance.UpdateLog.LogEvent("Component has 0 bytes: " + strAppPath, ImageType.Error);
+                    MainForm.Instance.UpdateLog.LogEvent("Component has 0 bytes: " + strAppPath, ImageType.Error);
                     bComponentMissing = true;
                 }
             }
@@ -1237,20 +1234,17 @@ namespace MeGUI
         /// This method is called to retrieve the update data from the webserver
         /// and then set the relevant information to the grid.
         /// </summary>
-        public ErrorState GetUpdateXML(bool bUseLocalXMLFile, string strServerAddress)
+        public ErrorState GetUpdateXML(string strServerAddress)
         {
             if (upgradeXml != null) // the update file has already been downloaded and processed
                 return ErrorState.Successful;
 
-            // checks if there is a special server to check
-            if (!String.IsNullOrEmpty(strServerAddress))
-                ServerAddress = strServerAddress;
-
             string data = null;
             upgradeXml = new XmlDocument();
 
-            if (bUseLocalXMLFile)
+            if (String.IsNullOrEmpty(strServerAddress))
             {
+                // check local file
 #if x86
                 string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
 #endif
@@ -1264,6 +1258,11 @@ namespace MeGUI
                     data = sr.ReadToEnd();
                     sr.Close();
                     AddTextToLog("Local update file opened successfully", ImageType.Information);
+                }
+                else
+                {
+                    upgradeXml = null;
+                    return ErrorState.ServerNotAvailable;
                 }
             }
             else
@@ -1295,15 +1294,15 @@ namespace MeGUI
                 try
                 {
 #if x86
-                    data = serverClient.DownloadString(ServerAddress + "upgrade.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
+                    data = serverClient.DownloadString(strServerAddress + "upgrade.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
 #endif
 #if x64
-                    data = serverClient.DownloadString(ServerAddress + "upgrade_x64.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
+                    data = serverClient.DownloadString(strServerAddress + "upgrade_x64.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
 #endif
                 }
                 catch
                 {
-                    AddTextToLog("Could not connect to server " + ServerAddress, ImageType.Error);
+                    AddTextToLog("Could not connect to server " + strServerAddress, ImageType.Error);
                     upgradeXml = null;
                     return ErrorState.ServerNotAvailable;
                 }
@@ -1315,7 +1314,7 @@ namespace MeGUI
             }
             catch
             {
-                AddTextToLog("Invalid update file. Aborting.", ImageType.Error);
+                AddTextToLog("Invalid or missing update file. Aborting.", ImageType.Error);
                 upgradeXml = null;
                 return ErrorState.InvalidXML;
             }
@@ -1332,15 +1331,14 @@ namespace MeGUI
             {
                 ServerAddress = serverName;
                 AddTextToLog("Connecting to server: " + serverName, ImageType.Information);
-                value = GetUpdateXML(false, null);
+                value = GetUpdateXML(serverName);
                 if (value == ErrorState.Successful)
                     break;
             }
 
             if (value != ErrorState.Successful)
             {
-                AddTextToLog("Could not download XML file", ImageType.Error);
-                value = GetUpdateXML(true, null);
+                value = GetUpdateXML(null);
                 if (value != ErrorState.Successful)
                     return;
             }

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,10 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MeGUI.core.gui
@@ -61,7 +57,7 @@ namespace MeGUI.core.gui
                 return;
             }
             UpdateWindow oUpdateWindow = new UpdateWindow(MainForm.Instance, MainForm.Instance.Settings, true);
-            if (oUpdateWindow.GetUpdateXML(false, serverName) != UpdateWindow.ErrorState.Successful)
+            if (oUpdateWindow.GetUpdateXML(serverName) != UpdateWindow.ErrorState.Successful)
             {
                 if (MessageBox.Show("The server or the XML file is not available.\r\nShould it be added nevertheless?", "No connection to server", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != System.Windows.Forms.DialogResult.Yes)
                     return;

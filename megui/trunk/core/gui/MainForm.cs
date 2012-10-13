@@ -784,7 +784,7 @@ namespace MeGUI
 
             UpdateWindow update = new UpdateWindow(this, this.Settings);
             update.GetUpdateData(true);
-            bool bIsComponentMissing = UpdateWindow.isComponentMissing(true);
+            bool bIsComponentMissing = UpdateWindow.isComponentMissing();
             if (bIsComponentMissing || update.HasUpdatableFiles()) // If there are updated or missing files, display the window
             {
                 if (MainForm.Instance.Settings.AutoUpdateSession)
@@ -817,7 +817,7 @@ namespace MeGUI
                             "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         update.ShowDialog();
                 }
-                if (UpdateWindow.isComponentMissing(true) && !this.Restart)
+                if (UpdateWindow.isComponentMissing() && !this.Restart)
                 {
                     if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
                     {

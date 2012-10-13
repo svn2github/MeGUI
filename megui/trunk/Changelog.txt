@@ -1,3 +1,4 @@
+2193 [Updater] some minor enhancements for offline mode
 2192 [MediaInfo] ignore phantom TiVo audio tracks
 2191 [OneClick] added AviSource() as way to process AVI files
      [File Indexer] added DFSC/VFW and CFHD/CINEFORM to the list of not by FFMS supported codecs
