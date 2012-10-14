@@ -94,7 +94,12 @@ namespace MeGUI
             useadvancedtooltips = true;
             audioSamplesPerUpdate = 100000;
             aviMuxGUIPath = getDownloadPath(@"tools\avimux_gui\avimux_gui.exe");
-            qaacPath = getDownloadPath(@"tools\qaac\qaac.exe");
+#if x64
+            qaacPath = getDownloadPath(@"tools\qaac\x64\qaac.exe");
+#endif
+#if x86
+            qaacPath = getDownloadPath(@"tools\qaac\x86\qaac.exe");
+#endif
             opusPath = getDownloadPath(@"tools\opus\opusenc.exe");
 			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");

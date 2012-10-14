@@ -1119,18 +1119,29 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
             if (audioJob.Settings is QaacSettings)
             {
-                QaacSettings f = audioJob.Settings as QaacSettings;
+                QaacSettings q = audioJob.Settings as QaacSettings;
                 _encoderExecutablePath = this._settings.QaacPath;
                 _mustSendWavHeaderToEncoderStdIn = true;
-                switch (f.BitrateMode)
+                StringBuilder sb = new StringBuilder("--ignorelength --threading ");
+
+                if (q.Profile == QaacProfile.ALAC)
+                    sb.Append("-A ");
+                else
                 {
-                    case BitrateManagementMode.VBR:
-                        _encoderCommandLine = "-q " + f.Quality + " --mpeg-vers 4 -o \"{0}\" -"; 
-                        break;
-                    default:
-                        _encoderCommandLine = "-b " + f.Bitrate + " --mpeg-vers 4 -o \"{0}\" -";
-                        break;
+                    if (q.Profile == QaacProfile.HE) sb.Append("--he ");
+
+                    switch (q.Mode)
+                    {
+                        case QaacMode.TVBR: sb.Append("-V " + q.Quality); break;
+                        case QaacMode.CVBR: sb.Append("-v " + q.Bitrate); break;
+                        case QaacMode.ABR : sb.Append("-a " + q.Bitrate); break;
+                        case QaacMode.CBR : sb.Append("-c " + q.Bitrate); break;
+                    }
                 }
+
+                sb.Append(" - -o \"{0}\"");
+
+                _encoderCommandLine = sb.ToString();
             }
             if (audioJob.Settings is MP3Settings)
             {
