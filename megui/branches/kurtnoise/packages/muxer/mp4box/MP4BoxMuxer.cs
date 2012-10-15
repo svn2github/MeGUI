@@ -339,8 +339,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     sb.Append("\"");
                 }
 
-                if (!string.IsNullOrEmpty(settings.ChapterFile)) // a chapter file is defined
-                    sb.Append(" -chap \"" + settings.ChapterFile + "\"");
+                if (!string.IsNullOrEmpty(settings.ChapterFile))
+                {
+                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                    {
+                        FileUtil.CreateXMLFromOGGChapFile(settings.ChapterFile);
+                        sb.Append(" -add \"" + Path.Combine(Path.GetDirectoryName(settings.ChapterFile), Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml") + ":chap\"");
+                    }
+                    else
+                        sb.Append(" -chap \"" + settings.ChapterFile + "\"");
+
+                }
 
                 if (settings.SplitSize.HasValue)
                     sb.Append(" -splits " + settings.SplitSize.Value.KB);
