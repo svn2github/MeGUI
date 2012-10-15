@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,15 +19,9 @@
 // ****************************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
-using MeGUI.core.details.video;
 using MeGUI.core.util;
 
 namespace MeGUI.core.gui
@@ -62,7 +56,10 @@ namespace MeGUI.core.gui
                 }
             }
             if (comboBox1.Items.Count > 0)
+            {
                 comboBox1.SelectedIndex = 0;
+                MessageBox.Show("The profile \"" + fqname + "\" could not be selected.\r\nSelecting profile \"" + comboBox1.SelectedItem.ToString() + "\" instead.", "Profile couldn't be selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         public void SelectProfile(Profile prof)
