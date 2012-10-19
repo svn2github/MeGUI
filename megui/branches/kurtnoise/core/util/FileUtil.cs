@@ -469,9 +469,9 @@ namespace MeGUI.core.util
                     {
                         i++;
                         if (i % 2 == 1)
-                            sb.Append("<TextSample sampleTime=\"" + line.Substring(line.Length - 12) + "\"");
+                            sb.Append("<TextSample sampleTime=\"" + line.Substring(10) + "\"");
                         else
-                            sb.Append(" text=\"" + line.Substring(line.Length - line.LastIndexOf("NAME=")) + "\"></TextSample>" + Environment.NewLine);                        
+                            sb.Append(" text=\"" + line.Substring(14) + "\"></TextSample>" + Environment.NewLine);                        
                     }
                 }
                 sb.AppendLine("</TextStream>");
