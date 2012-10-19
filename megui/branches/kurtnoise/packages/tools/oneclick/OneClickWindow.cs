@@ -718,6 +718,7 @@ namespace MeGUI
                     sb.Append(string.Format("{0}:\"{1}\" ", oStreamControl.SelectedStream.TrackInfo.MMGTrackID, strDemuxFilePath));
                     oStreamControl.SelectedStream.DemuxFilePath = strDemuxFilePath;
                     dpp.FilesToDelete.Add(strDemuxFilePath);
+                    dpp.SubtitleTracks.Add(oStreamControl.SelectedStream);
                 }
 
                 if (sb.Length != 0)
@@ -999,21 +1000,21 @@ namespace MeGUI
 
 
             // write all to be processed tracks into the log
-            _oLog.LogEvent("Video: " + dpp.VideoInput);
+            _oLog.LogEvent("Video: " + _videoInputInfo.FileName);
             foreach (OneClickAudioTrack oTrack in dpp.AudioTracks)
             {
                 if (oTrack.AudioTrackInfo != null)
-                    _oLog.LogEvent("Audio: " + oTrack.AudioTrackInfo.SourceFileName);
+                    _oLog.LogEvent("Audio: " + oTrack.AudioTrackInfo.SourceFileName + " (" + oTrack.AudioTrackInfo.ToString() + ")");
                 else if (oTrack.AudioJob != null)
                     _oLog.LogEvent("Audio: " + oTrack.AudioJob.Input);
             }
             foreach (OneClickStream oTrack in dpp.SubtitleTracks)
             {
                 if (oTrack.TrackInfo != null)
-                    _oLog.LogEvent("Subtitle: " + oTrack.TrackInfo.SourceFileName);
+                    _oLog.LogEvent("Subtitle: " + oTrack.TrackInfo.SourceFileName + " (" + oTrack.TrackInfo.ToString() + ")");
             }
             
-
+            // add jobs to queue
             mainForm.Jobs.addJobsWithDependencies(finalJobChain);
 
             if (this.openOnQueue.Checked && !bAutomatedProcessing)
