@@ -352,8 +352,7 @@ namespace MeGUI
                 try
                 {
                     StreamWriter hfyuWrapper = new StreamWriter(inputAVS, false, Encoding.Default);
-                    String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
-                    hfyuWrapper.WriteLine("LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + hfyuFile + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")");
+                    hfyuWrapper.WriteLine(VideoUtil.getFFMSInputLine(hfyuFile, null, 0));
                     hfyuWrapper.Close();
                 }
                 catch (Exception)

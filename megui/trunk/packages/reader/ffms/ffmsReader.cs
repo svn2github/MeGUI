@@ -77,8 +77,6 @@ namespace MeGUI
         /// <param name="indexFile">the FFMSIndex index file that this reader will process</param>
         public ffmsFile(string fileName, string indexFile)
         {
-            string strScript = "";
-
             if (!String.IsNullOrEmpty(indexFile) && String.IsNullOrEmpty(fileName))
             {
                 this.fileName = indexFile.Substring(0, indexFile.Length - 8);
@@ -87,17 +85,19 @@ namespace MeGUI
             else
                 this.fileName = fileName;
 
-            string strDLL = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
-            strScript = "LoadPlugin(\"" + strDLL + "\")\r\nFFVideoSource(\"" + this.fileName + "\"" 
-                + (!string.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty) 
-                + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
-            reader = AvsFile.ParseScript(strScript);
-            info = reader.VideoInfo.Clone();
+            double fps = 0;
+            MediaInfoFile oInfo = null;
             if (File.Exists(this.fileName))
             {
-                MediaInfoFile oInfo = new MediaInfoFile(this.fileName);
-                info.DAR = oInfo.VideoInfo.DAR;
+                oInfo = new MediaInfoFile(this.fileName);
+                if (oInfo.VideoInfo.HasVideo && oInfo.VideoInfo.FPS > 0)
+                    fps = oInfo.VideoInfo.FPS;
             }
+
+            reader = AvsFile.ParseScript(VideoUtil.getFFMSInputLine(this.fileName, indexFile, fps));
+            info = reader.VideoInfo.Clone();
+            if (oInfo != null)
+                info.DAR = oInfo.VideoInfo.DAR;
         }
 
         #region properties

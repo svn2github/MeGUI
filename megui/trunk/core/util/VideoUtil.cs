@@ -907,19 +907,57 @@ namespace MeGUI
             i.LogValue("AviSynth", strVersion);
         }
 
+        public static string getFFMSInputLine(string inputFile, string indexFile, double fps)
+        {
+            return getFFMSBasicInputLine(inputFile, indexFile, 0, 0, 0);
+        }
+
+        private static string getFFMSBasicInputLine(string inputFile, string indexFile, int rffmode, int fpsnum, int fpsden)
+        {
+            StringBuilder script = new StringBuilder();
+            if (inputFile.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
+                inputFile = inputFile.Substring(0, inputFile.Length - 8);
+            script.AppendLine("LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll") + "\")");
+            script.Append("FFVideoSource(\"" + inputFile + "\"");
+            if (!String.IsNullOrEmpty(indexFile)
+                && !indexFile.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(inputFile.ToLower(System.Globalization.CultureInfo.InvariantCulture) + ".ffindex"))
+                script.Append(", cachefile=\"" + indexFile + "\"");
+            if (fpsnum > 0 && fpsden > 0)
+                script.Append(", fpsnum=" + fpsnum + ", fpsden=" + fpsden);
+            if (MainForm.Instance.Settings.FFMSThreads > 0)
+                script.Append(", threads=" + MainForm.Instance.Settings.FFMSThreads);
+            if (rffmode > 0)
+                script.Append(", rffmode=" + rffmode);
+            script.Append(")");
+            return script.ToString();
+        }
+
         public static string getAssumeFPS(double fps, string strInput)
         {
+            int fpsnum;
+            int fpsden;
+
+            if (!getFPSFraction(fps, strInput, out fpsnum, out fpsden))
+                return String.Empty;
+
+            return ".AssumeFPS(" + fpsnum + "," + fpsden + ")";
+        }
+
+        private static bool getFPSFraction(double fps, string strInput, out int fpsnum, out int fpsden)
+        {
+            fpsnum = fpsden = 0;
+
             if (fps <= 0)
             {
                 if (!File.Exists(strInput))
-                    return String.Empty;
+                    return false;
                 if (strInput.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
                     strInput = strInput.Substring(0, strInput.Length - 8);
                 if (Path.GetExtension(strInput).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
                 {
                     fps = GetFPSFromAVSFile(strInput);
                     if (fps <= 0)
-                        return String.Empty;
+                        return false;
                 }
                 else
                 {
@@ -927,25 +965,48 @@ namespace MeGUI
                     if (oInfo.VideoInfo.HasVideo && oInfo.VideoInfo.FPS > 0)
                         fps = oInfo.VideoInfo.FPS;
                     else
-                        return String.Empty;
+                        return false;
                 }
             }
 
-            string strAssumeFPS = ".AssumeFPS(";
-            string strFPS = Math.Round(fps, 3).ToString("F3", System.Globalization.CultureInfo.InvariantCulture);
-            switch (strFPS)
+            double dFPS = Math.Round(fps, 3);
+            if (dFPS == 23.976)
             {
-                case "23.976": strAssumeFPS += "24000,1001"; break;
-                case "29.970": strAssumeFPS += "30000,1001"; break;
-                case "59.940": strAssumeFPS += "60000,1001"; break;
-                case "119.880": strAssumeFPS += "120000,1001"; break;
-                case "24.000": strAssumeFPS += "24,1"; break;
-                case "25.000": strAssumeFPS += "25,1"; break;
-                case "50.000": strAssumeFPS += "50,1"; break;
-                case "100.000": strAssumeFPS += "100,1"; break;
-                default: strAssumeFPS += strFPS; break;
+                fpsnum = 24000; fpsden = 1001;
             }
-            return strAssumeFPS + ")";
+            else if (dFPS == 29.970)
+            {
+                fpsnum = 30000; fpsden = 1001;
+            }
+            else if (dFPS == 59.940)
+            {
+                fpsnum = 60000; fpsden = 1001;
+            }
+            else if (dFPS == 119.880)
+            {
+                fpsnum = 120000; fpsden = 1001;
+            }
+            else
+            {
+                dFPS = dFPS * 1000;
+                if (dFPS % 1000 == 0)
+                {
+                    fpsnum = (int)Math.Floor(dFPS / 1000); fpsden = 1;
+                }
+                else if (dFPS % 100 == 0)
+                {
+                    fpsnum = (int)Math.Floor(dFPS / 100); fpsden = 10;
+                }
+                else if (dFPS % 1000 == 0)
+                {
+                    fpsnum = (int)Math.Floor(dFPS / 10); fpsden = 100;
+                }
+                else
+                {
+                    fpsnum = (int)dFPS; fpsden = 1000;
+                }
+            }
+            return true;
         }
 
         public static double GetFPSFromAVSFile(String strAVSScript)

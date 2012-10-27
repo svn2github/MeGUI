@@ -258,7 +258,9 @@ namespace MeGUI
             btnFFMS.Enabled = iFile.isFFMSIndexable();
 
             IndexType newType = IndexType.NONE;
-            if (iFile.recommendIndexer(out newType))
+            iFile.recommendIndexer(out newType);
+            if (newType == IndexType.D2V || newType == IndexType.DGA ||
+                newType == IndexType.DGI || newType == IndexType.FFMS)
             {
                 gbIndexer.Enabled = gbAudio.Enabled = gbOutput.Enabled = true;
                 changeIndexer(newType);
