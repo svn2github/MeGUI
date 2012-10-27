@@ -161,10 +161,27 @@ namespace MeGUI
         /// <returns>a list of containers that can be supported</returns>
         public List<ContainerType> GetSupportedContainers(params MuxableType[] inputTypes)
         {
+            // remove duplicate types
+            List<MuxableType> allTypes = new List<MuxableType>();
+            foreach (MuxableType oType in inputTypes)
+            {
+                bool bFound = false;
+                foreach (MuxableType oAllType in allTypes)
+                {
+                    if (oType.outputType.ID.Equals(oAllType.outputType.ID))
+                    {
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (!bFound)
+                    allTypes.Add(oType);
+            }
+
             List<ContainerType> supportedContainers = new List<ContainerType>();
             foreach (ContainerType cot in GetSupportedContainers())
             {
-                if (CanBeMuxed(cot, inputTypes))
+                if (CanBeMuxed(cot, allTypes.ToArray()))
                 {
                     if (!supportedContainers.Contains(cot))
                         supportedContainers.Add(cot);
@@ -176,11 +193,34 @@ namespace MeGUI
         public List<ContainerType> GetSupportedContainers(VideoEncoderType videoCodec, AudioEncoderType[] audioCodecs,
             params MuxableType[] dictatedOutputTypes)
         {
+            // remove duplicate codecs
+            List<AudioEncoderType> allCodecs = new List<AudioEncoderType>();
+            foreach (AudioEncoderType oType in audioCodecs)
+                if (!allCodecs.Contains(oType))
+                    allCodecs.Add(oType);
+
+            // remove duplicate types
+            List<MuxableType> allTypes = new List<MuxableType>();
+            foreach (MuxableType oType in dictatedOutputTypes)
+            {
+                bool bFound = false;
+                foreach (MuxableType oAllType in allTypes)
+                {
+                    if (oType.outputType.ID.Equals(oAllType.outputType.ID))
+                    {
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (!bFound)
+                    allTypes.Add(oType);
+            }
+
             List<ContainerType> supportedContainers = new List<ContainerType>();
             List<ContainerType> allKnownContainers = GetSupportedContainers();
             foreach (ContainerType cot in allKnownContainers)
             {
-                if (CanBeMuxed(videoCodec, audioCodecs, cot, dictatedOutputTypes))
+                if (CanBeMuxed(videoCodec, allCodecs.ToArray(), cot, allTypes.ToArray()))
                 {
                     if (!supportedContainers.Contains(cot))
                         supportedContainers.Add(cot);

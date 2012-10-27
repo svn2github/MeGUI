@@ -480,29 +480,31 @@ namespace MeGUI
             List<AudioEncoderType> audioCodecs = new List<AudioEncoderType>();
             List<MuxableType> dictatedOutputTypes = new List<MuxableType>();
 
-            for (int i = 0; i < audioTracks.Count; ++i)
+            if (audioTracks != null)
             {
-                if (audioTracks[i].SelectedStreamIndex == 0) // "None"
-                    continue;
-
-                if (audioTracks[i].SelectedStream.EncoderSettings != null && audioTracks[i].SelectedStream.EncodingMode != AudioEncodingMode.Never)
-                    audioCodecs.Add(audioTracks[i].SelectedStream.EncoderSettings.EncoderType);
-                else if (audioTracks[i].SelectedStream.EncodingMode == AudioEncodingMode.Never)
+                for (int i = 0; i < audioTracks.Count; ++i)
                 {
-                    string typeString;
+                    if (audioTracks[i].SelectedStreamIndex == 0) // "None"
+                        continue;
 
-                    if (audioTracks[i].SelectedItem.IsStandard)
+                    if (audioTracks[i].SelectedStream.EncoderSettings != null && audioTracks[i].SelectedStream.EncodingMode != AudioEncodingMode.Never)
+                        audioCodecs.Add(audioTracks[i].SelectedStream.EncoderSettings.EncoderType);
+                    else if (audioTracks[i].SelectedStream.EncodingMode == AudioEncodingMode.Never)
                     {
-                        AudioTrackInfo ati = (AudioTrackInfo)audioTracks[i].SelectedStream.TrackInfo;
-                        typeString = "file." + ati.Codec;
-                    }
-                    else
-                    {
-                        typeString = audioTracks[i].SelectedFile;
-                    }
+                        string typeString;
+                        if (audioTracks[i].SelectedItem.IsStandard)
+                        {
+                            AudioTrackInfo ati = (AudioTrackInfo)audioTracks[i].SelectedStream.TrackInfo;
+                            typeString = "file." + ati.Codec;
+                        }
+                        else
+                        {
+                            typeString = audioTracks[i].SelectedFile;
+                        }
 
-                    if (VideoUtil.guessAudioType(typeString) != null)
-                        dictatedOutputTypes.Add(VideoUtil.guessAudioMuxableType(typeString, false));
+                        if (VideoUtil.guessAudioType(typeString) != null)
+                            dictatedOutputTypes.Add(VideoUtil.guessAudioMuxableType(typeString, false));
+                    }
                 }
             }
 
@@ -512,10 +514,8 @@ namespace MeGUI
             List<ContainerType> supportedOutputTypes = new List<ContainerType>();
 
             foreach (ContainerType c in acceptableContainerTypes)
-            {
                 if (tempSupportedOutputTypes.Contains(c))
                     supportedOutputTypes.Add(c);
-            }
             
             if (supportedOutputTypes.Count == 0)
             {
