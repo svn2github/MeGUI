@@ -695,7 +695,7 @@ namespace MeGUI
 
                     if (!bDontEncode)
                     {
-                        if (oStreamControl.SelectedStream.TrackInfo.Codec.Equals("TrueHD", StringComparison.InvariantCultureIgnoreCase))
+                        if (oStreamControl.SelectedStream.TrackInfo.Codec.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("truehd"))
                             oStreamControl.SelectedStream.TrackInfo.Codec = "AC-3";                            
                         else if (oStreamControl.SelectedStream.TrackInfo.Codec.StartsWith("DTS-HD", StringComparison.InvariantCultureIgnoreCase))
                             oStreamControl.SelectedStream.TrackInfo.Codec = "DTS";
@@ -841,7 +841,7 @@ namespace MeGUI
                     string strFileName = string.Empty;
                     if (!oStreamControl.SelectedItem.IsStandard || !dpp.Eac3toDemux)
                     {
-                        if (strAudioCodec.Equals("TrueHD", StringComparison.InvariantCultureIgnoreCase))
+                        if (strAudioCodec.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("truehd"))
                         {
                             strAudioCodec = "AC-3";
                             if (oStreamControl.SelectedItem.IsStandard)

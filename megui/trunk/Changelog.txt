@@ -1,4 +1,5 @@
-2210 [OneClick] optimize job creation process when several tracks are used
+2211 [OneClick] optimized TrueHD handling with eac3to
+2210 [OneClick] optimized job creation process when several tracks are used
 2209 [AVS Script Creator] internal optimizations
 2203 [OneClick] fixed missing internal subtitles during Blu-ray processing
 2199 added check if Haali is correctly installed

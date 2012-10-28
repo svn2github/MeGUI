@@ -198,7 +198,7 @@ namespace MeGUI
                 if (strCodec.StartsWith("DTS", StringComparison.InvariantCultureIgnoreCase))
                     strCodec = "DTS";
 
-                if (strCodec.StartsWith("TRUEHD", StringComparison.InvariantCultureIgnoreCase))
+                if (strCodec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("TRUEHD"))
                     strCodec = "TRUEHD";
 
                 switch (strCodec)
