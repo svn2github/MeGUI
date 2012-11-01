@@ -861,6 +861,7 @@ namespace MeGUI
                 !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-TS") &&
                 !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-PS") &&
                 !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG VIDEO") &&
+                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-4") &&
                 !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("VC-1") &&
                 !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVC") &&
                 !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BDAV") &&

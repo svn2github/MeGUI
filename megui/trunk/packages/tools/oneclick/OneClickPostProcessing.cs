@@ -170,7 +170,7 @@ namespace MeGUI
                 if (audioFiles.Count == 0 && job.PostprocessingProperties.IndexType != FileIndexerWindow.IndexType.NONE && !job.PostprocessingProperties.Eac3toDemux)
                     audioFiles = vUtil.getAllDemuxedAudio(arrAudioTracks, new List<AudioTrackInfo>(), out arrAudioFilesDelete, job.IndexFile, _log);
 
-                fillInAudioInformation(arrAudioJobs, arrMuxStreams);
+                fillInAudioInformation(ref arrAudioJobs, arrMuxStreams);
 
                 if (!String.IsNullOrEmpty(job.PostprocessingProperties.VideoFileToMux))
                     _log.LogEvent("Don't encode video: True");
@@ -361,17 +361,21 @@ namespace MeGUI
             raiseEvent();
         }
 
-        private void fillInAudioInformation(List<AudioJob> arrAudioJobs, List<MuxStream> arrMuxStreams)
+        private void fillInAudioInformation(ref List<AudioJob> arrAudioJobs, List<MuxStream> arrMuxStreams)
         {
             foreach (MuxStream m in arrMuxStreams)
                 m.path = convertTrackNumberToFile(m.path, ref m.delay);
 
+            List<AudioJob> tempList = new List<AudioJob>();
             foreach (AudioJob a in arrAudioJobs)
             {
                 a.Input = convertTrackNumberToFile(a.Input, ref a.Delay);
                 if (String.IsNullOrEmpty(a.Output) && !String.IsNullOrEmpty(a.Input))
                     a.Output = FileUtil.AddToFileName(a.Input, "_audio");
+                if (!String.IsNullOrEmpty(a.Input))
+                    tempList.Add(a);
             }
+            arrAudioJobs = tempList;
         }
 
         /// <summary>
@@ -383,6 +387,12 @@ namespace MeGUI
         /// <returns></returns>
         private string convertTrackNumberToFile(string input, ref int delay)
         {
+            if (String.IsNullOrEmpty(input))
+            {
+                _log.Warn("Couldn't find audio file. Skipping track.");
+                return null;
+            }
+
             if (input.StartsWith("::") && input.EndsWith("::") && input.Length > 4)
             {
                 string sub = input.Substring(2, input.Length - 4);

@@ -179,7 +179,8 @@ namespace MeGUI
 
             if (audioTracks != null && audioTracks.Count > 0)
             {
-                if (audioTracks[0].ContainerType.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("matroska"))
+                if (audioTracks[0].ContainerType.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("matroska") ||
+                    (Path.GetExtension(projectName).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".dgi") && audioTracks[0].ContainerType == "MPEG-4"))
                     strTrackName = " [";
                 else if (audioTracks[0].ContainerType == "MPEG-TS" || audioTracks[0].ContainerType == "BDAV")
                     strTrackName = " PID ";
@@ -494,7 +495,7 @@ namespace MeGUI
                             allAudioToMux.Add(ocAudioTrack.DirectMuxAudio);
                         }
                     }
-                    if (ocAudioTrack.AudioJob != null)
+                    if (ocAudioTrack.AudioJob != null && !String.IsNullOrEmpty(ocAudioTrack.AudioJob.Input))
                     {
                         allAudioToMux.Add(ocAudioTrack.AudioJob.ToMuxStream());
                         allInputAudioTypes.Add(ocAudioTrack.AudioJob.ToMuxableType());
