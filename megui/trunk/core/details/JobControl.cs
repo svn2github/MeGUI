@@ -760,7 +760,8 @@ namespace MeGUI.core.details
         internal void RequestNewWorker()
         {
             string name = InputBox.Show("Please enter a name for this new worker", "Please enter a name", freeWorkerName());
-            if (string.IsNullOrEmpty(name)) return;
+            if (string.IsNullOrEmpty(name))
+                return;
             if (workers.ContainsKey(name))
             {
                 MessageBox.Show("A worker by this name already exists. Adding worker failed", "Adding worker failed",
@@ -781,8 +782,8 @@ namespace MeGUI.core.details
             workers.Add(w.Name, w);
             summary.Add(w);
             mainForm.RegisterForm(w);
-            if (show) w.Show();
-
+            if (show) 
+                w.Show();
             return w;
         }
 
@@ -833,7 +834,8 @@ namespace MeGUI.core.details
         internal void ShutDown(JobWorker w)
         {
             workers.Remove(w.Name);
-            if (w.Visible) Util.ThreadSafeRun(w, delegate { w.Close(); });
+            if (w.Visible) 
+                Util.ThreadSafeRun(w, delegate { w.Close(); });
             summary.Remove(w.Name);
         }
 

@@ -34,12 +34,16 @@ namespace MeGUI
 {
     public partial class OneClickWindow : Form
     {
-        #region Variable Declaration
+        #region variable declaration
         LogItem _oLog;
         List<OneClickStreamControl> audioTracks;
         List<OneClickStreamControl> subtitleTracks;
         OneClickSettings _oSettings;
         private bool bLock;
+
+        /// <summary>
+        /// whether the current processing is a part of batch processing
+        /// </summary>
         private bool bAutomatedProcessing;
 
         /// <summary>
@@ -87,8 +91,8 @@ namespace MeGUI
 
         void OneClickProfileChanged(object sender, EventArgs e)
         {
-            this.Settings = (OneClickSettings)oneclickProfile.SelectedProfile.BaseSettings;
-        } 
+            SetOneClickProfile((OneClickSettings)oneclickProfile.SelectedProfile.BaseSettings);
+        }
         #endregion
         #region Video profiles
         private VideoCodecSettings VideoSettings
@@ -246,13 +250,13 @@ namespace MeGUI
                 {
                     strTempName = strTempName.Substring(0, strTempName.Length - 1) + iPGCNumber;
                     strTempName = Path.Combine(Path.GetDirectoryName(strInputFile), strTempName + Path.GetExtension(strInputFile));
-                    workingName.Text = PrettyFormatting.ExtractWorkingName(strTempName, _oSettings.WorkingNameReplace, _oSettings.WorkingNameReplaceWith);
+                    workingName.Text = PrettyFormatting.ExtractWorkingName(strTempName, _oSettings.LeadingName, _oSettings.WorkingNameReplace, _oSettings.WorkingNameReplaceWith);
                 }
                 else
-                    workingName.Text = PrettyFormatting.ExtractWorkingName(strInputFile, _oSettings.WorkingNameReplace, _oSettings.WorkingNameReplaceWith);
+                    workingName.Text = PrettyFormatting.ExtractWorkingName(strInputFile, _oSettings.LeadingName, _oSettings.WorkingNameReplace, _oSettings.WorkingNameReplaceWith);
             }
             else
-                workingName.Text = PrettyFormatting.ExtractWorkingName(strInputFile, _oSettings.WorkingNameReplace, _oSettings.WorkingNameReplaceWith);
+                workingName.Text = PrettyFormatting.ExtractWorkingName(strInputFile, _oSettings.LeadingName, _oSettings.WorkingNameReplace, _oSettings.WorkingNameReplaceWith);
 
             this.updateFilename();
         }
@@ -394,7 +398,7 @@ namespace MeGUI
                 mainForm.OneClickLog = _oLog;
             }
             bAutomatedProcessing = true;
-            this.Settings = oSettings;
+            SetOneClickProfile(oSettings);
             OneClickProcessing oProcessor = new OneClickProcessing(this, arrFilesToProcess, oSettings, _oLog);
             return;
         }
@@ -411,7 +415,8 @@ namespace MeGUI
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
                     bAutomatedProcessing = true;
-                    this.Settings = (OneClickSettings)oneclickProfile.SelectedProfile.BaseSettings;
+                    SetOneClickProfile((OneClickSettings)oneclickProfile.SelectedProfile.BaseSettings);
+                    _oSettings.LeadingName = MeGUI.core.gui.InputBox.Show("If desired please enter a leading name", "Please enter a leading name", _oSettings.LeadingName);
                 }
             }
             bLock = true;
@@ -543,70 +548,65 @@ namespace MeGUI
             beingCalled = false;
         }
 
-        private OneClickSettings Settings
+        private void SetOneClickProfile(OneClickSettings settings)
         {
-            set
+            _oSettings = settings.Clone();
+
+            if (_videoInputInfo != null)
             {
-                OneClickSettings settings = value;
+                List<OneClickStream> arrAudioTrackInfo = new List<OneClickStream>();
+                foreach (AudioTrackInfo oInfo in _videoInputInfo.AudioInfo.Tracks)
+                    arrAudioTrackInfo.Add(new OneClickStream(oInfo));
+                AudioResetTrack(arrAudioTrackInfo, settings);
 
-                if (_videoInputInfo != null)
-                {
-                    List<OneClickStream> arrAudioTrackInfo = new List<OneClickStream>();
-                    foreach (AudioTrackInfo oInfo in _videoInputInfo.AudioInfo.Tracks)
-                        arrAudioTrackInfo.Add(new OneClickStream(oInfo));
-                    AudioResetTrack(arrAudioTrackInfo, settings);
-
-                    List<OneClickStream> arrSubtitleTrackInfo = new List<OneClickStream>();
-                    foreach (SubtitleTrackInfo oInfo in _videoInputInfo.SubtitleInfo.Tracks)
-                        arrSubtitleTrackInfo.Add(new OneClickStream(oInfo));
-                    SubtitleResetTrack(arrSubtitleTrackInfo, settings);
-                }
-                else
-                    ResetAudioSettings(settings);
-
-                videoProfile.SetProfileNameOrWarn(settings.VideoProfileName);
-                avsProfile.SetProfileNameOrWarn(settings.AvsProfileName);
-
-                List<ContainerType> temp = new List<ContainerType>();
-                List<ContainerType> allContainerTypes = muxProvider.GetSupportedContainers();
-                foreach (string s in settings.ContainerCandidates)
-                {
-                    ContainerType ct = allContainerTypes.Find(new Predicate<ContainerType>(delegate(ContainerType t) { return t.ToString() == s; }));
-                    if (ct != null)
-                        temp.Add(ct);
-                }
-                acceptableContainerTypes = temp.ToArray();
-
-                ignoreRestrictions = false;
-
-                // bools
-                chkDontEncodeVideo.Checked = settings.DontEncodeVideo;
-                signalAR.Checked = settings.SignalAR;
-                autoDeint.Checked = settings.AutomaticDeinterlacing;
-                autoCrop.Checked = settings.AutoCrop;
-                keepInputResolution.Checked = settings.KeepInputResolution;
-                addPrerenderJob.Checked = settings.PrerenderVideo;
-                if (usechaptersmarks.Enabled)
-                    usechaptersmarks.Checked = settings.UseChaptersMarks;
-
-                splitting.Value = settings.SplitSize;
-                fileSize.Value = settings.Filesize;
-                if (settings.OutputResolution <= horizontalResolution.Maximum)
-                    horizontalResolution.Value = settings.OutputResolution;
-                workingDirectory.Filename = settings.DefaultWorkingDirectory;
-
-                // device type
-                devicetype.Text = settings.DeviceOutputType;
-
-                // Clean up after those settings were set
-                updatePossibleContainers();
-                containerFormat_SelectedIndexChanged(null, null);
-
-                _oSettings = settings;
-
-                if (!string.IsNullOrEmpty(input.SelectedText))
-                    updateWorkingName(input.SelectedText);
+                List<OneClickStream> arrSubtitleTrackInfo = new List<OneClickStream>();
+                foreach (SubtitleTrackInfo oInfo in _videoInputInfo.SubtitleInfo.Tracks)
+                    arrSubtitleTrackInfo.Add(new OneClickStream(oInfo));
+                SubtitleResetTrack(arrSubtitleTrackInfo, settings);
             }
+            else
+                ResetAudioSettings(settings);
+
+            videoProfile.SetProfileNameOrWarn(settings.VideoProfileName);
+            avsProfile.SetProfileNameOrWarn(settings.AvsProfileName);
+
+            List<ContainerType> temp = new List<ContainerType>();
+            List<ContainerType> allContainerTypes = muxProvider.GetSupportedContainers();
+            foreach (string s in settings.ContainerCandidates)
+            {
+                ContainerType ct = allContainerTypes.Find(new Predicate<ContainerType>(delegate(ContainerType t) { return t.ToString() == s; }));
+                if (ct != null)
+                    temp.Add(ct);
+            }
+            acceptableContainerTypes = temp.ToArray();
+
+            ignoreRestrictions = false;
+
+            // bools
+            chkDontEncodeVideo.Checked = settings.DontEncodeVideo;
+            signalAR.Checked = settings.SignalAR;
+            autoDeint.Checked = settings.AutomaticDeinterlacing;
+            autoCrop.Checked = settings.AutoCrop;
+            keepInputResolution.Checked = settings.KeepInputResolution;
+            addPrerenderJob.Checked = settings.PrerenderVideo;
+            if (usechaptersmarks.Enabled)
+                usechaptersmarks.Checked = settings.UseChaptersMarks;
+
+            splitting.Value = settings.SplitSize;
+            fileSize.Value = settings.Filesize;
+            if (settings.OutputResolution <= horizontalResolution.Maximum)
+                horizontalResolution.Value = settings.OutputResolution;
+            workingDirectory.Filename = settings.DefaultWorkingDirectory;
+
+            // device type
+            devicetype.Text = settings.DeviceOutputType;
+
+            // Clean up after those settings were set
+            updatePossibleContainers();
+            containerFormat_SelectedIndexChanged(null, null);
+
+            if (!string.IsNullOrEmpty(input.SelectedText))
+                updateWorkingName(input.SelectedText);
         }
 
         private void goButton_Click(object sender, EventArgs e)

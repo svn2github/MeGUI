@@ -124,6 +124,7 @@ namespace MeGUI.packages.tools.oneclick
                     val.UseNoLanguagesAsFallback = false;
 
                 val.IndexerPriority = arrIndexerPriority;
+                val.LeadingName = txtLeadingName.Text;
                 val.WorkingNameReplace = txtWorkingNameDelete.Text;
                 val.WorkingNameReplaceWith = txtWorkingNameReplaceWith.Text;
                 return val;
@@ -147,6 +148,7 @@ namespace MeGUI.packages.tools.oneclick
                 outputDirectory.Filename = value.DefaultOutputDirectory;
                 txtWorkingNameDelete.Text = value.WorkingNameReplace;
                 txtWorkingNameReplaceWith.Text = value.WorkingNameReplaceWith;
+                txtLeadingName.Text = value.LeadingName;
 
                 int i = 0;
                 AudioResetTrack();

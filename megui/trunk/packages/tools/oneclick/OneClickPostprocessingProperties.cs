@@ -40,14 +40,13 @@ namespace MeGUI
 		private VideoCodecSettings videoSettings;
         private AviSynthSettings avsSettings;
 		private double customAR;
-        private string chapterFile, finalOutput, aviSynthScript, deviceType, inputFile, workingDirectory, _videoFileToMux;
+        private string chapterFile, finalOutput, aviSynthScript, deviceType, inputFile, workingDirectory, _videoFileToMux, ifoFile;
         private List<string> filesToDelete;
         private List<OneClickAudioTrack> _audioTracks;
         private List<OneClickStream> _subtitleTrack;
         private FileIndexerWindow.IndexType _indexType;
         private OneClickSettings _oneClickSettings;
         private List<OneClickFilesToProcess> _filesToProcess;
-        private string ifoFile;
 
 		public OneClickPostprocessingProperties()
 		{

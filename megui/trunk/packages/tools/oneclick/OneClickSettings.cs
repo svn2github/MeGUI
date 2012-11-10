@@ -175,6 +175,13 @@ namespace MeGUI
             set { deviceType = value; }
         }
 
+        private string leadingName;
+        public string LeadingName
+        {
+            get { return leadingName; }
+            set { leadingName = value; }
+        }
+
         private string workingNameReplace;
         public string WorkingNameReplace
         {
@@ -290,6 +297,7 @@ namespace MeGUI
             defaultWorkingDirectory = "";
             workingNameReplace = "";
             workingNameReplaceWith = "";
+            leadingName = "";
             audioSettings = new List<OneClickAudioSettings>();
 
             if (MainForm.Instance != null)

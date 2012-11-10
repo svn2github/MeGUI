@@ -116,6 +116,8 @@ namespace MeGUI.packages.tools.oneclick
             this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.audioAddTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.audioRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtLeadingName = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
@@ -755,6 +757,8 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label1);
+            this.groupBox4.Controls.Add(this.txtLeadingName);
             this.groupBox4.Controls.Add(this.label6);
             this.groupBox4.Controls.Add(this.label5);
             this.groupBox4.Controls.Add(this.txtWorkingNameReplaceWith);
@@ -769,7 +773,7 @@ namespace MeGUI.packages.tools.oneclick
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(7, 68);
+            this.label6.Location = new System.Drawing.Point(7, 83);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(29, 13);
             this.label6.TabIndex = 3;
@@ -778,7 +782,7 @@ namespace MeGUI.packages.tools.oneclick
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 42);
+            this.label5.Location = new System.Drawing.Point(7, 57);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(47, 13);
             this.label5.TabIndex = 2;
@@ -786,14 +790,14 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // txtWorkingNameReplaceWith
             // 
-            this.txtWorkingNameReplaceWith.Location = new System.Drawing.Point(60, 65);
+            this.txtWorkingNameReplaceWith.Location = new System.Drawing.Point(60, 80);
             this.txtWorkingNameReplaceWith.Name = "txtWorkingNameReplaceWith";
             this.txtWorkingNameReplaceWith.Size = new System.Drawing.Size(121, 20);
             this.txtWorkingNameReplaceWith.TabIndex = 1;
             // 
             // txtWorkingNameDelete
             // 
-            this.txtWorkingNameDelete.Location = new System.Drawing.Point(60, 39);
+            this.txtWorkingNameDelete.Location = new System.Drawing.Point(60, 54);
             this.txtWorkingNameDelete.Name = "txtWorkingNameDelete";
             this.txtWorkingNameDelete.Size = new System.Drawing.Size(121, 20);
             this.txtWorkingNameDelete.TabIndex = 0;
@@ -863,6 +867,22 @@ namespace MeGUI.packages.tools.oneclick
             this.audioRemoveTrack.Size = new System.Drawing.Size(149, 22);
             this.audioRemoveTrack.Text = "Remove Track";
             this.audioRemoveTrack.Click += new System.EventHandler(this.audioRemoveTrack_Click);
+            // 
+            // txtLeadingName
+            // 
+            this.txtLeadingName.Location = new System.Drawing.Point(60, 28);
+            this.txtLeadingName.Name = "txtLeadingName";
+            this.txtLeadingName.Size = new System.Drawing.Size(121, 20);
+            this.txtLeadingName.TabIndex = 4;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Leading";
             // 
             // OneClickConfigPanel
             // 
@@ -967,5 +987,7 @@ namespace MeGUI.packages.tools.oneclick
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.CheckedListBox containerTypeList;
         private System.Windows.Forms.Label containerFormatLabel;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtLeadingName;
     }
 }
