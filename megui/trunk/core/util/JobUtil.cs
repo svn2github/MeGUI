@@ -121,7 +121,7 @@ namespace MeGUI
         public JobChain GenerateMuxJobs(VideoStream video, decimal? framerate, MuxStream[] audioStreamsArray, 
             MuxableType[] audioTypes, MuxStream[] subtitleStreamsArray, MuxableType[] subTypes,
             string chapterFile, MuxableType chapterInputType, ContainerType container, string output, 
-            FileSize? splitSize, List<string> inputsToDelete, string deviceType, MuxableType deviceOutputType)
+            FileSize? splitSize, List<string> inputsToDelete, string deviceType, MuxableType deviceOutputType, bool alwaysMuxOutput)
         {
             Debug.Assert(splitSize == null || splitSize.Value != FileSize.Empty);
 
@@ -156,7 +156,7 @@ namespace MeGUI
                 allTypes.Add(deviceOutputType);
 
             // get mux path
-            MuxPath muxPath = prov.GetMuxPath(container, splitSize.HasValue, allTypes.ToArray());
+            MuxPath muxPath = prov.GetMuxPath(container, alwaysMuxOutput || splitSize.HasValue, allTypes.ToArray());
 
             // add duplicate entries back into the mux path
             muxPath.InitialInputTypes.AddRange(duplicateTypes);

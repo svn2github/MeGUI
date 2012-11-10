@@ -719,7 +719,7 @@ namespace MeGUI
                 }
                 removeStreamsToBeEncoded(ref audio, aStreams);
                 mainForm.Jobs.addJobsWithDependencies(vUtil.GenerateJobSeries(this.videoStream, muxedOutput, aStreams, subtitles, chapters,
-                    desiredSize, splitSize, cot, this.prerender, audio, log, this.device.Text, vInfo.Zones, null, null));
+                    desiredSize, splitSize, cot, this.prerender, audio, log, this.device.Text, vInfo.Zones, null, null, false));
                 this.Close();
 			}
 		}

@@ -319,7 +319,8 @@ namespace MeGUI
                         subtitles, job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                         job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
                         job.PostprocessingProperties.PrerenderJob, arrMuxStreams.ToArray(),
-                        _log, job.PostprocessingProperties.DeviceOutputType, null, job.PostprocessingProperties.VideoFileToMux, job.PostprocessingProperties.AudioTracks.ToArray());
+                        _log, job.PostprocessingProperties.DeviceOutputType, null, job.PostprocessingProperties.VideoFileToMux, 
+                        job.PostprocessingProperties.AudioTracks.ToArray(), true);
                     if (c == null)
                     {
                         _log.Warn("Job creation aborted");

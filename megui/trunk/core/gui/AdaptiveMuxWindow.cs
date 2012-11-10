@@ -20,11 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
 using MeGUI.core.details;
@@ -264,7 +260,8 @@ namespace MeGUI
                 }
 
                 return jobUtil.GenerateMuxJobs(myVideo, fps.Value, audioStreams, audioTypes, subtitleStreams,
-                    subtitleTypes, this.chapters.Filename, chapterInputType, (cbContainer.SelectedItem as ContainerType), output.Filename, splitSize, new List<string>(), this.cbType.Text, deviceOutputType);
+                    subtitleTypes, this.chapters.Filename, chapterInputType, (cbContainer.SelectedItem as ContainerType), 
+                    output.Filename, splitSize, new List<string>(), this.cbType.Text, deviceOutputType, false);
             }
         }
         /// <summary>
