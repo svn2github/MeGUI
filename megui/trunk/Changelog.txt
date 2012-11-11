@@ -1,3 +1,4 @@
+2216 [AVS Script Creator] fixed handling of custom FFMS index file location
 2215 [OneClick] always mux output file
 2214 [MKVExtract] fixed handling of input file name which contains error or warning
 2213 [OneClick] added leading name option

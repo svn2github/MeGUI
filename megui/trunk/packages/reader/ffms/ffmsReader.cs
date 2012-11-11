@@ -36,7 +36,9 @@ namespace MeGUI
 
         public IMediaFile Open(string file)
         {
-            if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
+            if (file.Contains("|"))
+                return new ffmsFile(file.Split('|')[0], file.Split('|')[1]);
+            else if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
                 return new ffmsFile(null, file);
             else
                 return new ffmsFile(file, null);

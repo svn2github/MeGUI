@@ -268,6 +268,8 @@ namespace MeGUI
         /// <param name="oLog">the log item</param>
         private void GetSourceInformation(string file, LogItem oLog, int iPGCNumber)
         {
+            if (file.Contains("|"))
+                file = file.Split('|')[0];
             _Log = oLog;
             _file = file;
             _indexerToUse = FileIndexerWindow.IndexType.NONE;
@@ -1224,7 +1226,6 @@ namespace MeGUI
         }
 
         #region IMediaFile Members
-
 
         public bool HasAudio
         {

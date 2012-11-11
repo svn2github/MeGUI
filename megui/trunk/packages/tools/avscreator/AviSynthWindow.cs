@@ -679,7 +679,10 @@ namespace MeGUI
 
         private void openVideo(string videoInput)
         {
-            openVideo(videoInput, videoInput, false);
+            if (String.IsNullOrEmpty(indexFile))
+                openVideo(videoInput, videoInput, false);
+            else
+                openVideo(videoInput + "|" + indexFile, videoInput, false);
         }
 
         private bool showOriginal()
