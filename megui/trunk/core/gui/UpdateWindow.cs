@@ -822,11 +822,6 @@ namespace MeGUI
         }
         public void AddTextToLog(string text, ImageType oLogType)
         {
-            if (oLog == null)
-            {
-                oLog = mainForm.Log.Info("Update detection");
-                mainForm.UpdateLog = oLog;
-            }
             oLog.LogEvent(text, oLogType);
 
             if (oLogType == ImageType.Warning || oLogType == ImageType.Error)
@@ -897,32 +892,13 @@ namespace MeGUI
         {
             SaveSettings();
         }
-        
-        /// <summary>
-        /// Constructor for Updatewindow.
-        /// </summary>
-        /// <param name="savedSettings">Current MeGUI settings</param>
-        public UpdateWindow(MainForm mainForm, MeGUISettings savedSettings)
-        {
-            InitializeComponent();
-            this.mainForm = mainForm;
-            this.oLog = mainForm.UpdateLog;
-            LoadComponentSettings();
-            this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
-            meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
-            this.serverList = shuffled(mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList]);
-            if (serverList.Length == 0)
-            {
-                MessageBox.Show("Couldn't run auto-update since there are no servers registered.", "No servers registered", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            LoadSettings();
-        }
 
         /// <summary>
         /// Constructor for Updatewindow.
         /// </summary>
+        /// <param name="mainForm">MainForm instance</param>
         /// <param name="savedSettings">Current MeGUI settings</param>
+        /// <param name="bSilent">whether the update window should be displayed</param>
         public UpdateWindow(MainForm mainForm, MeGUISettings savedSettings, bool bSilent)
         {
             InitializeComponent();
@@ -931,6 +907,15 @@ namespace MeGUI
             LoadComponentSettings();
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
+            if (bSilent)
+                return;
+            this.serverList = shuffled(mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList]);
+            if (serverList.Length == 0)
+            {
+                MessageBox.Show("Couldn't run auto-update since there are no servers registered.", "No servers registered", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            LoadSettings();
         }
 
         private void LoadComponentSettings()
@@ -2216,7 +2201,7 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            UpdateWindow update = new UpdateWindow(info, info.Settings);
+            UpdateWindow update = new UpdateWindow(info, info.Settings, false);
             update.ShowDialog();
         }
 
