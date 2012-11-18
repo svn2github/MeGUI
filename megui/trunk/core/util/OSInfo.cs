@@ -75,10 +75,17 @@ namespace MeGUI
         private const int PRODUCT_HOME_BASIC = 0x00000002;
         private const int PRODUCT_HOME_PREMIUM = 0x00000003;
         private const int PRODUCT_ENTERPRISE = 0x00000004;
+        private const int PRODUCT_ENTERPRISE_N = 0x0000001B;
         private const int PRODUCT_HOME_BASIC_N = 0x00000005;
         private const int PRODUCT_BUSINESS = 0x00000006;
         private const int PRODUCT_BUSINESS_N = 0x00000010;
         private const int PRODUCT_STARTER = 0x0000000B;
+        private const int PRODUCT_PROFESSIONAL = 0x00000030;
+        private const int PRODUCT_PROFESSIONAL_N = 0x00000031;
+        private const int PRODUCT_PROFESSIONAL_WMC = 0x00000067;
+        private const int PRODUCT_CORE = 0x00000065;
+        private const int PRODUCT_CORE_N = 0x00000062;
+        private const int PRODUCT_CORE_COUNTRYSPECIFIC = 0x00000063;
         #endregion
 
         #region Public Methods
@@ -277,6 +284,29 @@ namespace MeGUI
                                                             case PRODUCT_BUSINESS_N: osName = "Windows 7 Professional Edition"; break;
                                                             case PRODUCT_STARTER: osName = "Windows 7 Starter Edition"; break;
                                                             default: osName = "Windows 7"; break;
+                                                        }
+                                                    } break;
+                                                }
+                                            case 2: // Windows 8
+                                                {
+                                                    uint edition = PRODUCT_UNDEFINED;
+                                                    if (GetProductInfo(osVersionInfo.dwMajorVersion,
+                                                                       osVersionInfo.dwMinorVersion,
+                                                                       osVersionInfo.wServicePackMajor,
+                                                                       osVersionInfo.wServicePackMinor,
+                                                                       out edition))
+                                                    {
+                                                        switch (edition)
+                                                        {
+                                                            case PRODUCT_CORE:
+                                                            case PRODUCT_CORE_COUNTRYSPECIFIC:
+                                                            case PRODUCT_CORE_N: osName = "Windows 8 Standard Edition"; break;
+                                                            case PRODUCT_ENTERPRISE: 
+                                                            case PRODUCT_ENTERPRISE_N: osName = "Windows 8 Entreprise Edition"; break;
+                                                            case PRODUCT_PROFESSIONAL:
+                                                            case PRODUCT_PROFESSIONAL_N: osName = "Windows 8 Professional Edition"; break;
+                                                            case PRODUCT_PROFESSIONAL_WMC: osName = "Windows 8 Professional with Media Center Edition"; break;
+                                                            default: osName = "Windows 8"; break;
                                                         }
                                                     } break;
                                                 }
