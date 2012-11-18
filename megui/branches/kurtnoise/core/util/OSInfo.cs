@@ -78,6 +78,19 @@ namespace MeGUI
         private const int PRODUCT_HOME_BASIC_N = 0x00000005;
         private const int PRODUCT_BUSINESS = 0x00000006;
         private const int PRODUCT_BUSINESS_N = 0x00000010;
+        private const int PRODUCT_CLUSTER_SERVER = 0x00000012;
+        private const int PRODUCT_CLUSTER_SERVER_V = 0x00000040;
+        private const int PRODUCT_CORE = 0x00000065;
+        private const int PRODUCT_CORE_N = 0x00000062;
+        private const int PRODUCT_CORE_COUNTRYSPECIFIC = 0x00000063;
+        private const int PRODUCT_CORE_SINGLELANGUAGE = 0x00000064;
+        private const int PRODUCT_PROFESSIONAL = 0x00000030;
+        private const int PRODUCT_PROFESSIONAL_E = 0x00000045;
+        private const int PRODUCT_PROFESSIONAL_N = 0x00000031;
+        private const int PRODUCT_PROFESSIONAL_WMC = 0x00000067;
+        private const int PRODUCT_SB_SOLUTION_SERVER_EM = 0x00000036;
+        private const int PRODUCT_SERVER_FOR_SB_SOLUTIONS = 0x00000033;
+        private const int PRODUCT_SERVER_FOR_SB_SOLUTIONS_EM = 0x00000037;
         private const int PRODUCT_STARTER = 0x0000000B;
         #endregion
 
@@ -278,6 +291,45 @@ namespace MeGUI
                                                             case PRODUCT_STARTER: osName = "Windows 7 Starter Edition"; break;
                                                             default: osName = "Windows 7"; break;
                                                         }
+                                                    } break;
+                                                }
+                                            case 2: // 8
+                                                {
+                                                    switch (osVersionInfo.wProductType)
+                                                    {
+                                                        case 1: // Windows 8
+                                                            {
+                                                                uint edition = PRODUCT_UNDEFINED;
+                                                                if (GetProductInfo(osVersionInfo.dwMajorVersion,
+                                                                                   osVersionInfo.dwMinorVersion,
+                                                                                   osVersionInfo.wServicePackMajor,
+                                                                                   osVersionInfo.wServicePackMinor,
+                                                                                   out edition))
+                                                                {
+                                                                    switch (edition)
+                                                                    {
+                                                                        case PRODUCT_ULTIMATE: osName = "Windows 8 Ultimate Edition"; break;
+                                                                        case PRODUCT_HOME_BASIC:
+                                                                        case PRODUCT_HOME_BASIC_N: osName = "Windows 8 Home Basic Edition"; break;
+                                                                        case PRODUCT_HOME_PREMIUM: osName = "Windows 8 Premium Edition"; break;
+                                                                        case PRODUCT_ENTERPRISE: osName = "Windows 8 Enterprise Edition"; break;
+                                                                        case PRODUCT_BUSINESS:
+                                                                        case PRODUCT_BUSINESS_N: osName = "Windows 8 Business Edition"; break;
+                                                                        case PRODUCT_STARTER: osName = "Windows 8 Starter Edition"; break;
+                                                                        default: osName = "Windows 8"; break;
+                                                                    }
+                                                                } break;
+                                                            }
+                                                        case 3: // Server 2012
+                                                            {
+                                                                if ((osVersionInfo.wSuiteMask & VER_SUITE_DATACENTER) == VER_SUITE_DATACENTER)
+                                                                    osName = "Windows Server 2012 Datacenter Server";
+                                                                else if ((osVersionInfo.wSuiteMask & VER_SUITE_ENTERPRISE) == VER_SUITE_ENTERPRISE)
+                                                                    osName = "Windows Server 2012 Advanced Server";
+                                                                else
+                                                                    osName = "Windows Server 2012";
+                                                                break;
+                                                            }
                                                     } break;
                                                 }
                                         }
