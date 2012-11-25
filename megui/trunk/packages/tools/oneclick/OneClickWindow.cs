@@ -513,6 +513,25 @@ namespace MeGUI
                 }
             }
 
+            if (subtitleTracks != null)
+            {
+                for (int i = 0; i < subtitleTracks.Count; ++i)
+                {
+                    if (subtitleTracks[i].SelectedStreamIndex == 0) // "None"
+                        continue;
+
+                    string typeString;
+                    if (subtitleTracks[i].SelectedItem.IsStandard)
+                        typeString = subtitleTracks[i].SelectedStream.TrackInfo.DemuxFileName;
+                    else
+                        typeString = subtitleTracks[i].SelectedFile;
+
+                    SubtitleType subtitleType = VideoUtil.guessSubtitleType(typeString);
+                    if (subtitleType != null)
+                        dictatedOutputTypes.Add((new MuxableType(subtitleType, null)));
+                }
+            }
+
             List<ContainerType> tempSupportedOutputTypes = this.muxProvider.GetSupportedContainers(
                 VideoSettings.EncoderType, audioCodecs.ToArray(), dictatedOutputTypes.ToArray());
 
@@ -521,22 +540,31 @@ namespace MeGUI
             foreach (ContainerType c in acceptableContainerTypes)
                 if (tempSupportedOutputTypes.Contains(c))
                     supportedOutputTypes.Add(c);
-            
+
+            ignoreRestrictions = false;
             if (supportedOutputTypes.Count == 0)
             {
                 if (tempSupportedOutputTypes.Count > 0 && !ignoreRestrictions)
                 {
-                    string message = string.Format(
-                    "No container type could be found that matches the list of acceptable types " +
-                    "in your chosen one click profile. {0}" +
-                    "Your restrictions are now being ignored.", Environment.NewLine);
-                    MessageBox.Show(message, "Filetype restrictions too restrictive", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    if (!bAutomatedProcessing)
+                    {
+                        string message = string.Format(
+                        "No container type could be found that matches the list of acceptable types " +
+                        "in your chosen one click profile. {0}" +
+                        "Your restrictions are now being ignored.", Environment.NewLine);
+                        MessageBox.Show(message, "Filetype restrictions too restrictive", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                     ignoreRestrictions = true;
                 }
-                if (ignoreRestrictions) 
+                if (ignoreRestrictions)
                     supportedOutputTypes = tempSupportedOutputTypes;
                 if (tempSupportedOutputTypes.Count == 0)
-                    MessageBox.Show("No container type could be found for your current settings. Please modify the codecs you use", "No container found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                {
+                    if (bAutomatedProcessing)
+                        ignoreRestrictions = true;
+                    else
+                        MessageBox.Show("No container type could be found for your current settings. Please modify the codecs you use", "No container found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             if (supportedOutputTypes.Count > 0)
             {
@@ -580,8 +608,6 @@ namespace MeGUI
             }
             acceptableContainerTypes = temp.ToArray();
 
-            ignoreRestrictions = false;
-
             // bools
             chkDontEncodeVideo.Checked = settings.DontEncodeVideo;
             signalAR.Checked = settings.SignalAR;
@@ -617,6 +643,15 @@ namespace MeGUI
 
         private void createOneClickJob(List<OneClickFilesToProcess> arrFilesToProcess)
         {
+            // checks if there is a suitable container
+            if (ignoreRestrictions)
+            {
+                _oLog.LogEvent(_videoInputInfo.FileName + ": No container type could be found that matches the list of acceptable types in your chosen one click profile. Skipping...");
+                if (arrFilesToProcess != null)
+                    setBatchProcessing(arrFilesToProcess, _oSettings);
+                return;
+            }
+
             // set random working directory
             string strWorkingDirectory = string.Empty;
             if (Directory.Exists(workingDirectory.Filename))
@@ -890,45 +925,44 @@ namespace MeGUI
                 }
             }
 
-            // subtitle handling
-            if (dpp.Container == ContainerType.MKV)
-            {
-                foreach (OneClickStreamControl oStream in subtitleTracks)
-                {
-                    if (oStream.SelectedStreamIndex <= 0) // not NONE
-                        continue;
 
-                    if (oStream.SelectedItem.IsStandard)
+            // subtitle handling
+            foreach (OneClickStreamControl oStream in subtitleTracks)
+            {
+                if (oStream.SelectedStreamIndex <= 0) // not NONE
+                    continue;
+
+                if (oStream.SelectedItem.IsStandard)
+                {
+                    string strExtension = Path.GetExtension(oStream.SelectedStream.TrackInfo.SourceFileName.ToLower(System.Globalization.CultureInfo.InvariantCulture));
+                    if (strExtension.Equals(".ifo") || strExtension.Equals(".vob"))
                     {
-                        string strExtension = Path.GetExtension(oStream.SelectedStream.TrackInfo.SourceFileName.ToLower(System.Globalization.CultureInfo.InvariantCulture));
-                        if (strExtension.Equals(".ifo") || strExtension.Equals(".vob"))
+                        string strInput = oStream.SelectedStream.TrackInfo.SourceFileName;
+                        if (strExtension.Equals(".vob"))
                         {
-                            string strInput = oStream.SelectedStream.TrackInfo.SourceFileName;
-                            if (strExtension.Equals(".vob"))
-                            {
-                                if (Path.GetFileName(strInput).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
-                                    strInput = strInput.Substring(0, strInput.LastIndexOf("_")) + "_0.IFO";
-                                else
-                                    strInput = Path.ChangeExtension(strInput, ".IFO");
-                            }
-                            string outputFile = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(strInput)) + "_" + oStream.SelectedStream.TrackInfo.MMGTrackID + ".idx";
-                            SubtitleIndexJob oJob = new SubtitleIndexJob(strInput, outputFile, false, new List<int> { oStream.SelectedStream.TrackInfo.MMGTrackID }, _videoInputInfo.VideoInfo.PGCNumber);
-                            prepareJobs = new SequentialChain(new SequentialChain(prepareJobs), new SequentialChain(oJob));
-                            oStream.SelectedStream.DemuxFilePath = outputFile;
-                            dpp.FilesToDelete.Add(outputFile);
-                            dpp.FilesToDelete.Add(Path.ChangeExtension(outputFile, ".sub"));
-                            dpp.SubtitleTracks.Add(oStream.SelectedStream);
+                            if (Path.GetFileName(strInput).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
+                                strInput = strInput.Substring(0, strInput.LastIndexOf("_")) + "_0.IFO";
+                            else
+                                strInput = Path.ChangeExtension(strInput, ".IFO");
                         }
-                        else if (inputContainer == ContainerType.MKV && !dpp.Eac3toDemux) // only if container MKV and no demux with eac3to
-                        {
-                            oExtractMKVTrack.Add(oStream.SelectedStream.TrackInfo);
-                            dpp.SubtitleTracks.Add(oStream.SelectedStream);
-                        }
-                    }
-                    else
+                        string outputFile = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(strInput)) + "_" + oStream.SelectedStream.TrackInfo.MMGTrackID + ".idx";
+                        SubtitleIndexJob oJob = new SubtitleIndexJob(strInput, outputFile, false, new List<int> { oStream.SelectedStream.TrackInfo.MMGTrackID }, _videoInputInfo.VideoInfo.PGCNumber);
+                        prepareJobs = new SequentialChain(new SequentialChain(prepareJobs), new SequentialChain(oJob));
+                        oStream.SelectedStream.DemuxFilePath = outputFile;
+                        dpp.FilesToDelete.Add(outputFile);
+                        dpp.FilesToDelete.Add(Path.ChangeExtension(outputFile, ".sub"));
                         dpp.SubtitleTracks.Add(oStream.SelectedStream);
+                    }
+                    else if (inputContainer == ContainerType.MKV && !dpp.Eac3toDemux) // only if container MKV and no demux with eac3to
+                    {
+                        oExtractMKVTrack.Add(oStream.SelectedStream.TrackInfo);
+                        dpp.SubtitleTracks.Add(oStream.SelectedStream);
+                    }
                 }
+                else
+                    dpp.SubtitleTracks.Add(oStream.SelectedStream);
             }
+
 
             // create MKV extract job if required
             if (oExtractMKVTrack.Count > 0)
@@ -936,6 +970,7 @@ namespace MeGUI
                 MkvExtractJob extractJob = new MkvExtractJob(dpp.VideoInput, dpp.WorkingDirectory, oExtractMKVTrack);
                 prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(extractJob));
             }
+
 
             // add audio job to chain if required
             prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(audioJobs));
@@ -1172,6 +1207,7 @@ namespace MeGUI
             a.ShowDefaultStream = subtitleTracks[0].ShowDefaultStream;
             a.ShowForceStream = subtitleTracks[0].ShowForceStream;
             a.chkDefaultStream.CheckedChanged += new System.EventHandler(this.chkDefaultStream_CheckedChanged);
+            a.SomethingChanged += new EventHandler(audio1_SomethingChanged);
             a.Filter = subtitleTracks[0].Filter;
             a.FileUpdated += oneClickSubtitleStreamControl_FileUpdated;
             a.StandardStreams = subtitleTracks[0].StandardStreams;
@@ -1202,6 +1238,8 @@ namespace MeGUI
 
             for (int i = 0; i < subtitlesTab.TabCount - 1; i++)
                 subtitlesTab.TabPages[i].Text = "Subtitle " + (i + 1);
+
+            updatePossibleContainers();
         }
 
         private void chkDefaultStream_CheckedChanged(object sender, EventArgs e)
@@ -1384,6 +1422,8 @@ namespace MeGUI
 
             for (int i = 0; i < audioTab.TabCount - 1; i++)
                 audioTab.TabPages[i].Text = "Audio " + (i + 1);
+
+            updatePossibleContainers();
         }
 
         private int iSelectedAudioTabPage = -1;

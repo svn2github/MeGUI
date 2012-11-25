@@ -1,3 +1,6 @@
+2220 [OneClick] improved output container validation
+                added subtitle support to MP4, AVI and M2TS container
+2219 [Log] added Windows 8 detection
 2217 [Update] fixed a problem if the automatic update check is disabled and components are missing
 2216 [AVS Script Creator] fixed handling of custom FFMS index file location
 2215 [OneClick] always mux output file

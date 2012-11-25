@@ -362,6 +362,7 @@ namespace MeGUI
             this.oneClickSubtitleStreamControl1.Size = new System.Drawing.Size(434, 90);
             this.oneClickSubtitleStreamControl1.StandardStreams = new object[0];
             this.oneClickSubtitleStreamControl1.TabIndex = 0;
+            this.oneClickSubtitleStreamControl1.FileUpdated += new System.EventHandler(this.oneClickSubtitleStreamControl_FileUpdated);
             // 
             // tabPage5
             // 
