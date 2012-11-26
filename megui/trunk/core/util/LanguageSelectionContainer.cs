@@ -104,10 +104,9 @@ namespace MeGUI
             addLanguage("Estonian", "est");
             addLanguage("Faroese", "fao");
             addLanguage("Finnish", "fin");
-            addLanguage("Français", "fra");
-            addLanguage("French", "fre");
+            addLanguage("French", "fra");
             addLanguage("Georgian", "kat");
-            addLanguage("German", "ger");
+            addLanguage("German", "deu");
             addLanguage("Greek", "ell");
             addLanguage("Hebrew", "heb");
             addLanguage("Hindi", "hin");
@@ -174,7 +173,7 @@ namespace MeGUI
             {
                 if (ci.ThreeLetterISOLanguageName == iso639dot2) // we found our language
                 {
-                    if (ci.TwoLetterISOLanguageName.Length == 2) // sometimes we get 3 letter codes here, divxmux can't handle those
+                    //if (ci.TwoLetterISOLanguageName.Length == 2) // sometimes we get 3 letter codes here, divxmux can't handle those
                         return ci.TwoLetterISOLanguageName;
                 }
             }
