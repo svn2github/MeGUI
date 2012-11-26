@@ -354,6 +354,8 @@ namespace MeGUI
                     
                     foreach (string instComp in instComps)
                     {
+                        if (instComp.Equals("v4.0")) break;
+
                         Microsoft.Win32.RegistryKey key = componentsKey.OpenSubKey(instComp);
                         string version = (string)key.GetValue("Version");
 
@@ -367,7 +369,7 @@ namespace MeGUI
                             {
                                 Microsoft.Win32.RegistryKey strKey = key.OpenSubKey(strRegKey);
                                 string strVersion = (string)strKey.GetValue("Version");
-                                if (!String.IsNullOrEmpty(strVersion)) 
+                                if (!String.IsNullOrEmpty(strVersion))
                                     versions.Add(strVersion);
                             }
                         }
@@ -504,6 +506,15 @@ namespace MeGUI
                                             switch (build)
                                             {
                                                 default: dnvf = "4.0"; break;
+                                            }
+                                        }
+                                        break;
+                                    case "5":
+                                        {
+                                            switch (revision)
+                                            {
+                                                case "50709": dnvf = "4.5"; break;
+                                                default: dnvf = "4.5"; break;
                                             }
                                         }
                                         break;
