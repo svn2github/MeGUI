@@ -439,7 +439,56 @@ namespace MeGUI.core.util
                     oLog.LogValue(strName, fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")");
             }
             else
-                oLog.LogValue(strName, "not installed", ImageType.Error);
+                if (strName.Contains("Haali"))
+                    oLog.LogValue(strName, "not installed", ImageType.Warning);
+                else
+                    oLog.LogValue(strName, "not installed", ImageType.Error);
         }
+
+        /// <summary>
+        /// Create Chapters XML File from OGG Chapters File
+        /// </summary>
+        /// <param name="inFile">input</inFile>
+        public static void CreateXMLFromOGGChapFile(string inFile)
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();                
+                sb.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+                sb.AppendLine("<!-- GPAC 3GPP Text Stream -->");
+                sb.AppendLine("<TextStream version=\"1.1\">");
+                sb.AppendLine("<TextStreamHeader>");
+                sb.AppendLine("<TextSampleDescription>");
+                sb.AppendLine("<FontTable></FontTable>");
+                sb.AppendLine("</TextSampleDescription>");
+                sb.AppendLine("</TextStreamHeader>");
+
+                using (StreamReader sr = new StreamReader(inFile))
+                {
+                    string line = null;
+                    int i = 0;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        i++;
+                        if (i % 2 == 1)
+                            sb.Append("<TextSample sampleTime=\"" + line.Substring(line.IndexOf("=")+1) + "\"");
+                        else
+                            sb.Append(" text=\"" + line.Substring(line.IndexOf("=")+1) + "\"></TextSample>" + Environment.NewLine);                        
+                    }
+                }
+                sb.AppendLine("</TextStream>");
+
+                using (StreamWriter sw = new StreamWriter(Path.Combine(Path.GetDirectoryName(inFile), Path.GetFileNameWithoutExtension(inFile) + ".xml")))
+                {
+                    sw.Write(sb.ToString());
+                    sw.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                e.Message.ToString();
+            }
+        }
+
     }
 }
