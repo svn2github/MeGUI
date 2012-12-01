@@ -757,7 +757,7 @@ namespace MeGUI
                 }
 
                 if (sb.Length != 0)
-                    prepareJobs = new SequentialChain(new HDStreamsExJob(_videoInputInfo.FileName, dpp.WorkingDirectory, null, sb.ToString(), 2));
+                    prepareJobs = new SequentialChain(new HDStreamsExJob(new List<string>() { _videoInputInfo.FileName }, dpp.WorkingDirectory, null, sb.ToString(), 2));
             }
 
             // set video mux handling
@@ -893,7 +893,7 @@ namespace MeGUI
                                 aInput = Path.Combine(strWorkingDirectory, Path.GetFileName(aInput));
                             }
 
-                            HDStreamsExJob oJob = new HDStreamsExJob(strFileName, aInput, null, "\"" + aInput + "\"", 2);
+                            HDStreamsExJob oJob = new HDStreamsExJob(new List<string>() { strFileName }, aInput, null, "\"" + aInput + "\"", 2);
                             audioJobs = new SequentialChain(audioJobs, new SequentialChain(oJob));
                             dpp.FilesToDelete.Add(FileUtil.AddToFileName(Path.ChangeExtension(aInput, "txt"), " - Log"));
                             dpp.FilesToDelete.Add(aInput);
@@ -914,7 +914,7 @@ namespace MeGUI
                                 aInput = Path.Combine(strWorkingDirectory, Path.GetFileName(aInput));
                             }
 
-                            HDStreamsExJob oJob = new HDStreamsExJob(strFileName, aInput, null, "\"" + aInput + "\" -core", 2);
+                            HDStreamsExJob oJob = new HDStreamsExJob(new List<string>() { strFileName }, aInput, null, "\"" + aInput + "\" -core", 2);
                             audioJobs = new SequentialChain(audioJobs, new SequentialChain(oJob));
                             dpp.FilesToDelete.Add(FileUtil.AddToFileName(Path.ChangeExtension(aInput, "txt"), " - Log"));
                             dpp.FilesToDelete.Add(aInput);

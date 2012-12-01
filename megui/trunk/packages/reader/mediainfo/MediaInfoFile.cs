@@ -711,7 +711,7 @@ namespace MeGUI
                     if (infoLog != null)
                         infoLog.Info("Blu-ray playlist detected. Getting information from eac3to.");
 
-                    _Eac3toInfo = new Eac3toInfo(strFile, this, infoLog);
+                    _Eac3toInfo = new Eac3toInfo(new List<string>() { strFile }, this, infoLog);
                     _Eac3toInfo.FetchAllInformation();
 
                     int iAudioCount = 0;
@@ -815,7 +815,7 @@ namespace MeGUI
                 return -1;
 
             if (_Eac3toInfo == null)
-                _Eac3toInfo = new Eac3toInfo(_file, this, _Log);
+                _Eac3toInfo = new Eac3toInfo(new List<string>() { _file }, this, _Log);
 
             int iTrack = -1;
             foreach (eac3to.Stream oTrack in _Eac3toInfo.Features[0].Streams)

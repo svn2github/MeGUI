@@ -1,3 +1,9 @@
+2226 [HD Streams Extractor] fixed handling of input files with a + in the file name
+2225 [MP4Muxer] added better language support & several Apple devices tunings especially for chapters
+2224 [Audio] removed faac & introduced qaac + opus encoders
+2223 replaced the ISO 639-2 bibliographic language codes for German/French with the terminology ones (ger->deu, fre->fra)
+2222 [Log] if Haali is not correctly installed a warning instead of an error will be logged
+2221 [Log] added .NET 4.5 detection
 2220 [OneClick] improved output container validation
                 added subtitle support to MP4, AVI and M2TS container
 2219 [Log] added Windows 8 detection

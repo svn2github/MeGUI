@@ -29,6 +29,7 @@ namespace MeGUI
         private string featureNb;
         private string args;
         private int inputType;
+        private List<string> source;
 
         public HDStreamsExJob()
             : base()
@@ -36,11 +37,13 @@ namespace MeGUI
             featureNb = "";
             args = "";
             inputType = 1;
+            source = new List<string>();
         }
 
-        public HDStreamsExJob(string input, string ouput, string featureNb, string args, int inputType)
+        public HDStreamsExJob(List<string> input, string ouput, string featureNb, string args, int inputType)
         {
-            Input = input;
+            Input = input[0];
+            source = input;
             Output = ouput;
             FeatureNb = featureNb;
             Args = args;
@@ -57,6 +60,12 @@ namespace MeGUI
         {
             get { return args; }
             set { args = value; }
+        }
+
+        public List<string> Source
+        {
+            get { return source; }
+            set { source = value; }
         }
 
         // 1 = Folder as Input

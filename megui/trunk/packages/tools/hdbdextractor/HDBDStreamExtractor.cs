@@ -41,12 +41,13 @@ namespace MeGUI.packages.tools.hdbdextractor
         private int inputType = 1;
         string dummyInput = "";
         Eac3toInfo _oEac3toInfo;
+        List<string> input = new List<string>();
 
         public HdBdStreamExtractor(MainForm info)
         {
             this.mainForm = info;
             this.settings = info.Settings;
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         #region backgroundWorker
@@ -131,8 +132,10 @@ namespace MeGUI.packages.tools.hdbdextractor
         private void FolderInputSourceButton_Click(object sender, EventArgs e)
         {
             string myinput = "";
+            string outputFolder = "";
             DialogResult dr;
             int idx = 0;
+            input.Clear();
 
             if (FolderSelection.Checked)
             {
@@ -142,12 +145,15 @@ namespace MeGUI.packages.tools.hdbdextractor
                 dr = folderBrowserDialog1.ShowDialog();
                 if (dr != DialogResult.OK)
                     return;
+                inputType = 1;
                 if (folderBrowserDialog1.SelectedPath.EndsWith(":\\"))
                     myinput = folderBrowserDialog1.SelectedPath;
                 else
                     myinput = folderBrowserDialog1.SelectedPath + System.IO.Path.DirectorySeparatorChar;
                 if (dr == DialogResult.OK)
                     MainForm.Instance.Settings.LastSourcePath = myinput;
+                outputFolder = myinput.Substring(0, myinput.LastIndexOf("\\") + 1);
+                input.Add(myinput);
             }
             else
             {
@@ -157,32 +163,33 @@ namespace MeGUI.packages.tools.hdbdextractor
                 inputType = 2;
                 foreach (String file in openFileDialog1.FileNames)
                 {
-                    if (idx > 0) // seamless branching
-                        myinput += "+" + file;
-                    else
+                    if (idx == 0)
+                    {
+                        outputFolder = System.IO.Path.GetDirectoryName(file);
                         myinput = file;
+                        input.Add(file);
+                    }
+                    else // seamless branching
+                    {
+                        myinput += "+" + file;
+                        input.Add(file);
+                    }
                     idx++;
                 }
             }
 
             FolderInputTextBox.Text = myinput;
-            if (FolderInputTextBox.Text != "")
+            if (String.IsNullOrEmpty(FolderInputTextBox.Text))
+                return;
+
+            if (String.IsNullOrEmpty(FolderOutputTextBox.Text))
             {
-                string projectPath;
-                if (!string.IsNullOrEmpty(projectPath = MainForm.Instance.Settings.DefaultOutputDir))
-                    FolderOutputTextBox.Text = projectPath;
+                if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultOutputDir))
+                    FolderOutputTextBox.Text = MainForm.Instance.Settings.DefaultOutputDir;
                 else
-                {
-                    if (string.IsNullOrEmpty(FolderOutputTextBox.Text))
-                    {
-                        if (idx > 0) // seamless branching
-                            FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, (FolderInputTextBox.Text.LastIndexOf("\\") - FolderInputTextBox.Text.LastIndexOf("+")));
-                        else
-                            FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.LastIndexOf("\\") + 1);
-                    }
-                }
-                FeatureButton_Click(null, null);
+                    FolderOutputTextBox.Text = outputFolder;
             }
+            FeatureButton_Click(null, null);
         }
 
         private void FolderOutputSourceButton_Click(object sender, EventArgs e)
@@ -210,7 +217,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             FeatureButton.Enabled = false;
             Cursor = Cursors.WaitCursor;
 
-            _oEac3toInfo = new Eac3toInfo(FolderInputTextBox.Text, null, null);
+            _oEac3toInfo = new Eac3toInfo(input, null, null);
             _oEac3toInfo.FetchInformationCompleted += new OnFetchInformationCompletedHandler(SetData);
             _oEac3toInfo.ProgressChanged += new OnProgressChangedHandler(SetProgress);
             _oEac3toInfo.FetchFeatureInformation();
@@ -321,7 +328,6 @@ namespace MeGUI.packages.tools.hdbdextractor
             HDStreamsExJob job;
 
             args.eac3toPath = settings.EAC3toPath;
-            args.inputPath = FolderInputTextBox.Text;
             if (FolderSelection.Checked)
                 args.featureNumber = ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number.ToString();
             args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);
@@ -339,9 +345,9 @@ namespace MeGUI.packages.tools.hdbdextractor
 
             // Load to MeGUI job queue
             if (FolderSelection.Checked)
-                job = new HDStreamsExJob(dummyInput, this.FolderOutputTextBox.Text + "xxx", args.featureNumber, args.args, inputType);
+                job = new HDStreamsExJob(new List<string>() { dummyInput }, this.FolderOutputTextBox.Text + "xxx", args.featureNumber, args.args, inputType);
             else
-                job = new HDStreamsExJob(this.FolderInputTextBox.Text, this.FolderOutputTextBox.Text + "xxx", null, args.args, inputType);
+                job = new HDStreamsExJob(input, this.FolderOutputTextBox.Text + "xxx", null, args.args, inputType);
 
             lastJob = job;
             mainForm.Jobs.addJobsToQueue(job);

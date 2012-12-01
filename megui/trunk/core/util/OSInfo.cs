@@ -354,7 +354,8 @@ namespace MeGUI
                     
                     foreach (string instComp in instComps)
                     {
-                        if (instComp.Equals("v4.0")) break;
+                        if (instComp.Equals("v4.0"))
+                            break;
 
                         Microsoft.Win32.RegistryKey key = componentsKey.OpenSubKey(instComp);
                         string version = (string)key.GetValue("Version");

@@ -33,19 +33,10 @@ namespace MeGUI.packages.tools.hdbdextractor
     struct eac3toArgs
     {
         public string eac3toPath { get; set; }
-        public string inputPath { get; set; }
         public string workingFolder { get; set; }
         public string featureNumber { get; set; }
         public string args { get; set; }
         public ResultState resultState { get; set; }
-
-        public eac3toArgs(string eac3toPath, string inputPath, string args)
-            : this()
-        {
-            this.eac3toPath = eac3toPath;
-            this.inputPath = inputPath;
-            this.args = args;
-        }
     }
 
     public enum ResultState
@@ -67,7 +58,7 @@ namespace MeGUI.packages.tools.hdbdextractor
         private List<Feature> features;
         private OperatingMode oMode;
         private eac3toArgs args;
-        private String strFile;
+        private List<string> input;
         private LogItem _log;
         private MediaInfoFile iFile;
         private bool bFetchAll;
@@ -82,18 +73,20 @@ namespace MeGUI.packages.tools.hdbdextractor
         public event OnFetchInformationCompletedHandler FetchInformationCompleted;
         public event OnProgressChangedHandler ProgressChanged;
 
-        public Eac3toInfo(String strPath, MediaInfoFile iFile, LogItem oLog)
+        public Eac3toInfo(List<string> input, MediaInfoFile iFile, LogItem oLog)
         {
+            oLog = MainForm.Instance.Log;
             if (oLog != null)
             {
                 _log = oLog.Add(new LogItem("eac3toInfo"));
-                _log.LogEvent("Input: " + strPath);
+                foreach (string strPath in input)
+                    _log.LogEvent("Input: " + strPath);
             }
-            if (System.IO.Directory.Exists(strPath))
+            if (System.IO.Directory.Exists(input[0]))
                 oMode = OperatingMode.FolderBased;
             else
                 oMode = OperatingMode.FileBased;
-            strFile = strPath;
+            this.input = input;
             this.iFile = iFile;
         }
 
@@ -135,7 +128,6 @@ namespace MeGUI.packages.tools.hdbdextractor
             initBackgroundWorker();
             args = new eac3toArgs();
             args.eac3toPath = MainForm.Instance.Settings.EAC3toPath;
-            args.inputPath = strFile;
             args.resultState = ResultState.FeatureCompleted;
             args.args = string.Empty;
             args.workingFolder = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.EAC3toPath);
@@ -149,7 +141,6 @@ namespace MeGUI.packages.tools.hdbdextractor
             initBackgroundWorker();
             args = new eac3toArgs();
             args.eac3toPath = MainForm.Instance.Settings.EAC3toPath;
-            args.inputPath = strFile;
             args.resultState = ResultState.StreamCompleted;
             args.args = iFeatureNumber.ToString();
             args.featureNumber = iFeatureNumber.ToString();
@@ -165,23 +156,27 @@ namespace MeGUI.packages.tools.hdbdextractor
 
             using (Process compiler = new Process())
             {
+                string strSource = string.Format("\"{0}\"", input[0]);
+                for (int i = 1; i < input.Count; i++)
+                    strSource += string.Format("+\"{0}\"", input[i]);
+
                 compiler.StartInfo.FileName = args.eac3toPath;
                 switch (args.resultState)
                 {
                     case ResultState.FeatureCompleted:
-                        compiler.StartInfo.Arguments = string.Format("\"{0}\"", args.inputPath);
+                        compiler.StartInfo.Arguments = string.Format("{0}", strSource);
                         break;
                     case ResultState.StreamCompleted:
                         if (args.args == string.Empty)
-                            compiler.StartInfo.Arguments = string.Format("\"{0}\"", args.inputPath);
+                            compiler.StartInfo.Arguments = string.Format("{0}", strSource);
                         else
-                            compiler.StartInfo.Arguments = string.Format("\"{0}\" {1}) {2}", args.inputPath, args.args, "-progressnumbers");
+                            compiler.StartInfo.Arguments = string.Format("{0} {1}) {2}", strSource, args.args, "-progressnumbers");
                         break;
                     case ResultState.ExtractCompleted:
                         if (oMode == OperatingMode.FileBased)
-                            compiler.StartInfo.Arguments = string.Format("\"{0}\" {1}", args.inputPath, args.args + " -progressnumbers");
+                            compiler.StartInfo.Arguments = string.Format("{0} {1}", strSource, args.args + " -progressnumbers");
                         else
-                            compiler.StartInfo.Arguments = string.Format("\"{0}\" {1}) {2}", args.inputPath, args.featureNumber, args.args + "-progressnumbers");
+                            compiler.StartInfo.Arguments = string.Format("{0} {1}) {2}", strSource, args.featureNumber, args.args + "-progressnumbers");
                         break;
                 }
 
@@ -366,11 +361,18 @@ namespace MeGUI.packages.tools.hdbdextractor
                                 if (features.Count == 0)
                                 {
                                     Feature dummyFeature = new Feature();
-                                    if (System.IO.File.Exists(strFile) && iFile == null)
-                                        iFile = new MediaInfoFile(strFile);
-                                    if (iFile != null)
-                                        dummyFeature.Duration = TimeSpan.FromSeconds(Math.Ceiling(iFile.VideoInfo.FrameCount / iFile.VideoInfo.FPS));
-                                    dummyFeature.Name = System.IO.Path.GetFileName(strFile);
+                                    for (int i = 0; i < input.Count; i++)
+                                    {
+                                        if (System.IO.File.Exists(input[i]) && iFile == null)
+                                            iFile = new MediaInfoFile(input[i]);
+                                        if (iFile != null)
+                                        {
+                                            dummyFeature.Duration += TimeSpan.FromSeconds(Math.Ceiling(iFile.VideoInfo.FrameCount / iFile.VideoInfo.FPS));
+                                            iFile = null;
+                                        }
+                                        dummyFeature.Files.Add(new File(System.IO.Path.GetFileName(input[i]), i + 1));
+                                    }
+                                    dummyFeature.Name = System.IO.Path.GetFileName(input[0]);
                                     dummyFeature.Description = dummyFeature.Name + ", " + dummyFeature.Duration.ToString();
                                     features.Add(dummyFeature);
                                 }

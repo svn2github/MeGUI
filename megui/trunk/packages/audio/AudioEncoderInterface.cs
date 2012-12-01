@@ -49,9 +49,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
                 ((j as AudioJob).Settings is NeroAACSettings) ||
                 ((j as AudioJob).Settings is FlacSettings) ||
-                ((j as AudioJob).Settings is AftenSettings)) ||
+                ((j as AudioJob).Settings is AftenSettings) ||
                 ((j as AudioJob).Settings is QaacSettings) ||
-                ((j as AudioJob).Settings is OpusSettings))
+                ((j as AudioJob).Settings is OpusSettings)))
                 return new AviSynthAudioEncoder(mf.Settings);
             return null;
         }

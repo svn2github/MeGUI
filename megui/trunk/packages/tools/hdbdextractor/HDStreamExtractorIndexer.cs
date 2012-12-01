@@ -35,7 +35,8 @@ namespace MeGUI
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is HDStreamsExJob) return new HDStreamExtractorIndexer(mf.Settings.EAC3toPath);
+            if (j is HDStreamsExJob) 
+                return new HDStreamExtractorIndexer(mf.Settings.EAC3toPath);
             return null;
         }
 
@@ -78,7 +79,8 @@ namespace MeGUI
 
         protected override void checkJobIO()
         {
-            // do nothing
+            foreach (string strSource in job.Source)
+                Util.ensureExists(strSource);
         }
 
         public override void ProcessLine(string line, StreamType stream)
@@ -145,7 +147,15 @@ namespace MeGUI
                         sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input, job.FeatureNb, job.Args + " -progressnumbers"));
                 }
                 else
-                    sb.Append(string.Format("\"{0}\" {1}", job.Input, job.Args + " -progressnumbers"));
+                {
+                    if (job.Source.Count == 0 && !String.IsNullOrEmpty(job.Input))
+                        job.Source.Add(job.Input);
+
+                    string strSource = string.Format("\"{0}\"", job.Source[0]);
+                    for (int i = 1; i < job.Source.Count; i++)
+                        strSource += string.Format("+\"{0}\"", job.Source[i]);
+                    sb.Append(string.Format("{0} {1}", strSource, job.Args + " -progressnumbers"));
+                }
 
                 return sb.ToString();
             }
