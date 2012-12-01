@@ -144,7 +144,6 @@ namespace MeGUI
                     case "avimux_gui": arrPath.Add(MainForm.Instance.Settings.AviMuxGUIPath); break;
                     case "tsmuxer": arrPath.Add(MainForm.Instance.Settings.TSMuxerPath); break;
                     case "xvid_encraw": arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath); break;
-                    case "faac": arrPath.Add(MainForm.Instance.Settings.FaacPath); break;
                     case "mkvmerge":
                         arrPath.Add(MainForm.Instance.Settings.MkvmergePath);
                         arrPath.Add(MainForm.Instance.Settings.MkvExtractPath);
@@ -156,6 +155,8 @@ namespace MeGUI
                     case "aften": arrPath.Add(MainForm.Instance.Settings.AftenPath); break;
                     case "flac": arrPath.Add(MainForm.Instance.Settings.FlacPath); break;
                     case "eac3to": arrPath.Add(MainForm.Instance.Settings.EAC3toPath); break;
+                    case "qaac": arrPath.Add(MainForm.Instance.Settings.QaacPath); break;
+                    case "opus": arrPath.Add(MainForm.Instance.Settings.OpusPath); break;
                     case "libs":
                         {
                             strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
@@ -634,8 +635,6 @@ namespace MeGUI
                     {
                         case ("dgindex"):
                             return meGUISettings.DgIndexPath;
-                        case ("faac"):
-                            return meGUISettings.FaacPath;
                         case ("mkvmerge"):
                             return meGUISettings.MkvmergePath;
                         case ("lame"):
@@ -678,6 +677,10 @@ namespace MeGUI
                             return meGUISettings.FFMSIndexPath;
                         case ("tsmuxer"):
                             return meGUISettings.TSMuxerPath;
+                        case ("qaac"):
+                            return meGUISettings.QaacPath;
+                        case ("opus"):
+                            return meGUISettings.OpusPath;                                 
                         default:
                             return null;
                     }
@@ -988,8 +991,6 @@ namespace MeGUI
             arrPath.Add(MainForm.Instance.Settings.TSMuxerPath);
             //xvid_encraw
             arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath);
-            //faac
-            arrPath.Add(MainForm.Instance.Settings.FaacPath);
             //mkvmerge
             arrPath.Add(MainForm.Instance.Settings.MkvmergePath);
             arrPath.Add(MainForm.Instance.Settings.MkvExtractPath);

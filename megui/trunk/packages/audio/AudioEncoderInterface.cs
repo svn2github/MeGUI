@@ -47,10 +47,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 ((j as AudioJob).Settings is MP2Settings) ||
                 ((j as AudioJob).Settings is AC3Settings) ||
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
-                ((j as AudioJob).Settings is FaacSettings) ||
                 ((j as AudioJob).Settings is NeroAACSettings) ||
                 ((j as AudioJob).Settings is FlacSettings) ||
-                ((j as AudioJob).Settings is AftenSettings)))
+                ((j as AudioJob).Settings is AftenSettings)) ||
+                ((j as AudioJob).Settings is QaacSettings) ||
+                ((j as AudioJob).Settings is OpusSettings))
                 return new AviSynthAudioEncoder(mf.Settings);
             return null;
         }
@@ -1126,21 +1127,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                 _encoderCommandLine = sb.ToString();
             }
-            if (audioJob.Settings is FaacSettings)
-            {
-                FaacSettings f = audioJob.Settings as FaacSettings;
-                _encoderExecutablePath = this._settings.FaacPath;
-                _mustSendWavHeaderToEncoderStdIn = true;
-                switch (f.BitrateMode)
-                {
-                    case BitrateManagementMode.VBR:
-                        _encoderCommandLine = "-q " + f.Quality + " --mpeg-vers 4 -o \"{0}\" -"; 
-                        break;
-                    default:
-                        _encoderCommandLine = "-b " + f.Bitrate + " --mpeg-vers 4 -o \"{0}\" -";
-                        break;
-                }
-            }
             if (audioJob.Settings is MP3Settings)
             {
                 MP3Settings m = audioJob.Settings as MP3Settings;
@@ -1160,6 +1146,52 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         _encoderCommandLine = "--abr " + m.AbrBitrate + " -h - \"{0}\"";
                         break;
                 }
+            }
+
+            if (audioJob.Settings is QaacSettings)
+            {
+                QaacSettings q = audioJob.Settings as QaacSettings;
+                _encoderExecutablePath = this._settings.QaacPath;
+                _mustSendWavHeaderToEncoderStdIn = true;
+                StringBuilder sb = new StringBuilder("--ignorelength --threading ");
+
+                if (q.Profile == QaacProfile.ALAC)
+                    sb.Append("-A ");
+                else
+                {
+                    if (q.Profile == QaacProfile.HE) sb.Append("--he ");
+
+                    switch (q.Mode)
+                    {
+                        case QaacMode.TVBR: sb.Append("-V " + q.Quality); break;
+                        case QaacMode.CVBR: sb.Append("-v " + q.Bitrate); break;
+                        case QaacMode.ABR: sb.Append("-a " + q.Bitrate); break;
+                        case QaacMode.CBR: sb.Append("-c " + q.Bitrate); break;
+                    }
+                }
+
+                sb.Append(" - -o \"{0}\"");
+
+                _encoderCommandLine = sb.ToString();
+            }
+
+            if (audioJob.Settings is OpusSettings)
+            {
+                OpusSettings o = audioJob.Settings as OpusSettings;
+                _encoderExecutablePath = this._settings.OpusPath;
+                _mustSendWavHeaderToEncoderStdIn = true;
+                StringBuilder sb = new StringBuilder("--ignorelength ");
+
+                switch (o.Mode)
+                {
+                    case OpusMode.CVBR: sb.Append("--cvbr --bitrate " + o.Bitrate); break;
+                    case OpusMode.HCBR: sb.Append("--hard-cbr --bitrate " + o.Bitrate); break;
+                    case OpusMode.VBR:  sb.Append("--vbr --bitrate " + o.Bitrate); break;
+                }
+                
+                sb.Append(" - \"{0}\"");
+
+                _encoderCommandLine = sb.ToString();
             }
 
             //Just check encoder existance

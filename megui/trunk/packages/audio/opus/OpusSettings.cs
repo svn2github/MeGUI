@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,40 +22,33 @@ using System;
 
 namespace MeGUI
 {
-	/// <summary>
-	/// Summary description for FaacSettings.
-	/// </summary>
-	public class FaacSettings : AudioCodecSettings
+    public enum OpusMode
+    {
+        [EnumTitle("VBR")]
+        VBR,
+        [EnumTitle("Constrained VBR")]
+        CVBR,
+        [EnumTitle("Hard CBR")]
+        HCBR
+    }
+
+    public class OpusSettings : AudioCodecSettings
 	{
-        public static string ID = "FAAC";
+        public static readonly string ID = "OPUS";
 
-        public static readonly int[] SupportedBitrates = new int[] {
-            64,
-            80,
-            96,
-            112,
-            128,
-            160,
-            192,
-            224,
-            256,
-            320,
-            388,
-            448};
+        public static readonly OpusMode[] SupportedModes = new OpusMode[] { OpusMode.VBR, OpusMode.CVBR, OpusMode.HCBR };
 
-		private decimal quality;
-		public FaacSettings()
-            : base(ID, AudioCodec.AAC, AudioEncoderType.FAAC, 128, BitrateManagementMode.VBR)
+		public OpusSettings() 
+            : base(ID, AudioCodec.OPUS, AudioEncoderType.OPUS, 6, BitrateManagementMode.VBR)
 		{
-			Quality = 100;
+            Mode = OpusMode.VBR;
 		}
-		/// <summary>
-		/// gets / sets the vbr quality
-		/// </summary>
-		public decimal Quality
-		{
-			get {return quality;}
-			set {quality = value;}
-		}
+
+        private OpusMode mode;
+        public OpusMode Mode
+        {
+            get { return mode; }
+            set { mode = value; }
+        }
 	}
 }

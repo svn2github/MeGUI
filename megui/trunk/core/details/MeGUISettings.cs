@@ -45,7 +45,7 @@ namespace MeGUI
             Advanced
         };
         private string[][] autoUpdateServerLists;
-        private string faacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
+        private string qaacPath, opusPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
                        ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath, aviSynthPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
@@ -94,11 +94,12 @@ namespace MeGUI
             useadvancedtooltips = true;
             audioSamplesPerUpdate = 100000;
             aviMuxGUIPath = getDownloadPath(@"tools\avimux_gui\avimux_gui.exe");
-            faacPath = getDownloadPath(@"tools\faac\faac.exe");
 			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
             mkvExtractPath = getDownloadPath(@"tools\mkvmerge\mkvextract.exe");
             pgcDemuxPath = getDownloadPath(@"tools\pgcdemux\pgcdemux.exe");
+            qaacPath = getDownloadPath(@"tools\qaac\qaac.exe");
+            opusPath = getDownloadPath(@"tools\opus\opusenc.exe");
 #if x64
             x264Path = getDownloadPath(@"tools\x264\x264_64.exe");
             b64bitX264 = true;
@@ -585,15 +586,7 @@ namespace MeGUI
         }
 
         /// <summary>
-        /// filename and full path of the faac executable
-        /// </summary>
-        public string FaacPath
-        {
-            get { return faacPath; }
-        }
-
-        /// <summary>
-        /// filename and full path of the faac executable
+        /// filename and full path of the lame executable
         /// </summary>
         public string LamePath
         {
@@ -717,6 +710,23 @@ namespace MeGUI
         {
             get { return tsmuxerPath; }
         }
+
+        /// <summary>
+        /// filename and full path of the qaac executable
+        /// </summary>
+        public string QaacPath
+        {
+            get { return qaacPath; }
+        }
+
+        /// <summary>
+        /// filename and full path of the opus executable
+        /// </summary>
+        public string OpusPath
+        {
+            get { return opusPath; }
+        }
+
         ///<summary>
         /// gets / sets whether megui backup files from updater or not
         /// </summary>

@@ -62,10 +62,11 @@ namespace MeGUI
         XmlInclude(typeof(AC3Settings)), 
         XmlInclude(typeof(NeroAACSettings)), 
         XmlInclude(typeof(MP3Settings)), 
-        XmlInclude(typeof(FaacSettings)), 
         XmlInclude(typeof(OggVorbisSettings)),
         XmlInclude(typeof(AftenSettings)),
-        XmlInclude(typeof(FlacSettings))
+        XmlInclude(typeof(FlacSettings)),
+        XmlInclude(typeof(QaacSettings)),
+        XmlInclude(typeof(OpusSettings))
     ]
 	public abstract class AudioCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
 	{
