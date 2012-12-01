@@ -124,7 +124,7 @@ namespace MeGUI
                 input.SelectedItem = oItem;
                 if (!string.IsNullOrEmpty(value.Language))
                 {
-                    if (LanguageSelectionContainer.Languages.ContainsValue(value.Language))
+                    if (!String.IsNullOrEmpty(LanguageSelectionContainer.lookupISOCode(value.Language)))
                         subtitleLanguage.Text = LanguageSelectionContainer.lookupISOCode(value.Language);
                     else
                         subtitleLanguage.Text = value.Language;

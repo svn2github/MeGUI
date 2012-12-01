@@ -302,7 +302,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     }
                     if (!string.IsNullOrEmpty(stream.language))
                     {
-                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.LanguagesTerminology)
                         {
                             if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                             {
@@ -323,7 +323,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     sb.Append(" -add \"" + stream.path + "#trackID=1");
                     if (!string.IsNullOrEmpty(stream.language))
                     {
-                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.LanguagesTerminology)
                         {
                             if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                             {

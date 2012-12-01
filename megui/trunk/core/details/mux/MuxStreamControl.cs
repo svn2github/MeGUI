@@ -71,7 +71,7 @@ namespace MeGUI.core.details.mux
                 input.Filename = value.path;
                 if (!string.IsNullOrEmpty(value.language))
                 {
-                    if (LanguageSelectionContainer.Languages.ContainsValue(value.language))
+                    if (!String.IsNullOrEmpty(LanguageSelectionContainer.lookupISOCode(value.language)))
                         subtitleLanguage.Text = LanguageSelectionContainer.lookupISOCode(value.language);
                     else
                         subtitleLanguage.Text = value.language;

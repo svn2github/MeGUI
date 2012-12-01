@@ -1,5 +1,6 @@
+2227 [MP4 Muxer] changed muxer to use the ISO 639-2/T language codes
 2226 [HD Streams Extractor] fixed handling of input files with a + in the file name
-2225 [MP4Muxer] added better language support & several Apple devices tunings especially for chapters
+2225 [MP4 Muxer] added better language support & several Apple devices tunings especially for chapters
 2224 [Audio] removed faac & introduced qaac + opus encoders
 2223 replaced the ISO 639-2 bibliographic language codes for German/French with the terminology ones (ger->deu, fre->fra)
 2222 [Log] if Haali is not correctly installed a warning instead of an error will be logged

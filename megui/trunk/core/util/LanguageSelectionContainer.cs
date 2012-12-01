@@ -29,125 +29,255 @@ namespace MeGUI
 	/// </summary>
 	public class LanguageSelectionContainer
 	{
-        private static readonly Dictionary<string,string> languages;
-        private static readonly Dictionary<string, string> languagesReverse;
+        // used by all tools except MP4box
+        private static readonly Dictionary<string, string> languagesBibliographic; 
+        private static readonly Dictionary<string, string> languagesReverseBibliographic;
 
+        // used by MP4box
+        private static readonly Dictionary<string, string> languagesTerminology;
+        private static readonly Dictionary<string, string> languagesReverseTerminology;
+
+        /// <summary>
+        /// uses the ISO 639-2/B language codes
+        /// </summary>
         public static Dictionary<string, string> Languages
         {
             get
             {
-                return languages;
+                return languagesBibliographic;
             }
         }
 
-
-        private static void addLanguage(string name, string iso)
+        /// <summary>
+        /// uses the ISO 639-2/T language codes
+        /// </summary>
+        public static Dictionary<string, string> LanguagesTerminology
         {
-            languages.Add(name, iso);
-            languagesReverse.Add(iso, name);
+            get
+            {
+                return languagesTerminology;
+            }
+        }
+
+        private static void addLanguageB(string name, string iso)
+        {
+            languagesBibliographic.Add(name, iso);
+            languagesReverseBibliographic.Add(iso, name);
+        }
+
+        private static void addLanguageT(string name, string iso)
+        {
+            languagesTerminology.Add(name, iso);
+            languagesReverseTerminology.Add(iso, name);
         }
 
         static LanguageSelectionContainer()
         {
-            languages = new Dictionary<string, string>();
-            languagesReverse = new Dictionary<string, string>();
+            // http://www.loc.gov/standards/iso639-2/php/code_list.php
 
-            addLanguage("English", "eng");
-            addLanguage("Abkhazian", "abk");
-            addLanguage("Achinese", "ace");
-            addLanguage("Acoli", "ach");
-            addLanguage("Adangme", "ada");
-            addLanguage("Adygei (Adyghe)", "ady");
-            addLanguage("Afar", "aar");
-            addLanguage("Afrihili", "afh");
-            addLanguage("Afrikaans", "afr");
-            addLanguage("Afro-Asiatic (Other)", "afa");
-            addLanguage("Akan", "aka");
-            addLanguage("Akkadian", "akk");
-            addLanguage("Albanian", "sqi");
-            addLanguage("Aleut", "ale");
-            addLanguage("Algonquian languages", "alg");
-            addLanguage("Altaic (Other)", "tut");
-            addLanguage("Apache languages", "apa");
-            addLanguage("Arabic", "ara");
-            addLanguage("Aragonese", "arg");
-            addLanguage("Aramaic", "arc");
-            addLanguage("Arapaho", "arp");
-            addLanguage("Araucanian", "arn");
-            addLanguage("Arawak", "arw");
-            addLanguage("Armenian", "hye");
-            addLanguage("Assamese", "ast");
-            addLanguage("Athapascan languages", "art");
-            addLanguage("Australian languages", "aus");
-            addLanguage("Austronesian (Other)", "map");
-            addLanguage("Avaric", "ava");
-            addLanguage("Avestan", "ave");
-            addLanguage("Awadhi", "awa");
-            addLanguage("Aymara", "aym");
-            addLanguage("Azerbaijani", "aze");
-            addLanguage("Balinese", "ban");
-            addLanguage("Bantu", "bnt");
-            addLanguage("Basque", "eus");
-            addLanguage("Belarusian", "bel");
-            addLanguage("Bosnian", "bos");
-            addLanguage("Breton", "bre");
-            addLanguage("Bulgarian", "bul");
-            addLanguage("Burmese", "mya");
-            addLanguage("Catalan", "cat");
-            addLanguage("Chinese", "chi");
-            addLanguage("Chinese (Alt)", "zho");
-            addLanguage("Corsican", "cos");
-            addLanguage("Croatian", "hrv");
-            addLanguage("Czech", "ces");
-            addLanguage("Danish", "dan");
-            addLanguage("Dutch", "nld");            
-            addLanguage("Estonian", "est");
-            addLanguage("Faroese", "fao");
-            addLanguage("Finnish", "fin");
-            addLanguage("French", "fra");
-            addLanguage("Georgian", "kat");
-            addLanguage("German", "deu");
-            addLanguage("Greek", "ell");
-            addLanguage("Hebrew", "heb");
-            addLanguage("Hindi", "hin");
-            addLanguage("Hungarian", "hun");
-            addLanguage("Icelandic", "isl");
-            addLanguage("Indonesian", "ind");
-            addLanguage("Irish", "gai");
-            addLanguage("Italian", "ita");
-            addLanguage("Japanese", "jpn");
-            addLanguage("Kashmiri", "kas");
-            addLanguage("Kongo", "kon");
-            addLanguage("Korean", "kor");
-            addLanguage("Latvian", "lav");
-            addLanguage("Lithuanian", "lit");
-            addLanguage("Macedonian", "mkd");
-            addLanguage("Maltese", "mlt");
-            addLanguage("Moldavian", "mol");
-            addLanguage("Mongolian", "mon");
-            addLanguage("Norwegian", "nor");
-            addLanguage("Punjabi", "pan");
-            addLanguage("Persian", "fas");
-            addLanguage("Polish", "pol");
-            addLanguage("Portuguese", "por");
-            addLanguage("Romanian", "ron");
-            addLanguage("Russian", "rus");
-            addLanguage("Serbian", "srp");
-            addLanguage("Slovak", "slk");
-            addLanguage("Slovenian", "slv");
-            addLanguage("Spanish", "spa");
-            addLanguage("Swahili", "swa");
-            addLanguage("Swedish", "swe");
-            addLanguage("Thai", "tha");
-            addLanguage("Tibetan", "bod");
-            addLanguage("Turkish", "tur");
-            addLanguage("Urdu", "urd");
-            addLanguage("Ukrainian", "ukr");
-            addLanguage("Uzbek", "uzb");
-            addLanguage("Vietnamese", "vie");
-            addLanguage("Zhuang", "zha");
-            addLanguage("Zulu", "zul");
-            addLanguage("Zuni", "zun");
+            languagesBibliographic = new Dictionary<string, string>();
+            languagesReverseBibliographic = new Dictionary<string, string>();
+
+            languagesTerminology = new Dictionary<string, string>();
+            languagesReverseTerminology = new Dictionary<string, string>();
+
+            addLanguageB("Abkhazian", "abk");
+            addLanguageB("Achinese", "ace");
+            addLanguageB("Acoli", "ach");
+            addLanguageB("Adangme", "ada");
+            addLanguageB("Adygei (Adyghe)", "ady");
+            addLanguageB("Afar", "aar");
+            addLanguageB("Afrihili", "afh");
+            addLanguageB("Afrikaans", "afr");
+            addLanguageB("Afro-Asiatic (Other)", "afa");
+            addLanguageB("Akan", "aka");
+            addLanguageB("Akkadian", "akk");
+            addLanguageB("Albanian", "alb");
+            addLanguageB("Aleut", "ale");
+            addLanguageB("Algonquian languages", "alg");
+            addLanguageB("Altaic (Other)", "tut");
+            addLanguageB("Apache languages", "apa");
+            addLanguageB("Arabic", "ara");
+            addLanguageB("Aragonese", "arg");
+            addLanguageB("Aramaic", "arc");
+            addLanguageB("Arapaho", "arp");
+            addLanguageB("Araucanian", "arn");
+            addLanguageB("Arawak", "arw");
+            addLanguageB("Armenian", "arm");
+            addLanguageB("Assamese", "ast");
+            addLanguageB("Athapascan languages", "art");
+            addLanguageB("Australian languages", "aus");
+            addLanguageB("Austronesian (Other)", "map");
+            addLanguageB("Avaric", "ava");
+            addLanguageB("Avestan", "ave");
+            addLanguageB("Awadhi", "awa");
+            addLanguageB("Aymara", "aym");
+            addLanguageB("Azerbaijani", "aze");
+            addLanguageB("Balinese", "ban");
+            addLanguageB("Bantu", "bnt");
+            addLanguageB("Basque", "baq");
+            addLanguageB("Belarusian", "bel");
+            addLanguageB("Bosnian", "bos");
+            addLanguageB("Breton", "bre");
+            addLanguageB("Bulgarian", "bul");
+            addLanguageB("Burmese", "bur");
+            addLanguageB("Catalan", "cat");
+            addLanguageB("Chinese", "chi");
+            addLanguageB("Corsican", "cos");
+            addLanguageB("Croatian", "hrv");
+            addLanguageB("Czech", "cze");
+            addLanguageB("Danish", "dan");
+            addLanguageB("Dutch", "dut");            
+            addLanguageB("Estonian", "est");
+            addLanguageB("Faroese", "fao");
+            addLanguageB("Finnish", "fin");
+            addLanguageB("French", "fre");
+            addLanguageB("Georgian", "geo");
+            addLanguageB("German", "ger");
+            addLanguageB("Greek", "gre");
+            addLanguageB("Hebrew", "heb");
+            addLanguageB("Hindi", "hin");
+            addLanguageB("Hungarian", "hun");
+            addLanguageB("English", "eng");
+            addLanguageB("Icelandic", "ice");
+            addLanguageB("Indonesian", "ind");
+            addLanguageB("Irish", "gai");
+            addLanguageB("Italian", "ita");
+            addLanguageB("Japanese", "jpn");
+            addLanguageB("Kashmiri", "kas");
+            addLanguageB("Kongo", "kon");
+            addLanguageB("Korean", "kor");
+            addLanguageB("Latvian", "lav");
+            addLanguageB("Lithuanian", "lit");
+            addLanguageB("Macedonian", "mac");
+            addLanguageB("Malay", "may");
+            addLanguageB("Maltese", "mlt");
+            addLanguageB("Maori", "mao");
+            addLanguageB("Moldavian", "mol");
+            addLanguageB("Mongolian", "mon");
+            addLanguageB("Norwegian", "nor");
+            addLanguageB("Punjabi", "pan");
+            addLanguageB("Persian", "per");
+            addLanguageB("Polish", "pol");
+            addLanguageB("Portuguese", "por");
+            addLanguageB("Romanian", "rum");
+            addLanguageB("Russian", "rus");
+            addLanguageB("Serbian", "srp");
+            addLanguageB("Slovak", "slo");
+            addLanguageB("Slovenian", "slv");
+            addLanguageB("Spanish", "spa");
+            addLanguageB("Swahili", "swa");
+            addLanguageB("Swedish", "swe");
+            addLanguageB("Thai", "tha");
+            addLanguageB("Tibetan", "tib");
+            addLanguageB("Turkish", "tur");
+            addLanguageB("Urdu", "urd");
+            addLanguageB("Ukrainian", "ukr");
+            addLanguageB("Uzbek", "uzb");
+            addLanguageB("Vietnamese", "vie");
+            addLanguageB("Welsh", "wel");
+            addLanguageB("Zhuang", "zha");
+            addLanguageB("Zulu", "zul");
+            addLanguageB("Zuni", "zun");
+
+            addLanguageT("Abkhazian", "abk");
+            addLanguageT("Achinese", "ace");
+            addLanguageT("Acoli", "ach");
+            addLanguageT("Adangme", "ada");
+            addLanguageT("Adygei (Adyghe)", "ady");
+            addLanguageT("Afar", "aar");
+            addLanguageT("Afrihili", "afh");
+            addLanguageT("Afrikaans", "afr");
+            addLanguageT("Afro-Asiatic (Other)", "afa");
+            addLanguageT("Akan", "aka");
+            addLanguageT("Akkadian", "akk");
+            addLanguageT("Albanian", "sqi");
+            addLanguageT("Aleut", "ale");
+            addLanguageT("Algonquian languages", "alg");
+            addLanguageT("Altaic (Other)", "tut");
+            addLanguageT("Apache languages", "apa");
+            addLanguageT("Arabic", "ara");
+            addLanguageT("Aragonese", "arg");
+            addLanguageT("Aramaic", "arc");
+            addLanguageT("Arapaho", "arp");
+            addLanguageT("Araucanian", "arn");
+            addLanguageT("Arawak", "arw");
+            addLanguageT("Armenian", "hye");
+            addLanguageT("Assamese", "ast");
+            addLanguageT("Athapascan languages", "art");
+            addLanguageT("Australian languages", "aus");
+            addLanguageT("Austronesian (Other)", "map");
+            addLanguageT("Avaric", "ava");
+            addLanguageT("Avestan", "ave");
+            addLanguageT("Awadhi", "awa");
+            addLanguageT("Aymara", "aym");
+            addLanguageT("Azerbaijani", "aze");
+            addLanguageT("Balinese", "ban");
+            addLanguageT("Bantu", "bnt");
+            addLanguageT("Basque", "eus");
+            addLanguageT("Belarusian", "bel");
+            addLanguageT("Bosnian", "bos");
+            addLanguageT("Breton", "bre");
+            addLanguageT("Bulgarian", "bul");
+            addLanguageT("Burmese", "mya");
+            addLanguageT("Catalan", "cat");
+            addLanguageT("Chinese", "zho");
+            addLanguageT("Corsican", "cos");
+            addLanguageT("Croatian", "hrv");
+            addLanguageT("Czech", "ces");
+            addLanguageT("Danish", "dan");
+            addLanguageT("Dutch", "nld");
+            addLanguageT("Estonian", "est");
+            addLanguageT("Faroese", "fao");
+            addLanguageT("Finnish", "fin");
+            addLanguageT("French", "fra");
+            addLanguageT("Georgian", "kat");
+            addLanguageT("German", "deu");
+            addLanguageT("Greek", "ell");
+            addLanguageT("Hebrew", "heb");
+            addLanguageT("Hindi", "hin");
+            addLanguageT("Hungarian", "hun");
+            addLanguageT("English", "eng");
+            addLanguageT("Icelandic", "isl");
+            addLanguageT("Indonesian", "ind");
+            addLanguageT("Irish", "gai");
+            addLanguageT("Italian", "ita");
+            addLanguageT("Japanese", "jpn");
+            addLanguageT("Kashmiri", "kas");
+            addLanguageT("Kongo", "kon");
+            addLanguageT("Korean", "kor");
+            addLanguageT("Latvian", "lav");
+            addLanguageT("Lithuanian", "lit");
+            addLanguageT("Macedonian", "mkd");
+            addLanguageT("Malay", "msa");
+            addLanguageT("Maltese", "mlt");
+            addLanguageT("Maori", "mri");
+            addLanguageT("Moldavian", "mol");
+            addLanguageT("Mongolian", "mon");
+            addLanguageT("Norwegian", "nor");
+            addLanguageT("Punjabi", "pan");
+            addLanguageT("Persian", "fas");
+            addLanguageT("Polish", "pol");
+            addLanguageT("Portuguese", "por");
+            addLanguageT("Romanian", "ron");
+            addLanguageT("Russian", "rus");
+            addLanguageT("Serbian", "srp");
+            addLanguageT("Slovak", "slk");
+            addLanguageT("Slovenian", "slv");
+            addLanguageT("Spanish", "spa");
+            addLanguageT("Swahili", "swa");
+            addLanguageT("Swedish", "swe");
+            addLanguageT("Thai", "tha");
+            addLanguageT("Tibetan", "bod");
+            addLanguageT("Turkish", "tur");
+            addLanguageT("Urdu", "urd");
+            addLanguageT("Ukrainian", "ukr");
+            addLanguageT("Uzbek", "uzb");
+            addLanguageT("Vietnamese", "vie");
+            addLanguageT("Welsh", "cym");
+            addLanguageT("Zhuang", "zha");
+            addLanguageT("Zulu", "zul");
+            addLanguageT("Zuni", "zun");
         }
 
 		private LanguageSelectionContainer()
@@ -156,11 +286,14 @@ namespace MeGUI
 
         public static string lookupISOCode(string code)
 		{
-            if (languagesReverse.ContainsKey(code))
-                return languagesReverse[code];
+            if (languagesReverseBibliographic.ContainsKey(code))
+                return languagesReverseBibliographic[code];
+            else if (languagesReverseTerminology.ContainsKey(code))
+                return languagesReverseTerminology[code];
             else
                 return "";
 		}
+
         /// <summary>
         /// takes an ISO639.2 3 letter language code and returns
         /// a 2 letter ISO639.1 language code
