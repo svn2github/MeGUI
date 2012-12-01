@@ -240,6 +240,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     else
                         strInput = settings.MuxedInput;
 
+                    if (settings.DeviceType != "Standard")
+                    {
+                        switch (settings.DeviceType)
+                        {
+                            case "iPod": sb.Append("-ipod "); break;
+                            case "iPhone": sb.Append("-ipod -brand M4VP:1 "); break;
+                            case "ISMA": sb.Append("-isma "); break;
+                            case "PSP": sb.Append("-psp "); break;
+                        }
+                    }
+
                     MediaInfoFile oVideoInfo = new MediaInfoFile(strInput, ref log);
                     sb.Append("-add \"" + strInput);
 
@@ -295,7 +306,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         {
                             if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                             {
-                                sb.Append(":lang=" + strLanguage.Value);
+                                sb.Append(":lang=" + LanguageSelectionContainer.getISO639dot1(strLanguage.Value));
                                 break;
                             }
                         }
@@ -316,38 +327,47 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         {
                             if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                             {
-                                sb.Append(":lang=" + strLanguage.Value);
+                                sb.Append(":lang=" + LanguageSelectionContainer.getISO639dot1(strLanguage.Value));
                                 break;
                             }
                         }
                     }
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(":name=" + stream.name);
+                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                        sb.Append(":hdlr=sbtl:layout=-1:group=2");
                     sb.Append("\"");
                 }
 
-                if (!string.IsNullOrEmpty(settings.ChapterFile)) // a chapter file is defined
-                    sb.Append(" -chap \"" + settings.ChapterFile + "\"");
+                if (!string.IsNullOrEmpty(settings.ChapterFile))
+                {
+                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                    {
+                        FileUtil.CreateXMLFromOGGChapFile(settings.ChapterFile);
+                        sb.Append(" -add \"" + Path.Combine(Path.GetDirectoryName(settings.ChapterFile), Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml:chap") + "\"");
+                    }
+                    else
+                        sb.Append(" -chap \"" + settings.ChapterFile + "\"");
+
+                }
 
                 if (settings.SplitSize.HasValue)
                     sb.Append(" -splits " + settings.SplitSize.Value.KB);
-
-                if (settings.DeviceType != "Standard")
-                {
-                    switch (settings.DeviceType)
-                    {
-                        case "iPod": sb.Append(" -ipod"); break;
-                        case "iPhone": sb.Append(" -ipod -brand M4VP:1"); break;
-                        case "ISMA": sb.Append(" -isma"); break;
-                        case "PSP": sb.Append(" -psp"); break;
-                    }
-                }
 
                 // tmp directory
                 if (!String.IsNullOrEmpty(MainForm.Instance.Settings.TempDirMP4) && Directory.Exists(MainForm.Instance.Settings.TempDirMP4))
                     sb.AppendFormat(" -tmp \"{0}\"", MainForm.Instance.Settings.TempDirMP4.Replace("\\","\\\\"));
                 else if (!Path.GetPathRoot(settings.MuxedOutput).Equals(settings.MuxedOutput, StringComparison.CurrentCultureIgnoreCase))
                     sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput).Replace("\\", "\\\\"));
+
+                if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                {
+                    if (!string.IsNullOrEmpty(settings.VideoInput))
+                        settings.MuxedOutput = Path.ChangeExtension(settings.MuxedOutput, ".m4v");
+                    if (string.IsNullOrEmpty(settings.VideoInput) && !string.IsNullOrEmpty(settings.AudioStreams.ToString()))
+                        settings.MuxedOutput = Path.ChangeExtension(settings.MuxedOutput, ".m4a");
+                }
+
                 // force to create a new output file
                 sb.Append(" -new \"" + settings.MuxedOutput + "\"");
                 return sb.ToString();
