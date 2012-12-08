@@ -721,6 +721,9 @@ namespace MeGUI
                     if (!oStreamControl.SelectedItem.IsStandard)
                         continue;
 
+                    if (oStreamControl.SelectedStreamIndex <= 0) // not NONE
+                        continue;
+
                     bool bDontEncode = false;
                     if (oStreamControl.IsDontEncodePossible() &&
                         (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.Never ||
@@ -747,6 +750,9 @@ namespace MeGUI
                 foreach (OneClickStreamControl oStreamControl in subtitleTracks)
                 {
                     if (!oStreamControl.SelectedItem.IsStandard)
+                        continue;
+
+                    if (oStreamControl.SelectedStreamIndex <= 0) // not NONE
                         continue;
 
                     string strDemuxFilePath = Path.Combine(dpp.WorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName);
