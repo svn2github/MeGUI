@@ -125,8 +125,13 @@ namespace MeGUI.core.gui
             comboBox1.Items.Clear();
             foreach (Named<Profile> oProfile in Manager.Profiles(ProfileSet))
             {
-                if (!(oProfile.Data.BaseSettings is NeroAACSettings) || MainForm.Instance.Settings.IsNeroAACEncAvailable())
-                    comboBox1.Items.Add(oProfile);
+                if ((oProfile.Data.BaseSettings is NeroAACSettings) && !MainForm.Instance.Settings.IsNeroAACEncAvailable())
+                    continue;
+
+                if ((oProfile.Data.BaseSettings is QaacSettings) && !MainForm.Instance.Settings.IsQAACAvailable())
+                    continue;
+
+                comboBox1.Items.Add(oProfile);
             }
             SelectProfile(Manager.GetSelectedProfile(ProfileSet));
         }

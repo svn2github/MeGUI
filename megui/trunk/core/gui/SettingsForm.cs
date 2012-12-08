@@ -140,6 +140,7 @@ namespace MeGUI
         private CheckBox useNeroAacEnc;
         private Label lblNero;
         private CheckBox useDGIndexNV;
+        private CheckBox useQAAC;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -324,6 +325,7 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
+            this.useQAAC = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.targetSizeSCBox1 = new MeGUI.core.gui.TargetSizeSCBox();
             this.defaultOutputDir = new MeGUI.FileBar();
@@ -1158,6 +1160,7 @@ namespace MeGUI
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.useQAAC);
             this.groupBox6.Controls.Add(this.lblForcedName);
             this.groupBox6.Controls.Add(this.txtForcedName);
             this.groupBox6.Controls.Add(this.lblffmsThreads);
@@ -1393,6 +1396,17 @@ namespace MeGUI
             this.toolTipHelp.IsBalloon = true;
             this.toolTipHelp.ReshowDelay = 100;
             this.toolTipHelp.ShowAlways = true;
+            // 
+            // useQAAC
+            // 
+            this.useQAAC.AutoSize = true;
+            this.useQAAC.Location = new System.Drawing.Point(12, 54);
+            this.useQAAC.Name = "useQAAC";
+            this.useQAAC.Size = new System.Drawing.Size(90, 17);
+            this.useQAAC.TabIndex = 48;
+            this.useQAAC.Text = "Enable QAAC";
+            this.useQAAC.UseVisualStyleBackColor = true;
+            this.useQAAC.CheckedChanged += new System.EventHandler(this.useQAAC_CheckedChanged);
             // 
             // helpButton1
             // 
@@ -1658,6 +1672,7 @@ namespace MeGUI
                 settings.UseITUValues = cbUseITUValues.Checked;
                 settings.UseNeroAacEnc = useNeroAacEnc.Checked;
                 settings.UseDGIndexNV = useDGIndexNV.Checked;
+                settings.UseQAAC = useQAAC.Checked;
 				return settings;
 			}
 			set
@@ -1726,6 +1741,7 @@ namespace MeGUI
                 cbUseITUValues.Checked = settings.UseITUValues;
                 useNeroAacEnc.Checked = settings.UseNeroAacEnc;
                 useDGIndexNV.Checked = settings.UseDGIndexNV;
+                useQAAC.Checked = settings.UseQAAC;
 			}
 		}
 		#endregion
@@ -1788,6 +1804,12 @@ namespace MeGUI
             neroaacencLocation.Enabled = lblNero.Enabled = useNeroAacEnc.Checked;
             if (useNeroAacEnc.Checked && !internalSettings.UseNeroAacEnc)
                 MessageBox.Show("You have to restart MeGUI in order to get access to the NeroAacEnc profiles!", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void useQAAC_CheckedChanged(object sender, EventArgs e)
+        {
+            if (useQAAC.Checked && !internalSettings.UseQAAC)
+                MessageBox.Show("You have to restart MeGUI in order to get access to the QAAC profiles!", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 	}
 }

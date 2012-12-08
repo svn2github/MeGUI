@@ -1481,7 +1481,7 @@ namespace MeGUI
             }
             catch (Exception)
             {
-                i.LogEvent("Haali Matroska Muxer not installed properly. Therefore DSS2(), FFVideoSource() and the HD Streams Extractor may also not work.", ImageType.Error);
+                i.LogEvent("Haali Matroska Muxer not installed properly. Therefore DSS2(), FFVideoSource() and the HD Streams Extractor may also not work.", ImageType.Warning);
             }
 
             FileUtil.GetFileInformation("Haali DSS2", Path.Combine(MeGUISettings.HaaliMSPath, "avss.dll"), ref i);

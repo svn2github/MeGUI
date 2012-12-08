@@ -155,7 +155,12 @@ namespace MeGUI
                     case "aften": arrPath.Add(MainForm.Instance.Settings.AftenPath); break;
                     case "flac": arrPath.Add(MainForm.Instance.Settings.FlacPath); break;
                     case "eac3to": arrPath.Add(MainForm.Instance.Settings.EAC3toPath); break;
-                    case "qaac": arrPath.Add(MainForm.Instance.Settings.QaacPath); break;
+                    case "qaac":
+                        if (MainForm.Instance.Settings.UseQAAC)
+                        {
+                            arrPath.Add(MainForm.Instance.Settings.QaacPath);
+                        }
+                        break;
                     case "opus": arrPath.Add(MainForm.Instance.Settings.OpusPath); break;
                     case "libs":
                         {
@@ -1008,6 +1013,8 @@ namespace MeGUI
             arrPath.Add(MainForm.Instance.Settings.FlacPath);
             //eac3to
             arrPath.Add(MainForm.Instance.Settings.EAC3toPath);
+            //opus
+            arrPath.Add(MainForm.Instance.Settings.OpusPath);
             //libs":
             strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             arrPath.Add((System.IO.Path.Combine(strPath, @"ICSharpCode.SharpZipLib.dll")));
@@ -1057,7 +1064,11 @@ namespace MeGUI
             arrPath.Add(MainForm.Instance.Settings.VobSubPath);
             //besplit
             arrPath.Add(MainForm.Instance.Settings.BeSplitPath);
-            
+
+            //qaac
+            if (MainForm.Instance.Settings.UseQAAC)
+                arrPath.Add(MainForm.Instance.Settings.QaacPath);
+
             //neroaacenc
             if (MainForm.Instance.Settings.UseNeroAacEnc)
                 arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
@@ -1160,6 +1171,8 @@ namespace MeGUI
                         if (file.Name.Equals("neroaacenc") && !MainForm.Instance.Settings.UseNeroAacEnc)
                             continue;
                         if (file.Name.Equals("dgindexnv") && !MainForm.Instance.Settings.UseDGIndexNV)
+                            continue;
+                        if (file.Name.Equals("qaac") && !MainForm.Instance.Settings.UseQAAC)
                             continue;
                         this.upgradeData.Add(file);
                     }
@@ -1450,6 +1463,8 @@ namespace MeGUI
                 if (node.Name.Equals("neroaacenc") && !MainForm.Instance.Settings.UseNeroAacEnc)
                     return;
                 if (node.Name.Equals("dgindexnv") && !MainForm.Instance.Settings.UseDGIndexNV)
+                    return;
+                if (node.Name.Equals("qaac") && !MainForm.Instance.Settings.UseQAAC)
                     return;
 #if x86
                 if (node.Attributes["platform"].Value.Equals("x64"))
