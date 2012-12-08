@@ -1,3 +1,4 @@
+2230 [HD Streams Extractor] improved error handling
 2229 [OneClick] fixed a problem during Blu-ray processing when source has no subtitle/audio track
 2228 [OneClick] fixed a problem starting OneClick after a new install
 2227 [MP4 Muxer] changed muxer to use the ISO 639-2/T language codes

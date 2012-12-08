@@ -444,12 +444,13 @@ namespace MeGUI.packages.tools.hdbdextractor
             {
                 if (_oEac3toInfo.IsBusy()) // disallow selection change
                 {
-                    this.FeatureDataGridView.SelectionChanged -= new System.EventHandler(this.FeatureDataGridView_SelectionChanged);
-
-                    FeatureDataGridView.CurrentRow.Selected = false;
-                    FeatureDataGridView.Rows[int.Parse(FeatureDataGridView.Tag.ToString())].Selected = true;
-
-                    this.FeatureDataGridView.SelectionChanged += new System.EventHandler(this.FeatureDataGridView_SelectionChanged);
+                    if (FeatureDataGridView.Tag != null)
+                    {
+                        FeatureDataGridView.SelectionChanged -= new System.EventHandler(this.FeatureDataGridView_SelectionChanged);
+                        FeatureDataGridView.CurrentRow.Selected = false;
+                        FeatureDataGridView.Rows[int.Parse(FeatureDataGridView.Tag.ToString())].Selected = true;
+                        FeatureDataGridView.SelectionChanged += new System.EventHandler(this.FeatureDataGridView_SelectionChanged);
+                    }
                 }
                 else // backgroundworker is not busy, allow selection change
                 {
