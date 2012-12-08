@@ -1,3 +1,4 @@
+2228 [OneClick] fixed a problem starting OneClick after a new install
 2227 [MP4 Muxer] changed muxer to use the ISO 639-2/T language codes
 2226 [HD Streams Extractor] fixed handling of input files with a + in the file name
 2225 [MP4 Muxer] added better language support & several Apple devices tunings especially for chapters

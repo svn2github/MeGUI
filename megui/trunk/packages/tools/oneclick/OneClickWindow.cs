@@ -1556,9 +1556,14 @@ namespace MeGUI
                 }
                 if (!bFound)
                 {
-                    a.SelectProfileNameOrWarn(settings.AudioSettings[0].Profile);
-                    if (a.IsDontEncodePossible() == true)
-                        a.EncodingMode = settings.AudioSettings[0].AudioEncodingMode;
+                    if (settings.AudioSettings.Count > 0)
+                    {
+                        a.SelectProfileNameOrWarn(settings.AudioSettings[0].Profile);
+                        if (a.IsDontEncodePossible() == true)
+                            a.EncodingMode = settings.AudioSettings[0].AudioEncodingMode;
+                    }
+                    else
+                        a.EncodingMode = AudioEncodingMode.IfCodecDoesNotMatch;
                 }
             }
         }
