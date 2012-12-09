@@ -1,3 +1,4 @@
+2232 [HD Streams Extractor] + [OneClick] improved logging
 2231 [QAAC] as external dependencies are required the encoder is disabled by default
             enable it in the MeGUI settings and make sure that CoreAudioToolbox.dll is available
 2230 [HD Streams Extractor] improved error handling

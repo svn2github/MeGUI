@@ -64,6 +64,7 @@ namespace MeGUI
         private int avsLock;
         private LogItem _oneClickLog;
         private LogItem _updateLog;
+        private LogItem _eac3toLog;
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
         public bool IsOverlayIconActive { get { return taskbarIcon != null; } }
         public string LogFile { get { return strLogFile; } }
@@ -71,6 +72,7 @@ namespace MeGUI
         public int AvsLock { get { return avsLock; } set { avsLock = value; } }
         public LogItem OneClickLog { get { return _oneClickLog; } set { _oneClickLog = value; } }
         public LogItem UpdateLog { get { return _updateLog; } set { _updateLog = value; } }
+        public LogItem Eac3toLog { get { return _eac3toLog; } set { _eac3toLog = value; } }
         #endregion
 
         public void RegisterForm(Form f)

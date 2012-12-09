@@ -114,6 +114,11 @@ namespace MeGUI
         {
             this.mainForm = mainForm;
             this._oLog = mainForm.OneClickLog;
+            if (_oLog == null)
+            {
+                _oLog = mainForm.Log.Info("OneClick");
+                mainForm.OneClickLog = _oLog;
+            }
             vUtil = new VideoUtil(mainForm);
             this.muxProvider = mainForm.MuxProvider;
             acceptableContainerTypes = muxProvider.GetSupportedContainers().ToArray();
@@ -353,13 +358,6 @@ namespace MeGUI
                 MessageBox.Show("These files or folders cannot be used in OneClick mode.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
-            if (_oLog == null)
-            {
-                _oLog = mainForm.Log.Info("OneClick");
-                mainForm.OneClickLog = _oLog;
-            }
-
             this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
             goButton.Enabled = false;
             OneClickProcessing oProcessor = new OneClickProcessing(this, arrFilesToProcess, _oSettings, _oLog);
@@ -372,13 +370,6 @@ namespace MeGUI
                 MessageBox.Show("Input " + fileName + " does not exists", "Input not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            if (_oLog == null)
-            {
-                _oLog = mainForm.Log.Info("OneClick");
-                mainForm.OneClickLog = _oLog;
-            }
-
             this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
             goButton.Enabled = false;
             OneClickProcessing oProcessor = new OneClickProcessing(this, fileName, _oSettings, _oLog);
@@ -392,11 +383,6 @@ namespace MeGUI
 
         public void setBatchProcessing(List<OneClickFilesToProcess> arrFilesToProcess, OneClickSettings oSettings)
         {
-            if (_oLog == null)
-            {
-                _oLog = mainForm.Log.Info("OneClick");
-                mainForm.OneClickLog = _oLog;
-            }
             bAutomatedProcessing = true;
             SetOneClickProfile(oSettings);
             OneClickProcessing oProcessor = new OneClickProcessing(this, arrFilesToProcess, oSettings, _oLog);

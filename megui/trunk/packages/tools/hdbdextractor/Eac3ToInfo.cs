@@ -75,13 +75,21 @@ namespace MeGUI.packages.tools.hdbdextractor
 
         public Eac3toInfo(List<string> input, MediaInfoFile iFile, LogItem oLog)
         {
-            oLog = MainForm.Instance.Log;
-            if (oLog != null)
+            // create log instance
+            if (oLog == null)
             {
-                _log = oLog.Add(new LogItem("eac3toInfo"));
-                foreach (string strPath in input)
-                    _log.LogEvent("Input: " + strPath);
+                _log = MainForm.Instance.Eac3toLog;
+                if (_log == null)
+                {
+                    _log = MainForm.Instance.Log.Info("HD Streams Extractor");
+                    MainForm.Instance.Eac3toLog = _log;
+                }
             }
+            else
+                _log = oLog.Add(new LogItem("eac3toInfo"));
+
+            foreach (string strPath in input)
+                _log.LogEvent("Input: " + strPath);
             if (System.IO.Directory.Exists(input[0]))
                 oMode = OperatingMode.FolderBased;
             else
@@ -474,6 +482,15 @@ namespace MeGUI.packages.tools.hdbdextractor
                     // Done
                     // Done.
                     else if (data.Equals("Done."))
+                    {
+                        if (_log != null)
+                            _log.LogEvent(data);
+                        return;
+                    }
+
+                    // unusual video framerate
+                    // v02 The video framerate is correct, but rather unusual.
+                    else if (data.Contains("The video framerate is correct, but rather unusual"))
                     {
                         if (_log != null)
                             _log.LogEvent(data);
