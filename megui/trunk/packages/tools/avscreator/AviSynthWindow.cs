@@ -385,6 +385,7 @@ namespace MeGUI
                     break;
             }
             setSourceInterface();
+            calcAspectError();
         }
 		
         /// <summary>
@@ -754,7 +755,7 @@ namespace MeGUI
 
         private void calcAspectError()
         {
-            if (file == null || resize.CheckState != CheckState.Checked)
+            if (file == null)
             {
                 lblAspectError.BackColor = System.Drawing.SystemColors.Window;
                 lblAspectError.Text = "0.00000%";
@@ -763,6 +764,12 @@ namespace MeGUI
 
             int iHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
             int iWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+
+            if (arChooser.Value.HasValue)
+            {
+                Sar s = arChooser.Value.Value.ToSar((int)file.VideoInfo.Width, (int)file.VideoInfo.Height);
+                iWidth = (int)((decimal)iWidth * s.ar);
+            }
 
             if (iHeight <= 0 || iWidth <= 0 || verticalResolution.Value <= 0 || horizontalResolution.Value <= 0)
             {
@@ -911,6 +918,7 @@ namespace MeGUI
                     mod16Box.SelectedIndex = 0;
                 mod16Box_SelectedIndexChanged(null, null);
                 suggestResolution_CheckedChanged(null, null);
+                lblAspectError.Visible = lblAR.Visible = false;
             }
             else
             {
@@ -918,6 +926,7 @@ namespace MeGUI
                 this.suggestResolution.Enabled = true;
                 this.suggestResolution.Checked = false;
                 mod16Box_SelectedIndexChanged(null, null);
+                lblAspectError.Visible = lblAR.Visible = true;
             }
             if (sender != null && e != null)
                 showScript(false);
@@ -1238,9 +1247,10 @@ namespace MeGUI
                 this.horizontalResolution.Enabled = true;
                 this.verticalResolution.Enabled = !suggestResolution.Checked;
                 if (Mod16Method == mod16Method.resize)
-                    this.suggestResolution.Enabled = suggestMod.Enabled = false;
+                    this.suggestResolution.Enabled = false;
                 else
-                    this.suggestResolution.Enabled = suggestMod.Enabled = true;
+                    this.suggestResolution.Enabled = true;
+                suggestMod.Enabled = true;
             }
             else
             {

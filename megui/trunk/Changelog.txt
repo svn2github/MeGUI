@@ -1,15 +1,17 @@
-2246 [AviSynth Script Creator] enhanced readability of the "red parts"
-                               the "Aspect Ratio Error" only turns red if the value is bigger than the acceptable aspect error
-                               crop values will be used also for the upsize warnings
+2247 [AVS Script Creator] hide "Aspect Ratio Error" when doing an anamorphic encoding
+                          fixed handling of the "Aspect Ratio Error" if dealing with an anamorphic input file
+2246 [AVS Script Creator] enhanced readability of the "red parts"
+                          the "Aspect Ratio Error" only turns red if the value is bigger than the acceptable aspect error
+                          crop values will be used also for the upsize warnings
 2245 [Queue] related jobs are highlighted when selecting a job
 2244 [Queue] when deleting a job warn always if it is part of a related job series
-2243 [AviSynth Script Creator] fixed a crash if "Clever (TM) anamorphic encoding" is enabled
-2242 [AviSynth Script Creator] show signed "Aspect Ratio Error"
+2243 [AVS Script Creator] fixed a crash if "Clever (TM) anamorphic encoding" is enabled
+2242 [AVS Script Creator] show signed "Aspect Ratio Error"
 2241 [Worker] a finished temporary worker will not start anymore idle workers. Bug #691
               several small optimizations
-2240 [AviSynth Script Creator] "Aspect Ratio Error" will also be changed if cropping is changed
-2239 [AviSynth Script Creator] added "Aspect Ratio Error"
-2238 [AviSynth Script Creator] enabled upsizing
+2240 [AVS Script Creator] "Aspect Ratio Error" will also be changed if cropping is changed
+2239 [AVS Script Creator] added "Aspect Ratio Error"
+2238 [AVS Script Creator] enabled upsizing
 
 Changelog 2153 --> 2237
 

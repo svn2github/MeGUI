@@ -56,7 +56,7 @@ namespace MeGUI
             System.Windows.Forms.Label label5;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AviSynthWindow));
             this.resNCropGroupbox = new System.Windows.Forms.GroupBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.lblAR = new System.Windows.Forms.Label();
             this.suggestMod = new System.Windows.Forms.ComboBox();
             this.chAutoPreview = new System.Windows.Forms.CheckBox();
             this.resize = new System.Windows.Forms.CheckBox();
@@ -130,12 +130,12 @@ namespace MeGUI
             this.onSaveLoadScript = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.previewAvsButton = new System.Windows.Forms.Button();
+            this.lblAspectError = new System.Windows.Forms.Label();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.videoOutput = new MeGUI.FileBar();
             this.input = new MeGUI.FileBar();
             this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.arChooser = new MeGUI.core.gui.ARChooser();
-            this.lblAspectError = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -210,7 +210,7 @@ namespace MeGUI
             this.resNCropGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.resNCropGroupbox.Controls.Add(this.lblAspectError);
-            this.resNCropGroupbox.Controls.Add(this.label9);
+            this.resNCropGroupbox.Controls.Add(this.lblAR);
             this.resNCropGroupbox.Controls.Add(this.suggestMod);
             this.resNCropGroupbox.Controls.Add(this.chAutoPreview);
             this.resNCropGroupbox.Controls.Add(this.resize);
@@ -231,14 +231,14 @@ namespace MeGUI
             this.resNCropGroupbox.TabStop = false;
             this.resNCropGroupbox.Text = "Crop && Resize";
             // 
-            // label9
+            // lblAR
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(236, 126);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(95, 13);
-            this.label9.TabIndex = 13;
-            this.label9.Text = "Aspect Ratio Error";
+            this.lblAR.AutoSize = true;
+            this.lblAR.Location = new System.Drawing.Point(236, 126);
+            this.lblAR.Name = "lblAR";
+            this.lblAR.Size = new System.Drawing.Size(95, 13);
+            this.lblAR.TabIndex = 13;
+            this.lblAR.Text = "Aspect Ratio Error";
             // 
             // suggestMod
             // 
@@ -507,9 +507,9 @@ namespace MeGUI
             "Encode non-mod16",
             "Crop mod4 horizontally",
             "Undercrop to achieve mod16"});
-            this.mod16Box.Location = new System.Drawing.Point(239, 119);
+            this.mod16Box.Location = new System.Drawing.Point(222, 119);
             this.mod16Box.Name = "mod16Box";
-            this.mod16Box.Size = new System.Drawing.Size(157, 21);
+            this.mod16Box.Size = new System.Drawing.Size(174, 21);
             this.mod16Box.TabIndex = 19;
             this.mod16Box.SelectedIndexChanged += new System.EventHandler(this.mod16Box_SelectedIndexChanged);
             // 
@@ -1124,6 +1124,16 @@ namespace MeGUI
             this.previewAvsButton.Text = "Preview AVS Script";
             this.previewAvsButton.Click += new System.EventHandler(this.previewButton_Click);
             // 
+            // lblAspectError
+            // 
+            this.lblAspectError.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblAspectError.Location = new System.Drawing.Point(340, 122);
+            this.lblAspectError.Name = "lblAspectError";
+            this.lblAspectError.Size = new System.Drawing.Size(75, 21);
+            this.lblAspectError.TabIndex = 14;
+            this.lblAspectError.Text = "0.00000%";
+            this.lblAspectError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1192,16 +1202,6 @@ namespace MeGUI
             this.arChooser.Size = new System.Drawing.Size(214, 29);
             this.arChooser.TabIndex = 21;
             this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
-            // 
-            // lblAspectError
-            // 
-            this.lblAspectError.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblAspectError.Location = new System.Drawing.Point(340, 122);
-            this.lblAspectError.Name = "lblAspectError";
-            this.lblAspectError.Size = new System.Drawing.Size(75, 21);
-            this.lblAspectError.TabIndex = 14;
-            this.lblAspectError.Text = "0.00000%";
-            this.lblAspectError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // AviSynthWindow
             // 
@@ -1340,7 +1340,7 @@ namespace MeGUI
         private ComboBox cbCharset;
         private CheckBox nvResize;
         private ComboBox suggestMod;
-        private Label label9;
+        private Label lblAR;
         private Label lblAspectError;
     }
 }
