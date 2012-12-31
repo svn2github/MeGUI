@@ -798,11 +798,15 @@ namespace MeGUI
 
                 if (File.Exists(videoIFO))
                 {
-                    prepareJobs = new SequentialChain(new PgcDemuxJob(videoIFO, dpp.WorkingDirectory, _videoInputInfo.VideoInfo.PGCNumber));
-                    for (int i = 1; i < 10; i++)
-                        dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, "VTS_01_" + i + ".VOB"));
                     dpp.IFOInput = videoIFO;
-                    dpp.VideoInput = Path.Combine(dpp.WorkingDirectory, "VTS_01_1.VOB");
+                    if (IFOparser.getPGCnb(videoIFO) > 1)
+                    {
+                        // more than one PGC - therefore pgcdemux must be used
+                        prepareJobs = new SequentialChain(new PgcDemuxJob(videoIFO, dpp.WorkingDirectory, _videoInputInfo.VideoInfo.PGCNumber));
+                        for (int i = 1; i < 10; i++)
+                            dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, "VTS_01_" + i + ".VOB"));
+                        dpp.VideoInput = Path.Combine(dpp.WorkingDirectory, "VTS_01_1.VOB");
+                    }
                 }
             }
 
