@@ -56,6 +56,7 @@ namespace MeGUI
             System.Windows.Forms.Label label5;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AviSynthWindow));
             this.resNCropGroupbox = new System.Windows.Forms.GroupBox();
+            this.txtAspectError = new System.Windows.Forms.TextBox();
             this.suggestMod = new System.Windows.Forms.ComboBox();
             this.chAutoPreview = new System.Windows.Forms.CheckBox();
             this.resize = new System.Windows.Forms.CheckBox();
@@ -129,6 +130,7 @@ namespace MeGUI
             this.onSaveLoadScript = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.previewAvsButton = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.videoOutput = new MeGUI.FileBar();
             this.input = new MeGUI.FileBar();
@@ -207,6 +209,8 @@ namespace MeGUI
             // 
             this.resNCropGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.resNCropGroupbox.Controls.Add(this.label9);
+            this.resNCropGroupbox.Controls.Add(this.txtAspectError);
             this.resNCropGroupbox.Controls.Add(this.suggestMod);
             this.resNCropGroupbox.Controls.Add(this.chAutoPreview);
             this.resNCropGroupbox.Controls.Add(this.resize);
@@ -226,6 +230,15 @@ namespace MeGUI
             this.resNCropGroupbox.TabIndex = 0;
             this.resNCropGroupbox.TabStop = false;
             this.resNCropGroupbox.Text = "Crop && Resize";
+            // 
+            // txtAspectError
+            // 
+            this.txtAspectError.Enabled = false;
+            this.txtAspectError.Location = new System.Drawing.Point(340, 123);
+            this.txtAspectError.Name = "txtAspectError";
+            this.txtAspectError.Size = new System.Drawing.Size(75, 21);
+            this.txtAspectError.TabIndex = 12;
+            this.txtAspectError.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // suggestMod
             // 
@@ -1111,6 +1124,15 @@ namespace MeGUI
             this.previewAvsButton.Text = "Preview AVS Script";
             this.previewAvsButton.Click += new System.EventHandler(this.previewButton_Click);
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(236, 126);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(95, 13);
+            this.label9.TabIndex = 13;
+            this.label9.Text = "Aspect Ratio Error";
+            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1317,5 +1339,7 @@ namespace MeGUI
         private ComboBox cbCharset;
         private CheckBox nvResize;
         private ComboBox suggestMod;
+        private TextBox txtAspectError;
+        private Label label9;
     }
 }

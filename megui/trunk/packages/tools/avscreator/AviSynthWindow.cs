@@ -751,6 +751,34 @@ namespace MeGUI
                 showScript(false);
             }
 		}
+
+        private void calcAspectError()
+        {
+            if (file == null || resize.CheckState != CheckState.Checked)
+            {
+                txtAspectError.BackColor = System.Drawing.SystemColors.Window;
+                txtAspectError.Text = "0.00000%";
+                return;
+            }
+
+            int iHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+            int iWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+
+            if (iHeight <= 0 || iWidth <= 0 || verticalResolution.Value <= 0 || horizontalResolution.Value <= 0)
+            {
+                txtAspectError.BackColor = System.Drawing.SystemColors.Window;
+                txtAspectError.Text = "0.00000%";
+                return;
+            }
+
+            double aspectError = Math.Abs(1 - (iWidth * (double)verticalResolution.Value) / (iHeight * (double)horizontalResolution.Value));
+            txtAspectError.Text = String.Format("{0:0.00000%}", aspectError);
+            if (aspectError * 100 < mainForm.Settings.AcceptableAspectErrorPercent)
+                txtAspectError.BackColor = System.Drawing.SystemColors.Window;
+            else
+                txtAspectError.BackColor = System.Drawing.Color.OrangeRed;
+        }
+
 		#endregion
 
 		#region updown
@@ -768,6 +796,7 @@ namespace MeGUI
                 horizontalResolution.BackColor = System.Drawing.Color.OrangeRed;
             else
                 horizontalResolution.BackColor = System.Drawing.SystemColors.Window;
+            calcAspectError();
 		}
 
 		private void verticalResolution_ValueChanged(object sender, EventArgs e)
@@ -780,6 +809,7 @@ namespace MeGUI
                 verticalResolution.BackColor = System.Drawing.Color.OrangeRed;
             else
                 verticalResolution.BackColor = System.Drawing.SystemColors.Window;
+            calcAspectError();
 		}
 
 		private void sendCropValues()
@@ -1196,6 +1226,7 @@ namespace MeGUI
                 this.suggestResolution.Enabled = this.suggestResolution.Checked = suggestMod.Enabled = false;
             }
             chAutoPreview_CheckedChanged(null, null);
+            calcAspectError();
 
             if (sender != null && e != null)
                 showScript(false);
@@ -1217,7 +1248,7 @@ namespace MeGUI
                 this.suggestResolution.Checked = true;
                 resize.Enabled = false;
                 resize.Checked = true;
-                horizontalResolution.Value = horizontalResolution.Maximum;
+                horizontalResolution.Value = file.VideoInfo.Width;
                 suggestResolution_CheckedChanged(null, null);
             }
             else if (Mod16Method == mod16Method.none)
