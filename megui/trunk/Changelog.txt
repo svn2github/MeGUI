@@ -1,3 +1,4 @@
+2248 [OneClick] warn if identical tracks are about to be processed
 2247 [AVS Script Creator] hide "Aspect Ratio Error" when doing an anamorphic encoding
                           fixed handling of the "Aspect Ratio Error" if dealing with an anamorphic input file
 2246 [AVS Script Creator] enhanced readability of the "red parts"

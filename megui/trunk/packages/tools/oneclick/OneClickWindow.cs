@@ -1090,6 +1090,60 @@ namespace MeGUI
                 return false;
             }
 
+            for (int i = 0; i < audioTracks.Count - 1; i++)
+            {
+                if (audioTracks[i].SelectedStreamIndex <= 0) // not NONE
+                    continue;
+
+                for (int j = i + 1; j < audioTracks.Count; j++)
+                {
+                    if (audioTracks[j].SelectedStreamIndex <= 0) // not NONE
+                        continue;
+
+                    // compare the two controls
+                    if (audioTracks[i].SelectedStream.DemuxFilePath.Equals(audioTracks[j].SelectedStream.DemuxFilePath) &&
+                        audioTracks[i].SelectedStream.Language.Equals(audioTracks[j].SelectedStream.Language) &&
+                        audioTracks[i].SelectedStream.Name.Equals(audioTracks[j].SelectedStream.Name) &&
+                        audioTracks[i].SelectedStream.DefaultStream == audioTracks[j].SelectedStream.DefaultStream &&
+                        audioTracks[i].SelectedStream.Delay == audioTracks[j].SelectedStream.Delay &&
+                        audioTracks[i].SelectedStream.EncoderSettings.Equals(audioTracks[j].SelectedStream.EncoderSettings) &&
+                        audioTracks[i].SelectedStream.EncodingMode == audioTracks[j].SelectedStream.EncodingMode &&
+                        audioTracks[i].SelectedStream.ForcedStream == audioTracks[j].SelectedStream.ForcedStream)
+                    {
+                        DialogResult dr = MessageBox.Show("The audio tracks " + (i + 1) + " and " + (j + 1) + " are identical. Are you sure you want to proceed?", "Duplicate audio tracks found", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        if (dr == System.Windows.Forms.DialogResult.No)
+                            return false;
+                    }  
+                }
+            }
+
+            for (int i = 0; i < subtitleTracks.Count - 1; i++)
+            {
+                if (subtitleTracks[i].SelectedStreamIndex <= 0) // not NONE
+                    continue;
+
+                for (int j = i + 1; j < subtitleTracks.Count; j++)
+                {
+                    if (subtitleTracks[j].SelectedStreamIndex <= 0) // not NONE
+                        continue;
+
+                    // compare the two controls
+                    if (subtitleTracks[i].SelectedStream.DemuxFilePath.Equals(subtitleTracks[j].SelectedStream.DemuxFilePath) &&
+                        subtitleTracks[i].SelectedStream.Language.Equals(subtitleTracks[j].SelectedStream.Language) &&
+                        subtitleTracks[i].SelectedStream.Name.Equals(subtitleTracks[j].SelectedStream.Name) &&
+                        subtitleTracks[i].SelectedStream.DefaultStream == subtitleTracks[j].SelectedStream.DefaultStream &&
+                        subtitleTracks[i].SelectedStream.Delay == subtitleTracks[j].SelectedStream.Delay &&
+                        subtitleTracks[i].SelectedStream.EncoderSettings.Equals(subtitleTracks[j].SelectedStream.EncoderSettings) &&
+                        subtitleTracks[i].SelectedStream.EncodingMode == subtitleTracks[j].SelectedStream.EncodingMode &&
+                        subtitleTracks[i].SelectedStream.ForcedStream == subtitleTracks[j].SelectedStream.ForcedStream)
+                    {
+                        DialogResult dr = MessageBox.Show("The subtitle tracks " + (i + 1) + " and " + (j + 1) + " are identical. Are you sure you want to proceed?", "Duplicate subtitle tracks found", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        if (dr == System.Windows.Forms.DialogResult.No)
+                            return false;
+                    }
+                }
+            }
+
             return true;
         }
 
