@@ -42,9 +42,14 @@ namespace MeGUI
         private bool bLock;
 
         /// <summary>
-        /// whether the current processing is a part of batch processing
+        /// whether the current processing should be done without user interaction
         /// </summary>
         private bool bAutomatedProcessing;
+
+        /// <summary>
+        /// whether the current processing is a part of batch processing
+        /// </summary>
+        private bool bBatchProcessing;
 
         /// <summary>
         /// whether we ignore the restrictions on container output type set by the profile
@@ -383,7 +388,7 @@ namespace MeGUI
 
         public void setBatchProcessing(List<OneClickFilesToProcess> arrFilesToProcess, OneClickSettings oSettings)
         {
-            bAutomatedProcessing = true;
+            bBatchProcessing = bAutomatedProcessing = true;
             SetOneClickProfile(oSettings);
             OneClickProcessing oProcessor = new OneClickProcessing(this, arrFilesToProcess, oSettings, _oLog);
             return;
@@ -396,7 +401,7 @@ namespace MeGUI
 
             if (!bAutomatedProcessing && arrFilesToProcess.Count > 0)
             {
-                string question = "Do you want to process all " + (arrFilesToProcess.Count + 1) + " files/tracks in the selection?\r\nThey all will be processed with the current settings\r\nin the OneClick profile \"" + oneclickProfile.SelectedProfile.Name + "\".";
+                string question = "Do you want to process all " + (arrFilesToProcess.Count + 1) + " files/tracks in the selection?\r\nThey all will be processed with the current settings\r\nin the OneClick profile \"" + oneclickProfile.SelectedProfile.Name + "\".\r\nOther settings will be ignored.";
                 DialogResult dr = MessageBox.Show(question, "Automated folder processing", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
@@ -798,11 +803,15 @@ namespace MeGUI
 
                 if (File.Exists(videoIFO))
                 {
-                    prepareJobs = new SequentialChain(new PgcDemuxJob(videoIFO, dpp.WorkingDirectory, _videoInputInfo.VideoInfo.PGCNumber));
-                    for (int i = 1; i < 10; i++)
-                        dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, "VTS_01_" + i + ".VOB"));
                     dpp.IFOInput = videoIFO;
-                    dpp.VideoInput = Path.Combine(dpp.WorkingDirectory, "VTS_01_1.VOB");
+                    if (IFOparser.getPGCnb(videoIFO) > 1)
+                    {
+                        // more than one PGC - therefore pgcdemux must be used
+                        prepareJobs = new SequentialChain(new PgcDemuxJob(videoIFO, dpp.WorkingDirectory, _videoInputInfo.VideoInfo.PGCNumber));
+                        for (int i = 1; i < 10; i++)
+                            dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, "VTS_01_" + i + ".VOB"));
+                        dpp.VideoInput = Path.Combine(dpp.WorkingDirectory, "VTS_01_1.VOB");
+                    }
                 }
             }
 
@@ -1042,7 +1051,7 @@ namespace MeGUI
             }
             
             // add jobs to queue
-            mainForm.Jobs.addJobsWithDependencies(finalJobChain);
+            mainForm.Jobs.addJobsWithDependencies(finalJobChain, !bBatchProcessing);
 
             if (this.openOnQueue.Checked && !bAutomatedProcessing)
             {
@@ -1088,6 +1097,60 @@ namespace MeGUI
             {
                 MessageBox.Show("MeGUI cannot process this job", "Wrong configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
+            }
+
+            for (int i = 0; i < audioTracks.Count - 1; i++)
+            {
+                if (audioTracks[i].SelectedStreamIndex <= 0) // not NONE
+                    continue;
+
+                for (int j = i + 1; j < audioTracks.Count; j++)
+                {
+                    if (audioTracks[j].SelectedStreamIndex <= 0) // not NONE
+                        continue;
+
+                    // compare the two controls
+                    if (audioTracks[i].SelectedStream.DemuxFilePath.Equals(audioTracks[j].SelectedStream.DemuxFilePath) &&
+                        audioTracks[i].SelectedStream.Language.Equals(audioTracks[j].SelectedStream.Language) &&
+                        audioTracks[i].SelectedStream.Name.Equals(audioTracks[j].SelectedStream.Name) &&
+                        audioTracks[i].SelectedStream.DefaultStream == audioTracks[j].SelectedStream.DefaultStream &&
+                        audioTracks[i].SelectedStream.Delay == audioTracks[j].SelectedStream.Delay &&
+                        audioTracks[i].SelectedStream.EncoderSettings.Equals(audioTracks[j].SelectedStream.EncoderSettings) &&
+                        audioTracks[i].SelectedStream.EncodingMode == audioTracks[j].SelectedStream.EncodingMode &&
+                        audioTracks[i].SelectedStream.ForcedStream == audioTracks[j].SelectedStream.ForcedStream)
+                    {
+                        DialogResult dr = MessageBox.Show("The audio tracks " + (i + 1) + " and " + (j + 1) + " are identical. Are you sure you want to proceed?", "Duplicate audio tracks found", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        if (dr == System.Windows.Forms.DialogResult.No)
+                            return false;
+                    }  
+                }
+            }
+
+            for (int i = 0; i < subtitleTracks.Count - 1; i++)
+            {
+                if (subtitleTracks[i].SelectedStreamIndex <= 0) // not NONE
+                    continue;
+
+                for (int j = i + 1; j < subtitleTracks.Count; j++)
+                {
+                    if (subtitleTracks[j].SelectedStreamIndex <= 0) // not NONE
+                        continue;
+
+                    // compare the two controls
+                    if (subtitleTracks[i].SelectedStream.DemuxFilePath.Equals(subtitleTracks[j].SelectedStream.DemuxFilePath) &&
+                        subtitleTracks[i].SelectedStream.Language.Equals(subtitleTracks[j].SelectedStream.Language) &&
+                        subtitleTracks[i].SelectedStream.Name.Equals(subtitleTracks[j].SelectedStream.Name) &&
+                        subtitleTracks[i].SelectedStream.DefaultStream == subtitleTracks[j].SelectedStream.DefaultStream &&
+                        subtitleTracks[i].SelectedStream.Delay == subtitleTracks[j].SelectedStream.Delay &&
+                        subtitleTracks[i].SelectedStream.EncoderSettings.Equals(subtitleTracks[j].SelectedStream.EncoderSettings) &&
+                        subtitleTracks[i].SelectedStream.EncodingMode == subtitleTracks[j].SelectedStream.EncodingMode &&
+                        subtitleTracks[i].SelectedStream.ForcedStream == subtitleTracks[j].SelectedStream.ForcedStream)
+                    {
+                        DialogResult dr = MessageBox.Show("The subtitle tracks " + (i + 1) + " and " + (j + 1) + " are identical. Are you sure you want to proceed?", "Duplicate subtitle tracks found", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        if (dr == System.Windows.Forms.DialogResult.No)
+                            return false;
+                    }
+                }
             }
 
             return true;
@@ -1493,7 +1556,7 @@ namespace MeGUI
             audioTracks[0].SelectedStreamIndex = 0;
 
             // delete all tracks beside the first and last one
-            for (int i = audioTab.TabCount - 1; i > 1; i--)
+            for (int i = audioTab.TabPages.Count - 1; i > 1; i--)
             {
                 audioTab.TabPages.RemoveAt(i - 1);
                 audioTracks.RemoveAt(i - 1);

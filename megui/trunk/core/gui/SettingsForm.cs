@@ -1803,13 +1803,27 @@ namespace MeGUI
         {
             neroaacencLocation.Enabled = lblNero.Enabled = useNeroAacEnc.Checked;
             if (useNeroAacEnc.Checked && !internalSettings.UseNeroAacEnc)
-                MessageBox.Show("You have to restart MeGUI in order to get access to the NeroAacEnc profiles!", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You have to restart MeGUI in order to get access to NeroAacEnc", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void useQAAC_CheckedChanged(object sender, EventArgs e)
         {
-            if (useQAAC.Checked && !internalSettings.UseQAAC)
-                MessageBox.Show("You have to restart MeGUI in order to get access to the QAAC profiles!", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (!useQAAC.Checked || internalSettings.UseQAAC)
+                return;
+
+            if (!File.Exists(Settings.QaacPath))
+            {
+                // qaac.exe is not available. Therefore an update check is necessary
+                if (MessageBox.Show("The QAAC component is not installed.\n\nDo you want to search now online for updates?", "MeGUI component missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    MessageBox.Show("The updater will now be started. Please retart MeGUI after the update process has finished in order to get access to QAAC.", "Restart after update required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MainForm.Instance.startUpdateCheck();
+                }
+                else
+                    MessageBox.Show("You have selected to not update QAAC. Therefore QAAC will not be available. Run the updater on your own if you want to enable QAAC later.", "QAAC not enabled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+                MessageBox.Show("You have to restart MeGUI in order to get access to QAAC.", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 	}
 }

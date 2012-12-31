@@ -101,7 +101,7 @@ namespace MeGUI.packages.tools.besplitter
 
             join.ClipLength = TimeSpan.FromSeconds((double)c.TotalFrames / c.Framerate);
 
-            info.Jobs.addJobsWithDependencies(new SequentialChain(split, join));
+            info.Jobs.addJobsWithDependencies(new SequentialChain(split, join), true);
             this.Dispose();
         }
 

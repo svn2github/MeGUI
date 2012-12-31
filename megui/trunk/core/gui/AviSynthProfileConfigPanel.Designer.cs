@@ -40,9 +40,14 @@ namespace MeGUI.core.gui
             this.avisynthScript = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.extraSetupPage = new System.Windows.Forms.TabPage();
-            this.dss2 = new System.Windows.Forms.CheckBox();
-            this.mod16Box = new System.Windows.Forms.ComboBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.modValueBox = new System.Windows.Forms.ComboBox();
+            this.upsize = new System.Windows.Forms.CheckBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
+            this.mod16Box = new System.Windows.Forms.ComboBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.dss2 = new System.Windows.Forms.CheckBox();
             this.mpegOptGroupBox = new System.Windows.Forms.GroupBox();
             this.colourCorrect = new System.Windows.Forms.CheckBox();
             this.mpeg2Deblocking = new System.Windows.Forms.CheckBox();
@@ -55,6 +60,8 @@ namespace MeGUI.core.gui
             this.templatePage.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.extraSetupPage.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.mpegOptGroupBox.SuspendLayout();
             this.filtersGroupbox.SuspendLayout();
             this.SuspendLayout();
@@ -67,7 +74,7 @@ namespace MeGUI.core.gui
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(402, 405);
+            this.tabControl1.Size = new System.Drawing.Size(420, 405);
             this.tabControl1.TabIndex = 1;
             // 
             // templatePage
@@ -78,14 +85,14 @@ namespace MeGUI.core.gui
             this.templatePage.Controls.Add(this.label1);
             this.templatePage.Location = new System.Drawing.Point(4, 22);
             this.templatePage.Name = "templatePage";
-            this.templatePage.Size = new System.Drawing.Size(394, 379);
+            this.templatePage.Size = new System.Drawing.Size(412, 379);
             this.templatePage.TabIndex = 0;
             this.templatePage.Text = "Template";
             // 
             // dllBar
             // 
-            this.dllBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dllBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dllBar.Filename = "";
             this.dllBar.Filter = "DLL Files (*.dll)|*.dll";
             this.dllBar.FilterIndex = 0;
@@ -111,7 +118,7 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(394, 29);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(412, 29);
             this.flowLayoutPanel1.TabIndex = 45;
             // 
             // insertInput
@@ -176,9 +183,9 @@ namespace MeGUI.core.gui
             // 
             // avisynthScript
             // 
-            this.avisynthScript.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.avisynthScript.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.avisynthScript.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.avisynthScript.Location = new System.Drawing.Point(3, 32);
             this.avisynthScript.Multiline = true;
@@ -200,27 +207,72 @@ namespace MeGUI.core.gui
             // 
             // extraSetupPage
             // 
-            this.extraSetupPage.Controls.Add(this.dss2);
-            this.extraSetupPage.Controls.Add(this.mod16Box);
-            this.extraSetupPage.Controls.Add(this.signalAR);
+            this.extraSetupPage.Controls.Add(this.groupBox2);
+            this.extraSetupPage.Controls.Add(this.groupBox1);
             this.extraSetupPage.Controls.Add(this.mpegOptGroupBox);
             this.extraSetupPage.Controls.Add(this.filtersGroupbox);
             this.extraSetupPage.Location = new System.Drawing.Point(4, 22);
             this.extraSetupPage.Name = "extraSetupPage";
-            this.extraSetupPage.Size = new System.Drawing.Size(394, 379);
+            this.extraSetupPage.Size = new System.Drawing.Size(412, 379);
             this.extraSetupPage.TabIndex = 1;
             this.extraSetupPage.Text = "Extra Setup";
             // 
-            // dss2
+            // groupBox2
             // 
-            this.dss2.AutoSize = true;
-            this.dss2.Enabled = false;
-            this.dss2.Location = new System.Drawing.Point(13, 218);
-            this.dss2.Name = "dss2";
-            this.dss2.Size = new System.Drawing.Size(201, 17);
-            this.dss2.TabIndex = 22;
-            this.dss2.Text = "Prefer DSS2 over DirectShowSource";
-            this.dss2.UseVisualStyleBackColor = true;
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.modValueBox);
+            this.groupBox2.Controls.Add(this.upsize);
+            this.groupBox2.Controls.Add(this.signalAR);
+            this.groupBox2.Controls.Add(this.mod16Box);
+            this.groupBox2.Location = new System.Drawing.Point(3, 183);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(406, 95);
+            this.groupBox2.TabIndex = 24;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = " Resize Options ";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(21, 65);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(143, 13);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "MOD value used for resizing:";
+            // 
+            // modValueBox
+            // 
+            this.modValueBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.modValueBox.FormattingEnabled = true;
+            this.modValueBox.Items.AddRange(new object[] {
+            "mod16",
+            "mod8",
+            "mod4",
+            "mod2"});
+            this.modValueBox.Location = new System.Drawing.Point(219, 62);
+            this.modValueBox.Name = "modValueBox";
+            this.modValueBox.Size = new System.Drawing.Size(75, 21);
+            this.modValueBox.TabIndex = 23;
+            // 
+            // upsize
+            // 
+            this.upsize.AutoSize = true;
+            this.upsize.Location = new System.Drawing.Point(6, 42);
+            this.upsize.Name = "upsize";
+            this.upsize.Size = new System.Drawing.Size(105, 17);
+            this.upsize.TabIndex = 22;
+            this.upsize.Text = "Upsizing allowed";
+            this.upsize.UseVisualStyleBackColor = true;
+            // 
+            // signalAR
+            // 
+            this.signalAR.AutoSize = true;
+            this.signalAR.Location = new System.Drawing.Point(6, 19);
+            this.signalAR.Name = "signalAR";
+            this.signalAR.Size = new System.Drawing.Size(189, 17);
+            this.signalAR.TabIndex = 20;
+            this.signalAR.Text = "Clever (TM) anamorphic encoding:";
+            this.signalAR.Click += new System.EventHandler(this.signalAR_CheckedChanged);
             // 
             // mod16Box
             // 
@@ -228,40 +280,51 @@ namespace MeGUI.core.gui
             this.mod16Box.Enabled = false;
             this.mod16Box.FormattingEnabled = true;
             this.mod16Box.Items.AddRange(new object[] {
-            "Resize to mod16",
-            "Overcrop to achieve mod16",
+            "Resize to selected mod value",
+            "Overcrop to achieve selected mod",
             "Encode non-mod16",
             "Crop mod4 horizontally",
-            "Undercrop to achieve mod16"});
-            this.mod16Box.Location = new System.Drawing.Point(210, 181);
+            "Undercrop to achieve selected mod"});
+            this.mod16Box.Location = new System.Drawing.Point(219, 17);
             this.mod16Box.Name = "mod16Box";
-            this.mod16Box.Size = new System.Drawing.Size(157, 21);
+            this.mod16Box.Size = new System.Drawing.Size(181, 21);
             this.mod16Box.TabIndex = 21;
             // 
-            // signalAR
+            // groupBox1
             // 
-            this.signalAR.AutoSize = true;
-            this.signalAR.Location = new System.Drawing.Point(13, 183);
-            this.signalAR.Name = "signalAR";
-            this.signalAR.Size = new System.Drawing.Size(189, 17);
-            this.signalAR.TabIndex = 20;
-            this.signalAR.Text = "Clever (TM) anamorphic encoding:";
-            this.signalAR.Click += new System.EventHandler(this.signalAR_CheckedChanged);
+            this.groupBox1.Controls.Add(this.dss2);
+            this.groupBox1.Location = new System.Drawing.Point(3, 98);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(213, 79);
+            this.groupBox1.TabIndex = 23;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = " Misc ";
+            // 
+            // dss2
+            // 
+            this.dss2.AutoSize = true;
+            this.dss2.Enabled = false;
+            this.dss2.Location = new System.Drawing.Point(6, 21);
+            this.dss2.Name = "dss2";
+            this.dss2.Size = new System.Drawing.Size(201, 17);
+            this.dss2.TabIndex = 22;
+            this.dss2.Text = "Prefer DSS2 over DirectShowSource";
+            this.dss2.UseVisualStyleBackColor = true;
             // 
             // mpegOptGroupBox
             // 
             this.mpegOptGroupBox.Controls.Add(this.colourCorrect);
             this.mpegOptGroupBox.Controls.Add(this.mpeg2Deblocking);
-            this.mpegOptGroupBox.Location = new System.Drawing.Point(8, 98);
+            this.mpegOptGroupBox.Location = new System.Drawing.Point(222, 98);
             this.mpegOptGroupBox.Name = "mpegOptGroupBox";
-            this.mpegOptGroupBox.Size = new System.Drawing.Size(197, 79);
+            this.mpegOptGroupBox.Size = new System.Drawing.Size(187, 79);
             this.mpegOptGroupBox.TabIndex = 12;
             this.mpegOptGroupBox.TabStop = false;
-            this.mpegOptGroupBox.Text = "Mpeg Options";
+            this.mpegOptGroupBox.Text = " Mpeg Options ";
             // 
             // colourCorrect
             // 
-            this.colourCorrect.Location = new System.Drawing.Point(5, 45);
+            this.colourCorrect.Location = new System.Drawing.Point(6, 44);
             this.colourCorrect.Name = "colourCorrect";
             this.colourCorrect.Size = new System.Drawing.Size(124, 18);
             this.colourCorrect.TabIndex = 9;
@@ -269,7 +332,7 @@ namespace MeGUI.core.gui
             // 
             // mpeg2Deblocking
             // 
-            this.mpeg2Deblocking.Location = new System.Drawing.Point(5, 20);
+            this.mpeg2Deblocking.Location = new System.Drawing.Point(6, 20);
             this.mpeg2Deblocking.Name = "mpeg2Deblocking";
             this.mpeg2Deblocking.Size = new System.Drawing.Size(124, 18);
             this.mpeg2Deblocking.TabIndex = 8;
@@ -281,12 +344,12 @@ namespace MeGUI.core.gui
             this.filtersGroupbox.Controls.Add(this.resize);
             this.filtersGroupbox.Controls.Add(this.noiseFilter);
             this.filtersGroupbox.Controls.Add(this.resizeFilterType);
-            this.filtersGroupbox.Location = new System.Drawing.Point(8, 8);
+            this.filtersGroupbox.Location = new System.Drawing.Point(3, 8);
             this.filtersGroupbox.Name = "filtersGroupbox";
-            this.filtersGroupbox.Size = new System.Drawing.Size(400, 84);
+            this.filtersGroupbox.Size = new System.Drawing.Size(406, 84);
             this.filtersGroupbox.TabIndex = 1;
             this.filtersGroupbox.TabStop = false;
-            this.filtersGroupbox.Text = "Filters";
+            this.filtersGroupbox.Text = " Filters ";
             // 
             // noiseFilterType
             // 
@@ -294,17 +357,18 @@ namespace MeGUI.core.gui
             this.noiseFilterType.Enabled = false;
             this.noiseFilterType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.noiseFilterType.ItemHeight = 13;
-            this.noiseFilterType.Location = new System.Drawing.Point(152, 51);
+            this.noiseFilterType.Location = new System.Drawing.Point(96, 51);
             this.noiseFilterType.Name = "noiseFilterType";
             this.noiseFilterType.Size = new System.Drawing.Size(121, 21);
             this.noiseFilterType.TabIndex = 5;
             // 
             // resize
             // 
+            this.resize.AutoSize = true;
             this.resize.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.resize.Location = new System.Drawing.Point(6, 24);
             this.resize.Name = "resize";
-            this.resize.Size = new System.Drawing.Size(104, 24);
+            this.resize.Size = new System.Drawing.Size(84, 17);
             this.resize.TabIndex = 3;
             this.resize.Text = "Resize Filter";
             this.resize.CheckedChanged += new System.EventHandler(this.resize_CheckedChanged);
@@ -322,9 +386,10 @@ namespace MeGUI.core.gui
             // resizeFilterType
             // 
             this.resizeFilterType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.resizeFilterType.Enabled = false;
             this.resizeFilterType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.resizeFilterType.ItemHeight = 13;
-            this.resizeFilterType.Location = new System.Drawing.Point(152, 24);
+            this.resizeFilterType.Location = new System.Drawing.Point(96, 22);
             this.resizeFilterType.Name = "resizeFilterType";
             this.resizeFilterType.Size = new System.Drawing.Size(121, 21);
             this.resizeFilterType.TabIndex = 1;
@@ -335,16 +400,20 @@ namespace MeGUI.core.gui
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl1);
             this.Name = "AviSynthProfileConfigPanel";
-            this.Size = new System.Drawing.Size(402, 405);
+            this.Size = new System.Drawing.Size(420, 405);
             this.tabControl1.ResumeLayout(false);
             this.templatePage.ResumeLayout(false);
             this.templatePage.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.extraSetupPage.ResumeLayout(false);
-            this.extraSetupPage.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.mpegOptGroupBox.ResumeLayout(false);
             this.filtersGroupbox.ResumeLayout(false);
+            this.filtersGroupbox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -374,6 +443,11 @@ namespace MeGUI.core.gui
         private FileBar dllBar;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.CheckBox dss2;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox upsize;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox modValueBox;
 
     }
 }

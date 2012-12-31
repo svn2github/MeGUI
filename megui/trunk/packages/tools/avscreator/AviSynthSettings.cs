@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -33,7 +33,49 @@ namespace MeGUI
         public static string ID = "AviSynth";
         public string SettingsID { get { return ID; } }
 
+        private string template;
+        private ResizeFilterType resizeMethod;
+        private DenoiseFilterType denoiseMethod;
+        private mod16Method mod16Method;
+        private modValue modValueUsed;
+        private bool deinterlace, denoise, ivtc, mpeg2deblock, colourCorrect, dss2, resize, upsize;
+
         public void FixFileNames(System.Collections.Generic.Dictionary<string, string> _) { }
+
+        public AviSynthSettings()
+        {
+            this.Template = "<input>\r\n<deinterlace>\r\n<crop>\r\n<resize>\r\n<denoise>\r\n"; // Default -- will act as it did before avs profiles
+            this.ResizeMethod = ResizeFilterType.Lanczos; // Lanczos
+            this.DenoiseMethod = 0; // UnDot
+            this.Deinterlace = false;
+            this.Denoise = false;
+            this.Resize = true;
+            this.IVTC = false;
+            this.MPEG2Deblock = false;
+            this.ColourCorrect = true;
+            this.Mod16Method = mod16Method.none;
+            this.DSS2 = false;
+            this.Upsize = false;
+            this.ModValue = modValue.mod16;
+        }
+
+        public AviSynthSettings(string template, ResizeFilterType resizeMethod, bool resize, bool upsize,
+            DenoiseFilterType denoiseMethod, bool denoise, bool mpeg2deblock, bool colourCorrect, mod16Method method, bool dss2, modValue modValueUsed)
+        {
+            this.Template = template;
+            this.Resize = resize;
+            this.ResizeMethod = resizeMethod;
+            this.DenoiseMethod = denoiseMethod;
+            this.Deinterlace = deinterlace;
+            this.Denoise = denoise;
+            this.IVTC = ivtc;
+            this.MPEG2Deblock = mpeg2deblock;
+            this.ColourCorrect = colourCorrect;
+            this.Mod16Method = method;
+            this.DSS2 = dss2;
+            this.Upsize = upsize;
+            this.ModValue = modValueUsed;
+        }
 
         public override bool Equals(object obj)
         {
@@ -49,13 +91,6 @@ namespace MeGUI
         {
             return base.GetHashCode();
         }
-
-        private string template;
-        private ResizeFilterType resizeMethod;
-        private DenoiseFilterType denoiseMethod;
-        private mod16Method mod16Method;
-		private bool deinterlace, denoise, ivtc, mpeg2deblock, colourCorrect, dss2;
-        private bool resize;
 
         object ICloneable.Clone()
         {
@@ -77,6 +112,12 @@ namespace MeGUI
             get { return mod16Method; }
             set { mod16Method = value; }
         }
+
+        public modValue ModValue
+        {
+            get { return modValueUsed; }
+            set { modValueUsed = value; }
+        }
         
         public bool Resize
         {
@@ -84,6 +125,11 @@ namespace MeGUI
             set { resize = value; }
         }
 
+        public bool Upsize
+        {
+            get { return upsize; }
+            set { upsize = value; }
+        }
 
 		public string Template
 		{
@@ -102,77 +148,54 @@ namespace MeGUI
 				}
 				template = script.ToString();}
 		}
+
 		public ResizeFilterType ResizeMethod
 		{
 			get { return resizeMethod; }
 			set { resizeMethod = value; }
 		}
+
 		public DenoiseFilterType DenoiseMethod
 		{
 			get { return denoiseMethod; }
 			set { denoiseMethod = value; }
 		}
+
 		public bool Deinterlace
 		{
 			get { return deinterlace; }
 			set { deinterlace = value; }
 		}
+
 		public bool Denoise
 		{
 			get { return denoise; }
 			set { denoise = value; }
 		}
+
 		public bool IVTC
 		{
 			get { return ivtc; }
 			set { ivtc = value; }
 		}
+
 		public bool MPEG2Deblock
 		{
 			get { return mpeg2deblock; }
 			set { mpeg2deblock = value; }
 		}
+
 		public bool ColourCorrect
 		{
 			get { return colourCorrect; }
 			set { colourCorrect = value; }
 		}
+
         public bool DSS2
         {
             get { return dss2; }
             set { dss2 = value; }
         }
-
-		public AviSynthSettings()
-		{
-			this.Template = "<input>\r\n<deinterlace>\r\n<crop>\r\n<resize>\r\n<denoise>\r\n"; // Default -- will act as it did before avs profiles
-			this.ResizeMethod = ResizeFilterType.Lanczos; // Lanczos
-			this.DenoiseMethod = 0; // UnDot
-			this.Deinterlace = false;
-			this.Denoise = false;
-            this.resize = false;
-			this.IVTC = false;
-			this.MPEG2Deblock = false;
-			this.ColourCorrect = true;
-            this.Mod16Method = mod16Method.none;
-            this.DSS2 = false;
-		}
-
-		public AviSynthSettings(string template, ResizeFilterType resizeMethod, bool resize,
-			DenoiseFilterType denoiseMethod, bool denoise, bool mpeg2deblock, bool colourCorrect, mod16Method method, bool dss2)
-		{
-			this.Template = template;
-            this.Resize = resize;
-			this.ResizeMethod = resizeMethod;
-			this.DenoiseMethod = denoiseMethod;
-			this.Deinterlace = deinterlace;
-			this.Denoise = denoise;
-			this.IVTC = ivtc;
-			this.MPEG2Deblock = mpeg2deblock;
-			this.ColourCorrect = colourCorrect;
-            this.Mod16Method = method;
-            this.DSS2 = dss2;
-		}
 
         #region GenericSettings Members
 

@@ -45,7 +45,7 @@ namespace MeGUI
             x264DeviceList.Add(new x264Device(9, "iPod", 0, 7, 10000, 10000, 0, 5, 320, 240));
             x264DeviceList.Add(new x264Device(10, "Nokia N8", 2, 8, -1, -1, -1, -1, 640, 360));
             x264DeviceList.Add(new x264Device(11, "Nokia N900", 0, 7, -1, -1, -1, -1, 800, 480));
-            x264DeviceList.Add(new x264Device(12, "PS3", 2, 12, 31250, 31250, -1, -1, 1920, 1080));
+            x264DeviceList.Add(new x264Device(12, "PS3", 2, 11, 31250, 31250, -1, -1, 1920, 1080));
             x264DeviceList.Add(new x264Device(13, "PSP", 1, 7, 10000, 10000, -1, 3, 480, 272));
             x264DeviceList.Add(new x264Device(14, "Xbox 360", 2, 11, 24000, 24000, 3, 3, 1920, 1080));
             x264DeviceList.Add(new x264Device(15, "WDTV", 2, 11, -1, -1, -1, -1, 1920, 1080));

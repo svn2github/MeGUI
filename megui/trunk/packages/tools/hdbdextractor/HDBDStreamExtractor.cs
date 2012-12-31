@@ -345,9 +345,9 @@ namespace MeGUI.packages.tools.hdbdextractor
 
             // Load to MeGUI job queue
             if (FolderSelection.Checked)
-                job = new HDStreamsExJob(new List<string>() { dummyInput }, this.FolderOutputTextBox.Text + "xxx", args.featureNumber, args.args, inputType);
+                job = new HDStreamsExJob(new List<string>() { dummyInput }, this.FolderOutputTextBox.Text, args.featureNumber, args.args, inputType);
             else
-                job = new HDStreamsExJob(input, this.FolderOutputTextBox.Text + "xxx", null, args.args, inputType);
+                job = new HDStreamsExJob(input, this.FolderOutputTextBox.Text, null, args.args, inputType);
 
             lastJob = job;
             mainForm.Jobs.addJobsToQueue(job);
@@ -464,13 +464,23 @@ namespace MeGUI.packages.tools.hdbdextractor
                         // create dummy input string for megui job
                         if (feature.Description.Contains("EVO"))
                         {
-                            if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("HVDVD_TS"))
-                                dummyInput = FolderInputTextBox.Text + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                            if (feature.Description.Contains("+"))
+                            {
+                                if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("HVDVD_TS"))
+                                    dummyInput = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.IndexOf("HVDVD_TS")) + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf("+"));
+                                else
+                                    dummyInput = FolderInputTextBox.Text + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf("+"));
+                            }
                             else
-                                dummyInput = FolderInputTextBox.Text + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                            {
+                                if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("HVDVD_TS"))
+                                    dummyInput = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.IndexOf("HVDVD_TS")) + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                                else
+                                    dummyInput = FolderInputTextBox.Text + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                            }
                         }
                         else if (feature.Description.Contains("(angle"))
-                        {
+                        {   
                             if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\PLAYLIST"))
                                 dummyInput = FolderInputTextBox.Text + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
                             else if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\STREAM"))

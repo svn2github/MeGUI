@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 // ****************************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 using MeGUI.core.util;
@@ -30,7 +29,6 @@ namespace MeGUI
     public class DialogSettings
     {
         private bool ovewriteJobOutputResponse = true;
-
         public bool OverwriteJobOutputResponse
         {
             get { return ovewriteJobOutputResponse; }
@@ -38,74 +36,82 @@ namespace MeGUI
         }
 
         private bool askAboutOverwriteJobOutput = true;
-
         public bool AskAboutOverwriteJobOutput
         {
             get { return askAboutOverwriteJobOutput; }
             set { askAboutOverwriteJobOutput = value; }
         }
 
-
-        private bool askAboutDuplicates;
         private bool dupResponse;
-
         public bool DuplicateResponse
         {
             get { return dupResponse; }
             set { dupResponse = value; }
         }
 
-
+        private bool askAboutDuplicates;
         public bool AskAboutDuplicates
         {
             get { return askAboutDuplicates; }
             set { askAboutDuplicates = value; }
         }
 
-        private bool askAboutVOBs;
-        private bool addConvertToYV12;
-        private bool askAboutYV12;
-        private bool useOneClick;
-        private bool continueDespiteError;
         private bool askAboutError;
-
         public bool AskAboutError
         {
             get { return askAboutError; }
             set { askAboutError = value; }
         }
 
+        private bool continueDespiteError;
         public bool ContinueDespiteError
         {
             get { return continueDespiteError; }
             set { continueDespiteError = value; }
         }
 
-
+        private bool askAboutYV12;
         public bool AskAboutYV12
         {
             get { return askAboutYV12; }
             set { askAboutYV12 = value; }
         }
 
+        private bool addConvertToYV12;
         public bool AddConvertToYV12
         {
             get { return addConvertToYV12; }
             set { addConvertToYV12 = value; }
         }
 
-
+        private bool askAboutVOBs;
         public bool AskAboutVOBs
         {
             get { return askAboutVOBs; }
             set { askAboutVOBs = value; }
         }
-        
+
+        private bool useOneClick;
         public bool UseOneClick
         {
             get { return useOneClick; }
             set { useOneClick = value; }
         }
+
+        private bool askAboutIntermediateDelete;
+        public bool AskAboutIntermediateDelete
+        {
+            get { return askAboutIntermediateDelete; }
+            set { askAboutIntermediateDelete = value; }
+        }
+
+        private bool intermediateDelete;
+        public bool IntermediateDelete
+        {
+            get { return intermediateDelete; }
+            set { intermediateDelete = value; }
+        }
+
         public DialogSettings()
         {
             askAboutVOBs = true;
@@ -116,6 +122,8 @@ namespace MeGUI
             continueDespiteError = true;
             askAboutDuplicates = true;
             dupResponse = true;
+            askAboutIntermediateDelete = true;
+            intermediateDelete = true;
         }
     }
 }

@@ -172,7 +172,7 @@ namespace MeGUI
             minComplexity = 72;
             maxComplexity = 78;
             mainFormLocation = new Point(0, 0);
-            mainFormSize = new Size(524, 558);
+            mainFormSize = new Size(604, 478);
             updateFormLocation = new Point(0, 0);
             updateFormSize = new Size(710, 313);
             updateFormSplitter = 180;
