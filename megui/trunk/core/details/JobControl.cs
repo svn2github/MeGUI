@@ -279,15 +279,15 @@ namespace MeGUI.core.details
                 return;
             }
 
-            if (job.EnabledJobs.Count == 0)
+            if (job.EnabledJobs.Count == 0 && job.RequiredJobs.Count == 0)
             {
                 reallyDeleteJob(job);
                 return;
             }
 
-            DialogResult dr = MessageBox.Show("Some jobs depend on the job, '" + job.Name +
-                "' being completed for them to run. Do you want to delete all dependant jobs? " +
-                "Press Yes to delete all dependant jobs, No to delete this job and " +
+            DialogResult dr = MessageBox.Show("'" + job.Name +
+                "' is related to a job series. Do you want to delete all related jobs?\r\n" +
+                "Press Yes to delete all related jobs, No to delete this job and " +
                 "remove the dependencies, or Cancel to abort",
                 "Job dependency detected",
                 MessageBoxButtons.YesNoCancel,
@@ -348,7 +348,7 @@ namespace MeGUI.core.details
                 jobQueue.removeJobFromQueue(job);
 
             foreach (TaggedJob p in job.RequiredJobs)
-                p.EnabledJobs.Remove (job);
+                p.EnabledJobs.Remove(job);
 
             foreach (TaggedJob j in job.EnabledJobs)
                 j.RequiredJobs.Remove(job);
@@ -367,6 +367,9 @@ namespace MeGUI.core.details
             reallyDeleteJob(job);
 
             foreach (TaggedJob j in job.EnabledJobs)
+                deleteAllDependantJobs(j);
+
+            foreach (TaggedJob j in job.RequiredJobs)
                 deleteAllDependantJobs(j);
         }
         #endregion
