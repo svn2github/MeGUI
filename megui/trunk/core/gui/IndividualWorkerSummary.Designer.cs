@@ -36,10 +36,10 @@ namespace MeGUI.core.gui
             this.abortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.shutDownLaterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shutDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showProgressWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.shutDownLaterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.workerNameAndJob.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -68,13 +68,13 @@ namespace MeGUI.core.gui
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startEncodingToolStripMenuItem,
-            this.abortToolStripMenuItem,
-            this.renameToolStripMenuItem,
             this.stopToolStripMenuItem,
+            this.abortToolStripMenuItem,
             this.shutDownLaterToolStripMenuItem,
             this.shutDownToolStripMenuItem,
             this.showProgressWindowToolStripMenuItem,
-            this.showQueueToolStripMenuItem});
+            this.showQueueToolStripMenuItem,
+            this.renameToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(288, 202);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
@@ -90,7 +90,7 @@ namespace MeGUI.core.gui
             // 
             this.abortToolStripMenuItem.Name = "abortToolStripMenuItem";
             this.abortToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
-            this.abortToolStripMenuItem.Text = "Abort current job";
+            this.abortToolStripMenuItem.Text = "Abort job and stop worker immediately";
             this.abortToolStripMenuItem.Click += new System.EventHandler(this.abortToolStripMenuItem_Click);
             // 
             // renameToolStripMenuItem
@@ -104,8 +104,15 @@ namespace MeGUI.core.gui
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
             this.stopToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
-            this.stopToolStripMenuItem.Text = "Stop worker after this job";
+            this.stopToolStripMenuItem.Text = "Stop worker after the current job";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
+            // 
+            // shutDownLaterToolStripMenuItem
+            // 
+            this.shutDownLaterToolStripMenuItem.Name = "shutDownLaterToolStripMenuItem";
+            this.shutDownLaterToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            this.shutDownLaterToolStripMenuItem.Text = "Delete worker when finished local queue";
+            this.shutDownLaterToolStripMenuItem.Click += new System.EventHandler(this.shutDownLaterToolStripMenuItem_Click);
             // 
             // shutDownToolStripMenuItem
             // 
@@ -127,13 +134,6 @@ namespace MeGUI.core.gui
             this.showQueueToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
             this.showQueueToolStripMenuItem.Text = "Show queue";
             this.showQueueToolStripMenuItem.Click += new System.EventHandler(this.showQueueToolStripMenuItem_Click);
-            // 
-            // shutDownLaterToolStripMenuItem
-            // 
-            this.shutDownLaterToolStripMenuItem.Name = "shutDownLaterToolStripMenuItem";
-            this.shutDownLaterToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
-            this.shutDownLaterToolStripMenuItem.Text = "Delete worker when finished local queue";
-            this.shutDownLaterToolStripMenuItem.Click += new System.EventHandler(this.shutDownLaterToolStripMenuItem_Click);
             // 
             // IndividualWorkerSummary
             // 

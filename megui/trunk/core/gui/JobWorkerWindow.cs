@@ -153,9 +153,9 @@ namespace MeGUI.core.gui
                 if (currentJob != null)
                     _status += string.Format(" {0} ({1:P2})", currentJob.Name, progress/100M);
                 if (mode == JobWorkerMode.CloseOnLocalListCompleted)
-                    _status += " (delete worker after this job)";
+                    _status += " (delete worker after current job)";
                 else if (status == JobWorkerStatus.Stopping)
-                    _status += " (stop worker after this job)";
+                    _status += " (stop worker after current job)";
                 if (pauseStatus == PauseState.Paused)
                     _status += " (paused)";
                 return _status;
@@ -393,10 +393,7 @@ namespace MeGUI.core.gui
                 mainForm.Log.LogValue("Error attempting to stop processing", er, ImageType.Error);
             }
             markJobAborted();
-            if (status == JobWorkerStatus.Stopping)
-                status = JobWorkerStatus.Stopped;
-            else
-                status = JobWorkerStatus.Idle;
+            status = JobWorkerStatus.Stopped;
             refreshAll();
         }
 
@@ -453,7 +450,7 @@ namespace MeGUI.core.gui
                 Thread t = new Thread(new ThreadStart(delegate
                 {
                     TaggedJob job = mainForm.Jobs.ByName(su.JobName);
-                    JobStartInfo JobInfo = JobStartInfo.JOB_STARTED;
+                    JobStartInfo JobInfo = JobStartInfo.NO_JOBS_WAITING;
 
                     copyInfoIntoJob(job, su);
                     progress = 0;
@@ -482,17 +479,14 @@ namespace MeGUI.core.gui
                     if (mode == JobWorkerMode.CloseOnLocalListCompleted)
                     {
                         // shut down may be required
-                        if (shutdownWorkerIfJobsCompleted())
-                            JobInfo = JobStartInfo.NO_JOBS_WAITING;
+                        if (!shutdownWorkerIfJobsCompleted())
+                            JobInfo = JobStartInfo.JOB_STARTED;
                     }
                     else if (job.Status == JobStatus.ABORTED)
                     {
                         MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
                         log.LogEvent("Current job was aborted");
-                        if (status == JobWorkerStatus.Stopping)
-                            status = JobWorkerStatus.Stopped;
-                        else
-                            status = JobWorkerStatus.Idle;
+                        status = JobWorkerStatus.Stopped;
                     }
                     else if (status == JobWorkerStatus.Stopping)
                     {
@@ -752,13 +746,13 @@ namespace MeGUI.core.gui
                     }
                     catch (Exception e)
                     {
-                        if (++iCounter >= 10)
+                        if (++iCounter >= 3)
                         {
-                            i.LogValue("Error deleting file", e, ImageType.Warning);
+                            i.LogValue("Problem deleting file", e.Message, ImageType.Warning);
                             break;
                         }
                         else
-                            System.Threading.Thread.Sleep(1000);
+                            System.Threading.Thread.Sleep(2000);
                     }
                 }
                 if (!File.Exists(job.Job.Output))

@@ -1,3 +1,4 @@
+2252 [Worker] if a job is aborted the corresponding worker will be stopped
 2251 [OneClick] pgcdemux will only be used if more than one PGC is found
 2250 [AVS Script Creator] avoid upsizing when resizing a cropped source
      [AVS Script Creator] added option to enable upsizing in the profile (disabled by default)

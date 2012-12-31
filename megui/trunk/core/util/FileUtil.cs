@@ -374,19 +374,31 @@ namespace MeGUI.core.util
             // delete all files first
             foreach (string file in files)
             {
-                try
+                int iCounter = 0;
+
+                if (Directory.Exists(file))
+                    continue;
+                else if (!File.Exists(file))
+                    continue;
+                bShowLog = true;
+
+                while (File.Exists(file))
                 {
-                    if (Directory.Exists(file))
-                        continue;
-                    else if (!File.Exists(file))
-                        continue;
-                    bShowLog = true;
-                    File.Delete(file);
-                    i.LogEvent("Successfully deleted " + file);
-                }
-                catch (IOException e)
-                {
-                    i.LogValue("Error deleting " + file, e, ImageType.Error);
+                    try
+                    {
+                        File.Delete(file);
+                        i.LogEvent("Successfully deleted " + file);
+                    }
+                    catch (IOException e)
+                    {
+                        if (++iCounter >= 3)
+                        {
+                            i.LogValue("Problem deleting " + file, e.Message, ImageType.Warning);
+                            break;
+                        }
+                        else
+                            System.Threading.Thread.Sleep(2000);
+                    }
                 }
             }
 
@@ -404,12 +416,12 @@ namespace MeGUI.core.util
                             i.LogEvent("Successfully deleted directory " + file);
                         }
                         else
-                            i.LogEvent("Did not delete " + file + " as the directory is not empty.");
+                            i.LogEvent("Did not delete " + file + " as the directory is not empty.", ImageType.Warning);
                     }  
                 }
                 catch (IOException e)
                 {
-                    i.LogValue("Error deleting directory " + file, e, ImageType.Error);
+                    i.LogValue("Problem deleting directory " + file, e.Message, ImageType.Warning);
                 }
             }
             if (bAlwaysAddLog || bShowLog)
