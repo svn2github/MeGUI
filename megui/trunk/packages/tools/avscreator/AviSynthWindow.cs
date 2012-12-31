@@ -846,6 +846,7 @@ namespace MeGUI
 			}
             suggestResolution_CheckedChanged(null, null);
             chAutoPreview_CheckedChanged(null, null);
+            calcAspectError();
             if (sender != null && e != null)
                 showScript(false);
 		}
