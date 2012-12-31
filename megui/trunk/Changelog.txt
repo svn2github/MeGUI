@@ -1,3 +1,4 @@
+2236 [Log] renamed Haali Muxer to Haali Splitter and fixed a problem displaying the warning icon in Windows 7/8
 2235 [AviSynth Script Creator] fixed "Suggest Resolution (mod16)" handling
                                added option to select 2/4/8 as mod values for "Suggest Resolution"
 2234 [x264] lowered PS3 device level from 4.2 to 4.1 in order to enhance compatibility
