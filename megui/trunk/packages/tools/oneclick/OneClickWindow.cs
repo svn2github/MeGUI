@@ -1493,7 +1493,7 @@ namespace MeGUI
             audioTracks[0].SelectedStreamIndex = 0;
 
             // delete all tracks beside the first and last one
-            for (int i = audioTab.TabCount - 1; i > 1; i--)
+            for (int i = audioTab.TabPages.Count - 1; i > 1; i--)
             {
                 audioTab.TabPages.RemoveAt(i - 1);
                 audioTracks.RemoveAt(i - 1);

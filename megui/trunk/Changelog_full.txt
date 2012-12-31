@@ -1,3 +1,81 @@
+2237 [OneClick] fixed hidden progress window when using more than 1 worker
+2236 [Log] renamed Haali Muxer to Haali Splitter and fixed a problem displaying the warning icon in Windows 7/8
+2235 [AviSynth Script Creator] fixed "Suggest Resolution (mod16)" handling
+                               added option to select 2/4/8 as mod values for "Suggest Resolution"
+2234 [x264] lowered PS3 device level from 4.2 to 4.1 in order to enhance compatibility
+2233 [QAAC] added an information that an update check is required when enabling QAAC for the first time 
+2232 [HD Streams Extractor] + [OneClick] improved logging
+2231 [QAAC] as external dependencies are required the encoder is disabled by default
+            enable it in the MeGUI settings and make sure that CoreAudioToolbox.dll is available
+2230 [HD Streams Extractor] improved error handling
+2229 [OneClick] fixed a problem during Blu-ray processing when source has no subtitle/audio track
+2228 [OneClick] fixed a problem starting OneClick after a new install
+2227 [MP4 Muxer] changed muxer to use the ISO 639-2/T language codes
+2226 [HD Streams Extractor] fixed handling of input files with a + in the file name
+2225 [MP4 Muxer] added better language support & several Apple devices tunings especially for chapters
+2224 [Audio] removed faac & introduced qaac + opus encoders
+2223 replaced the ISO 639-2 bibliographic language codes for German/French with the terminology ones (ger->deu, fre->fra)
+2222 [Log] if Haali is not correctly installed a warning instead of an error will be logged
+2221 [Log] added .NET 4.5 detection
+2220 [OneClick] improved output container validation
+                added subtitle support to MP4, AVI and M2TS container
+2219 [Log] added Windows 8 detection
+2217 [Update] fixed a problem if the automatic update check is disabled and components are missing
+2216 [AVS Script Creator] fixed handling of custom FFMS index file location
+2215 [OneClick] always mux output file
+2214 [MKVExtract] fixed handling of input file name which contains error or warning
+2213 [OneClick] added leading name option
+2212 [DGIndexNV] added support for MP4 container (requires dgindexnv 2044+)
+2211 [OneClick] optimized TrueHD handling with eac3to
+2210 [OneClick] optimized job creation process when several tracks are used
+2209 [AVS Script Creator] internal optimizations
+2203 [OneClick] fixed missing internal subtitles during Blu-ray processing
+2199 added check if Haali is correctly installed
+2193 [Updater] some minor enhancements for offline mode
+2192 [MediaInfo] ignore phantom TiVo audio tracks
+2191 [OneClick] added AviSource() as way to process AVI files
+     [File Indexer] added DFSC/VFW and CFHD/CINEFORM to the list of not by FFMS supported codecs
+2190 [FFMS] try to index audio tracks only if at least one audio track has been selected
+2188 [Updater] renamed "avisynth" package to "avs" to avoid confusion that AviSynth may not be installed
+2187 [HD Streams Extractor] fixed "File Mode" when using multiple input files
+2186 fixed a crash when using a corrupt settings.xml. Bug #3574768
+2185 [OneClick] fixed a crash when using external audio files. Bug #3574820
+2184 portable AviSynth will be used if AviSynth is not installed
+2183 [File Indexer] added selectable FFMS index file location
+                    added PGC handling
+2182 [x264] increased the maximum value for --vbv-maxrate and --vbv-bufsize. Bug #3573545
+2181 [DGIndexNV] enhanced progress information (requires dgindexnv 2043+)
+2174 [OneClick] fixed included subtitle handling if input container is not MKV/VOB
+2172 [OneClick] support multiple input files per drag & drop
+2171 [OneClick] cosmetics #2
+2170 [OneClick] cosmetics
+2169 [FFMPEG] some adjustments for newer builds
+2164 [OneClick] added option to select different default audio settings for different languages
+2163 [OneClick] fixed muxing of external subtitle files
+2162 [OneClick] added up/down buttons for the indexer priority selection
+2161 [OneClick] added option for the default output directory
+2160 [OneClick] added option to disable audio/video tracks completely by default
+2159 [OneClick] use the correct input file if using Blu-ray input with the option "don't encode video"
+2158 [HD Streams Extractor] fixed a crash
+2157 [OneClick] added an improved OneClick encoder with these changes:
+     - added subtitle control (including delay, language, name, forced/default flag). Feature request #2752988
+     - enhanced audio control (added delay, language, name)
+     - AVS files as video input supported. Feature request #3412229
+     - folder as input supported. Feature request #3429875/#2773587
+     - embedded VOB subtitle support (IFO must be available)
+     - every OneClick job will be stored in a unique working directory. Feature request #2798486
+     - added option to select default audio/subtitle languages
+     - added option to select default working directory
+     - added option to specify the indexer priority
+     - added option to define the project name settings
+     - the x264 target playback device settings will be used for resizing
+     - input DAR detection moved from postprocessing to initial opening step
+     - added DVD folder + file processing (including PGC support). Feature request #2817190
+     - convert TrueHD and DTS-HD tracks with eac3to when the track should be encoded
+     - added Blu-ray processing (Folder + Playlist)
+2156 [File Indexer] added warning if the input VOB file has multiple PGCs
+2155 [OneClick] added job status message during cleanup step
+2154 [MediaInfo] some adjustments for frame rate detection with MediaInfo 0.7.59+
 2153 [MP4 Muxer] fixed muxing files with names containing #. Bug #3531735
 2152 [Chapter Creator] improved DVD PGC handling
                        added option to sort the title list

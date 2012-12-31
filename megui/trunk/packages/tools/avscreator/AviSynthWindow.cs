@@ -40,9 +40,7 @@ namespace MeGUI
         private string originalScript;
         private bool originalInlineAvs;
         private bool isPreviewMode = false;
-        private CultureInfo ci = new CultureInfo("en-us");
         private bool eventsOn = true;
-		private string path;
 		private VideoPlayer player;
         private IMediaFile file;
         private IVideoReader reader;
@@ -50,7 +48,6 @@ namespace MeGUI
 		public event OpenScriptCallback OpenScript;
         private Dar? suggestedDar;
         private MainForm mainForm;
-        private JobUtil jobUtil;
         private PossibleSources sourceType;
         private SourceDetector detector;
         private string indexFile;
@@ -84,8 +81,6 @@ namespace MeGUI
 
             enableControls(false);
             script = new StringBuilder();
-
-			this.path = mainForm.MeGUIPath;
 
             this.resizeFilterType.Items.Clear();
             this.resizeFilterType.DataSource = ScriptServer.ListOfResizeFilterType;
@@ -124,7 +119,6 @@ namespace MeGUI
 			this.cropBottom.Value = 0;
 
             deinterlaceType.DataSource = new DeinterlaceFilter[] { new DeinterlaceFilter("Do nothing (source not detected)", "#blank deinterlace line") };
-            this.jobUtil = new JobUtil(mainForm);
             ProfileChanged(null, null);
 
             showScript(true);
@@ -738,8 +732,6 @@ namespace MeGUI
                     this.tvTypeLabel.Text = "PAL";
                 else
                     this.tvTypeLabel.Text = "NTSC";
-                horizontalResolution.Maximum = file.VideoInfo.Width;
-                verticalResolution.Maximum = file.VideoInfo.Height;
                 horizontalResolution.Value = file.VideoInfo.Width;
                 verticalResolution.Value = file.VideoInfo.Height;
                 if (File.Exists(strSourceFileName))
@@ -771,6 +763,11 @@ namespace MeGUI
             chAutoPreview_CheckedChanged(null, null);
             if (sender != null && e != null)
                 showScript(false);
+
+            if (file.VideoInfo.Width < horizontalResolution.Value)
+                horizontalResolution.BackColor = System.Drawing.Color.OrangeRed;
+            else
+                horizontalResolution.BackColor = System.Drawing.SystemColors.Window;
 		}
 
 		private void verticalResolution_ValueChanged(object sender, EventArgs e)
@@ -778,6 +775,11 @@ namespace MeGUI
             chAutoPreview_CheckedChanged(null, null);
             if (sender != null && e != null)
                 showScript(false);
+
+            if (file.VideoInfo.Height < verticalResolution.Value)
+                verticalResolution.BackColor = System.Drawing.Color.OrangeRed;
+            else
+                verticalResolution.BackColor = System.Drawing.SystemColors.Window;
 		}
 
 		private void sendCropValues()
