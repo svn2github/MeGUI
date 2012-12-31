@@ -933,7 +933,7 @@ namespace MeGUI
             {
                 this.mod16Box.Enabled = false;
                 this.suggestResolution.Enabled = true;
-                this.suggestResolution.Checked = false;
+                this.suggestResolution.Checked = true;
                 mod16Box_SelectedIndexChanged(null, null);
                 lblAspectError.Visible = lblAR.Visible = true;
             }
@@ -1049,26 +1049,25 @@ namespace MeGUI
                 }
                 horizontalResolution.Increment = verticalResolution.Increment = mod;
 
-                if (suggestResolution.Checked)
+                int hres = (int)horizontalResolution.Value;
+
+                // remove upsizing if not allowed
+                if (!bAllowUpsizing && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < hres)
+                    hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+                else if (!horizontalResolution.Enabled && (int)file.VideoInfo.Width - Cropping.left - Cropping.right >= hres + mod)
+                    hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+
+                if (hres % mod != 0)
                 {
-                    int hres = (int)horizontalResolution.Value;
-
-                    // remove upsizing if not allowed
-                    if (!bAllowUpsizing && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < hres)
-                        hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-
-                    if (hres % mod != 0)
-                    {
-                        int diff = hres % mod;
-                        if (hres - diff > 0)
-                            hres -= diff;
-                        else
-                            hres += mod - diff;
-                    }
-
-                    if (hres != horizontalResolution.Value)
-                        horizontalResolution.Value = hres;
+                    int diff = hres % mod;
+                    if (hres - diff > 0)
+                        hres -= diff;
+                    else
+                        hres += mod - diff;
                 }
+
+                if (hres != horizontalResolution.Value)
+                    horizontalResolution.Value = hres;
 
                 bool signalAR = this.signalAR.Checked;
                 int scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping, 
@@ -1080,7 +1079,7 @@ namespace MeGUI
                     if (scriptVerticalResolution > verticalResolution.Maximum)
                     { 
                         // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
-                        int hres = (int)horizontalResolution.Value;
+                        hres = (int)horizontalResolution.Value;
                         do
                         {
                             hres -= mod;
@@ -1123,11 +1122,18 @@ namespace MeGUI
 				this.colourCorrect.Checked = value.ColourCorrect;
 				this.deinterlace.Checked = value.Deinterlace;
 				this.noiseFilter.Checked = value.Denoise;
-                this.resize.Checked = value.Resize;
+                this.resize.Checked = this.suggestResolution.Checked = value.Resize;
                 this.mod16Box.SelectedIndex = (int)value.Mod16Method;
                 this.signalAR.Checked = (value.Mod16Method != mod16Method.none);
                 this.dss2.Checked = value.DSS2;
                 this.bAllowUpsizing = value.Upsize;
+                if (!bAllowUpsizing && file != null)
+                {
+                    horizontalResolution.Maximum = file.VideoInfo.Width;
+                    verticalResolution.Maximum = file.VideoInfo.Height;
+                }
+                else
+                    horizontalResolution.Maximum = verticalResolution.Maximum = 9999;
                 this.modValueBox.SelectedIndex = (int)value.ModValue;
                 mod16Box_SelectedIndexChanged(null, null);
 				showScript(false);
@@ -1268,13 +1274,14 @@ namespace MeGUI
                     this.suggestResolution.Enabled = false;
                 else
                     this.suggestResolution.Enabled = true;
-                modValueBox.Enabled = true;
+                this.suggestResolution.Checked = true;
             }
             else
             {
                 this.horizontalResolution.Enabled = this.verticalResolution.Enabled = false;
-                this.suggestResolution.Enabled = this.suggestResolution.Checked = modValueBox.Enabled = false;
+                this.suggestResolution.Enabled = this.suggestResolution.Checked = false;
             }
+            checkModValueBox();
             chAutoPreview_CheckedChanged(null, null);
             calcAspectError();
 
@@ -1282,8 +1289,19 @@ namespace MeGUI
                 showScript(false);
         }
 
+        private void checkModValueBox()
+        {
+            if (resize.Checked || (signalAR.Checked && (Mod16Method == mod16Method.resize || Mod16Method == mod16Method.overcrop || Mod16Method == mod16Method.undercrop)))
+                modValueBox.Enabled = true;
+            else
+                modValueBox.Enabled = false;
+        }
+
         private void mod16Box_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (file != null)
+                horizontalResolution.Value = file.VideoInfo.Width;
+
             if (Mod16Method == mod16Method.overcrop)
                 crop.Text = "Crop (will be rounded up to selected mod)";
             else if (Mod16Method == mod16Method.undercrop)
@@ -1298,8 +1316,6 @@ namespace MeGUI
                 this.suggestResolution.Checked = true;
                 resize.Enabled = false;
                 resize.Checked = true;
-                if (file != null)
-                    horizontalResolution.Value = file.VideoInfo.Width;
                 suggestResolution_CheckedChanged(null, null);
             }
             else if (Mod16Method == mod16Method.none)
@@ -1314,6 +1330,8 @@ namespace MeGUI
                 resize.Enabled = false;
                 resize_CheckedChanged(null, null);
             }
+
+            checkModValueBox();
 
             if (sender != null && e != null)
                 showScript(false);
@@ -1352,6 +1370,7 @@ namespace MeGUI
         private void arChooser_SelectionChanged(object sender, string val)
         {
             suggestResolution_CheckedChanged(null, null);
+            calcAspectError();
             if (sender != null && val != null)
                 showScript(false);
         }

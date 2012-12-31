@@ -290,7 +290,7 @@ namespace MeGUI
             // suggestResolution
             // 
             this.suggestResolution.AutoSize = true;
-            this.suggestResolution.Location = new System.Drawing.Point(222, 83);
+            this.suggestResolution.Location = new System.Drawing.Point(222, 82);
             this.suggestResolution.Name = "suggestResolution";
             this.suggestResolution.Size = new System.Drawing.Size(118, 17);
             this.suggestResolution.TabIndex = 8;
@@ -577,7 +577,7 @@ namespace MeGUI
             "Undercrop to achieve selected mod"});
             this.mod16Box.Location = new System.Drawing.Point(222, 119);
             this.mod16Box.Name = "mod16Box";
-            this.mod16Box.Size = new System.Drawing.Size(174, 21);
+            this.mod16Box.Size = new System.Drawing.Size(222, 21);
             this.mod16Box.TabIndex = 19;
             this.mod16Box.SelectedIndexChanged += new System.EventHandler(this.mod16Box_SelectedIndexChanged);
             // 
