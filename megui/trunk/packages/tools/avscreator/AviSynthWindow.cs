@@ -1249,7 +1249,8 @@ namespace MeGUI
                 this.suggestResolution.Checked = true;
                 resize.Enabled = false;
                 resize.Checked = true;
-                horizontalResolution.Value = file.VideoInfo.Width;
+                if (file != null)
+                    horizontalResolution.Value = file.VideoInfo.Width;
                 suggestResolution_CheckedChanged(null, null);
             }
             else if (Mod16Method == mod16Method.none)
