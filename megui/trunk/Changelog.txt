@@ -1,4 +1,5 @@
-2244 [Queue] when deleting a job warn always if it is part of a realted job series
+2245 [Queue] related jobs are highlighted when selecting a job
+2244 [Queue] when deleting a job warn always if it is part of a related job series
 2243 [AviSynth Script Creator] fixed a crash if "Clever (TM) anamorphic encoding" is enabled
 2242 [AviSynth Script Creator] show signed "Aspect Ratio Error"
 2241 [Worker] a finished temporary worker will not start anymore idle workers. Bug #691
