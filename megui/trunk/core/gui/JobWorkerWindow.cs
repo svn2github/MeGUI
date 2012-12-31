@@ -77,6 +77,8 @@ namespace MeGUI.core.gui
     /// will be processed automatically. Postponed means that because of another running
     /// job in another worker this worker is stopped temporarily.
     /// 
+    /// 
+    /// 
     /// ProcessingThreads can run in several modes, enumerated 
     /// </summary>
     public partial class JobWorker : Form
@@ -152,10 +154,8 @@ namespace MeGUI.core.gui
                 string _status = "running"; 
                 if (currentJob != null)
                     _status += string.Format(" {0} ({1:P2})", currentJob.Name, progress/100M);
-                if (mode == JobWorkerMode.CloseOnLocalListCompleted)
-                    _status += " (delete worker after current job)";
-                else if (status == JobWorkerStatus.Stopping)
-                    _status += " (stop worker after current job)";
+                if (status == JobWorkerStatus.Stopping)
+                    _status += " (stopping after this job)";
                 if (pauseStatus == PauseState.Paused)
                     _status += " (paused)";
                 return _status;
@@ -195,6 +195,7 @@ namespace MeGUI.core.gui
         }
 
         private string name;
+
         public new string Name
         {
             get { return name; }
@@ -203,11 +204,6 @@ namespace MeGUI.core.gui
                 name = value;
                 Text = value;
             }
-        }
-
-        public int LocalJobCount
-        {
-            get { return localJobs.Count; }
         }
 
         public bool IsEncoding
@@ -228,7 +224,6 @@ namespace MeGUI.core.gui
         public JobWorker(MainForm mf)
         {
             mainForm = mf;
-
             InitializeComponent();
             jobQueue1.SetStartStopButtonsTogether();
             jobQueue1.RequestJobDeleted = new RequestJobDeleted(GUIDeleteJob);
@@ -237,12 +232,13 @@ namespace MeGUI.core.gui
                 foreach (TaggedJob j in jobs)
                     mainForm.Jobs.ReleaseJob(j);
             });
-            
-            pw = new ProgressWindow();
+
+            pw = new ProgressWindow(JobTypes.AUDIO);
             pw.Abort += new AbortCallback(pw_Abort);
             pw.PriorityChanged += new PriorityChangedCallback(pw_PriorityChanged);
             pw.CreateControl();
             mainForm.RegisterForm(pw);
+
         }
 
         #region job run util
@@ -308,7 +304,7 @@ namespace MeGUI.core.gui
 
         internal void UserRequestShutDown()
         {
-            DialogResult r = MessageBox.Show("Do you really want to delete this job worker?", "Really delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult r = MessageBox.Show("Do you really want to shut down this job worker?", "Really shut down?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (r == DialogResult.Yes)
                 ShutDown();
         }
@@ -363,12 +359,9 @@ namespace MeGUI.core.gui
 
         private void updateProgress()
         {
-            if (this.InvokeRequired) 
-                Invoke(new MethodInvoker(delegate { jobProgress.Value = (int)Progress; }));
-            else 
-                jobProgress.Value = (int)Progress;
-            if (alive)
-                mainForm.Jobs.UpdateProgress(this.Name);
+            if (this.InvokeRequired) Invoke(new MethodInvoker(delegate { jobProgress.Value = (int)Progress; }));
+            else jobProgress.Value = (int)Progress;
+            if (alive) mainForm.Jobs.UpdateProgress(this.Name);
         }
         #endregion
 
@@ -393,7 +386,10 @@ namespace MeGUI.core.gui
                 mainForm.Log.LogValue("Error attempting to stop processing", er, ImageType.Error);
             }
             markJobAborted();
-            status = JobWorkerStatus.Stopped;
+            if (status == JobWorkerStatus.Stopping)
+                status = JobWorkerStatus.Stopped;
+            else
+                status = JobWorkerStatus.Idle;
             refreshAll();
         }
 
@@ -450,7 +446,6 @@ namespace MeGUI.core.gui
                 Thread t = new Thread(new ThreadStart(delegate
                 {
                     TaggedJob job = mainForm.Jobs.ByName(su.JobName);
-                    JobStartInfo JobInfo = JobStartInfo.NO_JOBS_WAITING;
 
                     copyInfoIntoJob(job, su);
                     progress = 0;
@@ -464,6 +459,8 @@ namespace MeGUI.core.gui
                         job.Status = JobStatus.DONE;
                     }
 
+                    bool bIsAudioJob = job.Job.EncodingMode.Equals("audio");
+
                     currentProcessor = null;
                     currentJob = null;
 
@@ -476,17 +473,16 @@ namespace MeGUI.core.gui
                     else
                         mainForm.Jobs.saveJob(job, mainForm.MeGUIPath);     //AAA: save state more often
 
-                    if (mode == JobWorkerMode.CloseOnLocalListCompleted)
-                    {
-                        // shut down may be required
-                        if (!shutdownWorkerIfJobsCompleted())
-                            JobInfo = JobStartInfo.JOB_STARTED;
-                    }
+                    if (shutdownWorkerIfJobsCompleted())
+                    { }
                     else if (job.Status == JobStatus.ABORTED)
                     {
                         MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
                         log.LogEvent("Current job was aborted");
-                        status = JobWorkerStatus.Stopped;
+                        if (status == JobWorkerStatus.Stopping)
+                            status = JobWorkerStatus.Stopped;
+                        else
+                            status = JobWorkerStatus.Idle;
                     }
                     else if (status == JobWorkerStatus.Stopping)
                     {
@@ -496,8 +492,7 @@ namespace MeGUI.core.gui
                     }
                     else
                     {
-                        JobInfo = startNextJobInQueue();
-                        switch (JobInfo)
+                        switch (startNextJobInQueue())
                         {
                             case JobStartInfo.JOB_STARTED:
                                 MeGUI.core.util.WindowUtil.PreventSystemPowerdown();
@@ -521,10 +516,10 @@ namespace MeGUI.core.gui
                         }
                     }
 
-                    if (JobInfo == JobStartInfo.JOB_STARTED)
-                        Util.ThreadSafeRun(mainForm.Jobs, delegate { mainForm.Jobs.StartIdleWorkers(); });
-
                     refreshAll();
+
+                    if (bIsAudioJob)
+                        Util.ThreadSafeRun(mainForm.Jobs, delegate { mainForm.Jobs.StartPostponedWorkers(); });
                 }));
                 t.IsBackground = true;
                 t.Start();
@@ -554,11 +549,12 @@ namespace MeGUI.core.gui
         }
 
         /// <summary>
-        /// shuts down this worker if the jobs are completed
+        /// shuts down this worker if the jobs are complete and it is a temporary worker
         /// </summary>
         /// <returns>true if worker was shut down, false otherwise</returns>
         private bool shutdownWorkerIfJobsCompleted()
         {
+            if (mode != JobWorkerMode.CloseOnLocalListCompleted) return false;
             foreach (TaggedJob j in localJobs.Values)
                 if (j.Status != JobStatus.DONE)
                     return false;
@@ -746,13 +742,16 @@ namespace MeGUI.core.gui
                     }
                     catch (Exception e)
                     {
-                        if (++iCounter >= 3)
+                        if (++iCounter >= 10)
                         {
-                            i.LogValue("Problem deleting file", e.Message, ImageType.Warning);
+                            i.LogValue("Error deleting file", e, ImageType.Warning);
                             break;
                         }
                         else
-                            System.Threading.Thread.Sleep(2000);
+                        {
+                            i.LogEvent("Error deleting file - trying again", ImageType.Information);
+                            System.Threading.Thread.Sleep(1000);
+                        }
                     }
                 }
                 if (!File.Exists(job.Job.Output))
@@ -842,7 +841,16 @@ namespace MeGUI.core.gui
 
         }
 
-        public void ShutDownWhenFinished()
+
+        private void changeNameToolStripMenuItem_Click(object sender, EventArgs e) { UserRequestedRename(); }
+
+
+        private void setName(string p)
+        {
+            mainForm.Jobs.RenameWorker(this.name, p); // throws NameTakenException if it fails
+        }
+
+        private void shutDownWhenFinishedLocalQueueToolStripMenuItem_Click(object sender, EventArgs e)
         {
             shutDownWhenFinishedLocalQueueToolStripMenuItem.Checked = !shutDownWhenFinishedLocalQueueToolStripMenuItem.Checked;
             if (shutDownWhenFinishedLocalQueueToolStripMenuItem.Checked)
@@ -854,22 +862,6 @@ namespace MeGUI.core.gui
             }
             else
                 mode = JobWorkerMode.RequestNewJobs;
-        }
-
-
-        private void changeNameToolStripMenuItem_Click(object sender, EventArgs e) 
-        { 
-            UserRequestedRename(); 
-        }
-
-        private void setName(string p)
-        {
-            mainForm.Jobs.RenameWorker(this.name, p); // throws NameTakenException if it fails
-        }
-
-        private void shutDownWhenFinishedLocalQueueToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShutDownWhenFinished();
         }
 
         private void shutDownWorkerNowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -921,9 +913,7 @@ namespace MeGUI.core.gui
         }
 
         public bool IsProgressWindowAvailable
-        { 
-            get { return IsEncoding; } 
-        }
+        { get { return IsEncoding; } }
 
         public bool IsProgressWindowVisible
         {

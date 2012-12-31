@@ -303,7 +303,7 @@ namespace MeGUI
             JobChain jobs = prepareVideoJob(movieInput, movieOutput, settings, dar, prerender, checkVideo, zones);
             if (jobs == null)
                 return false;
-            mainForm.Jobs.addJobsWithDependencies(jobs, true);
+            mainForm.Jobs.addJobsWithDependencies(jobs);
 
             return false;
         }

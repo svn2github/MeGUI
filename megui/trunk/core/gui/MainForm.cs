@@ -765,7 +765,7 @@ namespace MeGUI
         {
             AdaptiveMuxWindow amw = new AdaptiveMuxWindow(this);
             if (amw.ShowDialog() == DialogResult.OK)
-                Jobs.addJobsWithDependencies(amw.Jobs, true);
+                Jobs.addJobsWithDependencies(amw.Jobs);
         }
 
         private void MeGUI_Load(object sender, EventArgs e)
@@ -1421,9 +1421,6 @@ namespace MeGUI
         {
             this.ClientSize = settings.MainFormSize;
 
-            if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1) || Environment.OSVersion.Version.Major > 6)
-                taskbarItem = (ITaskbarList3)new ProgressTaskbar();
-
             getVersionInformation();
 
             if (_updateLog == null)
@@ -1435,6 +1432,10 @@ namespace MeGUI
 
             if (settings.AutoStartQueueStartup)
                 jobControl1.StartAll(false);
+
+            if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1)
+                || Environment.OSVersion.Version.Major > 6)
+                taskbarItem = (ITaskbarList3)new ProgressTaskbar();
         }
 
         public void startUpdateCheck()
@@ -1464,11 +1465,11 @@ namespace MeGUI
                 FileUtil.GetFileInformation("DevIL", devil, ref i);
             FileUtil.GetFileInformation("AvisynthWrapper", Path.GetDirectoryName(Application.ExecutablePath) + @"\AvisynthWrapper.dll", ref i);
 
-            // check if Haali Matroska Splitter is properly installed
+            // check if Haali Matroska Muxer is properly installed
             try
             {
-                // A28F324B-DDC5-4999-AA25-D3A7E25EF7A8 = Haali Matroska Splitter x86
-                // 55DA30FC-F16B-49FC-BAA5-AE59FC65F82D = Haali Matroska Splitter x64
+                // A28F324B-DDC5-4999-AA25-D3A7E25EF7A8 = Haali Matroska Muxer x86
+                // 55DA30FC-F16B-49FC-BAA5-AE59FC65F82D = Haali Matroska Muxer x64
 #if x86
                 Type comtype = Type.GetTypeFromCLSID(new Guid("A28F324B-DDC5-4999-AA25-D3A7E25EF7A8"));
                 string fileName = "splitter.ax";
@@ -1478,13 +1479,11 @@ namespace MeGUI
                 string fileName = "splitter.x64.ax";
 #endif
                 object comobj = Activator.CreateInstance(comtype);
-                FileUtil.GetFileInformation("Haali Matroska Splitter", Path.Combine(MeGUISettings.HaaliMSPath, fileName), ref i);
+                FileUtil.GetFileInformation("Haali Matroska Muxer", Path.Combine(MeGUISettings.HaaliMSPath, fileName), ref i);
             }
             catch (Exception)
             {
-                i.LogEvent("Haali Matroska Splitter not installed properly.", ImageType.Warning);
-                i.LogEvent("Therefore DSS2() and certain functions of FFVideoSource() and the HD Streams Extractor may also not work.", ImageType.Warning);
-                i.LogEvent("Please download and install it from http://haali.su/mkv/", ImageType.Warning);
+                i.LogEvent("Haali Matroska Muxer not installed properly. Therefore DSS2(), FFVideoSource() and the HD Streams Extractor may also not work.", ImageType.Warning);
             }
 
             FileUtil.GetFileInformation("Haali DSS2", Path.Combine(MeGUISettings.HaaliMSPath, "avss.dll"), ref i);
@@ -1495,6 +1494,9 @@ namespace MeGUI
             FileUtil.GetFileInformation("MessageBoxExLib", Path.GetDirectoryName(Application.ExecutablePath) + @"\MessageBoxExLib.dll", ref i);
             FileUtil.GetFileInformation("SevenZipSharp", Path.GetDirectoryName(Application.ExecutablePath) + @"\SevenZipSharp.dll", ref i);
             FileUtil.GetFileInformation("7z", Path.GetDirectoryName(Application.ExecutablePath) + @"\7z.dll", ref i);
+
+            
+
         }
 
         public void setOverlayIcon(Icon oIcon)

@@ -1,86 +1,77 @@
-2256 [AVS Script Creator] fixed a slight rounding error in the aspect error calculation
-2255 [AVS Script Creator] resize is enabled by default in the profiles (only for new profiles)
-     [AVS Script Creator] suggest resolution is automatically pre-selected when doing a resize
-     [AVS Script Creator] DAR changes also triggers a recalc of the "Aspect Ratio Error"
-     [AVS Script Creator] avoid upsizing (if disallowed) when "Clever (TM) anamorphic encoding" is used
-     [AVS Script Creator] some minor cosmetics / changes
-2254 [Update] fixed a crash if the proxy has been enabled without server address
-2253 [Queue] warn if intermediate files of an incomplete job are going to be deleted
-2252 [Worker] if a job is aborted the corresponding worker will be stopped
-2251 [OneClick] pgcdemux will only be used if more than one PGC is found
-2250 [AVS Script Creator] avoid upsizing when resizing a cropped source
-     [AVS Script Creator] added option to enable upsizing in the profile (disabled by default)
-     [AVS Script Creator] added option to select the default mod value in the profile (mod16 by default)
-     [AVS Script Creator] adjusted "Clever (TM) anamorphic encoding" so the new mod values are used
-     [OneClick] obey the new AVS Script Creator settings
-2249 [HD Streams Extractor] fixed handling of seamless branching EVO files
-2248 [OneClick] warn if identical tracks are about to be processed
-2247 [AVS Script Creator] hide "Aspect Ratio Error" when doing an anamorphic encoding
-                          fixed handling of the "Aspect Ratio Error" if dealing with an anamorphic input file
-2246 [AVS Script Creator] enhanced readability of the "red parts"
-                          the "Aspect Ratio Error" only turns red if the value is bigger than the acceptable aspect error
-                          crop values will be used also for the upsize warnings
-2245 [Queue] related jobs are highlighted when selecting a job
-2244 [Queue] when deleting a job warn always if it is part of a related job series
-2243 [AVS Script Creator] fixed a crash if "Clever (TM) anamorphic encoding" is enabled
-2242 [AVS Script Creator] show signed "Aspect Ratio Error"
-2241 [Worker] a finished temporary worker will not start anymore idle workers. Bug #691
-              several small optimizations
-2240 [AVS Script Creator] "Aspect Ratio Error" will also be changed if cropping is changed
-2239 [AVS Script Creator] added "Aspect Ratio Error"
-2238 [AVS Script Creator] enabled upsizing
-
-Changelog 2153 --> 2237
-
-Features/Changes:
-- enhanced OneClick tool (read details in the block below)
-- AviSynth is not required to be installed anymore. Instead a portable version will be used when required.
-- The audio encoder QAAC and OPUS have been added - FAAC has been removed.
-  Because of the external dependencies QAAC must be enabled in the MeGUI settings. 
-  Additionally for QAAC some files must be installed (https://sites.google.com/site/qaacpage)
-- added better MP4 language support & several Apple devices tunings especially for chapters
-
-Enhanced OneClick encoder:
-- Blu-ray processing (Folder + Playlist)
-- DVD folder + file processing (including PGC support). Feature request #2817190
-- folder as input supported. Feature request #3429875/#2773587
-- support multiple input files per drag & drop
-- new subtitle control (including delay, language, name, forced/default flag). Feature request #2752988
-- subtitle support for MP4, AVI and M2TS output container
-- enhanced audio control (added delay, language, name)
-- AVS files as video input supported. Feature request #3412229
-- embedded VOB subtitle support (IFO must be available)
-- every OneClick job will be stored in a unique working directory. Feature request #2798486
-- option to select default audio/subtitle languages
-- option to select different default audio settings for different languages
-- option to select default working and output directory
-- option to specify the indexer priority and added AviSource() as way to process AVI files
-- options to define the project name settings
-- the x264 target playback device settings will be used for resizing
-- input DAR detection moved from postprocessing to initial opening step
-- convert TrueHD and DTS-HD tracks with eac3to when the track should be encoded
-
-Enhancements/Fixes:
-[DGIndexNV] enhanced progress information (requires dgindexnv 2043+)
-[DGIndexNV] added support for MP4 container (requires dgindexnv 2044+)
-[AviSynth Script Creator] added option to select 2/4/8 as mod values for "Suggest Resolution"
-[AviSynth Script Creator] fixed "Suggest Resolution (mod16)" handling
-[FFMS] try to index audio tracks only if at least one audio track has been selected
-[File Indexer] added DFSC/VFW and CFHD/CINEFORM to the list of not by FFMS supported codecs
-[File Indexer] added PGC handling
-[File Indexer] added selectable FFMS index file location
-[HD Streams Extractor] fixed handling of input files with a + in the file name
-[Log] added Windows 8 / .NET 4.5 detection
-[Log] if Haali is not correctly installed a warning will be logged
-[MediaInfo] ignore phantom TiVo audio tracks
-[MediaInfo] some adjustments for frame rate detection with MediaInfo 0.7.59+
-[MKVExtract] fixed handling of input file name which contains error or warning
-[MP4 Muxer] changed muxer to use the ISO 639-2/T language codes
-[Update] fixed a problem if the automatic update check is disabled and components are missing
-[x264] increased the maximum value for --vbv-maxrate and --vbv-bufsize. Bug #3573545
-[x264] lowered PS3 device level from 4.2 to 4.1 in order to enhance compatibility
-fixed a crash when using a corrupt settings.xml. Bug #3574768
-
+2234 [x264] lowered PS3 device level from 4.2 to 4.1 in order to enhance compatibility
+2233 [QAAC] added an information that an update check is required when enabling QAAC for the first time 
+2232 [HD Streams Extractor] + [OneClick] improved logging
+2231 [QAAC] as external dependencies are required the encoder is disabled by default
+            enable it in the MeGUI settings and make sure that CoreAudioToolbox.dll is available
+2230 [HD Streams Extractor] improved error handling
+2229 [OneClick] fixed a problem during Blu-ray processing when source has no subtitle/audio track
+2228 [OneClick] fixed a problem starting OneClick after a new install
+2227 [MP4 Muxer] changed muxer to use the ISO 639-2/T language codes
+2226 [HD Streams Extractor] fixed handling of input files with a + in the file name
+2225 [MP4 Muxer] added better language support & several Apple devices tunings especially for chapters
+2224 [Audio] removed faac & introduced qaac + opus encoders
+2223 replaced the ISO 639-2 bibliographic language codes for German/French with the terminology ones (ger->deu, fre->fra)
+2222 [Log] if Haali is not correctly installed a warning instead of an error will be logged
+2221 [Log] added .NET 4.5 detection
+2220 [OneClick] improved output container validation
+                added subtitle support to MP4, AVI and M2TS container
+2219 [Log] added Windows 8 detection
+2217 [Update] fixed a problem if the automatic update check is disabled and components are missing
+2216 [AVS Script Creator] fixed handling of custom FFMS index file location
+2215 [OneClick] always mux output file
+2214 [MKVExtract] fixed handling of input file name which contains error or warning
+2213 [OneClick] added leading name option
+2212 [DGIndexNV] added support for MP4 container (requires dgindexnv 2044+)
+2211 [OneClick] optimized TrueHD handling with eac3to
+2210 [OneClick] optimized job creation process when several tracks are used
+2209 [AVS Script Creator] internal optimizations
+2203 [OneClick] fixed missing internal subtitles during Blu-ray processing
+2199 added check if Haali is correctly installed
+2193 [Updater] some minor enhancements for offline mode
+2192 [MediaInfo] ignore phantom TiVo audio tracks
+2191 [OneClick] added AviSource() as way to process AVI files
+     [File Indexer] added DFSC/VFW and CFHD/CINEFORM to the list of not by FFMS supported codecs
+2190 [FFMS] try to index audio tracks only if at least one audio track has been selected
+2188 [Updater] renamed "avisynth" package to "avs" to avoid confusion that AviSynth may not be installed
+2187 [HD Streams Extractor] fixed "File Mode" when using multiple input files
+2186 fixed a crash when using a corrupt settings.xml. Bug #3574768
+2185 [OneClick] fixed a crash when using external audio files. Bug #3574820
+2184 portable AviSynth will be used if AviSynth is not installed
+2183 [File Indexer] added selectable FFMS index file location
+                    added PGC handling
+2182 [x264] increased the maximum value for --vbv-maxrate and --vbv-bufsize. Bug #3573545
+2181 [DGIndexNV] enhanced progress information (requires dgindexnv 2043+)
+2174 [OneClick] fixed included subtitle handling if input container is not MKV/VOB
+2172 [OneClick] support multiple input files per drag & drop
+2171 [OneClick] cosmetics #2
+2170 [OneClick] cosmetics
+2169 [FFMPEG] some adjustments for newer builds
+2164 [OneClick] added option to select different default audio settings for different languages
+2163 [OneClick] fixed muxing of external subtitle files
+2162 [OneClick] added up/down buttons for the indexer priority selection
+2161 [OneClick] added option for the default output directory
+2160 [OneClick] added option to disable audio/video tracks completely by default
+2159 [OneClick] use the correct input file if using Blu-ray input with the option "don't encode video"
+2158 [HD Streams Extractor] fixed a crash
+2157 [OneClick] added an improved OneClick encoder with these changes:
+     - added subtitle control (including delay, language, name, forced/default flag). Feature request #2752988
+     - enhanced audio control (added delay, language, name)
+     - AVS files as video input supported. Feature request #3412229
+     - folder as input supported. Feature request #3429875/#2773587
+     - embedded VOB subtitle support (IFO must be available)
+     - every OneClick job will be stored in a unique working directory. Feature request #2798486
+     - added option to select default audio/subtitle languages
+     - added option to select default working directory
+     - added option to specify the indexer priority
+     - added option to define the project name settings
+     - the x264 target playback device settings will be used for resizing
+     - input DAR detection moved from postprocessing to initial opening step
+     - added DVD folder + file processing (including PGC support). Feature request #2817190
+     - convert TrueHD and DTS-HD tracks with eac3to when the track should be encoded
+     - added Blu-ray processing (Folder + Playlist)
+2156 [File Indexer] added warning if the input VOB file has multiple PGCs
+2155 [OneClick] added job status message during cleanup step
+2154 [MediaInfo] some adjustments for frame rate detection with MediaInfo 0.7.59+
 
 Changelog 2112 --> 2153
 

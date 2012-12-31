@@ -587,20 +587,12 @@ SelectRangeEvery({3},{4},0)
         }
         #endregion
 
-        public static void undercrop(ref CropValues crop, modValue mValue)
+        public static void undercrop(ref CropValues crop)
         {
-            int mod = 16;
-            switch (mValue)
-            {
-                case modValue.mod8: mod = 8; break;
-                case modValue.mod4: mod = 4; break;
-                case modValue.mod2: mod = 2; break;
-            }
-
             if (crop.left % 2 != 0 && crop.top % 2 != 0 && crop.bottom % 2 != 0 && crop.right % 2 != 0)
-                throw new Exception("Cropping by odd numbers not supported in undercropping to mod" + mod);
+                throw new Exception("Cropping by odd numbers not supported in undercropping to mod16");
 
-            while ((crop.left + crop.right) % mod > 0)
+            while ((crop.left + crop.right) % 16 > 0)
             {
                 if (crop.left > crop.right)
                 {
@@ -617,7 +609,7 @@ SelectRangeEvery({3},{4},0)
                         crop.right = 0;
                 }
             }
-            while ((crop.top + crop.bottom) % mod > 0)
+            while ((crop.top + crop.bottom) % 16 > 0)
             {
                 if (crop.top > crop.bottom)
                 {
@@ -636,21 +628,13 @@ SelectRangeEvery({3},{4},0)
             }
         }
 
-        public static void overcrop(ref CropValues crop, modValue mValue)
+        public static void overcrop(ref CropValues crop)
         {
-            int mod = 16;
-            switch (mValue)
-            {
-                case modValue.mod8: mod = 8; break;
-                case modValue.mod4: mod = 4; break;
-                case modValue.mod2: mod = 2; break;
-            }
-
             if (crop.left % 2 != 0 && crop.top % 2 != 0 && crop.bottom % 2 != 0 && crop.right % 2 != 0)
-                throw new Exception("Cropping by odd numbers not supported in overcropping to mod" + mod);
+                throw new Exception("Cropping by odd numbers not supported in overcropping to mod16");
 
             bool doLeftNext = true;
-            while ((crop.left + crop.right) % mod != 0)
+            while ((crop.left + crop.right) % 16 != 0)
             {
                 if (doLeftNext)
                     crop.left += 2;
@@ -660,7 +644,7 @@ SelectRangeEvery({3},{4},0)
             }
 
             bool doTopNext = true;
-            while ((crop.top + crop.bottom) % mod != 0)
+            while ((crop.top + crop.bottom) % 16 != 0)
             {
                 if (doTopNext)
                     crop.top += 2;

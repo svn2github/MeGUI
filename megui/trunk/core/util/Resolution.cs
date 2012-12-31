@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -39,10 +39,9 @@ namespace MeGUI.core.util
 		/// <param name="signalAR">whether or not we're going to signal the aspect ratio (influences the resizing)</param>
 		/// <param name="sarX">horizontal pixel aspect ratio (used when signalAR = true)</param>
 		/// <param name="sarY">vertical pixel aspect ratio (used when signalAR = true)</param>
-        /// <param name="mod">the MOD value</param>
 		/// <returns>the suggested horizontal resolution</returns>
 		public static int suggestResolution(double readerHeight, double readerWidth, double customDAR, CropValues cropping, int horizontalResolution,
-			bool signalAR, int acceptableAspectError, out Dar? dar, int mod)
+			bool signalAR, int acceptableAspectError, out Dar? dar)
 		{
             double fractionOfWidth = (readerWidth - (double)cropping.left - (double)cropping.right) / readerWidth;
             double inputWidthOnHeight = (readerWidth - (double)cropping.left - (double)cropping.right) /
@@ -53,12 +52,12 @@ namespace MeGUI.core.util
             realAspectRatio = getAspectRatio(realAspectRatio, acceptableAspectError); // Constrains DAR to a set of limited possibilities
 			double resizedVerticalResolution = (double)horizontalResolution / realAspectRatio;
 
-            int scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (double)mod)) * mod;
+            int scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / 16.0)) * 16;
 
             if (signalAR)
 			{
                 resizedVerticalResolution = (double)horizontalResolution / inputWidthOnHeight; // Scale vertical resolution appropriately
-                scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (double)mod) * mod);
+                scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / 16.0) * 16);
 
                 int parX = 0;
                 int parY = 0;

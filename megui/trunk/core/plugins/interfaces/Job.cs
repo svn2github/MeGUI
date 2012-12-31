@@ -75,6 +75,7 @@ namespace MeGUI
     }
 
     public enum ProcessPriority : int { IDLE = 0, BELOW_NORMAL, NORMAL, ABOVE_NORMAL, HIGH };
+    public enum JobTypes: int { VIDEO=0, AUDIO, MUX, MERGE, INDEX, AVS, VOBSUB, CUT };
     public enum JobStatus: int { WAITING = 0, PROCESSING, POSTPONED, ERROR, ABORTED, DONE, SKIP, ABORTING };
     // status of job, 0: waiting, 1: processing, 2: postponed, 3: error, 4: aborted, 5: done, 6: skip, 7: aborting
 	

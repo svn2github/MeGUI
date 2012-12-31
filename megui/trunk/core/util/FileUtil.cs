@@ -366,54 +366,27 @@ namespace MeGUI.core.util
         /// in job.FilesToDelete if settings.DeleteIntermediateFiles is checked
         /// </summary>
         /// <param name="job">the job which should just have been completed</param>
-        public static LogItem DeleteIntermediateFiles(List<string> files, bool bAlwaysAddLog, bool askAboutDelete)
+        public static LogItem DeleteIntermediateFiles(List<string> files, bool bAlwaysAddLog)
         {
             bool bShowLog = false;
             LogItem i = new LogItem("Deleting intermediate files");
-
-            List<string> arrFiles = new List<string>();
+            
+            // delete all files first
             foreach (string file in files)
             {
-                if (Directory.Exists(file))
-                    continue;
-                else if (!File.Exists(file))
-                    continue;
-                if (!arrFiles.Contains(file))
-                    arrFiles.Add(file);
-            }
-
-            if (arrFiles.Count > 0)
-            {
-                bShowLog = true;
-                bool delete = true;
-
-                if (askAboutDelete)
-                    delete = MainForm.Instance.DialogManager.DeleteIntermediateFiles(arrFiles);
-                if (!delete)
-                    return null;
-
-                // delete all files first
-                foreach (string file in arrFiles)
+                try
                 {
-                    int iCounter = 0;
-                    while (File.Exists(file))
-                    {
-                        try
-                        {
-                            File.Delete(file);
-                            i.LogEvent("Successfully deleted " + file);
-                        }
-                        catch (IOException e)
-                        {
-                            if (++iCounter >= 3)
-                            {
-                                i.LogValue("Problem deleting " + file, e.Message, ImageType.Warning);
-                                break;
-                            }
-                            else
-                                System.Threading.Thread.Sleep(2000);
-                        }
-                    }
+                    if (Directory.Exists(file))
+                        continue;
+                    else if (!File.Exists(file))
+                        continue;
+                    bShowLog = true;
+                    File.Delete(file);
+                    i.LogEvent("Successfully deleted " + file);
+                }
+                catch (IOException e)
+                {
+                    i.LogValue("Error deleting " + file, e, ImageType.Error);
                 }
             }
 
@@ -431,12 +404,12 @@ namespace MeGUI.core.util
                             i.LogEvent("Successfully deleted directory " + file);
                         }
                         else
-                            i.LogEvent("Did not delete " + file + " as the directory is not empty.", ImageType.Warning);
+                            i.LogEvent("Did not delete " + file + " as the directory is not empty.");
                     }  
                 }
                 catch (IOException e)
                 {
-                    i.LogValue("Problem deleting directory " + file, e.Message, ImageType.Warning);
+                    i.LogValue("Error deleting directory " + file, e, ImageType.Error);
                 }
             }
             if (bAlwaysAddLog || bShowLog)

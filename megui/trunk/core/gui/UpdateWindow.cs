@@ -1265,18 +1265,26 @@ namespace MeGUI
                 WebClient serverClient = new WebClient();
 
                 // check for proxy authentication...
-                if (meGUISettings.UseHttpProxy && !String.IsNullOrEmpty(meGUISettings.HttpProxyAddress))
+                if (meGUISettings.UseHttpProxy == true)
                 {
+
                     WebProxy wprox = null;
                     ICredentials icred = null;
+
                     if (meGUISettings.HttpProxyUid != null)
+                    {
                         icred = new NetworkCredential(meGUISettings.HttpProxyUid, meGUISettings.HttpProxyPwd);
+                    }
+
                     wprox = new WebProxy(meGUISettings.HttpProxyAddress + ":" + meGUISettings.HttpProxyPort, true, null, icred);
+
                     WebRequest.DefaultWebProxy = wprox;
                     serverClient.Proxy = wprox;
                 }
                 else
+                {
                     serverClient.Proxy = null;
+                }
                 
                 try
                 {

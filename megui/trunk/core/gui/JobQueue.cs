@@ -19,10 +19,14 @@
 // ****************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 using MeGUI.core.details;
@@ -327,8 +331,7 @@ namespace MeGUI.core.gui
 
         private void deleteJobButton_Click(object sender, EventArgs e)
         {
-            if (queueListView.SelectedItems.Count <= 0) 
-                return;
+            if (queueListView.SelectedItems.Count <= 0) return;
 
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
@@ -341,8 +344,7 @@ namespace MeGUI.core.gui
             if (!jobs.ContainsKey(name)) // Check if it has already been deleted
                 return;
             TaggedJob job = jobs[name];
-            if (job == null) 
-                return;
+            if (job == null) return;
             RequestJobDeleted(job);
         }
         #endregion
@@ -398,7 +400,6 @@ namespace MeGUI.core.gui
             }
             lv.EndUpdate();
             lv.Refresh();
-
         }
 
         /// <summary>
@@ -432,15 +433,12 @@ namespace MeGUI.core.gui
             lv.SelectedIndices.CopyTo(indices, 0);
             Array.Sort(indices);
 
-            if (indices.Length == 0)
-                return false;
-            if (d == Direction.Up && indices[0] == 0)
-                return false;
+            if (indices.Length == 0) return false;
+            if (d == Direction.Up && indices[0] == 0) return false;
             if (d == Direction.Down &&
                 indices[indices.Length - 1] == queueListView.Items.Count - 1)
                 return false;
-            if (!consecutiveIndices(indices))
-                return false;
+            if (!consecutiveIndices(indices)) return false;
 
             return true;
         }
@@ -494,8 +492,8 @@ namespace MeGUI.core.gui
         {
             upButton.Enabled = isSelectionMovable(Direction.Up);
             downButton.Enabled = isSelectionMovable(Direction.Down);
+
             editJobButton.Enabled = isSelectionEditable();
-            markDependentJobs();
         }
 
         #endregion
@@ -727,9 +725,7 @@ namespace MeGUI.core.gui
 
         public void refreshQueue()
         {
-            if (!Visible) 
-                return;
-
+            if (!Visible) return;
             if (queueListView.InvokeRequired)
             {
                 queueListView.Invoke(new MethodInvoker(delegate { refreshQueue(); }));
@@ -865,43 +861,6 @@ namespace MeGUI.core.gui
         private void queueListView_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
         {
             this.SaveComponentSettings();
-        }
-
-        private void markDependentJobs()
-        {
-            List<string> oList = new List<string>();
-            foreach (ListViewItem oItem in queueListView.SelectedItems)
-            {
-                if (!jobs.ContainsKey(oItem.Text)) // check if it has been removed
-                    continue;
-                TaggedJob job = jobs[oItem.Text];
-                if (job == null)
-                    continue;
-                getAllDependantJobs(job, ref oList);
-            }
-
-            queueListView.SuspendLayout();
-            foreach (ListViewItem oItem in queueListView.Items)
-            {
-                if (oList.Contains(oItem.Text))
-                    oItem.BackColor = Color.FromArgb(255, 225, 235, 255);
-                else
-                    oItem.BackColor = SystemColors.Window;
-            }
-            queueListView.ResumeLayout();
-        }
-
-        private void getAllDependantJobs(TaggedJob job, ref List<string> oList)
-        {
-            if (oList.Contains(job.Name))
-                return;
-
-            oList.Add(job.Name);
-            foreach (TaggedJob j in job.EnabledJobs)
-                getAllDependantJobs(j, ref oList);
-
-            foreach (TaggedJob j in job.RequiredJobs)
-                getAllDependantJobs(j, ref oList);
         }
     }
 

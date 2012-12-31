@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2009  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,15 +19,17 @@
 // ****************************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 namespace MeGUI.core.gui
 {
     public partial class IndividualWorkerSummary : UserControl
     {
-        private JobWorker w;
-
         public IndividualWorkerSummary()
         {
             InitializeComponent();
@@ -38,8 +40,11 @@ namespace MeGUI.core.gui
             set { w = value; }
         }
 
+        JobWorker w;
+
         public void RefreshInfo()
         {
+
             workerNameAndJob.Text = string.Format("{0}: {1}", w.Name, w.StatusString);
             progressBar1.Value = (int)w.Progress;
         }
@@ -47,7 +52,6 @@ namespace MeGUI.core.gui
         private void startEncodingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             w.StartEncoding(true);
-            RefreshInfo();
         }
 
         private void abortToolStripMenuItem_Click(object sender, EventArgs e)
@@ -73,11 +77,6 @@ namespace MeGUI.core.gui
             w.UserRequestShutDown();
         }
 
-        private void shutDownLaterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            w.ShutDownWhenFinished();
-        }
-
         private void showProgressWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (showProgressWindowToolStripMenuItem.Checked)
@@ -96,14 +95,11 @@ namespace MeGUI.core.gui
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            startEncodingToolStripMenuItem.Enabled = !w.IsEncoding;
+            startEncodingToolStripMenuItem.Enabled = (!w.IsEncoding);
             abortToolStripMenuItem.Enabled = w.IsEncoding;
             
             stopToolStripMenuItem.Enabled = w.IsEncoding;
             stopToolStripMenuItem.Checked = w.Status == JobWorkerStatus.Stopping;
-
-            shutDownLaterToolStripMenuItem.Enabled = (w.LocalJobCount > 0 || w.Status != JobWorkerStatus.Idle);
-            shutDownLaterToolStripMenuItem.Checked = w.Mode == JobWorkerMode.CloseOnLocalListCompleted;
 
             showProgressWindowToolStripMenuItem.Enabled = w.IsProgressWindowAvailable;
             showProgressWindowToolStripMenuItem.Checked = w.IsProgressWindowVisible;

@@ -160,7 +160,7 @@ namespace MeGUI.core.gui
             this.changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
             this.changeNameToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
             this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
-            this.changeNameToolStripMenuItem.Text = "Rename worker";
+            this.changeNameToolStripMenuItem.Text = "Change name";
             this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
@@ -172,7 +172,7 @@ namespace MeGUI.core.gui
             // 
             this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Name = "shutDownWhenFinishedLocalQueueToolStripMenuItem";
             this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
-            this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Text = "Delete worker when finished local queue";
+            this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Text = "Shut down worker when finished local queue";
             this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Click += new System.EventHandler(this.shutDownWhenFinishedLocalQueueToolStripMenuItem_Click);
             // 
             // shutDownWorkerNowToolStripMenuItem
@@ -180,7 +180,7 @@ namespace MeGUI.core.gui
             this.shutDownWorkerNowToolStripMenuItem.Name = "shutDownWorkerNowToolStripMenuItem";
             this.shutDownWorkerNowToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
             this.shutDownWorkerNowToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
-            this.shutDownWorkerNowToolStripMenuItem.Text = "Delete worker now";
+            this.shutDownWorkerNowToolStripMenuItem.Text = "Shut down worker now";
             this.shutDownWorkerNowToolStripMenuItem.Click += new System.EventHandler(this.shutDownWorkerNowToolStripMenuItem_Click);
             // 
             // progressWindowToolStripMenuItem

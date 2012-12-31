@@ -65,7 +65,7 @@ namespace MeGUI.core.details
             delegate(MainForm mf, Job j)
             {
                 if (mf.Settings.DeleteIntermediateFiles)
-                    return FileUtil.DeleteIntermediateFiles(j.FilesToDelete, true, false);
+                    return FileUtil.DeleteIntermediateFiles(j.FilesToDelete, true);
                 return null;
             }
             , "DeleteIntermediateFiles");
@@ -98,7 +98,7 @@ namespace MeGUI.core.details
 
             log.LogValue("Delete Intermediate Files option set", mf.Settings.DeleteIntermediateFiles);
             if (mf.Settings.DeleteIntermediateFiles)
-                log.Add(FileUtil.DeleteIntermediateFiles(files, true, false));
+                log.Add(FileUtil.DeleteIntermediateFiles(files, true));
 
             su.IsComplete = true;
             statusUpdate(su);
