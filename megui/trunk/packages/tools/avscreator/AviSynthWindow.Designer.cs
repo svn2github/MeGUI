@@ -56,6 +56,7 @@ namespace MeGUI
             System.Windows.Forms.Label label5;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AviSynthWindow));
             this.resNCropGroupbox = new System.Windows.Forms.GroupBox();
+            this.suggestMod = new System.Windows.Forms.ComboBox();
             this.chAutoPreview = new System.Windows.Forms.CheckBox();
             this.resize = new System.Windows.Forms.CheckBox();
             this.suggestResolution = new System.Windows.Forms.CheckBox();
@@ -206,6 +207,7 @@ namespace MeGUI
             // 
             this.resNCropGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.resNCropGroupbox.Controls.Add(this.suggestMod);
             this.resNCropGroupbox.Controls.Add(this.chAutoPreview);
             this.resNCropGroupbox.Controls.Add(this.resize);
             this.resNCropGroupbox.Controls.Add(this.suggestResolution);
@@ -225,10 +227,25 @@ namespace MeGUI
             this.resNCropGroupbox.TabStop = false;
             this.resNCropGroupbox.Text = "Crop && Resize";
             // 
+            // suggestMod
+            // 
+            this.suggestMod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.suggestMod.FormattingEnabled = true;
+            this.suggestMod.Items.AddRange(new object[] {
+            "mod2",
+            "mod4",
+            "mod8",
+            "mod16"});
+            this.suggestMod.Location = new System.Drawing.Point(340, 81);
+            this.suggestMod.Name = "suggestMod";
+            this.suggestMod.Size = new System.Drawing.Size(75, 21);
+            this.suggestMod.TabIndex = 11;
+            this.suggestMod.SelectedIndexChanged += new System.EventHandler(this.suggestResolution_CheckedChanged);
+            // 
             // chAutoPreview
             // 
             this.chAutoPreview.AutoSize = true;
-            this.chAutoPreview.Location = new System.Drawing.Point(11, 124);
+            this.chAutoPreview.Location = new System.Drawing.Point(11, 123);
             this.chAutoPreview.Name = "chAutoPreview";
             this.chAutoPreview.Size = new System.Drawing.Size(119, 17);
             this.chAutoPreview.TabIndex = 10;
@@ -239,7 +256,7 @@ namespace MeGUI
             // resize
             // 
             this.resize.AutoSize = true;
-            this.resize.Location = new System.Drawing.Point(11, 80);
+            this.resize.Location = new System.Drawing.Point(11, 83);
             this.resize.Name = "resize";
             this.resize.Size = new System.Drawing.Size(57, 17);
             this.resize.TabIndex = 9;
@@ -249,11 +266,12 @@ namespace MeGUI
             // 
             // suggestResolution
             // 
-            this.suggestResolution.Location = new System.Drawing.Point(238, 80);
+            this.suggestResolution.AutoSize = true;
+            this.suggestResolution.Location = new System.Drawing.Point(222, 83);
             this.suggestResolution.Name = "suggestResolution";
-            this.suggestResolution.Size = new System.Drawing.Size(168, 17);
+            this.suggestResolution.Size = new System.Drawing.Size(118, 17);
             this.suggestResolution.TabIndex = 8;
-            this.suggestResolution.Text = "Suggest Resolution (mod16)";
+            this.suggestResolution.Text = "Suggest Resolution";
             this.suggestResolution.CheckedChanged += new System.EventHandler(this.suggestResolution_CheckedChanged);
             // 
             // cropLeft
@@ -334,7 +352,7 @@ namespace MeGUI
             // 
             // autoCropButton
             // 
-            this.autoCropButton.Location = new System.Drawing.Point(331, 34);
+            this.autoCropButton.Location = new System.Drawing.Point(340, 35);
             this.autoCropButton.Name = "autoCropButton";
             this.autoCropButton.Size = new System.Drawing.Size(75, 23);
             this.autoCropButton.TabIndex = 3;
@@ -343,7 +361,7 @@ namespace MeGUI
             // 
             // crop
             // 
-            this.crop.Location = new System.Drawing.Point(11, 28);
+            this.crop.Location = new System.Drawing.Point(11, 26);
             this.crop.Name = "crop";
             this.crop.Size = new System.Drawing.Size(97, 42);
             this.crop.TabIndex = 2;
@@ -527,7 +545,7 @@ namespace MeGUI
             this.reopenOriginal.AutoSize = true;
             this.reopenOriginal.Location = new System.Drawing.Point(96, 47);
             this.reopenOriginal.Name = "reopenOriginal";
-            this.reopenOriginal.Size = new System.Drawing.Size(157, 23);
+            this.reopenOriginal.Size = new System.Drawing.Size(183, 23);
             this.reopenOriginal.TabIndex = 20;
             this.reopenOriginal.Text = "Re-open original video player";
             this.reopenOriginal.UseVisualStyleBackColor = true;
@@ -544,7 +562,7 @@ namespace MeGUI
             "Encode non-mod16",
             "Crop mod4 horizontally",
             "Undercrop to achieve mod16"});
-            this.mod16Box.Location = new System.Drawing.Point(249, 119);
+            this.mod16Box.Location = new System.Drawing.Point(239, 119);
             this.mod16Box.Name = "mod16Box";
             this.mod16Box.Size = new System.Drawing.Size(157, 21);
             this.mod16Box.TabIndex = 19;
@@ -1308,5 +1326,6 @@ namespace MeGUI
         private Label label8;
         private ComboBox cbCharset;
         private CheckBox nvResize;
+        private ComboBox suggestMod;
     }
 }

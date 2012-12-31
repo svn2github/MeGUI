@@ -1,3 +1,5 @@
+2235 [AviSynth Script Creator] fixed "Suggest Resolution (mod16)" handling
+                               added option to select 2/4/8 as mod values for "Suggest Resolution"
 2234 [x264] lowered PS3 device level from 4.2 to 4.1 in order to enhance compatibility
 2233 [QAAC] added an information that an update check is required when enabling QAAC for the first time 
 2232 [HD Streams Extractor] + [OneClick] improved logging

@@ -107,6 +107,7 @@ namespace MeGUI
             deintSourceType.SelectedIndex = -1;
             cbNvDeInt.SelectedIndex = 0;
             cbCharset.SelectedIndex = 0;
+            suggestMod.SelectedIndex = 3;
 
             this.noiseFilterType.SelectedIndexChanged += new System.EventHandler(this.noiseFilterType_SelectedIndexChanged);
             this.resizeFilterType.SelectedIndexChanged += new System.EventHandler(this.resizeFilterType_SelectedIndexChanged);
@@ -967,20 +968,45 @@ namespace MeGUI
                 dar = (double)arChooser.RealValue.ar;
                 Dar? suggestedDar;
 
+                int mod = 16;
+                switch (suggestMod.SelectedIndex)
+                {
+                    case 0: mod = 2; break;
+                    case 1: mod = 4; break;
+                    case 2: mod = 8; break;
+                }
+                horizontalResolution.Increment = verticalResolution.Increment = mod;
+
+                if (suggestResolution.Checked)
+                {
+                    int hres = (int)horizontalResolution.Value;
+                    if (hres % mod != 0)
+                    {
+                        int diff = hres % mod;
+                        if (hres - diff > 0)
+                            hres -= diff;
+                        else
+                            hres += mod - diff;
+                        horizontalResolution.Value = hres;
+                    }    
+                }
+
                 bool signalAR = this.signalAR.Checked;
-                int scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar,
-                    Cropping, (int)horizontalResolution.Value, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
+                int scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping, 
+                    (int)horizontalResolution.Value, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar, mod);
 
                 if (suggestResolution.Checked)
                 {
                     this.verticalResolution.Enabled = false;
                     if (scriptVerticalResolution > verticalResolution.Maximum)
-                    { // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
+                    { 
+                        // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
                         int hres = (int)horizontalResolution.Value;
                         do
                         {
-                            hres -= 16;
-                            scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping, hres, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
+                            hres -= mod;
+                            scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping, 
+                                hres, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar, mod);
                         }
                         while (scriptVerticalResolution > verticalResolution.Maximum && hres > 0);
                         eventsOn = false;
@@ -1158,14 +1184,14 @@ namespace MeGUI
                 this.horizontalResolution.Enabled = true;
                 this.verticalResolution.Enabled = !suggestResolution.Checked;
                 if (Mod16Method == mod16Method.resize)
-                    this.suggestResolution.Enabled = false;
+                    this.suggestResolution.Enabled = suggestMod.Enabled = false;
                 else
-                    this.suggestResolution.Enabled = true;
+                    this.suggestResolution.Enabled = suggestMod.Enabled = true;
             }
             else
             {
                 this.horizontalResolution.Enabled = this.verticalResolution.Enabled = false;
-                this.suggestResolution.Enabled = this.suggestResolution.Checked = false;
+                this.suggestResolution.Enabled = this.suggestResolution.Checked = suggestMod.Enabled = false;
             }
             chAutoPreview_CheckedChanged(null, null);
 

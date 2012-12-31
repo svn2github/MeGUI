@@ -554,7 +554,7 @@ namespace MeGUI
                     outputWidthCropped = desiredOutputWidth;
                     outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width,
                         (double)customDAR.ar, cropValues, outputWidthCropped, signalAR,
-                        mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+                        mainForm.Settings.AcceptableAspectErrorPercent, out dar, 16);
                     dar = null;
                 }
 
@@ -670,12 +670,12 @@ namespace MeGUI
                 
                 // adjust cropped vertical resolution
                 outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, (double)customDAR.ar,
-                    cropValues, outputWidthCropped, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+                    cropValues, outputWidthCropped, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar, 16);
                 while (outputHeightCropped > xTargetDevice.Height || (xTargetDevice.BluRay && outputHeightCropped > outputHeightIncludingPadding))
                 {
                     outputWidthCropped -= 16;
                     outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, (double)customDAR.ar,
-                        cropValues, outputWidthCropped, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+                        cropValues, outputWidthCropped, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar, 16);
                 }
             }
 
@@ -705,7 +705,7 @@ namespace MeGUI
             // calculate height
             if (!keepInputResolution)
                 outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, (double)customDAR.ar,
-                    cropValues, outputWidthCropped, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+                    cropValues, outputWidthCropped, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar, 16);
             
             // set complete padding if required
             if (outputHeightIncludingPadding == 0 && outputWidthIncludingPadding > 0)
