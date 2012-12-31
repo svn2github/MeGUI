@@ -77,8 +77,6 @@ namespace MeGUI.core.gui
     /// will be processed automatically. Postponed means that because of another running
     /// job in another worker this worker is stopped temporarily.
     /// 
-    /// 
-    /// 
     /// ProcessingThreads can run in several modes, enumerated 
     /// </summary>
     public partial class JobWorker : Form
@@ -195,7 +193,6 @@ namespace MeGUI.core.gui
         }
 
         private string name;
-
         public new string Name
         {
             get { return name; }
@@ -224,6 +221,7 @@ namespace MeGUI.core.gui
         public JobWorker(MainForm mf)
         {
             mainForm = mf;
+
             InitializeComponent();
             jobQueue1.SetStartStopButtonsTogether();
             jobQueue1.RequestJobDeleted = new RequestJobDeleted(GUIDeleteJob);
@@ -232,13 +230,12 @@ namespace MeGUI.core.gui
                 foreach (TaggedJob j in jobs)
                     mainForm.Jobs.ReleaseJob(j);
             });
-
-            pw = new ProgressWindow(JobTypes.AUDIO);
+            
+            pw = new ProgressWindow();
             pw.Abort += new AbortCallback(pw_Abort);
             pw.PriorityChanged += new PriorityChangedCallback(pw_PriorityChanged);
             pw.CreateControl();
             mainForm.RegisterForm(pw);
-
         }
 
         #region job run util
@@ -359,9 +356,12 @@ namespace MeGUI.core.gui
 
         private void updateProgress()
         {
-            if (this.InvokeRequired) Invoke(new MethodInvoker(delegate { jobProgress.Value = (int)Progress; }));
-            else jobProgress.Value = (int)Progress;
-            if (alive) mainForm.Jobs.UpdateProgress(this.Name);
+            if (this.InvokeRequired) 
+                Invoke(new MethodInvoker(delegate { jobProgress.Value = (int)Progress; }));
+            else 
+                jobProgress.Value = (int)Progress;
+            if (alive)
+                mainForm.Jobs.UpdateProgress(this.Name);
         }
         #endregion
 
@@ -446,6 +446,7 @@ namespace MeGUI.core.gui
                 Thread t = new Thread(new ThreadStart(delegate
                 {
                     TaggedJob job = mainForm.Jobs.ByName(su.JobName);
+                    JobStartInfo JobInfo = JobStartInfo.JOB_STARTED;
 
                     copyInfoIntoJob(job, su);
                     progress = 0;
@@ -458,8 +459,6 @@ namespace MeGUI.core.gui
                         postprocessJob(job.Job);
                         job.Status = JobStatus.DONE;
                     }
-
-                    bool bIsAudioJob = job.Job.EncodingMode.Equals("audio");
 
                     currentProcessor = null;
                     currentJob = null;
@@ -492,7 +491,8 @@ namespace MeGUI.core.gui
                     }
                     else
                     {
-                        switch (startNextJobInQueue())
+                        JobInfo = startNextJobInQueue();
+                        switch (JobInfo)
                         {
                             case JobStartInfo.JOB_STARTED:
                                 MeGUI.core.util.WindowUtil.PreventSystemPowerdown();
@@ -516,10 +516,10 @@ namespace MeGUI.core.gui
                         }
                     }
 
-                    refreshAll();
+                    if (JobInfo == JobStartInfo.JOB_STARTED)
+                        Util.ThreadSafeRun(mainForm.Jobs, delegate { mainForm.Jobs.StartIdleWorkers(); });
 
-                    if (bIsAudioJob)
-                        Util.ThreadSafeRun(mainForm.Jobs, delegate { mainForm.Jobs.StartPostponedWorkers(); });
+                    refreshAll();
                 }));
                 t.IsBackground = true;
                 t.Start();
@@ -913,7 +913,9 @@ namespace MeGUI.core.gui
         }
 
         public bool IsProgressWindowAvailable
-        { get { return IsEncoding; } }
+        { 
+            get { return IsEncoding; } 
+        }
 
         public bool IsProgressWindowVisible
         {

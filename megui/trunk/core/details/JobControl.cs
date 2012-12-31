@@ -49,7 +49,8 @@ namespace MeGUI.core.details
         public void ShowAllProcessWindows()
         {
             foreach (JobWorker w in workers.Values)
-                if (w.IsProgressWindowAvailable) w.ShowProcessWindow();
+                if (w.IsProgressWindowAvailable) 
+                    w.ShowProcessWindow();
         }
 
         public void HideAllProcessWindows()
@@ -75,7 +76,7 @@ namespace MeGUI.core.details
             }
 
             if (workers.Values.Count == 0)
-              NewWorker(freeWorkerName(), false);
+                NewWorker(freeWorkerName(), false);
 
             foreach (JobWorker w in workers.Values)
             {
@@ -90,7 +91,8 @@ namespace MeGUI.core.details
         public void StopAll()
         {
             foreach (JobWorker w in workers.Values)
-                if (w.IsEncoding) w.SetStopping();
+                if (w.IsEncoding) 
+                    w.SetStopping();
             refresh();
         }
         #endregion
@@ -204,7 +206,7 @@ namespace MeGUI.core.details
         {
             set
             {
-                mainForm = value; 
+                mainForm = value;
                 mainForm.RegisterForm(summary);
             }
         }
@@ -214,7 +216,8 @@ namespace MeGUI.core.details
             get
             {
                 foreach (JobWorker w in workers.Values)
-                    if (w.IsEncoding) return true;
+                    if (w.IsEncoding) 
+                        return true;
                 return false;
             }
         }
@@ -223,7 +226,8 @@ namespace MeGUI.core.details
             get
             {
                 foreach (JobWorker w in workers.Values)
-                    if (w.IsEncodingAudio) return true;
+                    if (w.IsEncodingAudio) 
+                        return true;
                 return false;
             }
         }
@@ -379,6 +383,13 @@ namespace MeGUI.core.details
                     w.StartEncoding(false);
         }
 
+        public void StartIdleWorkers()
+        {
+            foreach (JobWorker w in workers.Values)
+                if (!w.IsEncoding && (w.Status == JobWorkerStatus.Idle || w.Status == JobWorkerStatus.Postponed))
+                    w.StartEncoding(false);
+        }
+
         #region saving / loading jobs
         internal List<string> toStringList(IEnumerable<TaggedJob> jobList)
         {
@@ -439,7 +450,8 @@ namespace MeGUI.core.details
                 bool bIsTemporaryWorker = false;
                 if (p.fst.StartsWith("Temporary worker "))
                 {
-                    if (p.snd.Count == 0) continue;
+                    if (p.snd.Count == 0) 
+                        continue;
                     mode = JobWorkerMode.CloseOnLocalListCompleted;
                     bIsTemporaryWorker = true;
                 }
@@ -585,7 +597,7 @@ namespace MeGUI.core.details
         #endregion
         
         #region adding jobs to queue
-        public void addJobsWithDependencies(JobChain c)
+        public void addJobsWithDependencies(JobChain c, bool bStartQueue)
         {
             if (c == null)
                 return;
@@ -593,7 +605,7 @@ namespace MeGUI.core.details
             foreach (TaggedJob j in c.Jobs)
                 addJob(j);
             saveJobs();
-            if (mainForm.Settings.AutoStartQueue)
+            if (mainForm.Settings.AutoStartQueue && bStartQueue)
                 StartAll(false);
             refresh();
         }
@@ -782,7 +794,7 @@ namespace MeGUI.core.details
             workers.Add(w.Name, w);
             summary.Add(w);
             mainForm.RegisterForm(w);
-            if (show) 
+            if (show)
                 w.Show();
             return w;
         }
@@ -864,7 +876,7 @@ namespace MeGUI.core.details
 
         private void cbAfterEncoding_SelectedIndexChanged(object sender, EventArgs e)
         {
-            currentAfterEncoding = (AfterEncoding) cbAfterEncoding.SelectedIndex;
+            currentAfterEncoding = (AfterEncoding)cbAfterEncoding.SelectedIndex;
         }
     }
     enum JobStartInfo { JOB_STARTED, NO_JOBS_WAITING, COULDNT_START }
