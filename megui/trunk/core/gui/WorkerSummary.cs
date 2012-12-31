@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -64,7 +64,8 @@ namespace MeGUI.core.gui
                 Invoke(new MethodInvoker(RefreshInfo));
                 return;
             }
-            if (!Visible) return;
+            if (!Visible) 
+                return;
             foreach (IndividualWorkerSummary i in displays.Values)
                 i.RefreshInfo();
         }

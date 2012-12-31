@@ -62,7 +62,8 @@ namespace MeGUI.core.details
         public void AbortAll()
         {
             foreach (JobWorker worker in workers.Values)
-                if (worker.IsEncoding) worker.Abort();
+                if (worker.IsEncoding)
+                    worker.Abort();
             refresh();
         }
 
@@ -781,7 +782,8 @@ namespace MeGUI.core.details
                 return;
             }
 
-            NewWorker(name, true);
+            JobWorker w = NewWorker(name, true);
+            w.StartEncoding(true);
         }
 
         private JobWorker NewWorker(string name, bool show)
@@ -794,8 +796,6 @@ namespace MeGUI.core.details
             workers.Add(w.Name, w);
             summary.Add(w);
             mainForm.RegisterForm(w);
-            if (show)
-                w.Show();
             return w;
         }
 

@@ -1,3 +1,5 @@
+2241 [Worker] a finished temporary worker will not start anymore idle workers. Bug #691
+              several small optimizations
 2240 [AviSynth Script Creator] "Aspect Ratio Error" will also be changed if cropping is changed
 2239 [AviSynth Script Creator] added "Aspect Ratio Error"
 2238 [AviSynth Script Creator] enabled upsizing

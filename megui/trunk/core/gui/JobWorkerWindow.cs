@@ -152,8 +152,10 @@ namespace MeGUI.core.gui
                 string _status = "running"; 
                 if (currentJob != null)
                     _status += string.Format(" {0} ({1:P2})", currentJob.Name, progress/100M);
-                if (status == JobWorkerStatus.Stopping)
-                    _status += " (stopping after this job)";
+                if (mode == JobWorkerMode.CloseOnLocalListCompleted)
+                    _status += " (delete worker after this job)";
+                else if (status == JobWorkerStatus.Stopping)
+                    _status += " (stop worker after this job)";
                 if (pauseStatus == PauseState.Paused)
                     _status += " (paused)";
                 return _status;
@@ -201,6 +203,11 @@ namespace MeGUI.core.gui
                 name = value;
                 Text = value;
             }
+        }
+
+        public int LocalJobCount
+        {
+            get { return localJobs.Count; }
         }
 
         public bool IsEncoding
@@ -301,7 +308,7 @@ namespace MeGUI.core.gui
 
         internal void UserRequestShutDown()
         {
-            DialogResult r = MessageBox.Show("Do you really want to shut down this job worker?", "Really shut down?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult r = MessageBox.Show("Do you really want to delete this job worker?", "Really delete?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (r == DialogResult.Yes)
                 ShutDown();
         }
@@ -472,8 +479,12 @@ namespace MeGUI.core.gui
                     else
                         mainForm.Jobs.saveJob(job, mainForm.MeGUIPath);     //AAA: save state more often
 
-                    if (shutdownWorkerIfJobsCompleted())
-                    { }
+                    if (mode == JobWorkerMode.CloseOnLocalListCompleted)
+                    {
+                        // shut down may be required
+                        if (shutdownWorkerIfJobsCompleted())
+                            JobInfo = JobStartInfo.NO_JOBS_WAITING;
+                    }
                     else if (job.Status == JobStatus.ABORTED)
                     {
                         MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
@@ -549,12 +560,11 @@ namespace MeGUI.core.gui
         }
 
         /// <summary>
-        /// shuts down this worker if the jobs are complete and it is a temporary worker
+        /// shuts down this worker if the jobs are completed
         /// </summary>
         /// <returns>true if worker was shut down, false otherwise</returns>
         private bool shutdownWorkerIfJobsCompleted()
         {
-            if (mode != JobWorkerMode.CloseOnLocalListCompleted) return false;
             foreach (TaggedJob j in localJobs.Values)
                 if (j.Status != JobStatus.DONE)
                     return false;
@@ -748,10 +758,7 @@ namespace MeGUI.core.gui
                             break;
                         }
                         else
-                        {
-                            i.LogEvent("Error deleting file - trying again", ImageType.Information);
                             System.Threading.Thread.Sleep(1000);
-                        }
                     }
                 }
                 if (!File.Exists(job.Job.Output))
@@ -841,16 +848,7 @@ namespace MeGUI.core.gui
 
         }
 
-
-        private void changeNameToolStripMenuItem_Click(object sender, EventArgs e) { UserRequestedRename(); }
-
-
-        private void setName(string p)
-        {
-            mainForm.Jobs.RenameWorker(this.name, p); // throws NameTakenException if it fails
-        }
-
-        private void shutDownWhenFinishedLocalQueueToolStripMenuItem_Click(object sender, EventArgs e)
+        public void ShutDownWhenFinished()
         {
             shutDownWhenFinishedLocalQueueToolStripMenuItem.Checked = !shutDownWhenFinishedLocalQueueToolStripMenuItem.Checked;
             if (shutDownWhenFinishedLocalQueueToolStripMenuItem.Checked)
@@ -862,6 +860,22 @@ namespace MeGUI.core.gui
             }
             else
                 mode = JobWorkerMode.RequestNewJobs;
+        }
+
+
+        private void changeNameToolStripMenuItem_Click(object sender, EventArgs e) 
+        { 
+            UserRequestedRename(); 
+        }
+
+        private void setName(string p)
+        {
+            mainForm.Jobs.RenameWorker(this.name, p); // throws NameTakenException if it fails
+        }
+
+        private void shutDownWhenFinishedLocalQueueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShutDownWhenFinished();
         }
 
         private void shutDownWorkerNowToolStripMenuItem_Click(object sender, EventArgs e)
