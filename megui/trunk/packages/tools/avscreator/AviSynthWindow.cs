@@ -771,9 +771,9 @@ namespace MeGUI
                 return;
             }
 
-            double aspectError = Math.Abs(1 - (iWidth * (double)verticalResolution.Value) / (iHeight * (double)horizontalResolution.Value));
+            double aspectError = 1 - (iWidth * (double)verticalResolution.Value) / (iHeight * (double)horizontalResolution.Value);
             txtAspectError.Text = String.Format("{0:0.00000%}", aspectError);
-            if (aspectError * 100 < mainForm.Settings.AcceptableAspectErrorPercent)
+            if (Math.Abs(aspectError) * 100 < mainForm.Settings.AcceptableAspectErrorPercent)
                 txtAspectError.BackColor = System.Drawing.SystemColors.Window;
             else
                 txtAspectError.BackColor = System.Drawing.Color.OrangeRed;

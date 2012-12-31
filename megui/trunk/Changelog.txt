@@ -1,3 +1,4 @@
+2242 [AviSynth Script Creator] show signed "Aspect Ratio Error"
 2241 [Worker] a finished temporary worker will not start anymore idle workers. Bug #691
               several small optimizations
 2240 [AviSynth Script Creator] "Aspect Ratio Error" will also be changed if cropping is changed
