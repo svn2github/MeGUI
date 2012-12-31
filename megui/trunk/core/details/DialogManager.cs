@@ -248,5 +248,24 @@ namespace MeGUI
             }
             return mainForm.Settings.DialogSettings.AddConvertToYV12;
         }
+
+        public bool DeleteIntermediateFiles(List<string> arrFiles)
+        {
+            if (mainForm.Settings.DialogSettings.AskAboutIntermediateDelete)
+            {
+                string strFiles = string.Empty; ;
+                foreach (string file in arrFiles)
+                    strFiles += "\r\n" + file;
+
+                bool askAgain;
+                bool bResult = askAbout("Do you really want to delete the intermediate files below?\r\nThese files may still be required as the job did not finish successfully.\r\n" + strFiles,
+                                        "Confirm deletion of intermediate files", MessageBoxIcon.Warning, out askAgain);
+
+                mainForm.Settings.DialogSettings.AskAboutIntermediateDelete = askAgain;
+                mainForm.Settings.DialogSettings.IntermediateDelete = bResult;
+                return bResult;
+            }
+            return mainForm.Settings.DialogSettings.IntermediateDelete;
+        }
     }
 }

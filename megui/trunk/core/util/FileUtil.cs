@@ -366,38 +366,53 @@ namespace MeGUI.core.util
         /// in job.FilesToDelete if settings.DeleteIntermediateFiles is checked
         /// </summary>
         /// <param name="job">the job which should just have been completed</param>
-        public static LogItem DeleteIntermediateFiles(List<string> files, bool bAlwaysAddLog)
+        public static LogItem DeleteIntermediateFiles(List<string> files, bool bAlwaysAddLog, bool askAboutDelete)
         {
             bool bShowLog = false;
             LogItem i = new LogItem("Deleting intermediate files");
-            
-            // delete all files first
+
+            List<string> arrFiles = new List<string>();
             foreach (string file in files)
             {
-                int iCounter = 0;
-
                 if (Directory.Exists(file))
                     continue;
                 else if (!File.Exists(file))
                     continue;
-                bShowLog = true;
+                if (!arrFiles.Contains(file))
+                    arrFiles.Add(file);
+            }
 
-                while (File.Exists(file))
+            if (arrFiles.Count > 0)
+            {
+                bShowLog = true;
+                bool delete = true;
+
+                if (askAboutDelete)
+                    delete = MainForm.Instance.DialogManager.DeleteIntermediateFiles(arrFiles);
+                if (!delete)
+                    return null;
+
+                // delete all files first
+                foreach (string file in arrFiles)
                 {
-                    try
+                    int iCounter = 0;
+                    while (File.Exists(file))
                     {
-                        File.Delete(file);
-                        i.LogEvent("Successfully deleted " + file);
-                    }
-                    catch (IOException e)
-                    {
-                        if (++iCounter >= 3)
+                        try
                         {
-                            i.LogValue("Problem deleting " + file, e.Message, ImageType.Warning);
-                            break;
+                            File.Delete(file);
+                            i.LogEvent("Successfully deleted " + file);
                         }
-                        else
-                            System.Threading.Thread.Sleep(2000);
+                        catch (IOException e)
+                        {
+                            if (++iCounter >= 3)
+                            {
+                                i.LogValue("Problem deleting " + file, e.Message, ImageType.Warning);
+                                break;
+                            }
+                            else
+                                System.Threading.Thread.Sleep(2000);
+                        }
                     }
                 }
             }

@@ -261,7 +261,8 @@ namespace MeGUI.core.details
             if (incompleteJobs != 0)
             {
                 dr = MessageBox.Show("Delete incomplete jobs as well?\n\nYes for All, No for completed or Cancel to abort:", "Are you sure you want to clear the queue?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                if (dr == DialogResult.Cancel) return;
+                if (dr == DialogResult.Cancel) 
+                    return;
             }
             foreach (TaggedJob j in jobList)
             {
@@ -275,7 +276,7 @@ namespace MeGUI.core.details
         {
             if (job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING)
             {
-                MessageBox.Show("You cannot delete a job while it is being processed.", "Deleting job failed", MessageBoxButtons.OK);
+                MessageBox.Show("You cannot delete a job while it is being processed.", "Deleting " + job.Name + " failed", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
@@ -331,7 +332,7 @@ namespace MeGUI.core.details
                     filesToDelete.AddRange(((CleanupJob)job.Job).files);
                 if (filesToDelete.Count > 0)
                 {
-                    LogItem oLog = FileUtil.DeleteIntermediateFiles(filesToDelete, false);
+                    LogItem oLog = FileUtil.DeleteIntermediateFiles(filesToDelete, false, true);
                     if (oLog != null)
                     {
                         LogItem log = mainForm.Log.Info(string.Format("Log for {0} ({1}, {2} -> {3})", job.Name, job.Job.EncodingMode, job.InputFileName, job.OutputFileName));

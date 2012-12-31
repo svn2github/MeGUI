@@ -33,13 +33,14 @@ namespace MeGUI.core.gui
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.startEncodingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.abortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.abortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shutDownLaterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shutDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showProgressWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.workerNameAndJob.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -72,11 +73,12 @@ namespace MeGUI.core.gui
             this.abortToolStripMenuItem,
             this.shutDownLaterToolStripMenuItem,
             this.shutDownToolStripMenuItem,
+            this.toolStripSeparator1,
             this.showProgressWindowToolStripMenuItem,
             this.showQueueToolStripMenuItem,
             this.renameToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(288, 202);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(288, 208);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // startEncodingToolStripMenuItem
@@ -86,26 +88,19 @@ namespace MeGUI.core.gui
             this.startEncodingToolStripMenuItem.Text = "Start worker";
             this.startEncodingToolStripMenuItem.Click += new System.EventHandler(this.startEncodingToolStripMenuItem_Click);
             // 
-            // abortToolStripMenuItem
-            // 
-            this.abortToolStripMenuItem.Name = "abortToolStripMenuItem";
-            this.abortToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
-            this.abortToolStripMenuItem.Text = "Abort job and stop worker immediately";
-            this.abortToolStripMenuItem.Click += new System.EventHandler(this.abortToolStripMenuItem_Click);
-            // 
-            // renameToolStripMenuItem
-            // 
-            this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
-            this.renameToolStripMenuItem.Text = "Rename worker";
-            this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
-            // 
             // stopToolStripMenuItem
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
             this.stopToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
             this.stopToolStripMenuItem.Text = "Stop worker after the current job";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
+            // 
+            // abortToolStripMenuItem
+            // 
+            this.abortToolStripMenuItem.Name = "abortToolStripMenuItem";
+            this.abortToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            this.abortToolStripMenuItem.Text = "Abort job and stop worker immediately";
+            this.abortToolStripMenuItem.Click += new System.EventHandler(this.abortToolStripMenuItem_Click);
             // 
             // shutDownLaterToolStripMenuItem
             // 
@@ -134,6 +129,18 @@ namespace MeGUI.core.gui
             this.showQueueToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
             this.showQueueToolStripMenuItem.Text = "Show queue";
             this.showQueueToolStripMenuItem.Click += new System.EventHandler(this.showQueueToolStripMenuItem_Click);
+            // 
+            // renameToolStripMenuItem
+            // 
+            this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            this.renameToolStripMenuItem.Text = "Rename worker";
+            this.renameToolStripMenuItem.Click += new System.EventHandler(this.renameToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(284, 6);
             // 
             // IndividualWorkerSummary
             // 
@@ -165,5 +172,6 @@ namespace MeGUI.core.gui
         private System.Windows.Forms.ToolStripMenuItem showProgressWindowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showQueueToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shutDownLaterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
