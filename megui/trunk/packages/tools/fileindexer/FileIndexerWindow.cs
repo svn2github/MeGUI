@@ -404,7 +404,7 @@ namespace MeGUI
                 case IndexType.D2V:
                     {
                         prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(generateD2VIndexJob(videoInput)));
-                        mainForm.Jobs.addJobsWithDependencies(prepareJobs);
+                        mainForm.Jobs.addJobsWithDependencies(prepareJobs, true);
                         if (this.closeOnQueue.Checked)
                             this.Close();
                         break;
@@ -412,7 +412,7 @@ namespace MeGUI
                 case IndexType.DGI:
                     {
                         prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(generateDGNVIndexJob(videoInput)));
-                        mainForm.Jobs.addJobsWithDependencies(prepareJobs);
+                        mainForm.Jobs.addJobsWithDependencies(prepareJobs, true);
                         if (this.closeOnQueue.Checked)
                             this.Close();
                         break;
@@ -420,7 +420,7 @@ namespace MeGUI
                 case IndexType.DGA:
                     {
                         prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(generateDGAIndexJob(videoInput)));
-                        mainForm.Jobs.addJobsWithDependencies(prepareJobs);
+                        mainForm.Jobs.addJobsWithDependencies(prepareJobs, true);
                         if (this.closeOnQueue.Checked)
                             this.Close();
                         break;
@@ -437,7 +437,7 @@ namespace MeGUI
                             prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(extractJob));
                         }
                         prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(job));
-                        mainForm.Jobs.addJobsWithDependencies(prepareJobs);
+                        mainForm.Jobs.addJobsWithDependencies(prepareJobs, true);
                         if (this.closeOnQueue.Checked)
                             this.Close();
                         break;

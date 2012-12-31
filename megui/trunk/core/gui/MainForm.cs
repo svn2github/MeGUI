@@ -765,7 +765,7 @@ namespace MeGUI
         {
             AdaptiveMuxWindow amw = new AdaptiveMuxWindow(this);
             if (amw.ShowDialog() == DialogResult.OK)
-                Jobs.addJobsWithDependencies(amw.Jobs);
+                Jobs.addJobsWithDependencies(amw.Jobs, true);
         }
 
         private void MeGUI_Load(object sender, EventArgs e)

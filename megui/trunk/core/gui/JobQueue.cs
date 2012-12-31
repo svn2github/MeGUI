@@ -341,7 +341,8 @@ namespace MeGUI.core.gui
             if (!jobs.ContainsKey(name)) // Check if it has already been deleted
                 return;
             TaggedJob job = jobs[name];
-            if (job == null) return;
+            if (job == null) 
+                return;
             RequestJobDeleted(job);
         }
         #endregion
@@ -431,12 +432,15 @@ namespace MeGUI.core.gui
             lv.SelectedIndices.CopyTo(indices, 0);
             Array.Sort(indices);
 
-            if (indices.Length == 0) return false;
-            if (d == Direction.Up && indices[0] == 0) return false;
+            if (indices.Length == 0)
+                return false;
+            if (d == Direction.Up && indices[0] == 0)
+                return false;
             if (d == Direction.Down &&
                 indices[indices.Length - 1] == queueListView.Items.Count - 1)
                 return false;
-            if (!consecutiveIndices(indices)) return false;
+            if (!consecutiveIndices(indices))
+                return false;
 
             return true;
         }
@@ -723,7 +727,9 @@ namespace MeGUI.core.gui
 
         public void refreshQueue()
         {
-            if (!Visible) return;
+            if (!Visible) 
+                return;
+
             if (queueListView.InvokeRequired)
             {
                 queueListView.Invoke(new MethodInvoker(delegate { refreshQueue(); }));

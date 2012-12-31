@@ -42,9 +42,14 @@ namespace MeGUI
         private bool bLock;
 
         /// <summary>
-        /// whether the current processing is a part of batch processing
+        /// whether the current processing should be done without user interaction
         /// </summary>
         private bool bAutomatedProcessing;
+
+        /// <summary>
+        /// whether the current processing is a part of batch processing
+        /// </summary>
+        private bool bBatchProcessing;
 
         /// <summary>
         /// whether we ignore the restrictions on container output type set by the profile
@@ -383,7 +388,7 @@ namespace MeGUI
 
         public void setBatchProcessing(List<OneClickFilesToProcess> arrFilesToProcess, OneClickSettings oSettings)
         {
-            bAutomatedProcessing = true;
+            bBatchProcessing = bAutomatedProcessing = true;
             SetOneClickProfile(oSettings);
             OneClickProcessing oProcessor = new OneClickProcessing(this, arrFilesToProcess, oSettings, _oLog);
             return;
@@ -396,7 +401,7 @@ namespace MeGUI
 
             if (!bAutomatedProcessing && arrFilesToProcess.Count > 0)
             {
-                string question = "Do you want to process all " + (arrFilesToProcess.Count + 1) + " files/tracks in the selection?\r\nThey all will be processed with the current settings\r\nin the OneClick profile \"" + oneclickProfile.SelectedProfile.Name + "\".";
+                string question = "Do you want to process all " + (arrFilesToProcess.Count + 1) + " files/tracks in the selection?\r\nThey all will be processed with the current settings\r\nin the OneClick profile \"" + oneclickProfile.SelectedProfile.Name + "\".\r\nOther settings will be ignored.";
                 DialogResult dr = MessageBox.Show(question, "Automated folder processing", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
@@ -1046,7 +1051,7 @@ namespace MeGUI
             }
             
             // add jobs to queue
-            mainForm.Jobs.addJobsWithDependencies(finalJobChain);
+            mainForm.Jobs.addJobsWithDependencies(finalJobChain, !bBatchProcessing);
 
             if (this.openOnQueue.Checked && !bAutomatedProcessing)
             {
