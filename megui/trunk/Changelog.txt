@@ -1,3 +1,6 @@
+2246 [AviSynth Script Creator] enhanced readability of the "red parts"
+                               the "Aspect Ratio Error" only turns red if the value is bigger than the acceptable aspect error
+                               crop values will be used also for the upsize warnings
 2245 [Queue] related jobs are highlighted when selecting a job
 2244 [Queue] when deleting a job warn always if it is part of a related job series
 2243 [AviSynth Script Creator] fixed a crash if "Clever (TM) anamorphic encoding" is enabled

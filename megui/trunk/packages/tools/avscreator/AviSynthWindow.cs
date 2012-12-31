@@ -756,8 +756,8 @@ namespace MeGUI
         {
             if (file == null || resize.CheckState != CheckState.Checked)
             {
-                txtAspectError.BackColor = System.Drawing.SystemColors.Window;
-                txtAspectError.Text = "0.00000%";
+                lblAspectError.BackColor = System.Drawing.SystemColors.Window;
+                lblAspectError.Text = "0.00000%";
                 return;
             }
 
@@ -766,17 +766,17 @@ namespace MeGUI
 
             if (iHeight <= 0 || iWidth <= 0 || verticalResolution.Value <= 0 || horizontalResolution.Value <= 0)
             {
-                txtAspectError.BackColor = System.Drawing.SystemColors.Window;
-                txtAspectError.Text = "0.00000%";
+                lblAspectError.BackColor = System.Drawing.SystemColors.Window;
+                lblAspectError.Text = "0.00000%";
                 return;
             }
 
             double aspectError = 1 - (iWidth * (double)verticalResolution.Value) / (iHeight * (double)horizontalResolution.Value);
-            txtAspectError.Text = String.Format("{0:0.00000%}", aspectError);
-            if (Math.Abs(aspectError) * 100 < mainForm.Settings.AcceptableAspectErrorPercent)
-                txtAspectError.BackColor = System.Drawing.SystemColors.Window;
+            lblAspectError.Text = String.Format("{0:0.00000%}", aspectError);
+            if (Math.Abs(aspectError) * 100 <= mainForm.Settings.AcceptableAspectErrorPercent)
+                lblAspectError.ForeColor = System.Drawing.SystemColors.WindowText;
             else
-                txtAspectError.BackColor = System.Drawing.Color.OrangeRed;
+                lblAspectError.ForeColor = System.Drawing.Color.Red;
         }
 
 		#endregion
@@ -792,10 +792,10 @@ namespace MeGUI
             if (sender != null && e != null)
                 showScript(false);
 
-            if (file.VideoInfo.Width < horizontalResolution.Value)
-                horizontalResolution.BackColor = System.Drawing.Color.OrangeRed;
+            if (file != null && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < horizontalResolution.Value)
+                changeNumericUpDownColor(horizontalResolution, true);
             else
-                horizontalResolution.BackColor = System.Drawing.SystemColors.Window;
+                changeNumericUpDownColor(horizontalResolution, false);
             calcAspectError();
 		}
 
@@ -805,12 +805,32 @@ namespace MeGUI
             if (sender != null && e != null)
                 showScript(false);
 
-            if (file.VideoInfo.Height < verticalResolution.Value)
-                verticalResolution.BackColor = System.Drawing.Color.OrangeRed;
+            if (file != null && (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom < verticalResolution.Value)
+                changeNumericUpDownColor(verticalResolution, true);
             else
-                verticalResolution.BackColor = System.Drawing.SystemColors.Window;
+                changeNumericUpDownColor(verticalResolution, false);
             calcAspectError();
 		}
+
+        private void changeNumericUpDownColor(NumericUpDown oControl, bool bMarkRed)
+        {
+            if (oControl.Enabled)
+            {
+                if (bMarkRed)
+                    oControl.ForeColor = System.Drawing.Color.Red;
+                else
+                    oControl.ForeColor = System.Drawing.SystemColors.WindowText;
+                oControl.BackColor = System.Drawing.SystemColors.Window;
+            }
+            else
+            {
+                if (bMarkRed)
+                    oControl.BackColor = System.Drawing.Color.FromArgb(255, 255, 180, 180);
+                else
+                    oControl.BackColor = System.Drawing.SystemColors.Window;
+                oControl.ForeColor = System.Drawing.SystemColors.WindowText;
+            }
+        }
 
 		private void sendCropValues()
 		{
@@ -846,7 +866,8 @@ namespace MeGUI
 			}
             suggestResolution_CheckedChanged(null, null);
             chAutoPreview_CheckedChanged(null, null);
-            calcAspectError();
+            horizontalResolution_ValueChanged(null, null);
+            verticalResolution_ValueChanged(null, null);
             if (sender != null && e != null)
                 showScript(false);
 		}
