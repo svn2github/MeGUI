@@ -46,7 +46,7 @@ namespace MeGUI
         };
         private string[][] autoUpdateServerLists;
         private string qaacPath, opusPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
-                       ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
+                       ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat, bassPath,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath, aviSynthPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
@@ -120,6 +120,7 @@ namespace MeGUI
             aftenPath = getDownloadPath(@"tools\aften\aften.exe");
             flacPath = getDownloadPath(@"tools\flac\flac.exe");
             yadifPath = getDownloadPath(@"tools\yadif\yadif.dll");
+            bassPath = getDownloadPath(@"tools\bassaudio\bassaudio.dll");
             vobSubPath = getDownloadPath(@"tools\vobsub\vobsub.dll");
             besplitPath = getDownloadPath(@"tools\besplit\besplit.exe");
             dgavcIndexPath = getDownloadPath(@"tools\dgavcindex\dgavcindex.exe");
@@ -575,6 +576,14 @@ namespace MeGUI
         public string VobSubPath
         {
             get { return vobSubPath; }
+        }
+
+        /// <summary>
+        /// filename and full path of the bassaudio dll
+        /// </summary>
+        public string BassPath
+        {
+            get { return bassPath; }
         }
         
         /// <summary>

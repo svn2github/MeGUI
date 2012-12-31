@@ -189,6 +189,14 @@ namespace MeGUI
                     case "colormatrix": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"ColorMatrix.dll")); break;
                     case "vsfilter": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll")); break;
                     case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
+                    case "bassaudio":
+                        {
+                            arrPath.Add(MainForm.Instance.Settings.BassPath);
+                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.BassPath);
+                            arrPath.Add(System.IO.Path.Combine(strPath, "bass.dll"));
+                            arrPath.Add(System.IO.Path.Combine(strPath, "bass_aac.dll"));
+                            break;
+                        }
                     case "vobsub": arrPath.Add(MainForm.Instance.Settings.VobSubPath); break;
                     case "besplit": arrPath.Add(MainForm.Instance.Settings.BeSplitPath); break;
                     case "avs":
@@ -1053,6 +1061,11 @@ namespace MeGUI
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll"));
             //nicaudio
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll"));
+            //bassaudio
+            arrPath.Add(MainForm.Instance.Settings.BassPath);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.BassPath);
+            arrPath.Add(System.IO.Path.Combine(strPath, "bass.dll"));
+            arrPath.Add(System.IO.Path.Combine(strPath, "bass_aac.dll"));
 #endif
             //undot
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"UnDot.dll"));

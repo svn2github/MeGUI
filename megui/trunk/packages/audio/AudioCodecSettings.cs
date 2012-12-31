@@ -54,7 +54,8 @@ namespace MeGUI
     {
         NicAudio,
         FFAudioSource,
-        DirectShow
+        DirectShow,
+        BassAudio
     };
      
     [
@@ -142,6 +143,8 @@ namespace MeGUI
                     preferredDecoder = AudioDecodingEngine.FFAudioSource;
                 else if (value.Equals("DirectShow"))
                     preferredDecoder = AudioDecodingEngine.DirectShow;
+                else if (value.Equals("BassAudio"))
+                    preferredDecoder = AudioDecodingEngine.BassAudio;
             }
         }
 

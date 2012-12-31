@@ -578,6 +578,26 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             return false;
         }
 
+        private bool OpenSourceWithBassAudio(out StringBuilder sbOpen)
+        {
+            sbOpen = new StringBuilder();
+            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", MainForm.Instance.Settings.BassPath, Environment.NewLine);
+            sbOpen.AppendFormat("BassAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+            _log.LogEvent("Trying to open the file with BassAudioSource()", ImageType.Information);
+            string strErrorText = String.Empty;
+            if (AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
+            {
+                _log.LogEvent("Successfully opened the file with BassAudioSource()", ImageType.Information);
+                return true;
+            }
+            sbOpen = new StringBuilder();
+            if (String.IsNullOrEmpty(strErrorText))
+                _log.LogEvent("Failed opening the file with BassAudioSource()", ImageType.Information);
+            else
+                _log.LogEvent("Failed opening the file with BassAudioSource(). " + strErrorText, ImageType.Information);
+            return false;
+        }
+
         private bool OpenSourceWithDirectShow(out StringBuilder sbOpen, MediaInfoFile oInfo)
         {
             sbOpen = new StringBuilder();
@@ -797,6 +817,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 bFound = OpenSourceWithNicAudio(out script, oInfo, false);
                 if (!bFound)
+                    bFound = OpenSourceWithBassAudio(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithFFAudioSource(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithDirectShow(out script, oInfo);
+            }
+            else if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.BassAudio)
+            {
+                bFound = OpenSourceWithBassAudio(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithNicAudio(out script, oInfo, false);
+                if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
                 if (!bFound)
                     bFound = OpenSourceWithDirectShow(out script, oInfo);
@@ -807,6 +839,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (!bFound)
                     bFound = OpenSourceWithNicAudio(out script, oInfo, false);
                 if (!bFound)
+                    bFound = OpenSourceWithBassAudio(out script);
+                if (!bFound)
                     bFound = OpenSourceWithDirectShow(out script, oInfo);
             }
             else
@@ -814,6 +848,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 bFound = OpenSourceWithDirectShow(out script, oInfo);
                 if (!bFound)
                     bFound = OpenSourceWithNicAudio(out script, oInfo, false);
+                if (!bFound)
+                    bFound = OpenSourceWithBassAudio(out script);
                 if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
             }
