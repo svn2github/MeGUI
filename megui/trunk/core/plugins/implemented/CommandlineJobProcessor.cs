@@ -52,6 +52,7 @@ namespace MeGUI
         protected Thread readFromStdOutThread;
         protected List<string> tempFiles = new List<string>();
         protected bool bRunSecondTime = false;
+        protected bool bWaitForExit = false;
 
         #endregion
 
@@ -157,6 +158,8 @@ namespace MeGUI
                 doExitConfig();
                 StatusUpdate(su);
             }
+
+            bWaitForExit = false;
         }
 
         #region IVideoEncoder overridden Members
@@ -193,6 +196,7 @@ namespace MeGUI
             proc.StartInfo = pstart;
             proc.EnableRaisingEvents = true;
             proc.Exited += new EventHandler(proc_Exited);
+            bWaitForExit = false;
 
             try
             {
@@ -218,10 +222,11 @@ namespace MeGUI
             {
                 try
                 {
+                    bWaitForExit = true;
                     mre.Set(); // if it's paused, then unpause
                     su.WasAborted = true;
                     proc.Kill();
-                    while (!proc.HasExited) // wait until the process has terminated without locking the GUI
+                    while (bWaitForExit) // wait until the process has terminated without locking the GUI
                     {
                         System.Windows.Forms.Application.DoEvents();
                         System.Threading.Thread.Sleep(100);

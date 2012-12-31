@@ -1,3 +1,4 @@
+2258 [Job] improved aborting of Jobs
 2256 [AVS Script Creator] fixed a slight rounding error in the aspect error calculation
 2255 [AVS Script Creator] resize is enabled by default in the profiles (only for new profiles)
      [AVS Script Creator] suggest resolution is automatically pre-selected when doing a resize
