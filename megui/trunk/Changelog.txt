@@ -1,3 +1,8 @@
+2250 [AVS Script Creator] avoid upsizing when resizing a cropped source
+     [AVS Script Creator] added option to enable upsizing in the profile (disabled by default)
+     [AVS Script Creator] added option to select the default mod value in the profile (mod16 by default)
+     [AVS Script Creator] adjusted "Clever (TM) anamorphic encoding" so the new mod values are used
+     [OneClick] obey the new AVS Script Creator settings
 2249 [HD Streams Extractor] fixed handling of seamless branching EVO files
 2248 [OneClick] warn if identical tracks are about to be processed
 2247 [AVS Script Creator] hide "Aspect Ratio Error" when doing an anamorphic encoding

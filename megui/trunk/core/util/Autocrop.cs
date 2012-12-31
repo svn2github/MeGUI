@@ -28,18 +28,18 @@ namespace MeGUI.core.util
 {
     public class Autocrop
     {
-        public static bool autocrop(out CropValues cropValues, IVideoReader reader, bool signalAR, mod16Method cropMethod)
+        public static bool autocrop(out CropValues cropValues, IVideoReader reader, bool signalAR, mod16Method cropMethod, modValue mValue)
         {
             cropValues = Autocrop.autocrop(reader);
 
             if (signalAR)
             {
                 if (cropMethod == mod16Method.overcrop)
-                    ScriptServer.overcrop(ref cropValues);
+                    ScriptServer.overcrop(ref cropValues, mValue);
                 else if (cropMethod == mod16Method.mod4Horizontal)
                     ScriptServer.cropMod4Horizontal(ref cropValues);
                 else if (cropMethod == mod16Method.undercrop)
-                    ScriptServer.undercrop(ref cropValues);
+                    ScriptServer.undercrop(ref cropValues, mValue);
             }
 
             if (cropValues.left < 0)

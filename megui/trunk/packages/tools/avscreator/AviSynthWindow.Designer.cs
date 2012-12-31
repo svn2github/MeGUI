@@ -56,8 +56,9 @@ namespace MeGUI
             System.Windows.Forms.Label label5;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AviSynthWindow));
             this.resNCropGroupbox = new System.Windows.Forms.GroupBox();
+            this.lblAspectError = new System.Windows.Forms.Label();
             this.lblAR = new System.Windows.Forms.Label();
-            this.suggestMod = new System.Windows.Forms.ComboBox();
+            this.modValueBox = new System.Windows.Forms.ComboBox();
             this.chAutoPreview = new System.Windows.Forms.CheckBox();
             this.resize = new System.Windows.Forms.CheckBox();
             this.suggestResolution = new System.Windows.Forms.CheckBox();
@@ -72,8 +73,12 @@ namespace MeGUI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.optionsTab = new System.Windows.Forms.TabPage();
             this.gbOutput = new System.Windows.Forms.GroupBox();
+            this.videoOutput = new MeGUI.FileBar();
             this.label7 = new System.Windows.Forms.Label();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
+            this.input = new MeGUI.FileBar();
+            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.reopenOriginal = new System.Windows.Forms.Button();
             this.mod16Box = new System.Windows.Forms.ComboBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
@@ -130,12 +135,7 @@ namespace MeGUI
             this.onSaveLoadScript = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.previewAvsButton = new System.Windows.Forms.Button();
-            this.lblAspectError = new System.Windows.Forms.Label();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.videoOutput = new MeGUI.FileBar();
-            this.input = new MeGUI.FileBar();
-            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -211,7 +211,7 @@ namespace MeGUI
             | System.Windows.Forms.AnchorStyles.Right)));
             this.resNCropGroupbox.Controls.Add(this.lblAspectError);
             this.resNCropGroupbox.Controls.Add(this.lblAR);
-            this.resNCropGroupbox.Controls.Add(this.suggestMod);
+            this.resNCropGroupbox.Controls.Add(this.modValueBox);
             this.resNCropGroupbox.Controls.Add(this.chAutoPreview);
             this.resNCropGroupbox.Controls.Add(this.resize);
             this.resNCropGroupbox.Controls.Add(this.suggestResolution);
@@ -231,6 +231,16 @@ namespace MeGUI
             this.resNCropGroupbox.TabStop = false;
             this.resNCropGroupbox.Text = "Crop && Resize";
             // 
+            // lblAspectError
+            // 
+            this.lblAspectError.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblAspectError.Location = new System.Drawing.Point(340, 122);
+            this.lblAspectError.Name = "lblAspectError";
+            this.lblAspectError.Size = new System.Drawing.Size(75, 21);
+            this.lblAspectError.TabIndex = 14;
+            this.lblAspectError.Text = "0.00000%";
+            this.lblAspectError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // lblAR
             // 
             this.lblAR.AutoSize = true;
@@ -240,20 +250,20 @@ namespace MeGUI
             this.lblAR.TabIndex = 13;
             this.lblAR.Text = "Aspect Ratio Error";
             // 
-            // suggestMod
+            // modValueBox
             // 
-            this.suggestMod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.suggestMod.FormattingEnabled = true;
-            this.suggestMod.Items.AddRange(new object[] {
-            "mod2",
-            "mod4",
+            this.modValueBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.modValueBox.FormattingEnabled = true;
+            this.modValueBox.Items.AddRange(new object[] {
+            "mod16",
             "mod8",
-            "mod16"});
-            this.suggestMod.Location = new System.Drawing.Point(340, 81);
-            this.suggestMod.Name = "suggestMod";
-            this.suggestMod.Size = new System.Drawing.Size(75, 21);
-            this.suggestMod.TabIndex = 11;
-            this.suggestMod.SelectedIndexChanged += new System.EventHandler(this.suggestResolution_CheckedChanged);
+            "mod4",
+            "mod2"});
+            this.modValueBox.Location = new System.Drawing.Point(340, 81);
+            this.modValueBox.Name = "modValueBox";
+            this.modValueBox.Size = new System.Drawing.Size(75, 21);
+            this.modValueBox.TabIndex = 11;
+            this.modValueBox.SelectedIndexChanged += new System.EventHandler(this.suggestResolution_CheckedChanged);
             // 
             // chAutoPreview
             // 
@@ -456,6 +466,22 @@ namespace MeGUI
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
             // 
+            // videoOutput
+            // 
+            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoOutput.Filename = "";
+            this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
+            this.videoOutput.FilterIndex = 0;
+            this.videoOutput.FolderMode = false;
+            this.videoOutput.Location = new System.Drawing.Point(96, 17);
+            this.videoOutput.Name = "videoOutput";
+            this.videoOutput.ReadOnly = true;
+            this.videoOutput.SaveMode = true;
+            this.videoOutput.Size = new System.Drawing.Size(348, 26);
+            this.videoOutput.TabIndex = 7;
+            this.videoOutput.Title = null;
+            // 
             // label7
             // 
             this.label7.Location = new System.Drawing.Point(8, 24);
@@ -485,6 +511,48 @@ namespace MeGUI
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Input";
             // 
+            // input
+            // 
+            this.input.AllowDrop = true;
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Filename = "";
+            this.input.Filter = resources.GetString("input.Filter");
+            this.input.FilterIndex = 6;
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(96, 15);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(348, 26);
+            this.input.TabIndex = 1;
+            this.input.Title = "Select a source file";
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
+            // 
+            // avsProfile
+            // 
+            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.avsProfile.Location = new System.Drawing.Point(96, 147);
+            this.avsProfile.Name = "avsProfile";
+            this.avsProfile.ProfileSet = "AviSynth";
+            this.avsProfile.Size = new System.Drawing.Size(348, 22);
+            this.avsProfile.TabIndex = 22;
+            this.avsProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
+            // 
+            // arChooser
+            // 
+            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(96, 76);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(214, 29);
+            this.arChooser.TabIndex = 21;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
+            // 
             // reopenOriginal
             // 
             this.reopenOriginal.AutoSize = true;
@@ -502,11 +570,11 @@ namespace MeGUI
             this.mod16Box.Enabled = false;
             this.mod16Box.FormattingEnabled = true;
             this.mod16Box.Items.AddRange(new object[] {
-            "Resize to mod16",
-            "Overcrop to achieve mod16",
+            "Resize to selected mod",
+            "Overcrop to achieve selected mod",
             "Encode non-mod16",
             "Crop mod4 horizontally",
-            "Undercrop to achieve mod16"});
+            "Undercrop to achieve selected mod"});
             this.mod16Box.Location = new System.Drawing.Point(222, 119);
             this.mod16Box.Name = "mod16Box";
             this.mod16Box.Size = new System.Drawing.Size(174, 21);
@@ -1124,16 +1192,6 @@ namespace MeGUI
             this.previewAvsButton.Text = "Preview AVS Script";
             this.previewAvsButton.Click += new System.EventHandler(this.previewButton_Click);
             // 
-            // lblAspectError
-            // 
-            this.lblAspectError.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblAspectError.Location = new System.Drawing.Point(340, 122);
-            this.lblAspectError.Name = "lblAspectError";
-            this.lblAspectError.Size = new System.Drawing.Size(75, 21);
-            this.lblAspectError.TabIndex = 14;
-            this.lblAspectError.Text = "0.00000%";
-            this.lblAspectError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1144,64 +1202,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 17;
-            // 
-            // videoOutput
-            // 
-            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoOutput.Filename = "";
-            this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
-            this.videoOutput.FilterIndex = 0;
-            this.videoOutput.FolderMode = false;
-            this.videoOutput.Location = new System.Drawing.Point(96, 17);
-            this.videoOutput.Name = "videoOutput";
-            this.videoOutput.ReadOnly = true;
-            this.videoOutput.SaveMode = true;
-            this.videoOutput.Size = new System.Drawing.Size(348, 26);
-            this.videoOutput.TabIndex = 7;
-            this.videoOutput.Title = null;
-            // 
-            // input
-            // 
-            this.input.AllowDrop = true;
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.input.Filename = "";
-            this.input.Filter = resources.GetString("input.Filter");
-            this.input.FilterIndex = 6;
-            this.input.FolderMode = false;
-            this.input.Location = new System.Drawing.Point(96, 15);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(348, 26);
-            this.input.TabIndex = 1;
-            this.input.Title = "Select a source file";
-            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
-            // 
-            // avsProfile
-            // 
-            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.avsProfile.Location = new System.Drawing.Point(96, 147);
-            this.avsProfile.Name = "avsProfile";
-            this.avsProfile.ProfileSet = "AviSynth";
-            this.avsProfile.Size = new System.Drawing.Size(348, 22);
-            this.avsProfile.TabIndex = 22;
-            this.avsProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
-            // 
-            // arChooser
-            // 
-            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(96, 76);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.SelectedIndex = 0;
-            this.arChooser.Size = new System.Drawing.Size(214, 29);
-            this.arChooser.TabIndex = 21;
-            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
             // 
             // AviSynthWindow
             // 
@@ -1339,7 +1339,7 @@ namespace MeGUI
         private Label label8;
         private ComboBox cbCharset;
         private CheckBox nvResize;
-        private ComboBox suggestMod;
+        private ComboBox modValueBox;
         private Label lblAR;
         private Label lblAspectError;
     }

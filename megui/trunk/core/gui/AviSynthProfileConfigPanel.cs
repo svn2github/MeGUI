@@ -44,22 +44,28 @@ namespace MeGUI.core.gui
             get
             {
                 mod16Method method = (mod16Method)mod16Box.SelectedIndex;
+                modValue mValue = (modValue)modValueBox.SelectedIndex;
+
                 if (!signalAR.Checked)
                     method = mod16Method.none;
                 return new AviSynthSettings(avisynthScript.Text,
                     (ResizeFilterType)(resizeFilterType.SelectedItem as EnumProxy).RealValue,
                     resize.Checked,
+                    upsize.Checked,
                     (DenoiseFilterType)(noiseFilterType.SelectedItem as EnumProxy).RealValue,
                     noiseFilter.Checked,
                     mpeg2Deblocking.Checked,
                     colourCorrect.Checked,
                     method,
-                    dss2.Checked);
+                    dss2.Checked,
+                    mValue
+                    );
             }
             set
             {
                 avisynthScript.Text = value.Template;
                 resize.Checked = value.Resize;
+                upsize.Checked = value.Upsize;
                 resizeFilterType.SelectedItem = EnumProxy.Create(value.ResizeMethod);
                 noiseFilterType.SelectedItem = EnumProxy.Create(value.DenoiseMethod);
                 noiseFilter.Checked = value.Denoise;
@@ -69,6 +75,7 @@ namespace MeGUI.core.gui
                 mod16Box.Enabled = signalAR.Checked;
                 mod16Box.SelectedIndex = (int)value.Mod16Method;
                 dss2.Checked = value.DSS2;
+                modValueBox.SelectedIndex = (int)value.ModValue;
             }
         }
 
