@@ -777,7 +777,7 @@ namespace MeGUI
             if (arChooser.Value.HasValue)
             {
                 Sar s = arChooser.Value.Value.ToSar((int)file.VideoInfo.Width, (int)file.VideoInfo.Height);
-                iWidth = (int)((decimal)iWidth * s.ar);
+                iWidth = (int)Math.Round(((decimal)iWidth * s.X / s.Y));
             }
 
             if (iHeight <= 0 || iWidth <= 0 || verticalResolution.Value <= 0 || horizontalResolution.Value <= 0)
