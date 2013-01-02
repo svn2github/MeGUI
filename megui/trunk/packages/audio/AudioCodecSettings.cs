@@ -119,7 +119,7 @@ namespace MeGUI
 			this.bitrate = bitrate;
 			delay = 0;
 			delayEnabled = false;
-			autoGain = true;
+			autoGain = false;
             applyDRC = false;
             sampleRateType = 0;
             normalize = 100;
