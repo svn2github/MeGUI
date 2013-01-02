@@ -29,7 +29,7 @@ namespace MeGUI.core.util
     {
         /// <summary>
 		/// if enabled, each change of the horizontal resolution triggers this method
-		/// it calculates the ideal mod 16 vertical resolution that matches the desired horizontal resolution
+		/// it calculates the ideal mod vertical resolution that matches the desired horizontal resolution
 		/// </summary>
 		/// <param name="readerHeight">height of the source</param>
 		/// <param name="readerWidth">width of the source</param>

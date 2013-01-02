@@ -771,23 +771,37 @@ namespace MeGUI
                 return;
             }
 
-            int iHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
-            int iWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-
+            // get input dimension with SAR 1:1
+            int inputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+            int inputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
             if (arChooser.Value.HasValue)
             {
                 Sar s = arChooser.Value.Value.ToSar((int)file.VideoInfo.Width, (int)file.VideoInfo.Height);
-                iWidth = (int)Math.Round(((decimal)iWidth * s.X / s.Y));
+                inputWidth = (int)Math.Round(((decimal)inputWidth * s.X / s.Y));
             }
 
-            if (iHeight <= 0 || iWidth <= 0 || verticalResolution.Value <= 0 || horizontalResolution.Value <= 0)
+            // get output dimension with SAR 1:1
+            int outputHeight = (int)verticalResolution.Value;
+            int outputWidth = (int)horizontalResolution.Value;
+            if (!resize.Checked)
+            {
+                outputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+                outputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+            }
+            if (signalAR.Checked && suggestedDar.HasValue)
+            {
+                Sar s = suggestedDar.Value.ToSar(outputWidth, outputHeight);
+                outputWidth = (int)Math.Round(((decimal)outputWidth * s.X / s.Y));
+            }
+
+            if (inputHeight <= 0 || inputWidth <= 0 || outputHeight <= 0 || outputWidth <= 0)
             {
                 lblAspectError.BackColor = System.Drawing.SystemColors.Window;
                 lblAspectError.Text = "0.00000%";
                 return;
             }
 
-            double aspectError = (iHeight * (double)horizontalResolution.Value) / (iWidth * (double)verticalResolution.Value) - 1;
+            double aspectError = (inputHeight * (double)outputWidth) / (inputWidth * (double)outputHeight) - 1;
             lblAspectError.Text = String.Format("{0:0.00000%}", aspectError);
             if (Math.Abs(aspectError) * 100 <= mainForm.Settings.AcceptableAspectErrorPercent)
                 lblAspectError.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -808,7 +822,7 @@ namespace MeGUI
             if (sender != null && e != null)
                 showScript(false);
 
-            if (file != null && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < horizontalResolution.Value)
+            if (resize.Checked && file != null && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < horizontalResolution.Value)
                 changeNumericUpDownColor(horizontalResolution, true);
             else
                 changeNumericUpDownColor(horizontalResolution, false);
@@ -821,7 +835,7 @@ namespace MeGUI
             if (sender != null && e != null)
                 showScript(false);
 
-            if (file != null && (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom < verticalResolution.Value)
+            if (resize.Checked && file != null && (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom < verticalResolution.Value)
                 changeNumericUpDownColor(verticalResolution, true);
             else
                 changeNumericUpDownColor(verticalResolution, false);
@@ -870,6 +884,22 @@ namespace MeGUI
 				this.cropRight.Enabled = true;
 				this.cropBottom.Enabled = true;
 				sendCropValues();
+
+                if (file != null)
+                {
+                    int inputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+                    int inputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+                    if (!resize.Checked)
+                    {
+                        verticalResolution.Value = inputHeight;
+                        horizontalResolution.Value = inputWidth;
+                    }
+                    if (!bAllowUpsizing)
+                    {
+                        verticalResolution.Maximum = inputHeight;
+                        horizontalResolution.Maximum = inputWidth;
+                    }
+                }
 			}
 			else
 			{
@@ -927,7 +957,6 @@ namespace MeGUI
                     mod16Box.SelectedIndex = 0;
                 mod16Box_SelectedIndexChanged(null, null);
                 suggestResolution_CheckedChanged(null, null);
-                lblAspectError.Visible = lblAR.Visible = false;
             }
             else
             {
@@ -935,7 +964,6 @@ namespace MeGUI
                 this.suggestResolution.Enabled = true;
                 this.suggestResolution.Checked = true;
                 mod16Box_SelectedIndexChanged(null, null);
-                lblAspectError.Visible = lblAR.Visible = true;
             }
             if (sender != null && e != null)
                 showScript(false);
@@ -1054,10 +1082,11 @@ namespace MeGUI
                 // remove upsizing if not allowed
                 if (!bAllowUpsizing && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < hres)
                     hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-                else if (!horizontalResolution.Enabled && (int)file.VideoInfo.Width - Cropping.left - Cropping.right >= hres + mod)
+                else if (!horizontalResolution.Enabled) // remove upsizing or undersizing if value cannot be changed
                     hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-
-                if (hres % mod != 0)
+                   
+                // correct hres if not mod compliant and resize is enabled
+                if (resize.Checked && hres % mod != 0)
                 {
                     int diff = hres % mod;
                     if (hres - diff > 0)
@@ -1077,7 +1106,7 @@ namespace MeGUI
                 {
                     this.verticalResolution.Enabled = false;
                     if (scriptVerticalResolution > verticalResolution.Maximum)
-                    { 
+                    {
                         // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
                         hres = (int)horizontalResolution.Value;
                         do
@@ -1097,7 +1126,11 @@ namespace MeGUI
                         showScript(false);
                 }
                 else
+                {
                     this.verticalResolution.Enabled = resize.Checked;
+                    if (!verticalResolution.Enabled)
+                        verticalResolution.Value = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+                }
 
                 if (signalAR)
                     this.suggestedDar = suggestedDar;
@@ -1305,7 +1338,7 @@ namespace MeGUI
             if (Mod16Method == mod16Method.overcrop)
                 crop.Text = "Crop (will be rounded up to selected mod)";
             else if (Mod16Method == mod16Method.undercrop)
-                crop.Text = "Crop (will be rounded down to selected mod)";
+                crop.Text = "Crop (will be rounded down to sel. mod)";
             else
                 crop.Text = "Crop";
             crop_CheckedChanged(null, null);
@@ -1332,6 +1365,7 @@ namespace MeGUI
             }
 
             checkModValueBox();
+            calcAspectError();
 
             if (sender != null && e != null)
                 showScript(false);

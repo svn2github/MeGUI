@@ -1,3 +1,5 @@
+2262 [AVS Script Creator] show "Aspect Ratio Error" when doing an anamorphic encoding
+                          some cosmetic sizing & cropping enhancements
 2261 [Update] added system proxy. Patch by Shevek
 2260 [AVS Script Creator] changed "point of view" of the aspect error calculation
 2259 [Audio Encoder] added BassAudioSource() as decoder
