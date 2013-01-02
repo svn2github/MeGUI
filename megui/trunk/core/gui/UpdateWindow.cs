@@ -672,6 +672,8 @@ namespace MeGUI
                             return meGUISettings.OggEnc2Path;
                         case ("yadif"):
                             return meGUISettings.YadifPath;
+                        case ("bassaudio"):
+                            return meGUISettings.BassPath;
                         case ("vobsub"):
                             return meGUISettings.VobSubPath;
                         case ("besplit"):
