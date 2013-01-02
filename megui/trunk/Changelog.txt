@@ -1,3 +1,4 @@
+2265 [MP4 Muxer] improved iOS compatibility when using multiple audio/subtitle tracks. Patch #65 by Eli Bildirici
 2264 [Worker] a temporary worker will always be deleted after a job is finished (successful or not)
 2263 [Audio] changed default value of the normalization to disabled
 2262 [AVS Script Creator] show "Aspect Ratio Error" when doing an anamorphic encoding

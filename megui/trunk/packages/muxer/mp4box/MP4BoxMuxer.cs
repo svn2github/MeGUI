@@ -268,6 +268,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         sb.Append(":name=" + settings.VideoName);
                     sb.Append("\"");
                 }
+                int trackCount = 0;
                 foreach (object o in settings.AudioStreams)
                 {
                     MuxStream stream = (MuxStream)o;
@@ -315,8 +316,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         sb.Append(":name=" + stream.name);
                     if (stream.delay != 0)
                         sb.AppendFormat(":delay={0}", stream.delay);
+                    sb.Append(":group=1");
+                    if (trackCount > 0)
+                        sb.Append(":disabled");
                     sb.Append("\"");
+                    trackCount++;
                 }
+                trackCount = 0;
                 foreach (object o in settings.SubtitleStreams)
                 {
                     MuxStream stream = (MuxStream)o;
@@ -335,8 +341,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(":name=" + stream.name);
                     if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                    {
                         sb.Append(":hdlr=sbtl:layout=-1:group=2");
+                        if (trackCount > 0)
+                            sb.Append(":disabled");
+                    }
                     sb.Append("\"");
+                    trackCount++;
                 }
 
                 if (!string.IsNullOrEmpty(settings.ChapterFile))
@@ -345,6 +356,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         FileUtil.CreateXMLFromOGGChapFile(settings.ChapterFile);
                         sb.Append(" -add \"" + Path.Combine(Path.GetDirectoryName(settings.ChapterFile), Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml:chap") + "\"");
+                        job.FilesToDelete.Add(Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml");
                     }
                     else
                         sb.Append(" -chap \"" + settings.ChapterFile + "\"");
