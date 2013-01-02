@@ -1,3 +1,7 @@
+2267 [AVS Script Creator] improved accuracy of the "Aspect Ratio Error"
+     [AVS Script Creator] improved accuracy of the aspect ratio when using "Clever (TM) anamorphic encoding"
+     [AVS Script Creator] internal optimizations
+     [OneClick] implemented the AVS Script Creator changes
 2266 [Audio Encoder] added BassAudioSource() as decoder. Part II
 2265 [MP4 Muxer] improved iOS compatibility when using multiple audio/subtitle tracks. Patch #65 by Eli Bildirici
 2264 [Worker] a temporary worker will always be deleted after a job is finished (successful or not)

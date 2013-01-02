@@ -42,37 +42,36 @@ namespace MeGUI.core.util
         /// <param name="mod">the MOD value</param>
 		/// <returns>the suggested horizontal resolution</returns>
 		public static int suggestResolution(double readerHeight, double readerWidth, double customDAR, CropValues cropping, int horizontalResolution,
-			bool signalAR, int acceptableAspectError, out Dar? dar, int mod)
+			bool signalAR, out Dar? dar, int mod)
 		{
-            double fractionOfWidth = (readerWidth - (double)cropping.left - (double)cropping.right) / readerWidth;
-            double inputWidthOnHeight = (readerWidth - (double)cropping.left - (double)cropping.right) /
-                                          (readerHeight - (double)cropping.top - (double)cropping.bottom);
-            double sourceHorizontalResolution = readerHeight * customDAR * fractionOfWidth;
-            double sourceVerticalResolution = readerHeight - (double)cropping.top - (double)cropping.bottom;
-            double realAspectRatio = sourceHorizontalResolution / sourceVerticalResolution; // the real aspect ratio of the video
-            realAspectRatio = getAspectRatio(realAspectRatio, acceptableAspectError); // Constrains DAR to a set of limited possibilities
-			double resizedVerticalResolution = (double)horizontalResolution / realAspectRatio;
+            decimal fractionOfWidth = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) / (decimal)readerWidth;
+            decimal inputWidthOnHeight = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) /
+                                          ((decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom);
+            decimal sourceHorizontalResolution = (decimal)readerHeight * (decimal)customDAR * fractionOfWidth;
+            decimal sourceVerticalResolution = (decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom;
+            decimal realAspectRatio = sourceHorizontalResolution / sourceVerticalResolution; // the real aspect ratio of the video
+			decimal resizedVerticalResolution = (decimal)horizontalResolution / realAspectRatio;
 
-            int scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (double)mod)) * mod;
+            int scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod)) * mod;
 
             if (signalAR)
 			{
-                resizedVerticalResolution = (double)horizontalResolution / inputWidthOnHeight; // Scale vertical resolution appropriately
-                scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (double)mod) * mod);
+                resizedVerticalResolution = (decimal)horizontalResolution / inputWidthOnHeight; // Scale vertical resolution appropriately
+                scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod) * mod);
 
                 int parX = 0;
                 int parY = 0;
-                double distance = 999999;
-                for (int i = 1; i < 101; i++)
+                decimal distance = 999999;
+                for (int i = 1; i < 1001; i++)
                 {
-                    // We create a fraction with integers, and then convert back to a double, and see how big the rounding error is
-                    double fractionApproximation = (double)Math.Round(realAspectRatio * ((double)i)) / (double)i;
-                    double approximationDifference = Math.Abs(realAspectRatio - fractionApproximation);
+                    // We create a fraction with integers, and then convert back to a decimal, and see how big the rounding error is
+                    decimal fractionApproximation = (decimal)Math.Round(realAspectRatio * ((decimal)i)) / (decimal)i;
+                    decimal approximationDifference = Math.Abs(realAspectRatio - fractionApproximation);
                     if (approximationDifference < distance)
                     {
                         distance = approximationDifference;
                         parY = i;
-                        parX = (int)Math.Round(realAspectRatio * ((double)parY));
+                        parX = (int)Math.Round(realAspectRatio * ((decimal)parY));
                     }
                 }
                 Debug.Assert(parX > 0 && parY > 0);
@@ -85,33 +84,6 @@ namespace MeGUI.core.util
                 dar = null;
 				return scriptVerticalResolution;
 			}
-		}
-		
-		/// <summary>
-		/// finds the aspect ratio closest to the one giving as parameter (which is an approximation using the selected DAR for the source and the cropping values)
-		/// </summary>
-		/// <param name="calculatedAR">the aspect ratio to be approximated</param>
-		/// <returns>the aspect ratio that most closely matches the input</returns>
-		private static double getAspectRatio(double calculatedAR, int acceptableAspectErrorPercent)
-		{
-			double[] availableAspectRatios = {1.0, 1.33333, 1.66666, 1.77778, 1.85, 2.35};
-			double[] distances = new double[availableAspectRatios.Length];
-			double minDist = 1000.0;
-			double realAspectRatio = 1.0;
-			foreach (double d in availableAspectRatios)
-			{
-                double dist = Math.Abs(d - calculatedAR);
-				if (dist < minDist)
-				{
-					minDist = dist;
-					realAspectRatio = d;
-				}
-			}
-            double aspectError = realAspectRatio / calculatedAR;
-            if (Math.Abs(aspectError - 1.0) * 100.0 < acceptableAspectErrorPercent)
-                return realAspectRatio;
-            else
-                return calculatedAR;
 		}
 
         /// <summary>

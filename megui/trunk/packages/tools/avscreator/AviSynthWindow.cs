@@ -59,12 +59,11 @@ namespace MeGUI
         public AviSynthWindow(MainForm mainForm)
         {
             scriptRefresh--;
+            eventsOn = false;
             this.mainForm = mainForm;
 			InitializeComponent();
-            avsProfile.Manager = MainForm.Instance.Profiles;
 
             this.controlsToDisable = new List<Control>();
-
             this.controlsToDisable.Add(reopenOriginal);
             this.controlsToDisable.Add(filtersGroupbox);
             this.controlsToDisable.Add(deinterlacingGroupBox);
@@ -79,7 +78,6 @@ namespace MeGUI
             this.controlsToDisable.Add(avisynthScript);
             this.controlsToDisable.Add(openDLLButton);
             this.controlsToDisable.Add(dgOptions);
-
             enableControls(false);
             script = new StringBuilder();
 
@@ -89,7 +87,6 @@ namespace MeGUI
             this.noiseFilterType.Items.Clear();
             this.noiseFilterType.DataSource = ScriptServer.ListOfDenoiseFilterType;
             this.noiseFilterType.BindingContext = new BindingContext();
-
             this.deintFieldOrder.Items.Clear();
             this.deintFieldOrder.DataSource = ScriptServer.ListOfFieldOrders;
             this.deintFieldOrder.BindingContext = new BindingContext();
@@ -99,16 +96,13 @@ namespace MeGUI
             this.cbNvDeInt.Items.Clear();
             this.cbNvDeInt.DataSource = ScriptServer.ListOfNvDeIntType;
             this.cbNvDeInt.BindingContext = new BindingContext();
+            
             deintFieldOrder.SelectedIndex = -1;
             deintSourceType.SelectedIndex = -1;
             cbNvDeInt.SelectedIndex = 0;
             cbCharset.SelectedIndex = 0;
             modValueBox.SelectedIndex = 0;
             bAllowUpsizing = false;
-
-            this.noiseFilterType.SelectedIndexChanged += new System.EventHandler(this.noiseFilterType_SelectedIndexChanged);
-            this.resizeFilterType.SelectedIndexChanged += new System.EventHandler(this.resizeFilterType_SelectedIndexChanged);
-            this.cbNvDeInt.SelectedIndexChanged += new System.EventHandler(this.cbNvDeInt_SelectedIndexChanged);
 
             this.originalScript = String.Empty;
             this.isPreviewMode = false;
@@ -121,7 +115,9 @@ namespace MeGUI
 			this.cropBottom.Value = 0;
 
             deinterlaceType.DataSource = new DeinterlaceFilter[] { new DeinterlaceFilter("Do nothing (source not detected)", "#blank deinterlace line") };
-            ProfileChanged(null, null);
+
+            eventsOn = true;
+            avsProfile.Manager = MainForm.Instance.Profiles;
 
             showScript(true);
 		}
@@ -140,6 +136,7 @@ namespace MeGUI
 		{
             scriptRefresh--;
             openVideoSource(videoInput, null);
+            updateEverything(false);
             showScript(true);
 		}
 
@@ -148,6 +145,7 @@ namespace MeGUI
         {
             scriptRefresh--;
             openVideoSource(videoInput, indexFile);
+            updateEverything(false);
             showScript(true);
         }
 
@@ -169,7 +167,7 @@ namespace MeGUI
             openVideoSource(input.Filename, null);
             if (chAutoPreview.Checked == true)
                 previewButton_Click(sender, args);
-            signalAR_Checkedchanged(null, null);
+            updateEverything(false);
             showScript(true);
 		}
 
@@ -258,9 +256,19 @@ namespace MeGUI
             if (deinterlace.Checked && deinterlaceType.SelectedItem is DeinterlaceFilter)
                 deinterlaceLines = ((DeinterlaceFilter)deinterlaceType.SelectedItem).Script;
             cropLine = ScriptServer.GetCropLine(crop.Checked, Cropping);
+            
+            // resize options
+            int iWidth = (int)horizontalResolution.Maximum;
+            int iHeight = (int)verticalResolution.Maximum;
+            if (file != null)
+            {
+                iWidth = (int)file.VideoInfo.Width;
+                iHeight = (int)file.VideoInfo.Height;
+            }
             if (!nvResize.Checked)
                 resizeLine = ScriptServer.GetResizeLine(resize.Checked, (int)horizontalResolution.Value, (int)verticalResolution.Value, 0, 0, (ResizeFilterType)(resizeFilterType.SelectedItem as EnumProxy).RealValue,
-                                                        crop.Checked, Cropping, (int)horizontalResolution.Maximum, (int)verticalResolution.Maximum);
+                                                        crop.Checked, Cropping, iWidth, iHeight);
+
             denoiseLines = ScriptServer.GetDenoiseLines(noiseFilter.Checked, (DenoiseFilterType)(noiseFilterType.SelectedItem as EnumProxy).RealValue);
 
             string newScript = ScriptServer.CreateScriptFromTemplate(GetProfileSettings().Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
@@ -387,7 +395,6 @@ namespace MeGUI
                     break;
             }
             setSourceInterface();
-            calcAspectError();
         }
 		
         /// <summary>
@@ -415,9 +422,6 @@ namespace MeGUI
         /// </summary>
         private void setSourceInterface()
         {
-            if (Mod16Method.Equals(mod16Method.none)) 
-                mod16Box.SelectedIndex = 0;
-
             switch (this.sourceType)
             {            
                 case PossibleSources.d2v:
@@ -499,7 +503,6 @@ namespace MeGUI
                     this.nvResize.Checked = false;
                     this.cbNvDeInt.SelectedIndex = 0;
                     this.tabSources.SelectedTab = tabPage3;
-                    showScript(false);
                     break;
             }
         }
@@ -727,6 +730,7 @@ namespace MeGUI
             enableControls(videoLoaded);
             if (videoLoaded)
             {
+                eventsOn = false;
                 this.input.Filename = strSourceFileName;
                 file = player.File;
                 reader = player.Reader;
@@ -735,13 +739,6 @@ namespace MeGUI
                     this.tvTypeLabel.Text = "PAL";
                 else
                     this.tvTypeLabel.Text = "NTSC";
-                if (!bAllowUpsizing)
-                {
-                    horizontalResolution.Maximum = file.VideoInfo.Width;
-                    verticalResolution.Maximum = file.VideoInfo.Height;
-                }
-                else
-                    horizontalResolution.Maximum = verticalResolution.Maximum = 9999;
                 horizontalResolution.Value = file.VideoInfo.Width;
                 verticalResolution.Value = file.VideoInfo.Height;
                 if (File.Exists(strSourceFileName))
@@ -754,11 +751,7 @@ namespace MeGUI
 
                 cropLeft.Maximum = cropRight.Maximum = file.VideoInfo.Width / 2;
                 cropTop.Maximum = cropBottom.Maximum = file.VideoInfo.Height / 2;
-                /// Commented out to ensure to keep the source file resolution when opening it
-                /// if (resize.Enabled && resize.Checked)
-                ///    suggestResolution.Checked = true;
-                /// --------------------------------------------------------------------------
-                showScript(false);
+                eventsOn = true;
             }
 		}
 
@@ -773,16 +766,16 @@ namespace MeGUI
 
             // get input dimension with SAR 1:1
             int inputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
-            int inputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+            decimal inputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
             if (arChooser.Value.HasValue)
             {
                 Sar s = arChooser.Value.Value.ToSar((int)file.VideoInfo.Width, (int)file.VideoInfo.Height);
-                inputWidth = (int)Math.Round(((decimal)inputWidth * s.X / s.Y));
+                inputWidth = inputWidth * s.X / s.Y;
             }
 
             // get output dimension with SAR 1:1
             int outputHeight = (int)verticalResolution.Value;
-            int outputWidth = (int)horizontalResolution.Value;
+            decimal outputWidth = (int)horizontalResolution.Value;
             if (!resize.Checked)
             {
                 outputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
@@ -790,8 +783,8 @@ namespace MeGUI
             }
             if (signalAR.Checked && suggestedDar.HasValue)
             {
-                Sar s = suggestedDar.Value.ToSar(outputWidth, outputHeight);
-                outputWidth = (int)Math.Round(((decimal)outputWidth * s.X / s.Y));
+                Sar s = suggestedDar.Value.ToSar((int)outputWidth, outputHeight);
+                outputWidth = outputWidth * s.X / s.Y;
             }
 
             if (inputHeight <= 0 || inputWidth <= 0 || outputHeight <= 0 || outputWidth <= 0)
@@ -801,7 +794,7 @@ namespace MeGUI
                 return;
             }
 
-            double aspectError = (inputHeight * (double)outputWidth) / (inputWidth * (double)outputHeight) - 1;
+            decimal aspectError = (inputHeight * outputWidth) / (inputWidth * outputHeight) - 1;
             lblAspectError.Text = String.Format("{0:0.00000%}", aspectError);
             if (Math.Abs(aspectError) * 100 <= mainForm.Settings.AcceptableAspectErrorPercent)
                 lblAspectError.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -812,37 +805,7 @@ namespace MeGUI
 		#endregion
 
 		#region updown
-		private void horizontalResolution_ValueChanged(object sender, EventArgs e)
-		{
-            if (!eventsOn)
-                return;
-
-            suggestResolution_CheckedChanged(null, null);
-            chAutoPreview_CheckedChanged(null, null);
-            if (sender != null && e != null)
-                showScript(false);
-
-            if (resize.Checked && file != null && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < horizontalResolution.Value)
-                changeNumericUpDownColor(horizontalResolution, true);
-            else
-                changeNumericUpDownColor(horizontalResolution, false);
-            calcAspectError();
-		}
-
-		private void verticalResolution_ValueChanged(object sender, EventArgs e)
-		{
-            chAutoPreview_CheckedChanged(null, null);
-            if (sender != null && e != null)
-                showScript(false);
-
-            if (resize.Checked && file != null && (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom < verticalResolution.Value)
-                changeNumericUpDownColor(verticalResolution, true);
-            else
-                changeNumericUpDownColor(verticalResolution, false);
-            calcAspectError();
-		}
-
-        private void changeNumericUpDownColor(NumericUpDown oControl, bool bMarkRed)
+		private void changeNumericUpDownColor(NumericUpDown oControl, bool bMarkRed)
         {
             if (oControl.Enabled)
             {
@@ -875,49 +838,6 @@ namespace MeGUI
 		#endregion
 
 		#region checkboxes
-		private void crop_CheckedChanged(object sender, EventArgs e)
-		{
-			if (crop.Checked)
-			{
-				this.cropLeft.Enabled = true;
-				this.cropTop.Enabled = true;
-				this.cropRight.Enabled = true;
-				this.cropBottom.Enabled = true;
-				sendCropValues();
-
-                if (file != null)
-                {
-                    int inputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
-                    int inputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-                    if (!resize.Checked)
-                    {
-                        verticalResolution.Value = inputHeight;
-                        horizontalResolution.Value = inputWidth;
-                    }
-                    if (!bAllowUpsizing)
-                    {
-                        verticalResolution.Maximum = inputHeight;
-                        horizontalResolution.Maximum = inputWidth;
-                    }
-                }
-			}
-			else
-			{
-				this.cropLeft.Enabled = false;
-				this.cropTop.Enabled = false;
-				this.cropRight.Enabled = false;
-				this.cropBottom.Enabled = false;
-				if (player != null && player.Visible)
-					player.crop(0, 0, 0, 0);
-			}
-            suggestResolution_CheckedChanged(null, null);
-            chAutoPreview_CheckedChanged(null, null);
-            horizontalResolution_ValueChanged(null, null);
-            verticalResolution_ValueChanged(null, null);
-            if (sender != null && e != null)
-                showScript(false);
-		}
-
 		private void deinterlace_CheckedChanged(object sender, EventArgs e)
 		{
 			if (deinterlace.Checked)
@@ -946,61 +866,6 @@ namespace MeGUI
 			    showScript(false);
 		}
 
-        private void signalAR_Checkedchanged(object sender, EventArgs e)
-        {
-            if (signalAR.Checked)
-            {
-                this.mod16Box.Enabled = true;
-                this.suggestResolution.Enabled = true;
-                this.suggestResolution.Checked = true;
-                if (mod16Box.SelectedIndex == -1)
-                    mod16Box.SelectedIndex = 0;
-                mod16Box_SelectedIndexChanged(null, null);
-                suggestResolution_CheckedChanged(null, null);
-            }
-            else
-            {
-                this.mod16Box.Enabled = false;
-                this.suggestResolution.Enabled = true;
-                this.suggestResolution.Checked = true;
-                mod16Box_SelectedIndexChanged(null, null);
-            }
-            if (sender != null && e != null)
-                showScript(false);
-        }
-
-        void checkedChanged(object sender, EventArgs e)
-        {
-            if (sender != null && e != null)
-                showScript(false);
-        }
-
-		#endregion
-
-		#region comboboxes
-		private void resizeFilterType_SelectedIndexChanged(object sender, EventArgs e)
-		{
-            if (sender != null && e != null)
-			    showScript(false);
-		}
-
-		private void deinterlaceType_SelectedIndexChanged(object sender, EventArgs e)
-		{
-            if (sender != null && e != null)
-			    showScript(false);
-		}
-
-		private void noiseFilterType_SelectedIndexChanged(object sender, EventArgs e)
-		{
-            if (sender != null && e != null)
-			    showScript(false);
-		}
-
-        private void cbNvDeInt_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (sender != null && e != null)
-                showScript(false);
-        }
 		#endregion
 
 		#region autocrop
@@ -1051,96 +916,6 @@ namespace MeGUI
                 MessageBox.Show("I'm afraid I was unable to find more than 5 frames that have matching crop values");
         }
 
-		/// <summary>
-		/// if enabled, each change of the horizontal resolution triggers this method
-		/// it calculates the ideal mod vertical resolution that matches the desired horizontal resolution
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-        private void suggestResolution_CheckedChanged(object sender, EventArgs e)
-        {
-            if (file == null) 
-                return;
-
-            try
-            {
-                double dar = 1.0;
-                dar = (double)arChooser.RealValue.ar;
-                Dar? suggestedDar;
-
-                int mod = 16;
-                switch ((modValue)modValueBox.SelectedIndex)
-                {
-                    case modValue.mod8: mod = 8; break;
-                    case modValue.mod4: mod = 4; break;
-                    case modValue.mod2: mod = 2; break;
-                }
-                horizontalResolution.Increment = verticalResolution.Increment = mod;
-
-                int hres = (int)horizontalResolution.Value;
-
-                // remove upsizing if not allowed
-                if (!bAllowUpsizing && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < hres)
-                    hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-                else if (!horizontalResolution.Enabled) // remove upsizing or undersizing if value cannot be changed
-                    hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-                   
-                // correct hres if not mod compliant and resize is enabled
-                if (resize.Checked && hres % mod != 0)
-                {
-                    int diff = hres % mod;
-                    if (hres - diff > 0)
-                        hres -= diff;
-                    else
-                        hres += mod - diff;
-                }
-
-                if (hres != horizontalResolution.Value)
-                    horizontalResolution.Value = hres;
-
-                bool signalAR = this.signalAR.Checked;
-                int scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping, 
-                    (int)horizontalResolution.Value, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar, mod);
-
-                if (suggestResolution.Checked)
-                {
-                    this.verticalResolution.Enabled = false;
-                    if (scriptVerticalResolution > verticalResolution.Maximum)
-                    {
-                        // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
-                        hres = (int)horizontalResolution.Value;
-                        do
-                        {
-                            hres -= mod;
-                            scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping,
-                                hres, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar, mod);
-                        }
-                        while (scriptVerticalResolution > verticalResolution.Maximum && hres > 0);
-                        eventsOn = false;
-                        horizontalResolution.Value = hres;
-                        eventsOn = true;
-                    }
-                    verticalResolution.Value = (decimal)scriptVerticalResolution;
-                    chAutoPreview_CheckedChanged(null, null);
-                    if (sender != null && e != null)
-                        showScript(false);
-                }
-                else
-                {
-                    this.verticalResolution.Enabled = resize.Checked;
-                    if (!verticalResolution.Enabled)
-                        verticalResolution.Value = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
-                }
-
-                if (signalAR)
-                    this.suggestedDar = suggestedDar;
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Error in computing resolution\r\n" + exc.Message, "Unspecified Error", MessageBoxButtons.OK);
-            }
-        }
-
 		#endregion
 
         #region properties
@@ -1149,13 +924,14 @@ namespace MeGUI
 		{
 			set
 			{
+                eventsOn = false;
 				this.resizeFilterType.SelectedItem =  EnumProxy.Create( value.ResizeMethod);
                 this.noiseFilterType.SelectedItem = EnumProxy.Create(value.DenoiseMethod);
 				this.mpeg2Deblocking.Checked = value.MPEG2Deblock;
 				this.colourCorrect.Checked = value.ColourCorrect;
 				this.deinterlace.Checked = value.Deinterlace;
 				this.noiseFilter.Checked = value.Denoise;
-                this.resize.Checked = this.suggestResolution.Checked = value.Resize;
+                this.resize.Checked = value.Resize;
                 this.mod16Box.SelectedIndex = (int)value.Mod16Method;
                 this.signalAR.Checked = (value.Mod16Method != mod16Method.none);
                 this.dss2.Checked = value.DSS2;
@@ -1168,8 +944,8 @@ namespace MeGUI
                 else
                     horizontalResolution.Maximum = verticalResolution.Maximum = 9999;
                 this.modValueBox.SelectedIndex = (int)value.ModValue;
-                mod16Box_SelectedIndexChanged(null, null);
-				showScript(false);
+                eventsOn = true;
+                updateEverything(true);
 			}
         }
         
@@ -1297,80 +1073,6 @@ namespace MeGUI
         }
         #endregion
 
-        private void resize_CheckedChanged(object sender, EventArgs e)
-        {
-            if (resize.Checked)
-            {
-                this.horizontalResolution.Enabled = true;
-                this.verticalResolution.Enabled = !suggestResolution.Checked;
-                if (Mod16Method == mod16Method.resize)
-                    this.suggestResolution.Enabled = false;
-                else
-                    this.suggestResolution.Enabled = true;
-                this.suggestResolution.Checked = true;
-            }
-            else
-            {
-                this.horizontalResolution.Enabled = this.verticalResolution.Enabled = false;
-                this.suggestResolution.Enabled = this.suggestResolution.Checked = false;
-            }
-            checkModValueBox();
-            chAutoPreview_CheckedChanged(null, null);
-            calcAspectError();
-
-            if (sender != null && e != null)
-                showScript(false);
-        }
-
-        private void checkModValueBox()
-        {
-            if (resize.Checked || (signalAR.Checked && (Mod16Method == mod16Method.resize || Mod16Method == mod16Method.overcrop || Mod16Method == mod16Method.undercrop)))
-                modValueBox.Enabled = true;
-            else
-                modValueBox.Enabled = false;
-        }
-
-        private void mod16Box_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (file != null)
-                horizontalResolution.Value = file.VideoInfo.Width;
-
-            if (Mod16Method == mod16Method.overcrop)
-                crop.Text = "Crop (will be rounded up to selected mod)";
-            else if (Mod16Method == mod16Method.undercrop)
-                crop.Text = "Crop (will be rounded down to sel. mod)";
-            else
-                crop.Text = "Crop";
-            crop_CheckedChanged(null, null);
-
-            if (Mod16Method == mod16Method.resize)
-            {
-                this.suggestResolution.Enabled = false;
-                this.suggestResolution.Checked = true;
-                resize.Enabled = false;
-                resize.Checked = true;
-                suggestResolution_CheckedChanged(null, null);
-            }
-            else if (Mod16Method == mod16Method.none)
-            {
-                resize.Enabled = true;
-                suggestResolution.Enabled = true;
-                resize_CheckedChanged(null, null);
-            }
-            else
-            {
-                resize.Checked = false;
-                resize.Enabled = false;
-                resize_CheckedChanged(null, null);
-            }
-
-            checkModValueBox();
-            calcAspectError();
-
-            if (sender != null && e != null)
-                showScript(false);
-        }
-
         private void deintSourceType_SelectedIndexChanged(object sender, EventArgs e)
         {
             deintM.Enabled = (deintSourceType.SelectedItem == ScriptServer.ListOfSourceTypes[(int)UserSourceType.Decimating]);
@@ -1399,14 +1101,6 @@ namespace MeGUI
                 showOriginal();
             reopenOriginal.Enabled = true;
             reopenOriginal.Text = "Re-open original video player";
-        }
-
-        private void arChooser_SelectionChanged(object sender, string val)
-        {
-            suggestResolution_CheckedChanged(null, null);
-            calcAspectError();
-            if (sender != null && val != null)
-                showScript(false);
         }
 
         private void chAutoPreview_CheckedChanged(object sender, EventArgs e)
@@ -1485,13 +1179,229 @@ namespace MeGUI
             return c;
         }
 
-        private void cbCharset_SelectedIndexChanged(object sender, EventArgs e)
+        private void inputDARChanged(object sender, string val)
         {
-            if (sender != null && e != null)
+            updateEverything(sender != null);
+        }
+
+        private void updateEverything(object sender, EventArgs e)
+        {
+            updateEverything(sender != null);
+        }
+
+        private void updateEverything(bool bShowScript)
+        {
+            if (!eventsOn)
+                return;
+            eventsOn = false;
+
+            // update events may be triggered
+            setModType();
+            setCrop();
+            setOutputResolution();
+
+            // no update events triggered
+            calcAspectError();
+            checkControls();
+            chAutoPreview_CheckedChanged(null, null);
+
+            eventsOn = true;
+            if (bShowScript)
                 showScript(false);
         }
 
-        private void nvResize_CheckedChanged(object sender, EventArgs e)
+        private void setModType()
+        {
+            if (!bAllowUpsizing && file != null)
+            {
+                horizontalResolution.Maximum = file.VideoInfo.Width;
+                verticalResolution.Maximum = file.VideoInfo.Height;
+            }
+            else
+                horizontalResolution.Maximum = verticalResolution.Maximum = 9999;
+
+            if (signalAR.Checked)
+            {
+                mod16Box.Enabled = true;
+                if (mod16Box.SelectedIndex == -1)
+                    mod16Box.SelectedIndex = 0;
+            }
+            else
+                mod16Box.Enabled = false;
+
+            if (Mod16Method == mod16Method.overcrop)
+                crop.Text = "Crop (will be rounded up to selected mod)";
+            else if (Mod16Method == mod16Method.undercrop)
+                crop.Text = "Crop (will be rounded down to sel. mod)";
+            else
+                crop.Text = "Crop";
+
+            if (Mod16Method == mod16Method.resize)
+            {
+                resize.Enabled = false;
+                resize.Checked = true;
+                suggestResolution.Enabled = false;
+                suggestResolution.Checked = true;
+            }
+            else if (Mod16Method == mod16Method.none)
+            {
+                resize.Enabled = true;
+                suggestResolution.Enabled = resize.Checked;
+                if (!suggestResolution.Enabled)
+                    suggestResolution.Checked = true;
+            }
+            else
+            {
+                resize.Checked = false;
+                resize.Enabled = false;
+                suggestResolution.Enabled = false;
+                suggestResolution.Checked = true;
+            }
+
+            if (resize.Checked || (signalAR.Checked && (Mod16Method == mod16Method.resize || Mod16Method == mod16Method.overcrop || Mod16Method == mod16Method.undercrop)))
+                modValueBox.Enabled = true;
+            else
+                modValueBox.Enabled = false;
+        }
+
+        private void setCrop()
+        {
+            if (crop.Checked)
+            {
+                this.cropLeft.Enabled = true;
+                this.cropTop.Enabled = true;
+                this.cropRight.Enabled = true;
+                this.cropBottom.Enabled = true;
+                sendCropValues();
+
+                if (file != null)
+                {
+                    int inputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+                    int inputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+                    if (!resize.Checked)
+                    {
+                        verticalResolution.Value = inputHeight;
+                        horizontalResolution.Value = inputWidth;
+                    }
+                    if (!bAllowUpsizing)
+                    {
+                        verticalResolution.Maximum = inputHeight;
+                        horizontalResolution.Maximum = inputWidth;
+                    }
+                }
+            }
+            else
+            {
+                this.cropLeft.Enabled = false;
+                this.cropTop.Enabled = false;
+                this.cropRight.Enabled = false;
+                this.cropBottom.Enabled = false;
+                if (player != null && player.Visible)
+                    player.crop(0, 0, 0, 0);
+            }
+        }
+
+        private void setOutputResolution()
+        {
+            if (resize.Checked)
+            {
+                this.horizontalResolution.Enabled = true;
+                this.verticalResolution.Enabled = !suggestResolution.Checked;
+            }
+            else
+                this.horizontalResolution.Enabled = this.verticalResolution.Enabled = false;
+
+            if (file == null)
+                return;
+
+            try
+            {
+                double dar = 1.0;
+                dar = (double)arChooser.RealValue.ar;
+                Dar? suggestedDar;
+
+                int mod = 16;
+                switch ((modValue)modValueBox.SelectedIndex)
+                {
+                    case modValue.mod8: mod = 8; break;
+                    case modValue.mod4: mod = 4; break;
+                    case modValue.mod2: mod = 2; break;
+                }
+                horizontalResolution.Increment = verticalResolution.Increment = mod;
+
+                int hres = (int)horizontalResolution.Value;
+
+                // remove upsizing if not allowed
+                if (!bAllowUpsizing && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < hres)
+                    hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+                else if (!horizontalResolution.Enabled) // remove upsizing or undersizing if value cannot be changed
+                    hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+
+                // correct hres if not mod compliant and resize is enabled
+                if (resize.Checked && hres % mod != 0)
+                {
+                    int diff = hres % mod;
+                    if (hres - diff > 0)
+                        hres -= diff;
+                    else
+                        hres += mod - diff;
+                }
+
+                if (hres != horizontalResolution.Value)
+                    horizontalResolution.Value = hres;
+
+                bool signalAR = this.signalAR.Checked;
+                int scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping,
+                    (int)horizontalResolution.Value, signalAR, out suggestedDar, mod);
+
+                if (suggestResolution.Checked)
+                {
+                    this.verticalResolution.Enabled = false;
+                    if (scriptVerticalResolution > verticalResolution.Maximum)
+                    {
+                        // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
+                        hres = (int)horizontalResolution.Value;
+                        do
+                        {
+                            hres -= mod;
+                            scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping,
+                                hres, signalAR, out suggestedDar, mod);
+                        }
+                        while (scriptVerticalResolution > verticalResolution.Maximum && hres > 0);
+                        horizontalResolution.Value = hres;
+                    }
+                    verticalResolution.Value = (decimal)scriptVerticalResolution;
+                }
+                else
+                {
+                    this.verticalResolution.Enabled = resize.Checked;
+                    if (!verticalResolution.Enabled)
+                        verticalResolution.Value = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+                }
+
+                if (signalAR)
+                    this.suggestedDar = suggestedDar;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Error in computing resolution\r\n" + exc.Message, "Unspecified Error", MessageBoxButtons.OK);
+            }
+        }
+
+        private void checkControls()
+        {
+            if (resize.Checked && file != null && (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom < verticalResolution.Value)
+                changeNumericUpDownColor(verticalResolution, true);
+            else
+                changeNumericUpDownColor(verticalResolution, false);
+
+            if (resize.Checked && file != null && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < horizontalResolution.Value)
+                changeNumericUpDownColor(horizontalResolution, true);
+            else
+                changeNumericUpDownColor(horizontalResolution, false);
+        }
+
+        private void refreshScript(object sender, EventArgs e)
         {
             if (sender != null && e != null)
                 showScript(false);
