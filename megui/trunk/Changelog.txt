@@ -1,4 +1,5 @@
-2256 [AVS Script Creator] changed "point of view" of the aspect error calculation
+2261 [Update] added system proxy. Patch by Shevek
+2260 [AVS Script Creator] changed "point of view" of the aspect error calculation
 2259 [Audio Encoder] added BassAudioSource() as decoder
                      default order: NicAudio, BassAudio, FFAudioSource, DirectShow
 2258 [Job] improved aborting of Jobs

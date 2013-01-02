@@ -95,7 +95,6 @@ namespace MeGUI
         private Label label20;
         private Label label19;
         private Label label18;
-        private CheckBox cbx_usehttpproxy;
         private TextBox txt_httpproxypwd;
         private TextBox txt_httpproxyport;
         private GroupBox gbDefaultOutput;
@@ -141,6 +140,8 @@ namespace MeGUI
         private Label lblNero;
         private CheckBox useDGIndexNV;
         private CheckBox useQAAC;
+        private Label label1;
+        private ComboBox cbHttpProxyMode;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -272,6 +273,8 @@ namespace MeGUI
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbHttpProxyMode = new System.Windows.Forms.ComboBox();
             this.txt_httpproxyport = new System.Windows.Forms.TextBox();
             this.txt_httpproxypwd = new System.Windows.Forms.TextBox();
             this.txt_httpproxyuid = new System.Windows.Forms.TextBox();
@@ -280,7 +283,6 @@ namespace MeGUI
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
-            this.cbx_usehttpproxy = new System.Windows.Forms.CheckBox();
             this.gbVideoPreview = new System.Windows.Forms.GroupBox();
             this.chkEnsureCorrectPlaybackSpeed = new System.Windows.Forms.CheckBox();
             this.cbAddTimePos = new System.Windows.Forms.CheckBox();
@@ -304,6 +306,7 @@ namespace MeGUI
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.useQAAC = new System.Windows.Forms.CheckBox();
             this.lblForcedName = new System.Windows.Forms.Label();
             this.txtForcedName = new System.Windows.Forms.TextBox();
             this.lblffmsThreads = new System.Windows.Forms.Label();
@@ -325,7 +328,6 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
-            this.useQAAC = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.targetSizeSCBox1 = new MeGUI.core.gui.TargetSizeSCBox();
             this.defaultOutputDir = new MeGUI.FileBar();
@@ -807,6 +809,8 @@ namespace MeGUI
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Controls.Add(this.cbHttpProxyMode);
             this.groupBox2.Controls.Add(this.txt_httpproxyport);
             this.groupBox2.Controls.Add(this.txt_httpproxypwd);
             this.groupBox2.Controls.Add(this.txt_httpproxyuid);
@@ -815,43 +819,66 @@ namespace MeGUI
             this.groupBox2.Controls.Add(this.label20);
             this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.label18);
-            this.groupBox2.Controls.Add(this.cbx_usehttpproxy);
-            this.groupBox2.Location = new System.Drawing.Point(227, 234);
+            this.groupBox2.Location = new System.Drawing.Point(227, 243);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(240, 144);
+            this.groupBox2.Size = new System.Drawing.Size(240, 135);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Auto Update Http Proxy ";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Use:";
+            // 
+            // cbHttpProxyMode
+            // 
+            this.cbHttpProxyMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbHttpProxyMode.FormattingEnabled = true;
+            this.cbHttpProxyMode.Items.AddRange(new object[] {
+            "None",
+            "System Proxy",
+            "Custom Proxy",
+            "Custom Proxy With Login"});
+            this.cbHttpProxyMode.Location = new System.Drawing.Point(55, 25);
+            this.cbHttpProxyMode.Name = "cbHttpProxyMode";
+            this.cbHttpProxyMode.Size = new System.Drawing.Size(179, 21);
+            this.cbHttpProxyMode.TabIndex = 9;
+            this.cbHttpProxyMode.SelectedIndexChanged += new System.EventHandler(this.cbHttpProxyMode_SelectedIndexChanged);
+            // 
             // txt_httpproxyport
             // 
             this.txt_httpproxyport.Enabled = false;
-            this.txt_httpproxyport.Location = new System.Drawing.Point(191, 43);
+            this.txt_httpproxyport.Location = new System.Drawing.Point(191, 52);
             this.txt_httpproxyport.Name = "txt_httpproxyport";
             this.txt_httpproxyport.Size = new System.Drawing.Size(43, 21);
-            this.txt_httpproxyport.TabIndex = 8;
+            this.txt_httpproxyport.TabIndex = 6;
             // 
             // txt_httpproxypwd
             // 
             this.txt_httpproxypwd.Enabled = false;
-            this.txt_httpproxypwd.Location = new System.Drawing.Point(55, 99);
+            this.txt_httpproxypwd.Location = new System.Drawing.Point(55, 106);
             this.txt_httpproxypwd.Name = "txt_httpproxypwd";
             this.txt_httpproxypwd.PasswordChar = '*';
             this.txt_httpproxypwd.Size = new System.Drawing.Size(179, 21);
-            this.txt_httpproxypwd.TabIndex = 7;
+            this.txt_httpproxypwd.TabIndex = 8;
             // 
             // txt_httpproxyuid
             // 
             this.txt_httpproxyuid.Enabled = false;
-            this.txt_httpproxyuid.Location = new System.Drawing.Point(55, 72);
+            this.txt_httpproxyuid.Location = new System.Drawing.Point(55, 79);
             this.txt_httpproxyuid.Name = "txt_httpproxyuid";
             this.txt_httpproxyuid.Size = new System.Drawing.Size(179, 21);
-            this.txt_httpproxyuid.TabIndex = 6;
+            this.txt_httpproxyuid.TabIndex = 7;
             // 
             // txt_httpproxyaddress
             // 
             this.txt_httpproxyaddress.Enabled = false;
-            this.txt_httpproxyaddress.Location = new System.Drawing.Point(55, 43);
+            this.txt_httpproxyaddress.Location = new System.Drawing.Point(55, 52);
             this.txt_httpproxyaddress.Name = "txt_httpproxyaddress";
             this.txt_httpproxyaddress.Size = new System.Drawing.Size(103, 21);
             this.txt_httpproxyaddress.TabIndex = 5;
@@ -859,7 +886,7 @@ namespace MeGUI
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(6, 102);
+            this.label21.Location = new System.Drawing.Point(6, 109);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(31, 13);
             this.label21.TabIndex = 4;
@@ -868,7 +895,7 @@ namespace MeGUI
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(6, 75);
+            this.label20.Location = new System.Drawing.Point(6, 82);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(36, 13);
             this.label20.TabIndex = 3;
@@ -877,7 +904,7 @@ namespace MeGUI
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(164, 45);
+            this.label19.Location = new System.Drawing.Point(164, 55);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(31, 13);
             this.label19.TabIndex = 2;
@@ -886,22 +913,11 @@ namespace MeGUI
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(6, 45);
+            this.label18.Location = new System.Drawing.Point(6, 55);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(43, 13);
             this.label18.TabIndex = 1;
             this.label18.Text = "Server:";
-            // 
-            // cbx_usehttpproxy
-            // 
-            this.cbx_usehttpproxy.AutoSize = true;
-            this.cbx_usehttpproxy.Location = new System.Drawing.Point(9, 21);
-            this.cbx_usehttpproxy.Name = "cbx_usehttpproxy";
-            this.cbx_usehttpproxy.Size = new System.Drawing.Size(75, 17);
-            this.cbx_usehttpproxy.TabIndex = 0;
-            this.cbx_usehttpproxy.Text = "Use Proxy";
-            this.cbx_usehttpproxy.UseVisualStyleBackColor = true;
-            this.cbx_usehttpproxy.CheckedChanged += new System.EventHandler(this.cbx_usehttpproxy_CheckedChanged);
             // 
             // gbVideoPreview
             // 
@@ -953,7 +969,7 @@ namespace MeGUI
             this.autoUpdateGroupBox.Controls.Add(this.useAutoUpdateCheckbox);
             this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 104);
             this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
-            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 124);
+            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 133);
             this.autoUpdateGroupBox.TabIndex = 3;
             this.autoUpdateGroupBox.TabStop = false;
             this.autoUpdateGroupBox.Text = " Auto Update ";
@@ -1173,6 +1189,17 @@ namespace MeGUI
             this.groupBox6.TabIndex = 33;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = " Misc ";
+            // 
+            // useQAAC
+            // 
+            this.useQAAC.AutoSize = true;
+            this.useQAAC.Location = new System.Drawing.Point(12, 54);
+            this.useQAAC.Name = "useQAAC";
+            this.useQAAC.Size = new System.Drawing.Size(90, 17);
+            this.useQAAC.TabIndex = 48;
+            this.useQAAC.Text = "Enable QAAC";
+            this.useQAAC.UseVisualStyleBackColor = true;
+            this.useQAAC.CheckedChanged += new System.EventHandler(this.useQAAC_CheckedChanged);
             // 
             // lblForcedName
             // 
@@ -1397,17 +1424,6 @@ namespace MeGUI
             this.toolTipHelp.ReshowDelay = 100;
             this.toolTipHelp.ShowAlways = true;
             // 
-            // useQAAC
-            // 
-            this.useQAAC.AutoSize = true;
-            this.useQAAC.Location = new System.Drawing.Point(12, 54);
-            this.useQAAC.Name = "useQAAC";
-            this.useQAAC.Size = new System.Drawing.Size(90, 17);
-            this.useQAAC.TabIndex = 48;
-            this.useQAAC.Text = "Enable QAAC";
-            this.useQAAC.UseVisualStyleBackColor = true;
-            this.useQAAC.CheckedChanged += new System.EventHandler(this.useQAAC_CheckedChanged);
-            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1589,12 +1605,14 @@ namespace MeGUI
             }
         }
 
-        private void cbx_usehttpproxy_CheckedChanged(object sender, EventArgs e)
+        private void cbHttpProxyMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            txt_httpproxyaddress.Enabled = cbx_usehttpproxy.Checked;
-            txt_httpproxyport.Enabled = cbx_usehttpproxy.Checked;
-            txt_httpproxyuid.Enabled = cbx_usehttpproxy.Checked;
-            txt_httpproxypwd.Enabled = cbx_usehttpproxy.Checked;
+            var httpProxyMode = (ProxyMode)this.cbHttpProxyMode.SelectedIndex;
+
+            txt_httpproxyaddress.Enabled = httpProxyMode == ProxyMode.CustomProxy || httpProxyMode == ProxyMode.CustomProxyWithLogin;
+            txt_httpproxyport.Enabled = httpProxyMode == ProxyMode.CustomProxy || httpProxyMode == ProxyMode.CustomProxyWithLogin;
+            txt_httpproxyuid.Enabled = httpProxyMode == ProxyMode.CustomProxyWithLogin;
+            txt_httpproxypwd.Enabled = httpProxyMode == ProxyMode.CustomProxyWithLogin;
         }
 
         private void clearDefaultOutputDir_Click(object sender, EventArgs e)
@@ -1655,7 +1673,7 @@ namespace MeGUI
                 settings.AutoSelectHDStreams = chkSelectHDTracks.Checked;
                 settings.AedSettings = this.autoEncodeDefaults;
                 settings.AlwaysOnTop = chAlwaysOnTop.Checked;
-                settings.UseHttpProxy = cbx_usehttpproxy.Checked;
+                settings.HttpProxyMode = (ProxyMode)this.cbHttpProxyMode.SelectedIndex;
                 settings.HttpProxyAddress = txt_httpproxyaddress.Text;
                 settings.HttpProxyPort = txt_httpproxyport.Text;
                 settings.HttpProxyUid = txt_httpproxyuid.Text;
@@ -1721,7 +1739,7 @@ namespace MeGUI
                 chkSelectHDTracks.Checked = settings.AutoSelectHDStreams;
                 this.autoEncodeDefaults = settings.AedSettings;
                 chAlwaysOnTop.Checked = settings.AlwaysOnTop;
-                cbx_usehttpproxy.Checked = settings.UseHttpProxy;
+                cbHttpProxyMode.SelectedIndex = (int)settings.HttpProxyMode;
                 txt_httpproxyaddress.Text = settings.HttpProxyAddress;
                 txt_httpproxyport.Text = settings.HttpProxyPort;
                 txt_httpproxyuid.Text = settings.HttpProxyUid;

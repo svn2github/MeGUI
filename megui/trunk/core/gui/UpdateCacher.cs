@@ -135,25 +135,7 @@ namespace MeGUI
             WebClient wc = new WebClient();
 
             // check for proxy authentication...
-            if (MainForm.Instance.Settings.UseHttpProxy == true)
-            {
-                WebProxy wprox = null;
-                ICredentials icred = null;
-
-                if (MainForm.Instance.Settings.HttpProxyUid != null)
-                {
-                    icred = new NetworkCredential(MainForm.Instance.Settings.HttpProxyUid, MainForm.Instance.Settings.HttpProxyPwd);
-                }
-
-                wprox = new WebProxy(MainForm.Instance.Settings.HttpProxyAddress + ":" + MainForm.Instance.Settings.HttpProxyPort, true, null, icred);
-
-                WebRequest.DefaultWebProxy = wprox;
-                wc.Proxy = wprox;
-            }
-            else
-            {
-                wc.Proxy = null;
-            }
+            wc.Proxy = HttpProxy.GetProxy(MainForm.Instance.Settings);
 
             ManualResetEvent mre = new ManualResetEvent(false);
             wc.DownloadFileCompleted += delegate(object sender, AsyncCompletedEventArgs e)

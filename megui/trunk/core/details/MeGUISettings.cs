@@ -56,7 +56,7 @@ namespace MeGUI
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
-                     alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles, bUseITU,
+                     alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bUseQAAC,
                      bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc;
         private ulong audioSamplesPerUpdate;
@@ -78,6 +78,7 @@ namespace MeGUI
         private Dar[] customDARs;
         private OCGUIMode ocGUIMode;
         private AfterEncoding afterEncoding;
+        private ProxyMode httpProxyMode;
         #endregion
         public MeGUISettings()
 		{
@@ -156,7 +157,7 @@ namespace MeGUI
             audioExtension = "";
             safeProfileAlteration = false;
             alwaysOnTop = false;
-            usehttpproxy = false;
+            httpProxyMode = ProxyMode.None;
             httpproxyaddress = "";
             httpproxyport = "";
             httpproxyuid = "";
@@ -1045,10 +1046,10 @@ namespace MeGUI
         /// <summary>
         /// gets / sets the default settings for the Proxy
         /// </summary>
-        public bool UseHttpProxy 
+        public ProxyMode HttpProxyMode
         {
-            get { return usehttpproxy; }
-            set { usehttpproxy = value; }
+            get { return httpProxyMode; }
+            set { httpProxyMode = value; }
         }
         /// <summary>
         /// gets / sets the default settings for the Proxy Adress
@@ -1082,7 +1083,26 @@ namespace MeGUI
             get { return httpproxypwd; }
             set { httpproxypwd = value; }
         }
+        /// <summary>
+        /// gets / sets the default settings for the Proxy
+        /// </summary>
+        public string UseHttpProxy
+        {
+            get { return "migrated"; }
+            set 
+            {
+                if (value.Equals("migrated"))
+                    return;
 
+                if (value.Equals("true"))
+                {
+                    httpProxyMode = ProxyMode.CustomProxy;
+                    System.Windows.Forms.MessageBox.Show("Please verify that your proxy settings are correct as they have been updated.", "Proxy settings changed");                        
+                }
+                else
+                    httpProxyMode = ProxyMode.None;
+            }
+        }
         /// <summary>
         /// gets / sets the text to append to forced streams
         /// </summary>
@@ -1213,4 +1233,5 @@ namespace MeGUI
         #endregion
     }
     public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2, CloseMeGUI = 3 }
+    public enum ProxyMode { None = 0, SystemProxy = 1, CustomProxy = 2, CustomProxyWithLogin = 3 }
 }

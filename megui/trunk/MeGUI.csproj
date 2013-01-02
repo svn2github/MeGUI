@@ -498,6 +498,7 @@
     <Compile Include="core\util\FileUtil.cs" />
     <Compile Include="core\util\FilmCutter.cs" />
     <Compile Include="core\util\GenericRegisterer.cs" />
+    <Compile Include="core\util\HttpProxy.cs" />
     <Compile Include="core\util\IFOparser.cs" />
     <Compile Include="core\util\JobUtil.cs" />
     <Compile Include="core\util\LanguageSelectionContainer.cs" />
