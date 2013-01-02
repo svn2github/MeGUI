@@ -560,7 +560,7 @@ namespace MeGUI.core.gui
         private bool shutdownWorkerIfJobsCompleted()
         {
             foreach (TaggedJob j in localJobs.Values)
-                if (j.Status != JobStatus.DONE)
+                if (!bIsTemporaryWorker && j.Status != JobStatus.DONE)
                     return false;
             ShutDown();
             return true;
