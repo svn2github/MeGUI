@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -116,10 +116,10 @@ namespace MeGUI
 
             deinterlaceType.DataSource = new DeinterlaceFilter[] { new DeinterlaceFilter("Do nothing (source not detected)", "#blank deinterlace line") };
 
-            eventsOn = true;
             avsProfile.Manager = MainForm.Instance.Profiles;
 
-            showScript(true);
+            eventsOn = true;
+            updateEverything(true, true);
 		}
 
         void ProfileChanged(object sender, EventArgs e)
@@ -136,8 +136,7 @@ namespace MeGUI
 		{
             scriptRefresh--;
             openVideoSource(videoInput, null);
-            updateEverything(false);
-            showScript(true);
+            updateEverything(true, true);
 		}
 
         public AviSynthWindow(MainForm mainForm, string videoInput, string indexFile)
@@ -145,8 +144,7 @@ namespace MeGUI
         {
             scriptRefresh--;
             openVideoSource(videoInput, indexFile);
-            updateEverything(false);
-            showScript(true);
+            updateEverything(true, true);
         }
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -165,10 +163,7 @@ namespace MeGUI
         {
             scriptRefresh--;
             openVideoSource(input.Filename, null);
-            if (chAutoPreview.Checked == true)
-                previewButton_Click(sender, args);
-            updateEverything(false);
-            showScript(true);
+            updateEverything(true, true);
 		}
 
 		private void openDLLButton_Click(object sender, System.EventArgs e)
@@ -192,8 +187,7 @@ namespace MeGUI
             if (player == null || player.IsDisposed) 
                 player = new VideoPlayer();
 
-            bool videoLoaded = player.loadVideo(mainForm, avisynthScript.Text, PREVIEWTYPE.REGULAR, false, true, player.CurrentFrame, true);
-			if (videoLoaded)
+			if (player.loadVideo(mainForm, avisynthScript.Text, PREVIEWTYPE.REGULAR, false, true, player.CurrentFrame, true))
 			{
 				player.disableIntroAndCredits();
                 reader = player.Reader;
@@ -302,7 +296,11 @@ namespace MeGUI
                 scriptRefresh++;
             if (scriptRefresh < 1)
                 return;
+
+            string oldScript = avisynthScript.Text;
             avisynthScript.Text = this.generateScript();
+            if (!oldScript.Equals(avisynthScript.Text))
+                chAutoPreview_CheckedChanged(null, null);
 		}
 		#endregion
 
@@ -850,7 +848,7 @@ namespace MeGUI
 				deinterlaceType.Enabled = false;
 
             if (sender != null && e != null)
-			    this.showScript(false);
+			    showScript(false);
 		}
 
 		private void noiseFilter_CheckedChanged(object sender, EventArgs e)
@@ -903,14 +901,15 @@ namespace MeGUI
             bool error = (cropValues.left == -1);
             if (!error)
             {
+                eventsOn = false;
                 cropLeft.Value = cropValues.left;
                 cropTop.Value = cropValues.top;
                 cropRight.Value = cropValues.right;
                 cropBottom.Value = cropValues.bottom;
                 if (!crop.Checked)
                     crop.Checked = true;
-                chAutoPreview_CheckedChanged(null, null);
-                this.showScript(false);
+                eventsOn = true;
+                updateEverything(true, false);
             }
             else
                 MessageBox.Show("I'm afraid I was unable to find more than 5 frames that have matching crop values");
@@ -945,7 +944,7 @@ namespace MeGUI
                     horizontalResolution.Maximum = verticalResolution.Maximum = 9999;
                 this.modValueBox.SelectedIndex = (int)value.ModValue;
                 eventsOn = true;
-                updateEverything(true);
+                updateEverything(true, false);
 			}
         }
         
@@ -1181,15 +1180,15 @@ namespace MeGUI
 
         private void inputDARChanged(object sender, string val)
         {
-            updateEverything(sender != null);
+            updateEverything(sender != null, false);
         }
 
         private void updateEverything(object sender, EventArgs e)
         {
-            updateEverything(sender != null);
+            updateEverything(sender != null, false);
         }
 
-        private void updateEverything(bool bShowScript)
+        private void updateEverything(bool bShowScript, bool bForceScript)
         {
             if (!eventsOn)
                 return;
@@ -1203,11 +1202,10 @@ namespace MeGUI
             // no update events triggered
             calcAspectError();
             checkControls();
-            chAutoPreview_CheckedChanged(null, null);
-
+            
             eventsOn = true;
             if (bShowScript)
-                showScript(false);
+                showScript(bForceScript);
         }
 
         private void setModType()

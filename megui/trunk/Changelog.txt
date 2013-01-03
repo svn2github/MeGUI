@@ -1,3 +1,4 @@
+2268 [AVS Script Creator] use very high accuracy for anamorphic encodings if acceptable aspect error is set to 0%
 2267 [AVS Script Creator] improved accuracy of the "Aspect Ratio Error"
      [AVS Script Creator] improved accuracy of the aspect ratio when using "Clever (TM) anamorphic encoding"
      [AVS Script Creator] internal optimizations

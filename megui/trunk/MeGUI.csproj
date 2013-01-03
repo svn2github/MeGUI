@@ -277,10 +277,10 @@
     <Compile Include="core\gui\AutoUpdateServerConfigWindow.Designer.cs">
       <DependentUpon>AutoUpdateServerConfigWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="core\gui\AviSynthProfileConfigPanel.cs">
+    <Compile Include="packages\tools\avscreator\AviSynthProfileConfigPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="core\gui\AviSynthProfileConfigPanel.Designer.cs">
+    <Compile Include="packages\tools\avscreator\AviSynthProfileConfigPanel.Designer.cs">
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\ConfigableProfilesControl.cs">
@@ -817,7 +817,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>AutoUpdateServerConfigWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="core\gui\AviSynthProfileConfigPanel.resx">
+    <EmbeddedResource Include="packages\tools\avscreator\AviSynthProfileConfigPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </EmbeddedResource>

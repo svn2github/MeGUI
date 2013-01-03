@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -61,8 +61,11 @@ namespace MeGUI.core.util
 
                 int parX = 0;
                 int parY = 0;
+                int iLimit = 101;
                 decimal distance = 999999;
-                for (int i = 1; i < 1001; i++)
+                if (MainForm.Instance.Settings.AcceptableAspectErrorPercent == 0)
+                    iLimit = 99999;
+                for (int i = 1; i < iLimit; i++)
                 {
                     // We create a fraction with integers, and then convert back to a decimal, and see how big the rounding error is
                     decimal fractionApproximation = (decimal)Math.Round(realAspectRatio * ((decimal)i)) / (decimal)i;
