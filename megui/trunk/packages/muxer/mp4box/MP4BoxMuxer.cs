@@ -316,9 +316,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         sb.Append(":name=" + stream.name);
                     if (stream.delay != 0)
                         sb.AppendFormat(":delay={0}", stream.delay);
-                    sb.Append(":group=1");
-                    if (trackCount > 0)
-                        sb.Append(":disabled");
+                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                    {
+                        sb.Append(":group=1");
+                        if (trackCount > 0)
+                            sb.Append(":disabled");
+                    }
                     sb.Append("\"");
                     trackCount++;
                 }
@@ -355,7 +358,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
                     {
                         FileUtil.CreateXMLFromOGGChapFile(settings.ChapterFile);
-                        sb.Append(" -add \"" + Path.Combine(Path.GetDirectoryName(settings.ChapterFile), Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml:chap") + "\"");
+                        sb.Append(" -add \"" + Path.Combine(Path.GetDirectoryName(settings.ChapterFile), Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml:name=:chap") + "\"");
                         job.FilesToDelete.Add(Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml");
                     }
                     else
