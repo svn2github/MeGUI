@@ -568,7 +568,9 @@ namespace MediaInfoWrapper
                         _tracktemp_.Width = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"Width");
                         _tracktemp_.Height = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"Height");
                         _tracktemp_.AspectRatio = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"AspectRatio");
-                        _tracktemp_.AspectRatioString = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"AspectRatio/String");
+                        _tracktemp_.AspectRatioString = GetSpecificMediaInfo(MediaInfoStreamKind.Video, num2, "AspectRatio/String");
+                        _tracktemp_.PixelAspectRatio = GetSpecificMediaInfo(MediaInfoStreamKind.Video, num2, "PixelAspectRatio");
+                        _tracktemp_.PixelAspectRatioString = GetSpecificMediaInfo(MediaInfoStreamKind.Video, num2, "PixelAspectRatio/String");
                         _tracktemp_.FrameRate = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"FrameRate");
                         _tracktemp_.FrameRateString = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"FrameRate/String");
                         _tracktemp_.FrameRateOriginal = GetSpecificMediaInfo(MediaInfoStreamKind.Video, num2, "FrameRate_Original");

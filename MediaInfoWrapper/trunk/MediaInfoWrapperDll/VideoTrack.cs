@@ -29,6 +29,8 @@ namespace MediaInfoWrapper
         private string _Height;
         private string _AspectRatio;
         private string _AspectRatioString;
+        private string _PixelAspectRatio;
+        private string _PixelAspectRatioString;
         private string _FrameRate;
         private string _FrameRateString;
         private string _FrameRateOriginal;
@@ -431,6 +433,36 @@ namespace MediaInfoWrapper
             set
             {
                 this._AspectRatioString = value;
+            }
+        }
+
+        ///<summary> Pixel Aspect Ratio </summary>
+        public string PixelAspectRatio
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._PixelAspectRatio))
+                    this._PixelAspectRatio = "";
+                return _PixelAspectRatio;
+            }
+            set
+            {
+                this._PixelAspectRatio = value;
+            }
+        }
+
+        ///<summary> Pixel Aspect Ratio </summary>
+        public string PixelAspectRatioString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._PixelAspectRatioString))
+                    this._PixelAspectRatioString = "";
+                return _PixelAspectRatioString;
+            }
+            set
+            {
+                this._PixelAspectRatioString = value;
             }
         }
 
