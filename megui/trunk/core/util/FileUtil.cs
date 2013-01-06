@@ -486,7 +486,6 @@ namespace MeGUI.core.util
                 sb.AppendLine("<TextStream version=\"1.1\">");
                 sb.AppendLine("<TextStreamHeader>");
                 sb.AppendLine("<TextSampleDescription>");
-                sb.AppendLine("<FontTable></FontTable>");
                 sb.AppendLine("</TextSampleDescription>");
                 sb.AppendLine("</TextStreamHeader>");
 
