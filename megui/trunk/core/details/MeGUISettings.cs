@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ namespace MeGUI
                      bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc;
         private ulong audioSamplesPerUpdate;
         private decimal forceFilmThreshold, acceptableFPSError;
-        private int nbPasses, acceptableAspectError, autoUpdateServerSubList, minComplexity, updateFormSplitter,
+        private int nbPasses, autoUpdateServerSubList, minComplexity, updateFormSplitter,
                     maxComplexity, jobColumnWidth, inputColumnWidth, outputColumnWidth, codecColumnWidth,
                     modeColumnWidth, statusColumnWidth, ownerColumnWidth, startColumnWidth, endColumnWidth, fpsColumnWidth,
                     updateFormUpdateColumnWidth, updateFormNameColumnWidth, updateFormLocalVersionColumnWidth, 
@@ -141,7 +141,6 @@ namespace MeGUI
 			defaultLanguage1 = "";
 			defaultLanguage2 = "";
             defaultPriority = ProcessPriority.IDLE;
-            acceptableAspectError = 1;
             afterEncoding = AfterEncoding.DoNothing;
 			autoOpenScript = true;
 			enableMP3inMP4 = false;
@@ -493,14 +492,6 @@ namespace MeGUI
         {
             get { return afterEncodingCommand; }
             set { afterEncodingCommand = value; }
-        }
-        /// <summary>
-        /// Maximum aspect error (%) to allow in resizing.
-        /// </summary>
-        public int AcceptableAspectErrorPercent
-        {
-            get { return acceptableAspectError; }
-            set { acceptableAspectError = value; }
         }
         /// <summary>
         /// bool to decide whether to use advanced or basic tooltips

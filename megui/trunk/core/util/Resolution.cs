@@ -28,8 +28,7 @@ namespace MeGUI.core.util
     public class Resolution
     {
         /// <summary>
-		/// if enabled, each change of the horizontal resolution triggers this method
-		/// it calculates the ideal mod vertical resolution that matches the desired horizontal resolution
+		/// calculates the ideal mod vertical resolution that matches the desired horizontal resolution
 		/// </summary>
 		/// <param name="readerHeight">height of the source</param>
 		/// <param name="readerWidth">width of the source</param>
@@ -41,15 +40,15 @@ namespace MeGUI.core.util
 		/// <param name="sarY">vertical pixel aspect ratio (used when signalAR = true)</param>
         /// <param name="mod">the MOD value</param>
 		/// <returns>the suggested horizontal resolution</returns>
-		public static int suggestResolution(double readerHeight, double readerWidth, double customDAR, CropValues cropping, int horizontalResolution,
-			bool signalAR, out Dar? dar, int mod)
+        public static int SuggestVerticalResolution(double readerHeight, double readerWidth, Dar inputDAR, CropValues cropping, int horizontalResolution,
+            bool signalAR, out Dar? dar, int mod, decimal acceptableAspectErrorPercent)
 		{
             decimal fractionOfWidth = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) / (decimal)readerWidth;
             decimal inputWidthOnHeight = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) /
                                           ((decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom);
-            decimal sourceHorizontalResolution = (decimal)readerHeight * (decimal)customDAR * fractionOfWidth;
+            decimal sourceHorizontalResolution = (decimal)readerHeight * inputDAR.ar * fractionOfWidth;
             decimal sourceVerticalResolution = (decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom;
-            decimal realAspectRatio = sourceHorizontalResolution / sourceVerticalResolution; // the real aspect ratio of the video
+            decimal realAspectRatio = getAspectRatio(inputDAR.ar, sourceHorizontalResolution / sourceVerticalResolution, acceptableAspectErrorPercent); // the aspect ratio of the video
 			decimal resizedVerticalResolution = (decimal)horizontalResolution / realAspectRatio;
 
             int scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod)) * mod;
@@ -63,8 +62,8 @@ namespace MeGUI.core.util
                 int parY = 0;
                 int iLimit = 101;
                 decimal distance = 999999;
-                if (MainForm.Instance.Settings.AcceptableAspectErrorPercent == 0)
-                    iLimit = 99999;
+                if (acceptableAspectErrorPercent == 0)
+                    iLimit = 100001;
                 for (int i = 1; i < iLimit; i++)
                 {
                     // We create a fraction with integers, and then convert back to a decimal, and see how big the rounding error is
@@ -79,42 +78,117 @@ namespace MeGUI.core.util
                 }
                 Debug.Assert(parX > 0 && parY > 0);
                 dar = new Dar((ulong)parX, (ulong)parY);
-				
-				return scriptVerticalResolution;
 			}
 			else
-			{
                 dar = null;
-				return scriptVerticalResolution;
-			}
+
+            return scriptVerticalResolution;
 		}
 
         /// <summary>
-        /// rounds the output PAR to the closest matching predefined xvid profile
+        /// finds the aspect ratio closest to the one giving as parameter (which is an approximation using the selected DAR for the source and the cropping values)
         /// </summary>
-        /// <param name="sarX">horizontal component of the pixel aspect ratio</param>
-        /// <param name="sarY">vertical component of the pixel aspect ratio</param>
-        /// <param name="height">height of the desired output</param>
-        /// <param name="width">width of the desired output</param>
-        /// <returns>the closest profile match</returns>
-        public static int roundXviDPAR(int parX, int parY, int height, int width)
+        /// <param name="calculatedAR">the aspect ratio to be approximated</param>
+        /// <returns>the aspect ratio that most closely matches the input</returns>
+        private static decimal getAspectRatio(decimal inputAR, decimal calculatedAR, decimal acceptableAspectErrorPercent)
         {
-            double par = (double) parX / (double) parY;
-            double[] pars = { 1, 1.090909, 1.454545, 0.090909, 1.212121 };
-            double minDist = 1000;
-            int closestIndex = 0;
-            for (int i = 0; i < pars.Length; i++)
+            decimal aspectError = inputAR / calculatedAR;
+            if (Math.Abs(aspectError - 1.0M) * 100.0M < acceptableAspectErrorPercent)
+                return inputAR;
+            else
+                return calculatedAR;
+        }
+
+        /// <summary>
+        /// calculates the aspect ratio error
+        /// </summary>
+        /// <param name="inputWidth">height of the source (without cropping!)</param>
+        /// <param name="inputHeight">width of the source (without cropping!)</param>
+        /// <param name="outputWidth">the desired width of the output</param>
+        /// <param name="outputHeight">the desired height of the output</param>
+        /// <param name="Cropping">the crop values for the source</param>
+        /// <param name="inputDar">custom input display aspect ratio to be taken into account</param>
+        /// <param name="signalAR">whether or not we're going to signal the aspect ratio (influences the resizing)</param>
+        /// <param name="outputDar">custom output display aspect ratio to be taken into account</param>
+        /// <returns>the aspect ratio error in percent</returns>
+        public static decimal GetAspectRatioError(int inputWidth, int inputHeight, int outputWidth, int outputHeight, CropValues Cropping, Dar? inputDar, bool signalAR, Dar? outputDar)
+        {
+            if (inputHeight <= 0 || inputWidth <= 0 || outputHeight <= 0 || outputWidth <= 0)
+                return 0;
+
+            // get input dimension with SAR 1:1
+            int iHeight = inputHeight - Cropping.top - Cropping.bottom;
+            decimal iWidth = inputWidth - Cropping.left - Cropping.right;
+            if (inputDar.HasValue)
             {
-                double first = Math.Max(par, pars[i]);
-                double second = Math.Min(par, pars[i]);
-                double dist = first - second;
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    closestIndex = i;
-                }
+                Sar s = inputDar.Value.ToSar(inputWidth, inputHeight);
+                iWidth = iWidth * s.X / s.Y;
             }
-            return closestIndex;
+
+            // get output dimension with SAR 1:1
+            int oHeight = outputHeight;
+            decimal oWidth = outputWidth;
+            if (signalAR && outputDar.HasValue)
+            {
+                Sar s = outputDar.Value.ToSar(outputWidth, outputHeight);
+                oWidth = oWidth * s.X / s.Y;
+            }
+
+            return (iHeight * oWidth) / (iWidth * oHeight) - 1;
+        }
+
+        /// <summary>
+        /// calculates the DAR value based upon the video information 
+        /// </summary>
+        /// <param name="width">width of the video</param>
+        /// <param name="height">height of the video</param>
+        /// <param name="dar">display aspect ratio </param>
+        /// <param name="par">pixel aspect ratio </param>
+        /// <param name="darString">display aspect ratio string - e.g. 16:9 or 4:3</param>
+        /// <returns>the DAR value</returns>
+        public static Dar GetDAR(int width, int height, decimal? dar, decimal? par, string darString)
+        {
+            if (!String.IsNullOrEmpty(darString) && width == 720 && (height == 576 || height == 480))
+            {
+                Dar newDar = Dar.A1x1;
+                if (!MainForm.Instance.Settings.UseITUValues)
+                {
+                    if (darString.Equals("16:9"))
+                        newDar = Dar.STATIC16x9;
+                    else if (darString.Equals("4:3"))
+                        newDar = Dar.STATIC4x3;
+                }
+                else if (height == 576)
+                {
+                    if (darString.Equals("16:9"))
+                        newDar = Dar.ITU16x9PAL;
+                    else if (darString.Equals("4:3"))
+                        newDar = Dar.ITU4x3PAL;
+                }
+                else
+                {
+                    if (darString.Equals("16:9"))
+                        newDar = Dar.ITU16x9NTSC;
+                    else if (darString.Equals("4:3"))
+                        newDar = Dar.ITU4x3NTSC;
+                }
+                if (!newDar.Equals(Dar.A1x1.ar))
+                    return newDar;
+            }
+
+            if (par == null || par <= 0)
+                par = 1;
+
+            if (dar != null && dar > 0 )
+            {
+                decimal correctDar = (decimal)width * (decimal)par / height;
+                if (Math.Abs(Math.Round(correctDar, 3) - Math.Round((decimal)dar, 3)) <= 0.001M)
+                    return new Dar((ulong)(Math.Round(width * (decimal)par)), (ulong)height);
+                else
+                    return new Dar((decimal)dar);
+            }
+
+            return new Dar((ulong)width, (ulong)height);
         }
     }
 }

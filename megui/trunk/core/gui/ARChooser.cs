@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -54,11 +54,9 @@ namespace MeGUI.core.gui
         {
             base.Getter = delegate
             {
-                decimal result;
-                if (NumberChooser.ShowDialog(
-                    "Enter your AR:", "Custom AR", 3,
-                    0.1M, 10M, (Value ?? Dar.ITU16x9PAL).ar, out result) == DialogResult.OK)
-                    return new Dar(result);
+                Dar result;
+                if (AspectRatioChooser.ShowDialog(Value ?? Dar.ITU16x9PAL, out result) == DialogResult.OK)
+                    return result;
                 else
                     return null;
             };

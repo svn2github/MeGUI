@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ namespace MeGUI
         private mod16Method mod16Method;
         private modValue modValueUsed;
         private bool deinterlace, denoise, ivtc, mpeg2deblock, colourCorrect, dss2, resize, upsize;
+        private decimal acceptableAspectError;
 
         public void FixFileNames(System.Collections.Generic.Dictionary<string, string> _) { }
 
@@ -57,10 +58,11 @@ namespace MeGUI
             this.DSS2 = false;
             this.Upsize = false;
             this.ModValue = modValue.mod16;
+            this.acceptableAspectError = 1;
         }
 
-        public AviSynthSettings(string template, ResizeFilterType resizeMethod, bool resize, bool upsize,
-            DenoiseFilterType denoiseMethod, bool denoise, bool mpeg2deblock, bool colourCorrect, mod16Method method, bool dss2, modValue modValueUsed)
+        public AviSynthSettings(string template, ResizeFilterType resizeMethod, bool resize, bool upsize, DenoiseFilterType denoiseMethod,
+            bool denoise, bool mpeg2deblock, bool colourCorrect, mod16Method method, bool dss2, modValue modValueUsed, decimal acceptableAspectError)
         {
             this.Template = template;
             this.Resize = resize;
@@ -75,6 +77,7 @@ namespace MeGUI
             this.DSS2 = dss2;
             this.Upsize = upsize;
             this.ModValue = modValueUsed;
+            this.acceptableAspectError = acceptableAspectError;
         }
 
         public override bool Equals(object obj)
@@ -195,6 +198,15 @@ namespace MeGUI
         {
             get { return dss2; }
             set { dss2 = value; }
+        }
+
+        /// <summary>
+        /// Maximum aspect error (%) to allow in anamorphic resizing.
+        /// </summary>
+        public decimal AcceptableAspectError
+        {
+            get { return acceptableAspectError; }
+            set { acceptableAspectError = value; }
         }
 
         #region GenericSettings Members

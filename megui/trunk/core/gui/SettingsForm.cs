@@ -56,8 +56,6 @@ namespace MeGUI
 		private System.Windows.Forms.CheckBox deleteAbortedOutput;
 		private System.Windows.Forms.CheckBox deleteIntermediateFiles;
         private System.Windows.Forms.CheckBox openProgressWindow;
-        private NumericUpDown acceptableAspectError;
-        private Label acceptableAspectErrorLabel;
         private AutoEncodeDefaultsSettings autoEncodeDefaults;
         private TabPage tabPage3;
         private GroupBox autoUpdateGroupBox;
@@ -248,8 +246,6 @@ namespace MeGUI
             this.label6 = new System.Windows.Forms.Label();
             this.acceptableFPSError = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
-            this.acceptableAspectError = new System.Windows.Forms.NumericUpDown();
-            this.acceptableAspectErrorLabel = new System.Windows.Forms.Label();
             this.resetDialogs = new System.Windows.Forms.Button();
             this.configSourceDetector = new System.Windows.Forms.Button();
             this.chkboxUseAdvancedTooltips = new System.Windows.Forms.CheckBox();
@@ -269,8 +265,10 @@ namespace MeGUI
             this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
             this.defaultLanguage1 = new System.Windows.Forms.ComboBox();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
+            this.targetSizeSCBox1 = new MeGUI.core.gui.TargetSizeSCBox();
             this.btnClearOutputDirecoty = new System.Windows.Forms.Button();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
+            this.defaultOutputDir = new MeGUI.FileBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -316,8 +314,10 @@ namespace MeGUI
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.useNeroAacEnc = new System.Windows.Forms.CheckBox();
             this.lblNero = new System.Windows.Forms.Label();
+            this.neroaacencLocation = new MeGUI.FileBar();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnClearMP4TempDirectory = new System.Windows.Forms.Button();
+            this.tempDirMP4 = new MeGUI.FileBar();
             this.vobGroupBox = new System.Windows.Forms.GroupBox();
             this.useDGIndexNV = new System.Windows.Forms.CheckBox();
             this.cbAutoLoadDG = new System.Windows.Forms.CheckBox();
@@ -329,16 +329,11 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.targetSizeSCBox1 = new MeGUI.core.gui.TargetSizeSCBox();
-            this.defaultOutputDir = new MeGUI.FileBar();
-            this.neroaacencLocation = new MeGUI.FileBar();
-            this.tempDirMP4 = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.audiosamplesperupdate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -455,8 +450,6 @@ namespace MeGUI
             this.otherGroupBox.Controls.Add(this.label6);
             this.otherGroupBox.Controls.Add(this.acceptableFPSError);
             this.otherGroupBox.Controls.Add(this.label15);
-            this.otherGroupBox.Controls.Add(this.acceptableAspectError);
-            this.otherGroupBox.Controls.Add(this.acceptableAspectErrorLabel);
             this.otherGroupBox.Controls.Add(this.resetDialogs);
             this.otherGroupBox.Controls.Add(this.configSourceDetector);
             this.otherGroupBox.Controls.Add(this.chkboxUseAdvancedTooltips);
@@ -553,7 +546,7 @@ namespace MeGUI
             0,
             0,
             196608});
-            this.acceptableFPSError.Location = new System.Drawing.Point(150, 70);
+            this.acceptableFPSError.Location = new System.Drawing.Point(150, 47);
             this.acceptableFPSError.Maximum = new decimal(new int[] {
             5,
             0,
@@ -575,37 +568,11 @@ namespace MeGUI
             // 
             // label15
             // 
-            this.label15.Location = new System.Drawing.Point(9, 70);
+            this.label15.Location = new System.Drawing.Point(9, 47);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(130, 32);
             this.label15.TabIndex = 6;
             this.label15.Text = "Acceptable FPS rounding error (bitrate calculator)";
-            // 
-            // acceptableAspectError
-            // 
-            this.acceptableAspectError.Location = new System.Drawing.Point(175, 43);
-            this.acceptableAspectError.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.acceptableAspectError.Name = "acceptableAspectError";
-            this.acceptableAspectError.Size = new System.Drawing.Size(54, 21);
-            this.acceptableAspectError.TabIndex = 5;
-            this.acceptableAspectError.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // acceptableAspectErrorLabel
-            // 
-            this.acceptableAspectErrorLabel.AutoSize = true;
-            this.acceptableAspectErrorLabel.Location = new System.Drawing.Point(8, 45);
-            this.acceptableAspectErrorLabel.Name = "acceptableAspectErrorLabel";
-            this.acceptableAspectErrorLabel.Size = new System.Drawing.Size(145, 13);
-            this.acceptableAspectErrorLabel.TabIndex = 4;
-            this.acceptableAspectErrorLabel.Text = "Acceptable Aspect Error (%)";
             // 
             // resetDialogs
             // 
@@ -773,6 +740,19 @@ namespace MeGUI
             this.gbDefaultOutput.TabStop = false;
             this.gbDefaultOutput.Text = " Default Output Directory + Custom File Size Values ";
             // 
+            // targetSizeSCBox1
+            // 
+            this.targetSizeSCBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.targetSizeSCBox1.Location = new System.Drawing.Point(8, 56);
+            this.targetSizeSCBox1.MaximumSize = new System.Drawing.Size(1000, 28);
+            this.targetSizeSCBox1.MinimumSize = new System.Drawing.Size(64, 28);
+            this.targetSizeSCBox1.Name = "targetSizeSCBox1";
+            this.targetSizeSCBox1.NullString = "Modify custom file size values";
+            this.targetSizeSCBox1.SaveCustomValues = true;
+            this.targetSizeSCBox1.SelectedIndex = 0;
+            this.targetSizeSCBox1.Size = new System.Drawing.Size(273, 28);
+            this.targetSizeSCBox1.TabIndex = 44;
+            // 
             // btnClearOutputDirecoty
             // 
             this.btnClearOutputDirecoty.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -791,6 +771,22 @@ namespace MeGUI
             this.clearDefaultOutputDir.TabIndex = 41;
             this.clearDefaultOutputDir.Text = "x";
             this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
+            // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(8, 24);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(243, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
             // 
             // tabPage3
             // 
@@ -1305,6 +1301,23 @@ namespace MeGUI
             this.lblNero.TabIndex = 45;
             this.lblNero.Text = "Location";
             // 
+            // neroaacencLocation
+            // 
+            this.neroaacencLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.neroaacencLocation.Enabled = false;
+            this.neroaacencLocation.Filename = "";
+            this.neroaacencLocation.Filter = "NeroAacEnc|neroaacenc.exe";
+            this.neroaacencLocation.FilterIndex = 0;
+            this.neroaacencLocation.FolderMode = false;
+            this.neroaacencLocation.Location = new System.Drawing.Point(64, 26);
+            this.neroaacencLocation.Name = "neroaacencLocation";
+            this.neroaacencLocation.ReadOnly = true;
+            this.neroaacencLocation.SaveMode = false;
+            this.neroaacencLocation.Size = new System.Drawing.Size(399, 26);
+            this.neroaacencLocation.TabIndex = 44;
+            this.neroaacencLocation.Title = null;
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.btnClearMP4TempDirectory);
@@ -1324,6 +1337,23 @@ namespace MeGUI
             this.btnClearMP4TempDirectory.TabIndex = 42;
             this.btnClearMP4TempDirectory.Text = "x";
             this.btnClearMP4TempDirectory.Click += new System.EventHandler(this.btnClearMP4TempDirectory_Click);
+            // 
+            // tempDirMP4
+            // 
+            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tempDirMP4.Filename = "";
+            this.tempDirMP4.Filter = null;
+            this.tempDirMP4.FilterIndex = 0;
+            this.tempDirMP4.FolderMode = true;
+            this.tempDirMP4.Location = new System.Drawing.Point(13, 33);
+            this.tempDirMP4.Name = "tempDirMP4";
+            this.tempDirMP4.ReadOnly = true;
+            this.tempDirMP4.SaveMode = false;
+            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
+            this.tempDirMP4.TabIndex = 41;
+            this.tempDirMP4.Title = null;
+            this.tempDirMP4.FileSelected += new MeGUI.FileBarEventHandler(this.tempDirMP4_FileSelected);
             // 
             // vobGroupBox
             // 
@@ -1435,69 +1465,6 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
-            // targetSizeSCBox1
-            // 
-            this.targetSizeSCBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.targetSizeSCBox1.Location = new System.Drawing.Point(8, 56);
-            this.targetSizeSCBox1.MaximumSize = new System.Drawing.Size(1000, 28);
-            this.targetSizeSCBox1.MinimumSize = new System.Drawing.Size(64, 28);
-            this.targetSizeSCBox1.Name = "targetSizeSCBox1";
-            this.targetSizeSCBox1.NullString = "Modify custom file size values";
-            this.targetSizeSCBox1.SaveCustomValues = true;
-            this.targetSizeSCBox1.SelectedIndex = 0;
-            this.targetSizeSCBox1.Size = new System.Drawing.Size(273, 28);
-            this.targetSizeSCBox1.TabIndex = 44;
-            // 
-            // defaultOutputDir
-            // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(8, 24);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(243, 26);
-            this.defaultOutputDir.TabIndex = 40;
-            this.defaultOutputDir.Title = null;
-            // 
-            // neroaacencLocation
-            // 
-            this.neroaacencLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.neroaacencLocation.Enabled = false;
-            this.neroaacencLocation.Filename = "";
-            this.neroaacencLocation.Filter = "NeroAacEnc|neroaacenc.exe";
-            this.neroaacencLocation.FilterIndex = 0;
-            this.neroaacencLocation.FolderMode = false;
-            this.neroaacencLocation.Location = new System.Drawing.Point(64, 26);
-            this.neroaacencLocation.Name = "neroaacencLocation";
-            this.neroaacencLocation.ReadOnly = true;
-            this.neroaacencLocation.SaveMode = false;
-            this.neroaacencLocation.Size = new System.Drawing.Size(399, 26);
-            this.neroaacencLocation.TabIndex = 44;
-            this.neroaacencLocation.Title = null;
-            // 
-            // tempDirMP4
-            // 
-            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tempDirMP4.Filename = "";
-            this.tempDirMP4.Filter = null;
-            this.tempDirMP4.FilterIndex = 0;
-            this.tempDirMP4.FolderMode = true;
-            this.tempDirMP4.Location = new System.Drawing.Point(13, 33);
-            this.tempDirMP4.Name = "tempDirMP4";
-            this.tempDirMP4.ReadOnly = true;
-            this.tempDirMP4.SaveMode = false;
-            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
-            this.tempDirMP4.TabIndex = 41;
-            this.tempDirMP4.Title = null;
-            this.tempDirMP4.FileSelected += new MeGUI.FileBarEventHandler(this.tempDirMP4_FileSelected);
-            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1520,7 +1487,6 @@ namespace MeGUI
             this.otherGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.audiosamplesperupdate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
@@ -1630,7 +1596,6 @@ namespace MeGUI
                 settings.AudioSamplesPerUpdate = (ulong)audiosamplesperupdate.Value;
                 settings.AcceptableFPSError = acceptableFPSError.Value; 
                 settings.AutoUpdate = useAutoUpdateCheckbox.Checked;
-                settings.AcceptableAspectErrorPercent = (int)acceptableAspectError.Value;
                 settings.SourceDetectorSettings = sdSettings;
                 settings.NeroAacEncPath = neroaacencLocation.Filename;
                 settings.VideoExtension = videoExtension.Text;
@@ -1700,7 +1665,6 @@ namespace MeGUI
                 audiosamplesperupdate.Value = settings.AudioSamplesPerUpdate;
                 acceptableFPSError.Value = settings.AcceptableFPSError;
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;
-                acceptableAspectError.Value = (decimal)settings.AcceptableAspectErrorPercent;
                 neroaacencLocation.Filename = settings.NeroAacEncPath;
                 sdSettings = settings.SourceDetectorSettings;
                 chkboxUseAdvancedTooltips.Checked = settings.UseAdvancedTooltips;

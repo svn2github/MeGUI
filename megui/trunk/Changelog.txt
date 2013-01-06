@@ -1,3 +1,7 @@
+2272 [AVS Script Creator] moved "acceptable aspect error" setting into the AviSynth profile (1% by default)
+     [AVS Script Creator] improved AR chooser
+     [MediaInfo] improved aspect ratio detection
+2269 [MP4 Muxer] restrict "group=1" to the Apple Devices regarding Audio streams
 2268 [AVS Script Creator] use very high accuracy for anamorphic encodings if acceptable aspect error is set to 0%
 2267 [AVS Script Creator] improved accuracy of the "Aspect Ratio Error"
      [AVS Script Creator] improved accuracy of the aspect ratio when using "Clever (TM) anamorphic encoding"

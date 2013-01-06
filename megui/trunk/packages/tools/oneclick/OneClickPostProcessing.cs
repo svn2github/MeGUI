@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -578,8 +578,8 @@ namespace MeGUI
                     }
 
                     outputWidthCropped = desiredOutputWidth;
-                    outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, (double)customDAR.ar,
-                        cropValues, outputWidthCropped, signalAR, out dar, mod);
+                    outputHeightCropped = Resolution.SuggestVerticalResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, customDAR,
+                        cropValues, outputWidthCropped, signalAR, out dar, mod, avsSettings.AcceptableAspectError);
                     dar = null;
                 }
 
@@ -711,13 +711,13 @@ namespace MeGUI
                 }
                 
                 // adjust cropped vertical resolution
-                outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, (double)customDAR.ar,
-                    cropValues, outputWidthCropped, signalAR, out dar, mod);
+                outputHeightCropped = Resolution.SuggestVerticalResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, customDAR,
+                    cropValues, outputWidthCropped, signalAR, out dar, mod, avsSettings.AcceptableAspectError);
                 while (outputHeightCropped > xTargetDevice.Height || (xTargetDevice.BluRay && outputHeightCropped > outputHeightIncludingPadding))
                 {
                     outputWidthCropped -= mod;
-                    outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, (double)customDAR.ar,
-                        cropValues, outputWidthCropped, signalAR, out dar, mod);
+                    outputHeightCropped = Resolution.SuggestVerticalResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, customDAR,
+                        cropValues, outputWidthCropped, signalAR, out dar, mod, avsSettings.AcceptableAspectError);
                 }
             }
 
@@ -746,8 +746,8 @@ namespace MeGUI
 
             // calculate height
             if (!keepInputResolution)
-                outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, (double)customDAR.ar,
-                    cropValues, outputWidthCropped, signalAR, out dar, mod);
+                outputHeightCropped = Resolution.SuggestVerticalResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, customDAR,
+                    cropValues, outputWidthCropped, signalAR, out dar, mod, avsSettings.AcceptableAspectError);
             
             // set complete padding if required
             if (outputHeightIncludingPadding == 0 && outputWidthIncludingPadding > 0)

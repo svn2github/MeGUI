@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -38,16 +38,20 @@ namespace MeGUI.core.util
         public static readonly Dar A1x1 = new Dar(1, 1);
 
         public decimal ar;
+        private ulong x, y;
 
         public Dar(ulong x, ulong y)
         {
-            ar = -1;
-            init(x, y);
+            ar = (decimal)x / (decimal)y;
+            this.x = x;
+            this.y = y;
+            RatioUtils.reduce(ref this.x, ref this.y);
         }
 
         public Dar(decimal dar)
         {
             ar = dar;
+            RatioUtils.approximate(ar, out x, out y);
         }
 
         public Dar(decimal? dar, ulong width, ulong height)
@@ -56,46 +60,48 @@ namespace MeGUI.core.util
             if (dar.HasValue)
                 ar = dar.Value;
             else
-                init(width, height);
-        }
-
-        private void init(ulong x, ulong y)
-        {
-            ar = (decimal)x / (decimal)y;
+                ar = (decimal)width / (decimal)height;
+            this.x = width;
+            this.y = height;
+            RatioUtils.reduce(ref this.x, ref this.y);
         }
 
         public Dar(int x, int y, ulong width, ulong height)
         {
             ar = -1;
             if (x > 0 && y > 0)
-                init((ulong)x, (ulong)y);
+            {
+                ar = (decimal)x / (decimal)y;
+                this.x = (ulong)x;
+                this.y = (ulong)y;
+            }
             else
-                init(width, height);
+            {
+                ar = (decimal)width / (decimal)height;
+                this.x = width;
+                this.y = height;
+            }
+            RatioUtils.reduce(ref this.x, ref this.y);
         }
 
         public ulong X
         {
-            get
-            {
-                ulong x, y;
-                RatioUtils.approximate(ar, out x, out y);
-                return x;
-            }
+            get { return x; }
         }
 
         public ulong Y
         {
-            get
-            {
-                ulong x, y; RatioUtils.approximate(ar, out x, out y);
-                return y;
-            }
+            get { return y; }
         }
 
         public override string ToString()
         {
             System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-us");
-            return ar.ToString("#.########", culture);
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(x + ":" + y + " (");
+            sb.Append(ar.ToString("0.000)", culture));
+            return sb.ToString();
         }
 
         public override bool Equals(object obj)

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -58,7 +58,8 @@ namespace MeGUI.core.gui
                     colourCorrect.Checked,
                     method,
                     dss2.Checked,
-                    mValue
+                    mValue,
+                    acceptableAspectError.Value
                     );
             }
             set
@@ -76,6 +77,7 @@ namespace MeGUI.core.gui
                 mod16Box.SelectedIndex = (int)value.Mod16Method;
                 dss2.Checked = value.DSS2;
                 modValueBox.SelectedIndex = (int)value.ModValue;
+                acceptableAspectError.Value = value.AcceptableAspectError;
             }
         }
 

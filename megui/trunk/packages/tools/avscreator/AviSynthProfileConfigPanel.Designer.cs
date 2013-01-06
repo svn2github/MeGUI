@@ -1,3 +1,23 @@
+// ****************************************************************************
+// 
+// Copyright (C) 2005-2013 Doom9 & al
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// 
+// ****************************************************************************
+
 namespace MeGUI.core.gui
 {
     partial class AviSynthProfileConfigPanel
@@ -41,6 +61,8 @@ namespace MeGUI.core.gui
             this.label1 = new System.Windows.Forms.Label();
             this.extraSetupPage = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.acceptableAspectError = new System.Windows.Forms.NumericUpDown();
+            this.acceptableAspectErrorLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.modValueBox = new System.Windows.Forms.ComboBox();
             this.upsize = new System.Windows.Forms.CheckBox();
@@ -61,6 +83,7 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel1.SuspendLayout();
             this.extraSetupPage.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.mpegOptGroupBox.SuspendLayout();
             this.filtersGroupbox.SuspendLayout();
@@ -219,6 +242,8 @@ namespace MeGUI.core.gui
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.acceptableAspectError);
+            this.groupBox2.Controls.Add(this.acceptableAspectErrorLabel);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.modValueBox);
             this.groupBox2.Controls.Add(this.upsize);
@@ -226,15 +251,47 @@ namespace MeGUI.core.gui
             this.groupBox2.Controls.Add(this.mod16Box);
             this.groupBox2.Location = new System.Drawing.Point(3, 183);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(406, 95);
+            this.groupBox2.Size = new System.Drawing.Size(406, 119);
             this.groupBox2.TabIndex = 24;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Resize Options ";
             // 
+            // acceptableAspectError
+            // 
+            this.acceptableAspectError.DecimalPlaces = 1;
+            this.acceptableAspectError.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.acceptableAspectError.Location = new System.Drawing.Point(219, 44);
+            this.acceptableAspectError.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.acceptableAspectError.Name = "acceptableAspectError";
+            this.acceptableAspectError.Size = new System.Drawing.Size(54, 20);
+            this.acceptableAspectError.TabIndex = 26;
+            this.acceptableAspectError.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // acceptableAspectErrorLabel
+            // 
+            this.acceptableAspectErrorLabel.AutoSize = true;
+            this.acceptableAspectErrorLabel.Location = new System.Drawing.Point(23, 46);
+            this.acceptableAspectErrorLabel.Name = "acceptableAspectErrorLabel";
+            this.acceptableAspectErrorLabel.Size = new System.Drawing.Size(181, 13);
+            this.acceptableAspectErrorLabel.TabIndex = 25;
+            this.acceptableAspectErrorLabel.Text = "Acceptable Anamorphic Aspect Error";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 65);
+            this.label2.Location = new System.Drawing.Point(21, 90);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(143, 13);
             this.label2.TabIndex = 24;
@@ -249,7 +306,7 @@ namespace MeGUI.core.gui
             "mod8",
             "mod4",
             "mod2"});
-            this.modValueBox.Location = new System.Drawing.Point(219, 62);
+            this.modValueBox.Location = new System.Drawing.Point(219, 87);
             this.modValueBox.Name = "modValueBox";
             this.modValueBox.Size = new System.Drawing.Size(75, 21);
             this.modValueBox.TabIndex = 23;
@@ -257,7 +314,7 @@ namespace MeGUI.core.gui
             // upsize
             // 
             this.upsize.AutoSize = true;
-            this.upsize.Location = new System.Drawing.Point(6, 42);
+            this.upsize.Location = new System.Drawing.Point(6, 67);
             this.upsize.Name = "upsize";
             this.upsize.Size = new System.Drawing.Size(105, 17);
             this.upsize.TabIndex = 22;
@@ -269,10 +326,10 @@ namespace MeGUI.core.gui
             this.signalAR.AutoSize = true;
             this.signalAR.Location = new System.Drawing.Point(6, 19);
             this.signalAR.Name = "signalAR";
-            this.signalAR.Size = new System.Drawing.Size(189, 17);
+            this.signalAR.Size = new System.Drawing.Size(186, 17);
             this.signalAR.TabIndex = 20;
-            this.signalAR.Text = "Clever (TM) anamorphic encoding:";
-            this.signalAR.Click += new System.EventHandler(this.signalAR_CheckedChanged);
+            this.signalAR.Text = "Clever (TM) anamorphic encoding";
+            this.signalAR.CheckedChanged += new System.EventHandler(this.signalAR_CheckedChanged);
             // 
             // mod16Box
             // 
@@ -409,6 +466,7 @@ namespace MeGUI.core.gui
             this.extraSetupPage.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.mpegOptGroupBox.ResumeLayout(false);
@@ -448,6 +506,8 @@ namespace MeGUI.core.gui
         private System.Windows.Forms.CheckBox upsize;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox modValueBox;
+        private System.Windows.Forms.Label acceptableAspectErrorLabel;
+        private System.Windows.Forms.NumericUpDown acceptableAspectError;
 
     }
 }

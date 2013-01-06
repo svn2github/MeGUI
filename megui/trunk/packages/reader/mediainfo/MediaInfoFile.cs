@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ namespace MeGUI
                     double fps = (easyParseDouble(t.FrameRate) ?? easyParseDouble(t.FrameRateOriginal) ?? 99);
 
                     decimal? ar = easyParse<decimal>(delegate { return decimal.Parse(t.AspectRatio); });
-                    Dar dar = new Dar(ar, width, height);
+                    Dar dar = Resolution.GetDAR((int)width, (int)height, ar, null, null);
 
                     v.StreamInfo = new VideoInfo2(width, height, dar, frameCount, fps);
                     v.TrackNumber = uint.Parse(t.ID);
@@ -479,34 +479,7 @@ namespace MeGUI
                         if (_VideoInfo.Codec == null)
                             _VideoInfo.Codec = getVideoCodec(track.Format); // sometimes codec info is not available, check the format then...
                         _VideoInfo.Type = getVideoType(_VideoInfo.Codec, cType, file);
-                        Dar? dar = null;
-                        if (_VideoInfo.Width == 720 && (_VideoInfo.Height == 576 || _VideoInfo.Height == 480))
-                        {
-                            if (!MainForm.Instance.Settings.UseITUValues)
-                            {
-                                if (track.AspectRatioString.Equals("16:9"))
-                                    dar = Dar.STATIC16x9;
-                                else if (track.AspectRatioString.Equals("4:3"))
-                                    dar = Dar.STATIC4x3; 
-                            }
-                            else if (_VideoInfo.Height == 576)
-                            {
-                                if (track.AspectRatioString.Equals("16:9"))
-                                    dar = Dar.ITU16x9PAL;
-                                else if (track.AspectRatioString.Equals("4:3"))
-                                    dar = Dar.ITU4x3PAL;
-                            }
-                            else
-                            {
-                                if (track.AspectRatioString.Equals("16:9"))
-                                    dar = Dar.ITU16x9NTSC;
-                                else if (track.AspectRatioString.Equals("4:3"))
-                                    dar = Dar.ITU4x3NTSC;
-                            }
-                        }
-                        if (dar == null)
-                            dar = new Dar((decimal?)easyParseDouble(track.AspectRatio), _VideoInfo.Width, _VideoInfo.Height);
-                        _VideoInfo.DAR = (Dar)dar;
+                        _VideoInfo.DAR = Resolution.GetDAR((int)_VideoInfo.Width, (int)_VideoInfo.Height, easyParseDecimal(track.AspectRatio), easyParseDecimal(track.PixelAspectRatio), track.AspectRatioString);
                     }
                 }
                 info.Dispose();
@@ -1123,6 +1096,18 @@ namespace MeGUI
             try
             {
                 return double.Parse(value, culture);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private static decimal? easyParseDecimal(string value)
+        {
+            try
+            {
+                return decimal.Parse(value, culture);
             }
             catch (Exception)
             {

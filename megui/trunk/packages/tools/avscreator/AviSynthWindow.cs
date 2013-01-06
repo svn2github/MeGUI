@@ -762,39 +762,18 @@ namespace MeGUI
                 return;
             }
 
-            // get input dimension with SAR 1:1
-            int inputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
-            decimal inputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-            if (arChooser.Value.HasValue)
-            {
-                Sar s = arChooser.Value.Value.ToSar((int)file.VideoInfo.Width, (int)file.VideoInfo.Height);
-                inputWidth = inputWidth * s.X / s.Y;
-            }
-
-            // get output dimension with SAR 1:1
+            // get output dimension
             int outputHeight = (int)verticalResolution.Value;
-            decimal outputWidth = (int)horizontalResolution.Value;
+            int outputWidth = (int)horizontalResolution.Value;
             if (!resize.Checked)
             {
                 outputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
                 outputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
             }
-            if (signalAR.Checked && suggestedDar.HasValue)
-            {
-                Sar s = suggestedDar.Value.ToSar((int)outputWidth, outputHeight);
-                outputWidth = outputWidth * s.X / s.Y;
-            }
 
-            if (inputHeight <= 0 || inputWidth <= 0 || outputHeight <= 0 || outputWidth <= 0)
-            {
-                lblAspectError.BackColor = System.Drawing.SystemColors.Window;
-                lblAspectError.Text = "0.00000%";
-                return;
-            }
-
-            decimal aspectError = (inputHeight * outputWidth) / (inputWidth * outputHeight) - 1;
+            decimal aspectError = Resolution.GetAspectRatioError((int)file.VideoInfo.Width, (int)file.VideoInfo.Height, outputWidth, outputHeight, Cropping, arChooser.Value, signalAR.Checked, suggestedDar);
             lblAspectError.Text = String.Format("{0:0.00000%}", aspectError);
-            if (Math.Abs(aspectError) * 100 <= mainForm.Settings.AcceptableAspectErrorPercent)
+            if (!signalAR.Checked || Math.Floor(Math.Abs(aspectError) * 100000000) <= this.GetProfileSettings().AcceptableAspectError * 1000000)
                 lblAspectError.ForeColor = System.Drawing.SystemColors.WindowText;
             else
                 lblAspectError.ForeColor = System.Drawing.Color.Red;
@@ -1314,8 +1293,6 @@ namespace MeGUI
 
             try
             {
-                double dar = 1.0;
-                dar = (double)arChooser.RealValue.ar;
                 Dar? suggestedDar;
 
                 int mod = 16;
@@ -1349,8 +1326,8 @@ namespace MeGUI
                     horizontalResolution.Value = hres;
 
                 bool signalAR = this.signalAR.Checked;
-                int scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping,
-                    (int)horizontalResolution.Value, signalAR, out suggestedDar, mod);
+                int scriptVerticalResolution = Resolution.SuggestVerticalResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, arChooser.RealValue, Cropping,
+                    (int)horizontalResolution.Value, signalAR, out suggestedDar, mod, this.GetProfileSettings().AcceptableAspectError);
 
                 if (suggestResolution.Checked)
                 {
@@ -1362,8 +1339,8 @@ namespace MeGUI
                         do
                         {
                             hres -= mod;
-                            scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping,
-                                hres, signalAR, out suggestedDar, mod);
+                            scriptVerticalResolution = Resolution.SuggestVerticalResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, arChooser.RealValue, Cropping,
+                                hres, signalAR, out suggestedDar, mod, this.GetProfileSettings().AcceptableAspectError);
                         }
                         while (scriptVerticalResolution > verticalResolution.Maximum && hres > 0);
                         horizontalResolution.Value = hres;
