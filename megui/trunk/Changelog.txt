@@ -1,3 +1,4 @@
+2273 [Audio Encoding Window] cosmetics
 2272 [AVS Script Creator] moved "acceptable aspect error" setting into the AviSynth profile (1% by default)
      [AVS Script Creator] improved AR chooser
      [MediaInfo] improved aspect ratio detection
