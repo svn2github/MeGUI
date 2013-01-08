@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -764,8 +764,7 @@ namespace MeGUI
         private void mnuToolsAdaptiveMuxer_Click(object sender, EventArgs e)
         {
             AdaptiveMuxWindow amw = new AdaptiveMuxWindow(this);
-            if (amw.ShowDialog() == DialogResult.OK)
-                Jobs.addJobsWithDependencies(amw.Jobs, true);
+            amw.Show();
         }
 
         private void MeGUI_Load(object sender, EventArgs e)

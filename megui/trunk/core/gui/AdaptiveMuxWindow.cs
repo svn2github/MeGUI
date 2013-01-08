@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ namespace MeGUI
 
             subtitleTracks[0].chkDefaultStream.CheckedChanged += new System.EventHandler(base.chkDefaultStream_CheckedChanged);
             this.cbContainer.SelectedIndexChanged += new System.EventHandler(this.cbContainer_SelectedIndexChanged);
+            base.muxButton.Click += new System.EventHandler(this.muxButton_Click);
         }
 
         protected override void fileUpdated()
@@ -302,6 +303,57 @@ namespace MeGUI
             cot = (cbContainer.SelectedItem as ContainerType);
             output = this.output.Filename;
             base.getAdditionalStreams(out audio, out subtitles, out chapters);
+        }
+
+        protected virtual void muxButton_Click(object sender, System.EventArgs e)
+        {
+            if (minimizedMode)
+                return;
+
+            if (muxButton.DialogResult != DialogResult.OK)
+            {
+                if (string.IsNullOrEmpty(vInput.Filename))
+                {
+                    MessageBox.Show("You must configure a video input file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+                else if (string.IsNullOrEmpty(output.Filename))
+                {
+                    MessageBox.Show("You must configure an output file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+                else if (MainForm.verifyOutputFile(output.Filename) != null)
+                {
+                    MessageBox.Show("Invalid output file", "Invalid output", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else if (!fps.Value.HasValue)
+                {
+                    MessageBox.Show("You must select a framerate", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+            }
+            else
+            {
+                if (this.muxButton.Text.Equals("Update"))
+                {
+                    this.Close();
+                }
+                else
+                {
+                    JobChain oJobs = this.Jobs;
+                    if (oJobs.Jobs.Length == 0)
+                    {
+                        MessageBox.Show("No mux job created as input and output are the same", "Nothing to mux", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        return;
+                    }
+                    mainForm.Jobs.addJobsWithDependencies(oJobs, true);
+                    if (chkCloseOnQueue.Checked)
+                        this.Close();
+                    else
+                        output.Filename = String.Empty;
+                }
+            }
         }
     }
 }
