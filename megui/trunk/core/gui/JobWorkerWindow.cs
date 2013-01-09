@@ -450,7 +450,7 @@ namespace MeGUI.core.gui
                 Thread t = new Thread(new ThreadStart(delegate
                 {
                     TaggedJob job = mainForm.Jobs.ByName(su.JobName);
-                    JobStartInfo JobInfo = JobStartInfo.NO_JOBS_WAITING;
+                    JobStartInfo JobInfo = JobStartInfo.JOB_STARTED;
 
                     copyInfoIntoJob(job, su);
                     progress = 0;
@@ -476,23 +476,24 @@ namespace MeGUI.core.gui
                     else
                         mainForm.Jobs.saveJob(job, mainForm.MeGUIPath);     //AAA: save state more often
 
-                    if (mode == JobWorkerMode.CloseOnLocalListCompleted)
+                    if (mode == JobWorkerMode.CloseOnLocalListCompleted && shutdownWorkerIfJobsCompleted())
                     {
-                        // shut down may be required
-                        if (!shutdownWorkerIfJobsCompleted())
-                            JobInfo = JobStartInfo.JOB_STARTED;
+                        MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
+                        JobInfo = JobStartInfo.COULDNT_START;
                     }
                     else if (job.Status == JobStatus.ABORTED)
                     {
                         MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
                         log.LogEvent("Current job was aborted");
                         status = JobWorkerStatus.Stopped;
+                        JobInfo = JobStartInfo.COULDNT_START;
                     }
                     else if (status == JobWorkerStatus.Stopping)
                     {
                         MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
                         log.LogEvent("Queue mode stopped");
                         status = JobWorkerStatus.Stopped;
+                        JobInfo = JobStartInfo.COULDNT_START;
                     }
                     else
                     {

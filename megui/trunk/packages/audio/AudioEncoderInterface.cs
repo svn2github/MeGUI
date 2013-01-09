@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -210,6 +210,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     {
                         MediaInfoFile oInfo = new MediaInfoFile(audioJob.Output, ref _log);
                     }
+                }
+                else if (su.HasError && audioJob.Settings is QaacSettings && _encoderStdErr.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("coreaudiotoolbox.dll"))
+                {
+                    _log.LogEvent("CoreAudioToolbox.dll is missing and must be installed. Please have a look at https://sites.google.com/site/qaacpage", ImageType.Error);
+                    if (MessageBox.Show("CoreAudioToolbox.dll is missing and must be installed.\r\nOtherwise QAAC cannot be used.\r\n\r\nDo you want to open the installation instructions?", "CoreAudioToolbox.dll missing", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                        System.Diagnostics.Process.Start("https://sites.google.com/site/qaacpage");
                 }
             }
             if (StatusUpdate != null)
