@@ -1,3 +1,4 @@
+2264 [Worker] fixed temporary worker only processing one job
 2274 [Adaptive Muxer] fixed handling of the "and close" button
 2273 [Audio Encoding Window] cosmetics
 2272 [AVS Script Creator] moved "acceptable aspect error" setting into the AviSynth profile (1% by default)

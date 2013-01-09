@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -554,14 +554,15 @@ namespace MeGUI.core.gui
         }
 
         /// <summary>
-        /// shuts down this worker if the jobs are completed
+        /// shuts down this worker if no jobs are waiting
         /// </summary>
         /// <returns>true if worker was shut down, false otherwise</returns>
         private bool shutdownWorkerIfJobsCompleted()
         {
             foreach (TaggedJob j in localJobs.Values)
-                if (!bIsTemporaryWorker && j.Status != JobStatus.DONE)
-                    return false;
+                if (j.Status == JobStatus.WAITING)
+                    return false; // do not shut down as jobs are waiting
+            
             ShutDown();
             return true;
         }

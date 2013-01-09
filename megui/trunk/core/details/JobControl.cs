@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -387,11 +387,12 @@ namespace MeGUI.core.details
                 if (w.Status == JobWorkerStatus.Postponed)
                     w.StartEncoding(false);
         }
-
+            
         public void StartIdleWorkers()
         {
+            // start idle and postponed workers if required
             foreach (JobWorker w in workers.Values)
-                if (!w.IsEncoding && (w.Status == JobWorkerStatus.Idle || w.Status == JobWorkerStatus.Postponed))
+                if (!w.IsEncoding && ((w.Status == JobWorkerStatus.Idle && MainForm.Instance.Settings.AutoStartQueue) || w.Status == JobWorkerStatus.Postponed))
                     w.StartEncoding(false);
         }
 
