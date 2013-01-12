@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -568,6 +568,16 @@ namespace MeGUI.packages.tools.oneclick
         private void audioMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             audioRemoveTrack.Enabled = (iSelectedAudioTabPage != audioConfigurations.Count);
+        }
+
+        private void deleteOutput_Click(object sender, EventArgs e)
+        {
+            outputDirectory.Filename = string.Empty;
+        }
+
+        private void deleteWorking_Click(object sender, EventArgs e)
+        {
+            workingDirectory.Filename = string.Empty;
         }
     }
 }

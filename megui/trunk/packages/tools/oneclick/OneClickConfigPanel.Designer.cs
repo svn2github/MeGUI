@@ -105,6 +105,8 @@ namespace MeGUI.packages.tools.oneclick
             this.workingDirectory = new MeGUI.FileBar();
             this.workingDirectoryLabel = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtLeadingName = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.txtWorkingNameReplaceWith = new System.Windows.Forms.TextBox();
@@ -116,8 +118,8 @@ namespace MeGUI.packages.tools.oneclick
             this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.audioAddTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.audioRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtLeadingName = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.deleteOutput = new System.Windows.Forms.Button();
+            this.deleteWorking = new System.Windows.Forms.Button();
             label3 = new System.Windows.Forms.Label();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
@@ -696,6 +698,8 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.deleteWorking);
+            this.groupBox5.Controls.Add(this.deleteOutput);
             this.groupBox5.Controls.Add(this.outputDirectory);
             this.groupBox5.Controls.Add(this.label8);
             this.groupBox5.Controls.Add(this.workingDirectory);
@@ -709,13 +713,11 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // outputDirectory
             // 
-            this.outputDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.outputDirectory.Filename = "";
             this.outputDirectory.Filter = null;
             this.outputDirectory.FilterIndex = 0;
             this.outputDirectory.FolderMode = true;
-            this.outputDirectory.Location = new System.Drawing.Point(107, 19);
+            this.outputDirectory.Location = new System.Drawing.Point(64, 19);
             this.outputDirectory.Name = "outputDirectory";
             this.outputDirectory.ReadOnly = true;
             this.outputDirectory.SaveMode = false;
@@ -729,17 +731,15 @@ namespace MeGUI.packages.tools.oneclick
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(108, 13);
             this.label8.TabIndex = 44;
-            this.label8.Text = "Output Directory";
+            this.label8.Text = "Output";
             // 
             // workingDirectory
             // 
-            this.workingDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.workingDirectory.Filename = "";
             this.workingDirectory.Filter = null;
             this.workingDirectory.FilterIndex = 0;
             this.workingDirectory.FolderMode = true;
-            this.workingDirectory.Location = new System.Drawing.Point(107, 51);
+            this.workingDirectory.Location = new System.Drawing.Point(64, 51);
             this.workingDirectory.Name = "workingDirectory";
             this.workingDirectory.ReadOnly = true;
             this.workingDirectory.SaveMode = false;
@@ -753,7 +753,7 @@ namespace MeGUI.packages.tools.oneclick
             this.workingDirectoryLabel.Name = "workingDirectoryLabel";
             this.workingDirectoryLabel.Size = new System.Drawing.Size(108, 13);
             this.workingDirectoryLabel.TabIndex = 41;
-            this.workingDirectoryLabel.Text = "Working Directory";
+            this.workingDirectoryLabel.Text = "Working";
             // 
             // groupBox4
             // 
@@ -769,6 +769,22 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox4.TabIndex = 43;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = " Project Name ";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Leading";
+            // 
+            // txtLeadingName
+            // 
+            this.txtLeadingName.Location = new System.Drawing.Point(60, 28);
+            this.txtLeadingName.Name = "txtLeadingName";
+            this.txtLeadingName.Size = new System.Drawing.Size(121, 20);
+            this.txtLeadingName.TabIndex = 4;
             // 
             // label6
             // 
@@ -868,21 +884,25 @@ namespace MeGUI.packages.tools.oneclick
             this.audioRemoveTrack.Text = "Remove Track";
             this.audioRemoveTrack.Click += new System.EventHandler(this.audioRemoveTrack_Click);
             // 
-            // txtLeadingName
+            // deleteOutput
             // 
-            this.txtLeadingName.Location = new System.Drawing.Point(60, 28);
-            this.txtLeadingName.Name = "txtLeadingName";
-            this.txtLeadingName.Size = new System.Drawing.Size(121, 20);
-            this.txtLeadingName.TabIndex = 4;
+            this.deleteOutput.Location = new System.Drawing.Point(370, 20);
+            this.deleteOutput.Name = "deleteOutput";
+            this.deleteOutput.Size = new System.Drawing.Size(28, 23);
+            this.deleteOutput.TabIndex = 45;
+            this.deleteOutput.Text = "X";
+            this.deleteOutput.UseVisualStyleBackColor = true;
+            this.deleteOutput.Click += new System.EventHandler(this.deleteOutput_Click);
             // 
-            // label1
+            // deleteWorking
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Leading";
+            this.deleteWorking.Location = new System.Drawing.Point(370, 52);
+            this.deleteWorking.Name = "deleteWorking";
+            this.deleteWorking.Size = new System.Drawing.Size(28, 23);
+            this.deleteWorking.TabIndex = 46;
+            this.deleteWorking.Text = "X";
+            this.deleteWorking.UseVisualStyleBackColor = true;
+            this.deleteWorking.Click += new System.EventHandler(this.deleteWorking_Click);
             // 
             // OneClickConfigPanel
             // 
@@ -989,5 +1009,7 @@ namespace MeGUI.packages.tools.oneclick
         private System.Windows.Forms.Label containerFormatLabel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtLeadingName;
+        private System.Windows.Forms.Button deleteWorking;
+        private System.Windows.Forms.Button deleteOutput;
     }
 }
