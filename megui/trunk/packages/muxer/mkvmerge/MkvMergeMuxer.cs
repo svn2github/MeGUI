@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -104,6 +104,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 int trackID;
                 
                 sb.Append("-o \"" + settings.MuxedOutput + "\"");
+                if (settings.MuxAll)
+                {
+                    if (!string.IsNullOrEmpty(settings.VideoInput))
+                        sb.Append(" \"" + settings.VideoInput + "\"");
+                    else if(!string.IsNullOrEmpty(settings.MuxedInput))
+                        sb.Append(" \"" + settings.MuxedInput + "\"");
+                    sb.Append(" --ui-language en");
+                    return sb.ToString();
+                }
 
                 if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
@@ -119,7 +128,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     if (settings.Framerate.HasValue)
                         sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
                     sb.Append(" \"--compression\" \"" + trackID + ":none\"");
-                    sb.Append(" -d \"" + trackID + "\" --no-chapters -A -S \"" + settings.VideoInput + "\"");                    
+                    sb.Append(" -d \"" + trackID + "\" --no-chapters -A -S \"" + settings.VideoInput + "\"");
                 }
                 else if(!string.IsNullOrEmpty(settings.MuxedInput))
                 {
@@ -138,7 +147,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     if (settings.Framerate.HasValue)
                         sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
                     sb.Append(" \"--compression\" \"" + trackID + ":none\"");
-                    sb.Append(" -d \"" + trackID + "\" -A -S \"" + settings.MuxedInput + "\""); 
+                    sb.Append(" -d \"" + trackID + "\" -A -S \"" + settings.MuxedInput + "\"");
                 }
 
                 foreach (object o in settings.AudioStreams)

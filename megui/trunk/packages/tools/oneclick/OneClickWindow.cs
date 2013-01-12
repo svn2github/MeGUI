@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -662,7 +662,7 @@ namespace MeGUI
             ContainerType inputContainer = _videoInputInfo.ContainerFileType;
             JobChain prepareJobs = null;
 
-            // set oneclick job settings
+            // set initial oneclick job settings
             OneClickPostprocessingProperties dpp = new OneClickPostprocessingProperties();
             dpp.DAR = ar.Value;
             dpp.AvsSettings = (AviSynthSettings)avsProfile.SelectedProfile.BaseSettings;
@@ -683,6 +683,29 @@ namespace MeGUI
             dpp.FilesToDelete.Add(dpp.WorkingDirectory);
             dpp.ChapterFile = chapterFile.Filename;
             dpp.AutoCrop = autoCrop.Checked;
+
+
+            // mux input file into MKV if possible
+            if (inputContainer == ContainerType.AVI || inputContainer == ContainerType.MP4)
+            {
+                // create job
+                MuxJob mJob = new MuxJob();
+                mJob.MuxType = MuxerType.MKVMERGE;
+                mJob.Input = dpp.VideoInput;
+                mJob.Output = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(dpp.VideoInput) + ".mkv"); ;
+                mJob.Settings.MuxAll = true;
+                mJob.Settings.MuxedInput = mJob.Input;
+                mJob.Settings.MuxedOutput = mJob.Output;
+
+                // change input file properties
+                inputContainer = ContainerType.MKV;
+                dpp.VideoInput = mJob.Output;
+                dpp.FilesToDelete.Add(mJob.Output);
+
+                // add job to queue
+                prepareJobs = new SequentialChain(mJob);
+            }
+
 
             // create eac3to demux job if needed
             if (_videoInputInfo.isEac3toDemuxable())
@@ -754,7 +777,7 @@ namespace MeGUI
                 }
 
                 if (sb.Length != 0)
-                    prepareJobs = new SequentialChain(new HDStreamsExJob(new List<string>() { _videoInputInfo.FileName }, dpp.WorkingDirectory, null, sb.ToString(), 2));
+                    prepareJobs = new SequentialChain(prepareJobs, new HDStreamsExJob(new List<string>() { _videoInputInfo.FileName }, dpp.WorkingDirectory, null, sb.ToString(), 2));
             }
 
             // set video mux handling
@@ -836,12 +859,6 @@ namespace MeGUI
                 if (oStreamControl.SelectedItem.IsStandard)
                 {
                     oAudioTrackInfo = (AudioTrackInfo)oStreamControl.SelectedStream.TrackInfo;
-                    if (dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
-                    {
-                        _oLog.LogEvent("Internal audio track " + oAudioTrackInfo.TrackID + " must be skipped as AVISOURCE is going to be used", ImageType.Warning);
-                        continue;
-                    }
-
                     arrAudioTrackInfo.Add(oAudioTrackInfo);
                     if (dpp.IndexType != FileIndexerWindow.IndexType.NONE && !dpp.Eac3toDemux)
                         aInput = "::" + oAudioTrackInfo.TrackID + "::";
@@ -1517,8 +1534,8 @@ namespace MeGUI
             if (!track.SelectedItem.IsStandard)
                 track.SelectedStream.Delay = PrettyFormatting.getDelayAndCheck(track.SelectedStream.DemuxFilePath) ?? 0;
             if (_videoInputInfo != null && _videoInputInfo.IndexerToUse == FileIndexerWindow.IndexType.FFMS 
-                && track.SelectedItem.IsStandard && _videoInputInfo.ContainerFileType != ContainerType.MKV 
-                && !_videoInputInfo.isEac3toDemuxable())
+                && (_videoInputInfo.ContainerFileType == ContainerType.M2TS || _videoInputInfo.ContainerFileType == null)
+                && !_videoInputInfo.isEac3toDemuxable() && track.SelectedItem.IsStandard)
                 audioTracks[i].DisableDontEncode(true);
             else
                 audioTracks[i].DisableDontEncode(false);

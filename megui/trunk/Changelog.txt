@@ -1,3 +1,4 @@
+2277 [OneClick] mux AVI/MP4 input files into MKV for better audio/video processing support
 2276 [QAAC] if CoreAudioToolbox.dll is missing an information will be displayed
 2275 [Worker] fixed temporary worker only processing one job
 2274 [Adaptive Muxer] fixed handling of the "and close" button

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ namespace MeGUI
 
         public override string CodecString
         {
-            get { return ""; }
+            get { return type.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture); }
         }
 
         public override string EncodingMode
@@ -85,6 +85,7 @@ namespace MeGUI
 			get {return codec;}
 			set {codec = value;}
 		}
+
 		/// <summary>
 		/// number of b-frames in the video input, used for informational purposes
 		/// </summary>
@@ -93,6 +94,7 @@ namespace MeGUI
 			get {return nbOfBframes;}
 			set {nbOfBframes = value;}
 		}
+
 		/// <summary>
 		/// the number of frames the video has
 		/// </summary>
@@ -101,6 +103,7 @@ namespace MeGUI
 			get {return nbOfFrames;}
 			set {nbOfFrames = value;}
 		}
+
 		/// <summary>
 		/// chosen video bitrate for the output, used for informational purposes
 		/// </summary>
@@ -109,6 +112,7 @@ namespace MeGUI
 			get {return bitrate;}
 			set {bitrate = value;}
 		}
+
 		/// <summary>
 		/// projected mp4 muxing overhead for this job in bytes / frame
 		/// </summary>
@@ -117,6 +121,7 @@ namespace MeGUI
 			get {return overhead;}
 			set {overhead = value;}
 		}
+
 		/// <summary>
 		/// the settings for this job
 		/// contains additional information like additional streams, framerate, etc.
@@ -126,6 +131,7 @@ namespace MeGUI
 			get {return settings;}
 			set {settings = value;}
 		}
+
 		/// <summary>
 		/// gets / sets the type of mux job this is
 		/// </summary>

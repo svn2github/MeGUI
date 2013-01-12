@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -35,6 +35,8 @@ namespace MeGUI
 		private decimal? framerate;
 		private string chapterFile, videoName;
         private string muxedInput, videoInput, muxedOutput, deviceType;
+        private bool muxAll;
+        private Dar? dar;
 
         private FileSize? splitSize;
 
@@ -50,6 +52,7 @@ namespace MeGUI
             muxedOutput = "";
             deviceType = "";
 			splitSize = null;
+            muxAll = false;
 		}
 
         public string MuxedInput
@@ -57,11 +60,13 @@ namespace MeGUI
             get { return muxedInput; }
             set { muxedInput = value; }
         }
+
         public string MuxedOutput
         {
             get { return muxedOutput; }
             set { muxedOutput = value; }
         }
+
         public string VideoInput
         {
             get { return videoInput; }
@@ -76,6 +81,7 @@ namespace MeGUI
 			get {return audioStreams;}
 			set {audioStreams = value;}
 		}
+
 		/// <summary>
 		/// Array of subtitle tracks to be muxed
 		/// </summary>
@@ -84,6 +90,7 @@ namespace MeGUI
 			get {return subtitleStreams;}
 			set {subtitleStreams = value;}
 		}
+
 		/// <summary>
 		/// framerate of the video
 		/// </summary>
@@ -92,6 +99,7 @@ namespace MeGUI
 			get {return framerate;}
 			set {framerate = value;}
 		}
+
 		/// <summary>
 		/// the file containing the chapter information
 		/// </summary>
@@ -100,6 +108,7 @@ namespace MeGUI
 			get {return chapterFile;}
 			set {chapterFile = value;}
 		}
+
 		/// <summary>
 		/// file size at which the output file is to be split
 		/// </summary>
@@ -108,8 +117,6 @@ namespace MeGUI
 			get {return splitSize;}
 			set {splitSize = value;}
 		}
-
-        private Dar? dar;
 
         public Dar? DAR
         {
@@ -130,6 +137,15 @@ namespace MeGUI
         {
            get { return videoName; }
            set { videoName = value; }
+        }
+
+        /// <summary>
+        /// gets / sets if the complete input file must be muxed
+        /// </summary>
+        public bool MuxAll
+        {
+            get { return muxAll; }
+            set { muxAll = value; }
         }
 	
 	}
