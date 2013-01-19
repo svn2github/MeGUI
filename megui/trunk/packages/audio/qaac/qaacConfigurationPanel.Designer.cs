@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -43,6 +43,96 @@ namespace MeGUI.packages.audio.qaac
             }
             base.Dispose(disposing);
         }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.label2 = new System.Windows.Forms.Label();
+            this.cbMode = new System.Windows.Forms.ComboBox();
+            this.trackBar = new System.Windows.Forms.TrackBar();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbProfile = new System.Windows.Forms.ComboBox();
+            this.encoderGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // encoderGroupBox
+            // 
+            this.encoderGroupBox.Controls.Add(this.cbProfile);
+            this.encoderGroupBox.Controls.Add(this.label3);
+            this.encoderGroupBox.Controls.Add(this.trackBar);
+            this.encoderGroupBox.Controls.Add(this.cbMode);
+            this.encoderGroupBox.Controls.Add(this.label2);
+            this.encoderGroupBox.Size = new System.Drawing.Size(390, 131);
+            this.encoderGroupBox.Text = "QAAC Options";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(37, 26);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Mode";
+            // 
+            // cbMode
+            // 
+            this.cbMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMode.FormattingEnabled = true;
+            this.cbMode.Location = new System.Drawing.Point(88, 23);
+            this.cbMode.Name = "cbMode";
+            this.cbMode.Size = new System.Drawing.Size(121, 21);
+            this.cbMode.TabIndex = 1;
+            this.cbMode.SelectedIndexChanged += new System.EventHandler(this.cbMode_SelectedIndexChanged);
+            // 
+            // trackBar
+            // 
+            this.trackBar.Location = new System.Drawing.Point(6, 50);
+            this.trackBar.Maximum = 127;
+            this.trackBar.Name = "trackBar";
+            this.trackBar.Size = new System.Drawing.Size(387, 45);
+            this.trackBar.TabIndex = 2;
+            this.trackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trackBar.Value = 90;
+            this.trackBar.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(37, 98);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(36, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Profile";
+            // 
+            // cbProfile
+            // 
+            this.cbProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbProfile.FormattingEnabled = true;
+            this.cbProfile.Location = new System.Drawing.Point(88, 95);
+            this.cbProfile.Name = "cbProfile";
+            this.cbProfile.Size = new System.Drawing.Size(121, 21);
+            this.cbProfile.TabIndex = 4;
+            this.cbProfile.SelectedIndexChanged += new System.EventHandler(this.cbProfile_SelectedIndexChanged);
+            // 
+            // qaacConfigurationPanel
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.Name = "qaacConfigurationPanel";
+            this.Size = new System.Drawing.Size(394, 300);
+            this.encoderGroupBox.ResumeLayout(false);
+            this.encoderGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
 
         public System.Windows.Forms.ComboBox cbProfile;
         public System.Windows.Forms.Label label3;
