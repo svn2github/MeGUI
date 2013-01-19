@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -60,6 +60,8 @@ namespace MeGUI
             this.lblAR = new System.Windows.Forms.Label();
             this.modValueBox = new System.Windows.Forms.ComboBox();
             this.chAutoPreview = new System.Windows.Forms.CheckBox();
+            this.signalAR = new System.Windows.Forms.CheckBox();
+            this.mod16Box = new System.Windows.Forms.ComboBox();
             this.resize = new System.Windows.Forms.CheckBox();
             this.suggestResolution = new System.Windows.Forms.CheckBox();
             this.cropLeft = new System.Windows.Forms.NumericUpDown();
@@ -76,8 +78,6 @@ namespace MeGUI
             this.label7 = new System.Windows.Forms.Label();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
             this.reopenOriginal = new System.Windows.Forms.Button();
-            this.mod16Box = new System.Windows.Forms.ComboBox();
-            this.signalAR = new System.Windows.Forms.CheckBox();
             this.tvTypeLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.inputDARLabel = new System.Windows.Forms.Label();
@@ -277,6 +277,33 @@ namespace MeGUI
             this.chAutoPreview.Text = "Apply auto Preview";
             this.chAutoPreview.UseVisualStyleBackColor = true;
             this.chAutoPreview.CheckedChanged += new System.EventHandler(this.chAutoPreview_CheckedChanged);
+            // 
+            // signalAR
+            // 
+            this.signalAR.AutoSize = true;
+            this.signalAR.Location = new System.Drawing.Point(11, 31);
+            this.signalAR.Name = "signalAR";
+            this.signalAR.Size = new System.Drawing.Size(190, 17);
+            this.signalAR.TabIndex = 11;
+            this.signalAR.Text = "Clever (TM) anamorphic encoding:";
+            this.signalAR.CheckedChanged += new System.EventHandler(this.updateEverything);
+            // 
+            // mod16Box
+            // 
+            this.mod16Box.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.mod16Box.Enabled = false;
+            this.mod16Box.FormattingEnabled = true;
+            this.mod16Box.Items.AddRange(new object[] {
+            "Resize to selected mod",
+            "Overcrop to achieve selected mod",
+            "Encode non-mod16",
+            "Crop mod4 horizontally",
+            "Undercrop to achieve selected mod"});
+            this.mod16Box.Location = new System.Drawing.Point(222, 29);
+            this.mod16Box.Name = "mod16Box";
+            this.mod16Box.Size = new System.Drawing.Size(222, 21);
+            this.mod16Box.TabIndex = 19;
+            this.mod16Box.SelectedIndexChanged += new System.EventHandler(this.updateEverything);
             // 
             // resize
             // 
@@ -509,33 +536,6 @@ namespace MeGUI
             this.reopenOriginal.UseVisualStyleBackColor = true;
             this.reopenOriginal.Click += new System.EventHandler(this.reopenOriginal_Click);
             // 
-            // mod16Box
-            // 
-            this.mod16Box.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.mod16Box.Enabled = false;
-            this.mod16Box.FormattingEnabled = true;
-            this.mod16Box.Items.AddRange(new object[] {
-            "Resize to selected mod",
-            "Overcrop to achieve selected mod",
-            "Encode non-mod16",
-            "Crop mod4 horizontally",
-            "Undercrop to achieve selected mod"});
-            this.mod16Box.Location = new System.Drawing.Point(222, 29);
-            this.mod16Box.Name = "mod16Box";
-            this.mod16Box.Size = new System.Drawing.Size(222, 21);
-            this.mod16Box.TabIndex = 19;
-            this.mod16Box.SelectedIndexChanged += new System.EventHandler(this.updateEverything);
-            // 
-            // signalAR
-            // 
-            this.signalAR.AutoSize = true;
-            this.signalAR.Location = new System.Drawing.Point(11, 31);
-            this.signalAR.Name = "signalAR";
-            this.signalAR.Size = new System.Drawing.Size(190, 17);
-            this.signalAR.TabIndex = 11;
-            this.signalAR.Text = "Clever (TM) anamorphic encoding:";
-            this.signalAR.CheckedChanged += new System.EventHandler(this.updateEverything);
-            // 
             // tvTypeLabel
             // 
             this.tvTypeLabel.Location = new System.Drawing.Point(316, 82);
@@ -760,6 +760,7 @@ namespace MeGUI
             this.cbNvDeInt.Name = "cbNvDeInt";
             this.cbNvDeInt.Size = new System.Drawing.Size(265, 21);
             this.cbNvDeInt.TabIndex = 1;
+            this.cbNvDeInt.SelectedIndexChanged += new System.EventHandler(this.refreshScript);
             // 
             // nvDeInt
             // 
