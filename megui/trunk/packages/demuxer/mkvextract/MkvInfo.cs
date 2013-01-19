@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 //
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ namespace MeGUI
 {
     class MkvInfo
     {
-        private bool _bHasChapters;
+        private bool _bHasChapters, _bMuxable;
         private String _strResult, _strFile;
         private List<TrackInfo> _oTracks = new List<TrackInfo>();
         private LogItem _oLog;
@@ -42,12 +42,18 @@ namespace MeGUI
             else
                 this._oLog = oLog;
             this._strFile = strFile;
+            _bMuxable = true;
             getInfo();
         }
 
         public bool HasChapters
         {
             get { return _bHasChapters; }
+        }
+
+        public bool IsMuxable
+        {
+            get { return _bMuxable; }
         }
 
         private void getInfo()
@@ -77,11 +83,14 @@ namespace MeGUI
                     }
                     mkvinfo.WaitForExit();
 
+                    _oLog.LogValue("MkvInfo", _strResult);
                     if (mkvinfo.ExitCode != 0)
-                        _oLog.LogValue("MkvInfo", _strResult, ImageType.Error);
+                    {
+                        _bMuxable = false;
+                        _bHasChapters = false;
+                    }
                     else
-                        _oLog.LogValue("MkvInfo", _strResult);
-                    parseResult();
+                        parseResult();
                 }
                 catch (Exception ex)
                 {
@@ -161,6 +170,10 @@ namespace MeGUI
             {
                 if (Line.StartsWith("Chapters:"))
                     _bHasChapters = true;
+                else if (Line.Contains("(unsupported "))
+                    _bMuxable = false;
+                else if (Line.Contains("unsupported container"))
+                    _bMuxable = false;
             }
         }
 

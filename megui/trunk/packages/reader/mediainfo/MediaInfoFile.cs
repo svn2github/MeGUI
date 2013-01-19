@@ -780,6 +780,19 @@ namespace MeGUI
             return _MkvInfo.HasChapters;
         }
 
+        /// <summary>checks if the input file can be muxed to MKV</summary>
+        /// <returns>true if MKV can be created</returns>
+        public bool MuxableToMKV()
+        {
+            if (cType == ContainerType.MKV)
+                return true;
+
+            if (_MkvInfo == null)
+                _MkvInfo = new MkvInfo(_file, ref _Log);
+
+            return _MkvInfo.IsMuxable;
+        }
+
         /// <summary>checks if the file is a MKV file and has chapters</summary>
         /// <returns>track number or -1 if no chapters available</returns>
         public int getEac3toChaptersTrack()

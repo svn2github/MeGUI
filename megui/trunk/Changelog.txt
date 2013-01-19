@@ -1,3 +1,4 @@
+2279 [OneClick] remux only into MKV if necessary & possible
 2278 [OneClick] added option to reset the working/output directories in the profile
 2277 [OneClick] mux AVI/MP4 input files into MKV for better audio/video processing support
 2276 [QAAC] if CoreAudioToolbox.dll is missing an information will be displayed

@@ -106,11 +106,21 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 sb.Append("-o \"" + settings.MuxedOutput + "\"");
                 if (settings.MuxAll)
                 {
+                    string strInput = string.Empty;
                     if (!string.IsNullOrEmpty(settings.VideoInput))
-                        sb.Append(" \"" + settings.VideoInput + "\"");
-                    else if(!string.IsNullOrEmpty(settings.MuxedInput))
-                        sb.Append(" \"" + settings.MuxedInput + "\"");
+                        strInput = settings.VideoInput;
+                    else if (!string.IsNullOrEmpty(settings.MuxedInput))
+                        strInput = settings.MuxedInput;
+                    MediaInfoFile oVideoInfo = new MediaInfoFile(strInput, ref log);
+                    if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
+                        trackID = oVideoInfo.VideoInfo.Track.MMGTrackID;
+                    else
+                        trackID = 0;
+
+                    sb.Append(" \"" + strInput + "\"");
+                    sb.Append(" \"--compression\" \"" + trackID + ":none\"");
                     sb.Append(" --ui-language en");
+
                     return sb.ToString();
                 }
 

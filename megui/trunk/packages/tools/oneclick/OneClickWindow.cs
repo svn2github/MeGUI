@@ -686,24 +686,55 @@ namespace MeGUI
 
 
             // mux input file into MKV if possible
-            if (inputContainer == ContainerType.AVI || inputContainer == ContainerType.MP4)
+            if (inputContainer != ContainerType.MKV 
+                && (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE))
             {
-                // create job
-                MuxJob mJob = new MuxJob();
-                mJob.MuxType = MuxerType.MKVMERGE;
-                mJob.Input = dpp.VideoInput;
-                mJob.Output = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(dpp.VideoInput) + ".mkv"); ;
-                mJob.Settings.MuxAll = true;
-                mJob.Settings.MuxedInput = mJob.Input;
-                mJob.Settings.MuxedOutput = mJob.Output;
+                // and necessary
+                bool bRemuxInput = false;
+                if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
+                    bRemuxInput = true;
 
-                // change input file properties
-                inputContainer = ContainerType.MKV;
-                dpp.VideoInput = mJob.Output;
-                dpp.FilesToDelete.Add(mJob.Output);
+                foreach (OneClickStreamControl oStreamControl in audioTracks)
+                {
+                    if (!oStreamControl.SelectedItem.IsStandard)
+                        continue;
 
-                // add job to queue
-                prepareJobs = new SequentialChain(mJob);
+                    if (oStreamControl.SelectedStreamIndex <= 0) // not NONE
+                        continue;
+
+                    bRemuxInput = true;
+                }
+
+                foreach (OneClickStreamControl oStreamControl in subtitleTracks)
+                {
+                    if (!oStreamControl.SelectedItem.IsStandard)
+                        continue;
+
+                    if (oStreamControl.SelectedStreamIndex <= 0) // not NONE
+                        continue;
+
+                    bRemuxInput = true;
+                }
+
+                if (bRemuxInput && _videoInputInfo.MuxableToMKV())
+                {
+                    // create job
+                    MuxJob mJob = new MuxJob();
+                    mJob.MuxType = MuxerType.MKVMERGE;
+                    mJob.Input = dpp.VideoInput;
+                    mJob.Output = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(dpp.VideoInput) + ".mkv"); ;
+                    mJob.Settings.MuxAll = true;
+                    mJob.Settings.MuxedInput = mJob.Input;
+                    mJob.Settings.MuxedOutput = mJob.Output;
+                    dpp.FilesToDelete.Add(mJob.Output);
+
+                    // change input file properties
+                    inputContainer = ContainerType.MKV;
+                    dpp.VideoInput = mJob.Output;
+
+                    // add job to queue
+                    prepareJobs = new SequentialChain(mJob);
+                }
             }
 
 
@@ -859,6 +890,12 @@ namespace MeGUI
                 if (oStreamControl.SelectedItem.IsStandard)
                 {
                     oAudioTrackInfo = (AudioTrackInfo)oStreamControl.SelectedStream.TrackInfo;
+                    if (dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE && inputContainer != ContainerType.MKV)
+                    {
+                        _oLog.LogEvent("Internal audio track " + oAudioTrackInfo.TrackID + " will be skipped as AVISOURCE is going to be used", ImageType.Warning);
+                        continue;
+                    }
+
                     arrAudioTrackInfo.Add(oAudioTrackInfo);
                     if (dpp.IndexType != FileIndexerWindow.IndexType.NONE && !dpp.Eac3toDemux)
                         aInput = "::" + oAudioTrackInfo.TrackID + "::";
@@ -1047,6 +1084,8 @@ namespace MeGUI
             else
             {
                 // no indexer
+                if (inputContainer == ContainerType.MKV && dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
+                    dpp.VideoInput = _videoInputInfo.FileName;
                 OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(dpp.VideoInput, null, dpp);
                 finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(ocJob));
             }
