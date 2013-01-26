@@ -1,5 +1,7 @@
+2286 [OneClick] lowered default priority of the DGA indexer
 2285 [OneClick] added option to use only the first audio track from a specific language
 2284 [AVS Script Creator] always show the correct output resolution when not resizing
+                          even with upsizing allowed the default resolution will use no upsizing
 2283 [OneClick] added option to extract the core from HD audio tracks
 2282 [OneClick] remove phantom audio/subtitle tracks detected by MediaInfo when processing Blu-ray
 2281 [QAAC] disable TVBR in HE-AAC. Bug #699

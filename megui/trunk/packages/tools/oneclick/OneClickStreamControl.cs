@@ -229,7 +229,7 @@ namespace MeGUI
         {
             get 
             {
-                if (input.SelectedObject != null && !input.SelectedText.Equals("None") && input.SelectedSCItem.IsStandard)
+                if (input.SelectedObject != null && !String.IsNullOrEmpty(input.SelectedText) && !input.SelectedText.Equals("None") && input.SelectedSCItem.IsStandard)
                 {
                     OneClickStream oStream = (OneClickStream)input.SelectedObject;
                     oStream.Language = subtitleLanguage.Text;

@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 //
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -33,7 +33,8 @@ namespace MeGUI
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is MkvExtractJob) return new MkvExtract(mf.Settings.MkvExtractPath);
+            if (j is MkvExtractJob) 
+                return new MkvExtract(mf.Settings.MkvExtractPath);
             return null;
         }
 
@@ -41,7 +42,6 @@ namespace MeGUI
         {
             this.executable = executablePath;
         }
-
 
         #region line processing
         /// <summary>
@@ -99,6 +99,41 @@ namespace MeGUI
             {
                 StringBuilder sb = new StringBuilder();
 
+                // verify track IDs
+                MediaInfoFile oFile = new MediaInfoFile(job.Input, ref log);
+                foreach (TrackInfo oTrack in job.MkvTracks)
+                {
+                    if (oTrack.TrackType == TrackType.Audio)
+                    {
+                        bool bFound = false;
+                        foreach (AudioTrackInfo oAudioInfo in oFile.AudioInfo.Tracks)
+                        {
+                            if (oAudioInfo.MMGTrackID == oTrack.MMGTrackID)
+                                bFound = true;
+                        }
+
+                        if (!bFound)
+                            oTrack.TrackIndex = oFile.AudioInfo.Tracks[oTrack.TrackIndex].MMGTrackID;
+                        else
+                            oTrack.TrackIndex = oTrack.MMGTrackID;
+                    }
+                    else if (oTrack.TrackType == TrackType.Subtitle)
+                    {
+                        bool bFound = false;
+                        foreach (SubtitleTrackInfo oSubtitleInfo in oFile.SubtitleInfo.Tracks)
+                        {
+                            if (oSubtitleInfo.MMGTrackID == oTrack.MMGTrackID)
+                                bFound = true;
+                        }
+
+                        if (!bFound)
+                            oTrack.TrackIndex = oFile.SubtitleInfo.Tracks[oTrack.TrackIndex].MMGTrackID;
+                        else
+                            oTrack.TrackIndex = oTrack.MMGTrackID;
+                    }
+
+                }
+
                 // Input File
                 sb.Append("tracks \"" + job.Input + "\" --ui-language en");
 
@@ -109,7 +144,7 @@ namespace MeGUI
                     if (oTrack.TrackType != TrackType.Audio && oTrack.TrackType != TrackType.Subtitle)
                         continue;
 
-                    sb.Append(" " + oTrack.MMGTrackID + ":\"" + job.OutputPath + "\\" + oTrack.DemuxFileName + "\"");
+                    sb.Append(" " + oTrack.TrackIndex + ":\"" + job.OutputPath + "\\" + oTrack.DemuxFileName + "\"");
                 }
 
                 return sb.ToString();
