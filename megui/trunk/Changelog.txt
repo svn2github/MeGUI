@@ -1,3 +1,4 @@
+2282 [OneClick] remove phantom audio/subtitle tracks detected by MediaInfo when processing Blu-ray
 2281 [QAAC] disable TVBR in HE-AAC. Bug #699
 2280 [AVS Script Creator] fixed not applying Nvidia deinterlacer settings
 2279 [OneClick] remux only into MKV if necessary & possible. Bug #698

@@ -706,6 +706,8 @@ namespace MeGUI
                             bVideoFound = true;
                         }
                     }
+                    oInfo.Audio.RemoveRange(iAudioCount, oInfo.Audio.Count - iAudioCount);
+                    oInfo.Text.RemoveRange(iTextCount, oInfo.Text.Count - iTextCount);
                 }
                 else if (oInfo.Audio.Count == 0 && oInfo.Video.Count == 0 && Path.GetExtension(strFile).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
                 {
