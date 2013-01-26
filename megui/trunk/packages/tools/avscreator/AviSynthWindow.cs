@@ -119,7 +119,7 @@ namespace MeGUI
             avsProfile.Manager = MainForm.Instance.Profiles;
 
             eventsOn = true;
-            updateEverything(true, true);
+            updateEverything(true, true, resize.Checked);
 		}
 
         void ProfileChanged(object sender, EventArgs e)
@@ -136,7 +136,7 @@ namespace MeGUI
 		{
             scriptRefresh--;
             openVideoSource(videoInput, null);
-            updateEverything(true, true);
+            updateEverything(true, true, resize.Checked);
 		}
 
         public AviSynthWindow(MainForm mainForm, string videoInput, string indexFile)
@@ -144,7 +144,7 @@ namespace MeGUI
         {
             scriptRefresh--;
             openVideoSource(videoInput, indexFile);
-            updateEverything(true, true);
+            updateEverything(true, true, resize.Checked);
         }
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -163,7 +163,7 @@ namespace MeGUI
         {
             scriptRefresh--;
             openVideoSource(input.Filename, null);
-            updateEverything(true, true);
+            updateEverything(true, true, resize.Checked);
 		}
 
 		private void openDLLButton_Click(object sender, System.EventArgs e)
@@ -888,7 +888,7 @@ namespace MeGUI
                 if (!crop.Checked)
                     crop.Checked = true;
                 eventsOn = true;
-                updateEverything(true, false);
+                updateEverything(true, false, false);
             }
             else
                 MessageBox.Show("I'm afraid I was unable to find more than 5 frames that have matching crop values");
@@ -923,7 +923,7 @@ namespace MeGUI
                     horizontalResolution.Maximum = verticalResolution.Maximum = 9999;
                 this.modValueBox.SelectedIndex = (int)value.ModValue;
                 eventsOn = true;
-                updateEverything(true, false);
+                updateEverything(true, false, value.Resize);
 			}
         }
         
@@ -1159,15 +1159,15 @@ namespace MeGUI
 
         private void inputDARChanged(object sender, string val)
         {
-            updateEverything(sender != null, false);
+            updateEverything(sender != null, false, false);
         }
 
         private void updateEverything(object sender, EventArgs e)
         {
-            updateEverything(sender != null, false);
+            updateEverything(sender != null, false, false);
         }
 
-        private void updateEverything(bool bShowScript, bool bForceScript)
+        private void updateEverything(bool bShowScript, bool bForceScript, bool bResizeEnabled)
         {
             if (!eventsOn)
                 return;
@@ -1176,7 +1176,7 @@ namespace MeGUI
             // update events may be triggered
             setModType();
             setCrop();
-            setOutputResolution();
+            setOutputResolution(bResizeEnabled);
 
             // no update events triggered
             calcAspectError();
@@ -1250,22 +1250,6 @@ namespace MeGUI
                 this.cropRight.Enabled = true;
                 this.cropBottom.Enabled = true;
                 sendCropValues();
-
-                if (file != null)
-                {
-                    int inputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
-                    int inputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-                    if (!resize.Checked)
-                    {
-                        verticalResolution.Value = inputHeight;
-                        horizontalResolution.Value = inputWidth;
-                    }
-                    if (!bAllowUpsizing)
-                    {
-                        verticalResolution.Maximum = inputHeight;
-                        horizontalResolution.Maximum = inputWidth;
-                    }
-                }
             }
             else
             {
@@ -1276,9 +1260,25 @@ namespace MeGUI
                 if (player != null && player.Visible)
                     player.crop(0, 0, 0, 0);
             }
+
+            if (file != null)
+            {
+                int inputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+                int inputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
+                if (!resize.Checked)
+                {
+                    verticalResolution.Value = inputHeight;
+                    horizontalResolution.Value = inputWidth;
+                }
+                if (!bAllowUpsizing)
+                {
+                    verticalResolution.Maximum = inputHeight;
+                    horizontalResolution.Maximum = inputWidth;
+                }
+            }
         }
 
-        private void setOutputResolution()
+        private void setOutputResolution(bool bResizeEnabled)
         {
             if (resize.Checked)
             {
@@ -1288,7 +1288,7 @@ namespace MeGUI
             else
                 this.horizontalResolution.Enabled = this.verticalResolution.Enabled = false;
 
-            if (file == null)
+            if (file == null || !resize.Checked)
                 return;
 
             try
@@ -1307,13 +1307,13 @@ namespace MeGUI
                 int hres = (int)horizontalResolution.Value;
 
                 // remove upsizing if not allowed
-                if (!bAllowUpsizing && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < hres)
+                if ((!bAllowUpsizing || bResizeEnabled) && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < hres)
                     hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
                 else if (!horizontalResolution.Enabled) // remove upsizing or undersizing if value cannot be changed
                     hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
 
-                // correct hres if not mod compliant and resize is enabled
-                if (resize.Checked && hres % mod != 0)
+                // correct hres if not mod compliant
+                if (hres % mod != 0)
                 {
                     int diff = hres % mod;
                     if (hres - diff > 0)
@@ -1331,8 +1331,11 @@ namespace MeGUI
 
                 if (suggestResolution.Checked)
                 {
-                    this.verticalResolution.Enabled = false;
-                    if (scriptVerticalResolution > verticalResolution.Maximum)
+                    int iMaximum = (int)verticalResolution.Maximum;
+                    if (bResizeEnabled)
+                        iMaximum = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+
+                    if (scriptVerticalResolution > iMaximum)
                     {
                         // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
                         hres = (int)horizontalResolution.Value;
@@ -1345,6 +1348,7 @@ namespace MeGUI
                         while (scriptVerticalResolution > verticalResolution.Maximum && hres > 0);
                         horizontalResolution.Value = hres;
                     }
+                    verticalResolution.Enabled = false;
                     verticalResolution.Value = (decimal)scriptVerticalResolution;
                 }
                 else
@@ -1386,6 +1390,14 @@ namespace MeGUI
         {
             if (player != null && !player.Visible)
                 player.Show();
+        }
+
+        private void resize_CheckedChanged(object sender, EventArgs e)
+        {
+            if (sender != null && e != null & resize.Checked)
+                updateEverything(sender != null, false, true);
+            else
+                updateEverything(sender != null, false, false);
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);

@@ -316,7 +316,7 @@ namespace MeGUI
             this.resize.TabIndex = 9;
             this.resize.Text = "Resize";
             this.resize.UseVisualStyleBackColor = true;
-            this.resize.CheckedChanged += new System.EventHandler(this.updateEverything);
+            this.resize.CheckedChanged += new System.EventHandler(this.resize_CheckedChanged);
             // 
             // suggestResolution
             // 
