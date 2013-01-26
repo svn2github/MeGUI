@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -100,6 +100,8 @@ namespace MeGUI.packages.tools.oneclick
             this.lbDefaultAudio = new System.Windows.Forms.ListBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.deleteWorking = new System.Windows.Forms.Button();
+            this.deleteOutput = new System.Windows.Forms.Button();
             this.outputDirectory = new MeGUI.FileBar();
             this.label8 = new System.Windows.Forms.Label();
             this.workingDirectory = new MeGUI.FileBar();
@@ -118,8 +120,6 @@ namespace MeGUI.packages.tools.oneclick
             this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.audioAddTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.audioRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteOutput = new System.Windows.Forms.Button();
-            this.deleteWorking = new System.Windows.Forms.Button();
             label3 = new System.Windows.Forms.Label();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
@@ -372,7 +372,7 @@ namespace MeGUI.packages.tools.oneclick
             this.audioTab.Location = new System.Drawing.Point(6, 30);
             this.audioTab.Name = "audioTab";
             this.audioTab.SelectedIndex = 0;
-            this.audioTab.Size = new System.Drawing.Size(407, 133);
+            this.audioTab.Size = new System.Drawing.Size(407, 150);
             this.audioTab.TabIndex = 44;
             this.audioTab.SelectedIndexChanged += new System.EventHandler(this.audioTab_SelectedIndexChanged);
             this.audioTab.VisibleChanged += new System.EventHandler(this.audioTab_VisibleChanged);
@@ -385,7 +385,7 @@ namespace MeGUI.packages.tools.oneclick
             this.audioPage0.Controls.Add(this.oneClickAudioControl1);
             this.audioPage0.Location = new System.Drawing.Point(4, 22);
             this.audioPage0.Name = "audioPage0";
-            this.audioPage0.Size = new System.Drawing.Size(399, 107);
+            this.audioPage0.Size = new System.Drawing.Size(399, 124);
             this.audioPage0.TabIndex = 2;
             this.audioPage0.Text = "Default";
             this.audioPage0.UseVisualStyleBackColor = true;
@@ -394,7 +394,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             this.oneClickAudioControl1.Location = new System.Drawing.Point(6, 9);
             this.oneClickAudioControl1.Name = "oneClickAudioControl1";
-            this.oneClickAudioControl1.Size = new System.Drawing.Size(386, 90);
+            this.oneClickAudioControl1.Size = new System.Drawing.Size(386, 114);
             this.oneClickAudioControl1.TabIndex = 0;
             // 
             // audioPageAdd
@@ -711,6 +711,26 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = " Default Directories ";
             // 
+            // deleteWorking
+            // 
+            this.deleteWorking.Location = new System.Drawing.Point(370, 52);
+            this.deleteWorking.Name = "deleteWorking";
+            this.deleteWorking.Size = new System.Drawing.Size(28, 23);
+            this.deleteWorking.TabIndex = 46;
+            this.deleteWorking.Text = "X";
+            this.deleteWorking.UseVisualStyleBackColor = true;
+            this.deleteWorking.Click += new System.EventHandler(this.deleteWorking_Click);
+            // 
+            // deleteOutput
+            // 
+            this.deleteOutput.Location = new System.Drawing.Point(370, 20);
+            this.deleteOutput.Name = "deleteOutput";
+            this.deleteOutput.Size = new System.Drawing.Size(28, 23);
+            this.deleteOutput.TabIndex = 45;
+            this.deleteOutput.Text = "X";
+            this.deleteOutput.UseVisualStyleBackColor = true;
+            this.deleteOutput.Click += new System.EventHandler(this.deleteOutput_Click);
+            // 
             // outputDirectory
             // 
             this.outputDirectory.Filename = "";
@@ -883,26 +903,6 @@ namespace MeGUI.packages.tools.oneclick
             this.audioRemoveTrack.Size = new System.Drawing.Size(149, 22);
             this.audioRemoveTrack.Text = "Remove Track";
             this.audioRemoveTrack.Click += new System.EventHandler(this.audioRemoveTrack_Click);
-            // 
-            // deleteOutput
-            // 
-            this.deleteOutput.Location = new System.Drawing.Point(370, 20);
-            this.deleteOutput.Name = "deleteOutput";
-            this.deleteOutput.Size = new System.Drawing.Size(28, 23);
-            this.deleteOutput.TabIndex = 45;
-            this.deleteOutput.Text = "X";
-            this.deleteOutput.UseVisualStyleBackColor = true;
-            this.deleteOutput.Click += new System.EventHandler(this.deleteOutput_Click);
-            // 
-            // deleteWorking
-            // 
-            this.deleteWorking.Location = new System.Drawing.Point(370, 52);
-            this.deleteWorking.Name = "deleteWorking";
-            this.deleteWorking.Size = new System.Drawing.Size(28, 23);
-            this.deleteWorking.TabIndex = 46;
-            this.deleteWorking.Text = "X";
-            this.deleteWorking.UseVisualStyleBackColor = true;
-            this.deleteWorking.Click += new System.EventHandler(this.deleteWorking_Click);
             // 
             // OneClickConfigPanel
             // 

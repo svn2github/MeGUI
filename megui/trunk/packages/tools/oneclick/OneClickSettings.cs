@@ -92,7 +92,7 @@ namespace MeGUI
                     audioEncodingMode = AudioEncodingMode.NeverOnlyCore;
 
                 audioSettings = new List<OneClickAudioSettings>();
-                audioSettings.Add(new OneClickAudioSettings("[default]", audioProfileName, audioEncodingMode));
+                audioSettings.Add(new OneClickAudioSettings("[default]", audioProfileName, audioEncodingMode, false));
             }
         }
 

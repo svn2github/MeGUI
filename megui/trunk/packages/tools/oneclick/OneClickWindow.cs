@@ -1636,6 +1636,34 @@ namespace MeGUI
                 {
                     if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                     {
+                        // should only the first audio track for this language be processed?
+                        bool bUseFirstTrackOnly = settings.AudioSettings[0].UseFirstTrackOnly;
+                        foreach (OneClickAudioSettings oAudioSettings in settings.AudioSettings)
+                        {
+                            if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(oAudioSettings.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                            {
+                                bUseFirstTrackOnly = oAudioSettings.UseFirstTrackOnly;
+                                break;
+                            }
+                        }
+
+                        bool bAddTrack = true;
+                        if (bUseFirstTrackOnly)
+                        {
+                            foreach (OneClickStreamControl oAudioControl in audioTracks)
+                            {
+                                if (oAudioControl.SelectedStreamIndex > 0 &&
+                                    oAudioControl.SelectedStream.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                                {
+                                    bAddTrack = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!bAddTrack)
+                            break;
+
                         if (iCounter > 0)
                             AudioAddTrack(false);
                         audioTracks[iCounter++].SelectedStreamIndex = i + 1;
@@ -1647,6 +1675,34 @@ namespace MeGUI
             {
                 for (int i = 0; i < arrAudioTrackInfo.Count; i++)
                 {
+                    // should only the first audio track for this language be processed?
+                    bool bUseFirstTrackOnly = settings.AudioSettings[0].UseFirstTrackOnly;
+                    foreach (OneClickAudioSettings oAudioSettings in settings.AudioSettings)
+                    {
+                        if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(oAudioSettings.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                        {
+                            bUseFirstTrackOnly = oAudioSettings.UseFirstTrackOnly;
+                            break;
+                        }
+                    }
+
+                    bool bAddTrack = true;
+                    if (bUseFirstTrackOnly)
+                    {
+                        foreach (OneClickStreamControl oAudioControl in audioTracks)
+                        {
+                            if (oAudioControl.SelectedStreamIndex > 0 &&
+                                oAudioControl.SelectedStream.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                            {
+                                bAddTrack = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!bAddTrack)
+                        break;
+
                     if (iCounter > 0)
                         AudioAddTrack(false);
                     audioTracks[iCounter++].SelectedStreamIndex = i + 1;

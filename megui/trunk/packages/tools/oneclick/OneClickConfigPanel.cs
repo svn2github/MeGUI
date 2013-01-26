@@ -99,8 +99,8 @@ namespace MeGUI.packages.tools.oneclick
                         }
                     }
                     if (!bFound)
-                        arrSettings.Add(new OneClickAudioSettings(audioConfigurations[i].Language,
-                            audioConfigurations[i].EncoderProfile.FQName, audioConfigurations[i].EncodingMode));
+                        arrSettings.Add(new OneClickAudioSettings(audioConfigurations[i].Language, audioConfigurations[i].EncoderProfile.FQName,
+                            audioConfigurations[i].EncodingMode, audioConfigurations[i].UseFirstTrackOnly));
                 }
                 val.AudioSettings = arrSettings;
 
@@ -158,6 +158,7 @@ namespace MeGUI.packages.tools.oneclick
                     {
                         audioConfigurations[0].SetProfileNameOrWarn(o.Profile);
                         audioConfigurations[0].EncodingMode = o.AudioEncodingMode;
+                        audioConfigurations[0].UseFirstTrackOnly = o.UseFirstTrackOnly;
                     }
                     else
                         AudioAddTrack(o);
@@ -476,8 +477,8 @@ namespace MeGUI.packages.tools.oneclick
         private void AudioAddTrack(OneClickAudioSettings oSettings)
         {
             if (oSettings == null)
-                oSettings = new OneClickAudioSettings("English", 
-                    audioConfigurations[0].EncoderProfile.FQName, audioConfigurations[0].EncodingMode);
+                oSettings = new OneClickAudioSettings("English",
+                    audioConfigurations[0].EncoderProfile.FQName, audioConfigurations[0].EncodingMode, audioConfigurations[0].UseFirstTrackOnly);
 
             TabPage p = new TabPage(oSettings.Language);
             p.UseVisualStyleBackColor = audioTab.TabPages[0].UseVisualStyleBackColor;
@@ -490,6 +491,7 @@ namespace MeGUI.packages.tools.oneclick
             a.EncodingMode = oSettings.AudioEncodingMode;
             a.SetProfileNameOrWarn(oSettings.Profile);
             a.Language = oSettings.Language;
+            a.UseFirstTrackOnly = oSettings.UseFirstTrackOnly;
             a.LanguageChanged += new EventHandler(audio1_LanguageChanged);
             audioConfigurations.Add(a);
             
@@ -545,7 +547,7 @@ namespace MeGUI.packages.tools.oneclick
 
             List<OneClickAudioSettings> arrSettings = new List<OneClickAudioSettings>();
             foreach (OneClickAudioControl o in audioConfigurations)
-                arrSettings.Add(new OneClickAudioSettings(o.Language, o.EncoderProfile.FQName, o.EncodingMode));
+                arrSettings.Add(new OneClickAudioSettings(o.Language, o.EncoderProfile.FQName, o.EncodingMode, o.UseFirstTrackOnly));
             AudioResetTrack();
             int i = 0;
             foreach (OneClickAudioSettings o in arrSettings)

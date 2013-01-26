@@ -73,6 +73,13 @@ namespace MeGUI
             set { language.SelectedItem = value; }
         }
 
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool UseFirstTrackOnly
+        {
+            get { return cbFirstTrackOnly.Checked; }
+            set { cbFirstTrackOnly.Checked = value; }
+        }
+
         private void cbEncodingMode_SelectedIndexChanged(object sender, EventArgs e)
         {
             encoderProfile.Enabled = !cbEncodingMode.SelectedText.Equals("never");
@@ -99,11 +106,12 @@ namespace MeGUI
 
         }
 
-        public OneClickAudioSettings(string language, string profile, AudioEncodingMode mode)
+        public OneClickAudioSettings(string language, string profile, AudioEncodingMode mode, bool useFirstTrackOnly)
         {
             this.language = language;
             this.profile = profile;
             this.audioEncodingMode = mode;
+            this.useFirstTrackOnly = useFirstTrackOnly;
         }
 
         #region GenericSettings Members
@@ -190,6 +198,13 @@ namespace MeGUI
         {
             get { return profile; }
             set { profile = value; }
+        }
+
+        private bool useFirstTrackOnly;
+        public bool UseFirstTrackOnly
+        {
+            get { return useFirstTrackOnly; }
+            set { useFirstTrackOnly = value; }
         }
     }
 }

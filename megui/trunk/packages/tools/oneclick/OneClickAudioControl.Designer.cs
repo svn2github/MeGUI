@@ -55,6 +55,7 @@ namespace MeGUI
             this.cbEncodingMode = new System.Windows.Forms.ComboBox();
             this.encoderProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.label1 = new System.Windows.Forms.Label();
+            this.cbFirstTrackOnly = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -92,14 +93,16 @@ namespace MeGUI
             this.tableLayoutPanel1.Controls.Add(this.language, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.languageLabel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.cbFirstTrackOnly, 1, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(380, 90);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(380, 120);
             this.tableLayoutPanel1.TabIndex = 44;
             // 
             // label2
@@ -142,13 +145,24 @@ namespace MeGUI
             this.label1.TabIndex = 50;
             this.label1.Text = "Encoder";
             // 
+            // cbFirstTrackOnly
+            // 
+            this.cbFirstTrackOnly.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.cbFirstTrackOnly, 2);
+            this.cbFirstTrackOnly.Location = new System.Drawing.Point(64, 93);
+            this.cbFirstTrackOnly.Name = "cbFirstTrackOnly";
+            this.cbFirstTrackOnly.Size = new System.Drawing.Size(129, 17);
+            this.cbFirstTrackOnly.TabIndex = 52;
+            this.cbFirstTrackOnly.Text = "use only the first track";
+            this.cbFirstTrackOnly.UseVisualStyleBackColor = true;
+            // 
             // OneClickAudioControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "OneClickAudioControl";
-            this.Size = new System.Drawing.Size(380, 90);
+            this.Size = new System.Drawing.Size(380, 120);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
@@ -164,5 +178,6 @@ namespace MeGUI
         private System.Windows.Forms.ComboBox cbEncodingMode;
         protected System.Windows.Forms.Label label2;
         protected System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox cbFirstTrackOnly;
     }
 }
