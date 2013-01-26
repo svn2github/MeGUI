@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ namespace MeGUI
         {
             InitializeComponent();
             language.Items.AddRange(new List<string>(LanguageSelectionContainer.Languages.Keys).ToArray());
+            cbEncodingMode.Items.AddRange(EnumProxy.CreateArray(OneClickSettings.SupportedModes));
             if (MainForm.Instance != null)
                 encoderProfile.Manager = MainForm.Instance.Profiles;
         }
@@ -170,6 +171,8 @@ namespace MeGUI
                     audioEncodingMode = AudioEncodingMode.Never;
                 else if (value.Equals("IfCodecDoesNotMatch"))
                     audioEncodingMode = AudioEncodingMode.IfCodecDoesNotMatch;
+                else if (value.Equals("NeverOnlyCore"))
+                    audioEncodingMode = AudioEncodingMode.NeverOnlyCore;
                 else
                     audioEncodingMode = AudioEncodingMode.Always;
             }

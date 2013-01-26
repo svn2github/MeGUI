@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -274,89 +274,6 @@ namespace MeGUI.packages.tools.oneclick
 
             return false;
         }
-
-        //private bool getInputEac3toBased(OneClickSettings oSettings)
-        //{
-        //    if (!Directory.Exists(this.strInput))
-        //        return false;
-
-        //    oEac3toInfo = new eac3toInfo(strInput, null, _log);
-        //    oEac3toInfo.FetchInformationCompleted += new OnFetchInformationCompletedHandler(setInputEac3toBased);
-        //    oEac3toInfo.FetchAllInformation();
-        //    return true;
-        //}
-
-        //private void setInputEac3toBased(object sender, RunWorkerCompletedEventArgs e)
-        //{
-        //    string x;
-        //    if (e.Error != null)
-        //        x = e.Error.ToString();
-
-        //    if (oEac3toInfo.Features.Count == 0)
-        //    {
-        //        continueGet(this._oSettings);
-        //        return;
-        //    }
-
-        //    foreach (eac3to.Feature oFeature in oEac3toInfo.Features)
-        //    {
-        //        string strFile = this.strInput + @"\BDMV\PLAYLIST\" + oEac3toInfo.Features[0].Name;
-        //        MediaInfoFile iFile = new MediaInfoFile(strFile, ref _log);
-        //        oOneClickWindow.setInputData(iFile, new List<OneClickFilesToProcess>());
-        //        return;
-        //    }
-
-        //    //int maxHorizontalResolution = 0;
-        //    //int iHorizontalResolution = 0;
-        //    //List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
-        //    //foreach (eac3to.Stream oStream in oEac3toInfo.Features[0].Streams)
-        //    //{
-        //    //    if (oStream.Type == eac3to.StreamType.Video)
-        //    //    {
-        //    //        //h264/AVC, English, 1280x688 23.975p
-        //    //        //MPEG2, 480i60 /1.001 (16:9)
-        //    //        string[] info = oStream.Description.Split(',');
-        //    //        if (info.Length > 1)
-        //    //        {
-        //    //            if (info.Length > 2)
-        //    //                info = info[2].Trim().Split(' ');
-        //    //            else
-        //    //                info = info[1].Trim().Split(' ');
-        //    //            if (Regex.IsMatch(info[0], "^[0-9999]+x[0-9999]+.+$", RegexOptions.Compiled))
-        //    //                iHorizontalResolution = Int32.Parse(info[0].Split('x')[0]);
-        //    //            else if (Regex.IsMatch(info[0], "^[0-9999]+[p,i]+[0-9999]+.+$", RegexOptions.Compiled))
-        //    //            {
-        //    //                iHorizontalResolution = Int32.Parse(info[0].Split(new char[] { 'p', 'i' })[0]);
-        //    //                switch (iHorizontalResolution)
-        //    //                {
-        //    //                    case 480: iHorizontalResolution = 720; break;
-        //    //                    case 576: iHorizontalResolution = 720; break;
-        //    //                    case 720: iHorizontalResolution = 1280; break;
-        //    //                    case 1080: iHorizontalResolution = 1920; break;
-        //    //                }
-        //    //            }
-        //    //            if (iHorizontalResolution > maxHorizontalResolution)
-        //    //                maxHorizontalResolution = iHorizontalResolution;
-        //    //        }
-
-        //    //        else
-
-        //    //            break;
-        //    //    }
-        //    //    else if (oStream.Type == eac3to.StreamType.Audio)
-        //    //    {
-        //    //        AudioTrackInfo oAudio = new AudioTrackInfo(oStream.Language, oStream.Description, oStream.Number);
-        //    //        audioTracks.Add(oAudio);
-        //    //    }
-        //    //    else if (oStream.Type == eac3to.StreamType.Subtitle)
-        //    //    {
-        //    //        AudioTrackInfo oAudio = new AudioTrackInfo(oStream.Language, oStream.Description, oStream.Number);
-        //    //        audioTracks.Add(oAudio);
-        //    //    }
-        //    //}
-
-            
-        //}
 
         private bool getInputIndexerBased(MediaInfoFile iFile, OneClickSettings oSettings)
         {

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ namespace MeGUI
         {
             InitializeComponent();
             subtitleLanguage.Items.AddRange(new List<string>(LanguageSelectionContainer.Languages.Keys).ToArray());
+            cbEncodingMode.Items.AddRange(EnumProxy.CreateArray(OneClickSettings.SupportedModes));
             initProfileHandler();
         }
 

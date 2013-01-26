@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -29,11 +29,13 @@ namespace MeGUI
 {
     public enum AudioEncodingMode
     {
-        [EnumTitle("Always")]
+        [EnumTitle("always")]
         Always,
-        [EnumTitle("If codec does not match")]
+        [EnumTitle("if codec does not match")]
         IfCodecDoesNotMatch,
-        [EnumTitle("Never")]
+        [EnumTitle("never, but use only the core of HD tracks")]
+        NeverOnlyCore,
+        [EnumTitle("never")]
         Never
     };
 
@@ -42,6 +44,8 @@ namespace MeGUI
 	/// </summary>
     public class OneClickSettings : GenericSettings
 	{
+        public static readonly AudioEncodingMode[] SupportedModes = new AudioEncodingMode[] { AudioEncodingMode.Always, AudioEncodingMode.IfCodecDoesNotMatch, AudioEncodingMode.NeverOnlyCore, AudioEncodingMode.Never };
+
         private string videoProfileName;
         public string VideoProfileName
         {
@@ -84,6 +88,8 @@ namespace MeGUI
                     audioEncodingMode = AudioEncodingMode.Never;
                 else if (value.Equals("IfCodecDoesNotMatch"))
                     audioEncodingMode = AudioEncodingMode.IfCodecDoesNotMatch;
+                else if (value.Equals("NeverOnlyCore"))
+                    audioEncodingMode = AudioEncodingMode.NeverOnlyCore;
 
                 audioSettings = new List<OneClickAudioSettings>();
                 audioSettings.Add(new OneClickAudioSettings("[default]", audioProfileName, audioEncodingMode));

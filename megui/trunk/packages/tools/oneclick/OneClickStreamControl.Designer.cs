@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -58,12 +58,12 @@ namespace MeGUI
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.cbEncodingMode = new System.Windows.Forms.ComboBox();
-            this.encoderProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.chkDefaultStream = new System.Windows.Forms.CheckBox();
             this.chkForceStream = new System.Windows.Forms.CheckBox();
             this.removeSubtitleTrack = new System.Windows.Forms.Button();
-            this.input = new MeGUI.core.gui.FileSCBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.encoderProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.input = new MeGUI.core.gui.FileSCBox();
             ((System.ComponentModel.ISupportInitialize)(this.delay)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -200,27 +200,11 @@ namespace MeGUI
             this.tableLayoutPanel1.SetColumnSpan(this.cbEncodingMode, 3);
             this.cbEncodingMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbEncodingMode.FormattingEnabled = true;
-            this.cbEncodingMode.Items.AddRange(new object[] {
-            "always",
-            "if codec does not match",
-            "never"});
             this.cbEncodingMode.Location = new System.Drawing.Point(64, 123);
             this.cbEncodingMode.Name = "cbEncodingMode";
             this.cbEncodingMode.Size = new System.Drawing.Size(253, 21);
             this.cbEncodingMode.TabIndex = 49;
             this.cbEncodingMode.SelectedIndexChanged += new System.EventHandler(this.cbEncodingMode_SelectedIndexChanged);
-            // 
-            // encoderProfile
-            // 
-            this.encoderProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.SetColumnSpan(this.encoderProfile, 5);
-            this.encoderProfile.Location = new System.Drawing.Point(64, 93);
-            this.encoderProfile.Name = "encoderProfile";
-            this.encoderProfile.ProfileSet = "Audio";
-            this.encoderProfile.Size = new System.Drawing.Size(367, 22);
-            this.encoderProfile.TabIndex = 48;
-            this.encoderProfile.SelectedProfileChanged += new System.EventHandler(this.encoderProfile_SelectedProfileChanged);
             // 
             // chkDefaultStream
             // 
@@ -259,6 +243,28 @@ namespace MeGUI
             this.removeSubtitleTrack.TabIndex = 46;
             this.removeSubtitleTrack.Text = "X";
             // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 98);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.TabIndex = 50;
+            this.label1.Text = "Encoder";
+            // 
+            // encoderProfile
+            // 
+            this.encoderProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.SetColumnSpan(this.encoderProfile, 5);
+            this.encoderProfile.Location = new System.Drawing.Point(64, 93);
+            this.encoderProfile.Name = "encoderProfile";
+            this.encoderProfile.ProfileSet = "Audio";
+            this.encoderProfile.Size = new System.Drawing.Size(367, 22);
+            this.encoderProfile.TabIndex = 48;
+            this.encoderProfile.SelectedProfileChanged += new System.EventHandler(this.encoderProfile_SelectedProfileChanged);
+            // 
             // input
             // 
             this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -270,21 +276,10 @@ namespace MeGUI
             this.input.MinimumSize = new System.Drawing.Size(64, 29);
             this.input.Name = "input";
             this.input.SelectedIndex = -1;
-            this.input.SelectedItem = null;
             this.input.Size = new System.Drawing.Size(367, 29);
             this.input.TabIndex = 47;
             this.input.Type = MeGUI.core.gui.FileSCBox.FileSCBoxType.OC_FILE;
             this.input.SelectionChanged += new MeGUI.StringChanged(this.input_SelectionChanged);
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 98);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
-            this.label1.TabIndex = 50;
-            this.label1.Text = "Encoder";
             // 
             // OneClickStreamControl
             // 

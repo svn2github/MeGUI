@@ -1,3 +1,4 @@
+2283 [OneClick] added option to extract core from HD audio tracks
 2282 [OneClick] remove phantom audio/subtitle tracks detected by MediaInfo when processing Blu-ray
 2281 [QAAC] disable TVBR in HE-AAC. Bug #699
 2280 [AVS Script Creator] fixed not applying Nvidia deinterlacer settings

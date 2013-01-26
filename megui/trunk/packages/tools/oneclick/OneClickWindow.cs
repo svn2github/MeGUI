@@ -769,27 +769,28 @@ namespace MeGUI
                     if (oStreamControl.SelectedStreamIndex <= 0) // not NONE
                         continue;
 
-                    bool bDontEncode = false;
-                    if (oStreamControl.IsDontEncodePossible() &&
-                        (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.Never ||
-                        (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
-                        oStreamControl.SelectedStream.EncoderSettings.EncoderType.ACodec.ID.Equals(oStreamControl.SelectedStream.TrackInfo.Codec, StringComparison.InvariantCultureIgnoreCase))))
-                        bDontEncode = true;
-
-                    if (!bDontEncode)
+                    bool bCoreOnly = false;
+                    if (!oStreamControl.IsDontEncodePossible() || oStreamControl.SelectedStream.EncodingMode != AudioEncodingMode.Never)
                     {
+                        //check if core must be extracted
                         if (oStreamControl.SelectedStream.TrackInfo.Codec.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("truehd"))
-                            oStreamControl.SelectedStream.TrackInfo.Codec = "AC-3";                            
+                        {
+                            oStreamControl.SelectedStream.TrackInfo.Codec = "AC-3";
+                            bCoreOnly = true;
+                        }
                         else if (oStreamControl.SelectedStream.TrackInfo.Codec.StartsWith("DTS-HD", StringComparison.InvariantCultureIgnoreCase))
+                        {
                             oStreamControl.SelectedStream.TrackInfo.Codec = "DTS";
+                            bCoreOnly = true;
+                        }
                     }
 
                     sb.Append(string.Format("{0}:\"{1}\" ", oStreamControl.SelectedStream.TrackInfo.TrackID,
                         Path.Combine(dpp.WorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName)));
-                    dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName));
-
-                    if (!bDontEncode && oStreamControl.SelectedStream.TrackInfo.Codec.StartsWith("DTS", StringComparison.InvariantCultureIgnoreCase))
+                    if (bCoreOnly)
                         sb.Append("-core ");
+
+                    dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName));
                 }
 
                 foreach (OneClickStreamControl oStreamControl in subtitleTracks)
@@ -922,9 +923,12 @@ namespace MeGUI
 
                 if (oStreamControl.IsDontEncodePossible() &&
                     (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.Never ||
+                    (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.NeverOnlyCore && dpp.Eac3toDemux) ||
                     (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
                     oStreamControl.SelectedStream.EncoderSettings.EncoderType.ACodec.ID.Equals(strAudioCodec, StringComparison.InvariantCultureIgnoreCase))))
+                {
                     dpp.AudioTracks.Add(new OneClickAudioTrack(null, new MuxStream(aInput, strLanguage, strName, delay, false, false, null), oAudioTrackInfo, bExtractMKVTrack));
+                }
                 else
                 {
                     // audio track will be encoded
@@ -976,7 +980,10 @@ namespace MeGUI
                         }
                     }
 
-                    dpp.AudioTracks.Add(new OneClickAudioTrack(new AudioJob(aInput, null, null, oStreamControl.SelectedStream.EncoderSettings, delay, strLanguage, strName), null, oAudioTrackInfo, bExtractMKVTrack));
+                    if (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.NeverOnlyCore)
+                        dpp.AudioTracks.Add(new OneClickAudioTrack(null, new MuxStream(aInput, strLanguage, strName, delay, false, false, null), oAudioTrackInfo, bExtractMKVTrack));
+                    else
+                        dpp.AudioTracks.Add(new OneClickAudioTrack(new AudioJob(aInput, null, null, oStreamControl.SelectedStream.EncoderSettings, delay, strLanguage, strName), null, oAudioTrackInfo, bExtractMKVTrack));
                 }
             }
 
@@ -1084,7 +1091,7 @@ namespace MeGUI
             else
             {
                 // no indexer
-                if (inputContainer == ContainerType.MKV && dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
+                if (inputContainer == ContainerType.MKV && dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE && String.IsNullOrEmpty(dpp.VideoFileToMux))
                     dpp.VideoInput = _videoInputInfo.FileName;
                 OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(dpp.VideoInput, null, dpp);
                 finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(ocJob));

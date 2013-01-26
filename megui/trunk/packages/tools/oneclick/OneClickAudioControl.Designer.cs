@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -117,10 +117,6 @@ namespace MeGUI
             this.tableLayoutPanel1.SetColumnSpan(this.cbEncodingMode, 2);
             this.cbEncodingMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbEncodingMode.FormattingEnabled = true;
-            this.cbEncodingMode.Items.AddRange(new object[] {
-            "always",
-            "if codec does not match",
-            "never"});
             this.cbEncodingMode.Location = new System.Drawing.Point(64, 63);
             this.cbEncodingMode.Name = "cbEncodingMode";
             this.cbEncodingMode.Size = new System.Drawing.Size(312, 21);
