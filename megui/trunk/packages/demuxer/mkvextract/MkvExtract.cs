@@ -66,11 +66,6 @@ namespace MeGUI
         }
         #endregion
 
-        protected override bool checkExitCode
-        {
-            get { return true; }
-        }
-
         public override void ProcessLine(string line, StreamType stream)
         {
             if (line.StartsWith("Progress: ")) //status update

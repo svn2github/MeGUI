@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -79,8 +79,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 return LineType.splitting;
             if (isEmptyLine(line))
                 return LineType.empty;
-            if (line.IndexOf("Error") != -1 || line.IndexOf("unknown") != -1)
-                return LineType.error;
             return LineType.other;
         }
         /// <summary>
@@ -212,12 +210,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     break;
 
                 case LineType.other:
-                    base.ProcessLine(line, stream);
-                    break;
-
-                case LineType.error:
-                    log.LogValue("Error line", line, ImageType.Error);
-                    su.HasError = true;
                     base.ProcessLine(line, stream);
                     break;
             }

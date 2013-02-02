@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -68,7 +68,8 @@ namespace MeGUI
                     int pct = Int32.Parse(Regex.Match(line, "[0-9]{1,3}").Value);
                     return pct;
                 }
-                else return null;
+                else 
+                    return null;
             }
             catch (Exception e)
             {
@@ -105,23 +106,21 @@ namespace MeGUI
                 bSecondPass = true;
                 su.Status = "Fixing audio gaps/overlaps...";
             }
-            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("error"))
-            {
-                log.LogValue("An error occurred", line, ImageType.Error);
-                su.HasError = true;
-                base.ProcessLine(line, stream);
-            }
             else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("without making use of the gap/overlap information"))
             {
                 log.LogEvent("Job will be executed a second time to make use of the gap/overlap information");
                 base.bRunSecondTime = true;
                 base.ProcessLine(line, stream);
             }
-            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("warning") ||
-                     line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("without making use of the gap/overlap information") ||
-                     line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("doesn") ||
-                     (su.PercentageDoneExact > 0 && su.PercentageDoneExact < 100 &&
-                      !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("creating file ")))
+            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("<error>"))
+            {
+                log.LogValue("An error occurred", line, ImageType.Error);
+                base.ProcessLine(line, stream);
+            }
+            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("<warning>")
+                || (su.PercentageDoneExact > 0 && su.PercentageDoneExact < 100
+                && !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("creating file ") 
+                && !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("(seamless branching)...")))
             {
                 log.LogValue("A warning occurred", line, ImageType.Warning);
                 base.ProcessLine(line, stream);
@@ -140,11 +139,11 @@ namespace MeGUI
                 if (job.InputType == 1) // Folder as Input
                 {
                     if (job.Input.IndexOf("BDMV") > 0 && (job.Input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".m2ts") || job.Input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".mpls")))
-                        sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input.Substring(0, job.Input.IndexOf("BDMV")), job.FeatureNb, job.Args + " -progressnumbers"));
+                        sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input.Substring(0, job.Input.IndexOf("BDMV")), job.FeatureNb, job.Args.Trim() + " -progressnumbers"));
                     else if (job.Input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".evo"))
-                        sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input.Substring(0, job.Input.IndexOf("HVDVD_TS")), job.FeatureNb, job.Args + " -progressnumbers"));
+                        sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input.Substring(0, job.Input.IndexOf("HVDVD_TS")), job.FeatureNb, job.Args.Trim() + " -progressnumbers"));
                     else
-                        sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input, job.FeatureNb, job.Args + " -progressnumbers"));
+                        sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input, job.FeatureNb, job.Args.Trim() + " -progressnumbers"));
                 }
                 else
                 {
@@ -154,7 +153,7 @@ namespace MeGUI
                     string strSource = string.Format("\"{0}\"", job.Source[0]);
                     for (int i = 1; i < job.Source.Count; i++)
                         strSource += string.Format("+\"{0}\"", job.Source[i]);
-                    sb.Append(string.Format("{0} {1}", strSource, job.Args + " -progressnumbers"));
+                    sb.Append(string.Format("{0} {1}", strSource, job.Args.Trim() + " -progressnumbers"));
                 }
 
                 return sb.ToString();

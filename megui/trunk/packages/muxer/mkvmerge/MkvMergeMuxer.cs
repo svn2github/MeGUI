@@ -75,11 +75,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
             base.checkJobIO();
         }
 
-        protected override bool checkExitCode
-        {
-            get { return true; }
-        }
-
         public override void ProcessLine(string line, StreamType stream)
         {
             if (line.StartsWith("Progress: ")) //status update

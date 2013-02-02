@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 //
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -55,11 +55,6 @@ namespace MeGUI
             {
                 base.checkJobIO();
             }
-        }
-
-        protected override bool checkExitCode
-        {
-            get { return true; }
         }
 
         protected override string Commandline

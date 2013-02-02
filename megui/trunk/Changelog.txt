@@ -1,3 +1,5 @@
+2287 [HD Streams Extractor] log adjustments for eac3to 3.25+
+     [HD Streams Extractor] + [MP4 Muxer] fixed wrong detection of errors if file name contains "error"
 2286 [OneClick] lowered default priority of the DGA indexer
 2285 [OneClick] added option to use only the first audio track from a specific language
 2284 [AVS Script Creator] always show the correct output resolution when not resizing
