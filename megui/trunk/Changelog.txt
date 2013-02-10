@@ -1,71 +1,54 @@
-2287 [HD Streams Extractor] log adjustments for eac3to 3.25+
-     [HD Streams Extractor] + [MP4 Muxer] fixed wrong detection of errors if file name contains "error"
-2286 [OneClick] lowered default priority of the DGA indexer
-2285 [OneClick] added option to use only the first audio track from a specific language
-2284 [AVS Script Creator] always show the correct output resolution when not resizing
-                          even with upsizing allowed the default resolution will use no upsizing
-2283 [OneClick] added option to extract the core from HD audio tracks
-2282 [OneClick] remove phantom audio/subtitle tracks detected by MediaInfo when processing Blu-ray
-2281 [QAAC] disable TVBR in HE-AAC. Bug #699
-2280 [AVS Script Creator] fixed not applying Nvidia deinterlacer settings
-2279 [OneClick] remux only into MKV if necessary & possible. Bug #698
-2278 [OneClick] added option to reset the working/output directories in the profile
-2277 [OneClick] mux AVI/MP4 input files into MKV for better audio/video processing support
-2276 [QAAC] if CoreAudioToolbox.dll is missing an information will be displayed
-2275 [Worker] fixed temporary worker only processing one job
-2274 [Adaptive Muxer] fixed handling of the "and close" button
-2273 [Audio Encoding Window] cosmetics
-2272 [AVS Script Creator] moved "acceptable aspect error" setting into the AviSynth profile (1% by default)
-     [AVS Script Creator] improved AR chooser
-     [MediaInfo] improved aspect ratio detection
-2269 [MP4 Muxer] restrict "group=1" to the Apple Devices regarding Audio streams
-2268 [AVS Script Creator] use very high accuracy for anamorphic encodings if acceptable aspect error is set to 0%
-2267 [AVS Script Creator] improved accuracy of the "Aspect Ratio Error"
-     [AVS Script Creator] improved accuracy of the aspect ratio when using "Clever (TM) anamorphic encoding"
-     [AVS Script Creator] internal optimizations
-     [OneClick] implemented the AVS Script Creator changes
-2266 [Audio Encoder] added BassAudioSource() as decoder. Part II
-2265 [MP4 Muxer] improved iOS compatibility when using multiple audio/subtitle tracks. Patch #65 by Eli Bildirici
-2264 [Worker] a temporary worker will always be deleted after a job is finished (successful or not)
-2263 [Audio] changed default value of the normalization to disabled
-2262 [AVS Script Creator] show "Aspect Ratio Error" when doing an anamorphic encoding
-                          some cosmetic sizing & cropping enhancements
-2261 [Update] added system proxy. Patch by Shevek
-2260 [AVS Script Creator] changed "point of view" of the aspect error calculation
-2259 [Audio Encoder] added BassAudioSource() as decoder
-                     default order: NicAudio, BassAudio, FFAudioSource, DirectShow
-2258 [Job] improved aborting of Jobs
-2256 [AVS Script Creator] fixed a slight rounding error in the aspect error calculation
-2255 [AVS Script Creator] resize is enabled by default in the profiles (only for new profiles)
-     [AVS Script Creator] suggest resolution is automatically pre-selected when doing a resize
-     [AVS Script Creator] DAR changes also triggers a recalc of the "Aspect Ratio Error"
-     [AVS Script Creator] avoid upsizing (if disallowed) when "Clever (TM) anamorphic encoding" is used
-     [AVS Script Creator] some minor cosmetics / changes
-2254 [Update] fixed a crash if the proxy has been enabled without server address
-2253 [Queue] warn if intermediate files of an incomplete job are going to be deleted
-2252 [Worker] if a job is aborted the corresponding worker will be stopped
-2251 [OneClick] pgcdemux will only be used if more than one PGC is found
-2250 [AVS Script Creator] avoid upsizing when resizing a cropped source
-     [AVS Script Creator] added option to enable upsizing in the profile (disabled by default)
-     [AVS Script Creator] added option to select the default mod value in the profile (mod16 by default)
-     [AVS Script Creator] adjusted "Clever (TM) anamorphic encoding" so the new mod values are used
-     [OneClick] obey the new AVS Script Creator settings
-2249 [HD Streams Extractor] fixed handling of seamless branching EVO files
-2248 [OneClick] warn if identical tracks are about to be processed
-2247 [AVS Script Creator] hide "Aspect Ratio Error" when doing an anamorphic encoding
-                          fixed handling of the "Aspect Ratio Error" if dealing with an anamorphic input file
-2246 [AVS Script Creator] enhanced readability of the "red parts"
-                          the "Aspect Ratio Error" only turns red if the value is bigger than the acceptable aspect error
-                          crop values will be used also for the upsize warnings
-2245 [Queue] related jobs are highlighted when selecting a job
-2244 [Queue] when deleting a job warn always if it is part of a related job series
-2243 [AVS Script Creator] fixed a crash if "Clever (TM) anamorphic encoding" is enabled
-2242 [AVS Script Creator] show signed "Aspect Ratio Error"
-2241 [Worker] a finished temporary worker will not start anymore idle workers. Bug #691
-              several small optimizations
-2240 [AVS Script Creator] "Aspect Ratio Error" will also be changed if cropping is changed
-2239 [AVS Script Creator] added "Aspect Ratio Error"
-2238 [AVS Script Creator] enabled upsizing
+2289 [OneClick] fixed error when opening some files. Bug #703
+2288 [MP4 Muxer] added support for Apple TV & iPad
+
+Changelog 2237 --> 2287
+
+Features/Changes:
+- enhanced AVS Script Creator (read details in the block below) 
+- added BassAudioSource() as audio decoder
+  the default order is now: NicAudio, BassAudio, FFAudioSource, DirectShow
+- enhanced OneClick e.g. mux input files into MKV if possible for better audio/video processing support
+
+Enhancements/Fixes:
+[Adaptive Muxer] fixed handling of the "and close" button
+[Audio Encoding Window] cosmetics
+[Audio] changed default value of the normalization to disabled
+[AVS Script Creator] added "Aspect Ratio Error"
+[AVS Script Creator] added option to enable upsizing in the profile (disabled by default)
+[AVS Script Creator] added option to select the default mod value in the profile (mod16 by default)
+[AVS Script Creator] adjusted "Clever (TM) anamorphic encoding" so the new mod values are used
+[AVS Script Creator] always show the correct output resolution when not resizing
+[AVS Script Creator] even with upsizing allowed the default resolution will use no upsizing
+[AVS Script Creator] moved "acceptable aspect error" setting into the AviSynth profile (1% by default)
+[AVS Script Creator] resize is enabled by default in the profiles (only for new profiles)
+[AVS Script Creator] suggest resolution is automatically pre-selected when doing a resize
+[AVS Script Creator] use very high accuracy for anamorphic encodings if acceptable aspect error is set to 0%
+[HD Streams Extractor] + [MP4 Muxer] fixed wrong detection of errors if file name contains "error"
+[HD Streams Extractor] fixed handling of seamless branching EVO files
+[HD Streams Extractor] log adjustments for eac3to 3.25+
+[Job] improved aborting of Jobs
+[MediaInfo] improved aspect ratio detection
+[MP4 Muxer] improved iOS compatibility when using multiple audio/subtitle tracks. Patch #65 by Eli Bildirici
+[OneClick] added option to extract the core from HD audio tracks
+[OneClick] added option to reset the working/output directories in the profile
+[OneClick] added option to use only the first audio track from a specific language
+[OneClick] lowered default priority of the DGA indexer
+[OneClick] pgcdemux will only be used if more than one PGC is found
+[OneClick] remove phantom audio/subtitle tracks detected by MediaInfo when processing Blu-ray
+[OneClick] warn if identical tracks are about to be processed
+[QAAC] disable TVBR in HE-AAC. Bug #699
+[QAAC] if CoreAudioToolbox.dll is missing an information will be displayed
+[Queue] related jobs are highlighted when selecting a job
+[Queue] warn if intermediate files of an incomplete job are going to be deleted
+[Queue] when deleting a job warn always if it is part of a related job series
+[Update] added system proxy. Patch by Shevek
+[Update] fixed a crash if the proxy has been enabled without server address
+[Worker] a finished temporary worker will not start anymore idle workers. Bug #691
+[Worker] a temporary worker will always be deleted after a job is finished (successful or not)
+[Worker] fixed temporary worker only processing one job
+[Worker] if a job is aborted the corresponding worker will be stopped
+[Worker] several small optimizations
+
 
 Changelog 2153 --> 2237
 
@@ -179,7 +162,8 @@ Enhancements:
 
 Known Problems:
 - Unicode is not supported
+- non default DPI values are not supported
 - M2TS bitrate calculator does not calculate correct values as the specifications are not known
 
 Full changelog: 
-http://megui.svn.sourceforge.net/viewvc/megui/megui/trunk/Changelog_full.txt
+https://sourceforge.net/p/megui/code/2287/tree/megui/trunk/Changelog_full.txt

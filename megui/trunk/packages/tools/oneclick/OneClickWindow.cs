@@ -1619,11 +1619,13 @@ namespace MeGUI
             audioTracks[0].SelectedStreamIndex = 0;
 
             // delete all tracks beside the first and last one
-            while (audioTab.TabCount > 2)
+            try
             {
-                audioTab.TabPages.RemoveAt(1);
-                audioTracks.RemoveAt(1);
+                while (audioTab.TabCount > 2)
+                    audioTab.TabPages.RemoveAt(1);
             }
+            catch (Exception) {}
+            audioTracks.RemoveRange(1, audioTracks.Count - 1);
 
             foreach (string strLanguage in settings.DefaultAudioLanguage)
                 if (strLanguage.Equals("[none]"))
