@@ -498,6 +498,8 @@ namespace MeGUI
             supportedContainers.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MP4);
+            supportedDeviceTypes.Add(DeviceType.APPLETV);
+            supportedDeviceTypes.Add(DeviceType.IPAD);
             supportedDeviceTypes.Add(DeviceType.IPHONE);
             supportedDeviceTypes.Add(DeviceType.IPOD);
             supportedDeviceTypes.Add(DeviceType.ISMA);

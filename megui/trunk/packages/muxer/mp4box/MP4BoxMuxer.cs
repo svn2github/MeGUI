@@ -236,8 +236,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         switch (settings.DeviceType)
                         {
-                            case "iPod": sb.Append("-ipod "); break;
+                            case "iPod": sb.Append("-ipod -brand M4V  "); break;
                             case "iPhone": sb.Append("-ipod -brand M4VP:1 "); break;
+                            case "iPad":
+                            case "Apple TV": sb.Append("-ipod -brand M4VH "); break;
                             case "ISMA": sb.Append("-isma "); break;
                             case "PSP": sb.Append("-psp "); break;
                         }
@@ -308,7 +310,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         sb.Append(":name=" + stream.name);
                     if (stream.delay != 0)
                         sb.AppendFormat(":delay={0}", stream.delay);
-                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone" || settings.DeviceType == "iPad" || settings.DeviceType == "Apple TV")
                     {
                         sb.Append(":group=1");
                         if (trackCount > 0)
@@ -335,7 +337,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     }
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(":name=" + stream.name);
-                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone" || settings.DeviceType == "iPad" || settings.DeviceType == "Apple TV")
                     {
                         sb.Append(":hdlr=sbtl:layout=-1:group=2");
                         if (trackCount > 0)
@@ -347,7 +349,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
 
                 if (!string.IsNullOrEmpty(settings.ChapterFile))
                 {
-                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone" || settings.DeviceType == "iPad" || settings.DeviceType == "Apple TV")
                     {
                         FileUtil.CreateXMLFromOGGChapFile(settings.ChapterFile);
                         sb.Append(" -add \"" + Path.Combine(Path.GetDirectoryName(settings.ChapterFile), Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml:name=:chap") + "\"");
@@ -367,7 +369,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 else if (!Path.GetPathRoot(settings.MuxedOutput).Equals(settings.MuxedOutput, StringComparison.CurrentCultureIgnoreCase))
                     sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput).Replace("\\", "\\\\"));
 
-                if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone" || settings.DeviceType == "iPad" || settings.DeviceType == "Apple TV")
                 {
                     if (!string.IsNullOrEmpty(settings.VideoInput))
                         settings.MuxedOutput = Path.ChangeExtension(settings.MuxedOutput, ".m4v");

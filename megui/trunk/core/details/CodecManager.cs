@@ -299,6 +299,8 @@ namespace MeGUI
     {
         public DeviceType(string name, string filterName, string extension, ContainerType containerType)
             : base(name, filterName, extension, containerType) { }
+        public static readonly DeviceType APPLETV = new DeviceType("Apple TV", "Apple TV", "Apple TV", ContainerType.MP4);
+        public static readonly DeviceType IPAD = new DeviceType("iPad", "iPad", "iPad", ContainerType.MP4);
         public static readonly DeviceType IPOD = new DeviceType("iPod", "iPod", "iPod", ContainerType.MP4);
         public static readonly DeviceType IPHONE = new DeviceType("iPhone", "iPhone", "iPhone", ContainerType.MP4);
         public static readonly DeviceType ISMA = new DeviceType("ISMA", "ISMA", "ISMA", ContainerType.MP4);
@@ -388,6 +390,8 @@ namespace MeGUI
                 DeviceTypes.Register(DeviceType.IPOD) &&
                 DeviceTypes.Register(DeviceType.PSP) &&
                 DeviceTypes.Register(DeviceType.IPHONE) &&
+                DeviceTypes.Register(DeviceType.APPLETV) &&
+                DeviceTypes.Register(DeviceType.IPAD) &&
                 DeviceTypes.Register(DeviceType.ISMA)))
                 throw new Exception("Failed to register a device type");
         }
