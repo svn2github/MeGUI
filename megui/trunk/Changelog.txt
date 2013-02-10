@@ -1,3 +1,4 @@
+2290 removed "Successfully converted to YV12" message
 2289 [OneClick] fixed error when opening some files. Bug #703
 2288 [MP4 Muxer] added support for Apple TV & iPad
 

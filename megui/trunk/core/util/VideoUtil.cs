@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -360,14 +360,9 @@ namespace MeGUI
                                 {
                                     string sResult = checkVideo(avsFile, false); // Check everything again, to see if it is all fixed now
                                     if (sResult == null)
-                                    {
-                                        MessageBox.Show("Successfully converted to YV12.");
                                         return null;
-                                    }
                                     else
-                                    {
                                         return sResult;
-                                    }
                                 }
                             }
                             return "You didn't want me to append ConvertToYV12(). You'll have to fix the colorspace problem yourself.";
@@ -376,7 +371,6 @@ namespace MeGUI
                     }
 
                     VideoCodecSettings settings = GetCurrentVideoSettings();
-
                     if (settings != null && settings.SettingsID != "x264") // mod16 restriction
                     {
                         if (avi.Clip.VideoHeight % 16 != 0 ||
