@@ -1,3 +1,4 @@
+2294 [OneClick] only supported subtitle tracks will be added
 2293 [AVS Script Creator] fixed "Clever (TM) anamorphic encoding" if using "Encode non-mod 16"
 2292 [Audio Cutter] fixed not fading to black
 2291 [M2TS Muxer] disabled pure TrueHD as it is not supported by tsMuxeR

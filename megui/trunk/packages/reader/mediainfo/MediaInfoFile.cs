@@ -451,7 +451,31 @@ namespace MeGUI
                     int delay = 0;
                     Int32.TryParse(oTextTrack.Delay, out delay);
                     oTrack.Delay = delay;
-                    _SubtitleInfo.Tracks.Add(oTrack);
+
+                    // only add supported subtitle tracks
+                    string strCodec = oTrack.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+                    if (cType == ContainerType.MKV)
+                    {
+                        string[] arrCodec = new string[] { };
+                        arrCodec = strCodec.Split('/');
+                        if (arrCodec[0].Substring(1, 1).Equals("_"))
+                            arrCodec[0] = arrCodec[0].Substring(2);
+                        strCodec = arrCodec[0];
+                    }
+                    switch (strCodec)
+                    {
+                        case "VOBSUB": 
+                        case "ASS": 
+                        case "UTF-8": 
+                        case "SSA": 
+                        case "USF": 
+                        case "HDMV":
+                        case "PGS": break;
+                        default: strCodec = "unknown"; break;
+                    }
+
+                    if (!strCodec.Equals("unknown"))
+                        _SubtitleInfo.Tracks.Add(oTrack);
                 }
 
                 // video detection

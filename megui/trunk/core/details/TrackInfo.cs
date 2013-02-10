@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -183,13 +183,13 @@ namespace MeGUI
                     return null;
 
                 string strExtension = String.Empty;
-                string[] arrCodec = new string[]{};
                 string strCodec = String.Empty;
                 if (!String.IsNullOrEmpty(_codec))
                     strCodec = _codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
 
                 if (IsMKVContainer())
                 {
+                    string[] arrCodec = new string[] { };
                     arrCodec = _codec.Split('/');
                     if (arrCodec[0].Substring(1, 1).Equals("_"))
                         arrCodec[0] = arrCodec[0].Substring(2);
