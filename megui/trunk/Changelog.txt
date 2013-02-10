@@ -1,6 +1,7 @@
+2293 [AVS Script Creator] fixed "Clever (TM) anamorphic encoding" if using "Encode non-mod 16"
 2292 [Audio Cutter] fixed not fading to black
 2291 [M2TS Muxer] disabled pure TrueHD as it is not supported by tsMuxeR
-2290 removed "Successfully converted to YV12" message
+2290 [AVS Script Creator] removed "Successfully converted to YV12" message
 2289 [OneClick] fixed error when opening some files. Bug #703
 2288 [MP4 Muxer] added support for Apple TV & iPad
 

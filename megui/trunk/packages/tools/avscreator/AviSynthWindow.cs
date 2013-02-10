@@ -1288,7 +1288,9 @@ namespace MeGUI
             else
                 this.horizontalResolution.Enabled = this.verticalResolution.Enabled = false;
 
-            if (file == null || !resize.Checked)
+            this.suggestedDar = null;
+            bool signalAR = this.signalAR.Checked;
+            if (file == null || (!resize.Checked && (!signalAR || mod16Box.SelectedIndex != (int)mod16Method.nonMod16)))
                 return;
 
             try
@@ -1296,12 +1298,17 @@ namespace MeGUI
                 Dar? suggestedDar;
 
                 int mod = 16;
-                switch ((modValue)modValueBox.SelectedIndex)
+                if (!signalAR || mod16Box.SelectedIndex != (int)mod16Method.nonMod16)
                 {
-                    case modValue.mod8: mod = 8; break;
-                    case modValue.mod4: mod = 4; break;
-                    case modValue.mod2: mod = 2; break;
-                }
+                    switch ((modValue)modValueBox.SelectedIndex)
+                    {
+                        case modValue.mod8: mod = 8; break;
+                        case modValue.mod4: mod = 4; break;
+                        case modValue.mod2: mod = 2; break;
+                    }
+                }              
+                else
+                    mod = 1;
                 horizontalResolution.Increment = verticalResolution.Increment = mod;
 
                 int hres = (int)horizontalResolution.Value;
@@ -1325,7 +1332,6 @@ namespace MeGUI
                 if (hres != horizontalResolution.Value)
                     horizontalResolution.Value = hres;
 
-                bool signalAR = this.signalAR.Checked;
                 int scriptVerticalResolution = Resolution.SuggestVerticalResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, arChooser.RealValue, Cropping,
                     (int)horizontalResolution.Value, signalAR, out suggestedDar, mod, this.GetProfileSettings().AcceptableAspectError);
 
