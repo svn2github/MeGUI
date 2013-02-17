@@ -1,4 +1,5 @@
-2295 [OneClick] fixed some errors. Bug #703 + #707
+2296 [x264] fixed --crf and --partitions not set to default settings for new MeGUI installations
+2295 [OneClick] fixed some "index out of bounds" errors. Bug #703 + #707
 2294 [OneClick] only supported subtitle tracks will be added
 2293 [AVS Script Creator] fixed "Clever (TM) anamorphic encoding" if using "Encode non-mod 16"
 2292 [AVS Cutter] fixed not fading to black

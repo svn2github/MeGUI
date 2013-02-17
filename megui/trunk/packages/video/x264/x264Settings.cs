@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -129,7 +129,7 @@ namespace MeGUI
 			b8x8mv = true;
 			p4x4mv = false;
 			i4x4mv = true;
-			i8x8mv = false;
+			i8x8mv = true;
 			MinQuantizer = 0;
 			MaxQuantizer = 69;
 			maxQuantDelta = 4;
@@ -189,6 +189,7 @@ namespace MeGUI
             targetDevice = x264DeviceList[0];
             blurayCompat = false;
             _gopCalculation = 1;
+            quantizerCrf = 20;
 		}
 		#endregion
 		#region properties
