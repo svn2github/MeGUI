@@ -1438,11 +1438,13 @@ namespace MeGUI
             subtitleTracks[0].SelectedStreamIndex = 0;
 
             // delete all tracks beside the first and last one
-            for (int i = subtitlesTab.TabCount - 1; i > 1; i--)
+            try
             {
-                subtitlesTab.TabPages.RemoveAt(i - 1);
-                subtitleTracks.RemoveAt(i - 1);
+                while (subtitlesTab.TabCount > 2)
+                    subtitlesTab.TabPages.RemoveAt(1);
             }
+            catch (Exception) {}
+            subtitleTracks.RemoveRange(1, subtitleTracks.Count - 1);
 
             foreach (string strLanguage in settings.DefaultSubtitleLanguage)
                 if (strLanguage.Equals("[none]"))
@@ -1639,7 +1641,9 @@ namespace MeGUI
                     if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                     {
                         // should only the first audio track for this language be processed?
-                        bool bUseFirstTrackOnly = settings.AudioSettings[0].UseFirstTrackOnly;
+                        bool bUseFirstTrackOnly = true;
+                        if (settings.AudioSettings.Count > 0)
+                            bUseFirstTrackOnly = settings.AudioSettings[0].UseFirstTrackOnly;
                         foreach (OneClickAudioSettings oAudioSettings in settings.AudioSettings)
                         {
                             if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(oAudioSettings.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
@@ -1678,7 +1682,9 @@ namespace MeGUI
                 for (int i = 0; i < arrAudioTrackInfo.Count; i++)
                 {
                     // should only the first audio track for this language be processed?
-                    bool bUseFirstTrackOnly = settings.AudioSettings[0].UseFirstTrackOnly;
+                    bool bUseFirstTrackOnly = true;
+                    if (settings.AudioSettings.Count > 0)
+                        bUseFirstTrackOnly = settings.AudioSettings[0].UseFirstTrackOnly;
                     foreach (OneClickAudioSettings oAudioSettings in settings.AudioSettings)
                     {
                         if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(oAudioSettings.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture)))

@@ -305,6 +305,7 @@ namespace MeGUI
             workingNameReplaceWith = "";
             leadingName = "";
             audioSettings = new List<OneClickAudioSettings>();
+            audioSettings.Add(new OneClickAudioSettings("[default]", "FFmpeg AC-3: *scratchpad*", AudioEncodingMode.IfCodecDoesNotMatch, true));
 
             if (MainForm.Instance != null)
             {
