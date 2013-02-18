@@ -499,7 +499,7 @@ namespace MeGUI
                 // AR needs to be detected automatically now
                 _log.LogValue("Auto-detect aspect ratio", AR == null);
                 customDAR = iMediaFile.VideoInfo.DAR;
-                if (customDAR.ar <= 0)
+                if (customDAR.AR <= 0)
                 {
                     customDAR = Dar.ITU16x9PAL;
                     _log.Warn(string.Format("No aspect ratio found, defaulting to {0}.", customDAR));

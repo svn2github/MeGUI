@@ -735,7 +735,7 @@ namespace MeGUI.core.gui
             
             LogItem i = new LogItem("Deleting aborted output");
 
-            i.LogValue("Delete aborted ouptut set", mainForm.Settings.DeleteAbortedOutput);
+            i.LogValue("Delete aborted output set", mainForm.Settings.DeleteAbortedOutput);
             
             if (mainForm.Settings.DeleteAbortedOutput)
             {

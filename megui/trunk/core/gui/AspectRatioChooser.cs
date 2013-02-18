@@ -53,8 +53,8 @@ namespace MeGUI.core.gui
         public void SetValues(Dar ar)
         {
             bDisableEvents = true;
-            if (ar.ar >= numericUpDown1.Minimum && ar.ar <= numericUpDown1.Maximum)
-                numericUpDown1.Value = ar.ar;
+            if (ar.AR >= numericUpDown1.Minimum && ar.AR <= numericUpDown1.Maximum)
+                numericUpDown1.Value = ar.AR;
             if (ar.X >= numericUpDown2.Minimum && ar.X <= numericUpDown2.Maximum)
                 numericUpDown2.Value = ar.X;
             if (ar.Y >= numericUpDown3.Minimum && ar.Y <= numericUpDown3.Maximum)
@@ -74,8 +74,8 @@ namespace MeGUI.core.gui
                 return;
             bDisableEvents = true;
             Dar ar = new Dar((ulong)numericUpDown2.Value, (ulong)numericUpDown3.Value);
-            if (ar.ar >= numericUpDown1.Minimum && ar.ar <= numericUpDown1.Maximum)
-                numericUpDown1.Value = ar.ar;
+            if (ar.AR >= numericUpDown1.Minimum && ar.AR <= numericUpDown1.Maximum)
+                numericUpDown1.Value = ar.AR;
             bDisableEvents = false;
         }
 

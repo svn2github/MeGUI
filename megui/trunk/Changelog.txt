@@ -1,12 +1,20 @@
-2296 [x264] fixed --crf and --partitions not set to default settings for new MeGUI installations
-2295 [OneClick] fixed some "index out of bounds" errors. Bug #703 + #707
-2294 [OneClick] only supported subtitle tracks will be added
-2293 [AVS Script Creator] fixed "Clever (TM) anamorphic encoding" if using "Encode non-mod 16"
-2292 [AVS Cutter] fixed not fading to black
-2291 [M2TS Muxer] disabled pure TrueHD as it is not supported by tsMuxeR
-2290 [AVS Script Creator] removed "Successfully converted to YV12" message
-2289 [OneClick] fixed error when opening some files. Bug #703
-2288 [MP4 Muxer] added support for Apple TV & iPad
+2297 [MediaInfo] fixed wrong aspect ratio in some cases
+
+
+Changelog 2287 --> 2296
+
+Features/Changes:
+- added support for Apple TV & iPad in the MP4 muxer
+
+Enhancements/Fixes:
+[AVS Cutter] fixed not fading to black
+[AVS Script Creator] fixed "Clever (TM) anamorphic encoding" if using "Encode non-mod 16"
+[AVS Script Creator] removed "Successfully converted to YV12" message
+[M2TS Muxer] disabled pure TrueHD as it is not supported by tsMuxeR
+[OneClick] fixed some "index out of bounds" errors. Bug #703 + #707
+[OneClick] only supported subtitle tracks will be added
+[x264] fixed --crf and --partitions not set to default settings for new MeGUI installations
+
 
 Changelog 2237 --> 2287
 
@@ -107,64 +115,6 @@ Enhancements/Fixes:
 [x264] increased the maximum value for --vbv-maxrate and --vbv-bufsize. Bug #3573545
 [x264] lowered PS3 device level from 4.2 to 4.1 in order to enhance compatibility
 fixed a crash when using a corrupt settings.xml. Bug #3574768
-
-
-Changelog 2112 --> 2153
-
-Features/Changes:
-NeroAacEnc + DGIndexNV are now disabled by default as external dependencies are required.
-If they are already in use they will be enabled automatically, in all other cases
-they have to be enabled in "Options\Settings\External Program Configuration".
-[AutoEncode] enabled option to set the audio language and the track name
-[MediaInfo] improved information detection for DVD sources
-[Update] if a component is missing no jobs can be started
-
-Enhancements/Fixes:
-[Audio Encoder] cosmetics. Patch by andrewxeron929623
-[Audio Encoder] Import() will be used for AVS input files. Bug #3506283
-[Audio Encoder] NicAudio will be tried for DTS-MA decoding when DirectShowSource and FFAudioSource fail
-[AVS Script Creator] crop values will only be added to the script if necessary
-[AVS Script Creator] improved automatic cropping
-[Chapter Creator] added option to sort the title list
-[Chapter Creator] improved DVD PGC handling
-[DGA/DGI Indexer] + [MKV Muxer] + [VobSubber] added job status message during processing
-[DGI Indexer] fixed getting the film value
-[FFMS] prepared indexer for handling index files stored in other locations
-[Flac] changed input handling (PCM --> RAW) so that 24bit WAV files can be processed as well
-[HD Streams Extractor] fixed handling of English tracks in a MKV container when the track name contains a language
-[HD Streams Extractor] improved job queuing when no feature is selected
-[Job] improved aborting of jobs
-[Job] translate process exit codes to status messages
-[Log] added required DLLs to the version information block
-[Log] use system default encoding for AviSynth input script
-[MKV Muxer] adjusted (de)muxer to the recent mkvmerge changes (requires mkvmerge revision 5.3.0+)
-[MKV Muxer] improved handling of empty IDX subtitle files
-[MP4 Muxer] fixed muxing files with names containing #. Bug #3531735
-[OneClick] added some changes for the upcoming next release of the OneClick tool
-[OneClick] fixed encoding of AC3 tracks which should be muxed only
-[OneClick] fixed problem encoding WMA files
-[OneClick] fixed processing of audio files which cannot be demuxed
-[PGC Demux] added pgcdemux for DVD PGC processing
-[Progress Window] added job name. Feature request #3488205
-[Settings] cosmetics
-[VobSubber] improved detection of subtitle streams
-Fixed problems with Turkish characters in various places (e.g. in the File Indexer)
-
-
-Changelog 2106 --> 2112
-
-Features:
-[File Size Selector] removed some default values and added a control in the settings to add custom file size values
-[File Size Selector] all other controls will not save anymore custom values to avoid problems in AutoEncode + OneClick
-[Job] delete intermediate files also during job deletion if specified in the settings
-[Video Player] changed default start position to the middle if "Improved AVS opening" is selected
-[x264] force --keyint-min 1 with Blu-ray (requires x264 revision 2149+)
-[x264] replaced vfw4x264 with avs4x264mod. Details:
-[x264] http://forum.doom9.org/showthread.php?t=162656
-
-Enhancements:
-[AVS Script Creator] fixed opening of FFMS indexed files
-[XviD] fixed saving of custom vbv values. Bug #3483985
 
 
 Known Problems:

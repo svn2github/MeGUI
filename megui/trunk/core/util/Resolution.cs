@@ -46,9 +46,9 @@ namespace MeGUI.core.util
             decimal fractionOfWidth = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) / (decimal)readerWidth;
             decimal inputWidthOnHeight = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) /
                                           ((decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom);
-            decimal sourceHorizontalResolution = (decimal)readerHeight * inputDAR.ar * fractionOfWidth;
+            decimal sourceHorizontalResolution = (decimal)readerHeight * inputDAR.AR * fractionOfWidth;
             decimal sourceVerticalResolution = (decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom;
-            decimal realAspectRatio = getAspectRatio(inputDAR.ar, sourceHorizontalResolution / sourceVerticalResolution, acceptableAspectErrorPercent); // the aspect ratio of the video
+            decimal realAspectRatio = getAspectRatio(inputDAR.AR, sourceHorizontalResolution / sourceVerticalResolution, acceptableAspectErrorPercent); // the aspect ratio of the video
 			decimal resizedVerticalResolution = (decimal)horizontalResolution / realAspectRatio;
 
             int scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod)) * mod;
@@ -172,7 +172,7 @@ namespace MeGUI.core.util
                     else if (darString.Equals("4:3"))
                         newDar = Dar.ITU4x3NTSC;
                 }
-                if (!newDar.Equals(Dar.A1x1.ar))
+                if (!newDar.Equals(Dar.A1x1))
                     return newDar;
             }
 

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -431,17 +431,17 @@ namespace MeGUI
                 if ((int)file.VideoInfo.Width > iScreenWidth)
                 {
                     zoomMaxWidth = iScreenWidth;
-                    height = (int)Math.Round((decimal)zoomMaxWidth / d.ar);
+                    height = (int)Math.Round((decimal)zoomMaxWidth / d.AR);
                     if (height + formHeightDelta > iScreenHeight)
                     {
                         height = iScreenHeight - formHeightDelta;
-                        zoomMaxWidth = (int)Math.Round((decimal)height * d.ar);
+                        zoomMaxWidth = (int)Math.Round((decimal)height * d.AR);
                     }
                 }
                 else
                 {
                     height = iScreenHeight - formHeightDelta;
-                    zoomMaxWidth = (int)Math.Round((decimal)height * d.ar);
+                    zoomMaxWidth = (int)Math.Round((decimal)height * d.AR);
                 }
                 videoWindowWidth = zoomMaxWidth;
                 videoWindowHeight = height;
@@ -458,7 +458,7 @@ namespace MeGUI
                 zoomWidth = (int)(zoomMaxWidth * zoomFactor / 100);
                 Dar d = new Dar(file.VideoInfo.Width, file.VideoInfo.Height);
                 if (showPAR.Checked) d = arChooser.Value ?? d;
-                int height = (int)Math.Round((decimal)zoomWidth / d.ar);
+                int height = (int)Math.Round((decimal)zoomWidth / d.AR);
                 videoWindowWidth = zoomWidth;
                 videoWindowHeight = (int)height;
             }
@@ -1304,7 +1304,7 @@ namespace MeGUI
             Dar d = new Dar(file.VideoInfo.Width, file.VideoInfo.Height);
             if (PAR) d = arChooser.Value ?? d;
 
-            int height = (int)Math.Round((decimal)targetWidth / d.ar);
+            int height = (int)Math.Round((decimal)targetWidth / d.AR);
 
             videoWindowWidth = targetWidth;
             videoWindowHeight = (int)height;

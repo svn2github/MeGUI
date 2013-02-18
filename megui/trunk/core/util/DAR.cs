@@ -37,8 +37,8 @@ namespace MeGUI.core.util
         public static readonly Dar STATIC16x9 = new Dar(16, 9);
         public static readonly Dar A1x1 = new Dar(1, 1);
 
-        public decimal ar;
         private ulong x, y;
+        private decimal ar;
 
         public Dar(ulong x, ulong y)
         {
@@ -84,14 +84,22 @@ namespace MeGUI.core.util
             RatioUtils.reduce(ref this.x, ref this.y);
         }
 
+        public decimal AR
+        {
+            get { return ar; }
+            set { ar = value; }
+        }
+
         public ulong X
         {
             get { return x; }
+            set { x = value; }
         }
 
         public ulong Y
         {
             get { return y; }
+            set { y = value; }
         }
 
         public override string ToString()
@@ -106,9 +114,10 @@ namespace MeGUI.core.util
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Dar)) return false;
+            if (!(obj is Dar)) 
+                return false;
+            
             decimal ar2 = ((Dar)obj).ar;
-
             return (Math.Abs(ar - ar2) < 0.0001M * Math.Min(ar, ar2));
         }
 
