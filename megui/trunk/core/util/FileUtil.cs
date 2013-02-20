@@ -492,14 +492,18 @@ namespace MeGUI.core.util
                 using (StreamReader sr = new StreamReader(inFile))
                 {
                     string line = null;
+                    string chapTitle = null;
                     int i = 0;
                     while ((line = sr.ReadLine()) != null)
                     {
                         i++;
                         if (i % 2 == 1)
-                            sb.Append("<TextSample sampleTime=\"" + line.Substring(line.IndexOf("=")+1) + "\"");
+                            sb.Append("<TextSample sampleTime=\"" + line.Substring(line.IndexOf("=") + 1) + "\"");
                         else
-                            sb.Append(" text=\"" + line.Substring(line.IndexOf("=")+1) + "\"></TextSample>" + Environment.NewLine);                        
+                        {
+                            chapTitle = System.Text.RegularExpressions.Regex.Replace(line.Substring(line.IndexOf("=") + 1), "\"", "&quot;");
+                            sb.Append(" text=\"" + chapTitle + "\"></TextSample>" + Environment.NewLine);
+                        }                     
                     }
                 }
                 sb.AppendLine("</TextStream>");
@@ -515,6 +519,44 @@ namespace MeGUI.core.util
                 e.Message.ToString();
             }
         }
+
+        public static Int16 GetFileEncoding(string srcFile)
+        {
+            // *** Use Default of Encoding.Default (Ansi CodePage)
+            Encoding enc = Encoding.Default;
+            Int16 v = 0;
+
+            // *** Detect byte order mark if any - otherwise assume default
+            byte[] buffer = new byte[5];
+            FileStream file = new FileStream(srcFile, FileMode.Open);
+            file.Read(buffer, 0, 5);
+            file.Close();
+
+            if (buffer[0] == 0xef && buffer[1] == 0xbb && buffer[2] == 0xbf) // UTF8
+            {
+                enc = Encoding.UTF8;
+                v = 1;
+            }
+            else if (buffer[0] == 0xfe && buffer[1] == 0xff) // Unicode
+            {
+                enc = Encoding.Unicode;
+                v = 2;
+            }
+            else if (buffer[0] == 0 && buffer[1] == 0 && buffer[2] == 0xfe && buffer[3] == 0xff) // UTF32
+            {
+                enc = Encoding.UTF32;
+                v = 3; 
+            }
+            else if (buffer[0] == 0x2b && buffer[1] == 0x2f && buffer[2] == 0x76) // UTF7
+            {
+                enc = Encoding.UTF7;
+                v = 4;
+            }
+
+            //return enc;
+            return v;
+        }
+
 
     }
 }
