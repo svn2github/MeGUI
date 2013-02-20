@@ -68,7 +68,6 @@ namespace MeGUI.core.gui
         }
 
         bool hasLater;
-
         public bool HasLater
         {
             get { return hasLater; }

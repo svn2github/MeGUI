@@ -116,9 +116,8 @@ namespace MeGUI.core.util
         {
             if (!(obj is Dar)) 
                 return false;
-            
-            decimal ar2 = ((Dar)obj).ar;
-            return (Math.Abs(ar - ar2) < 0.0001M * Math.Min(ar, ar2));
+
+            return (X == ((Dar)obj).X && Y == ((Dar)obj).Y);
         }
 
         public override int GetHashCode()

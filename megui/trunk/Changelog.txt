@@ -1,3 +1,6 @@
+2300 [MediaInfo] fixed wrong aspect ratio if using anamorphic AVS files
+2299 [MP4 Muxer] allow Nero & Apple Chapters styles muxing for better interoperability with players. Patch by Eli Bildirici (#66) 
+2298 [MP4 Muxer] avoid quote truncation within Chapters Names. Patch by Eli Bildirici (#66)
 2297 [MediaInfo] fixed wrong aspect ratio in some cases
 
 

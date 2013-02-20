@@ -92,8 +92,7 @@ namespace MeGUI
                     ulong frameCount = ulong.Parse(t.FrameCount);
                     double fps = (easyParseDouble(t.FrameRate) ?? easyParseDouble(t.FrameRateOriginal) ?? 99);
 
-                    decimal? ar = easyParse<decimal>(delegate { return decimal.Parse(t.AspectRatio); });
-                    Dar dar = Resolution.GetDAR((int)width, (int)height, ar, null, null);
+                    Dar dar = Resolution.GetDAR((int)width, (int)height, t.AspectRatio, null, null);
 
                     v.StreamInfo = new VideoInfo2(width, height, dar, frameCount, fps);
                     v.TrackNumber = uint.Parse(t.ID);
@@ -503,7 +502,7 @@ namespace MeGUI
                         if (_VideoInfo.Codec == null)
                             _VideoInfo.Codec = getVideoCodec(track.Format); // sometimes codec info is not available, check the format then...
                         _VideoInfo.Type = getVideoType(_VideoInfo.Codec, cType, file);
-                        _VideoInfo.DAR = Resolution.GetDAR((int)_VideoInfo.Width, (int)_VideoInfo.Height, easyParseDecimal(track.AspectRatio), easyParseDecimal(track.PixelAspectRatio), track.AspectRatioString);
+                        _VideoInfo.DAR = Resolution.GetDAR((int)_VideoInfo.Width, (int)_VideoInfo.Height, track.AspectRatio, easyParseDecimal(track.PixelAspectRatio), track.AspectRatioString);
                     }
                 }
                 info.Dispose();
@@ -765,7 +764,7 @@ namespace MeGUI
                             oVideo.Codec = "AVS Video";
                             oVideo.CodecString = "AVS";
                             oVideo.Format = "AVS";
-                            oVideo.AspectRatio = avi.VideoInfo.DAR.ToString();
+                            oVideo.AspectRatio = avi.VideoInfo.DAR.X + ":" + avi.VideoInfo.DAR.Y;
                             oVideo.Delay = "0";
                             oInfo.Video.Add(oVideo);
                         }

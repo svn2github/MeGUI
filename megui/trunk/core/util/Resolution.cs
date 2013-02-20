@@ -28,33 +28,33 @@ namespace MeGUI.core.util
     public class Resolution
     {
         /// <summary>
-		/// calculates the ideal mod vertical resolution that matches the desired horizontal resolution
-		/// </summary>
-		/// <param name="readerHeight">height of the source</param>
-		/// <param name="readerWidth">width of the source</param>
-		/// <param name="customDAR">custom display aspect ratio to be taken into account for resizing</param>
-		/// <param name="cropping">the crop values for the source</param>
-		/// <param name="horizontalResolution">the desired horizontal resolution of the output</param>
-		/// <param name="signalAR">whether or not we're going to signal the aspect ratio (influences the resizing)</param>
-		/// <param name="sarX">horizontal pixel aspect ratio (used when signalAR = true)</param>
-		/// <param name="sarY">vertical pixel aspect ratio (used when signalAR = true)</param>
+        /// calculates the ideal mod vertical resolution that matches the desired horizontal resolution
+        /// </summary>
+        /// <param name="readerHeight">height of the source</param>
+        /// <param name="readerWidth">width of the source</param>
+        /// <param name="customDAR">custom display aspect ratio to be taken into account for resizing</param>
+        /// <param name="cropping">the crop values for the source</param>
+        /// <param name="horizontalResolution">the desired horizontal resolution of the output</param>
+        /// <param name="signalAR">whether or not we're going to signal the aspect ratio (influences the resizing)</param>
+        /// <param name="sarX">horizontal pixel aspect ratio (used when signalAR = true)</param>
+        /// <param name="sarY">vertical pixel aspect ratio (used when signalAR = true)</param>
         /// <param name="mod">the MOD value</param>
-		/// <returns>the suggested horizontal resolution</returns>
+        /// <returns>the suggested horizontal resolution</returns>
         public static int SuggestVerticalResolution(double readerHeight, double readerWidth, Dar inputDAR, CropValues cropping, int horizontalResolution,
             bool signalAR, out Dar? dar, int mod, decimal acceptableAspectErrorPercent)
-		{
+        {
             decimal fractionOfWidth = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) / (decimal)readerWidth;
             decimal inputWidthOnHeight = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) /
                                           ((decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom);
             decimal sourceHorizontalResolution = (decimal)readerHeight * inputDAR.AR * fractionOfWidth;
             decimal sourceVerticalResolution = (decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom;
             decimal realAspectRatio = getAspectRatio(inputDAR.AR, sourceHorizontalResolution / sourceVerticalResolution, acceptableAspectErrorPercent); // the aspect ratio of the video
-			decimal resizedVerticalResolution = (decimal)horizontalResolution / realAspectRatio;
+            decimal resizedVerticalResolution = (decimal)horizontalResolution / realAspectRatio;
 
             int scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod)) * mod;
 
             if (signalAR)
-			{
+            {
                 resizedVerticalResolution = (decimal)horizontalResolution / inputWidthOnHeight; // Scale vertical resolution appropriately
                 scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod) * mod);
 
@@ -78,12 +78,12 @@ namespace MeGUI.core.util
                 }
                 Debug.Assert(parX > 0 && parY > 0);
                 dar = new Dar((ulong)parX, (ulong)parY);
-			}
-			else
+            }
+            else
                 dar = null;
 
             return scriptVerticalResolution;
-		}
+        }
 
         /// <summary>
         /// finds the aspect ratio closest to the one giving as parameter (which is an approximation using the selected DAR for the source and the cropping values)
@@ -146,7 +146,7 @@ namespace MeGUI.core.util
         /// <param name="par">pixel aspect ratio </param>
         /// <param name="darString">display aspect ratio string - e.g. 16:9 or 4:3</param>
         /// <returns>the DAR value</returns>
-        public static Dar GetDAR(int width, int height, decimal? dar, decimal? par, string darString)
+        public static Dar GetDAR(int width, int height, string darValue, decimal? par, string darString)
         {
             if (!String.IsNullOrEmpty(darString) && width == 720 && (height == 576 || height == 480))
             {
@@ -179,7 +179,8 @@ namespace MeGUI.core.util
             if (par == null || par <= 0)
                 par = 1;
 
-            if (dar != null && dar > 0 )
+            decimal? dar = easyParseDecimal(darValue);
+            if (dar != null && dar > 0)
             {
                 decimal correctDar = (decimal)width * (decimal)par / height;
                 if (Math.Abs(Math.Round(correctDar, 3) - Math.Round((decimal)dar, 3)) <= 0.001M)
@@ -188,7 +189,23 @@ namespace MeGUI.core.util
                     return new Dar((decimal)dar);
             }
 
-            return new Dar((ulong)width, (ulong)height);
+            if (darValue.Contains(":"))
+                return new Dar(ulong.Parse(darValue.Split(':')[0]), ulong.Parse(darValue.Split(':')[1]));
+            else
+                return new Dar((ulong)width, (ulong)height);
+        }
+
+        private static decimal? easyParseDecimal(string value)
+        {
+            try
+            {
+                System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-us");
+                return decimal.Parse(value, culture);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
