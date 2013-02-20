@@ -349,14 +349,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
 
                 if (!string.IsNullOrEmpty(settings.ChapterFile))
                 {
+                    // Add Apple Devices Chapter format
                     if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone" || settings.DeviceType == "iPad" || settings.DeviceType == "Apple TV")
                     {
                         FileUtil.CreateXMLFromOGGChapFile(settings.ChapterFile);
                         sb.Append(" -add \"" + Path.Combine(Path.GetDirectoryName(settings.ChapterFile), Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml:name=:chap") + "\"");
                         job.FilesToDelete.Add(Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml");
                     }
-                    else
-                        sb.Append(" -chap \"" + settings.ChapterFile + "\"");
+
+                    // Add Nero Style Chapters - this doesn't break Apple Devices playback  - just for better interoperability with other tools
+                    sb.Append(" -chap \"" + settings.ChapterFile + "\"");
 
                 }
 
