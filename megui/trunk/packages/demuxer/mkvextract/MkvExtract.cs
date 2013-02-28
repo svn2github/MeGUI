@@ -73,13 +73,13 @@ namespace MeGUI
                 su.PercentageDoneExact = getPercentage(line);
                 su.Status = "Extracting Tracks...";
             }
-            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("error") 
+            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("error") 
                         && !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("extracting track"))
             {
                 log.LogValue("An error occurred", line, ImageType.Error);
                 su.HasError = true;
             }
-            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("warning")
+            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("warning")
                         && !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("extracting track"))
             {
                 log.LogValue("A warning occurred", line, ImageType.Warning);
