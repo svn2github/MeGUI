@@ -747,8 +747,8 @@ namespace MeGUI
                 else
                     arChooser.Value = file.VideoInfo.DAR;
 
-                cropLeft.Maximum = cropRight.Maximum = file.VideoInfo.Width / 2;
-                cropTop.Maximum = cropBottom.Maximum = file.VideoInfo.Height / 2;
+                cropLeft.Maximum = cropRight.Maximum = file.VideoInfo.Width;
+                cropTop.Maximum = cropBottom.Maximum = file.VideoInfo.Height;
                 eventsOn = true;
             }
 		}
@@ -1274,6 +1274,26 @@ namespace MeGUI
                 {
                     verticalResolution.Maximum = inputHeight;
                     horizontalResolution.Maximum = inputWidth;
+                }
+                if (crop.Checked)
+                {
+                    int mod = 16;
+                    if (!signalAR.Checked || mod16Box.SelectedIndex != (int)mod16Method.nonMod16)
+                    {
+                        switch ((modValue)modValueBox.SelectedIndex)
+                        {
+                            case modValue.mod8: mod = 8; break;
+                            case modValue.mod4: mod = 4; break;
+                            case modValue.mod2: mod = 2; break;
+                        }
+                    }
+                    else
+                        mod = 1;
+
+                    cropLeft.Maximum = (int)file.VideoInfo.Width - Cropping.right - mod;
+                    cropRight.Maximum = (int)file.VideoInfo.Width - Cropping.left - mod;
+                    cropTop.Maximum = (int)file.VideoInfo.Height - Cropping.bottom - mod;
+                    cropBottom.Maximum = (int)file.VideoInfo.Height - Cropping.top - mod;
                 }
             }
         }

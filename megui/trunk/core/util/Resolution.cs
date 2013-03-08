@@ -43,12 +43,12 @@ namespace MeGUI.core.util
         public static int SuggestVerticalResolution(double readerHeight, double readerWidth, Dar inputDAR, CropValues cropping, int horizontalResolution,
             bool signalAR, out Dar? dar, int mod, decimal acceptableAspectErrorPercent)
         {
+            int scriptVerticalResolution;
+
             decimal fractionOfWidth = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) / (decimal)readerWidth;
             decimal sourceHorizontalResolution = (decimal)readerHeight * inputDAR.AR * fractionOfWidth;
             decimal sourceVerticalResolution = (decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom;
             decimal resizedVerticalResolution = (decimal)horizontalResolution / (sourceHorizontalResolution / sourceVerticalResolution);
-
-            int scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod)) * mod;
 
             if (signalAR)
             {
@@ -80,7 +80,10 @@ namespace MeGUI.core.util
                 dar = new Dar((ulong)parX, (ulong)parY);
             }
             else
+            {
+                scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod)) * mod;
                 dar = null;
+            }
 
             return scriptVerticalResolution;
         }

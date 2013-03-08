@@ -1,3 +1,4 @@
+2303 [AVS Script Creator] removed cropping limit
 2302 [AVS Script Creator] fixed wrong resize values in some cases if using cropping without anamorphic encoding
 2301 [MKV Demuxer] fixed wrong detection of errors if file name contains "error"
 2300 [MediaInfo] fixed wrong aspect ratio if using anamorphic AVS files
