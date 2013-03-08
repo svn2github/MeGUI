@@ -1,3 +1,5 @@
+2302 [AVS Script Creator] fixed wrong resize values in some cases if using cropping without anamorphic encoding
+2301 [MKV Demuxer] fixed wrong detection of errors if file name contains "error"
 2300 [MediaInfo] fixed wrong aspect ratio if using anamorphic AVS files
 2299 [MP4 Muxer] allow Nero & Apple Chapters styles muxing for better interoperability with players. Patch by Eli Bildirici (#66) 
 2298 [MP4 Muxer] avoid quote truncation within Chapters Names. Patch by Eli Bildirici (#66)

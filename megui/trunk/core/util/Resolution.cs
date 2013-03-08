@@ -44,17 +44,17 @@ namespace MeGUI.core.util
             bool signalAR, out Dar? dar, int mod, decimal acceptableAspectErrorPercent)
         {
             decimal fractionOfWidth = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) / (decimal)readerWidth;
-            decimal inputWidthOnHeight = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) /
-                                          ((decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom);
             decimal sourceHorizontalResolution = (decimal)readerHeight * inputDAR.AR * fractionOfWidth;
             decimal sourceVerticalResolution = (decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom;
-            decimal realAspectRatio = getAspectRatio(inputDAR.AR, sourceHorizontalResolution / sourceVerticalResolution, acceptableAspectErrorPercent); // the aspect ratio of the video
-            decimal resizedVerticalResolution = (decimal)horizontalResolution / realAspectRatio;
+            decimal resizedVerticalResolution = (decimal)horizontalResolution / (sourceHorizontalResolution / sourceVerticalResolution);
 
             int scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod)) * mod;
 
             if (signalAR)
             {
+                decimal inputWidthOnHeight = ((decimal)readerWidth - (decimal)cropping.left - (decimal)cropping.right) /
+                                          ((decimal)readerHeight - (decimal)cropping.top - (decimal)cropping.bottom);
+                decimal realAspectRatio = getAspectRatio(inputDAR.AR, sourceHorizontalResolution / sourceVerticalResolution, acceptableAspectErrorPercent); // the aspect ratio of the video
                 resizedVerticalResolution = (decimal)horizontalResolution / inputWidthOnHeight; // Scale vertical resolution appropriately
                 scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod) * mod);
 
