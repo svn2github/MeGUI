@@ -969,7 +969,7 @@ namespace MeGUI
             {
                 if (detector == null) // We want to start the analysis
                 {
-                    string source = ScriptServer.GetInputLine(input.Filename, null, false, sourceType, false, false, false, 25, false);
+                    string source = ScriptServer.GetInputLine(input.Filename, indexFile, false, sourceType, false, false, false, 25, false);
                     if (nvDeInt.Enabled) 
                         source += ")";
                     detector = new SourceDetector(source,
