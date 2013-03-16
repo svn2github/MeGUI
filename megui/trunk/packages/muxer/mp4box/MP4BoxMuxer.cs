@@ -314,7 +314,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         sb.Append(":group=1");
                         if (trackCount > 0)
-                            sb.Append(":disabled");
+                            sb.Append(":disable");
                     }
                     sb.Append("\"");
                     trackCount++;
@@ -341,7 +341,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         sb.Append(":hdlr=sbtl:layout=-1:group=2");
                         if (trackCount > 0)
-                            sb.Append(":disabled");
+                            sb.Append(":disable");
                     }
                     sb.Append("\"");
                     trackCount++;
