@@ -1,3 +1,5 @@
+2307 [AVS Script Creator] fixed not applying film when manually choosing "Partially film"
+2306 [MP4 Muxer] cosmetic - "disable" instead of "disabled" parameter
 2305 [AVS Script Creator] fixed "TDeint (with EDI + BOB)"
 2304 [AVS Script Creator] fixed recreating the index file during "Analyse" if using FFMS with a non-default index file location
 2303 [AVS Script Creator] removed cropping limit

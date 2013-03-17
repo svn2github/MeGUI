@@ -546,8 +546,9 @@ namespace MeGUI
                 info.decimateM = (int)deintM.Value;
                 try
                 {
-                    info.majorityFilm = ((UserSourceType)((EnumProxy)deintSourceType.SelectedItem).RealValue)
-                   == UserSourceType.HybridFilmInterlaced;
+                    info.majorityFilm =
+                        ((UserSourceType)((EnumProxy)deintSourceType.SelectedItem).RealValue) == UserSourceType.HybridFilmInterlaced ||
+                        ((UserSourceType)((EnumProxy)deintSourceType.SelectedItem).RealValue) == UserSourceType.HybridProgressiveFilm;
                 }
                 catch (NullReferenceException) { }
                 info.isAnime = deintIsAnime.Checked;
@@ -562,18 +563,23 @@ namespace MeGUI
                 }
                 foreach (EnumProxy o in deintSourceType.Items)
                 {
-                    if ((SourceType)o.Tag == value.sourceType) deintSourceType.SelectedItem = o;
+                    if ((SourceType)o.Tag == value.sourceType)
+                        deintSourceType.SelectedItem = o;
                 }
                 foreach (EnumProxy o in deintFieldOrder.Items)
                 {
-                    if ((FieldOrder)o.Tag == value.fieldOrder) deintFieldOrder.SelectedItem = o;
+                    if ((FieldOrder)o.Tag == value.fieldOrder)
+                        deintFieldOrder.SelectedItem = o;
                 }
-                if (value.fieldOrder == FieldOrder.UNKNOWN) deintFieldOrder.SelectedIndex = -1;
+                if (value.fieldOrder == FieldOrder.UNKNOWN)
+                    deintFieldOrder.SelectedIndex = -1;
                 deintM.Value = value.decimateM;
                 if (value.sourceType == SourceType.HYBRID_FILM_INTERLACED)
                 {
-                    if (value.majorityFilm) deintSourceType.SelectedItem = ScriptServer.ListOfSourceTypes[(int)UserSourceType.HybridFilmInterlaced];
-                    else deintSourceType.SelectedItem = ScriptServer.ListOfSourceTypes[(int)UserSourceType.HybridInterlacedFilm];
+                    if (value.majorityFilm)
+                        deintSourceType.SelectedItem = ScriptServer.ListOfSourceTypes[(int)UserSourceType.HybridFilmInterlaced];
+                    else
+                        deintSourceType.SelectedItem = ScriptServer.ListOfSourceTypes[(int)UserSourceType.HybridInterlacedFilm];
                 }
                 this.deinterlaceType.DataSource = ScriptServer.GetDeinterlacers(value);
                 this.deinterlaceType.BindingContext = new BindingContext();
@@ -1017,6 +1023,7 @@ namespace MeGUI
                     {
                         deintProgressBar.Enabled = false;
                         this.DeintInfo = info;
+                        info.
                         if (deintSourceType.SelectedIndex < 1)
                         {
                             deinterlace.Enabled = false;
