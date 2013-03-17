@@ -87,7 +87,6 @@ namespace MeGUI
             this.mainForm = mainForm;
             this.vUtil = new VideoUtil(mainForm);
             this.jobUtil = new JobUtil(mainForm);
-            _oLog = mainForm.Log.Info("FileIndexer");
             CheckDGIIndexer();
         }
 
@@ -213,6 +212,12 @@ namespace MeGUI
         }
         private void openVideo(string fileName)
         {
+            this._oLog = mainForm.FileIndexerLog;
+            if (_oLog == null)
+            {
+                _oLog = mainForm.Log.Info("FileIndexer");
+                mainForm.FileIndexerLog = _oLog;
+            }
             MediaInfoFile iFile = new MediaInfoFile(fileName, ref _oLog);
 
             strVideoCodec = iFile.VideoInfo.Track.Codec;

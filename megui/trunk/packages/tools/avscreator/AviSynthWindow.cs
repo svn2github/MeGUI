@@ -53,6 +53,7 @@ namespace MeGUI
         private string indexFile;
         private int scriptRefresh = 1; // >= 1 enabled; < 1 disabled
         private bool bAllowUpsizing;
+        private LogItem _oLog;
 		#endregion
 
 		#region construction/deconstruction
@@ -1023,7 +1024,6 @@ namespace MeGUI
                     {
                         deintProgressBar.Enabled = false;
                         this.DeintInfo = info;
-                        info.
                         if (deintSourceType.SelectedIndex < 1)
                         {
                             deinterlace.Enabled = false;
@@ -1042,6 +1042,14 @@ namespace MeGUI
                 catch (Exception) { } // If we get any errors, it's most likely because the window was closed, so just ignore
             }
             detector = null;
+
+            this._oLog = mainForm.AVSScriptCreatorLog;
+            if (_oLog == null)
+            {
+                _oLog = mainForm.Log.Info("AVS Script Creator");
+                mainForm.AVSScriptCreatorLog = _oLog;
+            }
+            _oLog.LogValue("Source detection: " + Path.GetFileName(input.Filename), info.analysisResult, error ? ImageType.Warning : ImageType.Information);
         }
 
         public void analyseUpdate(int amountDone, int total)

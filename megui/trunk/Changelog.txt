@@ -1,3 +1,4 @@
+2308 [AVS Script Creator] added detailed analysis result to the log
 2307 [AVS Script Creator] fixed not applying film when manually choosing "Partially film"
 2306 [MP4 Muxer] cosmetic - "disable" instead of "disabled" parameter
 2305 [AVS Script Creator] fixed "TDeint (with EDI + BOB)"

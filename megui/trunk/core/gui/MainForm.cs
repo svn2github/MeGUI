@@ -63,6 +63,8 @@ namespace MeGUI
         private Semaphore logLock;
         private int avsLock;
         private LogItem _oneClickLog;
+        private LogItem _aVSScriptCreatorLog;
+        private LogItem _fileIndexerLog;
         private LogItem _updateLog;
         private LogItem _eac3toLog;
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
@@ -71,6 +73,8 @@ namespace MeGUI
         public Semaphore LogLock { get { return logLock; } set { logLock = value; } }
         public int AvsLock { get { return avsLock; } set { avsLock = value; } }
         public LogItem OneClickLog { get { return _oneClickLog; } set { _oneClickLog = value; } }
+        public LogItem AVSScriptCreatorLog { get { return _aVSScriptCreatorLog; } set { _aVSScriptCreatorLog = value; } }
+        public LogItem FileIndexerLog { get { return _fileIndexerLog; } set { _fileIndexerLog = value; } }
         public LogItem UpdateLog { get { return _updateLog; } set { _updateLog = value; } }
         public LogItem Eac3toLog { get { return _eac3toLog; } set { _eac3toLog = value; } }
         #endregion
