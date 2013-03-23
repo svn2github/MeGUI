@@ -1325,7 +1325,7 @@ namespace MeGUI
 
             this.suggestedDar = null;
             bool signalAR = this.signalAR.Checked;
-            if (file == null || (!resize.Checked && (!signalAR || mod16Box.SelectedIndex != (int)mod16Method.nonMod16)))
+            if (file == null || (!resize.Checked && !signalAR))
                 return;
 
             try

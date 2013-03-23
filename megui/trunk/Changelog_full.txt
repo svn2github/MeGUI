@@ -1,3 +1,15 @@
+2308 [AVS Script Creator] added detailed analysis result to the log
+2307 [AVS Script Creator] fixed not applying film when manually choosing "Partially film"
+2306 [MP4 Muxer] cosmetic - "disable" instead of "disabled" parameter
+2305 [AVS Script Creator] fixed "TDeint (with EDI + BOB)"
+2304 [AVS Script Creator] fixed recreating the index file during "Analyse" if using FFMS with a non-default index file location
+2303 [AVS Script Creator] removed cropping limit
+2302 [AVS Script Creator] fixed wrong resize values in some cases if using cropping without anamorphic encoding
+2301 [MKV Demuxer] fixed wrong detection of errors if file name contains "error"
+2300 [MediaInfo] fixed wrong aspect ratio if using anamorphic AVS files
+2299 [MP4 Muxer] allow Nero & Apple Chapters styles muxing for better interoperability with players. Patch by Eli Bildirici (#66) 
+2298 [MP4 Muxer] avoid quote truncation within Chapters Names. Patch by Eli Bildirici (#66)
+2297 [MediaInfo] fixed wrong aspect ratio in some cases
 2296 [x264] fixed --crf and --partitions not set to default settings for new MeGUI installations
 2295 [OneClick] fixed some "index out of bounds" errors. Bug #703 + #707
 2294 [OneClick] only supported subtitle tracks will be added

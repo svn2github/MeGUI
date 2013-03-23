@@ -1,15 +1,23 @@
-2308 [AVS Script Creator] added detailed analysis result to the log
-2307 [AVS Script Creator] fixed not applying film when manually choosing "Partially film"
-2306 [MP4 Muxer] cosmetic - "disable" instead of "disabled" parameter
-2305 [AVS Script Creator] fixed "TDeint (with EDI + BOB)"
-2304 [AVS Script Creator] fixed recreating the index file during "Analyse" if using FFMS with a non-default index file location
-2303 [AVS Script Creator] removed cropping limit
-2302 [AVS Script Creator] fixed wrong resize values in some cases if using cropping without anamorphic encoding
-2301 [MKV Demuxer] fixed wrong detection of errors if file name contains "error"
-2300 [MediaInfo] fixed wrong aspect ratio if using anamorphic AVS files
-2299 [MP4 Muxer] allow Nero & Apple Chapters styles muxing for better interoperability with players. Patch by Eli Bildirici (#66) 
-2298 [MP4 Muxer] avoid quote truncation within Chapters Names. Patch by Eli Bildirici (#66)
-2297 [MediaInfo] fixed wrong aspect ratio in some cases
+2309 [AVS Script Creator] fixed missing DAR values in the AVS script if using "Clever (TM) anamorphic encoding"
+
+
+Changelog 2296 --> 2308
+
+Features/Changes:
+[AVS Script Creator] removed cropping limit
+[MP4 Muxer] allow Nero & Apple Chapters styles muxing for better interoperability with players. Patch by Eli Bildirici (#66)
+
+Enhancements/Fixes:
+[AVS Script Creator] added detailed analysis result to the log
+[AVS Script Creator] fixed "TDeint (with EDI + BOB)"
+[AVS Script Creator] fixed not applying film when manually choosing "Partially film"
+[AVS Script Creator] fixed recreating the index file during "Analyse" if using FFMS with a non-default index file location
+[AVS Script Creator] fixed wrong resize values in some cases if using cropping without anamorphic encoding
+[MediaInfo] fixed wrong aspect ratio if using anamorphic AVS files
+[MediaInfo] fixed wrong aspect ratio in some cases
+[MKV Demuxer] fixed wrong detection of errors if file name contains "error"
+[MP4 Muxer] avoid quote truncation within Chapters Names. Patch by Eli Bildirici (#66)
+[MP4 Muxer] cosmetic - "disable" instead of "disabled" parameter
 
 
 Changelog 2287 --> 2296
@@ -74,58 +82,6 @@ Enhancements/Fixes:
 [Worker] fixed temporary worker only processing one job
 [Worker] if a job is aborted the corresponding worker will be stopped
 [Worker] several small optimizations
-
-
-Changelog 2153 --> 2237
-
-Features/Changes:
-- enhanced OneClick tool (read details in the block below)
-- AviSynth is not required to be installed anymore. Instead a portable version will be used when required.
-- The audio encoder QAAC and OPUS have been added - FAAC has been removed.
-  Because of the external dependencies QAAC must be enabled in the MeGUI settings. 
-  Additionally for QAAC some files must be installed (https://sites.google.com/site/qaacpage)
-- added better MP4 language support & several Apple devices tunings especially for chapters
-
-Enhanced OneClick encoder:
-- Blu-ray processing (Folder + Playlist)
-- DVD folder + file processing (including PGC support). Feature request #2817190
-- folder as input supported. Feature request #3429875/#2773587
-- support multiple input files per drag & drop
-- new subtitle control (including delay, language, name, forced/default flag). Feature request #2752988
-- subtitle support for MP4, AVI and M2TS output container
-- enhanced audio control (added delay, language, name)
-- AVS files as video input supported. Feature request #3412229
-- embedded VOB subtitle support (IFO must be available)
-- every OneClick job will be stored in a unique working directory. Feature request #2798486
-- option to select default audio/subtitle languages
-- option to select different default audio settings for different languages
-- option to select default working and output directory
-- option to specify the indexer priority and added AviSource() as way to process AVI files
-- options to define the project name settings
-- the x264 target playback device settings will be used for resizing
-- input DAR detection moved from postprocessing to initial opening step
-- convert TrueHD and DTS-HD tracks with eac3to when the track should be encoded
-
-Enhancements/Fixes:
-[DGIndexNV] enhanced progress information (requires dgindexnv 2043+)
-[DGIndexNV] added support for MP4 container (requires dgindexnv 2044+)
-[AviSynth Script Creator] added option to select 2/4/8 as mod values for "Suggest Resolution"
-[AviSynth Script Creator] fixed "Suggest Resolution (mod16)" handling
-[FFMS] try to index audio tracks only if at least one audio track has been selected
-[File Indexer] added DFSC/VFW and CFHD/CINEFORM to the list of not by FFMS supported codecs
-[File Indexer] added PGC handling
-[File Indexer] added selectable FFMS index file location
-[HD Streams Extractor] fixed handling of input files with a + in the file name
-[Log] added Windows 8 / .NET 4.5 detection
-[Log] if Haali is not correctly installed a warning will be logged
-[MediaInfo] ignore phantom TiVo audio tracks
-[MediaInfo] some adjustments for frame rate detection with MediaInfo 0.7.59+
-[MKVExtract] fixed handling of input file name which contains error or warning
-[MP4 Muxer] changed muxer to use the ISO 639-2/T language codes
-[Update] fixed a problem if the automatic update check is disabled and components are missing
-[x264] increased the maximum value for --vbv-maxrate and --vbv-bufsize. Bug #3573545
-[x264] lowered PS3 device level from 4.2 to 4.1 in order to enhance compatibility
-fixed a crash when using a corrupt settings.xml. Bug #3574768
 
 
 Known Problems:
