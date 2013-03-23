@@ -1,3 +1,4 @@
+2311 [OneClick] not correctly extracted subtitle files will be ignored. Bug #710
 2310 [OneClick] fixed AVS audio processing. Bug #711
 2309 [AVS Script Creator] fixed missing DAR values in the AVS script if using "Clever (TM) anamorphic encoding"
 

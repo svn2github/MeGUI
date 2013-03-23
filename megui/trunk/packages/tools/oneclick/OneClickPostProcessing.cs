@@ -148,6 +148,8 @@ namespace MeGUI
                 List<string> intermediateFiles = new List<string>();
 
                 FileUtil.ensureDirectoryExists(job.PostprocessingProperties.WorkingDirectory);
+
+                // audio handling
                 foreach (OneClickAudioTrack oAudioTrack in job.PostprocessingProperties.AudioTracks)
                 {
                     if (oAudioTrack.ExtractMKVTrack)
@@ -280,18 +282,12 @@ namespace MeGUI
                 foreach (string file in job.PostprocessingProperties.FilesToDelete)
                     intermediateFiles.Add(file);
 
+                // subtitle handling
                 if (!string.IsNullOrEmpty(avsFile) || !String.IsNullOrEmpty(job.PostprocessingProperties.VideoFileToMux))
                 {
-                    MuxStream[] subtitles;
-                    if (job.PostprocessingProperties.SubtitleTracks.Count == 0)
+                    List<MuxStream> subtitles = new List<MuxStream>();
+                    if (job.PostprocessingProperties.SubtitleTracks.Count > 0)
                     {
-                        //Create empty subtitles for muxing
-                        subtitles = new MuxStream[0];
-                    }
-                    else
-                    {
-                        subtitles = new MuxStream[job.PostprocessingProperties.SubtitleTracks.Count];
-                        int i = 0;
                         foreach (OneClickStream oTrack in job.PostprocessingProperties.SubtitleTracks)
                         {
                             if (oTrack.TrackInfo.IsMKVContainer())
@@ -304,19 +300,23 @@ namespace MeGUI
                                     if (Path.GetExtension(trackFile).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".idx"))
                                         intermediateFiles.Add(FileUtil.GetPathWithoutExtension(trackFile) + ".sub");
 
-                                    subtitles[i] = new MuxStream(trackFile, oTrack.Language, oTrack.Name, oTrack.Delay, oTrack.DefaultStream, oTrack.ForcedStream, null);
+                                    subtitles.Add(new MuxStream(trackFile, oTrack.Language, oTrack.Name, oTrack.Delay, oTrack.DefaultStream, oTrack.ForcedStream, null));
                                 }
                                 else
-                                    _log.LogEvent("File not found: " + trackFile, ImageType.Error);
+                                    _log.LogEvent("Ignoring subtitle as the it cannot be found: " + trackFile, ImageType.Warning);
                             }
                             else
-                                subtitles[i] = new MuxStream(oTrack.DemuxFilePath, oTrack.Language, oTrack.Name, oTrack.Delay, oTrack.DefaultStream, oTrack.ForcedStream, null);
-                            i++;
+                            {
+                                if (File.Exists(oTrack.DemuxFilePath))
+                                    subtitles.Add(new MuxStream(oTrack.DemuxFilePath, oTrack.Language, oTrack.Name, oTrack.Delay, oTrack.DefaultStream, oTrack.ForcedStream, null));
+                                else
+                                    _log.LogEvent("Ignoring subtitle as the it cannot be found: " + oTrack.DemuxFilePath, ImageType.Warning);
+                            }
                         }
                     }
 
                     JobChain c = vUtil.GenerateJobSeries(myVideo, job.PostprocessingProperties.FinalOutput, arrAudioJobs.ToArray(), 
-                        subtitles, job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
+                        subtitles.ToArray(), job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                         job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
                         job.PostprocessingProperties.PrerenderJob, arrMuxStreams.ToArray(),
                         _log, job.PostprocessingProperties.DeviceOutputType, null, job.PostprocessingProperties.VideoFileToMux, 
