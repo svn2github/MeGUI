@@ -184,6 +184,8 @@ namespace MeGUI
 
                 string strExtension = String.Empty;
                 string strCodec = String.Empty;
+                string strFileName = String.Empty;
+
                 if (!String.IsNullOrEmpty(_codec))
                     strCodec = _codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
 
@@ -226,12 +228,17 @@ namespace MeGUI
                     default: strExtension = strCodec + ".unknown"; break;
                 }
 
-                string strFileName = System.IO.Path.GetFileNameWithoutExtension(_sourceFileName) + " - [" + _mmgTrackID + "]";
-                if (!String.IsNullOrEmpty(_language))
-                    strFileName += " " + _language;
-                if (_delay != 0)
-                    strFileName += " " + _delay + "ms";
-                strFileName += "." + strExtension;
+                if (!strExtension.Equals("avs", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    strFileName = System.IO.Path.GetFileNameWithoutExtension(_sourceFileName) + " - [" + _mmgTrackID + "]";
+                    if (!String.IsNullOrEmpty(_language))
+                        strFileName += " " + _language;
+                    if (_delay != 0)
+                        strFileName += " " + _delay + "ms";
+                    strFileName += "." + strExtension;
+                }
+                else
+                    strFileName = System.IO.Path.GetFileName(_sourceFileName);
                 return strFileName;
             }
         }
