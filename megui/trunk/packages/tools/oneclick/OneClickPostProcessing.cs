@@ -197,7 +197,18 @@ namespace MeGUI
                     {
                         // internal chapter file
                         string strTempFile = job.PostprocessingProperties.ChapterFile;
-                        if (Path.GetExtension(job.PostprocessingProperties.VideoInput).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".mkv"))
+                        if (File.Exists(job.PostprocessingProperties.IFOInput))
+                        {
+                            job.PostprocessingProperties.ChapterFile = VideoUtil.getChaptersFromIFO(job.PostprocessingProperties.IFOInput, false, job.PostprocessingProperties.WorkingDirectory, job.PostprocessingProperties.TitleNumberToProcess);
+                            if (!String.IsNullOrEmpty(job.PostprocessingProperties.ChapterFile))
+                            {
+                                intermediateFiles.Add(job.PostprocessingProperties.ChapterFile);
+                                job.PostprocessingProperties.ChapterExtracted = true;
+                            }
+                            else
+                                job.PostprocessingProperties.ChapterFile = strTempFile;
+                        }
+                        else if (Path.GetExtension(job.PostprocessingProperties.VideoInput).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".mkv"))
                         {
                             MediaInfoFile oInfo = new MediaInfoFile(job.PostprocessingProperties.VideoInput, ref _log);
                             if (oInfo.hasMKVChapters())
@@ -211,17 +222,6 @@ namespace MeGUI
                                 else
                                     job.PostprocessingProperties.ChapterFile = strTempFile;
                             }
-                        }
-                        else if (File.Exists(job.PostprocessingProperties.IFOInput))
-                        {
-                            job.PostprocessingProperties.ChapterFile = VideoUtil.getChaptersFromIFO(job.PostprocessingProperties.IFOInput, false, job.PostprocessingProperties.WorkingDirectory, job.PostprocessingProperties.TitleNumberToProcess);
-                            if (!String.IsNullOrEmpty(job.PostprocessingProperties.ChapterFile))
-                            {
-                                intermediateFiles.Add(job.PostprocessingProperties.ChapterFile);
-                                job.PostprocessingProperties.ChapterExtracted = true;
-                            }
-                            else
-                                job.PostprocessingProperties.ChapterFile = strTempFile;
                         }
                     }
                     if (!File.Exists(job.PostprocessingProperties.ChapterFile))
