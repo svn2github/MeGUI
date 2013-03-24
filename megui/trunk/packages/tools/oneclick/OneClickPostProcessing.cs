@@ -40,6 +40,8 @@ namespace MeGUI
         }
 
         private Thread _processThread = null;
+        private Thread _processTime = null;
+        private SourceDetector sd = null;
         private DateTime _start;
         private StatusUpdate su;
         private OneClickPostProcessingJob job;
@@ -76,6 +78,16 @@ namespace MeGUI
         {
             _processThread.Abort();
             _processThread = null;
+            if (_processTime != null)
+            {
+                _processTime.Abort();
+                _processTime = null;
+            }
+            if (sd != null)
+            {
+                sd.stop();
+                sd = null;
+            }
         }
 
         private static void safeDelete(string filePath)
@@ -124,13 +136,13 @@ namespace MeGUI
 
         private void StartPostProcessing()
         {
-            Thread t = null;
+            
             try
             {
                 _log.LogEvent("Processing thread started");
                 raiseEvent("Preprocessing...   ***PLEASE WAIT***");
                 _start = DateTime.Now;
-                t = new Thread(new ThreadStart(delegate
+                _processTime = new Thread(new ThreadStart(delegate
                 {
                     while (true)
                     {
@@ -138,7 +150,7 @@ namespace MeGUI
                         Thread.Sleep(1000);
                     }
                 }));
-                t.Start();
+                _processTime.Start();
 
                 List<string> arrAudioFilesDelete = new List<string>();
                 audioFiles = new Dictionary<int, string>();
@@ -367,7 +379,7 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                t.Abort();
+                _processTime.Abort();
                 if (e is ThreadAbortException)
                 {
                     _log.LogEvent("Aborting...");
@@ -384,7 +396,7 @@ namespace MeGUI
                 }
                 return;
             }
-            t.Abort();
+            _processTime.Abort();
             su.IsComplete = true;
             raiseEvent();
         }
@@ -816,7 +828,7 @@ namespace MeGUI
             {
                 raiseEvent("Automatic deinterlacing...   ***PLEASE WAIT***");
                 string d2vPath = indexFile;
-                SourceDetector sd = new SourceDetector(inputLine, d2vPath, false,
+                sd = new SourceDetector(inputLine, d2vPath, false,
                     mainForm.Settings.SourceDetectorSettings,
                     new UpdateSourceDetectionStatus(analyseUpdate),
                     new FinishedAnalysis(finishedAnalysis));
@@ -824,6 +836,7 @@ namespace MeGUI
                 sd.analyse();
                 waitTillAnalyseFinished();
                 sd.stop();
+                sd = null;
                 deinterlaceLines = filters[0].Script;
                 if (interlaced)
                     _log.LogValue("Deinterlacing used", deinterlaceLines, ImageType.Warning);

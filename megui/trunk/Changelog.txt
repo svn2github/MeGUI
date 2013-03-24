@@ -1,4 +1,5 @@
-2321 [OneClick] fixed a problem with subtitle extraction caused by 2318
+2322 [OneClick] fixed a problem when aborting during automatic deinterlacing
+2321 [OneClick] fixed a problem with multiple subtitle extraction caused by 2318
 2320 [OneClick] fixed missing subtile tracks if using intermediate MKV files. Bug #710
 2319 [MKV Muxer] enhanced projected file size calculation if using intermediate MKV files
 2318 [OneClick] enhanced generation of demux file names
