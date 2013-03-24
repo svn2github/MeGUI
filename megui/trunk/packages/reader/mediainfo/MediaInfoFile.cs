@@ -437,6 +437,7 @@ namespace MeGUI
                 }
 
                 //subtitle detection
+                int i = 0;
                 foreach (TextTrack oTextTrack in info.Text)
                 {
                     int mmgTrackID = 0;
@@ -447,6 +448,7 @@ namespace MeGUI
                     oTrack.SourceFileName = file;
                     oTrack.Codec = oTextTrack.CodecString;
                     oTrack.ContainerType = _strContainer;
+                    oTrack.TrackIndex = i++;
                     int delay = 0;
                     Int32.TryParse(oTextTrack.Delay, out delay);
                     oTrack.Delay = delay;
