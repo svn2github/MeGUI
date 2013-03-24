@@ -108,9 +108,7 @@ namespace MeGUI
                         }
 
                         if (!bFound)
-                            oTrack.TrackIndex = oFile.AudioInfo.Tracks[oTrack.TrackIndex].MMGTrackID;
-                        else
-                            oTrack.TrackIndex = oTrack.MMGTrackID;
+                            oTrack.MMGTrackID = oFile.AudioInfo.Tracks[oTrack.TrackIndex].MMGTrackID;
                     }
                     else if (oTrack.TrackType == TrackType.Subtitle)
                     {
@@ -122,9 +120,7 @@ namespace MeGUI
                         }
 
                         if (!bFound)
-                            oTrack.TrackIndex = oFile.SubtitleInfo.Tracks[oTrack.TrackIndex].MMGTrackID;
-                        else
-                            oTrack.TrackIndex = oTrack.MMGTrackID;
+                            oTrack.MMGTrackID = oFile.SubtitleInfo.Tracks[oTrack.TrackIndex].MMGTrackID;
                     }
 
                 }
@@ -139,7 +135,7 @@ namespace MeGUI
                     if (oTrack.TrackType != TrackType.Audio && oTrack.TrackType != TrackType.Subtitle)
                         continue;
 
-                    sb.Append(" " + oTrack.TrackIndex + ":\"" + job.OutputPath + "\\" + oTrack.DemuxFileName + "\"");
+                    sb.Append(" " + oTrack.MMGTrackID + ":\"" + job.OutputPath + "\\" + oTrack.DemuxFileName + "\"");
                 }
 
                 return sb.ToString();

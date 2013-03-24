@@ -703,9 +703,11 @@ namespace MeGUI
                     {
                         // more than one PGC - therefore pgcdemux must be used
                         prepareJobs = new SequentialChain(new PgcDemuxJob(videoIFO, dpp.WorkingDirectory, _videoInputInfo.VideoInfo.PGCNumber));
+                        
                         for (int i = 1; i < 10; i++)
                             dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, "VTS_01_" + i + ".VOB"));
                         dpp.VideoInput = Path.Combine(dpp.WorkingDirectory, "VTS_01_1.VOB");
+                        dpp.ApplyDelayCorrection = true;
                     }
                 }
             }
@@ -1044,7 +1046,11 @@ namespace MeGUI
             {
                 MkvExtractJob extractJob = new MkvExtractJob(dpp.VideoInput, dpp.WorkingDirectory, oExtractMKVTrack);
                 prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(extractJob));
+                if (dpp.ApplyDelayCorrection)
+                    _oLog.LogEvent("Audio delay will be detected later as an intermediate MKV file is beeing used");
             }
+            else
+                dpp.ApplyDelayCorrection = false;
 
 
             // add audio job to chain if required

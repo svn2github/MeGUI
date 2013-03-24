@@ -154,6 +154,33 @@ namespace MeGUI
                 {
                     if (oAudioTrack.ExtractMKVTrack)
                     {
+                        if (job.PostprocessingProperties.ApplyDelayCorrection && File.Exists(job.PostprocessingProperties.VideoFileToMux))
+                        {
+                            MediaInfoFile oFile = new MediaInfoFile(job.PostprocessingProperties.VideoFileToMux, ref _log);
+                            bool bFound = false;
+                            foreach (AudioTrackInfo oAudioInfo in oFile.AudioInfo.Tracks)
+                            {
+                                if (oAudioInfo.MMGTrackID == oAudioTrack.AudioTrackInfo.MMGTrackID)
+                                    bFound = true;
+                            }
+                            int mmgTrackID = 0;
+                            if (!bFound)
+                                mmgTrackID = oFile.AudioInfo.Tracks[oAudioTrack.AudioTrackInfo.TrackIndex].MMGTrackID;
+                            else
+                                mmgTrackID = oAudioTrack.AudioTrackInfo.MMGTrackID;
+                            foreach (AudioTrackInfo oAudioInfo in oFile.AudioInfo.Tracks)
+                            {
+                                if (oAudioInfo.MMGTrackID == mmgTrackID)
+                                {
+                                    if (oAudioTrack.DirectMuxAudio != null)
+                                        oAudioTrack.DirectMuxAudio.delay = oAudioInfo.Delay;
+                                    if (oAudioTrack.AudioJob != null)
+                                        oAudioTrack.AudioJob.Delay = oAudioInfo.Delay;
+                                    break;
+                                }
+                            }
+                        }
+
                         audioFiles.Add(oAudioTrack.AudioTrackInfo.TrackID, job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
                         arrAudioFilesDelete.Add(job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
                     }

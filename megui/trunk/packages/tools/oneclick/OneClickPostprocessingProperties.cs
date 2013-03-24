@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -31,7 +31,8 @@ namespace MeGUI
 	/// </summary>
 	public class OneClickPostprocessingProperties
 	{
-		private bool signalAR, autoDeint, autoCrop, keepInputResolution, prerenderJob, useChapterMarks, chapterExtracted, eac3toDemux;
+		private bool signalAR, autoDeint, autoCrop, keepInputResolution, prerenderJob, 
+            useChapterMarks, chapterExtracted, eac3toDemux, applyDelayCorrection;
         private int horizontalOutputResolution, _titleNumberToProcess;
         private FileSize? splitSize;
         private ContainerType container;
@@ -73,6 +74,7 @@ namespace MeGUI
             _titleNumberToProcess = 1;
             eac3toDemux = false;
             ifoFile = string.Empty;
+            applyDelayCorrection = false;
 		}
 
         public bool AutoDeinterlace
@@ -288,6 +290,15 @@ namespace MeGUI
         {
             get { return eac3toDemux; }
             set { eac3toDemux = value; }
+        }
+
+        /// <summary>
+        /// gets / sets if a delay correction must be applied
+        /// </summary>
+        public bool ApplyDelayCorrection
+        {
+            get { return applyDelayCorrection; }
+            set { applyDelayCorrection = value; }
         }
 
         public List<string> FilesToDelete
