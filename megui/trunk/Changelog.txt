@@ -1,3 +1,4 @@
+2315 [OneClick] modified "and open next" behavior
 2314 [OneClick] improved muxing into intermediate MKV file if necessary
 2313 [OneClick] fixed using wrong chapters file if using an intermediate MKV file with VOB input
 2312 [OneClick] avoid muxing into intermediate MKV file if this is not necessary

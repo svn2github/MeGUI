@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -54,21 +54,16 @@ namespace MeGUI
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.outputTab = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.oneclickProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.label3 = new System.Windows.Forms.Label();
-            this.output = new MeGUI.FileBar();
             this.outputLabel = new System.Windows.Forms.Label();
             this.videoTab = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.input = new MeGUI.core.gui.FileSCBox();
             this.inputLabel = new System.Windows.Forms.Label();
             this.audioTab = new System.Windows.Forms.TabControl();
             this.audioPage0 = new System.Windows.Forms.TabPage();
-            this.oneClickAudioStreamControl1 = new MeGUI.OneClickStreamControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.subtitlesTab = new System.Windows.Forms.TabControl();
             this.subPage0 = new System.Windows.Forms.TabPage();
-            this.oneClickSubtitleStreamControl1 = new MeGUI.OneClickStreamControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.subtitleMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.subtitleAddTrack = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,8 +76,6 @@ namespace MeGUI
             this.avsBox = new System.Windows.Forms.GroupBox();
             this.keepInputResolution = new System.Windows.Forms.CheckBox();
             this.autoCrop = new System.Windows.Forms.CheckBox();
-            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
-            this.ar = new MeGUI.core.gui.ARChooser();
             this.autoDeint = new System.Windows.Forms.CheckBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
             this.outputResolutionLabel = new System.Windows.Forms.Label();
@@ -90,31 +83,38 @@ namespace MeGUI
             this.label2 = new System.Windows.Forms.Label();
             this.ARLabel = new System.Windows.Forms.Label();
             this.locationGroupBox = new System.Windows.Forms.GroupBox();
-            this.chapterFile = new MeGUI.FileBar();
-            this.workingDirectory = new MeGUI.FileBar();
             this.chapterLabel = new System.Windows.Forms.Label();
             this.workingDirectoryLabel = new System.Windows.Forms.Label();
             this.workingName = new System.Windows.Forms.TextBox();
             this.projectNameLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.filesizeLabel = new System.Windows.Forms.Label();
             this.devicetype = new System.Windows.Forms.ComboBox();
             this.deviceLabel = new System.Windows.Forms.Label();
             this.containerFormatLabel = new System.Windows.Forms.Label();
             this.containerFormat = new System.Windows.Forms.ComboBox();
-            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
             this.chkDontEncodeVideo = new System.Windows.Forms.CheckBox();
             this.usechaptersmarks = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.addPrerenderJob = new System.Windows.Forms.CheckBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.goButton = new System.Windows.Forms.Button();
             this.openOnQueue = new System.Windows.Forms.CheckBox();
             this.cbGUIMode = new System.Windows.Forms.ComboBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.oneclickProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.output = new MeGUI.FileBar();
+            this.input = new MeGUI.core.gui.FileSCBox();
+            this.oneClickAudioStreamControl1 = new MeGUI.OneClickStreamControl();
+            this.oneClickSubtitleStreamControl1 = new MeGUI.OneClickStreamControl();
+            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.ar = new MeGUI.core.gui.ARChooser();
+            this.chapterFile = new MeGUI.FileBar();
+            this.workingDirectory = new MeGUI.FileBar();
+            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
+            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             label1 = new System.Windows.Forms.Label();
             this.tabPage1.SuspendLayout();
             this.outputTab.SuspendLayout();
@@ -182,15 +182,6 @@ namespace MeGUI
             this.tabPage4.Text = "Output";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // oneclickProfile
-            // 
-            this.oneclickProfile.Location = new System.Drawing.Point(99, 40);
-            this.oneclickProfile.Name = "oneclickProfile";
-            this.oneclickProfile.ProfileSet = "OneClick";
-            this.oneclickProfile.Size = new System.Drawing.Size(332, 22);
-            this.oneclickProfile.TabIndex = 31;
-            this.oneclickProfile.SelectedProfileChanged += new System.EventHandler(this.OneClickProfileChanged);
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -199,23 +190,6 @@ namespace MeGUI
             this.label3.Size = new System.Drawing.Size(81, 13);
             this.label3.TabIndex = 30;
             this.label3.Text = "OneClick profile";
-            // 
-            // output
-            // 
-            this.output.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.output.Filename = "";
-            this.output.Filter = "MP4 Files|*.mp4";
-            this.output.FilterIndex = 0;
-            this.output.FolderMode = false;
-            this.output.Location = new System.Drawing.Point(99, 8);
-            this.output.Name = "output";
-            this.output.ReadOnly = true;
-            this.output.SaveMode = true;
-            this.output.Size = new System.Drawing.Size(333, 26);
-            this.output.TabIndex = 29;
-            this.output.Title = null;
-            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
             // 
             // outputLabel
             // 
@@ -245,22 +219,6 @@ namespace MeGUI
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Video";
             this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // input
-            // 
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.input.Filter = "All files (*.*)|*.*";
-            this.input.Location = new System.Drawing.Point(63, 6);
-            this.input.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.input.MinimumSize = new System.Drawing.Size(64, 29);
-            this.input.Name = "input";
-            this.input.SelectedIndex = -1;
-            this.input.SelectedItem = null;
-            this.input.Size = new System.Drawing.Size(368, 29);
-            this.input.TabIndex = 50;
-            this.input.Type = MeGUI.core.gui.FileSCBox.FileSCBoxType.OC_FILE_AND_FOLDER;
-            this.input.SelectionChanged += new MeGUI.StringChanged(this.input_SelectionChanged);
             // 
             // inputLabel
             // 
@@ -296,21 +254,6 @@ namespace MeGUI
             this.audioPage0.TabIndex = 2;
             this.audioPage0.Text = "Audio 1";
             this.audioPage0.UseVisualStyleBackColor = true;
-            // 
-            // oneClickAudioStreamControl1
-            // 
-            this.oneClickAudioStreamControl1.CustomStreams = new object[0];
-            this.oneClickAudioStreamControl1.Filter = "All files (*.*)|*.*";
-            this.oneClickAudioStreamControl1.Location = new System.Drawing.Point(0, 0);
-            this.oneClickAudioStreamControl1.Name = "oneClickAudioStreamControl1";
-            this.oneClickAudioStreamControl1.SelectedStreamIndex = 0;
-            this.oneClickAudioStreamControl1.ShowDefaultStream = false;
-            this.oneClickAudioStreamControl1.ShowDelay = true;
-            this.oneClickAudioStreamControl1.ShowForceStream = false;
-            this.oneClickAudioStreamControl1.Size = new System.Drawing.Size(434, 149);
-            this.oneClickAudioStreamControl1.StandardStreams = new object[0];
-            this.oneClickAudioStreamControl1.TabIndex = 0;
-            this.oneClickAudioStreamControl1.FileUpdated += new System.EventHandler(this.oneClickAudioStreamControl_FileUpdated);
             // 
             // tabPage2
             // 
@@ -348,21 +291,6 @@ namespace MeGUI
             this.subPage0.TabIndex = 2;
             this.subPage0.Text = "Subtitle 1";
             this.subPage0.UseVisualStyleBackColor = true;
-            // 
-            // oneClickSubtitleStreamControl1
-            // 
-            this.oneClickSubtitleStreamControl1.CustomStreams = new object[0];
-            this.oneClickSubtitleStreamControl1.Filter = "All files (*.*)|*.*";
-            this.oneClickSubtitleStreamControl1.Location = new System.Drawing.Point(0, 0);
-            this.oneClickSubtitleStreamControl1.Name = "oneClickSubtitleStreamControl1";
-            this.oneClickSubtitleStreamControl1.SelectedStreamIndex = 0;
-            this.oneClickSubtitleStreamControl1.ShowDefaultStream = true;
-            this.oneClickSubtitleStreamControl1.ShowDelay = true;
-            this.oneClickSubtitleStreamControl1.ShowForceStream = true;
-            this.oneClickSubtitleStreamControl1.Size = new System.Drawing.Size(434, 90);
-            this.oneClickSubtitleStreamControl1.StandardStreams = new object[0];
-            this.oneClickSubtitleStreamControl1.TabIndex = 0;
-            this.oneClickSubtitleStreamControl1.FileUpdated += new System.EventHandler(this.oneClickSubtitleStreamControl_FileUpdated);
             // 
             // tabPage5
             // 
@@ -489,28 +417,6 @@ namespace MeGUI
             this.autoCrop.Text = "AutoCrop";
             this.autoCrop.UseVisualStyleBackColor = true;
             // 
-            // avsProfile
-            // 
-            this.avsProfile.Location = new System.Drawing.Point(119, 92);
-            this.avsProfile.Name = "avsProfile";
-            this.avsProfile.ProfileSet = "AviSynth";
-            this.avsProfile.Size = new System.Drawing.Size(330, 22);
-            this.avsProfile.TabIndex = 23;
-            // 
-            // ar
-            // 
-            this.ar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ar.CustomDARs = new MeGUI.core.util.Dar[0];
-            this.ar.HasLater = true;
-            this.ar.Location = new System.Drawing.Point(119, 61);
-            this.ar.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.ar.MinimumSize = new System.Drawing.Size(64, 29);
-            this.ar.Name = "ar";
-            this.ar.SelectedIndex = 0;
-            this.ar.Size = new System.Drawing.Size(330, 29);
-            this.ar.TabIndex = 22;
-            // 
             // autoDeint
             // 
             this.autoDeint.AutoSize = true;
@@ -599,39 +505,6 @@ namespace MeGUI
             this.locationGroupBox.TabStop = false;
             this.locationGroupBox.Text = " Extra IO ";
             // 
-            // chapterFile
-            // 
-            this.chapterFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chapterFile.Filename = "";
-            this.chapterFile.Filter = "Chapter files (*.txt)|*.txt";
-            this.chapterFile.FilterIndex = 0;
-            this.chapterFile.FolderMode = false;
-            this.chapterFile.Location = new System.Drawing.Point(120, 47);
-            this.chapterFile.Name = "chapterFile";
-            this.chapterFile.ReadOnly = true;
-            this.chapterFile.SaveMode = false;
-            this.chapterFile.Size = new System.Drawing.Size(326, 26);
-            this.chapterFile.TabIndex = 39;
-            this.chapterFile.Title = null;
-            // 
-            // workingDirectory
-            // 
-            this.workingDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.workingDirectory.Filename = "";
-            this.workingDirectory.Filter = null;
-            this.workingDirectory.FilterIndex = 0;
-            this.workingDirectory.FolderMode = true;
-            this.workingDirectory.Location = new System.Drawing.Point(120, 15);
-            this.workingDirectory.Name = "workingDirectory";
-            this.workingDirectory.ReadOnly = true;
-            this.workingDirectory.SaveMode = false;
-            this.workingDirectory.Size = new System.Drawing.Size(326, 26);
-            this.workingDirectory.TabIndex = 38;
-            this.workingDirectory.Title = null;
-            this.workingDirectory.FileSelected += new MeGUI.FileBarEventHandler(this.workingDirectory_FileSelected);
-            // 
             // chapterLabel
             // 
             this.chapterLabel.Location = new System.Drawing.Point(6, 53);
@@ -683,21 +556,6 @@ namespace MeGUI
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = " Output Settings ";
             // 
-            // fileSize
-            // 
-            this.fileSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileSize.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.fileSize.Location = new System.Drawing.Point(120, 13);
-            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.fileSize.Name = "fileSize";
-            this.fileSize.NullString = "Don\'t Care";
-            this.fileSize.SaveCustomValues = false;
-            this.fileSize.SelectedIndex = 0;
-            this.fileSize.Size = new System.Drawing.Size(326, 29);
-            this.fileSize.TabIndex = 46;
-            // 
             // filesizeLabel
             // 
             this.filesizeLabel.Location = new System.Drawing.Point(6, 21);
@@ -741,22 +599,6 @@ namespace MeGUI
             this.containerFormat.Size = new System.Drawing.Size(95, 21);
             this.containerFormat.TabIndex = 41;
             this.containerFormat.SelectedIndexChanged += new System.EventHandler(this.containerFormat_SelectedIndexChanged);
-            // 
-            // splitting
-            // 
-            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitting.AutoSize = true;
-            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.splitting.Location = new System.Drawing.Point(120, 40);
-            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitting.Name = "splitting";
-            this.splitting.NullString = "No splitting";
-            this.splitting.SaveCustomValues = false;
-            this.splitting.SelectedIndex = 0;
-            this.splitting.Size = new System.Drawing.Size(326, 29);
-            this.splitting.TabIndex = 40;
             // 
             // videoGroupBox
             // 
@@ -802,15 +644,6 @@ namespace MeGUI
             this.label4.TabIndex = 38;
             this.label4.Text = "Encoder Settings";
             // 
-            // videoProfile
-            // 
-            this.videoProfile.Location = new System.Drawing.Point(119, 39);
-            this.videoProfile.Name = "videoProfile";
-            this.videoProfile.ProfileSet = "Video";
-            this.videoProfile.Size = new System.Drawing.Size(327, 22);
-            this.videoProfile.TabIndex = 17;
-            this.videoProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
-            // 
             // addPrerenderJob
             // 
             this.addPrerenderJob.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -841,11 +674,13 @@ namespace MeGUI
             // openOnQueue
             // 
             this.openOnQueue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.openOnQueue.Location = new System.Drawing.Point(273, 519);
+            this.openOnQueue.Checked = true;
+            this.openOnQueue.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.openOnQueue.Location = new System.Drawing.Point(273, 520);
             this.openOnQueue.Name = "openOnQueue";
-            this.openOnQueue.Size = new System.Drawing.Size(96, 24);
+            this.openOnQueue.Size = new System.Drawing.Size(106, 24);
             this.openOnQueue.TabIndex = 33;
-            this.openOnQueue.Text = "and open next";
+            this.openOnQueue.Text = "close after Go!";
             // 
             // cbGUIMode
             // 
@@ -868,6 +703,173 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 32;
+            // 
+            // oneclickProfile
+            // 
+            this.oneclickProfile.Location = new System.Drawing.Point(99, 40);
+            this.oneclickProfile.Name = "oneclickProfile";
+            this.oneclickProfile.ProfileSet = "OneClick";
+            this.oneclickProfile.Size = new System.Drawing.Size(332, 22);
+            this.oneclickProfile.TabIndex = 31;
+            this.oneclickProfile.SelectedProfileChanged += new System.EventHandler(this.OneClickProfileChanged);
+            // 
+            // output
+            // 
+            this.output.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.output.Filename = "";
+            this.output.Filter = "MP4 Files|*.mp4";
+            this.output.FilterIndex = 0;
+            this.output.FolderMode = false;
+            this.output.Location = new System.Drawing.Point(99, 8);
+            this.output.Name = "output";
+            this.output.ReadOnly = true;
+            this.output.SaveMode = true;
+            this.output.Size = new System.Drawing.Size(333, 26);
+            this.output.TabIndex = 29;
+            this.output.Title = null;
+            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
+            // 
+            // input
+            // 
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Filter = "All files (*.*)|*.*";
+            this.input.Location = new System.Drawing.Point(63, 6);
+            this.input.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.input.MinimumSize = new System.Drawing.Size(64, 29);
+            this.input.Name = "input";
+            this.input.SelectedIndex = -1;
+            this.input.SelectedItem = null;
+            this.input.Size = new System.Drawing.Size(368, 29);
+            this.input.TabIndex = 50;
+            this.input.Type = MeGUI.core.gui.FileSCBox.FileSCBoxType.OC_FILE_AND_FOLDER;
+            this.input.SelectionChanged += new MeGUI.StringChanged(this.input_SelectionChanged);
+            // 
+            // oneClickAudioStreamControl1
+            // 
+            this.oneClickAudioStreamControl1.CustomStreams = new object[0];
+            this.oneClickAudioStreamControl1.Filter = "All files (*.*)|*.*";
+            this.oneClickAudioStreamControl1.Location = new System.Drawing.Point(0, 0);
+            this.oneClickAudioStreamControl1.Name = "oneClickAudioStreamControl1";
+            this.oneClickAudioStreamControl1.SelectedStreamIndex = 0;
+            this.oneClickAudioStreamControl1.ShowDefaultStream = false;
+            this.oneClickAudioStreamControl1.ShowDelay = true;
+            this.oneClickAudioStreamControl1.ShowForceStream = false;
+            this.oneClickAudioStreamControl1.Size = new System.Drawing.Size(434, 149);
+            this.oneClickAudioStreamControl1.StandardStreams = new object[0];
+            this.oneClickAudioStreamControl1.TabIndex = 0;
+            this.oneClickAudioStreamControl1.FileUpdated += new System.EventHandler(this.oneClickAudioStreamControl_FileUpdated);
+            // 
+            // oneClickSubtitleStreamControl1
+            // 
+            this.oneClickSubtitleStreamControl1.CustomStreams = new object[0];
+            this.oneClickSubtitleStreamControl1.Filter = "All files (*.*)|*.*";
+            this.oneClickSubtitleStreamControl1.Location = new System.Drawing.Point(0, 0);
+            this.oneClickSubtitleStreamControl1.Name = "oneClickSubtitleStreamControl1";
+            this.oneClickSubtitleStreamControl1.SelectedStreamIndex = 0;
+            this.oneClickSubtitleStreamControl1.ShowDefaultStream = true;
+            this.oneClickSubtitleStreamControl1.ShowDelay = true;
+            this.oneClickSubtitleStreamControl1.ShowForceStream = true;
+            this.oneClickSubtitleStreamControl1.Size = new System.Drawing.Size(434, 90);
+            this.oneClickSubtitleStreamControl1.StandardStreams = new object[0];
+            this.oneClickSubtitleStreamControl1.TabIndex = 0;
+            this.oneClickSubtitleStreamControl1.FileUpdated += new System.EventHandler(this.oneClickSubtitleStreamControl_FileUpdated);
+            // 
+            // avsProfile
+            // 
+            this.avsProfile.Location = new System.Drawing.Point(119, 92);
+            this.avsProfile.Name = "avsProfile";
+            this.avsProfile.ProfileSet = "AviSynth";
+            this.avsProfile.Size = new System.Drawing.Size(330, 22);
+            this.avsProfile.TabIndex = 23;
+            // 
+            // ar
+            // 
+            this.ar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ar.CustomDARs = new MeGUI.core.util.Dar[0];
+            this.ar.HasLater = true;
+            this.ar.Location = new System.Drawing.Point(119, 61);
+            this.ar.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.ar.MinimumSize = new System.Drawing.Size(64, 29);
+            this.ar.Name = "ar";
+            this.ar.SelectedIndex = 0;
+            this.ar.Size = new System.Drawing.Size(330, 29);
+            this.ar.TabIndex = 22;
+            // 
+            // chapterFile
+            // 
+            this.chapterFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chapterFile.Filename = "";
+            this.chapterFile.Filter = "Chapter files (*.txt)|*.txt";
+            this.chapterFile.FilterIndex = 0;
+            this.chapterFile.FolderMode = false;
+            this.chapterFile.Location = new System.Drawing.Point(120, 47);
+            this.chapterFile.Name = "chapterFile";
+            this.chapterFile.ReadOnly = true;
+            this.chapterFile.SaveMode = false;
+            this.chapterFile.Size = new System.Drawing.Size(326, 26);
+            this.chapterFile.TabIndex = 39;
+            this.chapterFile.Title = null;
+            // 
+            // workingDirectory
+            // 
+            this.workingDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.workingDirectory.Filename = "";
+            this.workingDirectory.Filter = null;
+            this.workingDirectory.FilterIndex = 0;
+            this.workingDirectory.FolderMode = true;
+            this.workingDirectory.Location = new System.Drawing.Point(120, 15);
+            this.workingDirectory.Name = "workingDirectory";
+            this.workingDirectory.ReadOnly = true;
+            this.workingDirectory.SaveMode = false;
+            this.workingDirectory.Size = new System.Drawing.Size(326, 26);
+            this.workingDirectory.TabIndex = 38;
+            this.workingDirectory.Title = null;
+            this.workingDirectory.FileSelected += new MeGUI.FileBarEventHandler(this.workingDirectory_FileSelected);
+            // 
+            // fileSize
+            // 
+            this.fileSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.fileSize.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.fileSize.Location = new System.Drawing.Point(120, 13);
+            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fileSize.Name = "fileSize";
+            this.fileSize.NullString = "Don\'t Care";
+            this.fileSize.SaveCustomValues = false;
+            this.fileSize.SelectedIndex = 0;
+            this.fileSize.Size = new System.Drawing.Size(326, 29);
+            this.fileSize.TabIndex = 46;
+            // 
+            // splitting
+            // 
+            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitting.AutoSize = true;
+            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.splitting.Location = new System.Drawing.Point(120, 40);
+            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitting.Name = "splitting";
+            this.splitting.NullString = "No splitting";
+            this.splitting.SaveCustomValues = false;
+            this.splitting.SelectedIndex = 0;
+            this.splitting.Size = new System.Drawing.Size(326, 29);
+            this.splitting.TabIndex = 40;
+            // 
+            // videoProfile
+            // 
+            this.videoProfile.Location = new System.Drawing.Point(119, 39);
+            this.videoProfile.Name = "videoProfile";
+            this.videoProfile.ProfileSet = "Video";
+            this.videoProfile.Size = new System.Drawing.Size(327, 22);
+            this.videoProfile.TabIndex = 17;
+            this.videoProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
             // 
             // OneClickWindow
             // 

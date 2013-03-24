@@ -1129,12 +1129,9 @@ namespace MeGUI
             // add jobs to queue
             mainForm.Jobs.addJobsWithDependencies(finalJobChain, !bBatchProcessing);
 
-            if (this.openOnQueue.Checked && !bAutomatedProcessing)
+            if (!this.openOnQueue.Checked && !bAutomatedProcessing)
             {
-                if (!string.IsNullOrEmpty(this.chapterFile.Filename))
-                    this.chapterFile.Filename = string.Empty; // clean up
                 tabControl1.SelectedTab = tabControl1.TabPages[0];
-                input.SelectedIndex = 0;
                 goButton.Enabled = true;
             }
             else
