@@ -710,6 +710,7 @@ namespace MeGUI
                 }
             }
 
+            string intermediateMKVFile = String.Empty;
             if (_videoInputInfo.isEac3toDemuxable())
             {
                 // create eac3to demux job if needed
@@ -783,15 +784,14 @@ namespace MeGUI
                 if (sb.Length != 0)
                     prepareJobs = new SequentialChain(prepareJobs, new HDStreamsExJob(new List<string>() { _videoInputInfo.FileName }, dpp.WorkingDirectory, null, sb.ToString(), 2));
             }
-            else if (inputContainer != ContainerType.MKV
-                        && (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE))
+            else if (inputContainer != ContainerType.MKV)
             {
                 // mux input file into MKV if possible and necessary
                 bool bRemuxInput = false;
                 if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
                     bRemuxInput = true;
 
-                if (!bRemuxInput)
+                if (!bRemuxInput && (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE))
                 {
                     foreach (OneClickStreamControl oStreamControl in audioTracks)
                     {
@@ -806,7 +806,7 @@ namespace MeGUI
                     }
                 }
 
-                if (!bRemuxInput)
+                if (!bRemuxInput && (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE))
                 {
                     foreach (OneClickStreamControl oStreamControl in subtitleTracks)
                     {
@@ -834,8 +834,13 @@ namespace MeGUI
                     dpp.FilesToDelete.Add(mJob.Output);
 
                     // change input file properties
-                    inputContainer = ContainerType.MKV;
-                    dpp.VideoInput = mJob.Output;
+                    if (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
+                    {
+                        inputContainer = ContainerType.MKV;
+                        dpp.VideoInput = mJob.Output;
+                    }
+                    else
+                        intermediateMKVFile = mJob.Output;
 
                     // add job to queue
                     prepareJobs = new SequentialChain(prepareJobs, mJob);
@@ -847,6 +852,8 @@ namespace MeGUI
             {
                 if (dpp.Container != ContainerType.MKV)
                     _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the target container MKV is supported");
+                else if (!String.IsNullOrEmpty(intermediateMKVFile))
+                    dpp.VideoFileToMux = intermediateMKVFile;
                 else if (inputContainer != ContainerType.MKV)
                     _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the source container MKV is supported");
                 else
