@@ -35,16 +35,16 @@ namespace MeGUI
         private AudioJob _audioJob;
         private MuxStream _directMuxAudio;
         private AudioTrackInfo _audioTrackInfo;
-        private bool _bMKVTrack;
 
 		public OneClickAudioTrack() : this(null, null, null, false) { }
 
         public OneClickAudioTrack(AudioJob oAudioJob, MuxStream oMuxStream, AudioTrackInfo oAudioTrackInfo, bool bMKVTrack)
         {
-            _bMKVTrack = bMKVTrack;
             _audioJob = oAudioJob;
             _directMuxAudio = oMuxStream;
             _audioTrackInfo = oAudioTrackInfo;
+            if (_audioTrackInfo != null)
+                _audioTrackInfo.ExtractMKVTrack = bMKVTrack;
         }
 
 		/// <summary>
@@ -60,12 +60,6 @@ namespace MeGUI
         {
             get { return _directMuxAudio; }
             set { _directMuxAudio = value; }
-        }
-
-        public bool ExtractMKVTrack
-        {
-            get { return _bMKVTrack; }
-            set { _bMKVTrack = value; }
         }
 
         public AudioTrackInfo AudioTrackInfo

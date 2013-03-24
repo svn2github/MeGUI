@@ -808,7 +808,7 @@ namespace MeGUI
                     }
                 }
 
-                if (!bRemuxInput && (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE))
+                if (!bRemuxInput)
                 {
                     foreach (OneClickStreamControl oStreamControl in subtitleTracks)
                     {
@@ -1032,6 +1032,7 @@ namespace MeGUI
                     }
                     else if (inputContainer == ContainerType.MKV && !dpp.Eac3toDemux) // only if container MKV and no demux with eac3to
                     {
+                        oStream.SelectedStream.TrackInfo.ExtractMKVTrack = true;
                         oExtractMKVTrack.Add(oStream.SelectedStream.TrackInfo);
                         dpp.SubtitleTracks.Add(oStream.SelectedStream);
                     }

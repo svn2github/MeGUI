@@ -1,3 +1,4 @@
+2320 [OneClick] fixed missing subtile tracks if using intermediate MKV files. Bug #710
 2319 [MKV Muxer] enhanced projected file size calculation if using intermediate MKV files
 2318 [OneClick] enhanced generation of demux file names
 2317 [OneClick] the audio track encode selection will not be disabled anymore
@@ -6,7 +7,7 @@
 2314 [OneClick] improved muxing into intermediate MKV file if necessary
 2313 [OneClick] fixed using wrong chapters file if using an intermediate MKV file with VOB input
 2312 [OneClick] avoid muxing into intermediate MKV file if this is not necessary
-2311 [OneClick] not correctly extracted subtitle files will be ignored. Bug #710
+2311 [OneClick] not correctly extracted subtitle files will be ignored
 2310 [OneClick] fixed AVS audio processing. Bug #711
 2309 [AVS Script Creator] fixed missing DAR values in the AVS script if using "Clever (TM) anamorphic encoding"
 

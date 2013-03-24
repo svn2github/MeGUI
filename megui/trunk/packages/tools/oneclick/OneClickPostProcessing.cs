@@ -152,7 +152,7 @@ namespace MeGUI
                 // audio handling
                 foreach (OneClickAudioTrack oAudioTrack in job.PostprocessingProperties.AudioTracks)
                 {
-                    if (oAudioTrack.ExtractMKVTrack)
+                    if (oAudioTrack.AudioTrackInfo.ExtractMKVTrack)
                     {
                         if (job.PostprocessingProperties.ApplyDelayCorrection && File.Exists(job.PostprocessingProperties.VideoFileToMux))
                         {
@@ -317,7 +317,7 @@ namespace MeGUI
                     {
                         foreach (OneClickStream oTrack in job.PostprocessingProperties.SubtitleTracks)
                         {
-                            if (oTrack.TrackInfo.IsMKVContainer())
+                            if (oTrack.TrackInfo.ExtractMKVTrack)
                             {
                                 //demuxed MKV
                                 string trackFile = Path.GetDirectoryName(job.IndexFile) + "\\" + oTrack.TrackInfo.DemuxFileName;

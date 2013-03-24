@@ -38,7 +38,7 @@ namespace MeGUI
     {
         private string _codec, _containerType, _language, _name, _sourceFileName;
         private int _trackID, _mmgTrackID, _delay, _trackIndex;
-        private bool _bDefault, _bForced;
+        private bool _bDefault, _bForced, _bMKVTrack;
         private TrackType _trackType;
 
         public TrackInfo() : this(null, null)
@@ -56,6 +56,7 @@ namespace MeGUI
             this._delay = 0;
             this._trackIndex = 0;
             this._codec = _containerType = String.Empty;
+            this._bMKVTrack = false;
         }
 
         /// <summary>
@@ -172,6 +173,12 @@ namespace MeGUI
                 return false;
             else
                 return _containerType.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA");
+        }
+
+        public bool ExtractMKVTrack
+        {
+            get { return _bMKVTrack; }
+            set { _bMKVTrack = value; }
         }
 
         [XmlIgnore()]
