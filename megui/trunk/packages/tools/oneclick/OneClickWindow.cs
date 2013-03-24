@@ -1597,12 +1597,7 @@ namespace MeGUI
             OneClickStreamControl track = audioTracks[i];
             if (!track.SelectedItem.IsStandard)
                 track.SelectedStream.Delay = PrettyFormatting.getDelayAndCheck(track.SelectedStream.DemuxFilePath) ?? 0;
-            if (_videoInputInfo != null && _videoInputInfo.IndexerToUse == FileIndexerWindow.IndexType.FFMS 
-                && (_videoInputInfo.ContainerFileType == ContainerType.M2TS || _videoInputInfo.ContainerFileType == null)
-                && !_videoInputInfo.isEac3toDemuxable() && track.SelectedItem.IsStandard)
-                audioTracks[i].DisableDontEncode(true);
-            else
-                audioTracks[i].DisableDontEncode(false);
+            audioTracks[i].DisableDontEncode(false);
 
             foreach (OneClickStreamControl oControl in audioTracks)
             {
