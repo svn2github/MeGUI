@@ -685,62 +685,34 @@ namespace MeGUI
             dpp.AutoCrop = autoCrop.Checked;
 
 
-            // mux input file into MKV if possible
-            if (inputContainer != ContainerType.MKV 
-                && (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE))
+            // prepare input file
+            if (Path.GetExtension(_videoInputInfo.FileName.ToUpper(System.Globalization.CultureInfo.InvariantCulture)) == ".VOB")
             {
-                // and necessary
-                bool bRemuxInput = false;
-                if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
-                    bRemuxInput = true;
+                // create pgcdemux job if needed
+                string videoIFO;
+                // PGC numbers are not present in VOB, so we check the main IFO
+                if (Path.GetFileName(_videoInputInfo.FileName).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
+                    videoIFO = _videoInputInfo.FileName.Substring(0, _videoInputInfo.FileName.LastIndexOf("_")) + "_0.IFO";
+                else
+                    videoIFO = Path.ChangeExtension(_videoInputInfo.FileName, ".IFO");
 
-                foreach (OneClickStreamControl oStreamControl in audioTracks)
+                if (File.Exists(videoIFO))
                 {
-                    if (!oStreamControl.SelectedItem.IsStandard)
-                        continue;
-
-                    if (oStreamControl.SelectedStreamIndex <= 0) // not NONE
-                        continue;
-
-                    bRemuxInput = true;
-                }
-
-                foreach (OneClickStreamControl oStreamControl in subtitleTracks)
-                {
-                    if (!oStreamControl.SelectedItem.IsStandard)
-                        continue;
-
-                    if (oStreamControl.SelectedStreamIndex <= 0) // not NONE
-                        continue;
-
-                    bRemuxInput = true;
-                }
-
-                if (bRemuxInput && _videoInputInfo.MuxableToMKV())
-                {
-                    // create job
-                    MuxJob mJob = new MuxJob();
-                    mJob.MuxType = MuxerType.MKVMERGE;
-                    mJob.Input = dpp.VideoInput;
-                    mJob.Output = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(dpp.VideoInput) + ".mkv"); ;
-                    mJob.Settings.MuxAll = true;
-                    mJob.Settings.MuxedInput = mJob.Input;
-                    mJob.Settings.MuxedOutput = mJob.Output;
-                    dpp.FilesToDelete.Add(mJob.Output);
-
-                    // change input file properties
-                    inputContainer = ContainerType.MKV;
-                    dpp.VideoInput = mJob.Output;
-
-                    // add job to queue
-                    prepareJobs = new SequentialChain(mJob);
+                    dpp.IFOInput = videoIFO;
+                    if (IFOparser.getPGCnb(videoIFO) > 1)
+                    {
+                        // more than one PGC - therefore pgcdemux must be used
+                        prepareJobs = new SequentialChain(new PgcDemuxJob(videoIFO, dpp.WorkingDirectory, _videoInputInfo.VideoInfo.PGCNumber));
+                        for (int i = 1; i < 10; i++)
+                            dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, "VTS_01_" + i + ".VOB"));
+                        dpp.VideoInput = Path.Combine(dpp.WorkingDirectory, "VTS_01_1.VOB");
+                    }
                 }
             }
 
-
-            // create eac3to demux job if needed
             if (_videoInputInfo.isEac3toDemuxable())
             {
+                // create eac3to demux job if needed
                 dpp.Eac3toDemux = true;
                 StringBuilder sb = new StringBuilder();
 
@@ -811,6 +783,64 @@ namespace MeGUI
                 if (sb.Length != 0)
                     prepareJobs = new SequentialChain(prepareJobs, new HDStreamsExJob(new List<string>() { _videoInputInfo.FileName }, dpp.WorkingDirectory, null, sb.ToString(), 2));
             }
+            else if (inputContainer != ContainerType.MKV
+                        && (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE))
+            {
+                // mux input file into MKV if possible and necessary
+                bool bRemuxInput = false;
+                if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
+                    bRemuxInput = true;
+
+                if (!bRemuxInput)
+                {
+                    foreach (OneClickStreamControl oStreamControl in audioTracks)
+                    {
+                        if (!oStreamControl.SelectedItem.IsStandard)
+                            continue;
+
+                        if (oStreamControl.SelectedStreamIndex <= 0) // not NONE
+                            continue;
+
+                        bRemuxInput = true;
+                        break;
+                    }
+                }
+
+                if (!bRemuxInput)
+                {
+                    foreach (OneClickStreamControl oStreamControl in subtitleTracks)
+                    {
+                        if (!oStreamControl.SelectedItem.IsStandard)
+                            continue;
+
+                        if (oStreamControl.SelectedStreamIndex <= 0) // not NONE
+                            continue;
+
+                        bRemuxInput = true;
+                        break;
+                    }
+                }
+
+                if (bRemuxInput && _videoInputInfo.MuxableToMKV())
+                {
+                    // create job
+                    MuxJob mJob = new MuxJob();
+                    mJob.MuxType = MuxerType.MKVMERGE;
+                    mJob.Input = dpp.VideoInput;
+                    mJob.Output = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(dpp.VideoInput) + ".mkv"); ;
+                    mJob.Settings.MuxAll = true;
+                    mJob.Settings.MuxedInput = mJob.Input;
+                    mJob.Settings.MuxedOutput = mJob.Output;
+                    dpp.FilesToDelete.Add(mJob.Output);
+
+                    // change input file properties
+                    inputContainer = ContainerType.MKV;
+                    dpp.VideoInput = mJob.Output;
+
+                    // add job to queue
+                    prepareJobs = new SequentialChain(prepareJobs, mJob);
+                }
+            }
 
             // set video mux handling
             if (chkDontEncodeVideo.Checked)
@@ -845,30 +875,6 @@ namespace MeGUI
                 dpp.HorizontalOutputResolution = 0;
             else
                 dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
-
-            // create pgcdemux job if needed
-            if (Path.GetExtension(_videoInputInfo.FileName.ToUpper(System.Globalization.CultureInfo.InvariantCulture)) == ".VOB")
-            {
-                string videoIFO;
-                // PGC numbers are not present in VOB, so we check the main IFO
-                if (Path.GetFileName(_videoInputInfo.FileName).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
-                    videoIFO = _videoInputInfo.FileName.Substring(0, _videoInputInfo.FileName.LastIndexOf("_")) + "_0.IFO";
-                else
-                    videoIFO = Path.ChangeExtension(_videoInputInfo.FileName, ".IFO");
-
-                if (File.Exists(videoIFO))
-                {
-                    dpp.IFOInput = videoIFO;
-                    if (IFOparser.getPGCnb(videoIFO) > 1)
-                    {
-                        // more than one PGC - therefore pgcdemux must be used
-                        prepareJobs = new SequentialChain(new PgcDemuxJob(videoIFO, dpp.WorkingDirectory, _videoInputInfo.VideoInfo.PGCNumber));
-                        for (int i = 1; i < 10; i++)
-                            dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, "VTS_01_" + i + ".VOB"));
-                        dpp.VideoInput = Path.Combine(dpp.WorkingDirectory, "VTS_01_1.VOB");
-                    }
-                }
-            }
 
             // MKV tracks which need to be extracted
             List<TrackInfo> oExtractMKVTrack = new List<TrackInfo>();
