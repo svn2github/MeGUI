@@ -45,7 +45,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
             this.executable = executablePath;
         }
 
-
         #region line processing
         /// <summary>
         /// gets the framenumber from an mkvmerge status update line
@@ -88,6 +87,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 log.LogValue("A warning occurred", line, ImageType.Warning);
             else
                 base.ProcessLine(line, stream);
+        }
+
+        protected override void setProjectedFileSize()
+        {
+            if (!job.Settings.MuxAll)
+                base.setProjectedFileSize();
         }
 
         protected override string Commandline
