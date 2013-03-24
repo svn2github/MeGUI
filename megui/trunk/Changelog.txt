@@ -1,3 +1,4 @@
+2318 [OneClick] enhanced generation of demux file names
 2317 [OneClick] the audio track encode selection will not be disabled anymore
 2316 [OneClick] fixed audio delay handling if pgcdemux will be used together with an intermediate MKV file
 2315 [OneClick] modified "and open next" behavior

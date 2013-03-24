@@ -230,7 +230,7 @@ namespace MeGUI
 
                 if (!strExtension.Equals("avs", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    strFileName = System.IO.Path.GetFileNameWithoutExtension(_sourceFileName) + " - [" + _mmgTrackID + "]";
+                    strFileName = System.IO.Path.GetFileNameWithoutExtension(_sourceFileName) + " - [" + _trackIndex + "]";
                     if (!String.IsNullOrEmpty(_language))
                         strFileName += " " + _language;
                     if (_delay != 0)
