@@ -1,3 +1,4 @@
+2325 [MKV Muxer] improved playback performance with some players (requires MkvMerge 5.9.0+)
 2324 [OneClick] avoid muxing into intermediate MKV file in some cases if using a DVD source
 2323 [OneClick] set "Force using Key-Frames for chapters marks" even if "Don't encode video" is checked
 2322 [OneClick] fixed a problem when aborting during automatic deinterlacing

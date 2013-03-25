@@ -336,7 +336,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 if (settings.SplitSize.HasValue)
                     sb.Append(" --split " + (settings.SplitSize.Value.MB) + "M");
 
-                sb.Append(" --ui-language en");
+                sb.Append(" --engage no_cue_duration --engage no_cue_relative_position --ui-language en");
 
                 return sb.ToString();
             }
