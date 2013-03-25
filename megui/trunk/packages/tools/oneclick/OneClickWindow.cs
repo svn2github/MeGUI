@@ -606,8 +606,7 @@ namespace MeGUI
             autoCrop.Checked = settings.AutoCrop;
             keepInputResolution.Checked = settings.KeepInputResolution;
             addPrerenderJob.Checked = settings.PrerenderVideo;
-            if (usechaptersmarks.Enabled)
-                usechaptersmarks.Checked = settings.UseChaptersMarks;
+            usechaptersmarks.Checked = settings.UseChaptersMarks;
 
             splitting.Value = settings.SplitSize;
             fileSize.Value = settings.Filesize;

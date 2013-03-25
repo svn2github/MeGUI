@@ -41,7 +41,7 @@ namespace MeGUI
 
         private Thread _processThread = null;
         private Thread _processTime = null;
-        private SourceDetector sd = null;
+        private SourceDetector _sourceDetector = null;
         private DateTime _start;
         private StatusUpdate su;
         private OneClickPostProcessingJob job;
@@ -83,10 +83,10 @@ namespace MeGUI
                 _processTime.Abort();
                 _processTime = null;
             }
-            if (sd != null)
+            if (_sourceDetector != null)
             {
-                sd.stop();
-                sd = null;
+                _sourceDetector.stop();
+                _sourceDetector = null;
             }
         }
 
@@ -828,15 +828,15 @@ namespace MeGUI
             {
                 raiseEvent("Automatic deinterlacing...   ***PLEASE WAIT***");
                 string d2vPath = indexFile;
-                sd = new SourceDetector(inputLine, d2vPath, false,
+                _sourceDetector = new SourceDetector(inputLine, d2vPath, false,
                     mainForm.Settings.SourceDetectorSettings,
                     new UpdateSourceDetectionStatus(analyseUpdate),
                     new FinishedAnalysis(finishedAnalysis));
                 finished = false;
-                sd.analyse();
+                _sourceDetector.analyse();
                 waitTillAnalyseFinished();
-                sd.stop();
-                sd = null;
+                _sourceDetector.stop();
+                _sourceDetector = null;
                 deinterlaceLines = filters[0].Script;
                 if (interlaced)
                     _log.LogValue("Deinterlacing used", deinterlaceLines, ImageType.Warning);
