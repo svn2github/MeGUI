@@ -807,7 +807,7 @@ namespace MeGUI
                     }
                 }
 
-                if (!bRemuxInput)
+                if (!bRemuxInput && Path.GetExtension(_videoInputInfo.FileName.ToUpper(System.Globalization.CultureInfo.InvariantCulture)) != ".VOB")
                 {
                     foreach (OneClickStreamControl oStreamControl in subtitleTracks)
                     {
