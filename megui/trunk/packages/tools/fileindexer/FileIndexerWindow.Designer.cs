@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -225,7 +225,7 @@ namespace MeGUI
             // 
             // pickOutputButton
             // 
-            this.pickOutputButton.Location = new System.Drawing.Point(380, 17);
+            this.pickOutputButton.Location = new System.Drawing.Point(380, 16);
             this.pickOutputButton.Name = "pickOutputButton";
             this.pickOutputButton.Size = new System.Drawing.Size(30, 23);
             this.pickOutputButton.TabIndex = 5;

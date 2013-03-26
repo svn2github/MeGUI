@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -198,6 +198,11 @@ namespace MeGUI
         #region buttons
         private void pickOutputButton_Click(object sender, System.EventArgs e)
         {
+            if (!String.IsNullOrEmpty(output.Text))
+            {
+                saveProjectDialog.InitialDirectory = Path.GetDirectoryName(output.Text);
+                saveProjectDialog.FileName = Path.GetFileName(output.Text);
+            }
             if (saveProjectDialog.ShowDialog() == DialogResult.OK)
             {
                 output.Text = saveProjectDialog.FileName;
