@@ -910,7 +910,7 @@ namespace MeGUI
 			set
 			{
                 eventsOn = false;
-				this.resizeFilterType.SelectedItem =  EnumProxy.Create( value.ResizeMethod);
+				this.resizeFilterType.SelectedItem =  EnumProxy.Create(value.ResizeMethod);
                 this.noiseFilterType.SelectedItem = EnumProxy.Create(value.DenoiseMethod);
 				this.mpeg2Deblocking.Checked = value.MPEG2Deblock;
 				this.colourCorrect.Checked = value.ColourCorrect;

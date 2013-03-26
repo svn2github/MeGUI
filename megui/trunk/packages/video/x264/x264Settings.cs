@@ -32,6 +32,24 @@ namespace MeGUI
 	{
         public static string ID = "x264";
 
+        public enum x264PsyTuningModes
+        {
+            [EnumTitle("None")]
+            NONE,
+            [EnumTitle("Animation")]
+            ANIMATION,
+            [EnumTitle("Film")]
+            FILM,
+            [EnumTitle("Grain")]
+            GRAIN,
+            [EnumTitle("Still Image")]
+            STILLIMAGE,
+            [EnumTitle("PSNR")]
+            PSNR,
+            [EnumTitle("SSIM")]
+            SSIM
+        };
+
         public enum x264PresetLevelModes : int 
         { 
             ultrafast = 0,
@@ -80,17 +98,19 @@ namespace MeGUI
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur,
             bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
-            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, x264Nalhrd,
+            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, x264Nalhrd,
             colorMatrix, transfer, colorPrim, x264PullDown, sampleAR, _gopCalculation;
-		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
+		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression,
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, blurayCompat,
-			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
-            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass, picStruct, fakeInterlaced, nonDeterministic;
+			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile,
+            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass, picStruct,
+            fakeInterlaced, nonDeterministic, tuneFastDecode, tuneZeroLatency;
 		string quantizerMatrix, qpfile, openGop, range;
         x264PresetLevelModes preset;
         x264InterlacedModes interlacedMode;
         x264Device targetDevice;
+        x264PsyTuningModes psyTuningMode;
         List<x264Device> x264DeviceList;
 		#region constructor
         /// <summary>
@@ -100,7 +120,7 @@ namespace MeGUI
 		{
             x264DeviceList = x264Device.CreateDeviceList();
             preset = x264PresetLevelModes.medium;
-            tune = 0;
+            psyTuningMode = x264PsyTuningModes.NONE;
             deadZoneInter = 21;
             deadZoneIntra = 11;
 			noFastPSkip = false;
@@ -190,6 +210,7 @@ namespace MeGUI
             blurayCompat = false;
             _gopCalculation = 1;
             quantizerCrf = 20;
+            tuneFastDecode = tuneZeroLatency = false;
 		}
 		#endregion
 		#region properties
@@ -198,10 +219,32 @@ namespace MeGUI
             get { return preset; }
             set { preset = value; }
         }
-        public int x264Tuning
+#warning Deprecated since 2327; delete after next stable release
+        public string x264Tuning
         {
-            get { return tune; }
-            set { tune = value; }
+            get { return "migrated"; }
+            set 
+            {
+                if (value.Equals("migrated"))
+                    return;
+                if (value.Equals("1"))
+                    psyTuningMode = x264PsyTuningModes.FILM;
+                if (value.Equals("2"))
+                    psyTuningMode = x264PsyTuningModes.ANIMATION;
+                if (value.Equals("3"))
+                    psyTuningMode = x264PsyTuningModes.GRAIN;
+                if (value.Equals("4"))
+                    psyTuningMode = x264PsyTuningModes.PSNR;
+                if (value.Equals("5"))
+                    psyTuningMode = x264PsyTuningModes.SSIM;
+                if (value.Equals("6"))
+                    tuneFastDecode = true;
+            }
+        }
+        public x264PsyTuningModes x264PsyTuning
+        {
+            get { return psyTuningMode; }
+            set { psyTuningMode = value; }
         }
         public decimal QuantizerCRF
         {
@@ -580,18 +623,6 @@ namespace MeGUI
             get { return qpfile; }
             set { qpfile = value; }
         }
-#warning Deprecated since 2066; delete after next stable release
-        public string fullRange
-        {
-            get { return "migrated"; }
-            set
-            {
-                if (value.Equals("migrated"))
-                    return;
-                if (value.Equals("true"))
-                    range = "pc";
-            }
-        }
         public string Range
         {
             get 
@@ -688,6 +719,16 @@ namespace MeGUI
             get { return level; }
             set { level = value; }
         }
+        public bool TuneFastDecode
+        {
+            get { return tuneFastDecode; }
+            set { tuneFastDecode = value; }
+        }
+        public bool TuneZeroLatency
+        {
+            get { return tuneZeroLatency; }
+            set { tuneZeroLatency = value; }
+        }
         #endregion
         public override bool UsesSAR
         {
@@ -773,7 +814,7 @@ namespace MeGUI
                 this.Range != otherSettings.Range ||
                 this.MacroBlockOptions != otherSettings.MacroBlockOptions ||
                 this.x264PresetLevel != otherSettings.x264PresetLevel ||
-                this.x264Tuning != otherSettings.x264Tuning ||
+                this.x264PsyTuning != otherSettings.x264PsyTuning ||
                 this.x264AdvancedSettings != otherSettings.x264AdvancedSettings ||
                 this.Lookahead != otherSettings.Lookahead ||
                 this.NoMBTree != otherSettings.NoMBTree ||
@@ -796,7 +837,9 @@ namespace MeGUI
                 this.InterlacedMode != otherSettings.InterlacedMode ||
                 this.TargetDevice.ID != otherSettings.TargetDevice.ID ||
                 this.BlurayCompat != otherSettings.BlurayCompat ||
-                this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs
+                this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs ||
+                this.tuneFastDecode != otherSettings.tuneFastDecode ||
+                this.tuneZeroLatency != otherSettings.tuneZeroLatency
                 )
                 return true;
             else
@@ -846,12 +889,12 @@ namespace MeGUI
                 P4x4mv = false;
         }
 
-        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, int oTuningMode, x264Device oDevice)
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, x264PsyTuningModes oTuningMode, x264Device oDevice)
         {
             return GetDefaultNumberOfRefFrames(oPreset, oTuningMode, oDevice, -1, -1, -1);
         }
 
-        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, int oTuningMode, x264Device oDevice, int iLevel, int hRes, int vRes)
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, x264PsyTuningModes oTuningMode, x264Device oDevice, int iLevel, int hRes, int vRes)
         {
             int iDefaultSetting = 1;
             switch (oPreset)
@@ -867,7 +910,7 @@ namespace MeGUI
                 case x264Settings.x264PresetLevelModes.veryslow:
                 case x264Settings.x264PresetLevelModes.placebo: iDefaultSetting = 16; break;
             }
-            if (oTuningMode == 2 && iDefaultSetting > 1) // animation
+            if (oTuningMode == x264PsyTuningModes.ANIMATION && iDefaultSetting > 1)
                 iDefaultSetting *= 2;
             if (iDefaultSetting > 16)
                 iDefaultSetting = 16;
@@ -882,11 +925,14 @@ namespace MeGUI
             return iDefaultSetting;
         }
 
-        public static int GetDefaultNumberOfBFrames(x264PresetLevelModes oPresetLevel, int oTuningMode, int oAVCProfile, x264Device oDevice)
+        public static int GetDefaultNumberOfBFrames(x264PresetLevelModes oPresetLevel, x264PsyTuningModes oTuningMode, bool bTuneZeroLatency, int oAVCProfile, x264Device oDevice)
         {
             int iDefaultSetting = 0;
             if (oAVCProfile == 0) // baseline
                 return iDefaultSetting;
+            if (bTuneZeroLatency)
+                return iDefaultSetting;
+
             switch (oPresetLevel)
             {
                 case x264Settings.x264PresetLevelModes.ultrafast: iDefaultSetting = 0; break;
@@ -900,7 +946,7 @@ namespace MeGUI
                 case x264Settings.x264PresetLevelModes.veryslow: iDefaultSetting = 8; break;
                 case x264Settings.x264PresetLevelModes.placebo: iDefaultSetting = 16; break;
             }
-            if (oTuningMode == 2) // animation
+            if (oTuningMode == x264PsyTuningModes.ANIMATION)
                 iDefaultSetting += 2;
             if (iDefaultSetting > 16)
                 iDefaultSetting = 16;
@@ -910,11 +956,11 @@ namespace MeGUI
                 return iDefaultSetting;
         }
 
-        public static int GetDefaultNumberOfWeightp(x264PresetLevelModes oPresetLevel, int oTuningMode, int oAVCProfile, bool bBlurayCompat)
+        public static int GetDefaultNumberOfWeightp(x264PresetLevelModes oPresetLevel, bool bFastDecode, int oAVCProfile, bool bBlurayCompat)
         {
             if (oAVCProfile == 0) // baseline
                 return 0;
-            if (oTuningMode == 6) // Fast Decode
+            if (bFastDecode) // Fast Decode
                 return 0;
 
             int iDefaultSetting = 0;
@@ -937,15 +983,37 @@ namespace MeGUI
                 return iDefaultSetting;
         }
 
-        public static int GetDefaultAQMode(x264PresetLevelModes oPresetLevel, int oTuningMode)
+        public static int GetDefaultAQMode(x264PresetLevelModes oPresetLevel, x264PsyTuningModes oTuningMode)
         {
-            if (oTuningMode == 5) // SSIM
+            if (oTuningMode == x264PsyTuningModes.SSIM)
                 return 2;
 
-            if (oTuningMode == 4 || oPresetLevel == x264Settings.x264PresetLevelModes.ultrafast) // PSNR
+            if (oTuningMode == x264PsyTuningModes.PSNR || oPresetLevel == x264Settings.x264PresetLevelModes.ultrafast)
                 return 0;
 
             return 1;
+        }
+
+        public static int GetDefaultRCLookahead(x264PresetLevelModes oPresetLevel, bool bTuneZeroLatency)
+        {
+            int iDefaultSetting = 0;
+            if (bTuneZeroLatency)
+                return iDefaultSetting;
+
+            switch (oPresetLevel)
+            {
+                case x264Settings.x264PresetLevelModes.ultrafast:
+                case x264Settings.x264PresetLevelModes.superfast:   iDefaultSetting = 0; break;
+                case x264Settings.x264PresetLevelModes.veryfast:    iDefaultSetting = 10; break;
+                case x264Settings.x264PresetLevelModes.faster:      iDefaultSetting = 20; break;
+                case x264Settings.x264PresetLevelModes.fast:        iDefaultSetting = 30; break;
+                case x264Settings.x264PresetLevelModes.medium:      iDefaultSetting = 40; break;
+                case x264Settings.x264PresetLevelModes.slow:        iDefaultSetting = 50; break;
+                case x264Settings.x264PresetLevelModes.slower:
+                case x264Settings.x264PresetLevelModes.veryslow:
+                case x264Settings.x264PresetLevelModes.placebo:     iDefaultSetting = 60; break;
+            }
+            return iDefaultSetting;
         }
 	}
 }

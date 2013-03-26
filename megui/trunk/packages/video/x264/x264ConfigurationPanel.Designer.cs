@@ -1,3 +1,23 @@
+// ****************************************************************************
+// 
+// Copyright (C) 2005-2013 Doom9 & al
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// 
+// ****************************************************************************
+
 namespace MeGUI.packages.video.x264
 {
     partial class x264ConfigurationPanel
@@ -183,6 +203,8 @@ namespace MeGUI.packages.video.x264
             this.trellisLabel = new System.Windows.Forms.Label();
             this.MiscTabPage = new System.Windows.Forms.TabPage();
             this.gbOther = new System.Windows.Forms.GroupBox();
+            this.chkTuneZeroLatency = new System.Windows.Forms.CheckBox();
+            this.chkTuneFastDecode = new System.Windows.Forms.CheckBox();
             this.x264NbThreads = new System.Windows.Forms.NumericUpDown();
             this.nonDeterministic = new System.Windows.Forms.CheckBox();
             this.x264SlowFirstpass = new System.Windows.Forms.CheckBox();
@@ -1752,14 +1774,6 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264Tunes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.x264Tunes.FormattingEnabled = true;
-            this.x264Tunes.Items.AddRange(new object[] {
-            "Default",
-            "Film",
-            "Animation",
-            "Grain",
-            "PSNR",
-            "SSIM",
-            "Fast Decode"});
             this.x264Tunes.Location = new System.Drawing.Point(10, 16);
             this.x264Tunes.Name = "x264Tunes";
             this.x264Tunes.Size = new System.Drawing.Size(157, 21);
@@ -2400,17 +2414,41 @@ namespace MeGUI.packages.video.x264
             // 
             this.gbOther.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbOther.Controls.Add(this.chkTuneZeroLatency);
+            this.gbOther.Controls.Add(this.chkTuneFastDecode);
             this.gbOther.Controls.Add(this.x264NbThreads);
             this.gbOther.Controls.Add(this.nonDeterministic);
             this.gbOther.Controls.Add(this.x264SlowFirstpass);
             this.gbOther.Controls.Add(this.threadin);
             this.gbOther.Controls.Add(this.x264NbThreadsLabel);
-            this.gbOther.Location = new System.Drawing.Point(6, 311);
+            this.gbOther.Location = new System.Drawing.Point(6, 291);
             this.gbOther.Name = "gbOther";
-            this.gbOther.Size = new System.Drawing.Size(317, 86);
+            this.gbOther.Size = new System.Drawing.Size(317, 106);
             this.gbOther.TabIndex = 34;
             this.gbOther.TabStop = false;
             this.gbOther.Text = "Other";
+            // 
+            // chkTuneZeroLatency
+            // 
+            this.chkTuneZeroLatency.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkTuneZeroLatency.Location = new System.Drawing.Point(184, 76);
+            this.chkTuneZeroLatency.Name = "chkTuneZeroLatency";
+            this.chkTuneZeroLatency.Size = new System.Drawing.Size(125, 24);
+            this.chkTuneZeroLatency.TabIndex = 40;
+            this.chkTuneZeroLatency.Text = "Zero Latency";
+            this.chkTuneZeroLatency.UseVisualStyleBackColor = true;
+            this.chkTuneZeroLatency.CheckedChanged += new System.EventHandler(this.x264Tunes_SelectedIndexChanged);
+            // 
+            // chkTuneFastDecode
+            // 
+            this.chkTuneFastDecode.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkTuneFastDecode.Location = new System.Drawing.Point(12, 76);
+            this.chkTuneFastDecode.Name = "chkTuneFastDecode";
+            this.chkTuneFastDecode.Size = new System.Drawing.Size(125, 24);
+            this.chkTuneFastDecode.TabIndex = 39;
+            this.chkTuneFastDecode.Text = "Fast Decode";
+            this.chkTuneFastDecode.UseVisualStyleBackColor = true;
+            this.chkTuneFastDecode.CheckedChanged += new System.EventHandler(this.x264Tunes_SelectedIndexChanged);
             // 
             // x264NbThreads
             // 
@@ -2434,6 +2472,7 @@ namespace MeGUI.packages.video.x264
             this.nonDeterministic.TabIndex = 38;
             this.nonDeterministic.Text = "Non Deterministic";
             this.nonDeterministic.UseVisualStyleBackColor = true;
+            this.nonDeterministic.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264SlowFirstpass
             // 
@@ -2475,16 +2514,16 @@ namespace MeGUI.packages.video.x264
             // 
             this.gbAdjust.Controls.Add(this.btPresetSettings);
             this.gbAdjust.Controls.Add(this.dSettings);
-            this.gbAdjust.Location = new System.Drawing.Point(329, 311);
+            this.gbAdjust.Location = new System.Drawing.Point(329, 291);
             this.gbAdjust.Name = "gbAdjust";
-            this.gbAdjust.Size = new System.Drawing.Size(167, 86);
+            this.gbAdjust.Size = new System.Drawing.Size(167, 106);
             this.gbAdjust.TabIndex = 33;
             this.gbAdjust.TabStop = false;
             this.gbAdjust.Text = "Adjustments";
             // 
             // btPresetSettings
             // 
-            this.btPresetSettings.Location = new System.Drawing.Point(6, 48);
+            this.btPresetSettings.Location = new System.Drawing.Point(6, 61);
             this.btPresetSettings.Name = "btPresetSettings";
             this.btPresetSettings.Size = new System.Drawing.Size(150, 23);
             this.btPresetSettings.TabIndex = 37;
@@ -2495,7 +2534,7 @@ namespace MeGUI.packages.video.x264
             // 
             // dSettings
             // 
-            this.dSettings.Location = new System.Drawing.Point(6, 19);
+            this.dSettings.Location = new System.Drawing.Point(6, 32);
             this.dSettings.Name = "dSettings";
             this.dSettings.Size = new System.Drawing.Size(150, 23);
             this.dSettings.TabIndex = 35;
@@ -2512,7 +2551,7 @@ namespace MeGUI.packages.video.x264
             this.gbInOut.Controls.Add(this.psnr);
             this.gbInOut.Location = new System.Drawing.Point(329, 179);
             this.gbInOut.Name = "gbInOut";
-            this.gbInOut.Size = new System.Drawing.Size(167, 126);
+            this.gbInOut.Size = new System.Drawing.Size(167, 106);
             this.gbInOut.TabIndex = 32;
             this.gbInOut.TabStop = false;
             this.gbInOut.Text = "Input/Output";
@@ -2584,7 +2623,7 @@ namespace MeGUI.packages.video.x264
             this.gbVUI.Controls.Add(this.picStruct);
             this.gbVUI.Location = new System.Drawing.Point(6, 179);
             this.gbVUI.Name = "gbVUI";
-            this.gbVUI.Size = new System.Drawing.Size(317, 126);
+            this.gbVUI.Size = new System.Drawing.Size(317, 106);
             this.gbVUI.TabIndex = 31;
             this.gbVUI.TabStop = false;
             this.gbVUI.Text = "V.U.I";
@@ -3164,5 +3203,7 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.ComboBox x264Range;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.ComboBox cbGOPCalculation;
+        private System.Windows.Forms.CheckBox chkTuneZeroLatency;
+        private System.Windows.Forms.CheckBox chkTuneFastDecode;
     }
 }
