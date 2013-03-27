@@ -53,14 +53,14 @@ namespace MeGUI.packages.video.x264
             cqmComboBox1.SelectedIndex = 0;
             this.AdvancedToolTips = MainForm.Instance.Settings.UseAdvancedTooltips;
             AVCLevels al = new AVCLevels();
-            this.avcLevel.Items.AddRange(al.getLevels());
+            this.avcLevel.Items.AddRange(EnumProxy.CreateArray(AVCLevels.SupportedLevels));
+            this.avcLevel.SelectedItem = EnumProxy.Create(AVCLevels.Levels.L_UNRESTRICTED);
             x264DeviceList = x264Device.CreateDeviceList();
             foreach (x264Device oDevice in x264DeviceList)
                 this.targetDevice.Items.Add(oDevice.Name);
             oTargetDevice = x264DeviceList[0];
-            x264Tunes.DataSource = EnumProxy.CreateArray(new object[] { x264Settings.x264PsyTuningModes.NONE, x264Settings.x264PsyTuningModes.ANIMATION, 
-                x264Settings.x264PsyTuningModes.FILM, x264Settings.x264PsyTuningModes.GRAIN, x264Settings.x264PsyTuningModes.STILLIMAGE, 
-                x264Settings.x264PsyTuningModes.PSNR, x264Settings.x264PsyTuningModes.SSIM });
+            x264Tunes.Items.AddRange(EnumProxy.CreateArray(x264Settings.SupportedPsyTuningModes));
+            x264Tunes.SelectedItem = EnumProxy.Create(x264Settings.x264PsyTuningModes.NONE);
         }
         #endregion
         #region adjustments
@@ -87,15 +87,10 @@ namespace MeGUI.packages.video.x264
                 avcProfile.SelectedIndex = 2;
 
             // AVC level
-            if (oTargetDevice.Level > -1)
-            {
-                if (avcLevel.SelectedIndex > oTargetDevice.Level)
-                    avcLevel.SelectedIndex = oTargetDevice.Level;
-                else if (updateDevice == true && avcLevel.SelectedIndex < oTargetDevice.Level)
-                    avcLevel.SelectedIndex = oTargetDevice.Level;
-            }
-            else if (updateDevice == true)
-                avcLevel.SelectedIndex = avcLevel.Items.Count - 1;
+            if (getAVCLevel().CompareTo(oTargetDevice.AVCLevel) > 0)
+                avcLevel.SelectedItem = EnumProxy.Create(oTargetDevice.AVCLevel);
+            else if (updateDevice == true && getAVCLevel().CompareTo(oTargetDevice.AVCLevel) < 0)
+                avcLevel.SelectedItem = EnumProxy.Create(oTargetDevice.AVCLevel);
 
             // VBVBufsize
             if (oTargetDevice.VBVBufsize > -1)
@@ -176,7 +171,7 @@ namespace MeGUI.packages.video.x264
             }
             if (updateDevice == true)
             {
-                int iDefaultRFrames = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice);
+                int iDefaultRFrames = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel());
                 if (x264NumberOfRefFrames.Value != iDefaultRFrames)
                     x264NumberOfRefFrames.Value = iDefaultRFrames;
             }
@@ -301,8 +296,8 @@ namespace MeGUI.packages.video.x264
 
         private void doTuningsAdjustments()
         {
-            if (this.x264NumberOfRefFrames.Value != x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice))
-                this.x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice);
+            if (this.x264NumberOfRefFrames.Value != x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel()))
+                this.x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel());
             if (this.x264NumberOfBFrames.Value != x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice))
                 this.x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice);
             if (this.x264WeightedPPrediction.SelectedIndex != x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked))
@@ -553,14 +548,12 @@ namespace MeGUI.packages.video.x264
                     }
                     break;
             }
-
-#warning add fastdecode, zerolatency
         }
 
         private void doPresetsAdjustments()
         {
-            if (this.x264NumberOfRefFrames.Value != x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice))
-                this.x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice);
+            if (this.x264NumberOfRefFrames.Value != x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel()))
+                this.x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel());
             if (this.x264NumberOfBFrames.Value != x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice))
                 this.x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice);
             if (this.x264WeightedPPrediction.SelectedIndex != x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked))
@@ -980,49 +973,46 @@ namespace MeGUI.packages.video.x264
         }
         private void EnforceLevel(x264Settings inputSettings)
         {
-            if (avcLevel.SelectedIndex > -1)
-            {
-                AVCLevels al = new AVCLevels();
-                AVCLevelEnforcementReturn enforcement;
-                x264Settings verifiedSettings = al.EnforceSettings(avcLevel.SelectedIndex, inputSettings, BytesPerFrame, out enforcement);
-                // Set the correct input enable states
-                if (enforcement.EnableP4x4mv)
-                    if (this.macroblockOptions.SelectedIndex == 2)
-                        this.x264P4x4mv.Enabled = true;
-                    else
-                        this.x264P4x4mv.Enabled = false;
+            AVCLevels al = new AVCLevels();
+            AVCLevelEnforcementReturn enforcement;
+            x264Settings verifiedSettings = al.EnforceSettings(getAVCLevel(), inputSettings, BytesPerFrame, out enforcement);
+            // Set the correct input enable states
+            if (enforcement.EnableP4x4mv)
+                if (this.macroblockOptions.SelectedIndex == 2)
+                    this.x264P4x4mv.Enabled = true;
                 else
                     this.x264P4x4mv.Enabled = false;
-                if (enforcement.EnableVBVMaxRate)
-                    this.x264VBVMaxRate.Enabled = true;
-                else
-                    this.x264VBVMaxRate.Enabled = false;
-                if (enforcement.EnableVBVBufferSize)
-                    this.x264VBVBufferSize.Enabled = true;
-                else
-                    this.x264VBVBufferSize.Enabled = false;
-                if (enforcement.Altered)
-                {
-                    levelEnforced = true;
-                    this.Settings = verifiedSettings;
-                    levelEnforced = false;
+            else
+                this.x264P4x4mv.Enabled = false;
+            if (enforcement.EnableVBVMaxRate)
+                this.x264VBVMaxRate.Enabled = true;
+            else
+                this.x264VBVMaxRate.Enabled = false;
+            if (enforcement.EnableVBVBufferSize)
+                this.x264VBVBufferSize.Enabled = true;
+            else
+                this.x264VBVBufferSize.Enabled = false;
+            if (enforcement.Altered)
+            {
+                levelEnforced = true;
+                this.Settings = verifiedSettings;
+                levelEnforced = false;
 
-                    if (enforcement.Panic)
-                        MessageBox.Show(enforcement.PanicString, "Level Violation", MessageBoxButtons.OK);
-                }
+                if (enforcement.Panic)
+                    MessageBox.Show(enforcement.PanicString, "Level Violation", MessageBoxButtons.OK);
             }
         }
         private void doAVCLevelAdjustments()
         {
-            if (this.avcLevel.SelectedIndex == this.avcLevel.Items.Count - 1)
+            if (getAVCLevel() == AVCLevels.Levels.L_UNRESTRICTED)
                 return;
 
             AVCLevels avcLevel = new AVCLevels();
-            int avcLevelVerify = avcLevel.Verifyx264Settings(this.Settings as x264Settings, this.avcLevel.SelectedIndex, this.BytesPerFrame);
+            int avcLevelVerify = avcLevel.Verifyx264Settings(this.Settings as x264Settings, getAVCLevel(), this.BytesPerFrame);
             if (avcLevelVerify != 0)
             {
                 avcLevelDialog("Reverting to Unrestrained Level", avcLevelVerify);
-                this.avcLevel.SelectedIndex = this.avcLevel.Items.Count - 1;
+                this.avcLevel.SelectedItem = EnumProxy.Create(AVCLevels.Levels.L_UNRESTRICTED);
             }
         }
         #endregion
@@ -1357,7 +1347,7 @@ namespace MeGUI.packages.video.x264
                     xs.QuantizerMatrixType = cqmComboBox1.SelectedIndex;
                 xs.QuantizerMatrix = cqmComboBox1.SelectedText;
                 xs.Profile = avcProfile.SelectedIndex;
-                xs.Level = avcLevel.SelectedIndex;
+                xs.AVCLevel = getAVCLevel();
                 xs.NoiseReduction = (int)NoiseReduction.Value;
                 xs.AQmode = (int)cbAQMode.SelectedIndex;
                 xs.AQstrength = numAQStrength.Value;
@@ -1406,6 +1396,7 @@ namespace MeGUI.packages.video.x264
                 x264Settings xs = value;
                 updating = true;
                 tbx264Presets.Value = (int)xs.x264PresetLevel;
+                avcLevel.SelectedItem = EnumProxy.Create(xs.AVCLevel);
                 x264Tunes.SelectedItem = EnumProxy.Create(xs.x264PsyTuning);
                 chkTuneFastDecode.Checked = xs.TuneFastDecode;
                 chkTuneZeroLatency.Checked = xs.TuneZeroLatency;
@@ -1418,7 +1409,6 @@ namespace MeGUI.packages.video.x264
                     avcProfile.SelectedIndex = 2;
                 else
                     avcProfile.SelectedIndex = xs.Profile;
-                avcLevel.SelectedIndex = xs.Level;
                 updateDeviceBlocked = true;
                 targetDevice.SelectedItem = xs.TargetDevice.Name;
                 updateDeviceBlocked = false;
@@ -1942,7 +1932,7 @@ namespace MeGUI.packages.video.x264
             this.x264Tunes.SelectedIndex = 0;
             this.tbx264Presets.Value = 5;
             this.avcProfile.SelectedIndex = 2;
-            this.avcLevel.SelectedIndex = this.avcLevel.Items.Count - 1;
+            this.avcLevel.SelectedItem = EnumProxy.Create(AVCLevels.Levels.L_UNRESTRICTED);
             this.advancedSettings.Checked = true;
             this.targetDevice.SelectedIndex = 0;
 
@@ -2104,6 +2094,12 @@ namespace MeGUI.packages.video.x264
         {
             EnumProxy o = x264Tunes.SelectedItem as EnumProxy;
             return (x264Settings.x264PsyTuningModes)o.RealValue;
+        }
+
+        private AVCLevels.Levels getAVCLevel()
+        {
+            EnumProxy o = avcLevel.SelectedItem as EnumProxy;
+            return (AVCLevels.Levels)o.RealValue;
         }
     }
 }

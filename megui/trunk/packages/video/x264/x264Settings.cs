@@ -32,6 +32,12 @@ namespace MeGUI
 	{
         public static string ID = "x264";
 
+        public static readonly x264PsyTuningModes[] SupportedPsyTuningModes = new x264PsyTuningModes[] 
+        { x264PsyTuningModes.NONE, x264PsyTuningModes.ANIMATION, 
+          x264PsyTuningModes.FILM, x264PsyTuningModes.GRAIN, x264PsyTuningModes.STILLIMAGE, 
+          x264PsyTuningModes.PSNR, x264PsyTuningModes.SSIM 
+        };
+
         public enum x264PsyTuningModes
         {
             [EnumTitle("None")]
@@ -97,7 +103,7 @@ namespace MeGUI
         }
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur,
             bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
-            quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
+            quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile,
             lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, x264Nalhrd,
             colorMatrix, transfer, colorPrim, x264PullDown, sampleAR, _gopCalculation;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression,
@@ -111,6 +117,7 @@ namespace MeGUI
         x264InterlacedModes interlacedMode;
         x264Device targetDevice;
         x264PsyTuningModes psyTuningMode;
+        AVCLevels.Levels avcLevel;
         List<x264Device> x264DeviceList;
 		#region constructor
         /// <summary>
@@ -199,7 +206,7 @@ namespace MeGUI
             colorPrim = 0;
             x264Aud = false;
             profile = 3; // Autoguess. High if using default options.
-            level = 15;
+            avcLevel = AVCLevels.Levels.L_UNRESTRICTED;
             x264SlowFirstpass = false;
             openGop = "False";
             picStruct = false;
@@ -714,10 +721,53 @@ namespace MeGUI
             get { return profile; }
             set { profile = value; }
         }
-        public int Level
+#warning Deprecated since 2327; delete after next stable release
+        public string Level
         {
-            get { return level; }
-            set { level = value; }
+            get { return "migrated"; }
+            set
+            {
+                if (value.Equals("migrated"))
+                    return;
+
+                if (value.Equals("0"))
+                    avcLevel = AVCLevels.Levels.L_10;
+                if (value.Equals("1"))
+                    avcLevel = AVCLevels.Levels.L_11;
+                if (value.Equals("2"))
+                    avcLevel = AVCLevels.Levels.L_12;
+                if (value.Equals("3"))
+                    avcLevel = AVCLevels.Levels.L_13;
+                if (value.Equals("4"))
+                    avcLevel = AVCLevels.Levels.L_20;
+                if (value.Equals("5"))
+                    avcLevel = AVCLevels.Levels.L_21;
+                if (value.Equals("6"))
+                    avcLevel = AVCLevels.Levels.L_22;
+                if (value.Equals("7"))
+                    avcLevel = AVCLevels.Levels.L_30;
+                if (value.Equals("8"))
+                    avcLevel = AVCLevels.Levels.L_31;
+                if (value.Equals("9"))
+                    avcLevel = AVCLevels.Levels.L_32;
+                if (value.Equals("10"))
+                    avcLevel = AVCLevels.Levels.L_40;
+                if (value.Equals("11"))
+                    avcLevel = AVCLevels.Levels.L_41;
+                if (value.Equals("12"))
+                    avcLevel = AVCLevels.Levels.L_42;
+                if (value.Equals("13"))
+                    avcLevel = AVCLevels.Levels.L_50;
+                if (value.Equals("14"))
+                    avcLevel = AVCLevels.Levels.L_51;
+                if (value.Equals("15"))
+                    avcLevel = AVCLevels.Levels.L_UNRESTRICTED;
+            }
+        }
+        public AVCLevels.Levels AVCLevel
+        {
+            get { return avcLevel; }
+            set { avcLevel = value; }
         }
         public bool TuneFastDecode
         {
@@ -773,7 +823,7 @@ namespace MeGUI
                 this.I8x8mv != otherSettings.I8x8mv ||
                 this.IPFactor != otherSettings.IPFactor ||
                 this.KeyframeInterval != otherSettings.KeyframeInterval ||
-                this.Level != otherSettings.Level ||
+                this.AVCLevel != otherSettings.AVCLevel ||
                 this.MaxQuantDelta != otherSettings.MaxQuantDelta ||
                 this.MaxQuantizer != otherSettings.MaxQuantizer ||
                 this.MERange != otherSettings.MERange ||
@@ -889,26 +939,26 @@ namespace MeGUI
                 P4x4mv = false;
         }
 
-        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, x264PsyTuningModes oTuningMode, x264Device oDevice)
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, x264PsyTuningModes oTuningMode, x264Device oDevice, AVCLevels.Levels avcLevel)
         {
-            return GetDefaultNumberOfRefFrames(oPreset, oTuningMode, oDevice, -1, -1, -1);
+            return GetDefaultNumberOfRefFrames(oPreset, oTuningMode, oDevice, avcLevel, -1, -1);
         }
 
-        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, x264PsyTuningModes oTuningMode, x264Device oDevice, int iLevel, int hRes, int vRes)
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, x264PsyTuningModes oTuningMode, x264Device oDevice, AVCLevels.Levels avcLevel, int hRes, int vRes)
         {
             int iDefaultSetting = 1;
             switch (oPreset)
             {
                 case x264Settings.x264PresetLevelModes.ultrafast:
                 case x264Settings.x264PresetLevelModes.superfast:
-                case x264Settings.x264PresetLevelModes.veryfast: iDefaultSetting = 1; break;
+                case x264Settings.x264PresetLevelModes.veryfast:    iDefaultSetting = 1; break;
                 case x264Settings.x264PresetLevelModes.faster:
-                case x264Settings.x264PresetLevelModes.fast: iDefaultSetting = 2; break;
-                case x264Settings.x264PresetLevelModes.medium: iDefaultSetting = 3; break;
-                case x264Settings.x264PresetLevelModes.slow: iDefaultSetting = 5; break;
-                case x264Settings.x264PresetLevelModes.slower: iDefaultSetting = 8; break;
+                case x264Settings.x264PresetLevelModes.fast:        iDefaultSetting = 2; break;
+                case x264Settings.x264PresetLevelModes.medium:      iDefaultSetting = 3; break;
+                case x264Settings.x264PresetLevelModes.slow:        iDefaultSetting = 5; break;
+                case x264Settings.x264PresetLevelModes.slower:      iDefaultSetting = 8; break;
                 case x264Settings.x264PresetLevelModes.veryslow:
-                case x264Settings.x264PresetLevelModes.placebo: iDefaultSetting = 16; break;
+                case x264Settings.x264PresetLevelModes.placebo:     iDefaultSetting = 16; break;
             }
             if (oTuningMode == x264PsyTuningModes.ANIMATION && iDefaultSetting > 1)
                 iDefaultSetting *= 2;
@@ -916,9 +966,9 @@ namespace MeGUI
                 iDefaultSetting = 16;
             if (oDevice != null && oDevice.ReferenceFrames > -1)
                 iDefaultSetting = Math.Min(oDevice.ReferenceFrames, iDefaultSetting);
-            if (iLevel > -1 && hRes > 0 && vRes > 0)
+            if (hRes > 0 && vRes > 0)
             {
-                int iMaxRefForLevel = MeGUI.packages.video.x264.x264SettingsHandler.getMaxRefForLevel(iLevel, hRes, vRes);
+                int iMaxRefForLevel = MeGUI.packages.video.x264.x264SettingsHandler.getMaxRefForLevel(avcLevel, hRes, vRes);
                 if (iMaxRefForLevel > -1 && iMaxRefForLevel < iDefaultSetting)
                     iDefaultSetting = iMaxRefForLevel;
             }

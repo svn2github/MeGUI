@@ -405,7 +405,7 @@ Enables 'brightness' weighting of B-frames which improves fades and colour gradi
 			<Recommended>Enabled</Recommended>
 			<Default>Enabled</Default>
 		</weightb>
-	<weightp name="B-frame Weighted Prediction">
+	<weightp name="P-frame Weighted Prediction">
 		<Advanced>
 Enables use of explicit weighted prediction to improve compression in P-frames. Higher modes are slower.
 		</Advanced>

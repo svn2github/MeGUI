@@ -1,3 +1,5 @@
+2328 [x264] added AVC level 1b and 5.2
+2327 [x264] added "stillimage" to the psy tunings and moved "zerolatency" and "fastdecode" to the misc tab
 2326 [File Indexer] enhanced index file selection behavior
 2325 [MKV Muxer] improved playback performance with some players (requires MkvMerge 5.9.0+)
 2324 [OneClick] avoid muxing into intermediate MKV file in some cases if using a DVD source

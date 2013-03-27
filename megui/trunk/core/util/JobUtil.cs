@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -43,13 +43,13 @@ namespace MeGUI
        
         #region start/stop
 		MainForm mainForm;
-        AVCLevels al;
         string mbtreeFile = ".stats.mbtree";
+
 		public JobUtil(MainForm mainForm)
 		{
 			this.mainForm = mainForm;
-            al = new AVCLevels();
         }
+
         #endregion
 		#region job generation
 		#region single job generation
@@ -520,31 +520,6 @@ namespace MeGUI
             return GetAllInputProperties(out nbOfFrames, out framerate, out fn, out fd, out hRes, out vRes, out dar, video);
 		}
 
-        /// <summary>
-		/// validates a source against a given AVC level taking into account the rest of the configuration
-		/// </summary>
-		/// <param name="source">the source to be validated</param>
-		/// <param name="level">the level that this source should correspond to</param>
-		/// <param name="bframeType">type of b-frames used. 0 = none, 1 = b-frames without pyramid, 
-		/// 2 = b-frames with pyramid order</param>
-		/// <param name="nbReferences">the number of reference frames used</param>
-		/// <param name="compliantLevel">the first avc level that can be used to encode this source</param>
-		/// <returns>whether or not the current level is okay, if false and compliantLevel is -1, 
-		/// the source could not be read</returns>
-		public bool validateAVCLevel(string source, x264Settings settings, out int compliantLevel)
-		{
-			int hRes, vRes;
-            Dar d;
-            ulong nbFrames;
-			double framerate;
-			compliantLevel = -1;
-			if (GetAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out d, source))
-			{
-				return this.al.validateAVCLevel(hRes, vRes, framerate, settings, out compliantLevel);
-			}
-			else
-				return false;
-		}
 		/// <summary>
 		/// gets the number of frames of a videostream
 		/// </summary>
@@ -557,6 +532,7 @@ namespace MeGUI
 			bool succ = getInputProperties(out retval, out framerate, path);
 			return retval;
 		}
+
 		/// <summary>
 		/// gets the framerate of a video stream
 		/// </summary>

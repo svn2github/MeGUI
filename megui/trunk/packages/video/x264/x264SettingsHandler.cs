@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -515,44 +515,46 @@ namespace MeGUI.packages.video.x264
         /// Calculates the AVC level number
         /// </summary>
         /// <returns>the AVC level value</returns>
-        public int getLevel()
+        public AVCLevels.Levels getLevel()
         {
             string strCustomValue;
             extractCustomCommand("level", out strCustomValue);
             switch (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture).Replace(".", "").Trim())
             {
                 case "1": 
-                case "10": _xs.Level = 0; break;
-                case "11": _xs.Level = 1; break;
-                case "12": _xs.Level = 2; break;
-                case "13": _xs.Level = 3; break;
+                case "10": _xs.AVCLevel = AVCLevels.Levels.L_10; break;
+                case "11": _xs.AVCLevel = AVCLevels.Levels.L_11; break;
+                case "12": _xs.AVCLevel = AVCLevels.Levels.L_12; break;
+                case "13": _xs.AVCLevel = AVCLevels.Levels.L_13; break;
+                case "1b": _xs.AVCLevel = AVCLevels.Levels.L_1B; break;
                 case "2":
-                case "20": _xs.Level = 4; break;
-                case "21": _xs.Level = 5; break;
-                case "22": _xs.Level = 6; break;
+                case "20": _xs.AVCLevel = AVCLevels.Levels.L_20; break;
+                case "21": _xs.AVCLevel = AVCLevels.Levels.L_21; break;
+                case "22": _xs.AVCLevel = AVCLevels.Levels.L_22; break;
                 case "3":
-                case "30": _xs.Level = 7; break;
-                case "31": _xs.Level = 8; break;
-                case "32": _xs.Level = 9; break;
+                case "30": _xs.AVCLevel = AVCLevels.Levels.L_30; break;
+                case "31": _xs.AVCLevel = AVCLevels.Levels.L_31; break;
+                case "32": _xs.AVCLevel = AVCLevels.Levels.L_32; break;
                 case "4":
-                case "40": _xs.Level = 10; break;
-                case "41": _xs.Level = 11; break;
-                case "42": _xs.Level = 12; break;
+                case "40": _xs.AVCLevel = AVCLevels.Levels.L_40; break;
+                case "41": _xs.AVCLevel = AVCLevels.Levels.L_41; break;
+                case "42": _xs.AVCLevel = AVCLevels.Levels.L_42; break;
                 case "5":
-                case "50": _xs.Level = 13; break;
-                case "51": _xs.Level = 14; break;
+                case "50": _xs.AVCLevel = AVCLevels.Levels.L_50; break;
+                case "51": _xs.AVCLevel = AVCLevels.Levels.L_51; break;
+                case "52": _xs.AVCLevel = AVCLevels.Levels.L_52; break;
             }
 
             if (_log == null)
-                return _xs.Level;
+                return _xs.AVCLevel;
 
-            if (_device.Level > -1 && _xs.Level > _device.Level)
+            if (_xs.AVCLevel.CompareTo(_device.AVCLevel) > 0)
             {
-                _log.LogEvent(strDevice + "changing --level to " + AVCLevels.getCLILevelNames()[_device.Level]);
+                _log.LogEvent(strDevice + "changing --level to " + _device.AVCLevel.ToString());
                 _xs.Profile = _device.Profile;
             }
 
-            return _xs.Level;
+            return _xs.AVCLevel;
         }
 
         /// <summary>
@@ -837,7 +839,7 @@ namespace MeGUI.packages.video.x264
                 _xs.NbRefFrames = _device.ReferenceFrames;
             }
 
-            int iMaxRefForLevel = getMaxRefForLevel(_xs.Level, hRes, vRes);
+            int iMaxRefForLevel = getMaxRefForLevel(_xs.AVCLevel, hRes, vRes);
             if (iMaxRefForLevel > -1 && iMaxRefForLevel < _xs.NbRefFrames)
             {
                 _log.LogEvent(strDevice + "changing --ref to " + iMaxRefForLevel);
@@ -850,62 +852,35 @@ namespace MeGUI.packages.video.x264
         /// <summary>
         /// gets the maximum ref count based upon the given level
         /// </summary>
+        /// <param name="level">the AVC level</param>
         /// <param name="hRes">the horizontal resolution</param>
         /// <param name="vRes">the vertical resolution</param>
         /// <returns>the maximum reference count; -1 if no restriction</returns>
-        public static int getMaxRefForLevel(int level, int hRes, int vRes)
+        public static int getMaxRefForLevel(AVCLevels.Levels avcLevel, int hRes, int vRes)
         {
-            if (level < 0 || hRes <= 0 || vRes <= 0 || level >= 15)  // Unrestricted/Autoguess
+            if (hRes <= 0 || vRes <= 0 || avcLevel == AVCLevels.Levels.L_UNRESTRICTED)  // Unrestricted/Autoguess
                 return -1;
 
             int maxDPB = 0;  // the maximum picture decoded buffer for the given level
-            switch (level)
+            switch (avcLevel)
             {
-                case 0: // level 1
-                    maxDPB = 396;
-                    break;
-                case 1: // level 1.1
-                    maxDPB = 900;
-                    break;
-                case 2: // level 1.2
-                    maxDPB = 2376;
-                    break;
-                case 3: // level 1.3
-                    maxDPB = 2376;
-                    break;
-                case 4: // level 2
-                    maxDPB = 2376;
-                    break;
-                case 5: // level 2.1
-                    maxDPB = 4752;
-                    break;
-                case 6: // level 2.2
-                    maxDPB = 8100;
-                    break;
-                case 7: // level 3
-                    maxDPB = 8100;
-                    break;
-                case 8: // level 3.1
-                    maxDPB = 18000;
-                    break;
-                case 9: // level 3.2
-                    maxDPB = 20480;
-                    break;
-                case 10: // level 4
-                    maxDPB = 32768;
-                    break;
-                case 11: // level 4.1
-                    maxDPB = 32768;
-                    break;
-                case 12: // level 4.2
-                    maxDPB = 34816;
-                    break;
-                case 13: // level 5
-                    maxDPB = 110400;
-                    break;
-                case 14: // level 5.1
-                    maxDPB = 184320;
-                    break;
+                case AVCLevels.Levels.L_10: maxDPB = 396;    break;
+                case AVCLevels.Levels.L_1B: maxDPB = 396;    break;
+                case AVCLevels.Levels.L_11: maxDPB = 900;    break;
+                case AVCLevels.Levels.L_12: maxDPB = 2376;   break;
+                case AVCLevels.Levels.L_13: maxDPB = 2376;   break;
+                case AVCLevels.Levels.L_20: maxDPB = 2376;   break;
+                case AVCLevels.Levels.L_21: maxDPB = 4752;   break;
+                case AVCLevels.Levels.L_22: maxDPB = 8100;   break;
+                case AVCLevels.Levels.L_30: maxDPB = 8100;   break;
+                case AVCLevels.Levels.L_31: maxDPB = 18000;  break;
+                case AVCLevels.Levels.L_32: maxDPB = 20480;  break;
+                case AVCLevels.Levels.L_40: maxDPB = 32768;  break;
+                case AVCLevels.Levels.L_41: maxDPB = 32768;  break;
+                case AVCLevels.Levels.L_42: maxDPB = 34816;  break;
+                case AVCLevels.Levels.L_50: maxDPB = 110400; break;
+                case AVCLevels.Levels.L_51: maxDPB = 184320; break;
+                case AVCLevels.Levels.L_52: maxDPB = 184320; break;
             }
 
             int frameHeightInMbs = (int)System.Math.Ceiling((double)vRes / 16);

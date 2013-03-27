@@ -105,9 +105,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
 
             // AVC Levels
-            xs.Level = oSettingsHandler.getLevel();
-            if (xs.Level != 15) // unrestricted
-                sb.Append("--level " + AVCLevels.getCLILevelNames()[xs.Level] + " ");
+            xs.AVCLevel = oSettingsHandler.getLevel();
+            if (xs.AVCLevel != AVCLevels.Levels.L_UNRESTRICTED) // unrestricted
+                sb.Append("--level " + AVCLevels.GetLevelText(xs.AVCLevel) + " ");
 
             // --bluray-compat
             xs.BlurayCompat = oSettingsHandler.getBlurayCompat();
@@ -357,7 +357,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             // reference frames
             int iRefFrames = oSettingsHandler.getRefFrames(hres, vres);
-            if (iRefFrames != x264Settings.GetDefaultNumberOfRefFrames(xs.x264PresetLevel, xs.x264PsyTuning, null, xs.Level, hres, vres))
+            if (iRefFrames != x264Settings.GetDefaultNumberOfRefFrames(xs.x264PresetLevel, xs.x264PsyTuning, null, xs.AVCLevel, hres, vres))
                 sb.Append("--ref " + iRefFrames + " ");
 
             // WeightedPPrediction
