@@ -446,6 +446,8 @@ namespace MeGUI
                 string chapterFile = VideoUtil.getChapterFile(iFile.FileName);
                 if (File.Exists(chapterFile))
                     this.chapterFile.Filename = chapterFile;
+                if (!File.Exists(this.chapterFile.Filename))
+                    this.chapterFile.Filename = String.Empty;
             }
 
             if (string.IsNullOrEmpty(workingDirectory.Filename))
