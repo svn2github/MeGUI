@@ -284,48 +284,73 @@ namespace MeGUI
         #endregion
         #region public look-up routines
 		/// <summary>
-		/// gets the MaxBR value corresponding to a given AVC Level
+		/// gets the MaxCBP value corresponding to a given AVC Level
 		/// </summary>
 		/// <param name="level">the level</param>
-		/// <returns>the MaxBR in kbit/s</returns>
-		public int getMaxBR(Levels avcLevel, bool isHighProfile)
-		{
-            return getMaxCBP(avcLevel, isHighProfile);
-        }
-
-		/// <summary>
-		/// gets the max cbp rate in bytes for a given level
-		/// </summary>
-		/// <param name="level">the level</param>
-		/// <returns>the MaxCBP in bits</returns>
+		/// <returns>the MaxCBP in kbit/s</returns>
 		public int getMaxCBP(Levels avcLevel, bool isHighProfile)
 		{
             int maxCBP = 0;
             switch (avcLevel)
             {
-                case Levels.L_10: maxCBP = 64; break;
-                case Levels.L_1B: maxCBP = 128; break;
-                case Levels.L_11: maxCBP = 192; break;
-                case Levels.L_12: maxCBP = 384; break;
-                case Levels.L_13: maxCBP = 768; break;
-                case Levels.L_20: maxCBP = 2000; break;
-                case Levels.L_21: maxCBP = 4000; break;
-                case Levels.L_22: maxCBP = 4000; break;
-                case Levels.L_30: maxCBP = 10000; break;
-                case Levels.L_31: maxCBP = 14000; break;
-                case Levels.L_32: maxCBP = 20000; break;
-                case Levels.L_40: maxCBP = 20000; break;
-                case Levels.L_41: maxCBP = 50000; break;
-                case Levels.L_42: maxCBP = 50000; break;
+                case Levels.L_10: maxCBP = 175;    break;
+                case Levels.L_1B: maxCBP = 350;    break;
+                case Levels.L_11: maxCBP = 500;    break;
+                case Levels.L_12: maxCBP = 1000;   break;
+                case Levels.L_13: maxCBP = 2000;   break;
+                case Levels.L_20: maxCBP = 2000;   break;
+                case Levels.L_21: maxCBP = 4000;   break;
+                case Levels.L_22: maxCBP = 4000;   break;
+                case Levels.L_30: maxCBP = 10000;  break;
+                case Levels.L_31: maxCBP = 14000;  break;
+                case Levels.L_32: maxCBP = 20000;  break;
+                case Levels.L_40: maxCBP = 25000;  break;
+                case Levels.L_41: maxCBP = 62500;  break;
+                case Levels.L_42: maxCBP = 62500;  break;
                 case Levels.L_50: maxCBP = 135000; break;
                 case Levels.L_51: maxCBP = 240000; break;
                 case Levels.L_52: maxCBP = 240000; break;
             }
 
-            if (isHighProfile) // all bitrates and cbps are multiplied by 1.25 in high profile
+            if (isHighProfile) // all bitrates and CBPs are multiplied by 1.25 in high profile
                 maxCBP = maxCBP * 125 / 100;
 
             return maxCBP;
+        }
+
+		/// <summary>
+		/// gets the maxBR rate in bits for a given level
+		/// </summary>
+		/// <param name="level">the level</param>
+		/// <returns>the MaxBR in bits</returns>
+		public int getMaxBR(Levels avcLevel, bool isHighProfile)
+		{
+            int maxBR = 0;
+            switch (avcLevel)
+            {
+                case Levels.L_10: maxBR = 64;     break;
+                case Levels.L_1B: maxBR = 128;    break;
+                case Levels.L_11: maxBR = 192;    break;
+                case Levels.L_12: maxBR = 384;    break;
+                case Levels.L_13: maxBR = 768;    break;
+                case Levels.L_20: maxBR = 2000;   break;
+                case Levels.L_21: maxBR = 4000;   break;
+                case Levels.L_22: maxBR = 4000;   break;
+                case Levels.L_30: maxBR = 10000;  break;
+                case Levels.L_31: maxBR = 14000;  break;
+                case Levels.L_32: maxBR = 20000;  break;
+                case Levels.L_40: maxBR = 20000;  break;
+                case Levels.L_41: maxBR = 50000;  break;
+                case Levels.L_42: maxBR = 50000;  break;
+                case Levels.L_50: maxBR = 135000; break;
+                case Levels.L_51: maxBR = 240000; break;
+                case Levels.L_52: maxBR = 240000; break;
+            }
+
+            if (isHighProfile) // all bitrates and cbps are multiplied by 1.25 in high profile
+                maxBR = maxBR * 125 / 100;
+
+            return maxBR;
 		}
 
 		/// <summary>

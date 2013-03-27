@@ -1396,6 +1396,10 @@ namespace MeGUI.packages.video.x264
                 x264Settings xs = value;
                 updating = true;
                 tbx264Presets.Value = (int)xs.x264PresetLevel;
+                if (xs.Profile > 2)
+                    avcProfile.SelectedIndex = 2;
+                else
+                    avcProfile.SelectedIndex = xs.Profile;
                 avcLevel.SelectedItem = EnumProxy.Create(xs.AVCLevel);
                 x264Tunes.SelectedItem = EnumProxy.Create(xs.x264PsyTuning);
                 chkTuneFastDecode.Checked = xs.TuneFastDecode;
@@ -1405,10 +1409,6 @@ namespace MeGUI.packages.video.x264
                 cbInterlaceMode.SelectedIndex = (int)xs.InterlacedMode;
                 noDCTDecimateOption.Checked = xs.NoDCTDecimate;
                 ssim.Checked = xs.SSIMCalculation;
-                if (xs.Profile > 2)
-                    avcProfile.SelectedIndex = 2;
-                else
-                    avcProfile.SelectedIndex = xs.Profile;
                 updateDeviceBlocked = true;
                 targetDevice.SelectedItem = xs.TargetDevice.Name;
                 updateDeviceBlocked = false;
@@ -2100,6 +2100,23 @@ namespace MeGUI.packages.video.x264
         {
             EnumProxy o = avcLevel.SelectedItem as EnumProxy;
             return (AVCLevels.Levels)o.RealValue;
+        }
+
+        private void avcLevel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AVCLevels.Levels avcLevel = getAVCLevel();
+            if (avcLevel == AVCLevels.Levels.L_UNRESTRICTED || avcProfile.SelectedIndex < 0)
+            {
+                x264VBVBufferSize.Maximum = 99999999;
+                x264VBVMaxRate.Maximum = 99999999;
+            }
+            else
+            {
+                AVCLevels al = new AVCLevels();
+                x264VBVBufferSize.Maximum = al.getMaxCBP(avcLevel, avcProfile.SelectedIndex == 2);
+                x264VBVMaxRate.Maximum = al.getMaxBR(avcLevel, avcProfile.SelectedIndex == 2);
+            }
+            genericUpdate();
         }
     }
 }

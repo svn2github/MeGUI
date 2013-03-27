@@ -318,7 +318,7 @@ namespace MeGUI.packages.video.x264
             if (avcLevel != AVCLevels.Levels.L_UNRESTRICTED)
             {
                 AVCLevels al = new AVCLevels();
-                iTemp = al.getMaxCBP(avcLevel, bIsHighProfile);
+                iTemp = al.getMaxBR(avcLevel, bIsHighProfile);
                 if (_xs.VBVMaxBitrate == 0 || _xs.VBVMaxBitrate > iTemp)
                 {
                     if (_log != null)

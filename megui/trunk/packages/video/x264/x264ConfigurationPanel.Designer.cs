@@ -2855,7 +2855,7 @@ namespace MeGUI.packages.video.x264
             this.avcLevel.Name = "avcLevel";
             this.avcLevel.Size = new System.Drawing.Size(157, 21);
             this.avcLevel.TabIndex = 0;
-            this.avcLevel.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            this.avcLevel.SelectedIndexChanged += new System.EventHandler(this.avcLevel_SelectedIndexChanged);
             // 
             // avcProfileGroupbox
             // 
