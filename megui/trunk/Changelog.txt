@@ -1,3 +1,4 @@
+2329 [x264] added vbv restrictions based on the selected AVC level
 2328 [x264] added AVC level 1b and 5.2
 2327 [x264] added "stillimage" to the psy tunings and moved "zerolatency" and "fastdecode" to the misc tab
 2326 [File Indexer] enhanced index file selection behavior

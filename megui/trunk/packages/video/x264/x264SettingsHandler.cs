@@ -266,7 +266,7 @@ namespace MeGUI.packages.video.x264
         /// Calculates the --vbv-bufsize value
         /// </summary>
         /// <returns>the --vbv-bufsize value</returns>
-        public int getVBVBufsize()
+        public int getVBVBufsize(AVCLevels.Levels avcLevel, bool bIsHighProfile)
         {
             string strCustomValue;
             extractCustomCommand("vbv-bufsize", out strCustomValue);
@@ -274,13 +274,23 @@ namespace MeGUI.packages.video.x264
             if (Int32.TryParse(strCustomValue, out iTemp))
                 _xs.VBVBufferSize = iTemp;
 
-            if (_log == null)
-                return _xs.VBVBufferSize;
-
             if (_device.VBVBufsize > -1 && (_xs.VBVBufferSize > _device.VBVBufsize || _xs.VBVBufferSize == 0))
             {
-                _log.LogEvent(strDevice + "changing --vbv-bufsize to " + _device.VBVBufsize);
+                if (_log != null)
+                    _log.LogEvent(strDevice + "changing --vbv-bufsize to " + _device.VBVBufsize);
                 _xs.VBVBufferSize = _device.VBVBufsize;
+            }
+
+            if (avcLevel != AVCLevels.Levels.L_UNRESTRICTED)
+            {
+                AVCLevels al = new AVCLevels();
+                iTemp = al.getMaxCBP(avcLevel, bIsHighProfile);
+                if (_xs.VBVBufferSize == 0 || _xs.VBVBufferSize > iTemp)
+                {
+                    if (_log != null)
+                        _log.LogEvent(strDevice + "changing --vbv-bufsize to " + iTemp + " for level " + AVCLevels.GetLevelText(avcLevel));
+                    _xs.VBVBufferSize = iTemp;
+                }
             }
 
             return _xs.VBVBufferSize;
@@ -290,7 +300,7 @@ namespace MeGUI.packages.video.x264
         /// Calculates the --vbv-maxrate value
         /// </summary>
         /// <returns>the --vbv-maxrate value</returns>
-        public int getVBVMaxrate()
+        public int getVBVMaxrate(AVCLevels.Levels avcLevel, bool bIsHighProfile)
         {
             string strCustomValue;
             extractCustomCommand("vbv-maxrate", out strCustomValue);
@@ -298,13 +308,23 @@ namespace MeGUI.packages.video.x264
             if (Int32.TryParse(strCustomValue, out iTemp))
                 _xs.VBVMaxBitrate = iTemp;
 
-            if (_log == null)
-                return _xs.VBVMaxBitrate;
-
             if (_device.VBVMaxrate > -1 && (_xs.VBVMaxBitrate > _device.VBVMaxrate || _xs.VBVMaxBitrate == 0))
             {
-                _log.LogEvent(strDevice + "changing --vbv-bufsize to " + _device.VBVMaxrate);
+                if (_log != null)
+                    _log.LogEvent(strDevice + "changing --vbv-maxrate to " + _device.VBVMaxrate);
                 _xs.VBVMaxBitrate = _device.VBVMaxrate;
+            }
+
+            if (avcLevel != AVCLevels.Levels.L_UNRESTRICTED)
+            {
+                AVCLevels al = new AVCLevels();
+                iTemp = al.getMaxCBP(avcLevel, bIsHighProfile);
+                if (_xs.VBVMaxBitrate == 0 || _xs.VBVMaxBitrate > iTemp)
+                {
+                    if (_log != null)
+                        _log.LogEvent(strDevice + "changing --vbv-maxrate to " + iTemp + " for level " + AVCLevels.GetLevelText(avcLevel));
+                    _xs.VBVMaxBitrate = iTemp;
+                }
             }
 
             return _xs.VBVMaxBitrate;

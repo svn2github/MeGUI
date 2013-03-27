@@ -417,10 +417,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             if (xs.EncodingMode != 1) // doesn't apply to CQ mode
             {
-                xs.VBVBufferSize = oSettingsHandler.getVBVBufsize();
+                xs.VBVBufferSize = oSettingsHandler.getVBVBufsize(xs.AVCLevel, xs.Profile == 2);
                 if (xs.VBVBufferSize > 0)
                     sb.Append("--vbv-bufsize " + xs.VBVBufferSize + " ");
-                xs.VBVMaxBitrate = oSettingsHandler.getVBVMaxrate();
+                xs.VBVMaxBitrate = oSettingsHandler.getVBVMaxrate(xs.AVCLevel, xs.Profile == 2);
                 if (xs.VBVMaxBitrate > 0)
                     sb.Append("--vbv-maxrate " + xs.VBVMaxBitrate + " ");
                 if (!xs.CustomEncoderOptions.Contains("--vbv-init "))
