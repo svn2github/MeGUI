@@ -168,7 +168,7 @@ namespace MeGUI
         {
             switch (avcLevel)
             {
-                case Levels.L_10: return "1.1";
+                case Levels.L_10: return "1.0";
                 case Levels.L_1B: return "1b";
                 case Levels.L_11: return "1.1";
                 case Levels.L_12: return "1.2";
