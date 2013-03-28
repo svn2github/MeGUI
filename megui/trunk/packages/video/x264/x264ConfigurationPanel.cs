@@ -333,12 +333,6 @@ namespace MeGUI.packages.video.x264
                             this.x264QuantizerCompression.Value = 0.6M;
                         if (noDCTDecimateOption.Checked)
                             noDCTDecimateOption.Checked = false;
-                        if (!x264DeblockActive.Checked)
-                            x264DeblockActive.Checked = true;
-                        if (!cabac.Checked)
-                            cabac.Checked = true;
-                        if (!x264WeightedBPrediction.Checked)
-                            x264WeightedBPrediction.Checked = true;
                         if (nopsy.Checked)
                             nopsy.Checked = false;
                     }
@@ -367,12 +361,6 @@ namespace MeGUI.packages.video.x264
                             this.x264QuantizerCompression.Value = 0.6M;
                         if (noDCTDecimateOption.Checked)
                             noDCTDecimateOption.Checked = false;
-                        if (!x264DeblockActive.Checked)
-                            x264DeblockActive.Checked = true;
-                        if (!cabac.Checked)
-                            cabac.Checked = true;
-                        if (!x264WeightedBPrediction.Checked)
-                            x264WeightedBPrediction.Checked = true;
                         if (nopsy.Checked)
                             nopsy.Checked = false;
                     }
@@ -401,12 +389,6 @@ namespace MeGUI.packages.video.x264
                             this.x264QuantizerCompression.Value = 0.6M;
                         if (noDCTDecimateOption.Checked)
                             noDCTDecimateOption.Checked = false;
-                        if (!x264DeblockActive.Checked)
-                            x264DeblockActive.Checked = true;
-                        if (!cabac.Checked)
-                            cabac.Checked = true;
-                        if (!x264WeightedBPrediction.Checked)
-                            x264WeightedBPrediction.Checked = true;
                         if (nopsy.Checked)
                             nopsy.Checked = false;
                     }
@@ -435,12 +417,6 @@ namespace MeGUI.packages.video.x264
                             this.x264QuantizerCompression.Value = 0.8M;
                         if (!noDCTDecimateOption.Checked)
                             noDCTDecimateOption.Checked = true;
-                        if (!x264DeblockActive.Checked)
-                            x264DeblockActive.Checked = true;
-                        if (!cabac.Checked)
-                            cabac.Checked = true;
-                        if (!x264WeightedBPrediction.Checked)
-                            x264WeightedBPrediction.Checked = true;
                         if (nopsy.Checked)
                             nopsy.Checked = false;
                     }
@@ -469,12 +445,6 @@ namespace MeGUI.packages.video.x264
                             this.x264QuantizerCompression.Value = 0.6M;
                         if (noDCTDecimateOption.Checked)
                             noDCTDecimateOption.Checked = false;
-                        if (!x264DeblockActive.Checked)
-                            x264DeblockActive.Checked = true;
-                        if (!cabac.Checked)
-                            cabac.Checked = true;
-                        if (!x264WeightedBPrediction.Checked)
-                            x264WeightedBPrediction.Checked = true;
                         if (!nopsy.Checked)
                             nopsy.Checked = true;
                     }
@@ -503,12 +473,6 @@ namespace MeGUI.packages.video.x264
                             this.x264QuantizerCompression.Value = 0.6M;
                         if (noDCTDecimateOption.Checked)
                             noDCTDecimateOption.Checked = false;
-                        if (!x264DeblockActive.Checked)
-                            x264DeblockActive.Checked = true;
-                        if (!cabac.Checked)
-                            cabac.Checked = true;
-                        if (!x264WeightedBPrediction.Checked)
-                            x264WeightedBPrediction.Checked = true;
                         if (!nopsy.Checked)
                             nopsy.Checked = true;
                     }
@@ -537,17 +501,16 @@ namespace MeGUI.packages.video.x264
                             this.x264QuantizerCompression.Value = 0.6M;
                         if (noDCTDecimateOption.Checked)
                             noDCTDecimateOption.Checked = false;
-                        if (!x264DeblockActive.Checked)
-                            x264DeblockActive.Checked = true;
-                        if (!cabac.Checked)
-                            cabac.Checked = true;
-                        if (!x264WeightedBPrediction.Checked)
-                            x264WeightedBPrediction.Checked = true;
                         if (nopsy.Checked)
                             nopsy.Checked = false;
                     }
                     break;
             }
+
+            x264DeblockActive.Checked = !chkTuneFastDecode.Checked;
+            cabac.Checked = !chkTuneFastDecode.Checked;
+            x264WeightedBPrediction.Checked = !chkTuneFastDecode.Checked;
+            mbtree.Checked = !chkTuneZeroLatency.Checked;
         }
 
         private void doPresetsAdjustments()
@@ -950,72 +913,6 @@ namespace MeGUI.packages.video.x264
             }
         }
         #endregion
-        #region levels
-        private void avcLevelDialog(string title, int verifyResult)
-        {
-            string invalidLevelHelp = "Should be an informative message here";
-            switch (verifyResult)
-            {
-                case 1:
-                    invalidLevelHelp = "P4x4 macroblocks are not allowed in level > 3 or in level 3 with B frames.";
-                    break;
-                case 2:
-                    invalidLevelHelp = "Decoded Picture Buffer Size is too high\n(reduce frame size, no. of references, or no. of B frames)";
-                    break;
-                case 3:
-                    invalidLevelHelp = "Maximum Bitrate is too high";
-                    break;
-                case 4:
-                    invalidLevelHelp = "Maximum buffer size is too high";
-                    break;
-            }
-            MessageBox.Show("Sorry, the selected profile exceeds the AVC Level you have specified\n\n" + invalidLevelHelp, title, MessageBoxButtons.OK);
-        }
-        private void EnforceLevel(x264Settings inputSettings)
-        {
-            AVCLevels al = new AVCLevels();
-            AVCLevelEnforcementReturn enforcement;
-            x264Settings verifiedSettings = al.EnforceSettings(getAVCLevel(), inputSettings, BytesPerFrame, out enforcement);
-            // Set the correct input enable states
-            if (enforcement.EnableP4x4mv)
-                if (this.macroblockOptions.SelectedIndex == 2)
-                    this.x264P4x4mv.Enabled = true;
-                else
-                    this.x264P4x4mv.Enabled = false;
-            else
-                this.x264P4x4mv.Enabled = false;
-            if (enforcement.EnableVBVMaxRate)
-                this.x264VBVMaxRate.Enabled = true;
-            else
-                this.x264VBVMaxRate.Enabled = false;
-            if (enforcement.EnableVBVBufferSize)
-                this.x264VBVBufferSize.Enabled = true;
-            else
-                this.x264VBVBufferSize.Enabled = false;
-            if (enforcement.Altered)
-            {
-                levelEnforced = true;
-                this.Settings = verifiedSettings;
-                levelEnforced = false;
-
-                if (enforcement.Panic)
-                    MessageBox.Show(enforcement.PanicString, "Level Violation", MessageBoxButtons.OK);
-            }
-        }
-        private void doAVCLevelAdjustments()
-        {
-            if (getAVCLevel() == AVCLevels.Levels.L_UNRESTRICTED)
-                return;
-
-            AVCLevels avcLevel = new AVCLevels();
-            int avcLevelVerify = avcLevel.Verifyx264Settings(this.Settings as x264Settings, getAVCLevel(), this.BytesPerFrame);
-            if (avcLevelVerify != 0)
-            {
-                avcLevelDialog("Reverting to Unrestrained Level", avcLevelVerify);
-                this.avcLevel.SelectedItem = EnumProxy.Create(AVCLevels.Levels.L_UNRESTRICTED);
-            }
-        }
-        #endregion
         #region dropdowns
         private void setNonQPOptionsEnabled(bool enabled)
         {
@@ -1208,7 +1105,6 @@ namespace MeGUI.packages.video.x264
             doCheckBoxAdjustments();
             doTrellisAdjustments();            
             doMacroBlockAdjustments();
-            doAVCLevelAdjustments();
             x264DialogTriStateAdjustment();
             doMacroBlockAdjustments();
             doSubmeAdjustments();
@@ -2109,12 +2005,16 @@ namespace MeGUI.packages.video.x264
             {
                 x264VBVBufferSize.Maximum = 99999999;
                 x264VBVMaxRate.Maximum = 99999999;
+                x264VBVBufferSize.Value = x264VBVBufferSize.Minimum = 0;
+                x264VBVMaxRate.Value = x264VBVMaxRate.Minimum = 0;
             }
             else
             {
                 AVCLevels al = new AVCLevels();
-                x264VBVBufferSize.Maximum = al.getMaxCBP(avcLevel, avcProfile.SelectedIndex == 2);
-                x264VBVMaxRate.Maximum = al.getMaxBR(avcLevel, avcProfile.SelectedIndex == 2);
+                x264VBVBufferSize.Value = x264VBVBufferSize.Maximum = al.getMaxCBP(avcLevel, avcProfile.SelectedIndex == 2);
+                x264VBVBufferSize.Minimum = 1;
+                x264VBVMaxRate.Value = x264VBVMaxRate.Maximum = al.getMaxBR(avcLevel, avcProfile.SelectedIndex == 2);
+                x264VBVMaxRate.Minimum = 1;
             }
             genericUpdate();
         }

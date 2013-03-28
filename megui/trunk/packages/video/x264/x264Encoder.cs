@@ -223,7 +223,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             ///</summary>
 
             // H.264 Features
-            if (xs.Deblock)
+            if (xs.Deblock && !xs.CustomEncoderOptions.Contains("--no-deblock"))
             {
                 if (!xs.CustomEncoderOptions.Contains("--deblock "))
                 {
@@ -473,19 +473,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
 
             // Disable Macroblok Tree
-            if (!xs.NoMBTree)
-            {
-                if (!xs.CustomEncoderOptions.Contains("--no-mbtree"))
-                    if (xs.x264PresetLevel > x264Settings.x264PresetLevelModes.veryfast && !xs.TuneZeroLatency)
-                        sb.Append("--no-mbtree ");
-            }
-            else
-            {
-                // RC Lookahead
-                if (!xs.CustomEncoderOptions.Contains("--rc-lookahead "))
-                    if (xs.Lookahead != x264Settings.GetDefaultRCLookahead(xs.x264PresetLevel, xs.TuneZeroLatency))
-                        sb.Append("--rc-lookahead " + xs.Lookahead + " ");
-            }
+            if (!xs.CustomEncoderOptions.Contains("--no-mbtree"))
+                if (!xs.NoMBTree && xs.x264PresetLevel > x264Settings.x264PresetLevelModes.veryfast && !xs.TuneZeroLatency)
+                    sb.Append("--no-mbtree ");
+
+            // RC Lookahead
+            if (!xs.CustomEncoderOptions.Contains("--rc-lookahead "))
+                if (xs.Lookahead != x264Settings.GetDefaultRCLookahead(xs.x264PresetLevel, xs.TuneZeroLatency))
+                    sb.Append("--rc-lookahead " + xs.Lookahead + " ");
 
             // AQ-Mode
             if (xs.EncodingMode != (int)VideoCodecSettings.Mode.CQ)

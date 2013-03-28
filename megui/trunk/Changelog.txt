@@ -1,3 +1,6 @@
+2333 [x264] set AVC level, "zerolatency" and "fastdecode" effects also in the advanced settings
+2332 [x264] fixed AVC level 1.0 encoded as 1.1
+2331 [x264] fixed restricted vbv-bufsize value too low for some levels
 2330 [OneClick] fixed not removing chapter option if selected input file has no internal chapters
 2329 [x264] added vbv restrictions based on the selected AVC level
 2328 [x264] added AVC levels 1b and 5.2

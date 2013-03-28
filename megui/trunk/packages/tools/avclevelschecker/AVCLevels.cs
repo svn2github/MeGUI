@@ -453,9 +453,7 @@ namespace MeGUI
         /// <param name="bytesInUncompressedFrame">Number of bytes in an uncompressed frame</param>
         /// <returns>   0 if the settings are compliant with the level
         ///             1 if (level > 3 || level = 3 AND Bframes > 0)
-        ///             2 if maxDPB violated
-        ///             3 if vbv_maxrate violated
-        ///             4 if vbv_bufsize violated</returns>
+        ///             2 if maxDPB violated</returns>
         public int Verifyx264Settings(x264Settings settings, AVCLevels.Levels avcLevel, double bytesInUncompressedFrame)
         {
 
@@ -464,12 +462,6 @@ namespace MeGUI
 
             if (!this.checkMaxDPB(avcLevel, settings, bytesInUncompressedFrame))
                 return 2;
-
-            if (settings.VBVMaxBitrate > this.getMaxBR(avcLevel, settings.Profile == 2))
-                return 3;
-
-            if (settings.VBVBufferSize > this.getMaxCBP(avcLevel, settings.Profile == 2))
-                return 4;
 
             return 0;
         }
