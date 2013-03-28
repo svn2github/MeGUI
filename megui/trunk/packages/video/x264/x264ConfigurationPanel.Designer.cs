@@ -1713,7 +1713,7 @@ namespace MeGUI.packages.video.x264
             this.helpButton1.ArticleName = "Video Encoder Configuration/x264";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(448, 358);
+            this.helpButton1.Location = new System.Drawing.Point(455, 358);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 10;
@@ -2897,9 +2897,9 @@ namespace MeGUI.packages.video.x264
             // deviceGroupbox
             // 
             this.deviceGroupbox.Controls.Add(this.targetDevice);
-            this.deviceGroupbox.Location = new System.Drawing.Point(322, 260);
+            this.deviceGroupbox.Location = new System.Drawing.Point(6, 260);
             this.deviceGroupbox.Name = "deviceGroupbox";
-            this.deviceGroupbox.Size = new System.Drawing.Size(172, 48);
+            this.deviceGroupbox.Size = new System.Drawing.Size(488, 48);
             this.deviceGroupbox.TabIndex = 39;
             this.deviceGroupbox.TabStop = false;
             this.deviceGroupbox.Text = " Target Playback Device ";
@@ -2909,7 +2909,7 @@ namespace MeGUI.packages.video.x264
             this.targetDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.targetDevice.Location = new System.Drawing.Point(10, 19);
             this.targetDevice.Name = "targetDevice";
-            this.targetDevice.Size = new System.Drawing.Size(157, 21);
+            this.targetDevice.Size = new System.Drawing.Size(473, 21);
             this.targetDevice.TabIndex = 1;
             this.targetDevice.SelectedIndexChanged += new System.EventHandler(this.targetDevice_SelectedIndexChanged);
             // 

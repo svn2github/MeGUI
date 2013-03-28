@@ -101,7 +101,12 @@ namespace MeGUI.packages.video.x264
                     x264VBVBufferSize.Value = oTargetDevice.VBVBufsize;
             }
             else if (updateDevice == true)
-                x264VBVBufferSize.Value = 0;
+            {
+                if (x264VBVBufferSize.Minimum == 0)
+                    x264VBVBufferSize.Value = 0;
+                else
+                    x264VBVBufferSize.Value = x264VBVBufferSize.Maximum;
+            } 
 
             // VBVMaxrate
             if (oTargetDevice.VBVMaxrate > -1)
@@ -112,7 +117,12 @@ namespace MeGUI.packages.video.x264
                     x264VBVMaxRate.Value = oTargetDevice.VBVMaxrate;
             }
             else if (updateDevice == true)
-                x264VBVMaxRate.Value = 0;
+            {
+                if (x264VBVMaxRate.Minimum == 0)
+                    x264VBVMaxRate.Value = 0;
+                else
+                    x264VBVMaxRate.Value = x264VBVMaxRate.Maximum;
+            }
 
             // --b-pyramid
             if (oTargetDevice.BPyramid > -1)

@@ -276,11 +276,23 @@ namespace MeGUI
             get { return targetDevice.ID.ToString(); }
             set
             {
+                if (value.Equals("1")) // device profile 1 has been replaced with 7
+                    value = "7";
+                else if (value.Equals("6")) // device profile 6 has been replaced with 8
+                    value = "8";
+                else if (value.Equals("10") || value.Equals("11")) // device profiles 10/11 have been replaced with 9
+                    value = "9";
+
                 // only support one device at the moment
                 targetDevice = x264DeviceList[0];
                 foreach (x264Device oDevice in x264DeviceList)
+                {
                     if (oDevice.ID.ToString().Equals(value.Split(',')[0], StringComparison.CurrentCultureIgnoreCase))
+                    {
                         targetDevice = oDevice;
+                        break;
+                    }
+                }
             }
         }
         [XmlIgnore()]
