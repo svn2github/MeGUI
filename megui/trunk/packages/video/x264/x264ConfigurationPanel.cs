@@ -1354,23 +1354,33 @@ namespace MeGUI.packages.video.x264
                 x264IPFrameFactor.Value = xs.IPFactor;
                 x264PBFrameFactor.Value = xs.PBFactor;
                 x264ChromaQPOffset.Value = xs.ChromaQPOffset;
+#warning this fix can be removed after next stable build 2336
+                if (xs.VBVBufferSize == 1 && xs.VBVMaxBitrate == 1)
+                    xs.VBVBufferSize = xs.VBVMaxBitrate = 0;
                 if (xs.VBVBufferSize > 0)
                 {
-                    this.x264VBVMaxRate.Enabled = true;
-                    this.x264VBVMaxRateLabel.Enabled = true;
+                    this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = true;
                     x264VBVBufferSize.Text = xs.VBVBufferSize.ToString();
+                }
+                else if (x264VBVBufferSize.Minimum > 0)
+                {
+                    this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = false;
+                    x264VBVBufferSize.Value = x264VBVBufferSize.Maximum;
                 }
                 else
                 {
-                    this.x264VBVMaxRate.Enabled = false;
-                    this.x264VBVMaxRateLabel.Enabled = false;
+                    this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = false;
                     x264VBVBufferSize.Text = "0";
                 }
                 if (xs.VBVMaxBitrate > 0)
                 {
-                    this.x264VBVMaxRate.Enabled = true;
-                    this.x264VBVMaxRateLabel.Enabled = true;
+                    this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = true;
                     x264VBVMaxRate.Text = xs.VBVMaxBitrate.ToString();
+                }
+                else if (x264VBVMaxRate.Minimum > 0)
+                {
+                    x264VBVBufferSize.Value = x264VBVBufferSize.Maximum;
+                    x264VBVMaxRate.Value = x264VBVMaxRate.Maximum;
                 }
                 else
                 {

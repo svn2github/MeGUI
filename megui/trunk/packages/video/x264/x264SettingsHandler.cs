@@ -269,8 +269,11 @@ namespace MeGUI.packages.video.x264
         public int getVBVBufsize(AVCLevels.Levels avcLevel, bool bIsHighProfile)
         {
             string strCustomValue;
-            extractCustomCommand("vbv-bufsize", out strCustomValue);
+#warning this fix can be removed after next stable build 2336
+            if (_xs.VBVBufferSize == 1)
+                _xs.VBVBufferSize = 0;
             int iTemp = _xs.VBVBufferSize;
+            extractCustomCommand("vbv-bufsize", out strCustomValue);
             if (Int32.TryParse(strCustomValue, out iTemp))
                 _xs.VBVBufferSize = iTemp;
 
@@ -303,8 +306,11 @@ namespace MeGUI.packages.video.x264
         public int getVBVMaxrate(AVCLevels.Levels avcLevel, bool bIsHighProfile)
         {
             string strCustomValue;
-            extractCustomCommand("vbv-maxrate", out strCustomValue);
+#warning this fix can be removed after next stable build 2336
+            if (_xs.VBVMaxBitrate == 1)
+                _xs.VBVMaxBitrate = 0;
             int iTemp = _xs.VBVMaxBitrate;
+            extractCustomCommand("vbv-maxrate", out strCustomValue);
             if (Int32.TryParse(strCustomValue, out iTemp))
                 _xs.VBVMaxBitrate = iTemp;
 
