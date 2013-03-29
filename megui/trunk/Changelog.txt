@@ -1,3 +1,4 @@
+2336 [x264] set default --crf value to 23
 2335 [x264] fixed applying wrong vbv values (--vbv-bufsize 1 and --vbv-maxrate 1)
 2334 [x264] extended apple device profile support and removed/merged some others
 2333 [x264] set AVC level, "zerolatency" and "fastdecode" effects also in the advanced settings

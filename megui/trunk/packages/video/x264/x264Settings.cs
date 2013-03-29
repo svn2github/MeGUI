@@ -134,7 +134,7 @@ namespace MeGUI
             ssimCalc = false;
             psnrCalc = false;
 			EncodingMode = 9;
-			BitrateQuantizer = 20;
+			BitrateQuantizer = 23;
 			KeyframeInterval = 250;
 			nbRefFrames = 3;
 			noMixedRefs = false;
@@ -216,7 +216,7 @@ namespace MeGUI
             targetDevice = x264DeviceList[0];
             blurayCompat = false;
             _gopCalculation = 1;
-            quantizerCrf = 20;
+            quantizerCrf = 23;
             tuneFastDecode = tuneZeroLatency = false;
 		}
 		#endregion

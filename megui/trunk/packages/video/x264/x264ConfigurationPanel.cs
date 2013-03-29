@@ -1056,7 +1056,7 @@ namespace MeGUI.packages.video.x264
                 if (isBitrateMode(x264EncodingMode.SelectedIndex))
                     this.x264BitrateQuantizer.Value = 1000;
                 else
-                    this.x264BitrateQuantizer.Value = 20;
+                    this.x264BitrateQuantizer.Value = 23;
             }
 
             // No Scenecut
@@ -1844,7 +1844,7 @@ namespace MeGUI.packages.video.x264
         {
             // Main Tab
             this.x264EncodingMode.SelectedIndex = 9;
-            this.x264BitrateQuantizer.Value = 20;
+            this.x264BitrateQuantizer.Value = 23;
             this.x264Tunes.SelectedIndex = 0;
             this.tbx264Presets.Value = 5;
             this.avcProfile.SelectedIndex = 2;
