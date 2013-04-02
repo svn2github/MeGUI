@@ -164,40 +164,42 @@ namespace MeGUI
                 // audio handling
                 foreach (OneClickAudioTrack oAudioTrack in job.PostprocessingProperties.AudioTracks)
                 {
-                    if (oAudioTrack.AudioTrackInfo.ExtractMKVTrack)
+                    if (oAudioTrack.AudioTrackInfo != null)
                     {
-                        if (job.PostprocessingProperties.ApplyDelayCorrection && File.Exists(job.PostprocessingProperties.VideoFileToMux))
+                        if (oAudioTrack.AudioTrackInfo.ExtractMKVTrack)
                         {
-                            MediaInfoFile oFile = new MediaInfoFile(job.PostprocessingProperties.VideoFileToMux, ref _log);
-                            bool bFound = false;
-                            foreach (AudioTrackInfo oAudioInfo in oFile.AudioInfo.Tracks)
+                            if (job.PostprocessingProperties.ApplyDelayCorrection && File.Exists(job.PostprocessingProperties.VideoFileToMux))
                             {
-                                if (oAudioInfo.MMGTrackID == oAudioTrack.AudioTrackInfo.MMGTrackID)
-                                    bFound = true;
-                            }
-                            int mmgTrackID = 0;
-                            if (!bFound)
-                                mmgTrackID = oFile.AudioInfo.Tracks[oAudioTrack.AudioTrackInfo.TrackIndex].MMGTrackID;
-                            else
-                                mmgTrackID = oAudioTrack.AudioTrackInfo.MMGTrackID;
-                            foreach (AudioTrackInfo oAudioInfo in oFile.AudioInfo.Tracks)
-                            {
-                                if (oAudioInfo.MMGTrackID == mmgTrackID)
+                                MediaInfoFile oFile = new MediaInfoFile(job.PostprocessingProperties.VideoFileToMux, ref _log);
+                                bool bFound = false;
+                                foreach (AudioTrackInfo oAudioInfo in oFile.AudioInfo.Tracks)
                                 {
-                                    if (oAudioTrack.DirectMuxAudio != null)
-                                        oAudioTrack.DirectMuxAudio.delay = oAudioInfo.Delay;
-                                    if (oAudioTrack.AudioJob != null)
-                                        oAudioTrack.AudioJob.Delay = oAudioInfo.Delay;
-                                    break;
+                                    if (oAudioInfo.MMGTrackID == oAudioTrack.AudioTrackInfo.MMGTrackID)
+                                        bFound = true;
+                                }
+                                int mmgTrackID = 0;
+                                if (!bFound)
+                                    mmgTrackID = oFile.AudioInfo.Tracks[oAudioTrack.AudioTrackInfo.TrackIndex].MMGTrackID;
+                                else
+                                    mmgTrackID = oAudioTrack.AudioTrackInfo.MMGTrackID;
+                                foreach (AudioTrackInfo oAudioInfo in oFile.AudioInfo.Tracks)
+                                {
+                                    if (oAudioInfo.MMGTrackID == mmgTrackID)
+                                    {
+                                        if (oAudioTrack.DirectMuxAudio != null)
+                                            oAudioTrack.DirectMuxAudio.delay = oAudioInfo.Delay;
+                                        if (oAudioTrack.AudioJob != null)
+                                            oAudioTrack.AudioJob.Delay = oAudioInfo.Delay;
+                                        break;
+                                    }
                                 }
                             }
+                            audioFiles.Add(oAudioTrack.AudioTrackInfo.TrackID, job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
+                            arrAudioFilesDelete.Add(job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
                         }
-
-                        audioFiles.Add(oAudioTrack.AudioTrackInfo.TrackID, job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
-                        arrAudioFilesDelete.Add(job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
+                        else
+                            arrAudioTracks.Add(oAudioTrack.AudioTrackInfo);
                     }
-                    else if (oAudioTrack.AudioTrackInfo != null)
-                        arrAudioTracks.Add(oAudioTrack.AudioTrackInfo);
                     if (oAudioTrack.AudioJob != null)
                     {
                         if (job.PostprocessingProperties.IndexType == FileIndexerWindow.IndexType.NONE
