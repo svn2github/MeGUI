@@ -40,9 +40,9 @@ namespace MeGUI
             x264DeviceList.Add(new x264Device(4, "DivX Plus HD", 2, AVCLevels.Levels.L_40, 25000, 20000, 3, -1, 1920, 1080, false, 4, -1));
             x264DeviceList.Add(new x264Device(5, "DXVA", 2, AVCLevels.Levels.L_41, -1, -1, -1, -1, -1, -1));
             x264DeviceList.Add(new x264Device(7, "iPhone 2G", 0, AVCLevels.Levels.L_13, -1, -1, 0, 1, 640, 480));
+            x264DeviceList.Add(new x264Device(9, "iPhone 3G/3GS, iPod classic, iPod touch 1/2/3, iPod nano 3/4/5", 0, AVCLevels.Levels.L_30, -1, -1, 0, 1, 640, 480));
             x264DeviceList.Add(new x264Device(8, "iPhone 4, iPad 1/2, iPod touch 4/5", 1, AVCLevels.Levels.L_31, -1, -1, -1, -1, 1280, 720));
             x264DeviceList.Add(new x264Device(15, "iPhone 4S/5, iPad 3/4/mini, WDTV", 2, AVCLevels.Levels.L_41, -1, -1, -1, -1, 1920, 1080));
-            x264DeviceList.Add(new x264Device(9, "iPhone 3G/3GS, iPod classic, iPod touch 1/2/3, iPod nano 3/4/5", 0, AVCLevels.Levels.L_30, -1, -1, 0, 1, 640, 480));
             x264DeviceList.Add(new x264Device(17, "iPod nano 7", 2, AVCLevels.Levels.L_30, -1, -1, -1, -1, 720, 576));
             x264DeviceList.Add(new x264Device(12, "PS3", 2, AVCLevels.Levels.L_41, 31250, 31250, -1, -1, 1920, 1080));
             x264DeviceList.Add(new x264Device(13, "PSP", 1, AVCLevels.Levels.L_30, 10000, 10000, -1, 3, 480, 272, false, -1, 0));

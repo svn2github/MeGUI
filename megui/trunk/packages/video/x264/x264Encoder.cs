@@ -82,13 +82,27 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             return null;
         }
 
-        public static string genCommandline(string input, string output, Dar? d, int hres, int vres, int fps_n, int fps_d, x264Settings xs, Zone[] zones, LogItem log)
+        public static string genCommandline(string input, string output, Dar? d, int hres, int vres, int fps_n, int fps_d, x264Settings _xs, Zone[] zones, LogItem log)
         {
             int qp;
             bool display = false;
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
+            x264Settings xs = (x264Settings)_xs.Clone();
             MeGUI.packages.video.x264.x264SettingsHandler oSettingsHandler = new packages.video.x264.x264SettingsHandler(xs, log);
+
+            // log
+            if (log != null)
+            {
+                log.LogEvent("resolution: " + hres + "x" + vres);
+                log.LogEvent("frame rate: " + fps_n + "/" + fps_d);
+                if (d.HasValue)
+                    log.LogValue("aspect ratio", d.Value);
+                if (xs.TargetDevice.ID > 0)
+                    log.LogEvent("target device selected: " + xs.TargetDevice.ToString());
+                if (!String.IsNullOrEmpty(xs.CustomEncoderOptions))
+                    log.LogEvent("custom command line: " + xs.CustomEncoderOptions);
+            }
 
             #region main tab
             ///<summary>
