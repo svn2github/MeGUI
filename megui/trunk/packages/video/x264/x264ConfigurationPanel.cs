@@ -102,10 +102,10 @@ namespace MeGUI.packages.video.x264
             }
             else if (updateDevice == true)
             {
-                if (x264VBVBufferSize.Minimum == 0)
+                if (getAVCLevel() == AVCLevels.Levels.L_UNRESTRICTED)
                     x264VBVBufferSize.Value = 0;
                 else
-                    x264VBVBufferSize.Value = x264VBVBufferSize.Maximum;
+                    x264VBVBufferSize.Value = new AVCLevels().getMaxCBP(getAVCLevel(), avcProfile.SelectedIndex == 2);
             } 
 
             // VBVMaxrate
@@ -118,10 +118,10 @@ namespace MeGUI.packages.video.x264
             }
             else if (updateDevice == true)
             {
-                if (x264VBVMaxRate.Minimum == 0)
+                if (getAVCLevel() == AVCLevels.Levels.L_UNRESTRICTED)
                     x264VBVMaxRate.Value = 0;
                 else
-                    x264VBVMaxRate.Value = x264VBVMaxRate.Maximum;
+                    x264VBVMaxRate.Value = new AVCLevels().getMaxBR(getAVCLevel(), avcProfile.SelectedIndex == 2);
             }
 
             // --b-pyramid
@@ -1354,18 +1354,15 @@ namespace MeGUI.packages.video.x264
                 x264IPFrameFactor.Value = xs.IPFactor;
                 x264PBFrameFactor.Value = xs.PBFactor;
                 x264ChromaQPOffset.Value = xs.ChromaQPOffset;
-#warning this fix can be removed after next stable build 2336
-                if (xs.VBVBufferSize == 1 && xs.VBVMaxBitrate == 1)
-                    xs.VBVBufferSize = xs.VBVMaxBitrate = 0;
                 if (xs.VBVBufferSize > 0)
                 {
                     this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = true;
                     x264VBVBufferSize.Text = xs.VBVBufferSize.ToString();
                 }
-                else if (x264VBVBufferSize.Minimum > 0)
+                else if (getAVCLevel() != AVCLevels.Levels.L_UNRESTRICTED)
                 {
-                    this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = false;
-                    x264VBVBufferSize.Value = x264VBVBufferSize.Maximum;
+                    this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = true;
+                    x264VBVBufferSize.Value = new AVCLevels().getMaxCBP(getAVCLevel(), avcProfile.SelectedIndex == 2);
                 }
                 else
                 {
@@ -1377,10 +1374,10 @@ namespace MeGUI.packages.video.x264
                     this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = true;
                     x264VBVMaxRate.Text = xs.VBVMaxBitrate.ToString();
                 }
-                else if (x264VBVMaxRate.Minimum > 0)
+                else if (getAVCLevel() != AVCLevels.Levels.L_UNRESTRICTED)
                 {
-                    x264VBVBufferSize.Value = x264VBVBufferSize.Maximum;
-                    x264VBVMaxRate.Value = x264VBVMaxRate.Maximum;
+                    x264VBVBufferSize.Value = new AVCLevels().getMaxCBP(getAVCLevel(), avcProfile.SelectedIndex == 2);
+                    x264VBVMaxRate.Value = new AVCLevels().getMaxBR(getAVCLevel(), avcProfile.SelectedIndex == 2);
                 }
                 else
                 {
@@ -2023,18 +2020,14 @@ namespace MeGUI.packages.video.x264
             AVCLevels.Levels avcLevel = getAVCLevel();
             if (avcLevel == AVCLevels.Levels.L_UNRESTRICTED || avcProfile.SelectedIndex < 0)
             {
-                x264VBVBufferSize.Maximum = 99999999;
-                x264VBVMaxRate.Maximum = 99999999;
-                x264VBVBufferSize.Value = x264VBVBufferSize.Minimum = 0;
-                x264VBVMaxRate.Value = x264VBVMaxRate.Minimum = 0;
+                x264VBVBufferSize.Value = 0;
+                x264VBVMaxRate.Value = 0;
             }
             else
             {
                 AVCLevels al = new AVCLevels();
-                x264VBVBufferSize.Value = x264VBVBufferSize.Maximum = al.getMaxCBP(avcLevel, avcProfile.SelectedIndex == 2);
-                x264VBVBufferSize.Minimum = 1;
-                x264VBVMaxRate.Value = x264VBVMaxRate.Maximum = al.getMaxBR(avcLevel, avcProfile.SelectedIndex == 2);
-                x264VBVMaxRate.Minimum = 1;
+                x264VBVBufferSize.Value = al.getMaxCBP(avcLevel, avcProfile.SelectedIndex == 2);
+                x264VBVMaxRate.Value = al.getMaxBR(avcLevel, avcProfile.SelectedIndex == 2);
             }
             genericUpdate();
         }

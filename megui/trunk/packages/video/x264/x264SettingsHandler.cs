@@ -264,9 +264,6 @@ namespace MeGUI.packages.video.x264
         public int getVBVBufsize(AVCLevels.Levels avcLevel, bool bIsHighProfile)
         {
             string strCustomValue;
-#warning this fix can be removed after next stable build 2336
-            if (_xs.VBVBufferSize == 1)
-                _xs.VBVBufferSize = 0;
             int iTemp = _xs.VBVBufferSize;
             extractCustomCommand("vbv-bufsize", out strCustomValue);
             if (Int32.TryParse(strCustomValue, out iTemp))
@@ -279,16 +276,14 @@ namespace MeGUI.packages.video.x264
                 _xs.VBVBufferSize = _device.VBVBufsize;
             }
 
-            if (avcLevel != AVCLevels.Levels.L_UNRESTRICTED)
+            if (_log != null && avcLevel != AVCLevels.Levels.L_UNRESTRICTED)
             {
                 AVCLevels al = new AVCLevels();
                 iTemp = al.getMaxCBP(avcLevel, bIsHighProfile);
-                if (_xs.VBVBufferSize == 0 || _xs.VBVBufferSize > iTemp)
-                {
-                    if (_log != null)
-                        _log.LogEvent("changing --vbv-bufsize to " + iTemp + " for level " + AVCLevels.GetLevelText(avcLevel));
-                    _xs.VBVBufferSize = iTemp;
-                }
+                if (_xs.VBVBufferSize == 0)
+                    _log.LogEvent("--vbv-bufsize is not restricted. Maximum value for level " + AVCLevels.GetLevelText(avcLevel) + " is " + iTemp + ". Playback may be affected.", ImageType.Warning);
+                else if (_xs.VBVBufferSize > iTemp)
+                    _log.LogEvent("--vbv-bufsize is set to " + _xs.VBVBufferSize + ". Maximum value for level " + AVCLevels.GetLevelText(avcLevel) + " is " + iTemp + ". Playback may be affected.", ImageType.Warning);
             }
 
             return _xs.VBVBufferSize;
@@ -301,9 +296,6 @@ namespace MeGUI.packages.video.x264
         public int getVBVMaxrate(AVCLevels.Levels avcLevel, bool bIsHighProfile)
         {
             string strCustomValue;
-#warning this fix can be removed after next stable build 2336
-            if (_xs.VBVMaxBitrate == 1)
-                _xs.VBVMaxBitrate = 0;
             int iTemp = _xs.VBVMaxBitrate;
             extractCustomCommand("vbv-maxrate", out strCustomValue);
             if (Int32.TryParse(strCustomValue, out iTemp))
@@ -316,16 +308,14 @@ namespace MeGUI.packages.video.x264
                 _xs.VBVMaxBitrate = _device.VBVMaxrate;
             }
 
-            if (avcLevel != AVCLevels.Levels.L_UNRESTRICTED)
+            if (_log != null && avcLevel != AVCLevels.Levels.L_UNRESTRICTED)
             {
                 AVCLevels al = new AVCLevels();
                 iTemp = al.getMaxBR(avcLevel, bIsHighProfile);
-                if (_xs.VBVMaxBitrate == 0 || _xs.VBVMaxBitrate > iTemp)
-                {
-                    if (_log != null)
-                        _log.LogEvent("changing --vbv-maxrate to " + iTemp + " for level " + AVCLevels.GetLevelText(avcLevel));
-                    _xs.VBVMaxBitrate = iTemp;
-                }
+                if (_xs.VBVMaxBitrate == 0)
+                    _log.LogEvent("--vbv-maxrate is not restricted. Maximum value for level " + AVCLevels.GetLevelText(avcLevel) + " is " + iTemp + ". Playback may be affected.", ImageType.Warning);
+                else if (_xs.VBVMaxBitrate > iTemp)
+                    _log.LogEvent("--vbv-maxrate is set to " + _xs.VBVMaxBitrate + ". Maximum value for level " + AVCLevels.GetLevelText(avcLevel) + " is " + iTemp + ". Playback may be affected.", ImageType.Warning);
             }
 
             return _xs.VBVMaxBitrate;
