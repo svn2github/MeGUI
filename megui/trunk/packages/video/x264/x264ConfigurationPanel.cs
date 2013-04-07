@@ -1359,11 +1359,6 @@ namespace MeGUI.packages.video.x264
                     this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = true;
                     x264VBVBufferSize.Text = xs.VBVBufferSize.ToString();
                 }
-                else if (getAVCLevel() != AVCLevels.Levels.L_UNRESTRICTED)
-                {
-                    this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = true;
-                    x264VBVBufferSize.Value = new AVCLevels().getMaxCBP(getAVCLevel(), avcProfile.SelectedIndex == 2);
-                }
                 else
                 {
                     this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = false;
@@ -1373,11 +1368,6 @@ namespace MeGUI.packages.video.x264
                 {
                     this.x264VBVMaxRate.Enabled = this.x264VBVMaxRateLabel.Enabled = true;
                     x264VBVMaxRate.Text = xs.VBVMaxBitrate.ToString();
-                }
-                else if (getAVCLevel() != AVCLevels.Levels.L_UNRESTRICTED)
-                {
-                    x264VBVBufferSize.Value = new AVCLevels().getMaxCBP(getAVCLevel(), avcProfile.SelectedIndex == 2);
-                    x264VBVMaxRate.Value = new AVCLevels().getMaxBR(getAVCLevel(), avcProfile.SelectedIndex == 2);
                 }
                 else
                 {
