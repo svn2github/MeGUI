@@ -1,3 +1,4 @@
+2340 [OneClick] improved working path detection
 2339 [x264] changed vbv restrictions so that is possible to use non compliant values
 2338 [x264] log enhancements
 2337 [OneClick] fixed a problem with external audio files. Bug #714

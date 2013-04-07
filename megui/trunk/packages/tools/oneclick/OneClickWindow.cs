@@ -450,8 +450,12 @@ namespace MeGUI
                     this.chapterFile.Filename = String.Empty;
             }
 
-            if (string.IsNullOrEmpty(workingDirectory.Filename))
-                workingDirectory.Filename = Path.GetDirectoryName(iFile.FileName);
+            if (String.IsNullOrEmpty(workingDirectory.Filename))
+            {
+                string strPath = Path.GetDirectoryName(iFile.FileName);
+                if (Directory.Exists(strPath) && FileUtil.IsDirWriteable(strPath))
+                    workingDirectory.Filename = strPath;
+            }
 
             updateWorkingName(iFile.FileName);
 
@@ -614,7 +618,10 @@ namespace MeGUI
             fileSize.Value = settings.Filesize;
             if (settings.OutputResolution <= horizontalResolution.Maximum)
                 horizontalResolution.Value = settings.OutputResolution;
-            workingDirectory.Filename = settings.DefaultWorkingDirectory;
+            if (Directory.Exists(settings.DefaultWorkingDirectory) && FileUtil.IsDirWriteable(settings.DefaultWorkingDirectory))
+                workingDirectory.Filename = settings.DefaultWorkingDirectory;
+            else
+                workingDirectory.Filename = String.Empty;
 
             // device type
             devicetype.Text = settings.DeviceOutputType;
@@ -646,7 +653,7 @@ namespace MeGUI
 
             // set random working directory
             string strWorkingDirectory = string.Empty;
-            if (Directory.Exists(workingDirectory.Filename))
+            if (Directory.Exists(workingDirectory.Filename) && FileUtil.IsDirWriteable(workingDirectory.Filename))
                 strWorkingDirectory = workingDirectory.Filename;
             else
                 strWorkingDirectory = Path.GetDirectoryName(output.Filename);
@@ -1148,29 +1155,29 @@ namespace MeGUI
 
         private bool verifyInputSettings(MediaInfoFile oVideoInputInfo, string strWorkingDirectory)
         {
-            if (oVideoInputInfo == null)
+            if (oVideoInputInfo == null || !File.Exists(oVideoInputInfo.FileName))
             {
                 MessageBox.Show("Please select a valid input file!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
             }
 
-            if (String.IsNullOrEmpty(output.Filename) || !File.Exists(oVideoInputInfo.FileName))
+            if (String.IsNullOrEmpty(output.Filename))
             {
-                MessageBox.Show("Please select valid input and output file!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Please select valid output file!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
             }
 
             if (!FileUtil.IsDirWriteable(Path.GetDirectoryName(output.Filename)))
             {
-                MessageBox.Show("MeGUI cannot write on the disc " + Path.GetDirectoryName(output.Filename) + " \n" +
-                                 "Please, select another output path to save your project...", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("MeGUI cannot write on the disc: " + Path.GetDirectoryName(output.Filename) + " \n" +
+                                 "Please select a writeable output path to save your project!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
             }
 
             if (!FileUtil.IsDirWriteable(strWorkingDirectory))
             {
-                MessageBox.Show("MeGUI cannot write on the disc " + strWorkingDirectory + " \n" +
-                                 "Please, select another working path to save your project...", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("MeGUI cannot write on the disc: " + strWorkingDirectory + " \n" +
+                                 "Please select a writeable working path to save your project!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
             }
 
