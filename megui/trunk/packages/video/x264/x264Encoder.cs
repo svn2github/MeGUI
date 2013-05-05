@@ -71,15 +71,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
         public override string GetErrorString(string line, StreamType stream)
         {
-            if (line.IndexOf("Syntax") != -1 ||
-                (line.IndexOf("error") != -1)
-                || line.IndexOf("could not open") != -1)
-            {
-                if (line.IndexOf("converge") == -1 && line.IndexOf("try reducing") == -1 &&
-                    (line.IndexOf("target:") == -1 || line.IndexOf("expected:") == -1))
-                    return line;
-            }
-            return null;
+            if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("[error]:") 
+                || line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("error:"))
+                return line;
+            else
+                return null;
         }
 
         public static string genCommandline(string input, string output, Dar? d, int hres, int vres, int fps_n, int fps_d, x264Settings _xs, Zone[] zones, LogItem log)
@@ -965,7 +961,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
         protected override string Commandline
         {
-            get {
+            get 
+            {
                 return genCommandline(job.Input, job.Output, job.DAR, hres, vres, fps_n, fps_d, job.Settings as x264Settings, job.Zones, base.log);
             }
         }
