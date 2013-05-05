@@ -655,11 +655,16 @@ namespace MeGUI
             string strWorkingDirectory = string.Empty;
             if (Directory.Exists(workingDirectory.Filename) && FileUtil.IsDirWriteable(workingDirectory.Filename))
                 strWorkingDirectory = workingDirectory.Filename;
-            else
+            else if (File.Exists(output.Filename))
                 strWorkingDirectory = Path.GetDirectoryName(output.Filename);
-            do
-                strWorkingDirectory = Path.Combine(strWorkingDirectory, Path.GetRandomFileName());
-            while (Directory.Exists(strWorkingDirectory));
+            else if (File.Exists(_videoInputInfo.FileName))
+                strWorkingDirectory = Path.GetDirectoryName(_videoInputInfo.FileName);
+            if (!String.IsNullOrEmpty(strWorkingDirectory))
+            {
+                do
+                    strWorkingDirectory = Path.Combine(strWorkingDirectory, Path.GetRandomFileName());
+                while (Directory.Exists(strWorkingDirectory));
+            }
 
             if (!verifyInputSettings(_videoInputInfo, strWorkingDirectory))
             {
@@ -1163,7 +1168,7 @@ namespace MeGUI
 
             if (String.IsNullOrEmpty(output.Filename))
             {
-                MessageBox.Show("Please select valid output file!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Please select a valid output file!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
             }
 
@@ -1171,6 +1176,12 @@ namespace MeGUI
             {
                 MessageBox.Show("MeGUI cannot write on the disc: " + Path.GetDirectoryName(output.Filename) + " \n" +
                                  "Please select a writeable output path to save your project!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
+
+            if (String.IsNullOrEmpty(strWorkingDirectory))
+            {
+                MessageBox.Show("Please select a valid working directory!", "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
             }
 
