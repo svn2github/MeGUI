@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -50,14 +50,14 @@ namespace MeGUI.core.util
 
         public static CropValues autocrop(IVideoReader reader)
         {
-            /// start at 10% of the video, then advance by 6,66% and analyze 11 frames in total
+            // start at 10% of the video, then advance by 6,66% and analyze 11 frames in total
             int pos = reader.FrameCount / 10;
             int step = reader.FrameCount / 15;
             CropValues[] cropValues = new CropValues[11];
             for (int i = 0; i < 11; i++)
             {
-                Bitmap b = reader.ReadFrameBitmap(pos);
-                cropValues[i] = getAutoCropValues(b);
+                using (Bitmap b = reader.ReadFrameBitmap(pos))
+                    cropValues[i] = getAutoCropValues(b);
                 pos += step;
             }
             bool error = false;
@@ -83,7 +83,7 @@ namespace MeGUI.core.util
         /// </summary>
         /// <param name="values">the CropValues array to be analyzed</param>
         /// <returns>the final CropValues</returns>
-        public static CropValues getFinalAutocropValues(CropValues[] values)
+        private static CropValues getFinalAutocropValues(CropValues[] values)
         {
             CropValues retval = values[0].Clone();
             Dictionary<int, int> topValues = new Dictionary<int, int>();
@@ -172,7 +172,7 @@ namespace MeGUI.core.util
         /// </summary>
         /// <param name="b">the bitmap to be analyzed</param>
         /// <returns>struct containing the number of lines to be cropped away from the left, top, right and bottom</returns>
-        public static unsafe CropValues getAutoCropValues(Bitmap b)
+        private static unsafe CropValues getAutoCropValues(Bitmap b)
         {
             // When locking the pixels into memory, they are currently being converted from 24bpp to 32bpp. This incurs a small (5%) speed penalty,
             // but means that pixel management is easier, because each pixel is a 4-byte int.
@@ -293,6 +293,7 @@ namespace MeGUI.core.util
                     break;
                 lineBegin -= stride;
             }
+            b.UnlockBits(image);
             return retval;
         }
     }
