@@ -982,15 +982,16 @@ namespace MeGUI.packages.video.x264
                     tooltipHelp.SetToolTip(x264BitrateQuantizer, SelectHelpText("crf"));
                 }
               
-                x264BitrateQuantizer.Maximum = 64;
                 if (x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.quality) // crf
                 {
+                    x264BitrateQuantizer.Maximum = 51;
                     x264BitrateQuantizer.Minimum = 0.0M;
                     x264BitrateQuantizer.DecimalPlaces = 1;
                     x264BitrateQuantizer.Increment = 0.1M;
                 }
                 else // qp
                 {
+                    x264BitrateQuantizer.Maximum = 69;
                     x264BitrateQuantizer.Minimum = 0;
                     x264BitrateQuantizer.Value = (int)x264BitrateQuantizer.Value; // makes sure it is an integer, in case we just swapped from crf                    
                     x264BitrateQuantizer.DecimalPlaces = 0;

@@ -1,3 +1,4 @@
+2349 [x264] fixed max values for --crf and --qp
 2348 [x264] vbv enhancements
             - vbv values are shown in red if the values are too high or not limited
             - as too high values are also logged by x264 as a warning the MeGUI log warning has been removed
