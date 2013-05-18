@@ -356,7 +356,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         sb.Append(" -add \"" + Path.Combine(Path.GetDirectoryName(settings.ChapterFile), Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml:name=:chap") + "\"");
                         job.FilesToDelete.Add(Path.GetFileNameWithoutExtension(settings.ChapterFile) + ".xml");
                     }
-
+                    else
                     // Add Nero Style Chapters - this doesn't break Apple Devices playback  - just for better interoperability with other tools
                     sb.Append(" -chap \"" + settings.ChapterFile + "\"");
 
