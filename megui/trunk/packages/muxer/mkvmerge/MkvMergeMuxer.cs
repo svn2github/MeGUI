@@ -74,19 +74,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
             base.checkJobIO();
         }
 
-        public override void ProcessLine(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (line.StartsWith("Progress: ")) //status update
-                su.PercentageDoneExact = getPercentage(line);
-            else if (line.StartsWith("Error: "))
             {
-                log.LogValue("An error occurred", line, ImageType.Error);
-                su.HasError = true;
+                su.PercentageDoneExact = getPercentage(line);
+                return;
             }
+            
+            if (line.StartsWith("Error: "))
+                oType = ImageType.Error;
             else if (line.StartsWith("Warning: "))
-                log.LogValue("A warning occurred", line, ImageType.Warning);
-            else
-                base.ProcessLine(line, stream);
+                oType = ImageType.Warning;
+            base.ProcessLine(line, stream, oType);
         }
 
         protected override void setProjectedFileSize()

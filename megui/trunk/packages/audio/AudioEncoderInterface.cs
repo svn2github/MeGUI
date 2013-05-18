@@ -65,13 +65,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         private int _sampleRate;
 
-        private System.Threading.ManualResetEvent _mre = new System.Threading.ManualResetEvent(true); // lock used to pause encoding
+        private ManualResetEvent _mre = new System.Threading.ManualResetEvent(true); // lock used to pause encoding
         private Thread _encoderThread = null;
+
+        private ManualResetEvent stdoutDone = new ManualResetEvent(false);
+        private ManualResetEvent stderrDone = new ManualResetEvent(false);
         private Thread _readFromStdOutThread = null;
         private Thread _readFromStdErrThread = null;
-        private string _encoderStdErr = null;
-        private string _encoderStdOut = null;
+        private LogItem stdoutLog;
+        private LogItem stderrLog;
         private LogItem _log;
+        private string _encoderStdErr;
         private static readonly System.Text.RegularExpressions.Regex _cleanUpStringRegex = new System.Text.RegularExpressions.Regex(@"\n[^\n]+\r", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
 
         private MeGUISettings _settings = null;
@@ -202,7 +206,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         {
             if (su.IsComplete = (su.IsComplete || su.WasAborted || su.HasError))
             {
-                createLog();
+                _mre.Set();  // Make sure nothing is waiting for pause to stop
+                stdoutDone.WaitOne(); // wait for stdout to finish processing
+                stderrDone.WaitOne(); // wait for stderr to finish processing
 
                 if (!su.HasError && !su.WasAborted)
                 {
@@ -252,40 +258,84 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         private void readStdOut()
         {
-            readStdStream(true);
+            StreamReader sr = null;
+            try
+            {
+                sr = _encoderProcess.StandardOutput;
+            }
+            catch (Exception e)
+            {
+                _log.LogValue("Exception getting IO reader for stdout", e, ImageType.Error);
+                stdoutDone.Set();
+                return;
+            }
+            readStream(sr, stdoutDone, StreamType.Stdout);
         }
 
         private void readStdErr()
         {
-            readStdStream(false);
-        }
-
-        private string cleanUpString(string s)
-        {
-            return _cleanUpStringRegex.Replace(s.Replace(Environment.NewLine, "\n"), Environment.NewLine);
-        }
-
-        private void readStdStream(bool bStdOut)
-        {
-            using (StreamReader r = bStdOut ? _encoderProcess.StandardOutput : _encoderProcess.StandardError)
+            StreamReader sr = null;
+            try
             {
-                while (!_encoderProcess.HasExited)
-                {
-                    Thread.Sleep(0);
-                    string text1 = r.ReadToEnd();
-                    if (text1 != null)
-                    {
-                        if (text1.Length > 0)
-                        {
-                            if (bStdOut)
-                                _encoderStdOut = cleanUpString(text1);
-                            else
-                                _encoderStdErr = cleanUpString(text1);
-                        }
-                    }
-                    Thread.Sleep(0);
-                }
+                sr = _encoderProcess.StandardError;
             }
+            catch (Exception e)
+            {
+                _log.LogValue("Exception getting IO reader for stderr", e, ImageType.Error);
+                stderrDone.Set();
+                return;
+            }
+            readStream(sr, stderrDone, StreamType.Stderr);
+        }
+
+        private void readStream(StreamReader sr, ManualResetEvent rEvent, StreamType str)
+        {
+            string line;
+            if (_encoderProcess != null)
+            {
+                try
+                {
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        _mre.WaitOne();
+                        ProcessLine(line, str, ImageType.Information);
+                    }
+                }
+                catch (Exception e)
+                {
+                    ProcessLine("Exception in readStream. Line cannot be processed. " + e.Message, str, ImageType.Error);
+                }
+                rEvent.Set();
+            }
+        }
+
+        private void ProcessLine(string line, StreamType stream, ImageType oType)
+        {
+            line = _cleanUpStringRegex.Replace(line.Replace(Environment.NewLine, "\n"), Environment.NewLine);
+            if (String.IsNullOrEmpty(line.Trim()))
+                return;
+
+            if (audioJob.Settings is QaacSettings)
+            {
+                if (line.ToLowerInvariant().StartsWith("error:"))
+                    oType = ImageType.Error;
+            }
+            else if (audioJob.Settings is OggVorbisSettings)
+            {
+                if (line.ToLowerInvariant().StartsWith("\tencoding ["))
+                    return;
+            }
+
+            if (stream == StreamType.Stderr)
+                _encoderStdErr += line + "\n";
+
+            if (stream == StreamType.Stdout)
+                stdoutLog.LogEvent(line, oType);
+            if (stream == StreamType.Stderr)
+                stderrLog.LogEvent(line, oType);
+
+            if (oType == ImageType.Error)
+                su.HasError = true;
         }
 
         private void encode()
@@ -325,7 +375,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         if (0 == a.ChannelsCount)
                             throw new ApplicationException("Can't find audio stream");
 
-                        LogItem inputLog = _log.Info("Output Decoder");
+                        LogItem inputLog = _log.LogEvent("Output Decoder", ImageType.Information);
                         inputLog.LogValue("Channels", a.ChannelsCount);
                         inputLog.LogValue("Bits per sample", a.BitsPerSample);
                         inputLog.LogValue("Sample rate", a.AudioSampleRate);
@@ -339,7 +389,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         int frameBufferTotalSize = MAX_SAMPLES_PER_ONCE * a.ChannelsCount * a.BytesPerSample;
                         byte[] frameBuffer = new byte[frameBufferTotalSize];
                         createEncoderProcess(a);
-                        _log.LogEvent("Encoder process started");
                         try
                         {
                             using (Stream target = _encoderProcess.StandardInput.BaseStream)
@@ -363,7 +412,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                                         if (_encoderProcess != null)
                                             if (_encoderProcess.HasExited)
-                                                throw new ApplicationException("Abnormal encoder termination " + _encoderProcess.ExitCode.ToString());
+                                                throw new ApplicationException("Abnormal encoder termination. Exit code: " + _encoderProcess.ExitCode.ToString());
                                         int nHowMany = Math.Min((int)(a.SamplesCount - frameSample), MAX_SAMPLES_PER_ONCE);
 
                                         a.ReadAudio(address, frameSample, nHowMany);
@@ -455,15 +504,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             raiseEvent();
         }
 
-        private void createLog()
-        {
-            if (_encoderStdErr != null)
-                _log.LogValue("Output from encoder via stderr", _encoderStdErr + Environment.NewLine);
-
-            if (_encoderStdOut != null)
-                _log.LogValue("Output from encoder via stdout", _encoderStdOut + Environment.NewLine);
-        }
-
         private void deleteOutputFile()
         {
             safeDelete(audioJob.Output);
@@ -485,7 +525,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 info.Arguments = string.Format(_encoderCommandLine,
                     audioJob.Output, a.AudioSampleRate, a.BitsPerSample, a.ChannelsCount, a.SamplesCount, a.AudioSizeInBytes);
                 info.FileName = _encoderExecutablePath;
-                _log.LogValue("Commandline", _encoderExecutablePath + " " + info.Arguments);
+                _log.LogValue("Job commandline", _encoderExecutablePath + " " + info.Arguments);
                 info.UseShellExecute = false;
                 info.RedirectStandardInput = true;
                 info.RedirectStandardOutput = true;
@@ -507,12 +547,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 else if (_encoderThread.Priority == ThreadPriority.Highest)
                     this.changePriority(ProcessPriority.HIGH);
 
+                _log.LogEvent("Process started");
+                stdoutLog = _log.Info(string.Format("[{0:G}] {1}", DateTime.Now, "Standard output stream"));
+                stderrLog = _log.Info(string.Format("[{0:G}] {1}", DateTime.Now, "Standard error stream"));
                 _readFromStdOutThread = new Thread(new ThreadStart(readStdOut));
                 _readFromStdErrThread = new Thread(new ThreadStart(readStdErr));
                 _readFromStdOutThread.Start();
-                _readFromStdOutThread.Priority = ThreadPriority.Normal;
                 _readFromStdErrThread.Start();
-                _readFromStdErrThread.Priority = ThreadPriority.Normal;
             }
             catch (Exception e)
             {
@@ -1130,7 +1171,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 OggVorbisSettings n = audioJob.Settings as OggVorbisSettings;
                 _encoderExecutablePath = this._settings.OggEnc2Path;
-                _encoderCommandLine = "-Q --ignorelength --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
+                _encoderCommandLine = "--ignorelength --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
             }
             if (audioJob.Settings is NeroAACSettings)
             {

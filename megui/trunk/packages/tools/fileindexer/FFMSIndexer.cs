@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -39,29 +39,23 @@ namespace MeGUI
             return null;
         }
 
-        private string lastLine;
-
         public FFMSIndexer(string executableName)
         {
             executable = executableName;
         }
 
-        public override void ProcessLine(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (Regex.IsMatch(line, "^Indexing, please wait... [0-9]{1,3}%", RegexOptions.Compiled))
             {
                 su.PercentageDoneExact = Int32.Parse(line.Substring(25).Split('%')[0]);
                 su.Status = "Creating FFMS index...";
+                return;
             }
-            else if (Regex.IsMatch(line, "^Writing index...", RegexOptions.Compiled))
-            {
-                //su.PercentageDoneExact = 100;
-                su.Status = "Writing FFMS index...";
-            }
-            else
-                base.ProcessLine(line, stream);
 
-            lastLine = line;
+            if (Regex.IsMatch(line, "^Writing index...", RegexOptions.Compiled))
+                su.Status = "Writing FFMS index...";
+            base.ProcessLine(line, stream, oType);
         }
 
         protected override string Commandline

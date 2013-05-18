@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -47,21 +47,17 @@ namespace MeGUI
             return null;
         }
 
-        private string lastLine;
-
         public D2VIndexer(string executableName)
         {
             executable = executableName;
         }
 
-        public override void ProcessLine(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (Regex.IsMatch(line, "^[0-9]{1,3}$", RegexOptions.Compiled))
                 su.PercentageDoneExact = Int32.Parse(line);
             else
-                base.ProcessLine(line, stream);
-
-            lastLine = line;
+                base.ProcessLine(line, stream, oType);
         }
 
         protected override string Commandline

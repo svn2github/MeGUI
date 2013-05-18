@@ -60,27 +60,32 @@ new JobProcessorFactory(new ProcessorFactory(init), "FFmpegEncoder");
         }
         #endregion
 
-        public override string GetFrameString(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (line.StartsWith("Pos:")) // status update
             {
                 int frameNumberStart = line.IndexOf("s", 4) + 1;
                 int frameNumberEnd = line.IndexOf("f");
-                return line.Substring(frameNumberStart, frameNumberEnd - frameNumberStart).Trim();
+                if (base.setFrameNumber(line.Substring(frameNumberStart, frameNumberEnd - frameNumberStart).Trim()))
+                    return;
             }
             else if (line.StartsWith("frame=")) // status update for ffmpeg
             {
                 int frameNumberEnd = line.IndexOf("f", 6);
-                return line.Substring(6, frameNumberEnd - 6).Trim();
+                if (base.setFrameNumber(line.Substring(6, frameNumberEnd - 6).Trim()))
+                    return;
             }
-            return null;
-        }
 
-        public override string GetErrorString(string line, StreamType stream)
-        {
-            if (line.IndexOf("error") != -1 && line.IndexOf("Input/output error") == -1)
-                return line;
-            return null;
+            if (line.ToLowerInvariant().Contains("error") &&
+               !line.ToLowerInvariant().StartsWith("input #0, avisynth, from '") &&
+               !line.ToLowerInvariant().StartsWith("output #0, avi, to '") &&
+               !line.ToLowerInvariant().EndsWith("input/output error"))
+                oType = ImageType.Error;
+            else if (line.ToLowerInvariant().Contains("warning") &&
+                !line.ToLowerInvariant().StartsWith("input #0, avisynth, from '") &&
+                !line.ToLowerInvariant().StartsWith("output #0, avi, to '"))
+                oType = ImageType.Warning;
+            base.ProcessLine(line, stream, oType);
         }
     }
 }

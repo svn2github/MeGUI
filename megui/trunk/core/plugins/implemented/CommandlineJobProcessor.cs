@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -46,8 +46,8 @@ namespace MeGUI
         protected ManualResetEvent stderrDone = new ManualResetEvent(false);
         protected StatusUpdate su;
         protected LogItem log;
-        protected StringBuilder stdoutBuilder = new StringBuilder();
-        protected StringBuilder stderrBuilder = new StringBuilder();
+        protected LogItem stdoutLog;
+        protected LogItem stderrLog;
         protected Thread readFromStdErrThread;
         protected Thread readFromStdOutThread;
         protected List<string> tempFiles = new List<string>();
@@ -142,13 +142,8 @@ namespace MeGUI
                 }
             }
 
-            log.LogValue("Standard output stream", stdoutBuilder);
-            log.LogValue("Standard error stream", stderrBuilder);
-
             if (bRunSecondTime)
             {
-                stdoutBuilder = new StringBuilder();
-                stderrBuilder = new StringBuilder();
                 bRunSecondTime = false;
                 start();
             }
@@ -187,7 +182,6 @@ namespace MeGUI
             ProcessStartInfo pstart = new ProcessStartInfo();
             pstart.FileName = executable;
             pstart.Arguments = Commandline;
-            log.LogValue("Job commandline", '"' + pstart.FileName + "\" " + pstart.Arguments);
             pstart.RedirectStandardOutput = true;
             pstart.RedirectStandardError = true;
             pstart.WindowStyle = ProcessWindowStyle.Minimized;
@@ -197,12 +191,16 @@ namespace MeGUI
             proc.EnableRaisingEvents = true;
             proc.Exited += new EventHandler(proc_Exited);
             bWaitForExit = false;
+            log.LogValue("Job commandline", '"' + pstart.FileName + "\" " + pstart.Arguments);
 
             try
             {
                 bool started = proc.Start();
                 startTime = DateTime.Now;
                 isProcessing = true;
+                log.LogEvent("Process started");
+                stdoutLog = log.Info(string.Format("[{0:G}] {1}", DateTime.Now, "Standard output stream"));
+                stderrLog = log.Info(string.Format("[{0:G}] {1}", DateTime.Now, "Standard error stream"));
                 readFromStdErrThread = new Thread(new ThreadStart(readStdErr));
                 readFromStdOutThread = new Thread(new ThreadStart(readStdOut));
                 readFromStdOutThread.Start();
@@ -332,13 +330,12 @@ namespace MeGUI
                     while ((line = sr.ReadLine()) != null)
                     {
                         mre.WaitOne();
-                        ProcessLine(line, str);
+                        ProcessLine(line, str, ImageType.Information);
                     }
                 }
                 catch (Exception e)
                 {
-                    log.LogValue("Exception in readStream", e, ImageType.Error);
-                    ProcessLine("Exception in readStream. Line cannot be processed", str);
+                    ProcessLine("Exception in readStream. Line cannot be processed. " + e.Message, str, ImageType.Error);
                 }
                 rEvent.Set();
             }
@@ -367,19 +364,25 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                log.LogValue("Exception getting IO reador for stderr", e, ImageType.Error);
+                log.LogValue("Exception getting IO reader for stderr", e, ImageType.Error);
                 stderrDone.Set();
                 return;
             }
             readStream(sr, stderrDone, StreamType.Stderr);
         }
 
-        public virtual void ProcessLine(string line, StreamType stream)
+        public virtual void ProcessLine(string line, StreamType stream, ImageType oType)
         {
+            if (String.IsNullOrEmpty(line.Trim()))
+                return;
+
             if (stream == StreamType.Stdout)
-                stdoutBuilder.AppendLine(line);
+                stdoutLog.LogEvent(line, oType);
             if (stream == StreamType.Stderr)
-                stderrBuilder.AppendLine(line);
+                stderrLog.LogEvent(line, oType);
+
+            if (oType == ImageType.Error)
+                su.HasError = true;
         }
 
         #endregion

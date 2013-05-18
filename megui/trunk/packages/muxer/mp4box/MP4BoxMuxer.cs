@@ -81,77 +81,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 return LineType.empty;
             return LineType.other;
         }
-        /// <summary>
-        /// gets the completion percentage of an mp4box line
-        /// </summary>
-        /// <param name="line"></param>
-        /// <returns></returns>
-        private decimal? getPercentage(string line)
-        {
-            try
-            {
-                int start = line.IndexOf("(") + 1;
-                int end = line.IndexOf("/");
-                string perc = line.Substring(start, end - start);
-                int percentage = Int32.Parse(perc);
-                return percentage;
-            }
-            catch (Exception e)
-            {
-                log.LogValue("Exception in getPercentage(" + line + ") ", e, ImageType.Warning);
-                return null;
-            }
-        }
-        /// <summary>
-        /// determines if a read line is empty
-        /// </summary>
-        /// <param name="line"></param>
-        /// <returns></returns>
-        private bool isEmptyLine(string line)
-        {
-            char[] characters = line.ToCharArray();
-            bool isEmpty = true;
-            foreach (char c in characters)
-            {
-                if (c != 32)
-                {
-                    isEmpty = false;
-                    break;
-                }
-            }
-            return isEmpty;
-        }
-        #endregion
-        #region additional stuff
-        /// <summary>
-        /// compiles mp4 overhead statistics and dumps them to the log and a logfile
-        /// </summary>
-        public void printStatistics()
-        {
-            try
-            {
-                FileSize len = FileSize.Of(job.Output);
-                FileSize Empty = FileSize.Empty;
-                if (!Path.GetExtension(job.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".mp4"))
-                {
-                    FileSize rawSize = FileSize.Of(job.Input);
-                    LogItem i = new LogItem("MP4 Muxing statistics");
-                    i.LogValue("Size of raw video stream", rawSize);
-                    i.LogValue("Size of final MP4 file", len);
-                    i.LogValue("Codec", job.Codec);
-                    i.LogValue("Number of b-frames", job.NbOfBFrames);
-                    i.LogValue("Number of source frames", job.NbOfFrames);
-                    log.Add(i);
-                }
-            }
-            catch (Exception e)
-            {
-                log.LogValue("An exception occurred when printing mux statistics", e, ImageType.Warning);
-            }
-        }
-        #endregion
 
-        public override void ProcessLine(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             switch (getLineType(line))
             {
@@ -210,11 +141,82 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     break;
 
                 case LineType.other:
-                    base.ProcessLine(line, stream);
+                    base.ProcessLine(line, stream, oType);
                     break;
             }
             lastLine = line;
         }
+
+        /// <summary>
+        /// gets the completion percentage of an mp4box line
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        private decimal? getPercentage(string line)
+        {
+            try
+            {
+                int start = line.IndexOf("(") + 1;
+                int end = line.IndexOf("/");
+                string perc = line.Substring(start, end - start);
+                int percentage = Int32.Parse(perc);
+                return percentage;
+            }
+            catch (Exception e)
+            {
+                log.LogValue("Exception in getPercentage(" + line + ") ", e, ImageType.Warning);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// determines if a read line is empty
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        private bool isEmptyLine(string line)
+        {
+            char[] characters = line.ToCharArray();
+            bool isEmpty = true;
+            foreach (char c in characters)
+            {
+                if (c != 32)
+                {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            return isEmpty;
+        }
+        #endregion
+        #region additional stuff
+        /// <summary>
+        /// compiles mp4 overhead statistics and dumps them to the log and a logfile
+        /// </summary>
+        public void printStatistics()
+        {
+            try
+            {
+                FileSize len = FileSize.Of(job.Output);
+                FileSize Empty = FileSize.Empty;
+                if (!Path.GetExtension(job.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".mp4"))
+                {
+                    FileSize rawSize = FileSize.Of(job.Input);
+                    LogItem i = new LogItem("MP4 Muxing statistics");
+                    i.LogValue("Size of raw video stream", rawSize);
+                    i.LogValue("Size of final MP4 file", len);
+                    i.LogValue("Codec", job.Codec);
+                    i.LogValue("Number of b-frames", job.NbOfBFrames);
+                    i.LogValue("Number of source frames", job.NbOfFrames);
+                    log.Add(i);
+                }
+            }
+            catch (Exception e)
+            {
+                log.LogValue("An exception occurred when printing mux statistics", e, ImageType.Warning);
+            }
+        }
+        #endregion
 
         protected override string Commandline
         {

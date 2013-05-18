@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
+using MeGUI.core.util;
 
 namespace MeGUI.packages.tools.besplitter
 {
@@ -60,7 +62,7 @@ namespace MeGUI.packages.tools.besplitter
             base.checkJobIO();
         }
 
-        public override void ProcessLine(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (line.IndexOf("Writing") != -1 || line.IndexOf("Seeking") != -1)
             {
@@ -80,9 +82,9 @@ namespace MeGUI.packages.tools.besplitter
             }
 
             if (line.IndexOf("Usage") != -1)
-                log.LogValue("Error in usage", line, MeGUI.core.util.ImageType.Error);
+                oType = ImageType.Error;
 
-            base.ProcessLine(line, stream);
+            base.ProcessLine(line, stream, oType);
         }
     }
 }

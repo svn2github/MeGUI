@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -47,12 +47,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
 
         private int numberOfAudioTracks, numberOfSubtitleTracks;
         private string metaFile = null;
-        private string lastLine;
 
         public tsMuxeR(string executablePath)
         {
             this.executable = executablePath;
-            lastLine = "";
         }
         #region setup/start overrides
         protected override void checkJobIO()
@@ -79,16 +77,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
             }
         }
 
-        public override void ProcessLine(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (Regex.IsMatch(line, @"^[0-9]{1,3}\.[0-9]{1}%", RegexOptions.Compiled))
             {
                 su.PercentageDoneExact = getPercentage(line);
+                return;
             }
-            else
-                base.ProcessLine(line, stream);
 
-            lastLine = line;
+            if (stream == StreamType.Stderr || line.ToLowerInvariant().Contains("error"))
+                oType = ImageType.Error;
+            else if (line.ToLowerInvariant().Contains("warning"))
+                oType = ImageType.Warning;
+            base.ProcessLine(line, stream, oType);
         }
         
         /// <summary>

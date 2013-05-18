@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -369,7 +369,7 @@ namespace MeGUI.core.util
         public static LogItem DeleteIntermediateFiles(List<string> files, bool bAlwaysAddLog, bool askAboutDelete)
         {
             bool bShowLog = false;
-            LogItem i = new LogItem("Deleting intermediate files");
+            LogItem i = new LogItem(string.Format("[{0:G}] {1}", DateTime.Now, "Deleting intermediate files"));
 
             List<string> arrFiles = new List<string>();
             foreach (string file in files)

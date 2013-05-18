@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -34,12 +34,12 @@ namespace MeGUI
     public abstract class CommandlineVideoEncoder : CommandlineJobProcessor<VideoJob>
     {
         #region variables
+        private ulong numberOfFrames;
+        private Dar? dar;
+        private ulong? currentFrameNumber;
         protected int lastStatusUpdateFramePosition = 0;
-        ulong numberOfFrames;
-        ulong? currentFrameNumber;
         protected int hres = 0, vres = 0;
         protected int fps_n = 0, fps_d = 0;
-        Dar? dar;
         protected bool usesSAR = false;
         #endregion
         public CommandlineVideoEncoder() : base()
@@ -107,7 +107,7 @@ namespace MeGUI
                     double numberOfSeconds = (double)framecount / framerate;
                     long bitrate = (long)((double)(size * 8.0) / (numberOfSeconds * 1000.0));
 
-                    LogItem stats = log.Info("Final statistics");
+                    LogItem stats = log.Info(string.Format("[{0:G}] {1}", DateTime.Now, "Final statistics"));
 
                     if (job.Settings.EncodingMode == 1) // QP mode
                         stats.LogValue("Constant Quantizer Mode", "Quantizer " + job.Settings.BitrateQuantizer + " computed...");
@@ -126,30 +126,19 @@ namespace MeGUI
         }
         #endregion
 
-        public override void ProcessLine(string line, StreamType stream)
+        protected bool setFrameNumber(string frameString)
         {
-            string frameString = GetFrameString(line, stream);
-            string errorString = GetErrorString(line, stream);
-            if (!string.IsNullOrEmpty(frameString))
+            int currentFrameNumber;
+            if (int.TryParse(frameString, out currentFrameNumber))
             {
-                int currentFrameNumber;
-                if (int.TryParse(frameString, out currentFrameNumber))
-                    if (currentFrameNumber < 0)
-                        this.currentFrameNumber = 0;
-                    else
-                        this.currentFrameNumber = (ulong)currentFrameNumber;
+                if (currentFrameNumber < 0)
+                    this.currentFrameNumber = 0;
+                else
+                    this.currentFrameNumber = (ulong)currentFrameNumber;
+                 return true;
             }
-            if (!string.IsNullOrEmpty(errorString))
-            {
-                su.HasError = true;
-                log.LogValue("An error occurred", errorString, ImageType.Error);
-            }
-            if (frameString == null)
-                base.ProcessLine(line, stream);
+            return false;
         }
-
-        public abstract string GetFrameString(string line, StreamType stream);
-        public abstract string GetErrorString(string line, StreamType stream);
 
         protected override void doStatusCycleOverrides()
         {

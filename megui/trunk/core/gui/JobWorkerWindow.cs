@@ -642,16 +642,6 @@ namespace MeGUI.core.gui
                     throw new JobStartException("starting job failed with error '" + e.Message + "'", ExceptionType.Error);
                 }
 
-                if (job.Job.EncodingMode.Equals("ext"))
-                    log.LogEvent("Extracting started");
-                else if (job.Job.EncodingMode.Equals("mux"))
-                    log.LogEvent("Muxing started");
-                else if (job.Job.EncodingMode.Equals("idx"))
-                    log.LogEvent("Indexing started");
-                else if (job.Job.EncodingMode.Equals("oneclick"))
-                    log.LogEvent("OneClick processing started");
-                else
-                    log.LogEvent("Encoding started");
                 refreshAll();
                 return true;
             }

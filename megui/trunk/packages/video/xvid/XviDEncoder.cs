@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -49,24 +49,22 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
             executable = exePath;
         }
 
-        public override string GetFrameString(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (line.IndexOf(": key") != -1) // we found a position line, parse it
             {
                 int frameNumberEnd = line.IndexOf(":");
-                return line.Substring(0, frameNumberEnd).Trim();
+                if (base.setFrameNumber(line.Substring(0, frameNumberEnd).Trim()))
+                    return;
             }
-            return null;
-        }
 
-        public override string GetErrorString(string line, StreamType stream)
-        {
-            if ((line.IndexOf("Usage") != -1)  || // we get the usage message if there's an unrecognized parameter
-                (line.IndexOf("error") != -1)  ||
-                (line.IndexOf("AVIStreamWrite") != -1))
-               return line;
-            
-            return null;
+            if (line.ToLowerInvariant().Contains("error")
+                || line.ToLowerInvariant().Contains("usage") // we get the usage message if there's an unrecognized parameter
+                || line.ToLowerInvariant().Contains("avistreamwrite"))
+                oType = ImageType.Error;
+            else if (line.ToLowerInvariant().Contains("warning"))
+                oType = ImageType.Warning;
+            base.ProcessLine(line, stream, oType);
         }
 
         protected override string Commandline

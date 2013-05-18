@@ -40,13 +40,11 @@ namespace MeGUI
             return null;
         }
 
-        private string lastLine;
         private bool bSecondPass;
 
         public HDStreamExtractorIndexer(string executablePath)
         {
             this.executable = executablePath;
-            lastLine = "";
         }
 
         /// <summary>
@@ -84,7 +82,7 @@ namespace MeGUI
                 Util.ensureExists(strSource);
         }
 
-        public override void ProcessLine(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (line.StartsWith("process: ")) //status update
             {
@@ -105,30 +103,27 @@ namespace MeGUI
                 su.TimeElapsed = TimeSpan.Zero;
                 bSecondPass = true;
                 su.Status = "Fixing audio gaps/overlaps...";
+                base.ProcessLine(line, stream, oType);
             }
             else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("without making use of the gap/overlap information"))
             {
                 log.LogEvent("Job will be executed a second time to make use of the gap/overlap information");
                 base.bRunSecondTime = true;
-                base.ProcessLine(line, stream);
+                base.ProcessLine(line, stream, oType);
             }
             else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("<error>"))
             {
-                log.LogValue("An error occurred", line, ImageType.Error);
-                base.ProcessLine(line, stream);
+                base.ProcessLine(line, stream, ImageType.Error);
             }
             else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("<warning>")
                 || (su.PercentageDoneExact > 0 && su.PercentageDoneExact < 100
                 && !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("creating file ") 
                 && !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("(seamless branching)...")))
             {
-                log.LogValue("A warning occurred", line, ImageType.Warning);
-                base.ProcessLine(line, stream);
+                base.ProcessLine(line, stream, ImageType.Warning);
             }
             else
-                base.ProcessLine(line, stream);
-            
-            lastLine = line;
+                base.ProcessLine(line, stream, oType);
         }
 
         protected override string Commandline

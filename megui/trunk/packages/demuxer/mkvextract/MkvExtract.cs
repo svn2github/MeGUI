@@ -66,26 +66,23 @@ namespace MeGUI
         }
         #endregion
 
-        public override void ProcessLine(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (line.StartsWith("Progress: ")) //status update
             {
                 su.PercentageDoneExact = getPercentage(line);
                 su.Status = "Extracting Tracks...";
+                return;
             }
-            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("error") 
-                        && !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("extracting track"))
+
+            if (!line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("extracting track"))
             {
-                log.LogValue("An error occurred", line, ImageType.Error);
-                su.HasError = true;
+                if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("error"))
+                    oType = ImageType.Error;
+                else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("warning"))
+                    oType = ImageType.Warning;
             }
-            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("warning")
-                        && !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("extracting track"))
-            {
-                log.LogValue("A warning occurred", line, ImageType.Warning);
-            }
-            else
-                base.ProcessLine(line, stream);
+            base.ProcessLine(line, stream, oType);
         }
 
         protected override string Commandline

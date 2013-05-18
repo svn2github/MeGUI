@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -84,15 +84,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
             su.ClipLength = job.ClipLength;
         }
 
-        public override void ProcessLine(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (line.IndexOf("writing to file") != -1)
                 return;
-            
+
             if (line.IndexOf("Usage") != -1)
-                su.HasError = true;
-            
-            base.ProcessLine(line, stream);
+                oType = ImageType.Error;
+            base.ProcessLine(line, stream, oType);
         }
     }
 }

@@ -1,4 +1,6 @@
-2345 [HD Streams Extractor] select audio/subtitle tracks without language tag by default
+2347 [Log] improved logging - console output is added to the log immediately
+2346 [HD Streams Extractor] select audio/subtitle tracks without language tag by default
+2345 [MP4 Muxer] revert r2299 (allow Nero & Apple Chapters styles muxing for better interoperability with players)
 2344 [AVS Script Creator] + [OneClick] fixed memory leak when using autocrop. Bug #653
 2343 [x264] fixed wrong detection of errors if file name contains "error"
 2342 [OneClick] enhanced error handling

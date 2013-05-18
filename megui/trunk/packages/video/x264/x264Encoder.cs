@@ -55,27 +55,24 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 #endif
         }
 
-        public override string GetFrameString(string line, StreamType stream)
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (line.StartsWith("[")) // status update
             {
                 int frameNumberStart = line.IndexOf("]", 4) + 2;
                 int frameNumberEnd = line.IndexOf("/");
                 if (frameNumberStart > 0 && frameNumberEnd > 0 && frameNumberEnd > frameNumberStart)
-                    return line.Substring(frameNumberStart, frameNumberEnd - frameNumberStart).Trim();
-                else
-                    return null;
+                    if (base.setFrameNumber(line.Substring(frameNumberStart, frameNumberEnd - frameNumberStart).Trim()))
+                        return;
             }
-            return null;
-        }
 
-        public override string GetErrorString(string line, StreamType stream)
-        {
-            if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("[error]:") 
-                || line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("error:"))
-                return line;
-            else
-                return null;
+            if (line.ToLowerInvariant().Contains("[error]:")
+                || line.ToLowerInvariant().Contains("error:"))
+                oType = ImageType.Error;
+            else if (line.ToLowerInvariant().Contains("[warning]:")
+                || line.ToLowerInvariant().Contains("warning:"))
+                oType = ImageType.Warning;
+            base.ProcessLine(line, stream, oType);
         }
 
         public static string genCommandline(string input, string output, Dar? d, int hres, int vres, int fps_n, int fps_d, x264Settings _xs, Zone[] zones, LogItem log)
