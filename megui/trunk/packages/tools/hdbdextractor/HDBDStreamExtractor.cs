@@ -579,8 +579,13 @@ namespace MeGUI.packages.tools.hdbdextractor
                     extractStream.Value = 1;
                     bVideoSelected = true;
                 }
-                else if (row.Cells["languageDataGridViewTextBoxColumn"].Value.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(MainForm.Instance.Settings.DefaultLanguage1.ToLower(System.Globalization.CultureInfo.InvariantCulture)) ||
-                    row.Cells["languageDataGridViewTextBoxColumn"].Value.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(MainForm.Instance.Settings.DefaultLanguage2.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                else if (row.Cells["languageDataGridViewTextBoxColumn"].Value.ToString().ToLowerInvariant().Equals(MainForm.Instance.Settings.DefaultLanguage1.ToLowerInvariant()) ||
+                    row.Cells["languageDataGridViewTextBoxColumn"].Value.ToString().ToLowerInvariant().Equals(MainForm.Instance.Settings.DefaultLanguage2.ToLowerInvariant()))
+                {
+                    extractStream.Value = 1;
+                }
+                else if (String.IsNullOrEmpty(row.Cells["languageDataGridViewTextBoxColumn"].Value.ToString().Trim()) &&
+                    (row.Cells["StreamTypeTextBox"].Value.ToString().Equals("Audio") || row.Cells["StreamTypeTextBox"].Value.ToString().Equals("Subtitle")))
                 {
                     extractStream.Value = 1;
                 }
