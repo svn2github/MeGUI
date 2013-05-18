@@ -1152,7 +1152,7 @@ namespace MeGUI.packages.video.x264
             this.x264VBVMaxRate.Name = "x264VBVMaxRate";
             this.x264VBVMaxRate.Size = new System.Drawing.Size(55, 20);
             this.x264VBVMaxRate.TabIndex = 3;
-            this.x264VBVMaxRate.ValueChanged += new System.EventHandler(this.updateEvent);
+            this.x264VBVMaxRate.ValueChanged += new System.EventHandler(this.x264VBVMaxRate_ValueChanged);
             // 
             // x264TempQuantBlur
             // 
@@ -1232,7 +1232,7 @@ namespace MeGUI.packages.video.x264
             this.x264VBVBufferSize.Name = "x264VBVBufferSize";
             this.x264VBVBufferSize.Size = new System.Drawing.Size(55, 20);
             this.x264VBVBufferSize.TabIndex = 1;
-            this.x264VBVBufferSize.ValueChanged += new System.EventHandler(this.updateEvent);
+            this.x264VBVBufferSize.ValueChanged += new System.EventHandler(this.x264VBVBufferSize_ValueChanged);
             // 
             // x264TempQuantBlurLabel
             // 

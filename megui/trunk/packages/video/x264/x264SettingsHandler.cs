@@ -281,9 +281,7 @@ namespace MeGUI.packages.video.x264
                 AVCLevels al = new AVCLevels();
                 iTemp = al.getMaxCBP(avcLevel, bIsHighProfile);
                 if (_xs.VBVBufferSize == 0)
-                    _log.LogEvent("--vbv-bufsize is not restricted. Maximum value for level " + AVCLevels.GetLevelText(avcLevel) + " is " + iTemp + ". Playback may be affected.", ImageType.Warning);
-                else if (_xs.VBVBufferSize > iTemp)
-                    _log.LogEvent("--vbv-bufsize is set to " + _xs.VBVBufferSize + ". Maximum value for level " + AVCLevels.GetLevelText(avcLevel) + " is " + iTemp + ". Playback may be affected.", ImageType.Warning);
+                    _log.LogEvent("--vbv-bufsize is not restricted. Maximum value for level " + AVCLevels.GetLevelText(avcLevel) + " is " + iTemp + ". Playback may be affected. Reselect AVC level/profile or target playback device in the x264 preset to set the proper value.", ImageType.Warning);
             }
 
             return _xs.VBVBufferSize;
@@ -313,9 +311,7 @@ namespace MeGUI.packages.video.x264
                 AVCLevels al = new AVCLevels();
                 iTemp = al.getMaxBR(avcLevel, bIsHighProfile);
                 if (_xs.VBVMaxBitrate == 0)
-                    _log.LogEvent("--vbv-maxrate is not restricted. Maximum value for level " + AVCLevels.GetLevelText(avcLevel) + " is " + iTemp + ". Playback may be affected.", ImageType.Warning);
-                else if (_xs.VBVMaxBitrate > iTemp)
-                    _log.LogEvent("--vbv-maxrate is set to " + _xs.VBVMaxBitrate + ". Maximum value for level " + AVCLevels.GetLevelText(avcLevel) + " is " + iTemp + ". Playback may be affected.", ImageType.Warning);
+                    _log.LogEvent("--vbv-maxrate is not restricted. Maximum value for level " + AVCLevels.GetLevelText(avcLevel) + " is " + iTemp + ". Playback may be affected. Reselect AVC level/profile or target playback device in the x264 preset to set the proper value.", ImageType.Warning);
             }
 
             return _xs.VBVMaxBitrate;

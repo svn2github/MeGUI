@@ -1952,7 +1952,7 @@ namespace MeGUI.packages.video.x264
             if (this.x264WeightedPPrediction.SelectedIndex != x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked))
                 this.x264WeightedPPrediction.SelectedIndex = x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked);
 
-            genericUpdate();
+            avcLevel_SelectedIndexChanged(null, null);
         }
 
         private void cbTarget_SelectionChangeCommitted(object sender, EventArgs e)
@@ -2020,6 +2020,32 @@ namespace MeGUI.packages.video.x264
                 x264VBVMaxRate.Value = al.getMaxBR(avcLevel, avcProfile.SelectedIndex == 2);
             }
             genericUpdate();
+        }
+
+        private void x264VBVBufferSize_ValueChanged(object sender, EventArgs e)
+        {
+            x264VBVBufferSize.ForeColor = System.Drawing.SystemColors.WindowText;
+            AVCLevels.Levels avcLevel = getAVCLevel();
+            if (avcLevel != AVCLevels.Levels.L_UNRESTRICTED && avcProfile.SelectedIndex >= 0)
+            {
+                AVCLevels al = new AVCLevels();
+                if (x264VBVBufferSize.Value <= 0 || x264VBVBufferSize.Value > al.getMaxCBP(avcLevel, avcProfile.SelectedIndex == 2))
+                    x264VBVBufferSize.ForeColor = System.Drawing.Color.Red;
+            }
+            updateEvent(sender, e);
+        }
+
+        private void x264VBVMaxRate_ValueChanged(object sender, EventArgs e)
+        {
+            x264VBVMaxRate.ForeColor = System.Drawing.SystemColors.WindowText;
+            AVCLevels.Levels avcLevel = getAVCLevel();
+            if (avcLevel != AVCLevels.Levels.L_UNRESTRICTED && avcProfile.SelectedIndex >= 0)
+            {
+                AVCLevels al = new AVCLevels();
+                if (x264VBVMaxRate.Value <= 0 || x264VBVMaxRate.Value > al.getMaxBR(avcLevel, avcProfile.SelectedIndex == 2))
+                    x264VBVMaxRate.ForeColor = System.Drawing.Color.Red;
+            }
+            updateEvent(sender, e);
         }
     }
 }
