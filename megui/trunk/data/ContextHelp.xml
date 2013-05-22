@@ -234,7 +234,7 @@ It's up to you to decide which rate-control mode is better for your circumstance
 		</Advanced>
 			<Basic>Encode in Quality Based Variable Bit Rate mode, regardless of bit rate.</Basic>
 			<Recommended>The range 18-26 is probably where you will want to look at. If you need absolutely perfect quality 
-		you could go down to 16, but it's probably not worth it. Around 19-21.5 is where a rip will look very good. 
+		you could go down to 16, but it's probably not worth it. Around 19-21.5 is where an encoding will look very good. 
 		Higher resolution encoding can generally get away with higher crf values.</Recommended>
 			<Default>23</Default>
 		</crf>
@@ -280,7 +280,7 @@ complexity. (A setting of 100% would result in Constant Quantizer compression.</
 			<Advanced>
 Specifies the maximum bit rate allowed in the Video Buffer.</Advanced>
 			<Basic>Max local bit rate of Video Buffer Verifier.</Basic>
-			<Recommended>0 (Automatic)</Recommended>
+			<Recommended>Depends on the selected AVC level and profile. If value is shown in red playback may be affected - reselect AVC level/profile or target playback device to set the proper value.</Recommended>
 			<Default>0</Default>
 		</vbv-maxrate>
 		<vbv-bufsize name="VBV Buffer Size">
@@ -288,7 +288,7 @@ Specifies the maximum bit rate allowed in the Video Buffer.</Advanced>
 Specifies the maximum size of the Video Buffer, which can affect playback start up times
 if too large and cause stuttering if too small.</Advanced>
 			<Basic>Size of Video Buffer Verifier.</Basic>
-			<Recommended>0 (Automatic)</Recommended>
+			<Recommended>Depends on the selected AVC level and profile. If value is shown in red playback may be affected - reselect AVC level/profile or target playback device to set the proper value.</Recommended>
 			<Default>0</Default>
 		</vbv-bufsize>
 		<vbv-init name="VBV Initial Size">
@@ -733,7 +733,6 @@ Use access unit delimiters
 		<Advanced>
 Add NAL HRD parameters to the output stream; used for HD-DVD and Blu-ray compliancy. 
 Depends on vbv-bufsize and vbv-maxrate to be set to be active. 
-If enabled a patched x264.exe is needed!
 		</Advanced>
 		<Basic>Use nal-hrd</Basic>
 		<Recommended>Disabled, unless encoding for Blu-ray, in which case set this option</Recommended>

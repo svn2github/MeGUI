@@ -387,7 +387,8 @@ namespace MeGUI
                             case "DTS": ati.TrackID = (0x88 + counter); break;
                         }
                     }
-                    if (Int32.TryParse(atrack.StreamOrder, out iID))
+                    if (Int32.TryParse(atrack.StreamOrder, out iID) ||
+                        (atrack.StreamOrder.Contains("-") && Int32.TryParse(atrack.StreamOrder.Split('-')[1], out iID)))
                         ati.MMGTrackID = iID;
                     if (atrack.FormatProfile != "") // some tunings to have a more useful info instead of a typical audio Format
                     {
@@ -441,7 +442,8 @@ namespace MeGUI
                 foreach (TextTrack oTextTrack in info.Text)
                 {
                     int mmgTrackID = 0;
-                    Int32.TryParse(oTextTrack.StreamOrder, out mmgTrackID);
+                    if (!Int32.TryParse(oTextTrack.StreamOrder, out mmgTrackID) && oTextTrack.StreamOrder.Contains("-"))
+                        Int32.TryParse(oTextTrack.StreamOrder.Split('-')[1], out mmgTrackID);
                     SubtitleTrackInfo oTrack = new SubtitleTrackInfo(mmgTrackID, oTextTrack.LanguageString, oTextTrack.Title);
                     oTrack.DefaultTrack = oTextTrack.DefaultString.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("yes");
                     oTrack.ForcedTrack = oTextTrack.ForcedString.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("yes");
