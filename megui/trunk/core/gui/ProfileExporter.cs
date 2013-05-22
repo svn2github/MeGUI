@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -56,8 +56,6 @@ namespace MeGUI.core.gui
             return Util.Unique(files);
         }
 
-
-
         private void export_Click(object sender, EventArgs e)
         {
             Util.CatchExceptionsAndTellUser("An error occurred when saving the file", delegate
@@ -80,6 +78,8 @@ namespace MeGUI.core.gui
                     ProfileManager.WriteProfiles(tempFolder.FullName, profs);
 
                     FileUtil.CreateZipFile(tempFolder.FullName, filename);
+
+                    FileUtil.DeleteDirectoryIfExists(tempFolder.FullName, true);
 
                     DialogResult = DialogResult.OK;
                     MessageBox.Show("Completed successfully", "Export completed successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);

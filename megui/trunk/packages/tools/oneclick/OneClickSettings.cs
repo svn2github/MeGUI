@@ -216,6 +216,13 @@ namespace MeGUI
             set { useNoLanguagesAsFallback = value; }
         }
 
+        private bool disableIntermediateMKV;
+        public bool DisableIntermediateMKV
+        {
+            get { return disableIntermediateMKV; }
+            set { disableIntermediateMKV = value; }
+        }
+
         private string defaultWorkingDirectory;
         public string DefaultWorkingDirectory
         {
@@ -290,6 +297,7 @@ namespace MeGUI
             automaticDeinterlacing = true;
             prerenderVideo = false;
             dontEncodeVideo = false;
+            disableIntermediateMKV = false;
             useChaptersMarks = true;
 			signalAR = false;
             autoCrop = true;
@@ -368,7 +376,7 @@ namespace MeGUI
 
         public string[] RequiredProfiles
         {
-            get { return new string[]{VideoProfileName, AudioSettings[0].Profile};}
+            get { return new string[] { VideoProfileName, AudioSettings[0].Profile, AvsProfileName }; }
         }
 
         #endregion
