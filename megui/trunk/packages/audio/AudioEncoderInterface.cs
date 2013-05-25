@@ -317,12 +317,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
             if (audioJob.Settings is QaacSettings)
             {
+                if (System.Text.RegularExpressions.Regex.IsMatch(line, @"^[0-9]*:"))
+                    return;
                 if (line.ToLowerInvariant().StartsWith("error:"))
                     oType = ImageType.Error;
             }
             else if (audioJob.Settings is OggVorbisSettings)
             {
                 if (line.ToLowerInvariant().StartsWith("\tencoding ["))
+                    return;
+            }
+            else if (audioJob.Settings is NeroAACSettings)
+            {
+                if (System.Text.RegularExpressions.Regex.IsMatch(line.ToLowerInvariant(), @"^processed\s?[0-9]{0,5}\s?seconds..."))
                     return;
             }
 
