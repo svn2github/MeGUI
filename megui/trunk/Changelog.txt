@@ -1,4 +1,5 @@
-2353 [MKV Muxer] fixed detection of raw LC-AAC files as HC-AAC
+2354 [MainForm] improved File\Open and drag & drop handling
+2353 [MKV Muxer] fixed raw LC-AAC files detected as HW-AAC
                  fixed wrong default duration for interlaced AVC in some cases
 2352 [Log] improved logging part II
 2351 [Preset Exporter] fixed not exporting the AviSynth preset included in a OneClick preset. Bug #719

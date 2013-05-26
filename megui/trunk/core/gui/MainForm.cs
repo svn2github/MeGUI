@@ -35,10 +35,6 @@ using MeGUI.core.util;
 namespace MeGUI
 {
     public delegate void UpdateGUIStatusCallback(StatusUpdate su); // catches the UpdateGUI events fired from the encoder
-    public enum FileType
-    {
-        VIDEOINPUT, AUDIOINPUT, INDEXABLEVIDEO, OTHERVIDEO, ZIPPED_PROFILES, NONE
-    };
     public enum ProcessingStatus
     {
         DOINGNOTHING, RUNNING, PAUSED, STOPPING
@@ -485,18 +481,10 @@ namespace MeGUI
         #region menu actions
         private void mnuFileOpen_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter =
-                "All supported encodable files|" +
-                "*.avs;*.ac3;*.dts;*.mp2;*.mpa;*.wav;*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
-                "AviSynth Scripts (*.avs)|*.avs|" +
-                "Audio Files (*.ac3, *.dts, *.mp2, *.mpa, *.wav)|*.ac3;*.dts;*.mp2;*.mpa;*.wav|" +
-                "MPEG-2 Files (*.vob, *.mpg, *.mpeg, *.m2t*, *.m2v, *.mpv, *.tp, *.ts, *.trp, *.pva, *.vro)|" +
-                "*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro|" +
-                "Other Video Files (*.d2v, *.avi, *.flv, *.mp4, *.mkv, *.rmvb)|*.d2v;*.avi;*.flv;*.mp4;*.mkv;*.rmvb|" +
-                "All files|*.*";
+            openFileDialog.Filter = "All files|*.*";
             openFileDialog.Title = "Select your input file";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
-                openFile(openFileDialog.FileName);
+                openFile(openFileDialog.FileName, false);
         }
         private void mnuViewMinimizeToTray_Click(object sender, EventArgs e)
         {
@@ -611,85 +599,61 @@ namespace MeGUI
 
         #endregion
         #region file opening
-        public void openOtherVideoFile(string fileName)
+        private void openOtherVideoFile(string fileName)
         {
             AviSynthWindow asw = new AviSynthWindow(this, fileName);
             asw.OpenScript += new OpenScriptCallback(Video.openVideoFile);
             asw.Show();
         }
-        public void openDGIndexFile(string fileName)
+        private void openIndexableFile(string fileName)
         {
             if (DialogManager.useOneClick())
-                openOneClickFile(fileName);
-            else
-                openD2VCreatorFile(fileName);
-        }
-        public void openOneClickFile(string fileName)
-        {
-            OneClickWindow ocmt = new OneClickWindow(this);
-            ocmt.setInput(fileName);
-            ocmt.ShowDialog();
-        }
-        public void openD2VCreatorFile(string fileName)
-        {
-            FileIndexerWindow mpegInput = new FileIndexerWindow(this);
-            mpegInput.setConfig(fileName, null, 2, true, true, true, false);
-            mpegInput.Show();
-        }
-        private FileType getFileType(string fileName)
-        {
-            switch (Path.GetExtension(fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
             {
-                case ".avs":
-                    return FileType.VIDEOINPUT;
-                case ".aac":
-                case ".ac3":
-                case ".aif":
-                case ".au":
-                case ".caf":
-                case ".bwf":
-                case ".dtsma":
-                case ".dtshd":
-                case ".dts":
-                case ".mp2":
-                case ".mp3":
-                case ".mpa":
-                case ".wav":
-                case ".w64":
-                case ".eac3":
-                case ".ddp":
-                    return FileType.AUDIOINPUT;
-                case ".zip":
-                    return FileType.ZIPPED_PROFILES;
+                OneClickWindow ocmt = new OneClickWindow(this);
+                ocmt.setInput(fileName);
+                ocmt.ShowDialog();
+            }
+            else
+            {
+                FileIndexerWindow mpegInput = new FileIndexerWindow(this);
+                mpegInput.setConfig(fileName, null, 2, true, true, true, false);
+                mpegInput.Show();
+            }
+        }
+        public bool openFile(string file, bool openVideo)
+        {
+            if (Path.GetExtension(file.ToLowerInvariant()).Equals(".zip"))
+            {
+                importProfiles(file);
+                return false;
             }
 
-            MediaInfoFile iFile = new MediaInfoFile(fileName);
-            if (iFile.isD2VIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable() || iFile.isFFMSIndexable())
-                return FileType.INDEXABLEVIDEO;
-            else
-                return FileType.OTHERVIDEO;
-        }
-        public void openFile(string file)
-        {
-            switch (getFileType(file))
+            MediaInfoFile iFile = new MediaInfoFile(file);
+            if (iFile.HasVideo)
             {
-                case FileType.VIDEOINPUT:
-                    Video.openVideoFile(file);
-                    break;
-                case FileType.AUDIOINPUT:
-                    audioEncodingComponent1.openAudioFile(file);
-                    break;
-                case FileType.INDEXABLEVIDEO:
-                    openDGIndexFile(file);
-                    break;
-                case FileType.OTHERVIDEO:
-                    openOtherVideoFile(file);
-                    audioEncodingComponent1.openAudioFile(file); // for Non-MPEG OneClick fudge
-                    break;
-                case FileType.ZIPPED_PROFILES:
-                    importProfiles(file);
-                    break;
+                if (iFile.isD2VIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable() || iFile.isFFMSIndexable())
+                {
+                    openIndexableFile(file);
+                }
+                else
+                {
+                    if (iFile.HasAudio)
+                        audioEncodingComponent1.openAudioFile(file);
+                    if (iFile.ContainerFileTypeString.Equals("AVS"))
+                    {
+                        Video.openVideoFile(file);
+                        if (openVideo)
+                            return true;
+                    }
+                    else
+                        openOtherVideoFile(file);
+                }
             }
+            else if (iFile.HasAudio)
+                audioEncodingComponent1.openAudioFile(file);
+            else
+                MessageBox.Show("This file cannot be opened", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
         }
 
         private void importProfiles(string file)
@@ -703,7 +667,7 @@ namespace MeGUI
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             Invoke(new MethodInvoker(delegate
             {
-                openFile(files[0]);
+                openFile(files[0], false);
             }));
             this.tabControl1.SelectedIndex = 0;
         }
@@ -899,18 +863,6 @@ namespace MeGUI
             }
         }
 
-        public void OpenVideoFile(string p)
-        {
-            if (p.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avs"))
-                Video.openVideoFile(p);
-            else
-            {
-#warning should use mediafactory to generate scripts here.
-                string newFileName = VideoUtil.createSimpleAvisynthScript(p);
-                if (newFileName != null)
-                    Video.openVideoFile(newFileName);
-            }
-        }
         #region MeGUIInfo
         #region variable declaration
         private bool restart = false;

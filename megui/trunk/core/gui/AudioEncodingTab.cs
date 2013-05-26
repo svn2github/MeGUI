@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -140,7 +140,18 @@ namespace MeGUI.core.gui
 
         private void audioInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            if (!string.IsNullOrEmpty(audioInput.Filename)) openAudioFile(audioInput.Filename);
+            if (string.IsNullOrEmpty(audioInput.Filename))
+                return;
+
+            MediaInfoFile iFile = new MediaInfoFile(audioInput.Filename);
+            if (!iFile.HasAudio)
+            {
+                audioInput.Filename = String.Empty;
+                audioOutput.Filename = String.Empty;
+                MessageBox.Show("This file cannot be processed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+                openAudioFile(audioInput.Filename);
         }
 
         private bool bInitialStart = true;

@@ -174,9 +174,9 @@ namespace MeGUI
             if (mainForm.Settings.DialogSettings.AskAboutVOBs)
             {
                 bool askAgain;
-                bool bResult = askAbout("Do you want to open this with the One Click\r\n" +
+                bool bResult = askAbout("Do you want to open this file with the One Click\r\n" +
                     "Encoder (automated, easy to use) or the File\r\n" +
-                    "Indexer (manual, advanced)?", "Please choose your weapon", 
+                    "Indexer (manual, advanced)?", "Please choose your preferred tool", 
                     "One Click Encoder", "File Indexer", MessageBoxIcon.Question, out askAgain);
 
                 mainForm.Settings.DialogSettings.AskAboutVOBs = askAgain;

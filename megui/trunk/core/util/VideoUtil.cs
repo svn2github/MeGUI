@@ -712,32 +712,6 @@ namespace MeGUI
         }
         #endregion
 
-        public static string createSimpleAvisynthScript(string filename)
-        {
-            PossibleSources sourceType = PossibleSources.directShow;
-            if (filename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".vdr"))
-                sourceType = PossibleSources.vdr;
-            string outputFile = filename + ".avs";
-            if (File.Exists(outputFile))
-            {
-                DialogResult response = MessageBox.Show("The file, '" + outputFile + "' already exists.\r\n Do you want to overwrite it?",
-                    "File already exists", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (response == DialogResult.No)
-                    return null;
-            }
-            try
-            {
-                StreamWriter output = new StreamWriter(outputFile);
-                output.WriteLine(ScriptServer.GetInputLine(filename, null, false, sourceType, false, false, false, -1, false));
-                output.Close();
-            }
-            catch (IOException)
-            {
-                return null;
-            }
-            return outputFile;
-        }
-
         public static string convertChaptersTextFileTox264QPFile(string filename, double framerate)
         {
             StreamWriter sw = null;

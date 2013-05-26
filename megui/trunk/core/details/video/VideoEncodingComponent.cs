@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -117,8 +117,11 @@ namespace MeGUI
         #region event handlers
         private void videoInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            if (!string.IsNullOrEmpty(videoInput.Filename))
-                openVideoFile(videoInput.Filename);
+            if (!string.IsNullOrEmpty(videoInput.Filename) && !mainForm.openFile(videoInput.Filename, true))
+            {
+                videoInput.Filename = String.Empty;
+                videoOutput.Filename = String.Empty;
+            }
         }
 
         private void videoOutput_FileSelected(FileBar sender, FileBarEventArgs args)
