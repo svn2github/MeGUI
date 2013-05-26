@@ -124,40 +124,29 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     return sb.ToString();
                 }
 
-                if (!string.IsNullOrEmpty(settings.VideoInput))
+                if(!string.IsNullOrEmpty(settings.VideoInput) || !string.IsNullOrEmpty(settings.MuxedInput))
                 {
-                    MediaInfoFile oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
+                    string inputFile = settings.VideoInput;
+                    if (string.IsNullOrEmpty(settings.VideoInput))
+                        inputFile = settings.MuxedInput;
+
+                    MediaInfoFile oVideoInfo = new MediaInfoFile(inputFile, ref log);
                     if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
                         trackID = oVideoInfo.VideoInfo.Track.MMGTrackID;
                     else
                         trackID = 0;
 
-                    sb.Append(" --engage keep_bitstream_ar_info"); // assuming that SAR info is already in the stream...
-                    if (!string.IsNullOrEmpty(settings.VideoName))
-                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName.Replace("\"","\\\"") + "\"");
-                    if (settings.Framerate.HasValue)
-                        sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
-                    sb.Append(" \"--compression\" \"" + trackID + ":none\"");
-                    sb.Append(" -d \"" + trackID + "\" --no-chapters -A -S \"" + settings.VideoInput + "\"");
-                }
-                else if(!string.IsNullOrEmpty(settings.MuxedInput))
-                {
-                    MediaInfoFile oVideoInfo = new MediaInfoFile(settings.MuxedInput, ref log);
-                    if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
-                        trackID = oVideoInfo.VideoInfo.Track.MMGTrackID;
-                    else
-                        trackID = 0;
-
-                    if (settings.DAR.HasValue)
+                    if (settings.DAR.HasValue && !string.IsNullOrEmpty(settings.VideoInput))
                         sb.Append(" --aspect-ratio " + trackID + ":" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
                     else
-                        sb.Append(" --engage keep_bitstream_ar_info");
+                        sb.Append(" --engage keep_bitstream_ar_info"); // assuming that SAR info is already in the stream...
                     if (!string.IsNullOrEmpty(settings.VideoName))
                         sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName.Replace("\"", "\\\"") + "\"");
-                    if (settings.Framerate.HasValue)
+                    if (settings.Framerate.HasValue && (oVideoInfo.VideoInfo.Codec == null ||
+                        oVideoInfo.VideoInfo.Codec != VideoCodec.AVC || oVideoInfo.VideoInfo.ScanType.ToLowerInvariant().Equals("progressive")))
                         sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
                     sb.Append(" \"--compression\" \"" + trackID + ":none\"");
-                    sb.Append(" -d \"" + trackID + "\" -A -S \"" + settings.MuxedInput + "\"");
+                    sb.Append(" -d \"" + trackID + "\" --no-chapters -A -S \"" + inputFile + "\"");
                 }
 
                 foreach (object o in settings.AudioStreams)
@@ -176,28 +165,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     else
                         trackID = 0;
 
-                    int heaac_flag = 0;
-                    if (oAudioInfo.ContainerFileType == ContainerType.MP4)
+                    if (oAudioInfo.ContainerFileType == ContainerType.MP4 || oAudioInfo.AudioInfo.Codecs[0] == AudioCodec.AAC)
                     {
-                        heaac_flag = -1;
+                        int heaac_flag = -1;
                         if (oAudioInfo.AudioInfo.Tracks.Count > 0)
-                        {
                             heaac_flag = oAudioInfo.AudioInfo.Tracks[0].AACFlag;
-                        }
                         if (heaac_flag == 1)
-                            sb.Append(" --aac-is-sbr "+ trackID + ":1");
+                            sb.Append(" --aac-is-sbr " + trackID + ":1");
                         else if (heaac_flag == 0)
                             sb.Append(" --aac-is-sbr " + trackID + ":0");
-                    }
-                    else if (oAudioInfo.AudioInfo.Codecs[0] == AudioCodec.AAC)
-                    {
-                        heaac_flag = -1;
-                        if (oAudioInfo.AudioInfo.Tracks.Count > 0)
-                            heaac_flag = oAudioInfo.AudioInfo.Tracks[0].AACFlag;
-                        if (heaac_flag == 1)
-                            sb.Append(" --aac-is-sbr 0:1");
-                        else if (heaac_flag == 0)
-                            sb.Append(" --aac-is-sbr 0");
                     }
 
                     if (!string.IsNullOrEmpty(stream.language))

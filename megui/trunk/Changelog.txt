@@ -1,3 +1,5 @@
+2353 [MKV Muxer] fixed detection of raw LC-AAC files as HC-AAC
+                 fixed wrong default duration for interlaced AVC in some cases
 2352 [Log] improved logging part II
 2351 [Preset Exporter] fixed not exporting the AviSynth preset included in a OneClick preset. Bug #719
 2350 [OneClick] fixed wrong stream order in some TS files. Bug #718
