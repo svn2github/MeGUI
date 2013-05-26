@@ -74,6 +74,7 @@ namespace MeGUI.packages.tools.oneclick
                 val.AvsProfileName = avsProfile.SelectedProfile.FQName;
                 val.ContainerCandidates = ContainerCandidates;
                 val.DontEncodeVideo = chkDontEncodeVideo.Checked;
+                val.DisableIntermediateMKV = chkDisableIntermediateMKV.Checked;
                 val.Filesize = fileSize.Value;
                 val.OutputResolution = (long)horizontalResolution.Value;
                 val.PrerenderVideo = preprocessVideo.Checked;
@@ -139,6 +140,7 @@ namespace MeGUI.packages.tools.oneclick
                 horizontalResolution.Value = value.OutputResolution;
                 preprocessVideo.Checked = value.PrerenderVideo;
                 signalAR.Checked = value.SignalAR;
+                chkDisableIntermediateMKV.Checked = value.DisableIntermediateMKV;
                 splitSize.Value = value.SplitSize;
                 autoCrop.Checked = value.AutoCrop;
                 keepInputResolution.Checked = value.KeepInputResolution;

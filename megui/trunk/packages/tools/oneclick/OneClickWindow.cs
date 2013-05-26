@@ -758,7 +758,7 @@ namespace MeGUI
                         continue;
 
                     bool bCoreOnly = false;
-                    if (!oStreamControl.IsDontEncodePossible() || oStreamControl.SelectedStream.EncodingMode != AudioEncodingMode.Never)
+                    if (!isDontEncodeAudioPossible(oStreamControl.SelectedItem.IsStandard, inputContainer) || oStreamControl.SelectedStream.EncodingMode != AudioEncodingMode.Never)
                     {
                         //check if core must be extracted
                         if (oStreamControl.SelectedStream.TrackInfo.Codec.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("truehd"))
@@ -795,11 +795,11 @@ namespace MeGUI
                     dpp.FilesToDelete.Add(strDemuxFilePath);
                     dpp.SubtitleTracks.Add(oStreamControl.SelectedStream);
                 }
-
+                
                 if (sb.Length != 0)
                     prepareJobs = new SequentialChain(prepareJobs, new HDStreamsExJob(new List<string>() { _videoInputInfo.FileName }, dpp.WorkingDirectory, null, sb.ToString(), 2));
             }
-            else if (inputContainer != ContainerType.MKV)
+            else if (inputContainer != ContainerType.MKV && !_oSettings.DisableIntermediateMKV)
             {
                 // mux input file into MKV if possible and necessary
                 bool bRemuxInput = false;
@@ -949,7 +949,8 @@ namespace MeGUI
                     strLanguage = oStreamControl.SelectedStream.Language;
                 }
 
-                if (oStreamControl.IsDontEncodePossible() &&
+                bool bIsDontEncodeAudioPossible = isDontEncodeAudioPossible(oStreamControl.SelectedItem.IsStandard, inputContainer);
+                if (bIsDontEncodeAudioPossible &&
                     (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.Never ||
                     (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.NeverOnlyCore && dpp.Eac3toDemux) ||
                     (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
@@ -959,6 +960,13 @@ namespace MeGUI
                 }
                 else
                 {
+                    if (!bIsDontEncodeAudioPossible &&
+                    (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.Never ||
+                    (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.NeverOnlyCore && dpp.Eac3toDemux) ||
+                    (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
+                    oStreamControl.SelectedStream.EncoderSettings.EncoderType.ACodec.ID.Equals(strAudioCodec, StringComparison.InvariantCultureIgnoreCase))))
+                        _oLog.LogEvent("Audio " + oStreamControl.SelectedStream + " cannot be processed with encoding mode \"" + oStreamControl.SelectedStream.EncodingMode + "\" as it must be encoded");
+
                     // audio track will be encoded
                     string strFileName = string.Empty;
                     if (!oStreamControl.SelectedItem.IsStandard || !dpp.Eac3toDemux)
@@ -1617,7 +1625,6 @@ namespace MeGUI
             OneClickStreamControl track = audioTracks[i];
             if (!track.SelectedItem.IsStandard)
                 track.SelectedStream.Delay = PrettyFormatting.getDelayAndCheck(track.SelectedStream.DemuxFilePath) ?? 0;
-            audioTracks[i].DisableDontEncode(false);
 
             foreach (OneClickStreamControl oControl in audioTracks)
             {
@@ -1761,8 +1768,7 @@ namespace MeGUI
                     if (a.SelectedStream.Language.Equals(settings.AudioSettings[i].Language))
                     {
                         a.SelectProfileNameOrWarn(settings.AudioSettings[i].Profile);
-                        if (a.IsDontEncodePossible() == true)
-                            a.EncodingMode = settings.AudioSettings[i].AudioEncodingMode;
+                        a.EncodingMode = settings.AudioSettings[i].AudioEncodingMode;
                         bFound = true;
                         break;
                     }
@@ -1772,8 +1778,7 @@ namespace MeGUI
                     if (settings.AudioSettings.Count > 0)
                     {
                         a.SelectProfileNameOrWarn(settings.AudioSettings[0].Profile);
-                        if (a.IsDontEncodePossible() == true)
-                            a.EncodingMode = settings.AudioSettings[0].AudioEncodingMode;
+                        a.EncodingMode = settings.AudioSettings[0].AudioEncodingMode;
                     }
                     else
                         a.EncodingMode = AudioEncodingMode.IfCodecDoesNotMatch;
@@ -1814,6 +1819,23 @@ namespace MeGUI
         {
             if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
                 SubtitleRemoveTrack(audioTab.SelectedIndex);
+        }
+
+        private bool isDontEncodeAudioPossible(bool bIsStandardTrack, ContainerType inputContainer)
+        {
+            if (!bIsStandardTrack)
+                return true;
+
+            if (_videoInputInfo == null)
+                return false;
+
+            if (inputContainer == ContainerType.MKV ||
+                _videoInputInfo.IndexerToUse == FileIndexerWindow.IndexType.D2V || 
+                _videoInputInfo.IndexerToUse == FileIndexerWindow.IndexType.DGA || 
+                _videoInputInfo.IndexerToUse == FileIndexerWindow.IndexType.DGI)
+                return true;
+
+            return false;
         }
     }
 

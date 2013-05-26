@@ -82,26 +82,6 @@ namespace MeGUI
             get { return encoderProfile.SelectedProfile.FQName; }
         }
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public void DisableDontEncode(bool bDisable)
-        {
-            if (bDisable)
-            {
-                cbEncodingMode.SelectedItem = AudioEncodingMode.Always;
-                cbEncodingMode.Enabled = false;
-            }
-            else
-                cbEncodingMode.Enabled = true;
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsDontEncodePossible()
-        {
-            return cbEncodingMode.Enabled;
-        }
-
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public OneClickStream Stream
         {

@@ -120,6 +120,7 @@ namespace MeGUI.packages.tools.oneclick
             this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.audioAddTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.audioRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
+            this.chkDisableIntermediateMKV = new System.Windows.Forms.CheckBox();
             label3 = new System.Windows.Forms.Label();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
@@ -401,7 +402,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             this.audioPageAdd.Location = new System.Drawing.Point(4, 22);
             this.audioPageAdd.Name = "audioPageAdd";
-            this.audioPageAdd.Size = new System.Drawing.Size(399, 107);
+            this.audioPageAdd.Size = new System.Drawing.Size(399, 124);
             this.audioPageAdd.TabIndex = 3;
             this.audioPageAdd.Text = "   +";
             this.audioPageAdd.UseVisualStyleBackColor = true;
@@ -685,6 +686,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.chkDisableIntermediateMKV);
             this.tabPage5.Controls.Add(this.groupBox5);
             this.tabPage5.Controls.Add(this.groupBox4);
             this.tabPage5.Controls.Add(this.groupBox3);
@@ -904,6 +906,16 @@ namespace MeGUI.packages.tools.oneclick
             this.audioRemoveTrack.Text = "Remove Track";
             this.audioRemoveTrack.Click += new System.EventHandler(this.audioRemoveTrack_Click);
             // 
+            // chkDisableIntermediateMKV
+            // 
+            this.chkDisableIntermediateMKV.AutoSize = true;
+            this.chkDisableIntermediateMKV.Location = new System.Drawing.Point(15, 221);
+            this.chkDisableIntermediateMKV.Name = "chkDisableIntermediateMKV";
+            this.chkDisableIntermediateMKV.Size = new System.Drawing.Size(161, 17);
+            this.chkDisableIntermediateMKV.TabIndex = 45;
+            this.chkDisableIntermediateMKV.Text = "disable intermediate MKV file";
+            this.chkDisableIntermediateMKV.UseVisualStyleBackColor = true;
+            // 
             // OneClickConfigPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -930,6 +942,7 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
@@ -1011,5 +1024,6 @@ namespace MeGUI.packages.tools.oneclick
         private System.Windows.Forms.TextBox txtLeadingName;
         private System.Windows.Forms.Button deleteWorking;
         private System.Windows.Forms.Button deleteOutput;
+        private System.Windows.Forms.CheckBox chkDisableIntermediateMKV;
     }
 }
