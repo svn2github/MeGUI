@@ -1,6 +1,7 @@
+2356 [OneClick] + [HD Streams Extractor] fixed detection of BluRay mode if not using the root folder of the BD. Bug #721
 2355 [OneClick] added option to disable intermediate MKV files
 2354 [MainForm] improved File\Open and drag & drop handling
-2353 [MKV Muxer] fixed raw LC-AAC files detected as HW-AAC
+2353 [MKV Muxer] fixed raw LC-AAC files detected as HE-AAC
                  fixed wrong default duration for interlaced AVC in some cases
 2352 [Log] improved logging part II
 2351 [Preset Exporter] fixed not exporting the AviSynth preset included in a OneClick preset. Bug #719

@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -459,8 +459,6 @@ namespace MeGUI.packages.tools.hdbdextractor
                     // Check for Streams
                     if (feature.Streams == null || feature.Streams.Count == 0)
                     {
-                        //args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);
-
                         // create dummy input string for megui job
                         if (feature.Description.Contains("EVO"))
                         {
@@ -481,39 +479,19 @@ namespace MeGUI.packages.tools.hdbdextractor
                         }
                         else if (feature.Description.Contains("(angle"))
                         {   
-                            if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\PLAYLIST"))
-                                dummyInput = FolderInputTextBox.Text + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
-                            else if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\STREAM"))
-                                dummyInput = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.LastIndexOf("BDMV")) + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
-                            else
-                                dummyInput = FolderInputTextBox.Text + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
+                            dummyInput = getBDMVPath(FolderInputTextBox.Text, feature.Description.Substring(0, feature.Description.IndexOf(" (")));
                         }
                         else if (feature.Description.Substring(feature.Description.LastIndexOf(".") + 1, 4) == "m2ts")
                         {
                             string des = feature.Description.Substring(feature.Description.IndexOf(",") + 2, feature.Description.LastIndexOf(",") - feature.Description.IndexOf(",") - 2);
 
                             if (des.Contains("+")) // seamless branching
-                            {
-                                if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\STREAM"))
-                                    dummyInput = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.IndexOf("BDMV")) + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
-                                else
-                                    dummyInput = FolderInputTextBox.Text + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
-                            }
+                                dummyInput = getBDMVPath(FolderInputTextBox.Text, feature.Description.Substring(0, feature.Description.IndexOf(",")));
                             else
-                            {
-                                if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\STREAM"))
-                                    dummyInput = FolderInputTextBox.Text + des;
-                                else
-                                    dummyInput = FolderInputTextBox.Text + "BDMV\\STREAM\\" + des;
-                            }
+                                dummyInput = getBDMVPath(FolderInputTextBox.Text, des);
                         }
                         else
-                        {
-                            if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\PLAYLIST"))
-                                dummyInput = FolderInputTextBox.Text + feature.Description.Substring(0, feature.Description.IndexOf(","));
-                            else
-                                dummyInput = FolderInputTextBox.Text + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
-                        }
+                            dummyInput = getBDMVPath(FolderInputTextBox.Text, feature.Description.Substring(0, feature.Description.IndexOf(",")));
 
                         Cursor = Cursors.WaitCursor;
                         _oEac3toInfo.FetchStreamInformation(((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number);
@@ -590,6 +568,28 @@ namespace MeGUI.packages.tools.hdbdextractor
                     extractStream.Value = 1;
                 }
             }
+        }
+
+        private string getBDMVPath(string path, string file)
+        {
+            string filePath;
+            while (System.IO.Directory.Exists(path))
+            {
+                filePath = System.IO.Path.Combine(System.IO.Path.Combine(path, "BDMV\\STREAM"), file);
+                if (System.IO.File.Exists(filePath))
+                    return filePath;
+
+                filePath = System.IO.Path.Combine(System.IO.Path.Combine(path, "BDMV\\PLAYLIST"), file);
+                if (System.IO.File.Exists(filePath))
+                    return filePath;
+
+                if (System.IO.Path.GetFullPath(path).Equals(System.IO.Path.GetPathRoot(path)))
+                    return file;
+                
+                System.IO.DirectoryInfo pathInfo = new System.IO.DirectoryInfo(path);
+                path = pathInfo.Parent.FullName;
+            }
+            return file;
         }
     }
 

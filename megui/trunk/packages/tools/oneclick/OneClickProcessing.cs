@@ -172,15 +172,25 @@ namespace MeGUI.packages.tools.oneclick
         /// <returns>true if the files/folder can be processed as BluRay, false otherwise</returns>
         private bool getInputBluRayBased(OneClickSettings oSettings)
         {
-            string path = Path.Combine(Path.Combine(this.strInput, "BDMV"), "PLAYLIST");
-            if (!Directory.Exists(path))
+            string path = this.strInput;
+            while (!Path.GetFullPath(path).Equals(Path.GetPathRoot(path)))
+            {
+                string bdmvPath = Path.Combine(path, "BDMV\\PLAYLIST");
+                if (Directory.Exists(bdmvPath))
+                    break;
+
+                DirectoryInfo pathInfo = new DirectoryInfo(path);
+                path = pathInfo.Parent.FullName;
+            }
+
+            if (!Directory.Exists(Path.Combine(path, "BDMV\\PLAYLIST")))
                 return false;
 
             ChapterExtractor ex = new BlurayExtractor();
             using (frmStreamSelect frm = new frmStreamSelect(ex, SelectionMode.MultiExtended))
             {
                 frm.Text = "Select your Titles";
-                ex.GetStreams(this.strInput);
+                ex.GetStreams(path);
                 if (frm.ChapterCount == 1 || (frm.ChapterCount > 1 && frm.ShowDialog() == DialogResult.OK))
                 {
                     List<ChapterInfo> oChapterList = frm.SelectedMultipleChapterInfo;
@@ -191,7 +201,7 @@ namespace MeGUI.packages.tools.oneclick
 
                         foreach (ChapterInfo oChapterInfo in oChapterList)
                         {
-                            string strFile = this.strInput + @"\BDMV\PLAYLIST\" + oChapterInfo.SourceName;
+                            string strFile = path + @"\BDMV\PLAYLIST\" + oChapterInfo.SourceName;
 
                             if (iFile == null && File.Exists(strFile))
                             {

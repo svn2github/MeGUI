@@ -1,3 +1,36 @@
+2341 [x264] changed vbv restrictions so that is possible to use non compliant values. part II
+2340 [OneClick] improved working path detection
+2339 [x264] changed vbv restrictions so that is possible to use non compliant values
+2338 [x264] log enhancements
+2337 [OneClick] fixed a problem with external audio files. Bug #714
+2336 [x264] set default --crf value to 23
+2335 [x264] fixed applying wrong vbv values (--vbv-bufsize 1 and --vbv-maxrate 1)
+2334 [x264] extended apple device profile support and removed/merged some others
+2333 [x264] set AVC level, "zerolatency" and "fastdecode" effects also in the advanced settings
+2332 [x264] fixed AVC level 1.0 encoded as 1.1
+2331 [x264] fixed restricted vbv-bufsize value too low for some levels
+2330 [OneClick] fixed not removing chapter option if selected input file has no internal chapters
+2329 [x264] added vbv restrictions based on the selected AVC level
+2328 [x264] added AVC levels 1b and 5.2
+2327 [x264] added "stillimage" to the psy tunings and moved "zerolatency" and "fastdecode" to the misc tab
+2326 [File Indexer] enhanced index file selection behavior
+2325 [MKV Muxer] improved playback performance with some players (requires MkvMerge 5.9.0+)
+2324 [OneClick] avoid muxing into intermediate MKV file in some cases if using a DVD source
+2323 [OneClick] set "Force using Key-Frames for chapters marks" even if "Don't encode video" is checked
+2322 [OneClick] fixed a problem when aborting during automatic deinterlacing
+2321 [OneClick] fixed a problem with multiple subtitle extraction caused by 2318
+2320 [OneClick] fixed missing subtile tracks if using intermediate MKV files. Bug #710
+2319 [MKV Muxer] enhanced projected file size calculation if using intermediate MKV files
+2318 [OneClick] enhanced generation of demux file names
+2317 [OneClick] the audio track encode selection will not be disabled anymore
+2316 [OneClick] fixed audio delay handling if pgcdemux will be used together with an intermediate MKV file
+2315 [OneClick] modified "and open next" behavior
+2314 [OneClick] improved muxing into intermediate MKV file if necessary
+2313 [OneClick] fixed using wrong chapters file if using an intermediate MKV file with VOB input
+2312 [OneClick] avoid muxing into intermediate MKV file if this is not necessary
+2311 [OneClick] not correctly extracted subtitle files will be ignored
+2310 [OneClick] fixed AVS audio processing. Bug #711
+2309 [AVS Script Creator] fixed missing DAR values in the AVS script if using "Clever (TM) anamorphic encoding"
 2308 [AVS Script Creator] added detailed analysis result to the log
 2307 [AVS Script Creator] fixed not applying film when manually choosing "Partially film"
 2306 [MP4 Muxer] cosmetic - "disable" instead of "disabled" parameter
