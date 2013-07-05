@@ -484,15 +484,12 @@ namespace MeGUI
             IVideoReader reader;
             PossibleSources oPossibleSource;
             x264Device xTargetDevice = null;
+            CropValues cropValues = new CropValues();
 
             int outputWidthIncludingPadding = 0;
             int outputHeightIncludingPadding = 0;
             int outputWidthCropped = 0;
             int outputHeightCropped = 0;
-
-            CropValues cropValues = new CropValues();
-            bool bAdjustResolution = false;
-            bool bCropped = false;
 
             // open index file to retrieve information
             if (job.PostprocessingProperties.IndexType == FileIndexerWindow.IndexType.DGI)
@@ -531,7 +528,7 @@ namespace MeGUI
             // abort if the index file is invalid
             if (reader.FrameCount < 1)
             {
-                _log.Error("There are 0 frames in the index file. Aborting...");
+                _log.Error("There are " + reader.FrameCount + " frames in the index file. Aborting...");
                 return "";
             }
 
@@ -571,248 +568,37 @@ namespace MeGUI
             }
 
             // get mod value for resizing
-            int mod = 16;
-            switch (avsSettings.ModValue)
+            int mod = Resolution.GetModValue(avsSettings.ModValue, avsSettings.Mod16Method, signalAR);
+
+            // crop input as it may be required (autoCrop && !keepInputResolution or Blu-Ray)
+            if (Autocrop.autocrop(out cropValues, reader, signalAR, avsSettings.Mod16Method, avsSettings.ModValue) == false)
             {
-                case modValue.mod8: mod = 8; break;
-                case modValue.mod4: mod = 4; break;
-                case modValue.mod2: mod = 2; break;
+                _log.Error("Autocrop failed. Aborting...");
+                return "";
             }
 
-            // if encoding for a specific device select the appropriate resolution setting
-            if (xTargetDevice != null && xTargetDevice.Width > 0 && xTargetDevice.Height > 0)
-            {
-                if (keepInputResolution)
-                {
-                    // resolution should not be changed - use input resolution
-                    outputWidthCropped = (int)iMediaFile.VideoInfo.Width;
-                    outputHeightCropped = (int)iMediaFile.VideoInfo.Height;
-                }
-                else
-                {
-                    // crop input video if selected
-                    if (autoCrop)
-                    {
-                        if (Autocrop.autocrop(out cropValues, reader, signalAR, avsSettings.Mod16Method, avsSettings.ModValue) == false)
-                        {
-                            _log.Error("Autocrop failed. Aborting...");
-                            return "";
-                        }
-                        bCropped = true;
-                    }
+            Dar? suggestedDar = null;
+            outputWidthIncludingPadding = desiredOutputWidth;
+            CropValues paddingValues;
 
-                    // remove upsizing if not allowed
-                    if (!avsSettings.Upsize && (int)iMediaFile.VideoInfo.Width - cropValues.left - cropValues.right < desiredOutputWidth)
-                    {
-                        desiredOutputWidth = (int)iMediaFile.VideoInfo.Width - cropValues.left - cropValues.right;
-                        _log.LogEvent("Lowering output width resolution to " + desiredOutputWidth + " to avoid upsizing");
-                    }
+            Resolution.GetResolution((int)iMediaFile.VideoInfo.Width, (int)iMediaFile.VideoInfo.Height, customDAR,
+                ref cropValues, autoCrop && !keepInputResolution, mod, !keepInputResolution, avsSettings.Upsize, signalAR, true,
+                avsSettings.AcceptableAspectError, xTargetDevice, Convert.ToDouble(iMediaFile.VideoInfo.FPS_N) / iMediaFile.VideoInfo.FPS_D, 
+                ref outputWidthIncludingPadding, ref outputHeightIncludingPadding, out paddingValues, out suggestedDar, _log);
 
-                    // correct desiredOutputWidth if not mod compliant and resize is enabled
-                    if (desiredOutputWidth % mod != 0)
-                    {
-                        int diff = desiredOutputWidth % mod;
-                        if (desiredOutputWidth - diff > 0)
-                            desiredOutputWidth -= diff;
-                        else
-                            desiredOutputWidth += mod - diff;
-                    }
-
-                    outputWidthCropped = desiredOutputWidth;
-                    outputHeightCropped = Resolution.SuggestVerticalResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, customDAR,
-                        cropValues, outputWidthCropped, signalAR, out dar, mod, avsSettings.AcceptableAspectError);
-                    dar = null;
-                }
-
-                if (xTargetDevice.Width < outputWidthCropped)
-                {
-                    // width must be lowered to be target conform
-                    bAdjustResolution = true;
-                    if (keepInputResolution)
-                    {
-                        keepInputResolution = false;
-                        _log.LogEvent("Disabling \"Keep Input Resolution\" as " + xTargetDevice.Name + " does not support a resolution width of "
-                            + outputWidthCropped + ". The maximum value is " + xTargetDevice.Width + ".");
-                    }
-                }
-                else if (xTargetDevice.Height < outputHeightCropped)
-                {
-                    // height must be lowered to be target conform
-                    bAdjustResolution = true;
-                    if (keepInputResolution)
-                    {
-                        keepInputResolution = false;
-                        _log.LogEvent("Disabling \"Keep Input Resolution\" as " + xTargetDevice.Name + " does not support a resolution height of "
-                            + outputHeightCropped + ". The maximum value is " + xTargetDevice.Height + ".");
-                    }
-                }
-                else if (xTargetDevice.BluRay)
-                {
-                    string strResolution = outputWidthCropped + "x" + outputHeightCropped;
-                    if (!strResolution.Equals("1920x1080") &&
-                        !strResolution.Equals("1440x1080") &&
-                        !strResolution.Equals("1280x720") &&
-                        !strResolution.Equals("720x576") &&
-                        !strResolution.Equals("720x480"))
-                    {
-                        bAdjustResolution = true;
-                        if (keepInputResolution)
-                        {
-                            keepInputResolution = false;
-                            _log.LogEvent("Disabling \"Keep Input Resolution\" as " + xTargetDevice.Name + " does not support a resolution of "
-                                + outputWidthCropped + "x" + outputHeightCropped
-                                + ". Supported are 1920x1080, 1440x1080, 1280x720, 720x576 and 720x480.");
-                        }
-                    }
-                    else
-                    {
-                        outputWidthIncludingPadding = outputWidthCropped;
-                        outputHeightIncludingPadding = outputHeightCropped;
-                    }
-                }
-
-                if (bAdjustResolution)
-                {
-                    if (!autoCrop)
-                    {
-                        autoCrop = true;
-                        _log.LogEvent("Enabling \"AutoCrop\"");
-                    }
-                }
-            }
-            else
-                outputWidthCropped = desiredOutputWidth;
-
-            if (!keepInputResolution && autoCrop && !bCropped)
-            {
-                // crop input video if required
-                if (Autocrop.autocrop(out cropValues, reader, signalAR, avsSettings.Mod16Method, avsSettings.ModValue) == false)
-                {
-                    _log.Error("Autocrop failed. Aborting...");
-                    return "";
-                }
-                bCropped = true;
-
-                // remove upsizing if not allowed
-                if (!avsSettings.Upsize && (int)iMediaFile.VideoInfo.Width - cropValues.left - cropValues.right < desiredOutputWidth)
-                {
-                    desiredOutputWidth = (int)iMediaFile.VideoInfo.Width - cropValues.left - cropValues.right;
-                    _log.LogEvent("Lowering output width resolution to " + desiredOutputWidth + " to avoid upsizing");
-                }
-
-                // correct desiredOutputWidth if not mod compliant and resize is enabled
-                if (desiredOutputWidth % mod != 0)
-                {
-                    int diff = desiredOutputWidth % mod;
-                    if (desiredOutputWidth - diff > 0)
-                        desiredOutputWidth -= diff;
-                    else
-                        desiredOutputWidth += mod - diff;
-                }
-            }
-
-            if (bAdjustResolution)
-            {
-                // adjust horizontal resolution as width or height are too large
-                if (xTargetDevice.BluRay)
-                {
-                    if (outputWidthCropped >= 1920)
-                    {
-                        outputWidthCropped = 1920;
-                        outputHeightIncludingPadding = 1080;
-                        _log.LogEvent("Force resolution of 1920x1080 as required for " + xTargetDevice.Name);
-                    }
-                    else if (outputWidthCropped >= 1280)
-                    {
-                        outputWidthCropped = 1280;
-                        outputHeightIncludingPadding = 720;
-                        _log.LogEvent("Force resolution of 1280x720 as required for " + xTargetDevice.Name);
-                    }
-                    else
-                    {
-                        outputWidthCropped = 720;
-                        Double dfps = Convert.ToDouble(iMediaFile.VideoInfo.FPS_N) / iMediaFile.VideoInfo.FPS_D;
-                        if (dfps == 25)
-                        {
-                            outputHeightIncludingPadding = 576;
-                            _log.LogEvent("Force resolution of 720x576 as required for " + xTargetDevice.Name);
-                        }
-                        else
-                        {
-                            outputHeightIncludingPadding = 480;
-                            _log.LogEvent("Force resolution of 720x480 as required for " + xTargetDevice.Name);
-                        }
-                    }
-                    outputWidthIncludingPadding = outputWidthCropped;
-                }
-                else if (outputWidthCropped > xTargetDevice.Width)
-                {
-                    outputWidthCropped = xTargetDevice.Width;
-                    _log.LogEvent("Set resolution width to " + outputWidthCropped + " as required for " + xTargetDevice.Name);
-                }
-                
-                // adjust cropped vertical resolution
-                outputHeightCropped = Resolution.SuggestVerticalResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, customDAR,
-                    cropValues, outputWidthCropped, signalAR, out dar, mod, avsSettings.AcceptableAspectError);
-                while (outputHeightCropped > xTargetDevice.Height || (xTargetDevice.BluRay && outputHeightCropped > outputHeightIncludingPadding))
-                {
-                    outputWidthCropped -= mod;
-                    outputHeightCropped = Resolution.SuggestVerticalResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, customDAR,
-                        cropValues, outputWidthCropped, signalAR, out dar, mod, avsSettings.AcceptableAspectError);
-                }
-            }
-
-            if (keepInputResolution)
-            {
-                outputWidthCropped = outputWidthIncludingPadding = (int)iMediaFile.VideoInfo.Width;
-                outputHeightCropped = outputHeightIncludingPadding = (int)iMediaFile.VideoInfo.Height;
-                dar = customDAR;
-            }
-            else if (xTargetDevice == null || (xTargetDevice != null && !xTargetDevice.BluRay))
-            {
-                // Minimise upsizing
-                int sourceHorizontalResolution = (int)iMediaFile.VideoInfo.Width - cropValues.right - cropValues.left;
-                if (autoCrop)
-                    sourceHorizontalResolution = (int)iMediaFile.VideoInfo.Width;
-
-                if (outputWidthCropped > sourceHorizontalResolution)
-                {
-                    if (avsSettings.Mod16Method == mod16Method.resize)
-                        while (outputWidthCropped > sourceHorizontalResolution + mod)
-                            outputWidthCropped -= mod;
-                    else
-                        outputWidthCropped = sourceHorizontalResolution;
-                }
-            }
-
-            // calculate height
-            if (!keepInputResolution)
-                outputHeightCropped = Resolution.SuggestVerticalResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, customDAR,
-                    cropValues, outputWidthCropped, signalAR, out dar, mod, avsSettings.AcceptableAspectError);
-            
-            // set complete padding if required
-            if (outputHeightIncludingPadding == 0 && outputWidthIncludingPadding > 0)
-                outputHeightIncludingPadding = outputHeightCropped;
-            if (outputWidthIncludingPadding == 0 && outputHeightIncludingPadding > 0)
-                outputWidthIncludingPadding = outputWidthCropped;
-
-            // write calculated output resolution into the log
+            // log calculated output resolution
+            outputWidthCropped = outputWidthIncludingPadding - paddingValues.left - paddingValues.right;
+            outputHeightCropped = outputHeightIncludingPadding - paddingValues.bottom - paddingValues.top;
             _log.LogValue("Input resolution", iMediaFile.VideoInfo.Width + "x" + iMediaFile.VideoInfo.Height);
-            if (autoCrop && !keepInputResolution && cropValues.isCropped())
+            if (cropValues.isCropped())
             {
                 _log.LogValue("Autocrop values", cropValues);
                 _log.LogValue("Cropped output resolution", outputWidthCropped + "x" + outputHeightCropped);
             }
             else
                 _log.LogValue("Output resolution", outputWidthCropped + "x" + outputHeightCropped);
-            if (outputWidthIncludingPadding > 0 && (outputWidthIncludingPadding != outputWidthCropped || outputHeightIncludingPadding != outputHeightCropped))
+            if (paddingValues.isCropped())
                 _log.LogValue("Padded output resolution", outputWidthIncludingPadding + "x" + outputHeightIncludingPadding);
-            
-            if (outputWidthCropped <= 0 || outputHeightCropped <= 0)
-            {
-                _log.Error("Error in detection of output resolution");
-                return "";
-            }
 
             //Generate the avs script based on the template
             string inputLine = "#input";

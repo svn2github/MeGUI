@@ -888,9 +888,8 @@ namespace MeGUI
             else
             {
                 dpp.AutoDeinterlace = dpp.PrerenderJob = dpp.UseChaptersMarks = false;
-                dpp.KeepInputResolution = dpp.PrerenderJob = dpp.UseChaptersMarks = false;
+                dpp.KeepInputResolution = dpp.SignalAR = false;
                 dpp.OutputSize = null;
-                dpp.SignalAR = false;
             }
 
             if (keepInputResolution.Checked || !String.IsNullOrEmpty(dpp.VideoFileToMux))

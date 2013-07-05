@@ -589,13 +589,7 @@ SelectRangeEvery({3},{4},0)
 
         public static void undercrop(ref CropValues crop, modValue mValue)
         {
-            int mod = 16;
-            switch (mValue)
-            {
-                case modValue.mod8: mod = 8; break;
-                case modValue.mod4: mod = 4; break;
-                case modValue.mod2: mod = 2; break;
-            }
+            int mod = MeGUI.core.util.Resolution.GetModValue(mValue, mod16Method.undercrop, true);
 
             if (crop.left % 2 != 0 && crop.top % 2 != 0 && crop.bottom % 2 != 0 && crop.right % 2 != 0)
                 throw new Exception("Cropping by odd numbers not supported in undercropping to mod" + mod);
@@ -638,13 +632,7 @@ SelectRangeEvery({3},{4},0)
 
         public static void overcrop(ref CropValues crop, modValue mValue)
         {
-            int mod = 16;
-            switch (mValue)
-            {
-                case modValue.mod8: mod = 8; break;
-                case modValue.mod4: mod = 4; break;
-                case modValue.mod2: mod = 2; break;
-            }
+            int mod = MeGUI.core.util.Resolution.GetModValue(mValue, mod16Method.overcrop, true);
 
             if (crop.left % 2 != 0 && crop.top % 2 != 0 && crop.bottom % 2 != 0 && crop.right % 2 != 0)
                 throw new Exception("Cropping by odd numbers not supported in overcropping to mod" + mod);

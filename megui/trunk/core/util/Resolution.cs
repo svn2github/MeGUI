@@ -28,6 +28,301 @@ namespace MeGUI.core.util
     public class Resolution
     {
         /// <summary>
+        /// gets the desired resolution based on input settings
+        /// </summary>
+        /// <param name="sourceWidth">the complete width of the input file without cropping</param>
+        /// <param name="sourceHeight">the complete height of the input file without cropping</param>
+        /// <param name="inputDAR">the input DAR value</param>
+        /// <param name="cropValues">the crop values</param>
+        /// <param name="cropEnabled">true if crop values must be used</param>
+        /// <param name="mod">the mod value used for the final resize values</param>
+        /// <param name="resizeEnabled">true if resize can be used</param>
+        /// <param name="upsizingEnabled">true if upsizing can be used</param>
+        /// <param name="signalAR">whether or not ar signalling is to be used for the output 
+        /// (depending on this parameter, resizing changes to match the source AR)</param>
+        /// <param name="suggestHeight">true if height should be calculated</param>
+        /// <param name="acceptableAspectErrorPercent">acceptable aspect error if signalAR is true</param>
+        /// <param name="xTargetDevice">x264 Target Device - may limit the output resolution</param>
+        /// <param name="fps">the frames per second of the source</param>
+        /// <param name="outputWidth">the calculated output width</param>
+        /// <param name="outputHeight">the calculated output height</param>
+        /// <param name="paddingValues">the padding values</param>
+        /// <param name="outputDar">the output DAR value</param>
+        /// <param name="_log">the log item</param>
+        public static void GetResolution(int sourceWidth, int sourceHeight, Dar inputDar, 
+            ref CropValues cropValues, bool cropEnabled, int mod, bool resizeEnabled, bool upsizingAllowed, 
+            bool signalAR, bool suggestHeight, decimal acceptableAspectErrorPercent,
+            x264Device xTargetDevice, Double fps, ref int outputWidth, ref int outputHeight, 
+            out CropValues paddingValues, out Dar? outputDar, LogItem _log)
+        {
+            paddingValues = new CropValues();
+
+            getResolution(sourceWidth, sourceHeight, inputDar,
+                cropValues, cropEnabled, mod, resizeEnabled, upsizingAllowed,
+                signalAR, suggestHeight, acceptableAspectErrorPercent,
+                ref outputWidth, ref outputHeight,
+                out outputDar, _log);
+
+            bool settingsChanged;
+            if (isResolutionDeviceCompliant(xTargetDevice, outputWidth, outputHeight, out settingsChanged, ref resizeEnabled, ref cropEnabled, _log) == true)
+            {
+                if (!cropEnabled)
+                    cropValues = new CropValues();
+                return;
+            }
+
+            if (settingsChanged)
+            {
+                getResolution(sourceWidth, sourceHeight, inputDar,
+                    cropValues, cropEnabled, mod, resizeEnabled, upsizingAllowed,
+                    signalAR, suggestHeight, acceptableAspectErrorPercent,
+                    ref outputWidth, ref outputHeight,
+                    out outputDar, _log);
+
+                // check if the resolution is now compliant
+                if (isResolutionDeviceCompliant(xTargetDevice, outputWidth, outputHeight, out settingsChanged, ref resizeEnabled, ref cropEnabled, null) == true)
+                {
+                    if (!cropEnabled)
+                        cropValues = new CropValues();
+                    return;
+                }
+            }
+            if (!cropEnabled)
+                cropValues = new CropValues();
+
+            // adjust horizontal resolution if width or height are too large
+            int outputHeightIncludingPadding = 0;
+            int outputWidthIncludingPadding = 0;
+            if (xTargetDevice.BluRay)
+            {
+                if (outputWidth >= 1920)
+                {
+                    outputWidth = 1920;
+                    outputHeightIncludingPadding = 1080;
+                }
+                else if (outputWidth >= 1280)
+                {
+                    outputWidth = 1280;
+                    outputHeightIncludingPadding = 720;
+                }
+                else
+                {
+                    outputWidth = 720;
+                    if (fps == 25)
+                        outputHeightIncludingPadding = 576;
+                    else
+                        outputHeightIncludingPadding = 480;
+                }
+                outputWidthIncludingPadding = outputWidth;
+                if (_log != null)
+                    _log.LogEvent("Force resolution of " + outputWidth + "x" + outputHeightIncludingPadding + " as required for " + xTargetDevice.Name);
+            }
+            else if (outputWidth > xTargetDevice.Width)
+            {
+                outputWidth = xTargetDevice.Width;
+                _log.LogEvent("Set resolution width to " + outputWidth + " as required for " + xTargetDevice.Name);
+            }
+
+            // adjust cropped vertical resolution
+            getResolution(sourceWidth, sourceHeight, inputDar,
+                    cropValues, cropEnabled, mod, resizeEnabled, upsizingAllowed,
+                    signalAR, suggestHeight, acceptableAspectErrorPercent,
+                    ref outputWidth, ref outputHeight,
+                    out outputDar, _log);
+            while ((xTargetDevice.Height > 0 && outputHeight > xTargetDevice.Height) || (xTargetDevice.BluRay && outputHeight > outputHeightIncludingPadding))
+            {
+                outputWidth -= mod;
+                getResolution(sourceWidth, sourceHeight, inputDar,
+                    cropValues, cropEnabled, mod, resizeEnabled, upsizingAllowed,
+                    signalAR, suggestHeight, acceptableAspectErrorPercent,
+                    ref outputWidth, ref outputHeight,
+                    out outputDar, _log);
+            }
+
+            paddingValues.left = Convert.ToInt32(Math.Floor((outputWidthIncludingPadding - outputWidth) / 2.0));
+            paddingValues.right = Convert.ToInt32(Math.Ceiling((outputWidthIncludingPadding - outputWidth) / 2.0));
+            paddingValues.bottom = Convert.ToInt32(Math.Floor((outputHeightIncludingPadding - outputHeight) / 2.0));
+            paddingValues.top = Convert.ToInt32(Math.Ceiling((outputHeightIncludingPadding - outputHeight) / 2.0));
+
+            outputWidth = outputWidthIncludingPadding;
+            outputHeight = outputHeightIncludingPadding;
+
+            if (!cropEnabled)
+                cropValues = new CropValues();
+        }
+
+        /// <summary>
+        /// check if resolution is device compatible
+        /// </summary>
+        /// <param name="xTargetDevice">x264 Target Device - may limit the output resolution</param>
+        /// <param name="outputWidth">the calculated output width</param>
+        /// <param name="outputHeight">the calculated output height</param>
+        /// <param name="settingsChanged">true if resize or crop has been changed</param>
+        /// <param name="resizeEnabled">if resize is enabled</param>
+        /// <param name="cropEnabled">if crop is enabled</param>
+        /// <param name="_log">log item</param>
+        /// <returns>true if the settings are device compatible</returns>
+        private static bool isResolutionDeviceCompliant(x264Device xTargetDevice, int outputWidth, int outputHeight, 
+            out bool settingsChanged, ref bool resizeEnabled, ref bool cropEnabled, LogItem _log)
+        {
+            settingsChanged = false;
+            if (xTargetDevice == null)
+                return true;
+
+            bool bAdjustResolution = false;
+            if (xTargetDevice.Width < outputWidth)
+            {
+                // width must be lowered to be target conform
+                bAdjustResolution = true;
+                if (!resizeEnabled)
+                {
+                    resizeEnabled = settingsChanged = true;
+                    if (_log != null)
+                        _log.LogEvent("Enabling \"Resize\" as " + xTargetDevice.Name + " does not support a resolution width of "
+                            + outputWidth + ". The maximum value is " + xTargetDevice.Width + ".");
+                }
+            }
+            else if (xTargetDevice.Height < outputHeight)
+            {
+                // height must be lowered to be target conform
+                bAdjustResolution = true;
+                if (!resizeEnabled)
+                {
+                    resizeEnabled = settingsChanged = true;
+                    if (_log != null)
+                        _log.LogEvent("Enabling \"Resize\" as " + xTargetDevice.Name + " does not support a resolution height of "
+                            + outputHeight + ". The maximum value is " + xTargetDevice.Height + ".");
+                }
+            }
+            else if (xTargetDevice.BluRay)
+            {
+                string strResolution = outputWidth + "x" + outputHeight;
+                if (!strResolution.Equals("1920x1080") &&
+                    !strResolution.Equals("1440x1080") &&
+                    !strResolution.Equals("1280x720") &&
+                    !strResolution.Equals("720x576") &&
+                    !strResolution.Equals("720x480"))
+                {
+                    bAdjustResolution = settingsChanged = true;
+                    if (!resizeEnabled)
+                    {
+                        resizeEnabled = true;
+                        if (_log != null)
+                            _log.LogEvent("Enabling \"Resize\" as " + xTargetDevice.Name + " does not support a resolution of "
+                                + outputWidth + "x" + outputHeight
+                                + ". Supported are 1920x1080, 1440x1080, 1280x720, 720x576 and 720x480.");
+                    }
+                }
+            }
+
+            if (bAdjustResolution && !cropEnabled)
+            {
+                if (_log != null)
+                    _log.LogEvent("Enabling \"Crop\"");
+                cropEnabled = settingsChanged = true;
+            }
+
+            if (bAdjustResolution)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// gets the desired resolution based on input settings
+        /// </summary>
+        /// <param name="sourceWidth">the complete width of the input file without cropping</param>
+        /// <param name="sourceHeight">the complete height of the input file without cropping</param>
+        /// <param name="inputDAR">the input DAR value</param>
+        /// <param name="cropping">the crop values</param>
+        /// <param name="mod">the mod value used for the final resize values</param>
+        /// <param name="resizeEnabled">true if resize can be used</param>
+        /// <param name="upsizingEnabled">true if upsizing can be used</param>
+        /// <param name="signalAR">whether or not ar signalling is to be used for the output 
+        /// (depending on this parameter, resizing changes to match the source AR)</param>
+        /// <param name="suggestHeight">true if height should be calculated</param>
+        /// <param name="acceptableAspectErrorPercent">acceptable aspect error if signalAR is true</param>
+        /// <param name="outputWidth">the calculated output width</param>
+        /// <param name="outputHeight">the calculated output height</param>
+        /// <param name="outputDar">the output DAR value</param>
+        /// <param name="_log">the log item</param>
+        private static void getResolution(int sourceWidth, int sourceHeight, Dar inputDar,
+            CropValues cropValues, bool cropEnabled, int mod, bool resizeEnabled, 
+            bool upsizingAllowed, bool signalAR, bool suggestHeight, 
+            decimal acceptableAspectErrorPercent, ref int outputWidth, 
+            ref int outputHeight, out Dar? outputDar, LogItem _log)
+        {
+            outputDar = null;
+
+            CropValues cropping = new CropValues();
+            if (cropEnabled)
+                cropping = cropValues.Clone();
+
+            // remove upsizing if not allowed
+            if ((!upsizingAllowed || resizeEnabled) && sourceWidth - cropping.left - cropping.right < outputWidth)
+            {
+                outputWidth = sourceWidth - cropping.left - cropping.right;
+                if (_log != null)
+                    _log.LogEvent("Lowering output width resolution to " + outputWidth + " to avoid upsizing");
+            }
+
+            // correct hres if not mod compliant
+            if (outputWidth % mod != 0)
+            {
+                int diff = outputWidth % mod;
+                if (outputWidth - diff > 0)
+                    outputWidth -= diff;
+                else
+                    outputWidth = mod;
+            }
+
+            if (suggestHeight)
+            {
+                int scriptVerticalResolution = Resolution.SuggestVerticalResolution(sourceHeight, sourceWidth, inputDar, cropping,
+                    outputWidth, signalAR, out outputDar, mod, acceptableAspectErrorPercent);
+
+                int iMaximum = 9999;
+                if (resizeEnabled || !upsizingAllowed)
+                    iMaximum = sourceHeight - cropping.top - cropping.bottom;
+
+                // Reduce horizontal resolution until a fit is found
+                while (scriptVerticalResolution > iMaximum && outputWidth > mod)
+                {
+                    outputWidth -= mod;
+                    scriptVerticalResolution = Resolution.SuggestVerticalResolution(sourceHeight, sourceWidth, inputDar, cropping,
+                        outputWidth, signalAR, out outputDar, mod, acceptableAspectErrorPercent);
+                }
+                outputHeight = scriptVerticalResolution;
+            }
+            else if (!resizeEnabled)
+                outputHeight = sourceHeight - cropping.top - cropping.bottom;
+        }
+
+        /// <summary>
+        /// calculates the mod value
+        /// </summary>
+        /// <param name="modMethod">the selected mod method</param>
+        /// <param name="modMethod">the selected mod value</param>
+        /// <param name="signalAR">whether or not we're going to signal the aspect ratio</param>
+        /// <returns>the mod value</returns>
+        public static int GetModValue(modValue modValue, mod16Method modMethod, bool signalAR)
+        {
+            int mod = 16;
+            if (!signalAR || modMethod != mod16Method.nonMod16)
+            {
+                switch (modValue)
+                {
+                    case modValue.mod8: mod = 8; break;
+                    case modValue.mod4: mod = 4; break;
+                    case modValue.mod2: mod = 2; break;
+                }
+            }
+            else
+                mod = 1;
+
+            return mod;
+        }
+
+        /// <summary>
         /// calculates the ideal mod vertical resolution that matches the desired horizontal resolution
         /// </summary>
         /// <param name="readerHeight">height of the source</param>

@@ -884,7 +884,7 @@ namespace MeGUI
         private void setCropValues(CropValues cropValues)
         {
             this.Cursor = System.Windows.Forms.Cursors.Default;
-            bool error = (cropValues.left == -1);
+            bool error = (cropValues.left < 0);
             if (!error)
             {
                 eventsOn = false;
@@ -1292,19 +1292,7 @@ namespace MeGUI
                 }
                 if (crop.Checked)
                 {
-                    int mod = 16;
-                    if (!signalAR.Checked || mod16Box.SelectedIndex != (int)mod16Method.nonMod16)
-                    {
-                        switch ((modValue)modValueBox.SelectedIndex)
-                        {
-                            case modValue.mod8: mod = 8; break;
-                            case modValue.mod4: mod = 4; break;
-                            case modValue.mod2: mod = 2; break;
-                        }
-                    }
-                    else
-                        mod = 1;
-
+                    int mod = Resolution.GetModValue((modValue)modValueBox.SelectedIndex, (mod16Method)mod16Box.SelectedIndex, signalAR.Checked);
                     cropLeft.Maximum = (int)file.VideoInfo.Width - Cropping.right - mod;
                     cropRight.Maximum = (int)file.VideoInfo.Width - Cropping.left - mod;
                     cropTop.Maximum = (int)file.VideoInfo.Height - Cropping.bottom - mod;
@@ -1323,89 +1311,38 @@ namespace MeGUI
             else
                 this.horizontalResolution.Enabled = this.verticalResolution.Enabled = false;
 
-            this.suggestedDar = null;
+            suggestedDar = null;
             bool signalAR = this.signalAR.Checked;
             if (file == null || (!resize.Checked && !signalAR))
                 return;
 
-            try
-            {
-                Dar? suggestedDar;
+            int mod = Resolution.GetModValue((modValue)modValueBox.SelectedIndex, (mod16Method)mod16Box.SelectedIndex, signalAR);
+            horizontalResolution.Increment = verticalResolution.Increment = mod;
 
-                int mod = 16;
-                if (!signalAR || mod16Box.SelectedIndex != (int)mod16Method.nonMod16)
-                {
-                    switch ((modValue)modValueBox.SelectedIndex)
-                    {
-                        case modValue.mod8: mod = 8; break;
-                        case modValue.mod4: mod = 4; break;
-                        case modValue.mod2: mod = 2; break;
-                    }
-                }              
-                else
-                    mod = 1;
-                horizontalResolution.Increment = verticalResolution.Increment = mod;
+            int outputWidth = (int)horizontalResolution.Value;
+            int outputHeight = (int)verticalResolution.Value;
 
-                int hres = (int)horizontalResolution.Value;
+            // remove upsizing or undersizing if value cannot be changed
+            if (!resize.Checked && !((!bAllowUpsizing || bResizeEnabled) && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < outputWidth))
+                outputWidth = outputWidth - Cropping.left - Cropping.right;
 
-                // remove upsizing if not allowed
-                if ((!bAllowUpsizing || bResizeEnabled) && (int)file.VideoInfo.Width - Cropping.left - Cropping.right < hres)
-                    hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-                else if (!horizontalResolution.Enabled) // remove upsizing or undersizing if value cannot be changed
-                    hres = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
-
-                // correct hres if not mod compliant
-                if (hres % mod != 0)
-                {
-                    int diff = hres % mod;
-                    if (hres - diff > 0)
-                        hres -= diff;
-                    else
-                        hres += mod - diff;
-                }
-
-                if (hres != horizontalResolution.Value)
-                    horizontalResolution.Value = hres;
-
-                int scriptVerticalResolution = Resolution.SuggestVerticalResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, arChooser.RealValue, Cropping,
-                    (int)horizontalResolution.Value, signalAR, out suggestedDar, mod, this.GetProfileSettings().AcceptableAspectError);
-
-                if (suggestResolution.Checked)
-                {
-                    int iMaximum = (int)verticalResolution.Maximum;
-                    if (bResizeEnabled)
-                        iMaximum = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
-
-                    if (scriptVerticalResolution > iMaximum)
-                    {
-                        // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
-                        hres = (int)horizontalResolution.Value;
-                        do
-                        {
-                            hres -= mod;
-                            scriptVerticalResolution = Resolution.SuggestVerticalResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, arChooser.RealValue, Cropping,
-                                hres, signalAR, out suggestedDar, mod, this.GetProfileSettings().AcceptableAspectError);
-                        }
-                        while (scriptVerticalResolution > verticalResolution.Maximum && hres > 0);
-                        horizontalResolution.Value = hres;
-                    }
-                    verticalResolution.Enabled = false;
-                    verticalResolution.Value = (decimal)scriptVerticalResolution;
-                }
-                else
-                {
-                    this.verticalResolution.Enabled = resize.Checked;
-                    if (!verticalResolution.Enabled)
-                        verticalResolution.Value = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
-                }
-
-                if (signalAR)
-                    this.suggestedDar = suggestedDar;
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Error in computing resolution\r\n" + exc.Message, "Unspecified Error", MessageBoxButtons.OK);
-            }
+            CropValues paddingValues;
+            CropValues cropValues = Cropping.Clone();
+            
+            Resolution.GetResolution((int)file.VideoInfo.Width, (int)file.VideoInfo.Height, arChooser.RealValue, 
+                ref cropValues, crop.Checked, mod, bResizeEnabled, bAllowUpsizing, signalAR, suggestResolution.Checked, 
+                this.GetProfileSettings().AcceptableAspectError, null, 0, ref outputWidth, ref outputHeight, out paddingValues, out suggestedDar, null);
+            
+            if (!resize.Checked && !suggestResolution.Checked) // just to make sure
+                outputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+            if (outputWidth != (int)horizontalResolution.Value)
+                horizontalResolution.Value = outputWidth;
+            if (outputHeight != (int)verticalResolution.Value)
+                verticalResolution.Value = outputHeight;
+            if (suggestResolution.Checked)
+                verticalResolution.Enabled = false;
+            else
+                verticalResolution.Enabled = resize.Checked;
         }
 
         private void checkControls()
@@ -1435,7 +1372,7 @@ namespace MeGUI
 
         private void resize_CheckedChanged(object sender, EventArgs e)
         {
-            if (sender != null && e != null & resize.Checked)
+            if (sender != null && e != null && resize.Checked)
                 updateEverything(sender != null, false, true);
             else
                 updateEverything(sender != null, false, false);
