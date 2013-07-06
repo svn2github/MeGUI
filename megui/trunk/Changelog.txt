@@ -1,3 +1,4 @@
+2358 [MediaInfo] enhanced handling of incorrect avs files. Bug #722
 2357 [AVS Script Creator] + [OneClick] aligned resolution calculation of both tools
 
 Changelog 2341 --> 2356

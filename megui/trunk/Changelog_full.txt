@@ -1,3 +1,22 @@
+2356 [OneClick] + [HD Streams Extractor] fixed detection of Blu-Ray if not using the root folder of the BD. Bug #721
+2355 [OneClick] added option to disable intermediate MKV files
+2354 [MainForm] improved File\Open and drag & drop handling
+2353 [MKV Muxer] fixed raw LC-AAC files detected as HE-AAC
+                 fixed wrong default duration for interlaced AVC in some cases
+2352 [Log] improved logging part II
+2351 [Preset Exporter] fixed not exporting the AviSynth preset included in a OneClick preset. Bug #719
+2350 [OneClick] fixed wrong stream order in some TS files. Bug #718
+2349 [x264] fixed max values for --crf and --qp
+2348 [x264] vbv enhancements
+            - vbv values are shown in red if the values are too high or not limited
+            - as too high values are also logged by x264 as a warning the MeGUI log warning has been removed
+            - fixed not applying proper vbv values if only changing the AVC profile
+2347 [Log] improved logging - console output is added to the log immediately
+2346 [HD Streams Extractor] select audio/subtitle tracks without language tag by default
+2345 [MP4 Muxer] revert r2299 (allow Nero & Apple Chapters styles muxing for better interoperability with players)
+2344 [AVS Script Creator] + [OneClick] fixed memory leak when using autocrop. Bug #653
+2343 [x264] fixed wrong detection of errors if file name contains "error"
+2342 [OneClick] enhanced error handling
 2341 [x264] changed vbv restrictions so that is possible to use non compliant values. part II
 2340 [OneClick] improved working path detection
 2339 [x264] changed vbv restrictions so that is possible to use non compliant values

@@ -791,7 +791,9 @@ namespace MeGUI
             }
             catch (Exception ex)
             {
-                infoLog.LogValue("Error parsing media file", ex, ImageType.Information);
+                if (infoLog == null)
+                    infoLog = MainForm.Instance.Log.Info("MediaInfo");
+                infoLog.LogValue("Error parsing media file " + strFile, ex.Message, ImageType.Error);
             }
         }
 
@@ -1256,7 +1258,7 @@ namespace MeGUI
 
         public bool HasAudio
         {
-            get { return (_AudioInfo.Codecs.Length > 0); }
+            get { return (_AudioInfo.HasAudio()); }
         }
 
         public bool HasVideo
@@ -1397,7 +1399,7 @@ namespace MeGUI
 
         public AudioInformation()
         {
-            
+            _aCodecs = new AudioCodec[]{};
         }
 
         public AudioType Type
@@ -1433,6 +1435,15 @@ namespace MeGUI
                 return 0;
 
             return _arrAudioTracks[0].MMGTrackID;
+        }
+
+        /// <summary>gets the information if the file has as least one audio track</summary>
+        /// <returns>true if the file has at least one audio track</returns>
+        public bool HasAudio()
+        {
+            if (_aCodecs != null && _aCodecs.Length > 0)
+                return true;
+            return false;
         }
 
         public VideoInformation Clone()
