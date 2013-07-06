@@ -1794,6 +1794,8 @@ namespace MeGUI
         {
             oneClickAudioStreamControl1.enableDragDrop();
             oneClickSubtitleStreamControl1.enableDragDrop();
+            if (!String.IsNullOrEmpty(input.SelectedText))
+                OneClickProfileChanged(null, null);
         }
 
         private void audioTab_SelectedIndexChanged(object sender, EventArgs e)
