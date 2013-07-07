@@ -117,7 +117,7 @@ namespace MeGUI.core.util
                 if (_log != null)
                     _log.LogEvent("Force resolution of " + outputWidth + "x" + outputHeightIncludingPadding + " as required for " + xTargetDevice.Name);
             }
-            else if (outputWidth > xTargetDevice.Width)
+            else if (xTargetDevice.Width > 0 && outputWidth > xTargetDevice.Width)
             {
                 outputWidth = xTargetDevice.Width;
                 _log.LogEvent("Set resolution width to " + outputWidth + " as required for " + xTargetDevice.Name);
@@ -168,9 +168,11 @@ namespace MeGUI.core.util
             settingsChanged = false;
             if (xTargetDevice == null)
                 return true;
+            if (!xTargetDevice.BluRay && xTargetDevice.Height <= 0 && xTargetDevice.Width <= 0)
+                return true;
 
             bool bAdjustResolution = false;
-            if (xTargetDevice.Width < outputWidth)
+            if (xTargetDevice.Width > 0 && xTargetDevice.Width < outputWidth)
             {
                 // width must be lowered to be target conform
                 bAdjustResolution = true;
@@ -182,7 +184,7 @@ namespace MeGUI.core.util
                             + outputWidth + ". The maximum value is " + xTargetDevice.Width + ".");
                 }
             }
-            else if (xTargetDevice.Height < outputHeight)
+            else if (xTargetDevice.Height > 0 && xTargetDevice.Height < outputHeight)
             {
                 // height must be lowered to be target conform
                 bAdjustResolution = true;

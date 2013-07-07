@@ -552,6 +552,7 @@ namespace MeGUI
             {
                 x264Settings xs = (x264Settings)settings;
                 xTargetDevice = xs.TargetDevice;
+                _log.LogValue("Target device", xTargetDevice.Name);
 
                 // create qpf file if necessary
                 if (!String.IsNullOrEmpty(job.PostprocessingProperties.ChapterFile) && useChaptersMarks)
