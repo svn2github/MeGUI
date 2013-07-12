@@ -260,7 +260,7 @@ namespace MeGUI.core.util
                 cropping = cropValues.Clone();
 
             // remove upsizing if not allowed
-            if ((!upsizingAllowed || resizeEnabled) && sourceWidth - cropping.left - cropping.right < outputWidth)
+            if (!upsizingAllowed && sourceWidth - cropping.left - cropping.right < outputWidth)
             {
                 outputWidth = sourceWidth - cropping.left - cropping.right;
                 if (_log != null)
@@ -283,7 +283,7 @@ namespace MeGUI.core.util
                     outputWidth, signalAR, out outputDar, mod, acceptableAspectErrorPercent);
 
                 int iMaximum = 9999;
-                if (resizeEnabled || !upsizingAllowed)
+                if (!upsizingAllowed)
                     iMaximum = sourceHeight - cropping.top - cropping.bottom;
 
                 // Reduce horizontal resolution until a fit is found

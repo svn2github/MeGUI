@@ -1,4 +1,5 @@
-2360 [OneClick] fixed using a resolution of 16x16 or lower in some cases (regression of 2357).
+2361 [AVS Script Creator] fixed not possible to change the height (regression of 2357)
+2360 [OneClick] fixed using a resolution of 16x16 or lower in some cases (regression of 2357)
 2359 [OneClick] fixed adding only the first track when using File\Open in the MainForm. Bug #724
 2358 [MediaInfo] enhanced handling of incorrect avs files. Bug #722
 2357 [AVS Script Creator] + [OneClick] aligned resolution calculation of both tools
