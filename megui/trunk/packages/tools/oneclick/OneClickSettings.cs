@@ -237,6 +237,23 @@ namespace MeGUI
             set { defaultOutputDirectory = value; }
         }
 
+        private string defaultLanguage;
+        public string DefaultLanguage
+        {
+            get 
+            {
+                if (String.IsNullOrEmpty(defaultLanguage))
+                {
+                    if (MainForm.Instance != null && !String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultLanguage1))
+                        defaultLanguage = MainForm.Instance.Settings.DefaultLanguage1;
+                    else
+                        defaultLanguage = "English";
+                }
+                return defaultLanguage;
+            }
+            set { defaultLanguage = value; }
+        }
+
         private List<string> defaultAudioLanguage;
         [XmlIgnore()]
         [PropertyEqualityIgnoreAttribute()]
@@ -321,6 +338,7 @@ namespace MeGUI
                 {
                     DefaultAudioLanguage.Add(MainForm.Instance.Settings.DefaultLanguage1);
                     DefaultSubtitleLanguage.Add(MainForm.Instance.Settings.DefaultLanguage1);
+                    DefaultLanguage = MainForm.Instance.Settings.DefaultLanguage1;
                 }
                 if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultLanguage2) && !DefaultAudioLanguage.Contains(MainForm.Instance.Settings.DefaultLanguage2))
                     DefaultAudioLanguage.Add(MainForm.Instance.Settings.DefaultLanguage2);

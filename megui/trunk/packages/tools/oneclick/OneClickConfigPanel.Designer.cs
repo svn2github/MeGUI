@@ -53,7 +53,6 @@ namespace MeGUI.packages.tools.oneclick
             this.otherGroupBox = new System.Windows.Forms.GroupBox();
             this.keepInputResolution = new System.Windows.Forms.CheckBox();
             this.autoCrop = new System.Windows.Forms.CheckBox();
-            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.preprocessVideo = new System.Windows.Forms.CheckBox();
             this.autoDeint = new System.Windows.Forms.CheckBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
@@ -64,18 +63,14 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.chkDontEncodeVideo = new System.Windows.Forms.CheckBox();
             this.usechaptersmarks = new System.Windows.Forms.CheckBox();
-            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.videoCodecLabel = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.extraGroupbox = new System.Windows.Forms.GroupBox();
             this.audioTab = new System.Windows.Forms.TabControl();
             this.audioPage0 = new System.Windows.Forms.TabPage();
-            this.oneClickAudioControl1 = new MeGUI.OneClickAudioControl();
             this.audioPageAdd = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.splitSize = new MeGUI.core.gui.TargetSizeSCBox();
-            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.label2 = new System.Windows.Forms.Label();
             this.filesizeLabel = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -99,12 +94,11 @@ namespace MeGUI.packages.tools.oneclick
             this.lbNonDefaultAudio = new System.Windows.Forms.ListBox();
             this.lbDefaultAudio = new System.Windows.Forms.ListBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.chkDisableIntermediateMKV = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.deleteWorking = new System.Windows.Forms.Button();
             this.deleteOutput = new System.Windows.Forms.Button();
-            this.outputDirectory = new MeGUI.FileBar();
             this.label8 = new System.Windows.Forms.Label();
-            this.workingDirectory = new MeGUI.FileBar();
             this.workingDirectoryLabel = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -120,7 +114,15 @@ namespace MeGUI.packages.tools.oneclick
             this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.audioAddTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.audioRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
-            this.chkDisableIntermediateMKV = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cbUnknownLanguage = new System.Windows.Forms.ComboBox();
+            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.oneClickAudioControl1 = new MeGUI.OneClickAudioControl();
+            this.splitSize = new MeGUI.core.gui.TargetSizeSCBox();
+            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
+            this.outputDirectory = new MeGUI.FileBar();
+            this.workingDirectory = new MeGUI.FileBar();
             label3 = new System.Windows.Forms.Label();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
@@ -193,14 +195,6 @@ namespace MeGUI.packages.tools.oneclick
             this.autoCrop.TabIndex = 41;
             this.autoCrop.Text = "AutoCrop";
             this.autoCrop.UseVisualStyleBackColor = true;
-            // 
-            // avsProfile
-            // 
-            this.avsProfile.Location = new System.Drawing.Point(109, 90);
-            this.avsProfile.Name = "avsProfile";
-            this.avsProfile.ProfileSet = "AviSynth";
-            this.avsProfile.Size = new System.Drawing.Size(298, 22);
-            this.avsProfile.TabIndex = 39;
             // 
             // preprocessVideo
             // 
@@ -327,14 +321,6 @@ namespace MeGUI.packages.tools.oneclick
             this.usechaptersmarks.Text = "Force key frames for chapters marks";
             this.usechaptersmarks.UseVisualStyleBackColor = true;
             // 
-            // videoProfile
-            // 
-            this.videoProfile.Location = new System.Drawing.Point(77, 47);
-            this.videoProfile.Name = "videoProfile";
-            this.videoProfile.ProfileSet = "Video";
-            this.videoProfile.Size = new System.Drawing.Size(330, 22);
-            this.videoProfile.TabIndex = 40;
-            // 
             // videoCodecLabel
             // 
             this.videoCodecLabel.Location = new System.Drawing.Point(6, 51);
@@ -391,13 +377,6 @@ namespace MeGUI.packages.tools.oneclick
             this.audioPage0.Text = "Default";
             this.audioPage0.UseVisualStyleBackColor = true;
             // 
-            // oneClickAudioControl1
-            // 
-            this.oneClickAudioControl1.Location = new System.Drawing.Point(6, 9);
-            this.oneClickAudioControl1.Name = "oneClickAudioControl1";
-            this.oneClickAudioControl1.Size = new System.Drawing.Size(386, 114);
-            this.oneClickAudioControl1.TabIndex = 0;
-            // 
             // audioPageAdd
             // 
             this.audioPageAdd.Location = new System.Drawing.Point(4, 22);
@@ -431,32 +410,6 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox8.TabIndex = 19;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = " File ";
-            // 
-            // splitSize
-            // 
-            this.splitSize.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.splitSize.Location = new System.Drawing.Point(69, 49);
-            this.splitSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitSize.Name = "splitSize";
-            this.splitSize.NullString = "Dont split";
-            this.splitSize.SaveCustomValues = false;
-            this.splitSize.SelectedIndex = 0;
-            this.splitSize.Size = new System.Drawing.Size(340, 29);
-            this.splitSize.TabIndex = 41;
-            // 
-            // fileSize
-            // 
-            this.fileSize.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.fileSize.Location = new System.Drawing.Point(69, 23);
-            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.fileSize.Name = "fileSize";
-            this.fileSize.NullString = "Don\'t care";
-            this.fileSize.SaveCustomValues = false;
-            this.fileSize.SelectedIndex = 0;
-            this.fileSize.Size = new System.Drawing.Size(340, 29);
-            this.fileSize.TabIndex = 42;
             // 
             // label2
             // 
@@ -503,6 +456,8 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.cbUnknownLanguage);
+            this.tabPage4.Controls.Add(this.label4);
             this.tabPage4.Controls.Add(this.cbLanguageSelect);
             this.tabPage4.Controls.Add(this.label7);
             this.tabPage4.Controls.Add(this.groupBox2);
@@ -524,7 +479,7 @@ namespace MeGUI.packages.tools.oneclick
             "none"});
             this.cbLanguageSelect.Location = new System.Drawing.Point(268, 227);
             this.cbLanguageSelect.Name = "cbLanguageSelect";
-            this.cbLanguageSelect.Size = new System.Drawing.Size(108, 21);
+            this.cbLanguageSelect.Size = new System.Drawing.Size(130, 21);
             this.cbLanguageSelect.TabIndex = 47;
             // 
             // label7
@@ -544,18 +499,18 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox2.Controls.Add(this.btnAddSubtitle);
             this.groupBox2.Controls.Add(this.lbNonDefaultSubtitle);
             this.groupBox2.Controls.Add(this.lbDefaultSubtitle);
-            this.groupBox2.Location = new System.Drawing.Point(6, 118);
+            this.groupBox2.Location = new System.Drawing.Point(6, 101);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(413, 106);
+            this.groupBox2.Size = new System.Drawing.Size(413, 93);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Default Subtitle Language ";
             // 
             // btnSubtitleDown
             // 
-            this.btnSubtitleDown.Location = new System.Drawing.Point(151, 77);
+            this.btnSubtitleDown.Location = new System.Drawing.Point(151, 68);
             this.btnSubtitleDown.Name = "btnSubtitleDown";
-            this.btnSubtitleDown.Size = new System.Drawing.Size(29, 23);
+            this.btnSubtitleDown.Size = new System.Drawing.Size(29, 20);
             this.btnSubtitleDown.TabIndex = 6;
             this.btnSubtitleDown.Text = "-";
             this.btnSubtitleDown.UseVisualStyleBackColor = true;
@@ -563,9 +518,9 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // btnSubtitleUp
             // 
-            this.btnSubtitleUp.Location = new System.Drawing.Point(151, 19);
+            this.btnSubtitleUp.Location = new System.Drawing.Point(151, 18);
             this.btnSubtitleUp.Name = "btnSubtitleUp";
-            this.btnSubtitleUp.Size = new System.Drawing.Size(29, 23);
+            this.btnSubtitleUp.Size = new System.Drawing.Size(29, 20);
             this.btnSubtitleUp.TabIndex = 5;
             this.btnSubtitleUp.Text = "+";
             this.btnSubtitleUp.UseVisualStyleBackColor = true;
@@ -573,9 +528,9 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // btnRemoveSubtitle
             // 
-            this.btnRemoveSubtitle.Location = new System.Drawing.Point(151, 48);
+            this.btnRemoveSubtitle.Location = new System.Drawing.Point(151, 43);
             this.btnRemoveSubtitle.Name = "btnRemoveSubtitle";
-            this.btnRemoveSubtitle.Size = new System.Drawing.Size(29, 23);
+            this.btnRemoveSubtitle.Size = new System.Drawing.Size(29, 20);
             this.btnRemoveSubtitle.TabIndex = 4;
             this.btnRemoveSubtitle.Text = ">>";
             this.btnRemoveSubtitle.UseVisualStyleBackColor = true;
@@ -583,9 +538,9 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // btnAddSubtitle
             // 
-            this.btnAddSubtitle.Location = new System.Drawing.Point(227, 48);
+            this.btnAddSubtitle.Location = new System.Drawing.Point(227, 43);
             this.btnAddSubtitle.Name = "btnAddSubtitle";
-            this.btnAddSubtitle.Size = new System.Drawing.Size(29, 23);
+            this.btnAddSubtitle.Size = new System.Drawing.Size(29, 20);
             this.btnAddSubtitle.TabIndex = 3;
             this.btnAddSubtitle.Text = "<<";
             this.btnAddSubtitle.UseVisualStyleBackColor = true;
@@ -596,7 +551,7 @@ namespace MeGUI.packages.tools.oneclick
             this.lbNonDefaultSubtitle.FormattingEnabled = true;
             this.lbNonDefaultSubtitle.Location = new System.Drawing.Point(262, 18);
             this.lbNonDefaultSubtitle.Name = "lbNonDefaultSubtitle";
-            this.lbNonDefaultSubtitle.Size = new System.Drawing.Size(130, 82);
+            this.lbNonDefaultSubtitle.Size = new System.Drawing.Size(130, 69);
             this.lbNonDefaultSubtitle.Sorted = true;
             this.lbNonDefaultSubtitle.TabIndex = 2;
             this.lbNonDefaultSubtitle.SelectedIndexChanged += new System.EventHandler(this.lbNonDefaultSubtitle_SelectedIndexChanged);
@@ -606,7 +561,7 @@ namespace MeGUI.packages.tools.oneclick
             this.lbDefaultSubtitle.FormattingEnabled = true;
             this.lbDefaultSubtitle.Location = new System.Drawing.Point(15, 18);
             this.lbDefaultSubtitle.Name = "lbDefaultSubtitle";
-            this.lbDefaultSubtitle.Size = new System.Drawing.Size(130, 82);
+            this.lbDefaultSubtitle.Size = new System.Drawing.Size(130, 69);
             this.lbDefaultSubtitle.TabIndex = 1;
             this.lbDefaultSubtitle.SelectedIndexChanged += new System.EventHandler(this.lbDefaultSubtitle_SelectedIndexChanged);
             // 
@@ -620,16 +575,16 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox1.Controls.Add(this.lbDefaultAudio);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(413, 106);
+            this.groupBox1.Size = new System.Drawing.Size(413, 93);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = " Default Audio Language ";
+            this.groupBox1.Text = "Default Audio Language";
             // 
             // btnAudioDown
             // 
-            this.btnAudioDown.Location = new System.Drawing.Point(151, 77);
+            this.btnAudioDown.Location = new System.Drawing.Point(151, 68);
             this.btnAudioDown.Name = "btnAudioDown";
-            this.btnAudioDown.Size = new System.Drawing.Size(29, 23);
+            this.btnAudioDown.Size = new System.Drawing.Size(29, 20);
             this.btnAudioDown.TabIndex = 6;
             this.btnAudioDown.Text = "-";
             this.btnAudioDown.UseVisualStyleBackColor = true;
@@ -637,9 +592,9 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // btnAudioUp
             // 
-            this.btnAudioUp.Location = new System.Drawing.Point(151, 19);
+            this.btnAudioUp.Location = new System.Drawing.Point(151, 18);
             this.btnAudioUp.Name = "btnAudioUp";
-            this.btnAudioUp.Size = new System.Drawing.Size(29, 23);
+            this.btnAudioUp.Size = new System.Drawing.Size(29, 20);
             this.btnAudioUp.TabIndex = 5;
             this.btnAudioUp.Text = "+";
             this.btnAudioUp.UseVisualStyleBackColor = true;
@@ -647,9 +602,9 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // btnRemoveAudio
             // 
-            this.btnRemoveAudio.Location = new System.Drawing.Point(151, 48);
+            this.btnRemoveAudio.Location = new System.Drawing.Point(151, 43);
             this.btnRemoveAudio.Name = "btnRemoveAudio";
-            this.btnRemoveAudio.Size = new System.Drawing.Size(29, 23);
+            this.btnRemoveAudio.Size = new System.Drawing.Size(29, 20);
             this.btnRemoveAudio.TabIndex = 4;
             this.btnRemoveAudio.Text = ">>";
             this.btnRemoveAudio.UseVisualStyleBackColor = true;
@@ -657,9 +612,9 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // btnAddAudio
             // 
-            this.btnAddAudio.Location = new System.Drawing.Point(227, 48);
+            this.btnAddAudio.Location = new System.Drawing.Point(227, 43);
             this.btnAddAudio.Name = "btnAddAudio";
-            this.btnAddAudio.Size = new System.Drawing.Size(29, 23);
+            this.btnAddAudio.Size = new System.Drawing.Size(29, 20);
             this.btnAddAudio.TabIndex = 3;
             this.btnAddAudio.Text = "<<";
             this.btnAddAudio.UseVisualStyleBackColor = true;
@@ -670,7 +625,7 @@ namespace MeGUI.packages.tools.oneclick
             this.lbNonDefaultAudio.FormattingEnabled = true;
             this.lbNonDefaultAudio.Location = new System.Drawing.Point(262, 18);
             this.lbNonDefaultAudio.Name = "lbNonDefaultAudio";
-            this.lbNonDefaultAudio.Size = new System.Drawing.Size(130, 82);
+            this.lbNonDefaultAudio.Size = new System.Drawing.Size(130, 69);
             this.lbNonDefaultAudio.Sorted = true;
             this.lbNonDefaultAudio.TabIndex = 2;
             this.lbNonDefaultAudio.SelectedIndexChanged += new System.EventHandler(this.lbNonDefaultAudio_SelectedIndexChanged);
@@ -680,7 +635,7 @@ namespace MeGUI.packages.tools.oneclick
             this.lbDefaultAudio.FormattingEnabled = true;
             this.lbDefaultAudio.Location = new System.Drawing.Point(15, 19);
             this.lbDefaultAudio.Name = "lbDefaultAudio";
-            this.lbDefaultAudio.Size = new System.Drawing.Size(130, 82);
+            this.lbDefaultAudio.Size = new System.Drawing.Size(130, 69);
             this.lbDefaultAudio.TabIndex = 1;
             this.lbDefaultAudio.SelectedIndexChanged += new System.EventHandler(this.lbDefaultAudio_SelectedIndexChanged);
             // 
@@ -697,6 +652,16 @@ namespace MeGUI.packages.tools.oneclick
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Other";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // chkDisableIntermediateMKV
+            // 
+            this.chkDisableIntermediateMKV.AutoSize = true;
+            this.chkDisableIntermediateMKV.Location = new System.Drawing.Point(15, 221);
+            this.chkDisableIntermediateMKV.Name = "chkDisableIntermediateMKV";
+            this.chkDisableIntermediateMKV.Size = new System.Drawing.Size(161, 17);
+            this.chkDisableIntermediateMKV.TabIndex = 45;
+            this.chkDisableIntermediateMKV.Text = "disable intermediate MKV file";
+            this.chkDisableIntermediateMKV.UseVisualStyleBackColor = true;
             // 
             // groupBox5
             // 
@@ -733,20 +698,6 @@ namespace MeGUI.packages.tools.oneclick
             this.deleteOutput.UseVisualStyleBackColor = true;
             this.deleteOutput.Click += new System.EventHandler(this.deleteOutput_Click);
             // 
-            // outputDirectory
-            // 
-            this.outputDirectory.Filename = "";
-            this.outputDirectory.Filter = null;
-            this.outputDirectory.FilterIndex = 0;
-            this.outputDirectory.FolderMode = true;
-            this.outputDirectory.Location = new System.Drawing.Point(64, 19);
-            this.outputDirectory.Name = "outputDirectory";
-            this.outputDirectory.ReadOnly = true;
-            this.outputDirectory.SaveMode = false;
-            this.outputDirectory.Size = new System.Drawing.Size(300, 26);
-            this.outputDirectory.TabIndex = 43;
-            this.outputDirectory.Title = null;
-            // 
             // label8
             // 
             this.label8.Location = new System.Drawing.Point(6, 25);
@@ -754,20 +705,6 @@ namespace MeGUI.packages.tools.oneclick
             this.label8.Size = new System.Drawing.Size(108, 13);
             this.label8.TabIndex = 44;
             this.label8.Text = "Output";
-            // 
-            // workingDirectory
-            // 
-            this.workingDirectory.Filename = "";
-            this.workingDirectory.Filter = null;
-            this.workingDirectory.FilterIndex = 0;
-            this.workingDirectory.FolderMode = true;
-            this.workingDirectory.Location = new System.Drawing.Point(64, 51);
-            this.workingDirectory.Name = "workingDirectory";
-            this.workingDirectory.ReadOnly = true;
-            this.workingDirectory.SaveMode = false;
-            this.workingDirectory.Size = new System.Drawing.Size(300, 26);
-            this.workingDirectory.TabIndex = 42;
-            this.workingDirectory.Title = null;
             // 
             // workingDirectoryLabel
             // 
@@ -906,15 +843,100 @@ namespace MeGUI.packages.tools.oneclick
             this.audioRemoveTrack.Text = "Remove Track";
             this.audioRemoveTrack.Click += new System.EventHandler(this.audioRemoveTrack_Click);
             // 
-            // chkDisableIntermediateMKV
+            // label4
             // 
-            this.chkDisableIntermediateMKV.AutoSize = true;
-            this.chkDisableIntermediateMKV.Location = new System.Drawing.Point(15, 221);
-            this.chkDisableIntermediateMKV.Name = "chkDisableIntermediateMKV";
-            this.chkDisableIntermediateMKV.Size = new System.Drawing.Size(161, 17);
-            this.chkDisableIntermediateMKV.TabIndex = 45;
-            this.chkDisableIntermediateMKV.Text = "disable intermediate MKV file";
-            this.chkDisableIntermediateMKV.UseVisualStyleBackColor = true;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(16, 204);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(212, 13);
+            this.label4.TabIndex = 48;
+            this.label4.Text = "Language to set if it cannot be determined: ";
+            // 
+            // cbUnknownLanguage
+            // 
+            this.cbUnknownLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbUnknownLanguage.FormattingEnabled = true;
+            this.cbUnknownLanguage.Location = new System.Drawing.Point(268, 201);
+            this.cbUnknownLanguage.Name = "cbUnknownLanguage";
+            this.cbUnknownLanguage.Size = new System.Drawing.Size(130, 21);
+            this.cbUnknownLanguage.TabIndex = 49;
+            // 
+            // avsProfile
+            // 
+            this.avsProfile.Location = new System.Drawing.Point(109, 90);
+            this.avsProfile.Name = "avsProfile";
+            this.avsProfile.ProfileSet = "AviSynth";
+            this.avsProfile.Size = new System.Drawing.Size(298, 22);
+            this.avsProfile.TabIndex = 39;
+            // 
+            // videoProfile
+            // 
+            this.videoProfile.Location = new System.Drawing.Point(77, 47);
+            this.videoProfile.Name = "videoProfile";
+            this.videoProfile.ProfileSet = "Video";
+            this.videoProfile.Size = new System.Drawing.Size(330, 22);
+            this.videoProfile.TabIndex = 40;
+            // 
+            // oneClickAudioControl1
+            // 
+            this.oneClickAudioControl1.Location = new System.Drawing.Point(6, 9);
+            this.oneClickAudioControl1.Name = "oneClickAudioControl1";
+            this.oneClickAudioControl1.Size = new System.Drawing.Size(386, 114);
+            this.oneClickAudioControl1.TabIndex = 0;
+            // 
+            // splitSize
+            // 
+            this.splitSize.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.splitSize.Location = new System.Drawing.Point(69, 49);
+            this.splitSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitSize.Name = "splitSize";
+            this.splitSize.NullString = "Dont split";
+            this.splitSize.SaveCustomValues = false;
+            this.splitSize.SelectedIndex = 0;
+            this.splitSize.Size = new System.Drawing.Size(340, 29);
+            this.splitSize.TabIndex = 41;
+            // 
+            // fileSize
+            // 
+            this.fileSize.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.fileSize.Location = new System.Drawing.Point(69, 23);
+            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fileSize.Name = "fileSize";
+            this.fileSize.NullString = "Don\'t care";
+            this.fileSize.SaveCustomValues = false;
+            this.fileSize.SelectedIndex = 0;
+            this.fileSize.Size = new System.Drawing.Size(340, 29);
+            this.fileSize.TabIndex = 42;
+            // 
+            // outputDirectory
+            // 
+            this.outputDirectory.Filename = "";
+            this.outputDirectory.Filter = null;
+            this.outputDirectory.FilterIndex = 0;
+            this.outputDirectory.FolderMode = true;
+            this.outputDirectory.Location = new System.Drawing.Point(64, 19);
+            this.outputDirectory.Name = "outputDirectory";
+            this.outputDirectory.ReadOnly = true;
+            this.outputDirectory.SaveMode = false;
+            this.outputDirectory.Size = new System.Drawing.Size(300, 26);
+            this.outputDirectory.TabIndex = 43;
+            this.outputDirectory.Title = null;
+            // 
+            // workingDirectory
+            // 
+            this.workingDirectory.Filename = "";
+            this.workingDirectory.Filter = null;
+            this.workingDirectory.FilterIndex = 0;
+            this.workingDirectory.FolderMode = true;
+            this.workingDirectory.Location = new System.Drawing.Point(64, 51);
+            this.workingDirectory.Name = "workingDirectory";
+            this.workingDirectory.ReadOnly = true;
+            this.workingDirectory.SaveMode = false;
+            this.workingDirectory.Size = new System.Drawing.Size(300, 26);
+            this.workingDirectory.TabIndex = 42;
+            this.workingDirectory.Title = null;
             // 
             // OneClickConfigPanel
             // 
@@ -1025,5 +1047,7 @@ namespace MeGUI.packages.tools.oneclick
         private System.Windows.Forms.Button deleteWorking;
         private System.Windows.Forms.Button deleteOutput;
         private System.Windows.Forms.CheckBox chkDisableIntermediateMKV;
+        private System.Windows.Forms.ComboBox cbUnknownLanguage;
+        private System.Windows.Forms.Label label4;
     }
 }

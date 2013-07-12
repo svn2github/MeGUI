@@ -110,11 +110,20 @@ namespace MeGUI
                     else
                         subtitleLanguage.Text = value.Language;
                 }
+                else
+                    subtitleLanguage.Text = defaultLanguage;
                 subName.Text = value.Name;
                 delay.Value = value.Delay;
                 chkDefaultStream.Checked = value.DefaultStream;
                 chkForceStream.Checked = value.ForcedStream;
             }
+        }
+
+        private string defaultLanguage;
+        public string DefaultLanguage
+        {
+            set { defaultLanguage = value; }
+            get { return defaultLanguage; }
         }
 
         private bool showDelay;
@@ -309,8 +318,13 @@ namespace MeGUI
                 List<SubtitleInfo> subTracks;
                 idxReader.readFileProperties(input.SelectedText, out subTracks);
                 if (subTracks.Count > 0)
+                {
                     SetLanguage(LanguageSelectionContainer.Short2FullLanguageName(subTracks[0].Name));
+                    bFound = true;
+                }
             }
+            if (!bFound)
+                SetLanguage(defaultLanguage);
 
             // get delay & track name
             delay.Value = 0;

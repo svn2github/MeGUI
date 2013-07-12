@@ -1,3 +1,4 @@
+2363 [OneClick] added option to set a language by default if it cannot be determined
 2362 [Chapter Creator] automatically preselect chapter file name
 2361 [AVS Script Creator] fixed not possible to change the height (regression of 2357)
 2360 [OneClick] fixed using a resolution of 16x16 or lower in some cases (regression of 2357)

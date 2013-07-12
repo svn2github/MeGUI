@@ -577,6 +577,12 @@ namespace MeGUI
         {
             _oSettings = settings.Clone();
 
+            foreach (OneClickStreamControl oStream in audioTracks)
+                oStream.DefaultLanguage = _oSettings.DefaultLanguage;
+
+            foreach (OneClickStreamControl oStream in subtitleTracks)
+                oStream.DefaultLanguage = _oSettings.DefaultLanguage;
+
             if (_videoInputInfo != null)
             {
                 List<OneClickStream> arrAudioTrackInfo = new List<OneClickStream>();

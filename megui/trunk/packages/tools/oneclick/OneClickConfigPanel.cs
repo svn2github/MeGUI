@@ -61,6 +61,9 @@ namespace MeGUI.packages.tools.oneclick
             audioConfigurations = new List<OneClickAudioControl>();
             audioConfigurations.Add(oneClickAudioControl1);
             oneClickAudioControl1.SetDefault();
+            cbUnknownLanguage.Items.AddRange(new List<string>(LanguageSelectionContainer.Languages.Keys).ToArray());
+            cbUnknownLanguage.SelectedItem = "English";
+
         }
 
         #region Gettable<OneClickSettings> Members
@@ -115,6 +118,8 @@ namespace MeGUI.packages.tools.oneclick
                     arrDefaultSubtitle.Add(s);
                 val.DefaultSubtitleLanguage = arrDefaultSubtitle;
 
+                val.DefaultLanguage = cbUnknownLanguage.SelectedText;
+
                 List<string> arrIndexerPriority = new List<string>();
                 foreach (string s in lbIndexerPriority.Items)
                     arrIndexerPriority.Add(s);
@@ -165,6 +170,9 @@ namespace MeGUI.packages.tools.oneclick
                     else
                         AudioAddTrack(o);
                 }
+
+                if (!String.IsNullOrEmpty(value.DefaultLanguage))
+                    cbUnknownLanguage.SelectedItem = value.DefaultLanguage;
 
                 List<string> arrNonDefaultAudio = new List<string>(LanguageSelectionContainer.Languages.Keys);
                 arrNonDefaultAudio.Add("[none]");
