@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -271,8 +271,7 @@ namespace MeGUI
             // saveFileDialog
             // 
             this.saveFileDialog.DefaultExt = "txt";
-            this.saveFileDialog.Filter = "x264 qp Files (*.qpf)|*.qpf|Chapter Files (*.txt)|*.txt|Matroska Chapters files (*" +
-                ".xml)|*.xml|All supported Files (*.qpf;*.txt;*.xml)|*.qpf;*.txt;*.xml";
+            this.saveFileDialog.Filter = "Chapter Files (*.txt)|*.txt|Matroska Chapters files (*.xml)|*.xml|x264 qp Files (*.qpf)|*.qpf|All supported Files (*.txt;*.xml;*.qpf)|*.txt;*.xml;*.qpf";
             this.saveFileDialog.FilterIndex = 4;
             // 
             // gbInput
@@ -502,6 +501,10 @@ namespace MeGUI
 		#region saving files
 		private void saveButton_Click(object sender, System.EventArgs e)
 		{
+            if (String.IsNullOrEmpty(Path.GetFileNameWithoutExtension(input.Text)))
+                saveFileDialog.FileName = "Chapter Information.txt";
+            else
+                saveFileDialog.FileName = Path.GetFileNameWithoutExtension(input.Text) + " - Chapter Information.txt";
 			if (this.saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
                 string ext = Path.GetExtension(saveFileDialog.FileName).ToLower(System.Globalization.CultureInfo.InvariantCulture);
