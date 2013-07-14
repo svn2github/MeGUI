@@ -955,7 +955,7 @@ namespace MeGUI.packages.video.x264
                 x264TempQuantBlur.Enabled = true;
                 x264TempQuantBlurLabel.Enabled = true;
 
-                x264BitrateQuantizer.Maximum = 100000;
+                x264BitrateQuantizer.Maximum = 300000;
                 x264BitrateQuantizer.Minimum = 0;
                 x264BitrateQuantizer.DecimalPlaces = 0;
                 x264BitrateQuantizer.Increment = 10;

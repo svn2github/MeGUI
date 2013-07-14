@@ -381,7 +381,7 @@ namespace MeGUI.packages.video.x264
             this.x264BitrateQuantizer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.x264BitrateQuantizer.Location = new System.Drawing.Point(249, 19);
             this.x264BitrateQuantizer.Maximum = new decimal(new int[] {
-            100000,
+            300000,
             0,
             0,
             0});
