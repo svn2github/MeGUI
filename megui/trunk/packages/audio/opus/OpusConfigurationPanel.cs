@@ -60,11 +60,12 @@ namespace MeGUI.packages.audio.opus
             // trackBar
             // 
             this.trackBar.Location = new System.Drawing.Point(8, 58);
-            this.trackBar.Maximum = 256;
+            this.trackBar.Maximum = 512;
             this.trackBar.Minimum = 6;
             this.trackBar.Name = "trackBar";
             this.trackBar.Size = new System.Drawing.Size(387, 45);
             this.trackBar.TabIndex = 4;
+            this.trackBar.TickFrequency = 8;
             this.trackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.trackBar.Value = 64;
             this.trackBar.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
