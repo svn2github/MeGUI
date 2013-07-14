@@ -1,3 +1,6 @@
+2364 [Opus] raised default bitrate to 96 Kbps
+2365 [x264] allow max bitrate up to 300000 Kbps instead of 100000 Kbps
+2364 [Opus] allow max bitrate up to 512 Kbps. Feature request #512
 2363 [OneClick] added option to set a language by default if it cannot be determined
 2362 [Chapter Creator] automatically preselect chapter file name
 2361 [AVS Script Creator] fixed not possible to change the height (regression of 2357)

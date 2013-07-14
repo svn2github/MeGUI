@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ namespace MeGUI
         public static readonly OpusMode[] SupportedModes = new OpusMode[] { OpusMode.VBR, OpusMode.CVBR, OpusMode.HCBR };
 
 		public OpusSettings() 
-            : base(ID, AudioCodec.OPUS, AudioEncoderType.OPUS, 6, BitrateManagementMode.VBR)
+            : base(ID, AudioCodec.OPUS, AudioEncoderType.OPUS, 96, BitrateManagementMode.VBR)
 		{
             Mode = OpusMode.VBR;
 		}
