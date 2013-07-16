@@ -651,6 +651,19 @@ namespace MeGUI
             }
             else if (iFile.HasAudio)
                 audioEncodingComponent1.openAudioFile(file);
+            else if (Path.GetExtension(iFile.FileName).ToLowerInvariant().Equals(".avs"))
+            {
+                try
+                {
+                    using (AvsFile avi = AvsFile.OpenScriptFile(iFile.FileName))
+                    {
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error parsing avs file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
             else
                 MessageBox.Show("This file cannot be opened", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
@@ -1295,8 +1308,6 @@ namespace MeGUI
                 workersMenu.MenuItems.Add(i);
             }
         }
-
-
 
         void mnuWorker_Click(object sender1, EventArgs e)
         {
