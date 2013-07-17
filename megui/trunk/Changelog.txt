@@ -1,3 +1,5 @@
+2368 [OneClick] fixed internal chapters wrongly detected in VOB files
+                enhanced logging
 2367 [MainForm] show avs script errors. Feature request #513
 2366 [Opus] raised default bitrate to 96 Kbps
 2365 [x264] allow max bitrate up to 300000 Kbps instead of 100000 Kbps

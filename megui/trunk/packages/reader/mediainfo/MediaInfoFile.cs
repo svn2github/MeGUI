@@ -824,7 +824,7 @@ namespace MeGUI
             return _MkvInfo.IsMuxable;
         }
 
-        /// <summary>checks if the file is a MKV file and has chapters</summary>
+        /// <summary>checks if the file is an eac3to demuxable file and has chapters</summary>
         /// <returns>track number or -1 if no chapters available</returns>
         public int getEac3toChaptersTrack()
         {

@@ -435,13 +435,7 @@ namespace MeGUI
             horizontalResolution.Maximum = maxHorizontalResolution;
             
             // Detect Chapters
-            if (_videoInputInfo.hasMKVChapters())
-                this.chapterFile.Filename = "<internal chapters>";
-            else if (Path.GetExtension(iFile.FileName).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".vob"))
-                this.chapterFile.Filename = "<internal chapters>";
-            else if (_videoInputInfo.getEac3toChaptersTrack() > -1)
-                this.chapterFile.Filename = "<internal chapters>";
-            else
+            if (!VideoUtil.HasChapters(iFile))
             {
                 string chapterFile = VideoUtil.getChapterFile(iFile.FileName);
                 if (File.Exists(chapterFile))
@@ -449,6 +443,8 @@ namespace MeGUI
                 if (!File.Exists(this.chapterFile.Filename))
                     this.chapterFile.Filename = String.Empty;
             }
+            else
+                this.chapterFile.Filename = "<internal chapters>";
 
             if (String.IsNullOrEmpty(workingDirectory.Filename))
             {
@@ -764,7 +760,7 @@ namespace MeGUI
                         continue;
 
                     bool bCoreOnly = false;
-                    if (!isDontEncodeAudioPossible(oStreamControl.SelectedItem.IsStandard, inputContainer) || oStreamControl.SelectedStream.EncodingMode != AudioEncodingMode.Never)
+                    if (!isDontEncodeAudioPossible(_videoInputInfo, oStreamControl.SelectedItem.IsStandard, inputContainer) || oStreamControl.SelectedStream.EncodingMode != AudioEncodingMode.Never)
                     {
                         //check if core must be extracted
                         if (oStreamControl.SelectedStream.TrackInfo.Codec.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("truehd"))
@@ -805,7 +801,7 @@ namespace MeGUI
                 if (sb.Length != 0)
                     prepareJobs = new SequentialChain(prepareJobs, new HDStreamsExJob(new List<string>() { _videoInputInfo.FileName }, dpp.WorkingDirectory, null, sb.ToString(), 2));
             }
-            else if (inputContainer != ContainerType.MKV && !_oSettings.DisableIntermediateMKV)
+            else if (inputContainer != ContainerType.MKV)
             {
                 // mux input file into MKV if possible and necessary
                 bool bRemuxInput = false;
@@ -842,29 +838,39 @@ namespace MeGUI
                     }
                 }
 
-                if (bRemuxInput && _videoInputInfo.MuxableToMKV())
+                if (bRemuxInput)
                 {
-                    // create job
-                    MuxJob mJob = new MuxJob();
-                    mJob.MuxType = MuxerType.MKVMERGE;
-                    mJob.Input = dpp.VideoInput;
-                    mJob.Output = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(dpp.VideoInput) + ".mkv"); ;
-                    mJob.Settings.MuxAll = true;
-                    mJob.Settings.MuxedInput = mJob.Input;
-                    mJob.Settings.MuxedOutput = mJob.Output;
-                    dpp.FilesToDelete.Add(mJob.Output);
-
-                    // change input file properties
-                    if (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
+                    if (!_oSettings.DisableIntermediateMKV && _videoInputInfo.MuxableToMKV())
                     {
-                        inputContainer = ContainerType.MKV;
-                        dpp.VideoInput = mJob.Output;
+                        // create job
+                        MuxJob mJob = new MuxJob();
+                        mJob.MuxType = MuxerType.MKVMERGE;
+                        mJob.Input = dpp.VideoInput;
+                        mJob.Output = Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(dpp.VideoInput) + ".mkv"); ;
+                        mJob.Settings.MuxAll = true;
+                        mJob.Settings.MuxedInput = mJob.Input;
+                        mJob.Settings.MuxedOutput = mJob.Output;
+                        dpp.FilesToDelete.Add(mJob.Output);
+
+                        // change input file properties
+                        if (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
+                        {
+                            inputContainer = ContainerType.MKV;
+                            dpp.VideoInput = mJob.Output;
+                        }
+                        else
+                            intermediateMKVFile = mJob.Output;
+
+                        // add job to queue
+                        prepareJobs = new SequentialChain(prepareJobs, mJob);
                     }
                     else
-                        intermediateMKVFile = mJob.Output;
-
-                    // add job to queue
-                    prepareJobs = new SequentialChain(prepareJobs, mJob);
+                    {
+                        if (_oSettings.DisableIntermediateMKV)
+                            _oLog.LogEvent("Input file will not be demuxed as intermediate MKV is disabled. Therefore some OneClick features will be disabled.");
+                        else
+                            _oLog.LogEvent("Input file cannot not be muxed into an intermediate MKV as this is not supported. Therefore some OneClick features will be disabled.");
+                    }
                 }
             }
 
@@ -954,7 +960,7 @@ namespace MeGUI
                     strLanguage = oStreamControl.SelectedStream.Language;
                 }
 
-                bool bIsDontEncodeAudioPossible = isDontEncodeAudioPossible(oStreamControl.SelectedItem.IsStandard, inputContainer);
+                bool bIsDontEncodeAudioPossible = isDontEncodeAudioPossible(_videoInputInfo, oStreamControl.SelectedItem.IsStandard, inputContainer);
                 if (bIsDontEncodeAudioPossible &&
                     (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.Never ||
                     (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.NeverOnlyCore && dpp.Eac3toDemux) ||
@@ -1828,18 +1834,18 @@ namespace MeGUI
                 SubtitleRemoveTrack(audioTab.SelectedIndex);
         }
 
-        private bool isDontEncodeAudioPossible(bool bIsStandardTrack, ContainerType inputContainer)
+        private bool isDontEncodeAudioPossible(MediaInfoFile iFile, bool bIsStandardTrack, ContainerType inputContainer)
         {
             if (!bIsStandardTrack)
                 return true;
 
-            if (_videoInputInfo == null)
+            if (iFile == null)
                 return false;
 
             if (inputContainer == ContainerType.MKV ||
-                _videoInputInfo.IndexerToUse == FileIndexerWindow.IndexType.D2V || 
-                _videoInputInfo.IndexerToUse == FileIndexerWindow.IndexType.DGA || 
-                _videoInputInfo.IndexerToUse == FileIndexerWindow.IndexType.DGI)
+                iFile.IndexerToUse == FileIndexerWindow.IndexType.D2V ||
+                iFile.IndexerToUse == FileIndexerWindow.IndexType.DGA ||
+                iFile.IndexerToUse == FileIndexerWindow.IndexType.DGI)
                 return true;
 
             return false;

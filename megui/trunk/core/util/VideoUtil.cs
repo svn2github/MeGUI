@@ -118,6 +118,45 @@ namespace MeGUI
         }
 
         /// <summary>
+        /// checks if the input file has chapters
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns>true if the file has chapters</returns>
+        public static bool HasChapters(MediaInfoFile iFile)
+        {
+            if (iFile.hasMKVChapters() || iFile.getEac3toChaptersTrack() > -1)
+                return true;
+
+            if (Path.GetExtension(iFile.FileName.ToLowerInvariant()) != ".vob" &&
+                Path.GetExtension(iFile.FileName.ToLowerInvariant()) != ".ifo")
+                return false;
+
+            // detect ifo file
+            string videoIFO = String.Empty;
+            if (Path.GetExtension(iFile.FileName.ToLowerInvariant()) == ".vob")
+            {
+                // find the main IFO
+                if (Path.GetFileName(iFile.FileName).ToUpperInvariant().Substring(0, 4) == "VTS_")
+                    videoIFO = iFile.FileName.Substring(0, iFile.FileName.LastIndexOf("_")) + "_0.IFO";
+                else
+                    videoIFO = Path.ChangeExtension(iFile.FileName, ".IFO");
+            }
+
+            if (!File.Exists(videoIFO))
+                return false;
+
+            int iPGCNumber = 1;
+            if (iFile.VideoInfo.PGCNumber > 0)
+                iPGCNumber = iFile.VideoInfo.PGCNumber;
+
+            IfoExtractor ex = new IfoExtractor();
+            ChapterInfo pgc = ex.GetChapterInfo(videoIFO, iPGCNumber);
+            if (pgc.Chapters.Count > 0)
+                return true;
+            return false;
+        }
+
+        /// <summary>
         /// gets Timeline from Chapters Text file (formally as Ogg Format)
         /// </summary>
         /// <param name="fileName">the file read</param>
