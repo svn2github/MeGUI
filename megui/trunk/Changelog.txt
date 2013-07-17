@@ -1,3 +1,4 @@
+2369 [x264] disabled direct mp4 output as the official builds do not have this support enabled
 2368 [OneClick] fixed internal chapters wrongly detected in VOB files
                 enhanced logging
 2367 [MainForm] show avs script errors. Feature request #513
