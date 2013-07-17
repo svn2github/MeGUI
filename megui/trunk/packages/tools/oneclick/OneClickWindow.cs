@@ -1168,7 +1168,7 @@ namespace MeGUI
             // add jobs to queue
             mainForm.Jobs.addJobsWithDependencies(finalJobChain, !bBatchProcessing);
 
-            if (!this.openOnQueue.Checked && !bAutomatedProcessing)
+            if (!this.openOnQueue.Checked && this.Visible)
             {
                 tabControl1.SelectedTab = tabControl1.TabPages[0];
                 goButton.Enabled = true;
