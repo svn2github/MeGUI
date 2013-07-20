@@ -283,6 +283,7 @@
     <Compile Include="core\gui\AspectRatioChooser.Designer.cs">
       <DependentUpon>AspectRatioChooser.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\reader\ttxt\ttxtReader.cs" />
     <Compile Include="packages\tools\avscreator\AviSynthProfileConfigPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
