@@ -494,6 +494,7 @@ namespace MeGUI
             supportedAudioCodecs.Add(AudioCodec.MP3);
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
+            supportedSubtitleTypes.Add(SubtitleType.TTXT);
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
             supportedContainers.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.AVI);

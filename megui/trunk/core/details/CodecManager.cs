@@ -287,6 +287,7 @@ namespace MeGUI
         public static readonly SubtitleType SUBRIP = new SubtitleType("Subrip", "Subrip Subtitle Files", "srt", null);
         public static readonly SubtitleType BDSUP  = new SubtitleType("BDSup", "Blu-ray Sup Subtitle Files", "sup", null); 
         public static readonly SubtitleType VOBSUB = new SubtitleType("Vobsub", "Vobsub Subtitle Files", "idx", null);
+        public static readonly SubtitleType TTXT   = new SubtitleType("TTXT", "Time Text Subtitles Files", "ttxt", null);
     }
     public class ChapterType : OutputType
     {
@@ -371,7 +372,8 @@ namespace MeGUI
                 SubtitleTypes.Register(SubtitleType.SSA)    &&
                 SubtitleTypes.Register(SubtitleType.SUBRIP) &&
                 SubtitleTypes.Register(SubtitleType.BDSUP)  &&
-                SubtitleTypes.Register(SubtitleType.VOBSUB)))
+                SubtitleTypes.Register(SubtitleType.VOBSUB) &&
+                SubtitleTypes.Register(SubtitleType.TTXT)))
                 throw new Exception("Failed to register a subtitle type");
             if (!(
                 ContainerTypes.Register(ContainerType.AVI) &&
