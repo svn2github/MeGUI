@@ -77,6 +77,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 return LineType.writing;
             if (line.StartsWith("Splitting"))
                 return LineType.splitting;
+            if (line.StartsWith("TTXT Loading"))
+                return LineType.empty;
             if (isEmptyLine(line))
                 return LineType.empty;
             return LineType.other;
@@ -262,6 +264,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     }
                     if (!string.IsNullOrEmpty(settings.VideoName))
                         sb.Append(":name=" + settings.VideoName);
+                    else
+                        sb.Append(":name="); // to erase the default GPAC string
                     sb.Append("\"");
                 }
                 int trackCount = 0;
@@ -318,6 +322,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         if (trackCount > 0)
                             sb.Append(":disable");
                     }
+                    if (string.IsNullOrEmpty(stream.name))
+                        sb.Append(":name="); // to erase the default GPAC string
                     sb.Append("\"");
                     trackCount++;
                 }
@@ -325,7 +331,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 foreach (object o in settings.SubtitleStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    sb.Append(" -add \"" + stream.path + "#trackID=1");
+                    bool ttxtFFound = false;
+
+                    if (Path.GetExtension(stream.path).ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("ttxt"))
+                    {
+                        ttxtReader ttxtFile = new ttxtReader(stream.path);
+                        ttxtFFound = ttxtFile.readFileProperties(stream.path);
+                        if (ttxtFFound)
+                            sb.Append(" -add \"" + stream.path + "#trackID=1");
+                    }
+                    else
+                    {
+                        sb.Append(" -add \"" + stream.path + "#trackID=1");
+                    }
                     if (!string.IsNullOrEmpty(stream.language))
                     {
                         foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.LanguagesTerminology)
@@ -345,6 +363,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         if (trackCount > 0)
                             sb.Append(":disable");
                     }
+                    if (string.IsNullOrEmpty(stream.name))
+                        sb.Append(":name="); // to erase the default GPAC string
                     sb.Append("\"");
                     trackCount++;
                 }
