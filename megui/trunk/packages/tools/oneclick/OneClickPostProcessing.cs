@@ -582,10 +582,14 @@ namespace MeGUI
             outputWidthIncludingPadding = desiredOutputWidth;
             CropValues paddingValues;
 
+            bool resizeEnabled = !keepInputResolution;
             Resolution.GetResolution((int)iMediaFile.VideoInfo.Width, (int)iMediaFile.VideoInfo.Height, customDAR,
-                ref cropValues, autoCrop && !keepInputResolution, mod, !keepInputResolution, avsSettings.Upsize, signalAR, true,
+                ref cropValues, autoCrop && !keepInputResolution, mod, ref resizeEnabled, avsSettings.Upsize, signalAR, true,
                 avsSettings.AcceptableAspectError, xTargetDevice, Convert.ToDouble(iMediaFile.VideoInfo.FPS_N) / iMediaFile.VideoInfo.FPS_D, 
                 ref outputWidthIncludingPadding, ref outputHeightIncludingPadding, out paddingValues, out suggestedDar, _log);
+            keepInputResolution = !resizeEnabled;
+            if ((keepInputResolution || signalAR) && suggestedDar.HasValue)
+                dar = suggestedDar;
 
             // log calculated output resolution
             outputWidthCropped = outputWidthIncludingPadding - paddingValues.left - paddingValues.right;
@@ -660,7 +664,7 @@ namespace MeGUI
                 {
                     string strResolution = outputWidthIncludingPadding + "x" + outputHeightIncludingPadding;
                     x264Settings _xs = (x264Settings)settings;
-                    
+
                     if (strResolution.Equals("720x480"))
                     {
                         _xs.SampleAR = 4;

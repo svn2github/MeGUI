@@ -1328,9 +1328,10 @@ namespace MeGUI
 
             CropValues paddingValues;
             CropValues cropValues = Cropping.Clone();
-            
+
+            bool resizeEnabled = resize.Checked;
             Resolution.GetResolution((int)file.VideoInfo.Width, (int)file.VideoInfo.Height, arChooser.RealValue,
-                ref cropValues, crop.Checked, mod, resize.Checked, bAllowUpsizing, signalAR, suggestResolution.Checked, 
+                ref cropValues, crop.Checked, mod, ref resizeEnabled, bAllowUpsizing, signalAR, suggestResolution.Checked, 
                 this.GetProfileSettings().AcceptableAspectError, null, 0, ref outputWidth, ref outputHeight, out paddingValues, out suggestedDar, null);
             
             if (!resize.Checked && !suggestResolution.Checked) // just to make sure

@@ -50,7 +50,7 @@ namespace MeGUI.core.util
         /// <param name="outputDar">the output DAR value</param>
         /// <param name="_log">the log item</param>
         public static void GetResolution(int sourceWidth, int sourceHeight, Dar inputDar, 
-            ref CropValues cropValues, bool cropEnabled, int mod, bool resizeEnabled, bool upsizingAllowed, 
+            ref CropValues cropValues, bool cropEnabled, int mod, ref bool resizeEnabled, bool upsizingAllowed, 
             bool signalAR, bool suggestHeight, decimal acceptableAspectErrorPercent,
             x264Device xTargetDevice, Double fps, ref int outputWidth, ref int outputHeight, 
             out CropValues paddingValues, out Dar? outputDar, LogItem _log)
