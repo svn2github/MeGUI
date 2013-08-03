@@ -80,5 +80,11 @@ namespace MeGUI
             set { quality = value; }
         }
 
+        private bool noDelay;
+        public bool NoDelay
+        {
+            get { return noDelay; }
+            set { noDelay = value; }
+        }
 	}
 }

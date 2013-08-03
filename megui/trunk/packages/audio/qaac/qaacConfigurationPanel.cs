@@ -57,6 +57,7 @@ namespace MeGUI.packages.audio.qaac
                     case QaacMode.CBR: qas.BitrateMode = BitrateManagementMode.CBR; break;
                     default: qas.BitrateMode = BitrateManagementMode.VBR; break;
                 }
+                qas.NoDelay = chNoDelay.Checked;
                 qas.Mode = (QaacMode)(cbMode.SelectedItem as EnumProxy).RealValue;
                 qas.Profile = (QaacProfile)(cbProfile.SelectedItem as EnumProxy).RealValue;
                 if (qas.Mode == QaacMode.TVBR) 
@@ -73,7 +74,8 @@ namespace MeGUI.packages.audio.qaac
                 if (qas.Mode == QaacMode.TVBR)
                     trackBar.Value = Math.Max(Math.Min(qas.Quality, trackBar.Maximum), trackBar.Minimum);  
                 else
-                    trackBar.Value = Math.Max(Math.Min(qas.Bitrate, trackBar.Maximum), trackBar.Minimum);            
+                    trackBar.Value = Math.Max(Math.Min(qas.Bitrate, trackBar.Maximum), trackBar.Minimum);
+                chNoDelay.Checked = qas.NoDelay;
             }
         }
         #endregion

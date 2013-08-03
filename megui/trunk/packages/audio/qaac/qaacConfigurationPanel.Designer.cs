@@ -57,12 +57,14 @@ namespace MeGUI.packages.audio.qaac
             this.trackBar = new System.Windows.Forms.TrackBar();
             this.label3 = new System.Windows.Forms.Label();
             this.cbProfile = new System.Windows.Forms.ComboBox();
+            this.chNoDelay = new System.Windows.Forms.CheckBox();
             this.encoderGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // encoderGroupBox
             // 
+            this.encoderGroupBox.Controls.Add(this.chNoDelay);
             this.encoderGroupBox.Controls.Add(this.cbProfile);
             this.encoderGroupBox.Controls.Add(this.label3);
             this.encoderGroupBox.Controls.Add(this.trackBar);
@@ -120,6 +122,16 @@ namespace MeGUI.packages.audio.qaac
             this.cbProfile.TabIndex = 4;
             this.cbProfile.SelectedIndexChanged += new System.EventHandler(this.cbProfile_SelectedIndexChanged);
             // 
+            // chNoDelay
+            // 
+            this.chNoDelay.AutoSize = true;
+            this.chNoDelay.Location = new System.Drawing.Point(274, 97);
+            this.chNoDelay.Name = "chNoDelay";
+            this.chNoDelay.Size = new System.Drawing.Size(70, 17);
+            this.chNoDelay.TabIndex = 5;
+            this.chNoDelay.Text = "No Delay";
+            this.chNoDelay.UseVisualStyleBackColor = true;
+            // 
             // qaacConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -139,5 +151,6 @@ namespace MeGUI.packages.audio.qaac
         public System.Windows.Forms.TrackBar trackBar;
         public System.Windows.Forms.ComboBox cbMode;
         public System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox chNoDelay;
      }
 }

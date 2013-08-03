@@ -1260,6 +1260,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     }
                 }
 
+                if (q.NoDelay) // To resolve some A/V sync issues 
+                    sb.Append(" --no-delay");
+
                 sb.Append(" - -o \"{0}\"");
 
                 _encoderCommandLine = sb.ToString();
