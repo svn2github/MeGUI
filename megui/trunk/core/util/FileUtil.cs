@@ -113,9 +113,9 @@ namespace MeGUI.core.util
 
         public static DirectoryInfo ensureDirectoryExists(string p)
         {
-            if (Directory.Exists(p)) 
+            if (Directory.Exists(p))
                 return new DirectoryInfo(p);
-            if (string.IsNullOrEmpty(p)) 
+            if (string.IsNullOrEmpty(p))
                 throw new IOException("Can't create directory");
             ensureDirectoryExists(Path.GetDirectoryName(p));
             System.Threading.Thread.Sleep(100);
@@ -234,7 +234,7 @@ namespace MeGUI.core.util
             filter = filter.ToLower(System.Globalization.CultureInfo.InvariantCulture);
             filename = Path.GetFileName(filename).ToLower(System.Globalization.CultureInfo.InvariantCulture);
             string[] filters = filter.Split('|');
-            
+
             for (int i = 1; i < filters.Length; i += 2)
             {
                 string[] iFilters = filters[i].Split(';');
@@ -276,7 +276,7 @@ namespace MeGUI.core.util
         {
             if (Directory.Exists(sourcePath))
             {
-                string[] files =Directory.GetFiles(sourcePath);
+                string[] files = Directory.GetFiles(sourcePath);
 
                 foreach (string s in files)
                 {
@@ -314,9 +314,10 @@ namespace MeGUI.core.util
 
                     FileUtil.ensureDirectoryExists(Path.GetDirectoryName(targetPath));
 
-                    File.Move(sourcePath,targetPath);
+                    File.Move(sourcePath, targetPath);
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("Error while moving file: \n" + sourcePath + "\n" + ex.Message, "Error moving file", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -353,7 +354,7 @@ namespace MeGUI.core.util
                 if (bDirectoryCreated)
                     Directory.Delete(strPath);
 
-                return true; 
+                return true;
             }
             catch
             {
@@ -432,7 +433,7 @@ namespace MeGUI.core.util
                         }
                         else
                             i.LogEvent("Did not delete " + file + " as the directory is not empty.", ImageType.Warning);
-                    }  
+                    }
                 }
                 catch (IOException e)
                 {
@@ -458,10 +459,10 @@ namespace MeGUI.core.util
             {
                 FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(strFile);
                 fileVersion = FileProperties.FileVersion;
-                fileDate = File.GetLastWriteTimeUtc(strFile).ToString();
+                fileDate = File.GetLastWriteTimeUtc(strFile).ToString("dd-MM-yyyy");
 
                 if (string.IsNullOrEmpty(fileVersion))
-                    oLog.LogValue(strName, fileDate);
+                    oLog.LogValue(strName, " (" + fileDate + ")");
                 else
                     oLog.LogValue(strName, fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")");
             }
@@ -480,7 +481,7 @@ namespace MeGUI.core.util
         {
             try
             {
-                StringBuilder sb = new StringBuilder();                
+                StringBuilder sb = new StringBuilder();
                 sb.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
                 sb.AppendLine("<!-- GPAC 3GPP Text Stream -->");
                 sb.AppendLine("<TextStream version=\"1.1\">");
@@ -503,7 +504,7 @@ namespace MeGUI.core.util
                         {
                             chapTitle = System.Text.RegularExpressions.Regex.Replace(line.Substring(line.IndexOf("=") + 1), "\"", "&quot;");
                             sb.Append(" text=\"" + chapTitle + "\"></TextSample>" + Environment.NewLine);
-                        }                     
+                        }
                     }
                 }
                 sb.AppendLine("</TextStream>");
@@ -545,7 +546,7 @@ namespace MeGUI.core.util
             else if (buffer[0] == 0 && buffer[1] == 0 && buffer[2] == 0xfe && buffer[3] == 0xff) // UTF32
             {
                 enc = Encoding.UTF32;
-                v = 3; 
+                v = 3;
             }
             else if (buffer[0] == 0x2b && buffer[1] == 0x2f && buffer[2] == 0x76) // UTF7
             {
@@ -553,10 +554,8 @@ namespace MeGUI.core.util
                 v = 4;
             }
 
-            //return enc;
             return v;
         }
-
 
     }
 }

@@ -849,7 +849,7 @@ namespace MeGUI
                 }
                 FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(Path.Combine(pathRoot, "avisynth.dll"));
                 fileVersion = FileProperties.FileVersion;
-                fileDate = File.GetLastWriteTimeUtc(Path.Combine(pathRoot, "avisynth.dll")).ToString();
+                fileDate = File.GetLastWriteTimeUtc(Path.Combine(pathRoot, "avisynth.dll")).ToString("dd-MM-yyyy");
                 bLocal = true;
             }
 #if x86
@@ -859,7 +859,7 @@ namespace MeGUI
                 string path = Path.Combine(syswow64path, "avisynth.dll");
                 FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
                 fileVersion = FileProperties.FileVersion;
-                fileDate = File.GetLastWriteTimeUtc(path).ToString();
+                fileDate = File.GetLastWriteTimeUtc(path).ToString("dd-MM-yyyy");
                 bFound = true;
             }
             else if (!Directory.Exists(syswow64path) 
@@ -872,7 +872,7 @@ namespace MeGUI
                 string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "avisynth.dll");
                 FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
                 fileVersion = FileProperties.FileVersion;
-                fileDate = File.GetLastWriteTimeUtc(path).ToString();
+                fileDate = File.GetLastWriteTimeUtc(path).ToString("dd-MM-yyyy");
                 bFound = true;
             }
 
@@ -890,7 +890,7 @@ namespace MeGUI
                         path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll");
                         FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
                         fileVersion = FileProperties.FileVersion;
-                        fileDate = File.GetLastWriteTimeUtc(path).ToString();
+                        fileDate = File.GetLastWriteTimeUtc(path).ToString("dd-MM-yyyy");
                         bLocal = true;
                     }
                     catch {}
@@ -908,7 +908,7 @@ namespace MeGUI
                 return;
             string strVersion = string.Empty;
             if (string.IsNullOrEmpty(fileVersion))
-                strVersion = fileDate;
+                strVersion = " (" + fileDate + ")";
             else
                 strVersion = fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")";
             if (bLocal)
