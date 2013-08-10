@@ -905,7 +905,10 @@ namespace MeGUI
             }
 
             if (keepInputResolution.Checked || !String.IsNullOrEmpty(dpp.VideoFileToMux))
+            {
                 dpp.HorizontalOutputResolution = 0;
+                dpp.SignalAR = true;
+            }
             else
                 dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
 
@@ -946,8 +949,11 @@ namespace MeGUI
                     strAudioCodec = oAudioTrackInfo.Codec;
                     if (inputContainer == ContainerType.MKV && !dpp.Eac3toDemux) // only if container MKV and no demux with eac3to
                     {
-                        oExtractMKVTrack.Add(oStreamControl.SelectedStream.TrackInfo);
-                        bExtractMKVTrack = true;
+                        if (!strAudioCodec.Equals("PCM", StringComparison.InvariantCultureIgnoreCase)) // PCM track cannot be extracted by mkvextract
+                        {
+                            oExtractMKVTrack.Add(oStreamControl.SelectedStream.TrackInfo);
+                            bExtractMKVTrack = true;
+                        }
                     }
                 }
                 else
@@ -1024,6 +1030,17 @@ namespace MeGUI
                             audioJobs = new SequentialChain(audioJobs, new SequentialChain(oJob));
                             dpp.FilesToDelete.Add(FileUtil.AddToFileName(Path.ChangeExtension(aInput, "txt"), " - Log"));
                             dpp.FilesToDelete.Add(aInput);
+                        }
+                        else if (oStreamControl.SelectedItem.IsStandard && strAudioCodec.Equals("PCM", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            if (_videoInputInfo.ContainerFileType == ContainerType.MKV)
+                            {
+                                aInput = Path.Combine(strWorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName);
+                                HDStreamsExJob oJob = new HDStreamsExJob(new List<string>() { dpp.VideoInput }, aInput, null, oStreamControl.SelectedStream.TrackInfo.TrackID + ":\"" + aInput + "\"", 2);
+                                audioJobs = new SequentialChain(audioJobs, new SequentialChain(oJob));
+                                dpp.FilesToDelete.Add(FileUtil.AddToFileName(Path.ChangeExtension(aInput, "txt"), " - Log"));
+                                dpp.FilesToDelete.Add(aInput);
+                            }
                         }
                     }
 
@@ -1319,10 +1336,7 @@ namespace MeGUI
         private void keepInputResolution_CheckedChanged(object sender, EventArgs e)
         {
             if (keepInputResolution.Checked)
-            {
                 horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = false;
-                signalAR.Checked = true;
-            }
             else
                 horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = true;
         }

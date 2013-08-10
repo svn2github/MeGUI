@@ -401,7 +401,7 @@ namespace MeGUI
             this.keepInputResolution.Name = "keepInputResolution";
             this.keepInputResolution.Size = new System.Drawing.Size(246, 17);
             this.keepInputResolution.TabIndex = 25;
-            this.keepInputResolution.Text = "Keep Input Resolution (disable Crop && Resize)";
+            this.keepInputResolution.Text = "Keep Input Resolution (disable crop && resize)";
             this.keepInputResolution.UseVisualStyleBackColor = true;
             this.keepInputResolution.CheckedChanged += new System.EventHandler(this.keepInputResolution_CheckedChanged);
             // 

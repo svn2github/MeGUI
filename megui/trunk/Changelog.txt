@@ -1,3 +1,6 @@
+2378 [OneClick] A_MS/ACM (PCM) audio tracks in MKV files will be extracted with eac3to
+2377 [QAAC] added "no delay" feature
+2376 [Log] changed format of some date/times
 2375 [OneClick] fixed anamorphic encodings (regression of 2357) 
 2373 [MP4 Muxer] default GPAC string will be erased
 2372 [MP4 Muxer] added TTXT Subtitles Files support. Feature request #437

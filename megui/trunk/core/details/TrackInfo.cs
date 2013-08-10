@@ -218,8 +218,8 @@ namespace MeGUI
                     case "DTS": strExtension = "dts"; break;
                     case "MP3": strExtension = "mp3"; break;
                     case "MP2": strExtension = "mp2"; break;
-                    case "PCM": strExtension = "wav"; break;
-                    case "MS/ACM": strExtension = "wav"; break;
+                    case "PCM": strExtension = "w64"; break;
+                    case "MS/ACM": strExtension = "w64"; break;
                     case "VORBIS": strExtension = "ogg"; break;
                     case "FLAC": strExtension = "flac"; break;
                     case "REAL": strExtension = "ra"; break;

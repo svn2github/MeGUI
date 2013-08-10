@@ -180,7 +180,7 @@ namespace MeGUI.packages.tools.oneclick
             this.keepInputResolution.Name = "keepInputResolution";
             this.keepInputResolution.Size = new System.Drawing.Size(242, 17);
             this.keepInputResolution.TabIndex = 42;
-            this.keepInputResolution.Text = "Keep Input Resolution (disable Crop && Resize)";
+            this.keepInputResolution.Text = "Keep Input Resolution (disable crop && resize)";
             this.keepInputResolution.UseVisualStyleBackColor = true;
             this.keepInputResolution.CheckedChanged += new System.EventHandler(this.keepInputResolution_CheckedChanged);
             // 
