@@ -33,13 +33,13 @@ namespace MeGUI.core.details.audio
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.cbSampleRate = new System.Windows.Forms.ComboBox();
             this.primaryDecoding = new System.Windows.Forms.ComboBox();
-            this.lbSampleRate = new System.Windows.Forms.Label();
             this.besweetDownmixMode = new System.Windows.Forms.ComboBox();
             this.applyDRC = new System.Windows.Forms.CheckBox();
             this.normalize = new System.Windows.Forms.NumericUpDown();
             this.autoGain = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.BesweetChannelsLabel = new System.Windows.Forms.Label();
+            this.lbSampleRate = new System.Windows.Forms.Label();
             this.besweetOptionsGroupbox.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.normalize)).BeginInit();
@@ -107,6 +107,7 @@ namespace MeGUI.core.details.audio
             "Change to   8000 Hz",
             "Change to 11025 Hz",
             "Change to 22050 Hz",
+            "Change to 32000 Hz",
             "Change to 44100 Hz",
             "Change to 48000 Hz",
             "Speed-up (23.976 to 25)",
@@ -128,16 +129,6 @@ namespace MeGUI.core.details.audio
             this.primaryDecoding.Name = "primaryDecoding";
             this.primaryDecoding.Size = new System.Drawing.Size(282, 21);
             this.primaryDecoding.TabIndex = 13;
-            // 
-            // lbSampleRate
-            // 
-            this.lbSampleRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lbSampleRate.AutoSize = true;
-            this.lbSampleRate.Location = new System.Drawing.Point(3, 65);
-            this.lbSampleRate.Name = "lbSampleRate";
-            this.lbSampleRate.Size = new System.Drawing.Size(68, 13);
-            this.lbSampleRate.TabIndex = 11;
-            this.lbSampleRate.Text = "Sample Rate";
             // 
             // besweetDownmixMode
             // 
@@ -206,6 +197,16 @@ namespace MeGUI.core.details.audio
             this.BesweetChannelsLabel.Size = new System.Drawing.Size(86, 13);
             this.BesweetChannelsLabel.TabIndex = 2;
             this.BesweetChannelsLabel.Text = "Output Channels";
+            // 
+            // lbSampleRate
+            // 
+            this.lbSampleRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lbSampleRate.AutoSize = true;
+            this.lbSampleRate.Location = new System.Drawing.Point(3, 65);
+            this.lbSampleRate.Name = "lbSampleRate";
+            this.lbSampleRate.Size = new System.Drawing.Size(68, 13);
+            this.lbSampleRate.TabIndex = 11;
+            this.lbSampleRate.Text = "Sample Rate";
             // 
             // AudioConfigurationPanel
             // 

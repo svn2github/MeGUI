@@ -359,7 +359,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             Thread t = null;
             try
             {
-                raiseEvent("Opening file...   ***PLEASE WAIT***");
+                raiseEvent("Opening file....please wait, it may take some time");
                 _start = DateTime.Now;
                 t = new Thread(new ThreadStart(delegate
                 {
@@ -371,7 +371,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 }));
                 t.Start();
                 createAviSynthScript();
-                raiseEvent("Preprocessing...   ***PLEASE WAIT***");
+                raiseEvent("Preprocessing...please wait, it may take some time");
                 _start = DateTime.Now;
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
                 {
@@ -1113,21 +1113,24 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     script.Append("SSRC(22050)" + Environment.NewLine);
                     break;
                 case 4:
-                    script.Append("SSRC(44100)" + Environment.NewLine);
+                    script.Append("SSRC(32000)" + Environment.NewLine);
                     break;
                 case 5:
-                    script.Append("SSRC(48000)" + Environment.NewLine);
+                    script.Append("SSRC(44100)" + Environment.NewLine);
                     break;
                 case 6:
-                    script.Append("AssumeSampleRate((AudioRate()*1001+480)/960).SSRC(AudioRate())" + Environment.NewLine);
+                    script.Append("SSRC(48000)" + Environment.NewLine);
                     break;
                 case 7:
-                    script.Append("SSRC((AudioRate()*1001+480)/960).AssumeSampleRate(AudioRate())" + Environment.NewLine);
+                    script.Append("AssumeSampleRate((AudioRate()*1001+480)/960).SSRC(AudioRate())" + Environment.NewLine);
                     break;
                 case 8:
-                    script.Append("AssumeSampleRate((AudioRate()*25)/24).SSRC(AudioRate())" + Environment.NewLine);
+                    script.Append("SSRC((AudioRate()*1001+480)/960).AssumeSampleRate(AudioRate())" + Environment.NewLine);
                     break;
                 case 9:
+                    script.Append("AssumeSampleRate((AudioRate()*25)/24).SSRC(AudioRate())" + Environment.NewLine);
+                    break;
+                case 10:
                     script.Append("SSRC((AudioRate()*25)/24).AssumeSampleRate(AudioRate())" + Environment.NewLine);
                     break;
             }
