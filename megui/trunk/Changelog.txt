@@ -1,3 +1,5 @@
+2380 [AVS Script Creator] fixed a crash when opening first a smaller and then a bigger input file
+2379 [Audio] Added 32000 Hz as Sample Rate. Feature Request #518
 2378 [OneClick] A_MS/ACM (PCM) audio tracks in MKV files will be extracted with eac3to
 2377 [QAAC] added "no delay" feature
 2376 [Log] changed format of some date/times

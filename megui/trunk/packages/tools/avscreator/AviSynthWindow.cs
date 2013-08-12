@@ -744,8 +744,14 @@ namespace MeGUI
                     this.tvTypeLabel.Text = "PAL";
                 else
                     this.tvTypeLabel.Text = "NTSC";
+
+                if (horizontalResolution.Maximum < file.VideoInfo.Width)
+                    horizontalResolution.Maximum = file.VideoInfo.Width;
                 horizontalResolution.Value = file.VideoInfo.Width;
+                if (verticalResolution.Maximum < file.VideoInfo.Height)
+                    verticalResolution.Maximum = file.VideoInfo.Height;
                 verticalResolution.Value = file.VideoInfo.Height;
+
                 if (File.Exists(strSourceFileName))
                 {
                     MediaInfoFile oInfo = new MediaInfoFile(strSourceFileName);
@@ -1282,7 +1288,12 @@ namespace MeGUI
                 int inputWidth = (int)file.VideoInfo.Width - Cropping.left - Cropping.right;
                 if (!resize.Checked)
                 {
+                    if (verticalResolution.Maximum < inputHeight)
+                        verticalResolution.Maximum = inputHeight;
                     verticalResolution.Value = inputHeight;
+
+                    if (horizontalResolution.Maximum < inputWidth)
+                        horizontalResolution.Maximum = inputWidth;
                     horizontalResolution.Value = inputWidth;
                 }
                 if (!bAllowUpsizing)
@@ -1336,10 +1347,20 @@ namespace MeGUI
             
             if (!resize.Checked && !suggestResolution.Checked) // just to make sure
                 outputHeight = (int)file.VideoInfo.Height - Cropping.top - Cropping.bottom;
+
             if (outputWidth != (int)horizontalResolution.Value)
+            {
+                if (horizontalResolution.Maximum < outputWidth)
+                    horizontalResolution.Maximum = outputWidth;
                 horizontalResolution.Value = outputWidth;
+            }
             if (outputHeight != (int)verticalResolution.Value)
+            {
+                if (verticalResolution.Maximum < outputHeight)
+                    verticalResolution.Maximum = outputHeight;
                 verticalResolution.Value = outputHeight;
+            }
+            
             if (suggestResolution.Checked)
                 verticalResolution.Enabled = false;
             else
