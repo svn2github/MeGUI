@@ -181,7 +181,13 @@ namespace MeGUI
                 if ((vSettings.SettingsID.Equals("x264")) && (!fileType.Text.Equals("RAWAVC")))
                     info.VideoOutput = Path.ChangeExtension(info.VideoOutput, ".h264");
             }
-            
+
+            if ((fileType.Text.Equals("MP4")) && (!MainForm.Instance.Settings.UseExternalMuxerX264)) // force to use external muxer because the current x264 build doesn't have mp4 output
+            {
+                MainForm.Instance.Settings.UseExternalMuxerX264 = true; 
+                info.VideoOutput = Path.ChangeExtension(info.VideoOutput, ".h264");
+            }
+
             mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentSettings.Clone(),
                 info.IntroEndFrame, info.CreditsStartFrame, info.DAR, PrerenderJob, true, info.Zones);
 
