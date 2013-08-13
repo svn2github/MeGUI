@@ -27,6 +27,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
+using MeGUI.core.details;
 using MeGUI.core.details.video;
 using MeGUI.core.gui;
 using MeGUI.core.plugins.interfaces;
@@ -175,8 +176,45 @@ namespace MeGUI
                 return;
             }
             VideoCodecSettings vSettings = this.CurrentSettings.Clone();
+            if (MainForm.Instance.Settings.UseExternalMuxerX264)
+            {
+                if ((vSettings.SettingsID.Equals("x264")) && (!fileType.Text.Equals("RAWAVC")))
+                    info.VideoOutput = Path.ChangeExtension(info.VideoOutput, ".h264");
+            }
+            
             mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentSettings.Clone(),
                 info.IntroEndFrame, info.CreditsStartFrame, info.DAR, PrerenderJob, true, info.Zones);
+
+            if (MainForm.Instance.Settings.UseExternalMuxerX264)
+            {
+                if ((vSettings.SettingsID.Equals("x264")) && (!fileType.Text.Equals("RAWAVC")))
+                {
+                    // create job
+                    JobChain prepareJobs = null;
+                    MuxJob mJob = new MuxJob();
+                    mJob.Input = info.VideoOutput;
+
+                    if (fileType.Text.Equals("MKV"))
+                    {
+                        mJob.MuxType = MuxerType.MKVMERGE;
+                        mJob.Output = Path.ChangeExtension(info.VideoOutput, ".mkv");
+                    }
+                    else if (fileType.Text.Equals("MP4"))
+                    {
+                        mJob.MuxType = MuxerType.MP4BOX;
+                        mJob.Output = Path.ChangeExtension(info.VideoOutput, ".mp4");
+                    }
+
+                    mJob.Settings.MuxAll = true;
+                    mJob.Settings.MuxedInput = mJob.Input;
+                    mJob.Settings.MuxedOutput = mJob.Output;
+                    mJob.FilesToDelete.Add(info.VideoOutput);
+
+                    // add job to queue
+                    prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(mJob));
+                    mainForm.Jobs.addJobsWithDependencies(prepareJobs, true);
+                }
+            }
         }
         private bool bInitialStart = true;
         private void fileType_SelectedIndexChanged(object sender, EventArgs e)

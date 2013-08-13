@@ -58,7 +58,7 @@ namespace MeGUI
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bUseQAAC,
-                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc;
+                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc, bExternalMuxerX264;
         private ulong audioSamplesPerUpdate;
         private decimal forceFilmThreshold, acceptableFPSError;
         private int nbPasses, autoUpdateServerSubList, minComplexity, updateFormSplitter,
@@ -524,6 +524,14 @@ namespace MeGUI
         {
             get { return addTimePosition; }
             set { addTimePosition = value; }
+        }
+        /// <summary>
+        /// bool to decide whether to use external muxer for the x264 encoder
+        /// </summary>
+        public bool UseExternalMuxerX264
+        {
+            get { return bExternalMuxerX264; }
+            set { bExternalMuxerX264 = value; }
         }
         /// <summary>
         /// gets / sets the default output directory
