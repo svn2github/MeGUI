@@ -557,6 +557,7 @@ namespace MeGUI
                     oTrack.Info("ScanType: " + t.ScanTypeString);
                     oTrack.Info("Codec: " + t.Codec);
                     oTrack.Info("CodecString: " + t.CodecString);
+                    oTrack.Info("Bits Depth: " + t.BitDepth);
                     oTrack.Info("Format: " + t.Format);
                     oTrack.Info("AspectRatio: " + t.AspectRatio);
                     oTrack.Info("AspectRatioString: " + t.AspectRatioString);
