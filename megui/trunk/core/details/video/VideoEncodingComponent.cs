@@ -42,7 +42,8 @@ namespace MeGUI
         private MainForm mainForm = MainForm.Instance;
 
         #region video info
-        private VideoInfo info;
+        private VideoInfo info; 
+        public double FrameRate;
         private void initVideoInfo()
         {
             info = new VideoInfo();
@@ -145,7 +146,8 @@ namespace MeGUI
             if (videoLoaded)
             {
                 info.DAR = info.DAR ?? player.File.VideoInfo.DAR;
-                player.DAR = info.DAR;
+                player.DAR = info.DAR; 
+                FrameRate = player.Framerate;
                 player.IntroCreditsFrameSet += new IntroCreditsFrameSetCallback(player_IntroCreditsFrameSet);
                 player.Closed += new EventHandler(player_Closed);
                 player.Show();
@@ -212,6 +214,7 @@ namespace MeGUI
                     }
 
                     mJob.Settings.MuxAll = true;
+                    mJob.Settings.Framerate = decimal.Round((decimal)FrameRate,3,MidpointRounding.AwayFromZero);
                     mJob.Settings.MuxedInput = mJob.Input;
                     mJob.Settings.MuxedOutput = mJob.Output;
                     mJob.FilesToDelete.Add(info.VideoOutput);
