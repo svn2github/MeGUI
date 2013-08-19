@@ -57,7 +57,7 @@ namespace MeGUI
             this.Mod16Method = mod16Method.none;
             this.DSS2 = false;
             this.Upsize = false;
-            this.ModValue = modValue.mod16;
+            this.ModValue = modValue.mod8;
             this.acceptableAspectError = 1;
         }
 
