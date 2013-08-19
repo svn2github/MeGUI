@@ -56,7 +56,7 @@ namespace MeGUI.core.gui
                 MessageBox.Show("Only http servers are supported", "Server not http", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            UpdateWindow oUpdateWindow = new UpdateWindow(MainForm.Instance, MainForm.Instance.Settings, true);
+            UpdateWindow oUpdateWindow = new UpdateWindow(MainForm.Instance, true);
             if (oUpdateWindow.GetUpdateXML(serverName) != UpdateWindow.ErrorState.Successful)
             {
                 if (MessageBox.Show("The server or the XML file is not available.\r\nShould it be added nevertheless?", "No connection to server", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != System.Windows.Forms.DialogResult.Yes)

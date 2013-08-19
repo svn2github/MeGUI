@@ -764,7 +764,7 @@ namespace MeGUI
             if (File.Exists(strLocalUpdateXML))
                 MainForm.Instance.Settings.AutoUpdateSession = true;
 
-            UpdateWindow update = new UpdateWindow(this, this.Settings, false);
+            UpdateWindow update = new UpdateWindow(this, false);
             update.GetUpdateData(true);
             bool bIsComponentMissing = UpdateWindow.isComponentMissing();
             if (bIsComponentMissing || update.HasUpdatableFiles()) // If there are updated or missing files, display the window
@@ -823,7 +823,7 @@ namespace MeGUI
 
         private void mnuUpdate_Click(object sender, EventArgs e)
         {
-            UpdateWindow update = new UpdateWindow(this, this.Settings, false);
+            UpdateWindow update = new UpdateWindow(this, false);
             update.ShowDialog();
         }
 
@@ -909,7 +909,7 @@ namespace MeGUI
 
             if (parser.upgradeData.Count > 0)
             {
-                UpdateWindow update = new UpdateWindow(this, Settings, false);
+                UpdateWindow update = new UpdateWindow(this, false);
                 foreach (string file in parser.upgradeData.Keys)
                     update.UpdateUploadDate(file, parser.upgradeData[file]);
                 update.SaveSettings();

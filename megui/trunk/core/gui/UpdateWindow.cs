@@ -40,7 +40,7 @@ namespace MeGUI
 {
     public partial class UpdateWindow : Form
     {
-        private string[] serverList;
+        private List<string> serverList;
         
         private MainForm mainForm = null;
         public static MeGUISettings meGUISettings = null;
@@ -917,22 +917,22 @@ namespace MeGUI
         /// <param name="mainForm">MainForm instance</param>
         /// <param name="savedSettings">Current MeGUI settings</param>
         /// <param name="bSilent">whether the update window should be displayed</param>
-        public UpdateWindow(MainForm mainForm, MeGUISettings savedSettings, bool bSilent)
+        public UpdateWindow(MainForm mainForm, bool bSilent)
         {
             InitializeComponent();
             this.mainForm = mainForm;
             this.oLog = mainForm.UpdateLog;
             LoadComponentSettings();
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
-            meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
+            meGUISettings = mainForm.Settings; // Load up the MeGUI settings so i can access filepaths
             if (bSilent)
                 return;
-            this.serverList = shuffled(mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList]);
-            if (serverList.Length == 0)
+            if (mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList].Length <= 1)
             {
                 MessageBox.Show("Couldn't run auto-update since there are no servers registered.", "No servers registered", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            serverList = getUpdateServerList(mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList]);
             LoadSettings();
         }
 
@@ -1127,17 +1127,41 @@ namespace MeGUI
             return bComponentMissing;
         }
 
-        private string[] shuffled(string[] serverList)
+        private List<string> getUpdateServerList(string[] serverList)
         {
-            Random r = new Random();
-            SortedList<int, string> shuffled = new SortedList<int, string>();
-            // The first element is the name
-            for (int i = 1; i < serverList.Length; i++)
-                shuffled.Add(r.Next(),serverList[i]);
+            string lastUpdateServer = MainForm.Instance.Settings.LastUpdateServer;
+            List<string> randomServerList = new List<string>();
+            List<string> sortedServerList = new List<string>(serverList);
+            sortedServerList.RemoveAt(0); // remove header
 
-            string[] array = new string[shuffled.Count];
-            shuffled.Values.CopyTo(array, 0);
-            return array;
+            if (MainForm.Instance.Settings.LastUpdateCheck.AddHours(4).CompareTo(DateTime.Now.ToUniversalTime()) > 0)
+            {
+                // update server used within the last 4 hours - therefore no new server will be selected
+                if (sortedServerList.Contains(lastUpdateServer))
+                {
+                    sortedServerList.Remove(lastUpdateServer);
+                    randomServerList.Add(lastUpdateServer);
+                    lastUpdateServer = String.Empty;
+                }
+            }
+            else
+            {
+                if (sortedServerList.Contains(lastUpdateServer))
+                    sortedServerList.Remove(lastUpdateServer);
+            }
+
+            Random r = new Random();
+            while (sortedServerList.Count >  0)
+            {
+                int i = r.Next(0, sortedServerList.Count);
+                randomServerList.Add(sortedServerList[i]);
+                sortedServerList.RemoveAt(i);
+            }
+
+            if (!String.IsNullOrEmpty(lastUpdateServer))
+                randomServerList.Add(lastUpdateServer);
+
+            return randomServerList;
         }
 
         private void UpdateWindow_Load(object sender, EventArgs e)
@@ -1324,7 +1348,11 @@ namespace MeGUI
                 AddTextToLog("Connecting to server: " + serverName, ImageType.Information);
                 value = GetUpdateXML(serverName);
                 if (value == ErrorState.Successful)
+                {
+                    MainForm.Instance.Settings.LastUpdateCheck = DateTime.Now.ToUniversalTime();
+                    MainForm.Instance.Settings.LastUpdateServer = serverName; 
                     break;
+                }
             }
 
             if (value != ErrorState.Successful)
@@ -2213,7 +2241,7 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            UpdateWindow update = new UpdateWindow(info, info.Settings, false);
+            UpdateWindow update = new UpdateWindow(info, false);
             update.ShowDialog();
         }
 

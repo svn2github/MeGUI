@@ -1,3 +1,4 @@
+2387 [Update] update server will not be changed during every update check
 2386 [AVS Script Creator] changed default mod value to 8
 2385 [VideoEncodingComponent] added FrameRate information concerning external JobMuxer
 2384 [MediaInfo] added Bits Depth information in the log

@@ -45,6 +45,7 @@ namespace MeGUI
             Advanced
         };
         private string[][] autoUpdateServerLists;
+        private DateTime lastUpdateCheck;
         private string qaacPath, opusPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
                        ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat, bassPath,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath, aviSynthPath,
@@ -52,7 +53,7 @@ namespace MeGUI
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4, flacPath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath,
-                       mkvExtractPath, appendToForcedStreams, pgcDemuxPath, lastUsedOneClickFolder;
+                       mkvExtractPath, appendToForcedStreams, pgcDemuxPath, lastUsedOneClickFolder, lastUpdateServer;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
@@ -86,6 +87,8 @@ namespace MeGUI
             autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
                 new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
+            lastUpdateCheck = DateTime.Now.ToUniversalTime();
+            lastUpdateServer = String.Empty;
             acceptableFPSError = 0.01M;
             autoUpdateServerSubList = 0;
             autoUpdate = true;
@@ -438,6 +441,7 @@ namespace MeGUI
             get { return acceptableFPSError; }
             set { acceptableFPSError = value; }
         }
+
         /// <summary>
         /// Which sublist to look in for the update servers
         /// </summary>
@@ -446,6 +450,25 @@ namespace MeGUI
             get { return autoUpdateServerSubList; }
             set { autoUpdateServerSubList = value; }
         }
+
+        /// <summary>
+        /// Last update check
+        /// </summary>
+        public DateTime LastUpdateCheck
+        {
+            get { return lastUpdateCheck; }
+            set { lastUpdateCheck = value; }
+        }
+
+        /// <summary>
+        /// Last update server
+        /// </summary>
+        public string LastUpdateServer
+        {
+            get { return lastUpdateServer; }
+            set { lastUpdateServer = value; }
+        }
+
         /// <summary>
         /// List of servers to use for autoupdate
         /// </summary>
@@ -477,6 +500,7 @@ namespace MeGUI
             }
             set { autoUpdateServerLists = value; }
         }
+
         /// <summary>
         /// What to do after all encodes are finished
         /// </summary>
@@ -485,6 +509,7 @@ namespace MeGUI
             get { return afterEncoding; }
             set { afterEncoding = value; }
         }
+
         /// <summary>
         /// Command to run after encoding is finished (only if AfterEncoding is RunCommand)
         /// </summary>
@@ -493,6 +518,7 @@ namespace MeGUI
             get { return afterEncodingCommand; }
             set { afterEncodingCommand = value; }
         }
+
         /// <summary>
         /// bool to decide whether to use advanced or basic tooltips
         /// </summary>
@@ -501,6 +527,7 @@ namespace MeGUI
             get { return useadvancedtooltips; }
             set { useadvancedtooltips = value; }
         }
+
         /// <summary>
         /// bool to decide whether to use 64bit x264
         /// </summary>
@@ -509,6 +536,7 @@ namespace MeGUI
             get { return b64bitX264; }
             set { b64bitX264 = value; }
         }
+
         ///<summary>
         /// gets / sets whether megui puts the Video Preview Form "Alwyas on Top" or not
         /// </summary>
@@ -517,6 +545,7 @@ namespace MeGUI
             get { return alwaysOnTop; }
             set { alwaysOnTop = value; }
         }
+
         ///<summary>
         /// gets / sets whether megui add the Time Position or not to the Video Player
         /// </summary>
@@ -525,6 +554,7 @@ namespace MeGUI
             get { return addTimePosition; }
             set { addTimePosition = value; }
         }
+
         /// <summary>
         /// bool to decide whether to use external muxer for the x264 encoder
         /// </summary>
@@ -541,6 +571,7 @@ namespace MeGUI
             get { return defaultOutputDir; }
             set { defaultOutputDir = value; }
         }
+
         /// <summary>
         /// gets / sets the temp directory for MP4 Muxer
         /// </summary>
@@ -554,6 +585,7 @@ namespace MeGUI
             }
             set { tempDirMP4 = value; }
         }
+
         /// <summary>
         /// path of besplit.exe
         /// </summary>
