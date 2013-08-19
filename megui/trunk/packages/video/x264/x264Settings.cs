@@ -111,7 +111,7 @@ namespace MeGUI
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, blurayCompat,
 			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile,
             FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass, picStruct,
-            fakeInterlaced, nonDeterministic, tuneFastDecode, tuneZeroLatency;
+            fakeInterlaced, nonDeterministic, tuneFastDecode, tuneZeroLatency, stitchable;
 		string quantizerMatrix, qpfile, openGop, range;
         x264PresetLevelModes preset;
         x264InterlacedModes interlacedMode;
@@ -218,6 +218,7 @@ namespace MeGUI
             _gopCalculation = 1;
             quantizerCrf = 23;
             tuneFastDecode = tuneZeroLatency = false;
+            stitchable = false;
 		}
 		#endregion
 		#region properties
@@ -550,6 +551,11 @@ namespace MeGUI
         {
             get { return ssimCalc; }
             set { ssimCalc = value; }
+        }
+        public bool StitchAble
+        {
+            get { return stitchable; }
+            set { stitchable = value; }
         }
 		public string QuantizerMatrix
 		{

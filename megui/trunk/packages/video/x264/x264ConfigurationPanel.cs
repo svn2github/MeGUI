@@ -1197,6 +1197,7 @@ namespace MeGUI.packages.video.x264
                 xs.NoDCTDecimate = this.noDCTDecimateOption.Checked;
                 xs.SSIMCalculation = this.ssim.Checked;
                 xs.PSNRCalculation = this.psnr.Checked;
+                xs.StitchAble = this.stitchable.Checked;
                 xs.NoFastPSkip = noFastPSkip.Checked;
                 xs.X264SlowFirstpass = this.x264SlowFirstpass.Checked;
                 xs.NoMixedRefs = x264MixedReferences.Checked;
@@ -1316,6 +1317,7 @@ namespace MeGUI.packages.video.x264
                 cbInterlaceMode.SelectedIndex = (int)xs.InterlacedMode;
                 noDCTDecimateOption.Checked = xs.NoDCTDecimate;
                 ssim.Checked = xs.SSIMCalculation;
+                stitchable.Checked = xs.StitchAble;
                 updateDeviceBlocked = true;
                 targetDevice.SelectedItem = xs.TargetDevice.Name;
                 updateDeviceBlocked = false;
@@ -1574,6 +1576,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264NbThreads, SelectHelpText("threads"));
             tooltipHelp.SetToolTip(psnr, SelectHelpText("psnr"));
             tooltipHelp.SetToolTip(ssim, SelectHelpText("ssim"));
+            tooltipHelp.SetToolTip(stitchable, SelectHelpText("stitchable"));
             tooltipHelp.SetToolTip(logfile, SelectHelpText("logfile"));
             tooltipHelp.SetToolTip(customCommandlineOptions, SelectHelpText("customcommandline"));
             tooltipHelp.SetToolTip(qpfile, SelectHelpText("qpf"));

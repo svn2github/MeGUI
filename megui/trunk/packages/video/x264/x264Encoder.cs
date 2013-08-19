@@ -800,6 +800,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (!xs.Range.Equals("auto"))
                     sb.Append("--range " + xs.Range + " ");
 
+            if (!xs.CustomEncoderOptions.Contains("--stitchable"))
+                if (xs.StitchAble)
+                    sb.Append("--stitchable ");
+
             #endregion
 
             #region zones

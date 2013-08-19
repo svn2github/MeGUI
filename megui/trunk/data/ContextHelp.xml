@@ -696,6 +696,14 @@ Prevents SSIM calculations that are reported on completion.</Advanced>
 		<Recommended>Disabled</Recommended>
 		<Default>Disabled</Default>
 	</ssim>
+	<stitchable name="Stitch able">
+		<Advanced>
+Ensures ability to recombine a segmented encode
+Don't optimize headers based on video content</Advanced>
+		<Basic>Ensures ability to recombine a segmented encode</Basic>
+		<Recommended>Enabled if you want to merge video files</Recommended>
+		<Default>Disabled</Default>
+	</stitchable>
 		<quiet name="Quiet Mode">
 			<Advanced></Advanced>
 			<Basic>Enable Quiet Mode (do not display output information).</Basic>

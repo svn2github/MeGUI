@@ -214,6 +214,7 @@ namespace MeGUI.packages.video.x264
             this.btPresetSettings = new System.Windows.Forms.Button();
             this.dSettings = new System.Windows.Forms.Button();
             this.gbInOut = new System.Windows.Forms.GroupBox();
+            this.stitchable = new System.Windows.Forms.CheckBox();
             this.sampleAR = new System.Windows.Forms.ComboBox();
             this.sampleARLabel = new System.Windows.Forms.Label();
             this.ssim = new System.Windows.Forms.CheckBox();
@@ -2514,16 +2515,16 @@ namespace MeGUI.packages.video.x264
             // 
             this.gbAdjust.Controls.Add(this.btPresetSettings);
             this.gbAdjust.Controls.Add(this.dSettings);
-            this.gbAdjust.Location = new System.Drawing.Point(329, 291);
+            this.gbAdjust.Location = new System.Drawing.Point(329, 310);
             this.gbAdjust.Name = "gbAdjust";
-            this.gbAdjust.Size = new System.Drawing.Size(167, 106);
+            this.gbAdjust.Size = new System.Drawing.Size(167, 87);
             this.gbAdjust.TabIndex = 33;
             this.gbAdjust.TabStop = false;
             this.gbAdjust.Text = "Adjustments";
             // 
             // btPresetSettings
             // 
-            this.btPresetSettings.Location = new System.Drawing.Point(6, 61);
+            this.btPresetSettings.Location = new System.Drawing.Point(6, 48);
             this.btPresetSettings.Name = "btPresetSettings";
             this.btPresetSettings.Size = new System.Drawing.Size(150, 23);
             this.btPresetSettings.TabIndex = 37;
@@ -2534,7 +2535,7 @@ namespace MeGUI.packages.video.x264
             // 
             // dSettings
             // 
-            this.dSettings.Location = new System.Drawing.Point(6, 32);
+            this.dSettings.Location = new System.Drawing.Point(6, 19);
             this.dSettings.Name = "dSettings";
             this.dSettings.Size = new System.Drawing.Size(150, 23);
             this.dSettings.TabIndex = 35;
@@ -2545,16 +2546,28 @@ namespace MeGUI.packages.video.x264
             // 
             // gbInOut
             // 
+            this.gbInOut.Controls.Add(this.stitchable);
             this.gbInOut.Controls.Add(this.sampleAR);
             this.gbInOut.Controls.Add(this.sampleARLabel);
             this.gbInOut.Controls.Add(this.ssim);
             this.gbInOut.Controls.Add(this.psnr);
             this.gbInOut.Location = new System.Drawing.Point(329, 179);
             this.gbInOut.Name = "gbInOut";
-            this.gbInOut.Size = new System.Drawing.Size(167, 106);
+            this.gbInOut.Size = new System.Drawing.Size(167, 125);
             this.gbInOut.TabIndex = 32;
             this.gbInOut.TabStop = false;
             this.gbInOut.Text = "Input/Output";
+            // 
+            // stitchable
+            // 
+            this.stitchable.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.stitchable.Location = new System.Drawing.Point(10, 64);
+            this.stitchable.Name = "stitchable";
+            this.stitchable.Padding = new System.Windows.Forms.Padding(3);
+            this.stitchable.Size = new System.Drawing.Size(150, 23);
+            this.stitchable.TabIndex = 34;
+            this.stitchable.Text = "Stitch able";
+            this.stitchable.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // sampleAR
             // 
@@ -2571,7 +2584,7 @@ namespace MeGUI.packages.video.x264
             "32:27",
             "40:33",
             "64:45"});
-            this.sampleAR.Location = new System.Drawing.Point(86, 75);
+            this.sampleAR.Location = new System.Drawing.Point(86, 93);
             this.sampleAR.Name = "sampleAR";
             this.sampleAR.Size = new System.Drawing.Size(70, 21);
             this.sampleAR.TabIndex = 33;
@@ -2580,10 +2593,11 @@ namespace MeGUI.packages.video.x264
             // sampleARLabel
             // 
             this.sampleARLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.sampleARLabel.Location = new System.Drawing.Point(9, 75);
+            this.sampleARLabel.AutoSize = true;
+            this.sampleARLabel.Location = new System.Drawing.Point(14, 96);
             this.sampleARLabel.Margin = new System.Windows.Forms.Padding(3);
             this.sampleARLabel.Name = "sampleARLabel";
-            this.sampleARLabel.Size = new System.Drawing.Size(125, 24);
+            this.sampleARLabel.Size = new System.Drawing.Size(59, 13);
             this.sampleARLabel.TabIndex = 32;
             this.sampleARLabel.Text = "Force SAR";
             this.sampleARLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2591,7 +2605,7 @@ namespace MeGUI.packages.video.x264
             // ssim
             // 
             this.ssim.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ssim.Location = new System.Drawing.Point(6, 49);
+            this.ssim.Location = new System.Drawing.Point(10, 42);
             this.ssim.Name = "ssim";
             this.ssim.Padding = new System.Windows.Forms.Padding(3);
             this.ssim.Size = new System.Drawing.Size(150, 23);
@@ -2602,7 +2616,7 @@ namespace MeGUI.packages.video.x264
             // psnr
             // 
             this.psnr.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.psnr.Location = new System.Drawing.Point(6, 20);
+            this.psnr.Location = new System.Drawing.Point(10, 20);
             this.psnr.Name = "psnr";
             this.psnr.Padding = new System.Windows.Forms.Padding(3);
             this.psnr.Size = new System.Drawing.Size(150, 23);
@@ -2995,6 +3009,7 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264NbThreads)).EndInit();
             this.gbAdjust.ResumeLayout(false);
             this.gbInOut.ResumeLayout(false);
+            this.gbInOut.PerformLayout();
             this.gbVUI.ResumeLayout(false);
             this.gbVUI.PerformLayout();
             this.gbQPFile.ResumeLayout(false);
@@ -3205,5 +3220,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.ComboBox cbGOPCalculation;
         private System.Windows.Forms.CheckBox chkTuneZeroLatency;
         private System.Windows.Forms.CheckBox chkTuneFastDecode;
+        private System.Windows.Forms.CheckBox stitchable;
     }
 }

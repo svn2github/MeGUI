@@ -1,3 +1,4 @@
+2388 [x264] added --stitchable option (requires x264 revision 2345+)
 2387 [Update] update server will not be changed during every update check
 2386 [AVS Script Creator] changed default mod value to 8
 2385 [VideoEncodingComponent] added FrameRate information concerning external JobMuxer
