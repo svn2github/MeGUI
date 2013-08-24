@@ -225,9 +225,7 @@ namespace MeGUI
             if (!resize || (hres == iInputHresAfterCrop && vres == iInputVresAfterCrop))
             {
                 if (hresWithBorder > iInputHresAfterCrop || vresWithBorder > iInputVresAfterCrop)
-                    return string.Format("AddBorders({0},{1},{2},{3})",
-                        Math.Floor((hresWithBorder - iInputHresAfterCrop) / 2.0), Math.Floor((vresWithBorder - iInputVresAfterCrop) / 2.0),
-                        Math.Ceiling((hresWithBorder - iInputHresAfterCrop) / 2.0), Math.Ceiling((vresWithBorder - iInputVresAfterCrop) / 2.0));
+                    return getAddBorders(hres, vres, hresWithBorder, vresWithBorder);
                 else
                     return "#resize";
             }
@@ -235,13 +233,34 @@ namespace MeGUI
             EnumProxy p = EnumProxy.Create(type);
             if (p.Tag != null)
                 if (hresWithBorder > hres || vresWithBorder > vres)
-                    return string.Format(p.Tag + ".AddBorders({3},{4},{5},{6}) # {2}", hres, vres, p, 
-                        Math.Floor((hresWithBorder - hres) / 2.0), Math.Floor((vresWithBorder - vres) / 2.0), 
-                        Math.Ceiling((hresWithBorder - hres) / 2.0), Math.Ceiling((vresWithBorder - vres) / 2.0));
+                    return string.Format(p.Tag + "." + getAddBorders(hres, vres, hresWithBorder, vresWithBorder) + " # {2}", hres, vres, p);
                 else
                     return string.Format(p.Tag + " # {2}", hres, vres, p);
             else
                 return "#resize - " + p;
+        }
+
+        private static string getAddBorders(int hres, int vres, int hresWithBorder, int vresWithBorder)
+        {
+            CropValues borderValues = new CropValues();
+            borderValues.left = (int)Math.Floor((hresWithBorder - hres) / 2.0);
+            borderValues.top = (int)Math.Floor((vresWithBorder - vres) / 2.0);
+            borderValues.right = (int)Math.Ceiling((hresWithBorder - hres) / 2.0);
+            borderValues.bottom = (int)Math.Ceiling((vresWithBorder - vres) / 2.0);
+
+            // border values must be even for AviSynth 2.6
+            if (borderValues.left % 2 != 0 && borderValues.right % 2 != 0)
+            {
+                borderValues.left -= 1;
+                borderValues.right += 1;
+            }
+            if (borderValues.top % 2 != 0 && borderValues.bottom % 2 != 0)
+            {
+                borderValues.top -= 1;
+                borderValues.bottom += 1;
+            }
+
+            return string.Format("AddBorders({0},{1},{2},{3})", borderValues.left, borderValues.top, borderValues.right, borderValues.bottom);
         }
 
         public static string GetDenoiseLines(bool denoise, DenoiseFilterType type)

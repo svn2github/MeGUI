@@ -1,9 +1,11 @@
+2390 [OneClick] improved AddBorders calculation for AviSynth 2.6
+2389 [Main] updated the correct video output file extension according to the muxer used
 2388 [x264] added --stitchable option (requires x264 revision 2345+)
 2387 [Update] update server will not be changed during every update check
 2386 [AVS Script Creator] changed default mod value to 8
-2385 [VideoEncodingComponent] added FrameRate information concerning external JobMuxer
+2385 [Main] added FrameRate information concerning external JobMuxer
 2384 [MediaInfo] added Bits Depth information in the log
-2383 [Audio Encoder] Add TimeStretch support. Feature Request #493 
+2383 [Audio Encoder] Add TimeStretch support. Feature Request #493
 2382 [x264] Force to use external mp4 muxer because the current x264 build doesn't have the mp4 support
 2381 [x264] introduced external muxer job feature for the x264 encoder (only MKV & MP4). Can be enabled/disabled through the MeGUI settings. 
 2380 [AVS Script Creator] fixed a crash when opening first a smaller and then a bigger input file
@@ -11,7 +13,7 @@
 2378 [OneClick] A_MS/ACM (PCM) audio tracks in MKV files will be extracted with eac3to
 2377 [QAAC] added "no delay" feature
 2376 [Log] changed format of some date/times
-2375 [OneClick] fixed anamorphic encodings (regression of 2357) 
+2375 [OneClick] fixed anamorphic encodings (regression of 2357)
 2373 [MP4 Muxer] default GPAC string will be erased
 2372 [MP4 Muxer] added TTXT Subtitles Files support. Feature request #437
 2370 [OneClick] fixed "close after Go!" in batch mode
