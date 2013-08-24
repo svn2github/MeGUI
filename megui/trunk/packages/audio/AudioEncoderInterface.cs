@@ -332,6 +332,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (System.Text.RegularExpressions.Regex.IsMatch(line.ToLowerInvariant(), @"^processed\s?[0-9]{0,5}\s?seconds..."))
                     return;
             }
+            else if (audioJob.Settings is AftenSettings)
+            {
+                if (System.Text.RegularExpressions.Regex.IsMatch(line.ToLowerInvariant(), @"^progress: "))
+                    return;
+            }
 
             if (stream == StreamType.Stderr)
                 _encoderStdErr += line + "\n";
