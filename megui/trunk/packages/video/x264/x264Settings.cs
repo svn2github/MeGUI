@@ -111,7 +111,7 @@ namespace MeGUI
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, blurayCompat,
 			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile,
             FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass, picStruct,
-            fakeInterlaced, nonDeterministic, tuneFastDecode, tuneZeroLatency, stitchable;
+            fakeInterlaced, nonDeterministic, tuneFastDecode, tuneZeroLatency, stitchable, x26410Bits;
 		string quantizerMatrix, qpfile, openGop, range;
         x264PresetLevelModes preset;
         x264InterlacedModes interlacedMode;
@@ -219,6 +219,7 @@ namespace MeGUI
             quantizerCrf = 23;
             tuneFastDecode = tuneZeroLatency = false;
             stitchable = false;
+            x26410Bits = false;
 		}
 		#endregion
 		#region properties
@@ -577,6 +578,11 @@ namespace MeGUI
             get { return deadZoneIntra; }
             set { deadZoneIntra = value; }
         }
+        public bool X26410Bits
+        {
+            get { return x26410Bits; }
+            set { x26410Bits = value; }
+        }
         /// <summary>
         /// Only for XML export/import. For all other purposes use OpenGopValue()
         /// </summary>
@@ -907,7 +913,8 @@ namespace MeGUI
                 this.BlurayCompat != otherSettings.BlurayCompat ||
                 this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs ||
                 this.tuneFastDecode != otherSettings.tuneFastDecode ||
-                this.tuneZeroLatency != otherSettings.tuneZeroLatency
+                this.tuneZeroLatency != otherSettings.tuneZeroLatency ||
+                this.X26410Bits != otherSettings.X26410Bits
                 )
                 return true;
             else

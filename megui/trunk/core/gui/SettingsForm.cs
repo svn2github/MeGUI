@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -141,6 +141,7 @@ namespace MeGUI
         private Label label1;
         private ComboBox cbHttpProxyMode;
         private CheckBox chx264ExternalMuxer;
+        private CheckBox chUse10BitsX264;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -266,10 +267,8 @@ namespace MeGUI
             this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
             this.defaultLanguage1 = new System.Windows.Forms.ComboBox();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
-            this.targetSizeSCBox1 = new MeGUI.core.gui.TargetSizeSCBox();
             this.btnClearOutputDirecoty = new System.Windows.Forms.Button();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
-            this.defaultOutputDir = new MeGUI.FileBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -305,6 +304,8 @@ namespace MeGUI
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.chUse10BitsX264 = new System.Windows.Forms.CheckBox();
+            this.chx264ExternalMuxer = new System.Windows.Forms.CheckBox();
             this.useQAAC = new System.Windows.Forms.CheckBox();
             this.lblForcedName = new System.Windows.Forms.Label();
             this.txtForcedName = new System.Windows.Forms.TextBox();
@@ -315,10 +316,8 @@ namespace MeGUI
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.useNeroAacEnc = new System.Windows.Forms.CheckBox();
             this.lblNero = new System.Windows.Forms.Label();
-            this.neroaacencLocation = new MeGUI.FileBar();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnClearMP4TempDirectory = new System.Windows.Forms.Button();
-            this.tempDirMP4 = new MeGUI.FileBar();
             this.vobGroupBox = new System.Windows.Forms.GroupBox();
             this.useDGIndexNV = new System.Windows.Forms.CheckBox();
             this.cbAutoLoadDG = new System.Windows.Forms.CheckBox();
@@ -330,7 +329,10 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.chx264ExternalMuxer = new System.Windows.Forms.CheckBox();
+            this.targetSizeSCBox1 = new MeGUI.core.gui.TargetSizeSCBox();
+            this.defaultOutputDir = new MeGUI.FileBar();
+            this.neroaacencLocation = new MeGUI.FileBar();
+            this.tempDirMP4 = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -742,19 +744,6 @@ namespace MeGUI
             this.gbDefaultOutput.TabStop = false;
             this.gbDefaultOutput.Text = " Default Output Directory + Custom File Size Values ";
             // 
-            // targetSizeSCBox1
-            // 
-            this.targetSizeSCBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.targetSizeSCBox1.Location = new System.Drawing.Point(8, 56);
-            this.targetSizeSCBox1.MaximumSize = new System.Drawing.Size(1000, 28);
-            this.targetSizeSCBox1.MinimumSize = new System.Drawing.Size(64, 28);
-            this.targetSizeSCBox1.Name = "targetSizeSCBox1";
-            this.targetSizeSCBox1.NullString = "Modify custom file size values";
-            this.targetSizeSCBox1.SaveCustomValues = true;
-            this.targetSizeSCBox1.SelectedIndex = 0;
-            this.targetSizeSCBox1.Size = new System.Drawing.Size(273, 28);
-            this.targetSizeSCBox1.TabIndex = 44;
-            // 
             // btnClearOutputDirecoty
             // 
             this.btnClearOutputDirecoty.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -773,22 +762,6 @@ namespace MeGUI
             this.clearDefaultOutputDir.TabIndex = 41;
             this.clearDefaultOutputDir.Text = "x";
             this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
-            // 
-            // defaultOutputDir
-            // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(8, 24);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(243, 26);
-            this.defaultOutputDir.TabIndex = 40;
-            this.defaultOutputDir.Title = null;
             // 
             // tabPage3
             // 
@@ -1174,6 +1147,7 @@ namespace MeGUI
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.chUse10BitsX264);
             this.groupBox6.Controls.Add(this.chx264ExternalMuxer);
             this.groupBox6.Controls.Add(this.useQAAC);
             this.groupBox6.Controls.Add(this.lblForcedName);
@@ -1189,10 +1163,33 @@ namespace MeGUI
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = " Misc ";
             // 
+            // chUse10BitsX264
+            // 
+            this.chUse10BitsX264.AutoSize = true;
+            this.chUse10BitsX264.Location = new System.Drawing.Point(234, 49);
+            this.chUse10BitsX264.Name = "chUse10BitsX264";
+            this.chUse10BitsX264.Size = new System.Drawing.Size(166, 17);
+            this.chUse10BitsX264.TabIndex = 50;
+            this.chUse10BitsX264.Text = "x264: enable 10 Bits Encoder";
+            this.chUse10BitsX264.UseVisualStyleBackColor = true;
+            this.chUse10BitsX264.CheckedChanged += new System.EventHandler(this.chUse10BitsX264_CheckedChanged);
+            // 
+            // chx264ExternalMuxer
+            // 
+            this.chx264ExternalMuxer.AutoSize = true;
+            this.chx264ExternalMuxer.Checked = true;
+            this.chx264ExternalMuxer.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chx264ExternalMuxer.Location = new System.Drawing.Point(234, 31);
+            this.chx264ExternalMuxer.Name = "chx264ExternalMuxer";
+            this.chx264ExternalMuxer.Size = new System.Drawing.Size(208, 17);
+            this.chx264ExternalMuxer.TabIndex = 49;
+            this.chx264ExternalMuxer.Text = "x264: use external muxer (MKV, MP4)";
+            this.chx264ExternalMuxer.UseVisualStyleBackColor = true;
+            // 
             // useQAAC
             // 
             this.useQAAC.AutoSize = true;
-            this.useQAAC.Location = new System.Drawing.Point(12, 54);
+            this.useQAAC.Location = new System.Drawing.Point(13, 39);
             this.useQAAC.Name = "useQAAC";
             this.useQAAC.Size = new System.Drawing.Size(90, 17);
             this.useQAAC.TabIndex = 48;
@@ -1203,23 +1200,23 @@ namespace MeGUI
             // lblForcedName
             // 
             this.lblForcedName.AutoSize = true;
-            this.lblForcedName.Location = new System.Drawing.Point(11, 108);
+            this.lblForcedName.Location = new System.Drawing.Point(11, 103);
             this.lblForcedName.Name = "lblForcedName";
-            this.lblForcedName.Size = new System.Drawing.Size(163, 13);
+            this.lblForcedName.Size = new System.Drawing.Size(164, 13);
             this.lblForcedName.TabIndex = 33;
-            this.lblForcedName.Text = "add text to forced track names: ";
+            this.lblForcedName.Text = "Add text to forced track names: ";
             // 
             // txtForcedName
             // 
-            this.txtForcedName.Location = new System.Drawing.Point(225, 105);
+            this.txtForcedName.Location = new System.Drawing.Point(180, 100);
             this.txtForcedName.Name = "txtForcedName";
-            this.txtForcedName.Size = new System.Drawing.Size(234, 21);
+            this.txtForcedName.Size = new System.Drawing.Size(281, 21);
             this.txtForcedName.TabIndex = 32;
             // 
             // lblffmsThreads
             // 
             this.lblffmsThreads.AutoSize = true;
-            this.lblffmsThreads.Location = new System.Drawing.Point(10, 32);
+            this.lblffmsThreads.Location = new System.Drawing.Point(11, 17);
             this.lblffmsThreads.Name = "lblffmsThreads";
             this.lblffmsThreads.Size = new System.Drawing.Size(106, 13);
             this.lblffmsThreads.TabIndex = 31;
@@ -1227,7 +1224,7 @@ namespace MeGUI
             // 
             // ffmsThreads
             // 
-            this.ffmsThreads.Location = new System.Drawing.Point(122, 30);
+            this.ffmsThreads.Location = new System.Drawing.Point(123, 15);
             this.ffmsThreads.Maximum = new decimal(new int[] {
             1,
             0,
@@ -1252,7 +1249,7 @@ namespace MeGUI
             this.chkSelectHDTracks.AutoSize = true;
             this.chkSelectHDTracks.Checked = true;
             this.chkSelectHDTracks.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSelectHDTracks.Location = new System.Drawing.Point(225, 31);
+            this.chkSelectHDTracks.Location = new System.Drawing.Point(12, 72);
             this.chkSelectHDTracks.Name = "chkSelectHDTracks";
             this.chkSelectHDTracks.Size = new System.Drawing.Size(234, 17);
             this.chkSelectHDTracks.TabIndex = 29;
@@ -1264,7 +1261,7 @@ namespace MeGUI
             this.chkEnable64bitX264.AutoSize = true;
             this.chkEnable64bitX264.Checked = true;
             this.chkEnable64bitX264.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEnable64bitX264.Location = new System.Drawing.Point(225, 54);
+            this.chkEnable64bitX264.Location = new System.Drawing.Point(234, 13);
             this.chkEnable64bitX264.Name = "chkEnable64bitX264";
             this.chkEnable64bitX264.Size = new System.Drawing.Size(148, 17);
             this.chkEnable64bitX264.TabIndex = 28;
@@ -1304,23 +1301,6 @@ namespace MeGUI
             this.lblNero.TabIndex = 45;
             this.lblNero.Text = "Location";
             // 
-            // neroaacencLocation
-            // 
-            this.neroaacencLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.neroaacencLocation.Enabled = false;
-            this.neroaacencLocation.Filename = "";
-            this.neroaacencLocation.Filter = "NeroAacEnc|neroaacenc.exe";
-            this.neroaacencLocation.FilterIndex = 0;
-            this.neroaacencLocation.FolderMode = false;
-            this.neroaacencLocation.Location = new System.Drawing.Point(64, 26);
-            this.neroaacencLocation.Name = "neroaacencLocation";
-            this.neroaacencLocation.ReadOnly = true;
-            this.neroaacencLocation.SaveMode = false;
-            this.neroaacencLocation.Size = new System.Drawing.Size(399, 26);
-            this.neroaacencLocation.TabIndex = 44;
-            this.neroaacencLocation.Title = null;
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.btnClearMP4TempDirectory);
@@ -1340,23 +1320,6 @@ namespace MeGUI
             this.btnClearMP4TempDirectory.TabIndex = 42;
             this.btnClearMP4TempDirectory.Text = "x";
             this.btnClearMP4TempDirectory.Click += new System.EventHandler(this.btnClearMP4TempDirectory_Click);
-            // 
-            // tempDirMP4
-            // 
-            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tempDirMP4.Filename = "";
-            this.tempDirMP4.Filter = null;
-            this.tempDirMP4.FilterIndex = 0;
-            this.tempDirMP4.FolderMode = true;
-            this.tempDirMP4.Location = new System.Drawing.Point(13, 33);
-            this.tempDirMP4.Name = "tempDirMP4";
-            this.tempDirMP4.ReadOnly = true;
-            this.tempDirMP4.SaveMode = false;
-            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
-            this.tempDirMP4.TabIndex = 41;
-            this.tempDirMP4.Title = null;
-            this.tempDirMP4.FileSelected += new MeGUI.FileBarEventHandler(this.tempDirMP4_FileSelected);
             // 
             // vobGroupBox
             // 
@@ -1468,17 +1431,68 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
-            // chx264ExternalMuxer
+            // targetSizeSCBox1
             // 
-            this.chx264ExternalMuxer.AutoSize = true;
-            this.chx264ExternalMuxer.Checked = true;
-            this.chx264ExternalMuxer.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chx264ExternalMuxer.Location = new System.Drawing.Point(225, 77);
-            this.chx264ExternalMuxer.Name = "chx264ExternalMuxer";
-            this.chx264ExternalMuxer.Size = new System.Drawing.Size(208, 17);
-            this.chx264ExternalMuxer.TabIndex = 49;
-            this.chx264ExternalMuxer.Text = "x264: use external muxer (MKV, MP4)";
-            this.chx264ExternalMuxer.UseVisualStyleBackColor = true;
+            this.targetSizeSCBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.targetSizeSCBox1.Location = new System.Drawing.Point(8, 56);
+            this.targetSizeSCBox1.MaximumSize = new System.Drawing.Size(1000, 28);
+            this.targetSizeSCBox1.MinimumSize = new System.Drawing.Size(64, 28);
+            this.targetSizeSCBox1.Name = "targetSizeSCBox1";
+            this.targetSizeSCBox1.NullString = "Modify custom file size values";
+            this.targetSizeSCBox1.SaveCustomValues = true;
+            this.targetSizeSCBox1.SelectedIndex = 0;
+            this.targetSizeSCBox1.Size = new System.Drawing.Size(273, 28);
+            this.targetSizeSCBox1.TabIndex = 44;
+            // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(8, 24);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(243, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
+            // 
+            // neroaacencLocation
+            // 
+            this.neroaacencLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.neroaacencLocation.Enabled = false;
+            this.neroaacencLocation.Filename = "";
+            this.neroaacencLocation.Filter = "NeroAacEnc|neroaacenc.exe";
+            this.neroaacencLocation.FilterIndex = 0;
+            this.neroaacencLocation.FolderMode = false;
+            this.neroaacencLocation.Location = new System.Drawing.Point(64, 26);
+            this.neroaacencLocation.Name = "neroaacencLocation";
+            this.neroaacencLocation.ReadOnly = true;
+            this.neroaacencLocation.SaveMode = false;
+            this.neroaacencLocation.Size = new System.Drawing.Size(399, 26);
+            this.neroaacencLocation.TabIndex = 44;
+            this.neroaacencLocation.Title = null;
+            // 
+            // tempDirMP4
+            // 
+            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tempDirMP4.Filename = "";
+            this.tempDirMP4.Filter = null;
+            this.tempDirMP4.FilterIndex = 0;
+            this.tempDirMP4.FolderMode = true;
+            this.tempDirMP4.Location = new System.Drawing.Point(13, 33);
+            this.tempDirMP4.Name = "tempDirMP4";
+            this.tempDirMP4.ReadOnly = true;
+            this.tempDirMP4.SaveMode = false;
+            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
+            this.tempDirMP4.TabIndex = 41;
+            this.tempDirMP4.Title = null;
+            this.tempDirMP4.FileSelected += new MeGUI.FileBarEventHandler(this.tempDirMP4_FileSelected);
             // 
             // SettingsForm
             // 
@@ -1672,6 +1686,7 @@ namespace MeGUI
                 settings.UseDGIndexNV = useDGIndexNV.Checked;
                 settings.UseQAAC = useQAAC.Checked;
                 settings.UseExternalMuxerX264 = chx264ExternalMuxer.Checked;
+                settings.Use10bitsX264 = chUse10BitsX264.Checked; 
 				return settings;
 			}
 			set
@@ -1741,6 +1756,7 @@ namespace MeGUI
                 useDGIndexNV.Checked = settings.UseDGIndexNV;
                 useQAAC.Checked = settings.UseQAAC;
                 chx264ExternalMuxer.Checked = settings.UseExternalMuxerX264;
+                chUse10BitsX264.Checked = settings.Use10bitsX264;
 			}
 		}
 		#endregion
@@ -1823,6 +1839,12 @@ namespace MeGUI
             }
             else
                 MessageBox.Show("You have to restart MeGUI in order to get access to QAAC.", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void chUse10BitsX264_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!chUse10BitsX264.Checked || internalSettings.Use10bitsX264)
+                return;
         }
 	}
 }

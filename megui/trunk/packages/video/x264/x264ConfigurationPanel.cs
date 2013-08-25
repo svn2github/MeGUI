@@ -1297,6 +1297,7 @@ namespace MeGUI.packages.video.x264
                     }
                 }
                 xs.BlurayCompat = chkBlurayCompat.Checked;
+                xs.X26410Bits = ch10BitsEncoder.Checked;
                 return xs;
             }
             set
@@ -1424,6 +1425,7 @@ namespace MeGUI.packages.video.x264
                 x264hrd.SelectedIndex = xs.Nalhrd;
                 useQPFile.Checked = xs.UseQPFile;
                 this.qpfile.Text = xs.QPFile;
+                ch10BitsEncoder.Checked = xs.X26410Bits;
                 updating = false;
                 genericUpdate();
             }
@@ -1810,7 +1812,10 @@ namespace MeGUI.packages.video.x264
                     tabControl1.TabPages.Add(MiscTabPage);
                 x264EncodingMode.Visible = true;
                 cbTarget.Visible = false;
-                avcProfileGroupbox.Enabled = true;
+                if (ch10BitsEncoder.Checked)
+                    avcProfileGroupbox.Enabled = false;
+                else
+                    avcProfileGroupbox.Enabled = true;
                 avcLevelGroupbox.Enabled = true;
             }
             else
@@ -1842,6 +1847,8 @@ namespace MeGUI.packages.video.x264
             this.avcLevel.SelectedItem = EnumProxy.Create(AVCLevels.Levels.L_UNRESTRICTED);
             this.advancedSettings.Checked = true;
             this.targetDevice.SelectedIndex = 0;
+            this.ch10BitsEncoder.Enabled = false;
+            this.ch10BitsEncoder.Checked = false;
 
             // Frame-Type Tab
             this.x264DeblockActive.Checked = true;
@@ -2049,6 +2056,12 @@ namespace MeGUI.packages.video.x264
                 if (x264VBVMaxRate.Value <= 0 || x264VBVMaxRate.Value > al.getMaxBR(avcLevel, avcProfile.SelectedIndex == 2))
                     x264VBVMaxRate.ForeColor = System.Drawing.Color.Red;
             }
+            updateEvent(sender, e);
+        }
+        private void ch10BitsEncoder_CheckedChanged(object sender, EventArgs e)
+        {
+            ch10BitsEncoder.Checked = MainForm.Instance.Settings.Use10bitsX264;
+            advancedSettings_CheckedChanged(sender, e);
             updateEvent(sender, e);
         }
     }

@@ -244,6 +244,7 @@ namespace MeGUI.packages.video.x264
             this.avcLevelGroupbox = new System.Windows.Forms.GroupBox();
             this.deviceGroupbox = new System.Windows.Forms.GroupBox();
             this.targetDevice = new System.Windows.Forms.ComboBox();
+            this.ch10BitsEncoder = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.x264CodecGeneralGroupbox.SuspendLayout();
@@ -338,6 +339,7 @@ namespace MeGUI.packages.video.x264
             // 
             // mainTabPage
             // 
+            this.mainTabPage.Controls.Add(this.ch10BitsEncoder);
             this.mainTabPage.Controls.Add(this.deviceGroupbox);
             this.mainTabPage.Controls.Add(this.avcProfileGroupbox);
             this.mainTabPage.Controls.Add(this.avcLevelGroupbox);
@@ -2927,6 +2929,17 @@ namespace MeGUI.packages.video.x264
             this.targetDevice.TabIndex = 1;
             this.targetDevice.SelectedIndexChanged += new System.EventHandler(this.targetDevice_SelectedIndexChanged);
             // 
+            // ch10BitsEncoder
+            // 
+            this.ch10BitsEncoder.AutoSize = true;
+            this.ch10BitsEncoder.Location = new System.Drawing.Point(21, 341);
+            this.ch10BitsEncoder.Name = "ch10BitsEncoder";
+            this.ch10BitsEncoder.Size = new System.Drawing.Size(142, 17);
+            this.ch10BitsEncoder.TabIndex = 40;
+            this.ch10BitsEncoder.Text = "Enable 10-Bits Encoding";
+            this.ch10BitsEncoder.UseVisualStyleBackColor = true;
+            this.ch10BitsEncoder.CheckedChanged += new System.EventHandler(this.ch10BitsEncoder_CheckedChanged);
+            // 
             // x264ConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3221,5 +3234,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.CheckBox chkTuneZeroLatency;
         private System.Windows.Forms.CheckBox chkTuneFastDecode;
         private System.Windows.Forms.CheckBox stitchable;
+        private System.Windows.Forms.CheckBox ch10BitsEncoder;
     }
 }

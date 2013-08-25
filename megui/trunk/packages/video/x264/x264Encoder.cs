@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Globalization;
 using System.Text;
 using System.Windows.Forms; // used for the MethodInvoker
@@ -37,7 +38,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
         {
             if (j is VideoJob &&
                 (j as VideoJob).Settings is x264Settings)
+            {
                 return new x264Encoder(mf.Settings.X264Path);
+            }
             return null;
         }
 
@@ -48,9 +51,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 #if x86
             if (OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
             {
-                string x264Path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "avs4x264mod.exe");
+                string x264Path = Path.Combine(Path.GetDirectoryName(encoderPath), "avs4x264mod.exe");
                 if (System.IO.File.Exists(x264Path))
                     executable = x264Path;
+            }
+            else
+            {
+                if (MainForm.Instance.Settings.Use10bitsX264)
+                    executable = MainForm.Instance.Settings.X26410BitsPath;
             }
 #endif
         }
@@ -101,14 +109,31 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             ///<summary>
             /// x264 Main Tab Settings
             ///</summary>
-            
-            // AVC Profiles
-            xs.Profile = oSettingsHandler.getProfile();
-            switch (xs.Profile)
+#if x86
+            // Enable/Disable 10-Bits Encoding
+            if (MainForm.Instance.Settings.Use10bitsX264)
             {
-                case 0: sb.Append("--profile baseline "); break;
-                case 1: sb.Append("--profile main "); break;
-                case 2: break; // --profile high is the default value
+                if (OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
+                    sb.Append(" -L \"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath), "x264-10b_64.exe") + "\" ");
+            }
+#endif
+#if x64
+            // Enable/Disable 10-Bits Encoding
+            if (MainForm.Instance.Settings.Use10bitsX264)
+            {
+                sb.Append(" -L \"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath), "x264-10b_64.exe") + "\" ");
+            }
+#endif
+            // AVC Profiles
+            if (!MainForm.Instance.Settings.Use10bitsX264) // disable those profiles - not suite for 10-Bits Encoding
+            {
+                xs.Profile = oSettingsHandler.getProfile();
+                switch (xs.Profile)
+                {
+                    case 0: sb.Append("--profile baseline "); break;
+                    case 1: sb.Append("--profile main "); break;
+                    case 2: break; // --profile high is the default value
+                }
             }
 
             // AVC Levels
