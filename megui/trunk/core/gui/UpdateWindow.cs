@@ -1520,6 +1520,8 @@ namespace MeGUI
                     return;
                 if (node.Name.Equals("qaac") && !MainForm.Instance.Settings.UseQAAC)
                     return;
+                if (node.Name.Equals("x264_10b") && !MainForm.Instance.Settings.Use10bitsX264)
+                    return;
 #if x86
                 if (node.Attributes["platform"].Value.Equals("x64"))
 #endif
