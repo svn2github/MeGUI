@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -116,6 +116,20 @@ namespace MeGUI
 #endif
                             break;
                         }
+                    case "x264_10b":
+                        if (MainForm.Instance.Settings.Use10bitsX264)
+                        {
+                            arrPath.Add(MainForm.Instance.Settings.X26410BitsPath);
+#if x86
+                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath);
+                            if (OSInfo.isWow64())
+                            {
+                                arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
+                                arrPath.Add(System.IO.Path.Combine(strPath, "x264-10b_64.exe"));
+                            }
+#endif
+                        }
+                        break;
                     case "dgindex": 
                         arrPath.Add(MainForm.Instance.Settings.DgIndexPath);
                         strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath);
@@ -664,6 +678,8 @@ namespace MeGUI
                             return meGUISettings.AviSynthPath;
                         case ("x264"):
                             return meGUISettings.X264Path;
+                        case ("x264_10b"):
+                            return meGUISettings.X26410BitsPath;
                         case ("xvid_encraw"):
                             return meGUISettings.XviDEncrawPath;
                         case ("ffmpeg"):
@@ -982,6 +998,20 @@ namespace MeGUI
                 arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
             }
 #endif
+            //x264 10bit
+            if (MainForm.Instance.Settings.Use10bitsX264)
+            {
+                arrPath.Add(MainForm.Instance.Settings.X26410BitsPath);
+#if x86
+                strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath);
+                if (OSInfo.isWow64())
+                {
+                    arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
+                    arrPath.Add(System.IO.Path.Combine(strPath, "x264-10b_64.exe"));
+                }
+#endif
+            }
+
             // dgindex
             arrPath.Add(MainForm.Instance.Settings.DgIndexPath);
             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath);

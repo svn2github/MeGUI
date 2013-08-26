@@ -1483,13 +1483,14 @@ namespace MeGUI.packages.video.x264
             /* Main   */
             /**********/
             tooltipHelp.SetToolTip(avcProfile, SelectHelpText("profile"));
-            tooltipHelp.SetToolTip(avcLevel, SelectHelpText("level")); 
+            tooltipHelp.SetToolTip(avcLevel, SelectHelpText("level"));
             tooltipHelp.SetToolTip(x264Tunes, SelectHelpText("tunes"));
             tooltipHelp.SetToolTip(cbTarget, SelectHelpText("targetmode"));
             tooltipHelp.SetToolTip(tbx264Presets, SelectHelpText("presets"));
             tooltipHelp.SetToolTip(x264BitrateQuantizer, SelectHelpText("bitrate"));
             tooltipHelp.SetToolTip(targetDevice, SelectHelpText("device"));
             tooltipHelp.SetToolTip(x264EncodingMode, SelectHelpText("encodingmode"));
+            tooltipHelp.SetToolTip(ch10BitsEncoder, SelectHelpText("encoder10bit"));
             
             /**************/
             /* Frame-Type */
@@ -1812,11 +1813,9 @@ namespace MeGUI.packages.video.x264
                     tabControl1.TabPages.Add(MiscTabPage);
                 x264EncodingMode.Visible = true;
                 cbTarget.Visible = false;
-                if (ch10BitsEncoder.Checked)
-                    avcProfileGroupbox.Enabled = false;
-                else
-                    avcProfileGroupbox.Enabled = true;
+                avcProfileGroupbox.Enabled = !ch10BitsEncoder.Checked;
                 avcLevelGroupbox.Enabled = true;
+                ch10BitsEncoder.Visible = MainForm.Instance.Settings.Is10Bitx264Available();
             }
             else
             {
@@ -1832,6 +1831,7 @@ namespace MeGUI.packages.video.x264
                 cbTarget.Visible = true;
                 avcProfileGroupbox.Enabled = false;
                 avcLevelGroupbox.Enabled = false;
+                ch10BitsEncoder.Visible = false;
             }
             genericUpdate();
         }
@@ -2058,10 +2058,10 @@ namespace MeGUI.packages.video.x264
             }
             updateEvent(sender, e);
         }
+
         private void ch10BitsEncoder_CheckedChanged(object sender, EventArgs e)
         {
-            ch10BitsEncoder.Checked = MainForm.Instance.Settings.Use10bitsX264;
-            advancedSettings_CheckedChanged(sender, e);
+            avcProfileGroupbox.Enabled = !ch10BitsEncoder.Checked;
             updateEvent(sender, e);
         }
     }

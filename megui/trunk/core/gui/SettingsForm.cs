@@ -1845,6 +1845,15 @@ namespace MeGUI
         {
             if (!chUse10BitsX264.Checked || internalSettings.Use10bitsX264)
                 return;
+
+            if (!File.Exists(Settings.X26410BitsPath))
+            {
+                // x264-10b is not available. Therefore an update check is necessary
+                if (MessageBox.Show("The x264 10bit component is not installed.\n\nDo you want to search now online for updates?", "MeGUI component missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                    MainForm.Instance.startUpdateCheck();
+                else
+                    MessageBox.Show("You have selected to not update x264 10bit. Therefore it will not be available. Run the updater on your own if you want to enable it later.", "x264 10bit not enabled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 	}
 }

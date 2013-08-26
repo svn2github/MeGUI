@@ -58,10 +58,9 @@ namespace MeGUI
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
-                     alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU,
+                     alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU, bUse10BitsX264,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bUseQAAC,
-                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc, bExternalMuxerX264, 
-                     enable10BitsX264, bUse10BitsX264;
+                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc, bExternalMuxerX264;
         private ulong audioSamplesPerUpdate;
         private decimal forceFilmThreshold, acceptableFPSError;
         private int nbPasses, autoUpdateServerSubList, minComplexity, updateFormSplitter,
@@ -109,11 +108,11 @@ namespace MeGUI
 #if x64
             x264Path = getDownloadPath(@"tools\x264\x264_64.exe");
             b64bitX264 = true;
-            x26410BitsPath = getDownloadPath(@"tools\x264-10b\x264-10b_64.exe");
+            x26410BitsPath = getDownloadPath(@"tools\x264_10b\x264-10b_64.exe");
 #endif
 #if x86
             x264Path = getDownloadPath(@"tools\x264\x264.exe");
-            x26410BitsPath = getDownloadPath(@"tools\x264-10b\x264-10b.exe");
+            x26410BitsPath = getDownloadPath(@"tools\x264_10b\x264-10b.exe");
             if (OSInfo.isWow64())
                 b64bitX264 = true;
 #endif
@@ -209,7 +208,6 @@ namespace MeGUI
             bUseITU = true;
             bOpenAVSInThread = true;
             lastUsedOneClickFolder = "";
-            enable10BitsX264 = false;
             bUse10BitsX264 = false;
         }
 
@@ -551,15 +549,6 @@ namespace MeGUI
             set { bUse10BitsX264 = value; }
         }
 
-        /// <summary>
-        /// bool to decide whether to enable 10bit x264
-        /// </summary>
-        public bool Enable10bitsX264
-        {
-            get { return enable10BitsX264; }
-            set { enable10BitsX264 = value; }
-        }
-
         ///<summary>
         /// gets / sets whether megui puts the Video Preview Form "Alwyas on Top" or not
         /// </summary>
@@ -698,7 +687,7 @@ namespace MeGUI
 		}
 
         /// <summary>
-        /// filename and full path of the x264 executable
+        /// filename and full path of the x264 10b executable
         /// </summary>
         public string X26410BitsPath
         {
@@ -1292,6 +1281,12 @@ namespace MeGUI
 
             return true;
         }
+
+        public bool Is10Bitx264Available()
+        {
+            return bUse10BitsX264 && System.IO.File.Exists(x26410BitsPath);
+        }
+
         #endregion
     }
     public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2, CloseMeGUI = 3 }

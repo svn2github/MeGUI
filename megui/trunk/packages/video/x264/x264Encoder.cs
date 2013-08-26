@@ -39,7 +39,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (j is VideoJob &&
                 (j as VideoJob).Settings is x264Settings)
             {
-                return new x264Encoder(mf.Settings.X264Path);
+                x264Settings xs = (x264Settings)((j as VideoJob).Settings);
+                if (xs.X26410Bits)
+                    return new x264Encoder(mf.Settings.X26410BitsPath);
+                else
+                    return new x264Encoder(mf.Settings.X264Path);
             }
             return null;
         }
@@ -54,11 +58,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 string x264Path = Path.Combine(Path.GetDirectoryName(encoderPath), "avs4x264mod.exe");
                 if (System.IO.File.Exists(x264Path))
                     executable = x264Path;
-            }
-            else
-            {
-                if (MainForm.Instance.Settings.Use10bitsX264)
-                    executable = MainForm.Instance.Settings.X26410BitsPath;
             }
 #endif
         }
@@ -111,21 +110,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             ///</summary>
 #if x86
             // Enable/Disable 10-Bits Encoding
-            if (MainForm.Instance.Settings.Use10bitsX264)
+            if (xs.X26410Bits && !input.Equals("input") && !output.Equals("output"))
             {
                 if (OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
                     sb.Append(" -L \"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath), "x264-10b_64.exe") + "\" ");
             }
 #endif
-#if x64
-            // Enable/Disable 10-Bits Encoding
-            if (MainForm.Instance.Settings.Use10bitsX264)
-            {
-                sb.Append(" -L \"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath), "x264-10b_64.exe") + "\" ");
-            }
-#endif
             // AVC Profiles
-            if (!MainForm.Instance.Settings.Use10bitsX264) // disable those profiles - not suite for 10-Bits Encoding
+            if (!xs.X26410Bits) // disable those profiles - not suite for 10-Bits Encoding
             {
                 xs.Profile = oSettingsHandler.getProfile();
                 switch (xs.Profile)
