@@ -294,19 +294,16 @@ namespace MeGUI
 		#endregion
 		#region job preparation (aka multiple job generation)
 
-        public bool AddVideoJobs(string movieInput, string movieOutput, VideoCodecSettings settings,
+        public JobChain AddVideoJobs(string movieInput, string movieOutput, VideoCodecSettings settings,
             int introEndFrame, int creditsStartFrame, Dar? dar, bool prerender, bool checkVideo, Zone[] zones)
         {
+            JobChain jobs = null;
             bool cont = getFinalZoneConfiguration(settings, introEndFrame, creditsStartFrame, ref zones);
             if (!cont) // abort
-                return false;
-            JobChain jobs = prepareVideoJob(movieInput, movieOutput, settings, dar, prerender, checkVideo, zones);
-            if (jobs == null)
-                return false;
-            mainForm.Jobs.addJobsWithDependencies(jobs, true);
-
-            return false;
+                return jobs;
+            return prepareVideoJob(movieInput, movieOutput, settings, dar, prerender, checkVideo, zones);
         }
+
 		/// <summary>
 		/// at first, the job from the currently configured settings is generated. In addition, we find out if this job is 
 		/// a part of an automated series of jobs. If so, it means the first generated job was the second pass, and we have

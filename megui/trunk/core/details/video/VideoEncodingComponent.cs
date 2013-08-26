@@ -186,7 +186,7 @@ namespace MeGUI
                     info.VideoOutput = Path.ChangeExtension(info.VideoOutput, ".h264");
             }
 
-            mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentSettings.Clone(),
+            JobChain prepareJobs = mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentSettings.Clone(),
                 info.IntroEndFrame, info.CreditsStartFrame, info.DAR, PrerenderJob, true, info.Zones);
 
             if ((MainForm.Instance.Settings.UseExternalMuxerX264) || (fileType.Text.Equals("MP4")))
@@ -194,7 +194,6 @@ namespace MeGUI
                 if ((vSettings.SettingsID.Equals("x264")) && (!fileType.Text.Equals("RAWAVC")))
                 {
                     // create job
-                    JobChain prepareJobs = null;
                     MuxJob mJob = new MuxJob();
                     mJob.Input = info.VideoOutput;
 
@@ -217,10 +216,11 @@ namespace MeGUI
 
                     // add job to queue
                     prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(mJob));
-                    mainForm.Jobs.addJobsWithDependencies(prepareJobs, true);
                 }
             }
+            mainForm.Jobs.addJobsWithDependencies(prepareJobs, true);
         }
+
         private bool bInitialStart = true;
         private void fileType_SelectedIndexChanged(object sender, EventArgs e)
         {

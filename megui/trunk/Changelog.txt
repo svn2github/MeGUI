@@ -1,3 +1,5 @@
+2393 [Main] create external job muxer jobs with dependencies
+2392 [x264] added 10 bit encoding support. This can be enabled through the MeGUI settings. Thanks to Detmek for the tests.
 2391 [Aften] do not log progress messages
 2390 [OneClick] improved AddBorders calculation for AviSynth 2.6
 2389 [Main] updated the correct video output file extension according to the muxer used
