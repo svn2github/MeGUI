@@ -1164,7 +1164,7 @@ namespace MeGUI
         public X264EncoderProvider()
         {
             supportedCodecs.Add(VideoCodec.AVC);
-            supportedTypes.Add(VideoType.MP4); 
+            //supportedTypes.Add(VideoType.MP4); disabled as official x264 builds do not output to mp4
             supportedTypes.Add(VideoType.MKV);
             supportedTypes.Add(VideoType.RAWAVC);
             supportedEncoderTypes.Add(VideoEncoderType.X264);

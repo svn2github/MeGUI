@@ -180,13 +180,14 @@ namespace MeGUI
             }
             VideoCodecSettings vSettings = this.CurrentSettings.Clone();
 
-            if ((MainForm.Instance.Settings.UseExternalMuxerX264) || (fileType.Text.Equals("MP4")))
+            string videoOutput = info.VideoOutput;
+            if (vSettings.SettingsID.Equals("x264") && (MainForm.Instance.Settings.UseExternalMuxerX264) || (fileType.Text.Equals("MP4")))
             {
-                if ((vSettings.SettingsID.Equals("x264")) && (!fileType.Text.Equals("RAWAVC")))
-                    info.VideoOutput = Path.ChangeExtension(info.VideoOutput, ".h264");
+                if (!fileType.Text.Equals("RAWAVC"))
+                    videoOutput = Path.ChangeExtension(videoOutput, "264");
             }
 
-            JobChain prepareJobs = mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentSettings.Clone(),
+            JobChain prepareJobs = mainForm.JobUtil.AddVideoJobs(info.VideoInput, videoOutput, this.CurrentSettings.Clone(),
                 info.IntroEndFrame, info.CreditsStartFrame, info.DAR, PrerenderJob, true, info.Zones);
 
             if ((MainForm.Instance.Settings.UseExternalMuxerX264) || (fileType.Text.Equals("MP4")))
@@ -195,24 +196,24 @@ namespace MeGUI
                 {
                     // create job
                     MuxJob mJob = new MuxJob();
-                    mJob.Input = info.VideoOutput;
+                    mJob.Input = videoOutput;
 
                     if (fileType.Text.Equals("MKV"))
                     {
                         mJob.MuxType = MuxerType.MKVMERGE;
-                        mJob.Output = Path.ChangeExtension(info.VideoOutput, ".mkv");
+                        mJob.Output = Path.ChangeExtension(videoOutput, "mkv");
                     }
                     else if (fileType.Text.Equals("MP4"))
                     {
                         mJob.MuxType = MuxerType.MP4BOX;
-                        mJob.Output = Path.ChangeExtension(info.VideoOutput, ".mp4");
+                        mJob.Output = Path.ChangeExtension(videoOutput, "mp4");
                     }
 
                     mJob.Settings.MuxAll = true;
                     mJob.Settings.Framerate = decimal.Round((decimal)FrameRate,3,MidpointRounding.AwayFromZero);
                     mJob.Settings.MuxedInput = mJob.Input;
                     mJob.Settings.MuxedOutput = mJob.Output;
-                    mJob.FilesToDelete.Add(info.VideoOutput);
+                    mJob.FilesToDelete.Add(videoOutput);
 
                     // add job to queue
                     prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(mJob));
@@ -461,8 +462,15 @@ namespace MeGUI
                 return;
 
             lastCodec = CurrentSettings.EncoderType;
-            Util.ChangeItemsKeepingSelectedSame(fileType, videoEncoderProvider.GetSupportedOutput(lastCodec));
 
+            VideoType[] vArray = videoEncoderProvider.GetSupportedOutput(lastCodec);
+            if (lastCodec == VideoEncoderType.X264)
+            {
+                Array.Resize(ref vArray, vArray.Length + 1);
+                vArray[vArray.Length - 1] = VideoType.MP4;
+            }
+
+            Util.ChangeItemsKeepingSelectedSame(fileType, vArray);
         }
 
         private void editZonesButton_Click(object sender, EventArgs e)

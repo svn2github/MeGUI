@@ -1,10 +1,11 @@
+2396 [AutoEncode] fixed mp4 output (regression of 2381)
 2395 [x264] only download 10bit files if enabled
 2394 [x264] added x264 10bit to the update server
-2393 [Main] create external job muxer jobs with dependencies
+2393 [Main] create external job muxer jobs with dependencies (regression of 2381)
 2392 [x264] added 10 bit encoding support. This can be enabled through the MeGUI settings. Thanks to Detmek for the tests.
 2391 [Aften] do not log progress messages
 2390 [OneClick] improved AddBorders calculation for AviSynth 2.6
-2389 [Main] updated the correct video output file extension according to the muxer used
+2389 [Main] updated the correct video output file extension according to the muxer used (regression of 2381)
 2388 [x264] added --stitchable option (requires x264 revision 2345+)
 2387 [Update] update server will not be changed during every update check
 2386 [AVS Script Creator] changed default mod value to 8
