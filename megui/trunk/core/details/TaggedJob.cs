@@ -180,5 +180,15 @@ namespace MeGUI.core.details
                 return System.IO.Path.GetFileName(this.Job.Output);
             }
         }
+        /// <summary>
+        ///  Output Path of the job
+        /// </summary>
+        public string OutputFilePath
+        {
+            get
+            {
+                return System.IO.Path.GetDirectoryName(this.Job.Output);
+            }
+        }
     }
 }

@@ -672,6 +672,8 @@ namespace MeGUI.core.gui
             PostponedMenuItem.Checked = AllJobsHaveStatus(JobStatus.POSTPONED);
             WaitingMenuItem.Checked = AllJobsHaveStatus(JobStatus.WAITING);
 
+            OpenOutputFolderMenuItem.Enabled = AnyJobsHaveStatus(JobStatus.DONE);
+
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
                 item.SubItems[5].Text = (jobs[item.Text]).StatusString;
@@ -902,6 +904,21 @@ namespace MeGUI.core.gui
 
             foreach (TaggedJob j in job.RequiredJobs)
                 getAllDependantJobs(j, ref oList);
+        }
+
+        private void OpenOutputFolderMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in this.queueListView.SelectedItems)
+            {
+                TaggedJob job = jobs[item.Text];
+
+                if (job.Status == JobStatus.DONE)
+                {
+                    System.Diagnostics.Process prc = new System.Diagnostics.Process();
+                    prc.StartInfo.FileName = job.OutputFilePath;
+                    prc.Start();
+                }
+            }
         }
     }
 
