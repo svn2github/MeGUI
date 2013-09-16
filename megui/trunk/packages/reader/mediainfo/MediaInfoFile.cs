@@ -500,7 +500,7 @@ namespace MeGUI
                         _VideoInfo.Width = (ulong)easyParseInt(track.Width).Value;
                         _VideoInfo.Height = (ulong)easyParseInt(track.Height).Value;
                         _VideoInfo.FrameCount = (ulong)(easyParseInt(track.FrameCount) ?? 0);
-                        _VideoInfo.FPS = (easyParseDouble(track.FrameRate) ?? easyParseDouble(track.FrameRateOriginal) ?? 99);
+                        _VideoInfo.FPS = (easyParseDouble(track.FrameRate) ?? easyParseDouble(track.FrameRateOriginal) ?? 23.976);
                         _VideoInfo.ScanType = track.ScanTypeString;
                         _VideoInfo.Codec = getVideoCodec(track.Codec);
                         if (_VideoInfo.Codec == null)
