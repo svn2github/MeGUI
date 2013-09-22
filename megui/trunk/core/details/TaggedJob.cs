@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace MeGUI.core.details
@@ -29,26 +28,19 @@ namespace MeGUI.core.details
     public class TaggedJob
     {
         private Job job;
-
-        public Job Job
-        {
-            get { return job; }
-            set { job = value; }
-        }
-
-
         private JobStatus status;
         private DateTime start, end; // time the job was started / ended
-
-
-        #region job queue information
+        private string name;
         private string owningWorker;
+        private List<string> requiredJobNames;
+        private List<string> enabledJobNames;
+        public string EncodingSpeed = "";
 
-        public string OwningWorker
-        {
-            get { return owningWorker; }
-            set { owningWorker = value; }
-        }
+        [XmlIgnore]
+        public List<TaggedJob> EnabledJobs = new List<TaggedJob>();
+
+        [XmlIgnore]
+        public List<TaggedJob> RequiredJobs = new List<TaggedJob>();
 
         public TaggedJob() { }
 
@@ -58,13 +50,22 @@ namespace MeGUI.core.details
             job = j;
         }
 
-        private List<string> requiredJobNames;
-
+        public Job Job
+        {
+            get { return job; }
+            set { job = value; }
+        }
+        
+        public string OwningWorker
+        {
+            get { return owningWorker; }
+            set { owningWorker = value; }
+        }
 
         public void AddDependency(TaggedJob other)
         {
             // we can't have each job depending on the other
-            Debug.Assert(!other.RequiredJobs.Contains(this));
+            System.Diagnostics.Debug.Assert(!other.RequiredJobs.Contains(this));
             RequiredJobs.Add(other);
             other.EnabledJobs.Add(this);
         }
@@ -78,7 +79,6 @@ namespace MeGUI.core.details
             set { requiredJobNames = value; }
         }
 
-        private List<string> enabledJobNames;
         /// <summary>
         /// List of jobs which completing this job enables
         /// </summary>
@@ -88,15 +88,6 @@ namespace MeGUI.core.details
             set { enabledJobNames = value; }
         }
 
-        [XmlIgnore]
-        public List<TaggedJob> EnabledJobs = new List<TaggedJob>();
-
-        [XmlIgnore]
-        public List<TaggedJob> RequiredJobs = new List<TaggedJob>();
-        #endregion
-
-        public string EncodingSpeed = "";
-        private string name;
         /// <summary>
         /// the name of this job
         /// </summary>
@@ -105,6 +96,7 @@ namespace MeGUI.core.details
             get { return name; }
             set { name = value; }
         }
+
         /// <summary>
         /// status of the job
         /// </summary>
@@ -113,6 +105,7 @@ namespace MeGUI.core.details
             get { return status; }
             set { status = value; }
         }
+
         /// <summary>
         /// time the job was started
         /// </summary>
@@ -121,6 +114,7 @@ namespace MeGUI.core.details
             get { return start; }
             set { start = value; }
         }
+
         /// <summary>
         ///  time the job was completed
         /// </summary>
@@ -160,6 +154,7 @@ namespace MeGUI.core.details
                 }
             }
         }
+
         /// <summary>
         /// filename without path of the source for this job
         /// </summary>
@@ -167,9 +162,21 @@ namespace MeGUI.core.details
         {
             get
             {
-                return System.IO.Path.GetFileName(this.Job.Input);
+                return Path.GetFileName(this.Job.Input);
             }
         }
+
+        /// <summary>
+        /// input file name & path of the job
+        /// </summary>
+        public string InputFile
+        {
+            get
+            {
+                return this.Job.Input;
+            }
+        }
+
         /// <summary>
         ///  filename without path of the destination of this job
         /// </summary>
@@ -177,17 +184,18 @@ namespace MeGUI.core.details
         {
             get
             {
-                return System.IO.Path.GetFileName(this.Job.Output);
+                return Path.GetFileName(this.Job.Output);
             }
         }
+
         /// <summary>
-        ///  Output Path of the job
+        /// output file name & path the job
         /// </summary>
-        public string OutputFilePath
+        public string OutputFile
         {
             get
             {
-                return System.IO.Path.GetDirectoryName(this.Job.Output);
+                return this.Job.Output;
             }
         }
     }

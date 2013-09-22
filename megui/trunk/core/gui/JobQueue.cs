@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 using MeGUI.core.details;
@@ -672,7 +673,21 @@ namespace MeGUI.core.gui
             PostponedMenuItem.Checked = AllJobsHaveStatus(JobStatus.POSTPONED);
             WaitingMenuItem.Checked = AllJobsHaveStatus(JobStatus.WAITING);
 
-            OpenOutputFolderMenuItem.Enabled = AnyJobsHaveStatus(JobStatus.DONE);
+            OpenMenuItem.Enabled = false;
+            foreach (ListViewItem item in this.queueListView.SelectedItems)
+            {
+                TaggedJob job = jobs[item.Text];
+                inputFileToolStripMenuItem.Enabled = inputFolderToolStripMenuItem.Enabled = false;
+                outputFileToolStripMenuItem.Enabled = outputFolderToolStripMenuItem.Enabled = false;
+                if (File.Exists(job.InputFile))
+                    inputFileToolStripMenuItem.Enabled = OpenMenuItem.Enabled = true;
+                if (Directory.Exists(Path.GetDirectoryName(job.InputFile)))
+                    inputFolderToolStripMenuItem.Enabled = OpenMenuItem.Enabled = true;
+                if (File.Exists(job.OutputFile))
+                    outputFileToolStripMenuItem.Enabled = OpenMenuItem.Enabled = true;
+                if (Directory.Exists(Path.GetDirectoryName(job.OutputFile)))
+                    outputFolderToolStripMenuItem.Enabled = OpenMenuItem.Enabled = true;
+            }
 
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
@@ -906,18 +921,75 @@ namespace MeGUI.core.gui
                 getAllDependantJobs(j, ref oList);
         }
 
-        private void OpenOutputFolderMenuItem_Click(object sender, EventArgs e)
+        private void outputFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
                 TaggedJob job = jobs[item.Text];
+                if (!Directory.Exists(Path.GetDirectoryName(job.OutputFile)))
+                    continue;
 
-                if (job.Status == JobStatus.DONE)
+                try
                 {
-                    System.Diagnostics.Process prc = new System.Diagnostics.Process();
-                    prc.StartInfo.FileName = job.OutputFilePath;
+                    Process prc = new Process();
+                    prc.StartInfo.FileName = Path.GetDirectoryName(job.OutputFile);
                     prc.Start();
                 }
+                catch (Exception) { }
+            }
+        }
+
+        private void outputFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in this.queueListView.SelectedItems)
+            {
+                TaggedJob job = jobs[item.Text];
+                if (!File.Exists(job.OutputFile))
+                    continue;
+
+                try
+                {
+                    Process prc = new Process();
+                    prc.StartInfo.FileName = job.OutputFile;
+                    prc.Start();
+                }
+                catch (Exception) { }
+            }
+        }
+
+        private void inputFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in this.queueListView.SelectedItems)
+            {
+                TaggedJob job = jobs[item.Text];
+                if (!Directory.Exists(Path.GetDirectoryName(job.InputFile)))
+                    continue;
+
+                try
+                {
+                    Process prc = new Process();
+                    prc.StartInfo.FileName = Path.GetDirectoryName(job.InputFile);
+                    prc.Start();
+                }
+                catch (Exception) { }
+            }
+        }
+
+        private void inputFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in this.queueListView.SelectedItems)
+            {
+                TaggedJob job = jobs[item.Text];
+                if (!File.Exists(job.InputFile))
+                    continue;
+
+                try
+                {
+                    Process prc = new Process();
+                    prc.StartInfo.FileName = job.InputFile;
+                    prc.Start();
+                }
+                catch (Exception) { }
             }
         }
     }

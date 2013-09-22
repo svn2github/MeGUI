@@ -51,7 +51,11 @@ namespace MeGUI.core.gui
             this.WaitingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AbortMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.OpenOutputFolderMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.inputFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.inputFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.outputFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.outputFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.startStopButton = new System.Windows.Forms.Button();
             this.stopButton = new System.Windows.Forms.Button();
@@ -192,16 +196,16 @@ namespace MeGUI.core.gui
             this.StatusMenuItem,
             this.AbortMenuItem,
             this.EditMenuItem,
-            this.OpenOutputFolderMenuItem});
+            this.OpenMenuItem});
             this.queueContextMenu.Name = "queueContextMenu";
-            this.queueContextMenu.Size = new System.Drawing.Size(181, 114);
+            this.queueContextMenu.Size = new System.Drawing.Size(150, 114);
             this.queueContextMenu.Opened += new System.EventHandler(this.queueContextMenu_Opened);
             // 
             // DeleteMenuItem
             // 
             this.DeleteMenuItem.Name = "DeleteMenuItem";
             this.DeleteMenuItem.ShortcutKeyDisplayString = "";
-            this.DeleteMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.DeleteMenuItem.Size = new System.Drawing.Size(149, 22);
             this.DeleteMenuItem.Text = "&Delete";
             this.DeleteMenuItem.ToolTipText = "Delete this job";
             this.DeleteMenuItem.Click += new System.EventHandler(this.deleteJobButton_Click);
@@ -212,7 +216,7 @@ namespace MeGUI.core.gui
             this.PostponedMenuItem,
             this.WaitingMenuItem});
             this.StatusMenuItem.Name = "StatusMenuItem";
-            this.StatusMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.StatusMenuItem.Size = new System.Drawing.Size(149, 22);
             this.StatusMenuItem.Text = "&Change status";
             // 
             // PostponedMenuItem
@@ -233,7 +237,7 @@ namespace MeGUI.core.gui
             // 
             this.AbortMenuItem.Name = "AbortMenuItem";
             this.AbortMenuItem.ShortcutKeyDisplayString = "";
-            this.AbortMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.AbortMenuItem.Size = new System.Drawing.Size(149, 22);
             this.AbortMenuItem.Text = "&Abort";
             this.AbortMenuItem.ToolTipText = "Abort this job";
             this.AbortMenuItem.Click += new System.EventHandler(this.AbortMenuItem_Click);
@@ -243,20 +247,50 @@ namespace MeGUI.core.gui
             this.EditMenuItem.Enabled = false;
             this.EditMenuItem.Name = "EditMenuItem";
             this.EditMenuItem.ShortcutKeyDisplayString = "";
-            this.EditMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.EditMenuItem.Size = new System.Drawing.Size(149, 22);
             this.EditMenuItem.Text = "&Edit";
             this.EditMenuItem.ToolTipText = "Edit job\r\nOnly possible if only one job is selected which is waiting or postponed" +
     "";
             this.EditMenuItem.Click += new System.EventHandler(this.editJobButton_Click);
             // 
-            // OpenOutputFolderMenuItem
+            // OpenMenuItem
             // 
-            this.OpenOutputFolderMenuItem.Enabled = false;
-            this.OpenOutputFolderMenuItem.Name = "OpenOutputFolderMenuItem";
-            this.OpenOutputFolderMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.OpenOutputFolderMenuItem.Text = "&Open Output Folder";
-            this.OpenOutputFolderMenuItem.ToolTipText = "Open Output Folder when Job is done";
-            this.OpenOutputFolderMenuItem.Click += new System.EventHandler(this.OpenOutputFolderMenuItem_Click);
+            this.OpenMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.inputFileToolStripMenuItem,
+            this.inputFolderToolStripMenuItem,
+            this.outputFileToolStripMenuItem,
+            this.outputFolderToolStripMenuItem});
+            this.OpenMenuItem.Name = "OpenMenuItem";
+            this.OpenMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.OpenMenuItem.Text = "&Open";
+            // 
+            // inputFileToolStripMenuItem
+            // 
+            this.inputFileToolStripMenuItem.Name = "inputFileToolStripMenuItem";
+            this.inputFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.inputFileToolStripMenuItem.Text = "Input File";
+            this.inputFileToolStripMenuItem.Click += new System.EventHandler(this.inputFileToolStripMenuItem_Click);
+            // 
+            // inputFolderToolStripMenuItem
+            // 
+            this.inputFolderToolStripMenuItem.Name = "inputFolderToolStripMenuItem";
+            this.inputFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.inputFolderToolStripMenuItem.Text = "Input Folder";
+            this.inputFolderToolStripMenuItem.Click += new System.EventHandler(this.inputFolderToolStripMenuItem_Click);
+            // 
+            // outputFileToolStripMenuItem
+            // 
+            this.outputFileToolStripMenuItem.Name = "outputFileToolStripMenuItem";
+            this.outputFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.outputFileToolStripMenuItem.Text = "Output File";
+            this.outputFileToolStripMenuItem.Click += new System.EventHandler(this.outputFileToolStripMenuItem_Click);
+            // 
+            // outputFolderToolStripMenuItem
+            // 
+            this.outputFolderToolStripMenuItem.Name = "outputFolderToolStripMenuItem";
+            this.outputFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.outputFolderToolStripMenuItem.Text = "Output Folder";
+            this.outputFolderToolStripMenuItem.Click += new System.EventHandler(this.outputFolderToolStripMenuItem_Click);
             // 
             // flowLayoutPanel1
             // 
@@ -368,6 +402,10 @@ namespace MeGUI.core.gui
         private System.Windows.Forms.ColumnHeader endColumn;
         private System.Windows.Forms.ColumnHeader fpsColumn;
         private System.Windows.Forms.Button editJobButton;
-        private System.Windows.Forms.ToolStripMenuItem OpenOutputFolderMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem OpenMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem inputFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem inputFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem outputFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem outputFolderToolStripMenuItem;
     }
 }
