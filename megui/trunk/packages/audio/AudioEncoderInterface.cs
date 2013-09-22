@@ -1127,10 +1127,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     script.Append("SSRC(48000)" + Environment.NewLine);
                     break;
                 case 7: // Speed-up (23.976 to 25)
-                    script.Append("AssumeSampleRate((AudioRate()*1001+480)/960).SSRC(AudioRate()).TimeStretch(pitch=Float((AudioRate()*1001+480)/960)*100.0/Float(AudioRate())" + Environment.NewLine);
+                    script.Append("AssumeSampleRate((AudioRate()*1001+480)/960).SSRC(AudioRate()).TimeStretch(pitch=Float((AudioRate()*1001+480)/960)*100.0/Float(AudioRate()))" + Environment.NewLine);
                     break;
                 case 8: // Slow-down (25 to 23.976)
-                    script.Append("SSRC((AudioRate()*1001+480)/960).AssumeSampleRate(AudioRate()).TimeStretch(pitch=Float((AudioRate()*1001+480)/960)*100.0/Float(AudioRate())" + Environment.NewLine);
+                    script.Append("SSRC((AudioRate()*1001+480)/960).AssumeSampleRate(AudioRate()).TimeStretch(pitch=Float((AudioRate()*1001+480)/960)*100.0/Float(AudioRate()))" + Environment.NewLine);
                     break;
                 case 9: // Speed-up (24 to 25)
                     script.Append("AssumeSampleRate((AudioRate()*25)/24).SSRC(AudioRate()).TimeStretch(pitch=Float((AudioRate()*25)/24)*100.0/Float(AudioRate()))" + Environment.NewLine);

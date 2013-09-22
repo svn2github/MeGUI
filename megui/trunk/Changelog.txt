@@ -1,3 +1,4 @@
+2401 [Audio Encoder] fixed TimeStretch support for 23.976 <--> 25 fps conversion (regression of 2383)
 2400 [MediaInfo] added log output if fps cannot be determined
 2399 [x264] if --bluray-compat is used without a BluRay device selected:
             --open-gop is not forced anymore
