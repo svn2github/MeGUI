@@ -1,8 +1,9 @@
+2400 [MediaInfo] added log output if fps cannot be determined
 2399 [x264] if --bluray-compat is used without a BluRay device selected:
-            - --open-gop is not forced anymore
-            - --weightp is restricted to 0 or 1
+            --open-gop is not forced anymore
+            --weightp is restricted to 0 or 1
 2398 [Queue] allowed to open output folder when job is done. This is available via the right click on the Job Queue.
-2397 [MediaInfo] use 23.976 instead of 99 as default value when fps cannot be determined
+2397 [MediaInfo] use 23.976 instead of 99 as default value if fps cannot be determined
 2396 [AutoEncode] fixed mp4 output (regression of 2381)
 2395 [x264] only download 10bit files if enabled
 2394 [x264] added x264 10bit to the update server

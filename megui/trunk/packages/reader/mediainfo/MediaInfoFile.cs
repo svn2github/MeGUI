@@ -500,13 +500,28 @@ namespace MeGUI
                         _VideoInfo.Width = (ulong)easyParseInt(track.Width).Value;
                         _VideoInfo.Height = (ulong)easyParseInt(track.Height).Value;
                         _VideoInfo.FrameCount = (ulong)(easyParseInt(track.FrameCount) ?? 0);
-                        _VideoInfo.FPS = (easyParseDouble(track.FrameRate) ?? easyParseDouble(track.FrameRateOriginal) ?? 23.976);
                         _VideoInfo.ScanType = track.ScanTypeString;
                         _VideoInfo.Codec = getVideoCodec(track.Codec);
                         if (_VideoInfo.Codec == null)
                             _VideoInfo.Codec = getVideoCodec(track.Format); // sometimes codec info is not available, check the format then...
                         _VideoInfo.Type = getVideoType(_VideoInfo.Codec, cType, file);
                         _VideoInfo.DAR = Resolution.GetDAR((int)_VideoInfo.Width, (int)_VideoInfo.Height, track.AspectRatio, easyParseDecimal(track.PixelAspectRatio), track.AspectRatioString);
+
+                        double? fps = easyParseDouble(track.FrameRate) ?? easyParseDouble(track.FrameRateOriginal);
+                        if (fps == null)
+                        {
+                            fps = 23.976;
+                            if (infoLog == null)
+                            {
+                                infoLog = MainForm.Instance.Log.Info("MediaInfo");
+                                infoLog.Info("File: " + _file);
+                                infoLog.Info("FrameRate: " + track.FrameRate);
+                                infoLog.Info("FrameRateOriginal: " + track.FrameRateOriginal);
+
+                            }
+                            infoLog.LogEvent("fps cannot be determined. 23.976 will be used as default.", ImageType.Error);
+                        }
+                        _VideoInfo.FPS = (double)fps;
                     }
                 }
                 info.Dispose();
@@ -759,7 +774,7 @@ namespace MeGUI
                             oVideo.Width = avi.VideoInfo.Width.ToString();
                             oVideo.Height = avi.VideoInfo.Height.ToString();
                             oVideo.FrameCount = avi.VideoInfo.FrameCount.ToString();
-                            oVideo.FrameRate = avi.VideoInfo.FPS.ToString();
+                            oVideo.FrameRate = avi.VideoInfo.FPS.ToString(culture);
                             _VideoInfo.FPS_D = avi.VideoInfo.FPS_D;
                             _VideoInfo.FPS_N = avi.VideoInfo.FPS_N;
                             if (avi.Clip.interlaced_frame > 0)
