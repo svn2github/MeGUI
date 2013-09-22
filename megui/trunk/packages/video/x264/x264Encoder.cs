@@ -312,7 +312,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             xs.KeyframeInterval = iBackupKeyframeInterval;
             xs.MinGOPSize = iBackupMinGOPSize;
 
-            if (!xs.CustomEncoderOptions.Contains("--open-gop") && (xs.OpenGopValue || xs.BlurayCompat))
+            if (!xs.CustomEncoderOptions.Contains("--open-gop") && (xs.OpenGopValue || xs.TargetDevice.BluRay))
                 sb.Append("--open-gop ");
 
             // B-Frames

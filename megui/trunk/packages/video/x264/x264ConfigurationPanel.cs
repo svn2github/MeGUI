@@ -159,6 +159,17 @@ namespace MeGUI.packages.video.x264
                 if (this.x264WeightedPPrediction.SelectedIndex != x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked))
                     this.x264WeightedPPrediction.SelectedIndex = x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked);
             }
+            else if (chkBlurayCompat.Checked)
+            {
+                x264aud.Checked = true;
+                if (x264hrd.SelectedIndex == 0)
+                    x264hrd.SelectedIndex = 1;
+                if (x264WeightedPPrediction.SelectedIndex > 1)
+                    x264WeightedPPrediction.SelectedIndex = 1;
+                if (cbBPyramid.SelectedIndex > 1)
+                    cbBPyramid.SelectedIndex = 1;
+                slicesnb.Value = 4;
+            }
 
             // BFrames
             if (oTargetDevice.BFrames > -1)
