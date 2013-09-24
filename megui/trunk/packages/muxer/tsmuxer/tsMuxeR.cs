@@ -238,6 +238,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                         acodecID = "A_AAC";
                     else if (oInfo.AudioInfo.Codecs[0] == AudioCodec.DTS || oInfo.AudioInfo.Codecs[0] == AudioCodec.DTSHD || oInfo.AudioInfo.Codecs[0] == AudioCodec.DTSMA)
                         acodecID = "A_DTS";
+                    else if (oInfo.AudioInfo.Codecs[0] == AudioCodec.PCM || oInfo.AudioInfo.Codecs[0] == AudioCodec.WAV)
+                        acodecID = "A_LPCM";
 
                     sw.Write("\n" + acodecID + ", ");
                     sw.Write("\"" + stream.path + "\"");
