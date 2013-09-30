@@ -349,8 +349,8 @@ namespace MeGUI
                 {
                     MediaInfoWrapper.AudioTrack atrack = info.Audio[counter];
 
-                    if (atrack.Format.Equals("MPEG Audio") && String.IsNullOrEmpty(atrack.Delay) 
-                        && String.IsNullOrEmpty(atrack.SamplingRate) && String.IsNullOrEmpty(atrack.FormatProfile))
+                    if (String.IsNullOrEmpty(atrack.Delay) && String.IsNullOrEmpty(atrack.SamplingRate) 
+                        && String.IsNullOrEmpty(atrack.FormatProfile) && String.IsNullOrEmpty(atrack.SamplingRate))
                         continue;
 
                     _AudioInfo.Codecs[counter] = getAudioCodec(atrack.Format);

@@ -687,10 +687,7 @@ namespace MeGUI.core.gui
                     outputFileToolStripMenuItem.Enabled = OpenMenuItem.Enabled = true;
                 if (Directory.Exists(Path.GetDirectoryName(job.OutputFile)))
                     outputFolderToolStripMenuItem.Enabled = OpenMenuItem.Enabled = true;
-            }
 
-            foreach (ListViewItem item in this.queueListView.SelectedItems)
-            {
                 item.SubItems[5].Text = (jobs[item.Text]).StatusString;
             }
         }

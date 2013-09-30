@@ -1,3 +1,5 @@
+2404 [MediaInfo] ignore phantom audio tracks
+2403 [M2TS Muxer] added A_LPCM as Audio Codec ID for WAV/PCM files. Bug #730
 2402 [Queue] extended "Open" option to open input/output files/folders and in any job state if available
 2401 [Audio Encoder] fixed TimeStretch support for 23.976 <--> 25 fps conversion (regression of 2383)
 2400 [MediaInfo] added log output if fps cannot be determined
