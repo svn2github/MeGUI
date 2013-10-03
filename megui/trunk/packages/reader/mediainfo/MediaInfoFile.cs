@@ -350,7 +350,7 @@ namespace MeGUI
                     MediaInfoWrapper.AudioTrack atrack = info.Audio[counter];
 
                     if (String.IsNullOrEmpty(atrack.Delay) && String.IsNullOrEmpty(atrack.SamplingRate) 
-                        && String.IsNullOrEmpty(atrack.FormatProfile) && String.IsNullOrEmpty(atrack.SamplingRate))
+                        && String.IsNullOrEmpty(atrack.FormatProfile) && String.IsNullOrEmpty(atrack.Channels))
                         continue;
 
                     _AudioInfo.Codecs[counter] = getAudioCodec(atrack.Format);
