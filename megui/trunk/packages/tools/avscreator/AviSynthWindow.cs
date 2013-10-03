@@ -626,13 +626,14 @@ namespace MeGUI
                     { }
 
                     tempAvs = string.Format(
-                        "LoadPlugin(\"{0}\")\r\nDirectShowSource(\"{1}\", audio=false{2}, convertfps=true){3}{4}",
-                        Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll"),
+                        "DirectShowSource(\"{0}\", audio=false{1}, convertfps=true){2}{3}",
                         fileName,
                         frameRateString == null ? string.Empty : (", fps=" + frameRateString),
                         VideoUtil.getAssumeFPS(0, fileName),
                         this.flipVertical.Checked ? ".FlipVertical()" : string.Empty
                         );
+                    if (MainForm.Instance.Settings.PortableAviSynth)
+                        tempAvs = "LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll") + "\")\r\n" + tempAvs;
                 } 
                 if (file != null)
                     file.Dispose();

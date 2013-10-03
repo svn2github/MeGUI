@@ -1,3 +1,4 @@
+2406 [AviSynth] only load portable DirectShowSource.dll if portable mode is used
 2405 [Log] improved avs log information
 2404 [MediaInfo] ignore phantom audio tracks
 2403 [M2TS Muxer] added A_LPCM as Audio Codec ID for WAV/PCM files. Bug #730

@@ -57,7 +57,7 @@ namespace MeGUI
                        x26410BitsPath;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
-                     deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
+                     deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll,
                      alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU, bUse10BitsX264,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bUseQAAC,
                      bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc, bExternalMuxerX264;
@@ -1249,6 +1249,17 @@ namespace MeGUI
         {
             get { return bAutoUpdateSession; }
             set { bAutoUpdateSession = value; }
+        }
+
+        private bool bPortableAviSynth;
+        /// <summary>
+        /// portable avisynth in use
+        /// </summary>
+        [XmlIgnore()]
+        public bool PortableAviSynth
+        {
+            get { return bPortableAviSynth; }
+            set { bPortableAviSynth = value; }
         }
 
         #region Methods

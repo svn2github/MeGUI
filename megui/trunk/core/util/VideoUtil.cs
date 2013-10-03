@@ -938,10 +938,10 @@ namespace MeGUI
                     }
                     catch {}
                 }
-
-                if (!bLocal && !bFound && i != null)
-                    i.LogValue("AviSynth", "not installed", ImageType.Error);
             }
+            if (!bLocal && !bFound && i != null)
+                i.LogValue("AviSynth", "not installed", ImageType.Error);
+            MainForm.Instance.Settings.PortableAviSynth = bLocal;
         }
 
         public static string getFFMSInputLine(string inputFile, string indexFile, double fps)
