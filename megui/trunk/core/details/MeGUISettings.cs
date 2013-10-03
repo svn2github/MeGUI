@@ -86,8 +86,8 @@ namespace MeGUI
 		{
             strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             autoscroll = true;
-            autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
-                new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
+            autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/" },
+                new string[] { "Development", "http://megui.org/auto/" }, new string[] { "Custom"}};
             lastUpdateCheck = DateTime.Now.ToUniversalTime();
             lastUpdateServer = String.Empty;
             acceptableFPSError = 0.01M;
@@ -481,18 +481,19 @@ namespace MeGUI
             {
                 if (autoUpdateServerLists.Length > 2)
                 {
-                    autoUpdateServerLists[0] = new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" };
-                    autoUpdateServerLists[1] = new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" };
+                    autoUpdateServerLists[0] = new string[] { "Stable", "http://megui.org/auto/stable/" };
+                    autoUpdateServerLists[1] = new string[] { "Development", "http://megui.org/auto/" };
                 }
                 else
                 {
-                    autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
-                                                             new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] {"Custom"}};
+                    autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/" },
+                                                             new string[] { "Development", "http://megui.org/auto/"}, 
+                                                             new string[] { "Custom"}};
                 }
 #if x64
-                autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" },
-                                                         new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" },
-                                                         new string[] { "Custom", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }};
+                autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/" },
+                                                         new string[] { "Development", "http://megui.org/auto/" },
+                                                         new string[] { "Custom" }};
 #endif
 #if DEBUG
                 autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/" },
