@@ -138,7 +138,7 @@ namespace MeGUI
         public static string GetInputLine(string input, string indexFile, bool interlaced, PossibleSources sourceType,
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps, bool dss2)
         {
-            string inputLine = "#input";
+            string inputLine = "#input\r\n";
             string strDLLPath = "";
 
             switch (sourceType)
