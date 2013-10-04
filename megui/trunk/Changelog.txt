@@ -1,3 +1,4 @@
+2410 [Settings] sort the default languages alphabetically
 2409 [Update] fixed grammar/spelling errors
 2408 [AviSynth] fixed DirectShowSource in non-portable mode (regression of 2406)
 2407 [Update] disabled megui.xvidvideo.ru mirror as it is out of sync
