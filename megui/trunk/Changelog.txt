@@ -1,3 +1,5 @@
+2409 [Update] fixed grammar/spelling errors
+2408 [AviSynth] fixed DirectShowSource in non-portable mode (regression of 2406)
 2407 [Update] disabled megui.xvidvideo.ru mirror as it is out of sync
 2406 [AviSynth] only load portable DirectShowSource.dll if portable mode is used
 2405 [Log] improved avs log information

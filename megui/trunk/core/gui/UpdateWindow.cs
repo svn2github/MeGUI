@@ -1847,9 +1847,9 @@ namespace MeGUI
 
             AddTextToLog("Update completed", ImageType.Information);
             if (succeededFiles.Count > 0)
-                AddTextToLog("Files which have been sucessfully updated: " + succeededFiles.Count, ImageType.Information);
+                AddTextToLog("Files which have been successfully updated: " + succeededFiles.Count, ImageType.Information);
             if (failedFiles.Count > 0)
-                AddTextToLog("Files which have been not sucessfully updated: " + failedFiles.Count, ImageType.Error);
+                AddTextToLog("Files which have not been successfully updated: " + failedFiles.Count, ImageType.Error);
             else
             {
 #if x86

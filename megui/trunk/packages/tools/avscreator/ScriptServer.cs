@@ -138,7 +138,7 @@ namespace MeGUI
         public static string GetInputLine(string input, string indexFile, bool interlaced, PossibleSources sourceType,
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps, bool dss2)
         {
-            string inputLine = "#input\r\n";
+            string inputLine = "#input";
             string strDLLPath = "";
 
             switch (sourceType)
@@ -195,6 +195,7 @@ namespace MeGUI
                         }
                         else
                         {
+                            inputLine = String.Empty;
                             if (MainForm.Instance.Settings.PortableAviSynth)
                                 inputLine = "LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll") + "\")\r\n";
                             inputLine += "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)" + VideoUtil.getAssumeFPS(fps, input);
