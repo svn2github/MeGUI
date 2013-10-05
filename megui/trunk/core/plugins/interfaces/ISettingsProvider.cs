@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -61,7 +61,6 @@ namespace MeGUI
         }
 
         private Dar? dar = null;
-
         public Dar? DAR
         {
             get { return dar; }
@@ -69,14 +68,13 @@ namespace MeGUI
         }
         
         private int introEndFrame;
-
         public int IntroEndFrame
         {
             get { return introEndFrame; }
             set { introEndFrame = value; }
         }
-        private int creditsStartFrame;
 
+        private int creditsStartFrame;
         public int CreditsStartFrame
         {
             get { return creditsStartFrame; }
@@ -89,7 +87,6 @@ namespace MeGUI
             get { return zones; }
             set { zones = value ?? new Zone[0]; }
         }
-
 
         public VideoInfo(string videoInput, string videoOutput, int darX, int darY, int creditsStartFrame, int introEndFrame, Zone[] zones)
         {

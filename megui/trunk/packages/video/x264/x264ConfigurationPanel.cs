@@ -1950,6 +1950,7 @@ namespace MeGUI.packages.video.x264
             this.nonDeterministic.Checked = false;
             this.chkTuneFastDecode.Checked = false;
             this.chkTuneZeroLatency.Checked = false;
+            this.stitchable.Checked = false;
 
             // to update presets label
             tbx264Presets_Scroll(null, null);

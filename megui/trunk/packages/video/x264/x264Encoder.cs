@@ -837,12 +837,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     }
 
                     sbZones.Append(zone.startFrame + "," + zone.endFrame + ",");
-                    if (zone.mode == ZONEMODE.Quantizer)
+                    if (zone.mode == ZONEMODE.Quantizer && zone.modifier >= 0 && zone.modifier <= 51)
                     {
                         sbZones.Append("q=");
-                        sbZones.Append(zone.modifier + "/");
+                        sbZones.Append(zone.modifier.ToString(ci) + "/");
                     }
-                    if (zone.mode == ZONEMODE.Weight)
+                    else
                     {
                         sbZones.Append("b=");
                         double mod = (double)zone.modifier / 100.0;
