@@ -1,3 +1,4 @@
+2413 [OneClick] fixed option to set a language by default if it cannot be determined (regression of 2363)
 2412 [Update] enabled megui.xvidvideo.ru again
 2411 [x264] fixed wrong number format of the zone modifier in same cases
 2410 [Settings] sort the default languages alphabetically

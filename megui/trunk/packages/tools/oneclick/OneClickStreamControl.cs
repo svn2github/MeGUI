@@ -323,7 +323,7 @@ namespace MeGUI
                     bFound = true;
                 }
             }
-            if (!bFound)
+            if (!bFound && this.SelectedItem != null && this.SelectedStreamIndex > 0)
                 SetLanguage(defaultLanguage);
 
             // get delay & track name

@@ -1393,6 +1393,7 @@ namespace MeGUI
             a.ShowDelay = subtitleTracks[0].ShowDelay;
             a.ShowDefaultStream = subtitleTracks[0].ShowDefaultStream;
             a.ShowForceStream = subtitleTracks[0].ShowForceStream;
+            a.DefaultLanguage = subtitleTracks[0].DefaultLanguage;
             a.chkDefaultStream.CheckedChanged += new System.EventHandler(this.chkDefaultStream_CheckedChanged);
             a.SomethingChanged += new EventHandler(audio1_SomethingChanged);
             a.Filter = subtitleTracks[0].Filter;
@@ -1583,6 +1584,7 @@ namespace MeGUI
             a.StandardStreams = audioTracks[0].StandardStreams;
             a.CustomStreams = audioTracks[0].CustomStreams;
             a.SelectedStreamIndex = 0;
+            a.DefaultLanguage = audioTracks[0].DefaultLanguage;
             a.SomethingChanged += new EventHandler(audio1_SomethingChanged);
             a.EncodingMode = audioTracks[0].EncodingMode;
             a.initProfileHandler();
