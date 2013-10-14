@@ -964,12 +964,12 @@ namespace MeGUI
                 P4x4mv = false;
         }
 
-        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, x264PsyTuningModes oTuningMode, x264Device oDevice, AVCLevels.Levels avcLevel)
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, x264PsyTuningModes oTuningMode, x264Device oDevice, AVCLevels.Levels avcLevel, bool blurayCompat)
         {
-            return GetDefaultNumberOfRefFrames(oPreset, oTuningMode, oDevice, avcLevel, -1, -1);
+            return GetDefaultNumberOfRefFrames(oPreset, oTuningMode, oDevice, avcLevel, blurayCompat, -1, -1);
         }
 
-        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, x264PsyTuningModes oTuningMode, x264Device oDevice, AVCLevels.Levels avcLevel, int hRes, int vRes)
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, x264PsyTuningModes oTuningMode, x264Device oDevice, AVCLevels.Levels avcLevel, bool blurayCompat, int hRes, int vRes)
         {
             int iDefaultSetting = 1;
             switch (oPreset)
@@ -989,6 +989,8 @@ namespace MeGUI
                 iDefaultSetting *= 2;
             if (iDefaultSetting > 16)
                 iDefaultSetting = 16;
+            if (blurayCompat)
+                iDefaultSetting = Math.Min(6, iDefaultSetting);
             if (oDevice != null && oDevice.ReferenceFrames > -1)
                 iDefaultSetting = Math.Min(oDevice.ReferenceFrames, iDefaultSetting);
             if (hRes > 0 && vRes > 0)
@@ -1000,7 +1002,7 @@ namespace MeGUI
             return iDefaultSetting;
         }
 
-        public static int GetDefaultNumberOfBFrames(x264PresetLevelModes oPresetLevel, x264PsyTuningModes oTuningMode, bool bTuneZeroLatency, int oAVCProfile, x264Device oDevice)
+        public static int GetDefaultNumberOfBFrames(x264PresetLevelModes oPresetLevel, x264PsyTuningModes oTuningMode, bool bTuneZeroLatency, int oAVCProfile, x264Device oDevice, bool blurayCompat)
         {
             int iDefaultSetting = 0;
             if (oAVCProfile == 0) // baseline
@@ -1025,6 +1027,8 @@ namespace MeGUI
                 iDefaultSetting += 2;
             if (iDefaultSetting > 16)
                 iDefaultSetting = 16;
+            if (blurayCompat)
+                iDefaultSetting = Math.Min(3, iDefaultSetting);
             if (oDevice != null && oDevice.BFrames > -1)
                 return Math.Min(oDevice.BFrames, iDefaultSetting);
             else

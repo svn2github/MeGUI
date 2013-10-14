@@ -1,3 +1,7 @@
+2414 [x264] if --bluray-compat is used without a BluRay device selected:
+            --ref is restricted to 6
+            --bframes is restricted to 3
+            --slices 4 is not forced anymore 
 2413 [OneClick] fixed option to set a language by default if it cannot be determined (regression of 2363)
 2412 [Update] enabled megui.xvidvideo.ru again
 2411 [x264] fixed wrong number format of the zone modifier in same cases

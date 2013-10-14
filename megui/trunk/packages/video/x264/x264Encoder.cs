@@ -317,7 +317,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             // B-Frames
             xs.NbBframes = oSettingsHandler.getBFrames();
-            if (xs.Profile > 0 && xs.NbBframes != x264Settings.GetDefaultNumberOfBFrames(xs.x264PresetLevel, xs.x264PsyTuning, xs.TuneZeroLatency, xs.Profile, null))
+            if (xs.Profile > 0 && xs.NbBframes != x264Settings.GetDefaultNumberOfBFrames(xs.x264PresetLevel, xs.x264PsyTuning, xs.TuneZeroLatency, xs.Profile, null, xs.BlurayCompat))
                 sb.Append("--bframes " + xs.NbBframes + " ");
 
             if (xs.NbBframes > 0)
@@ -381,7 +381,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             // reference frames
             int iRefFrames = oSettingsHandler.getRefFrames(hres, vres);
-            if (iRefFrames != x264Settings.GetDefaultNumberOfRefFrames(xs.x264PresetLevel, xs.x264PsyTuning, null, xs.AVCLevel, hres, vres))
+            if (iRefFrames != x264Settings.GetDefaultNumberOfRefFrames(xs.x264PresetLevel, xs.x264PsyTuning, null, xs.AVCLevel, xs.BlurayCompat, hres, vres))
                 sb.Append("--ref " + iRefFrames + " ");
 
             // WeightedPPrediction

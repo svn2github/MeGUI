@@ -168,7 +168,10 @@ namespace MeGUI.packages.video.x264
                     x264WeightedPPrediction.SelectedIndex = 1;
                 if (cbBPyramid.SelectedIndex > 1)
                     cbBPyramid.SelectedIndex = 1;
-                slicesnb.Value = 4;
+                if (x264NumberOfBFrames.Value > 3)
+                    x264NumberOfBFrames.Value = 3;
+                if (x264NumberOfRefFrames.Value > 6)
+                    x264NumberOfRefFrames.Value = 6;
             }
 
             // BFrames
@@ -179,7 +182,7 @@ namespace MeGUI.packages.video.x264
             }
             if (updateDevice == true)
             {
-                int iDefaultBFrames = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice);
+                int iDefaultBFrames = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice, chkBlurayCompat.Checked);
                 if (x264NumberOfBFrames.Value != iDefaultBFrames)
                     x264NumberOfBFrames.Value = iDefaultBFrames;
             }
@@ -192,7 +195,7 @@ namespace MeGUI.packages.video.x264
             }
             if (updateDevice == true)
             {
-                int iDefaultRFrames = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel());
+                int iDefaultRFrames = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel(), chkBlurayCompat.Checked);
                 if (x264NumberOfRefFrames.Value != iDefaultRFrames)
                     x264NumberOfRefFrames.Value = iDefaultRFrames;
             }
@@ -317,10 +320,10 @@ namespace MeGUI.packages.video.x264
 
         private void doTuningsAdjustments()
         {
-            if (this.x264NumberOfRefFrames.Value != x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel()))
-                this.x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel());
-            if (this.x264NumberOfBFrames.Value != x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice))
-                this.x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice);
+            if (this.x264NumberOfRefFrames.Value != x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel(), chkBlurayCompat.Checked))
+                this.x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel(), chkBlurayCompat.Checked);
+            if (this.x264NumberOfBFrames.Value != x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice, chkBlurayCompat.Checked))
+                this.x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice, chkBlurayCompat.Checked);
             if (this.x264WeightedPPrediction.SelectedIndex != x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked))
                 this.x264WeightedPPrediction.SelectedIndex = x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked);
             if (this.cbAQMode.SelectedIndex != x264Settings.GetDefaultAQMode((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning()))
@@ -536,10 +539,10 @@ namespace MeGUI.packages.video.x264
 
         private void doPresetsAdjustments()
         {
-            if (this.x264NumberOfRefFrames.Value != x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel()))
-                this.x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel());
-            if (this.x264NumberOfBFrames.Value != x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice))
-                this.x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice);
+            if (this.x264NumberOfRefFrames.Value != x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel(), chkBlurayCompat.Checked))
+                this.x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), oTargetDevice, getAVCLevel(), chkBlurayCompat.Checked);
+            if (this.x264NumberOfBFrames.Value != x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice, chkBlurayCompat.Checked))
+                this.x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice, chkBlurayCompat.Checked);
             if (this.x264WeightedPPrediction.SelectedIndex != x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked))
                 this.x264WeightedPPrediction.SelectedIndex = x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked);
             if (this.cbAQMode.SelectedIndex != x264Settings.GetDefaultAQMode((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning()))
@@ -1970,8 +1973,8 @@ namespace MeGUI.packages.video.x264
 
         private void avcProfile_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.x264NumberOfBFrames.Value != x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice))
-                this.x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice);
+            if (this.x264NumberOfBFrames.Value != x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice, chkBlurayCompat.Checked))
+                this.x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, getPsyTuning(), chkTuneZeroLatency.Checked, avcProfile.SelectedIndex, oTargetDevice, chkBlurayCompat.Checked);
             if (this.x264WeightedPPrediction.SelectedIndex != x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked))
                 this.x264WeightedPPrediction.SelectedIndex = x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, chkTuneFastDecode.Checked, avcProfile.SelectedIndex, chkBlurayCompat.Checked);
 
