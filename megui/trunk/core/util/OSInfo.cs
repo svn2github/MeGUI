@@ -310,6 +310,29 @@ namespace MeGUI
                                                         }
                                                     } break;
                                                 }
+                                            case 3: // Windows 8.1
+                                                {
+                                                    uint edition = PRODUCT_UNDEFINED;
+                                                    if (GetProductInfo(osVersionInfo.dwMajorVersion,
+                                                                       osVersionInfo.dwMinorVersion,
+                                                                       osVersionInfo.wServicePackMajor,
+                                                                       osVersionInfo.wServicePackMinor,
+                                                                       out edition))
+                                                    {
+                                                        switch (edition)
+                                                        {
+                                                            case PRODUCT_CORE:
+                                                            case PRODUCT_CORE_COUNTRYSPECIFIC:
+                                                            case PRODUCT_CORE_N: osName = "Windows 8.1 Standard Edition"; break;
+                                                            case PRODUCT_ENTERPRISE:
+                                                            case PRODUCT_ENTERPRISE_N: osName = "Windows 8.1 Entreprise Edition"; break;
+                                                            case PRODUCT_PROFESSIONAL:
+                                                            case PRODUCT_PROFESSIONAL_N: osName = "Windows 8.1 Professional Edition"; break;
+                                                            case PRODUCT_PROFESSIONAL_WMC: osName = "Windows 8.1 Professional with Media Center Edition"; break;
+                                                            default: osName = "Windows 8.1"; break;
+                                                        }
+                                                    } break;
+                                                }
                                         }
                                         break;
                                     }
