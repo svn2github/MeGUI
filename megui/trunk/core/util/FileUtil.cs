@@ -110,17 +110,28 @@ namespace MeGUI.core.util
                 Directory.Delete(p, recursive);
         }
 
-
         public static DirectoryInfo ensureDirectoryExists(string p)
         {
             if (Directory.Exists(p))
                 return new DirectoryInfo(p);
             if (string.IsNullOrEmpty(p))
                 throw new IOException("Can't create directory");
-            ensureDirectoryExists(Path.GetDirectoryName(p));
+            ensureDirectoryExists(GetDirectoryName(p));
             System.Threading.Thread.Sleep(100);
             return Directory.CreateDirectory(p);
         }
+
+        public static string GetDirectoryName(string file)
+        {
+            string path = string.Empty;
+            try
+            {
+                path = Path.GetDirectoryName(file);
+            }
+            catch { }
+            return path;
+        }
+
         /// <summary>
         /// Generates a filename not in the list
         /// </summary>

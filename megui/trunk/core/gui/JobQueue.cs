@@ -681,11 +681,11 @@ namespace MeGUI.core.gui
                 outputFileToolStripMenuItem.Enabled = outputFolderToolStripMenuItem.Enabled = false;
                 if (File.Exists(job.InputFile))
                     inputFileToolStripMenuItem.Enabled = OpenMenuItem.Enabled = true;
-                if (Directory.Exists(Path.GetDirectoryName(job.InputFile)))
+                if (Directory.Exists(FileUtil.GetDirectoryName(job.InputFile)))
                     inputFolderToolStripMenuItem.Enabled = OpenMenuItem.Enabled = true;
                 if (File.Exists(job.OutputFile))
                     outputFileToolStripMenuItem.Enabled = OpenMenuItem.Enabled = true;
-                if (Directory.Exists(Path.GetDirectoryName(job.OutputFile)))
+                if (Directory.Exists(FileUtil.GetDirectoryName(job.OutputFile)))
                     outputFolderToolStripMenuItem.Enabled = OpenMenuItem.Enabled = true;
 
                 item.SubItems[5].Text = (jobs[item.Text]).StatusString;
@@ -923,13 +923,13 @@ namespace MeGUI.core.gui
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
                 TaggedJob job = jobs[item.Text];
-                if (!Directory.Exists(Path.GetDirectoryName(job.OutputFile)))
+                if (!Directory.Exists(FileUtil.GetDirectoryName(job.OutputFile)))
                     continue;
 
                 try
                 {
                     Process prc = new Process();
-                    prc.StartInfo.FileName = Path.GetDirectoryName(job.OutputFile);
+                    prc.StartInfo.FileName = FileUtil.GetDirectoryName(job.OutputFile);
                     prc.Start();
                 }
                 catch (Exception) { }
@@ -959,13 +959,13 @@ namespace MeGUI.core.gui
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
                 TaggedJob job = jobs[item.Text];
-                if (!Directory.Exists(Path.GetDirectoryName(job.InputFile)))
+                if (!Directory.Exists(FileUtil.GetDirectoryName(job.InputFile)))
                     continue;
 
                 try
                 {
                     Process prc = new Process();
-                    prc.StartInfo.FileName = Path.GetDirectoryName(job.InputFile);
+                    prc.StartInfo.FileName = FileUtil.GetDirectoryName(job.InputFile);
                     prc.Start();
                 }
                 catch (Exception) { }

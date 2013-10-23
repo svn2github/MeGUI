@@ -1,3 +1,4 @@
+2417 [Queue] fixed crash when opening the right click menu (regression of 2402)
 2416 [Log] added .NET 4.5.1 detection
 2415 [Log] added Windows 8.1 detection
 2414 [x264] if --bluray-compat is used without a BluRay device selected:
