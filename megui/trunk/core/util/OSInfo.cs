@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -535,10 +535,11 @@ namespace MeGUI
                                         break;
                                     case "5":
                                         {
-                                            switch (revision)
+                                            switch (build)
                                             {
                                                 case "50709": dnvf = "4.5"; break;
-                                                default: dnvf = "4.5"; break;
+                                                case "51641": dnvf = "4.5.1"; break;
+                                                default: dnvf = "4.5.x"; break;
                                             }
                                         }
                                         break;
