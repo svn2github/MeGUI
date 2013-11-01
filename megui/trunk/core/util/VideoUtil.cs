@@ -899,14 +899,19 @@ namespace MeGUI
                     i.LogValue("AviSynth portable", strVersion);
                 }
             }
-            else if (bFound && i != null)
+            else
             {
-                string strVersion = string.Empty;
-                if (string.IsNullOrEmpty(fileVersion))
-                    strVersion = " (" + fileDate + ")";
-                else
-                    strVersion = fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")";
-                i.LogValue("AviSynth", strVersion);
+                if (File.Exists(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "devil.dll")))
+                    FileUtil.DeleteFile(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "devil.dll"));
+                if (bFound && i != null)
+                {
+                    string strVersion = string.Empty;
+                    if (string.IsNullOrEmpty(fileVersion))
+                        strVersion = " (" + fileDate + ")";
+                    else
+                        strVersion = fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")";
+                    i.LogValue("AviSynth", strVersion);
+                }
             }
 
             if (!bFound && !bLocal)
