@@ -360,7 +360,18 @@ namespace MeGUI
         /// </summary>
         /// <returns>A string containing the Name of the Framework Version.</returns>
         /// 
-        public static string FormatDotNetVersion()
+        public static string GetDotNetVersion()
+        {
+            return GetDotNetVersion("");
+        }
+
+        /// <summary>
+        /// Returns the name of the dotNet Framework running on this computer.
+        /// </summary>
+        /// <param name="getSpecificVersion">if not empty only the specified version and if empty the highest version will be returned</param>
+        /// <returns>A string containing the Name of the Framework Version.</returns>
+        /// 
+        public static string GetDotNetVersion(string getSpecificVersion)
         {
             string fv = "unknown";
             string componentsKeyName = "SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\";
@@ -377,9 +388,6 @@ namespace MeGUI
                     
                     foreach (string instComp in instComps)
                     {
-                        if (instComp.Equals("v4.0"))
-                            break;
-
                         Microsoft.Win32.RegistryKey key = componentsKey.OpenSubKey(instComp);
                         string version = (string)key.GetValue("Version");
 
@@ -397,19 +405,24 @@ namespace MeGUI
                                     versions.Add(strVersion);
                             }
                         }
-                          
+                    }
+                    versions.Sort();
+
+                    foreach (string version in versions)
+                    {
+                        if (!String.IsNullOrEmpty(getSpecificVersion) && (version.StartsWith(getSpecificVersion) || DotNetVersionFormated(version).StartsWith(getSpecificVersion)) )
+                            return version;
+                        fv = version;
                     }
 
-                    IEnumerator etr = versions.GetEnumerator();
-                    while (etr.MoveNext())
-                        fv = etr.Current + "";
+                    if (!String.IsNullOrEmpty(getSpecificVersion))
+                        return null;
                 }
                 catch
                 {
                     return null;
                 }
             }
-
             return fv;
         }
 
@@ -525,14 +538,7 @@ namespace MeGUI
                             {
                                 switch (minor)
                                 {
-                                    case "0":
-                                        {
-                                            switch (build)
-                                            {
-                                                default: dnvf = "4.0"; break;
-                                            }
-                                        }
-                                        break;
+                                    case "0": dnvf = "4.0"; break;
                                     case "5":
                                         {
                                             switch (build)

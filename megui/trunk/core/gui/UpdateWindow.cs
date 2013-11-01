@@ -40,8 +40,8 @@ namespace MeGUI
 {
     public partial class UpdateWindow : Form
     {
+        #region Variables
         private List<string> serverList;
-        
         private MainForm mainForm = null;
         public static MeGUISettings meGUISettings = null;
         private bool continueUpdate = true;
@@ -54,7 +54,7 @@ namespace MeGUI
         private bool isOrHasDownloadedUpgradeData = false;
         private LogItem oLog;
         private String ServerAddress;
-
+        #endregion
         #region Classes
 
         public abstract class iUpgradeable
@@ -272,7 +272,7 @@ namespace MeGUI
                 platform.Name = "Platform";
                 status.Name = "Status";
 
-                name.Text = this.Name;
+                name.Text = this.DisplayName;
 
                 Version v = GetLatestVersion();
                 if (v != null)
@@ -408,6 +408,13 @@ namespace MeGUI
                 set { this.name = value; }
             }
 
+            private string displayName;
+            public string DisplayName
+            {
+                get { return this.displayName; }
+                set { this.displayName = value; }
+            }
+
             public enum PlatformModes : int
             {
                 any = 0,
@@ -429,6 +436,13 @@ namespace MeGUI
                 set { requiredBuild = value; }
             }
 
+            private string requiredNET;
+            public string RequiredNET
+            {
+                get { return requiredNET; }
+                set { requiredNET = value; }
+            }
+
             internal string treeViewID;
             public string TreeViewID
             {
@@ -442,15 +456,6 @@ namespace MeGUI
                 get { return needsRestartedCopying; }
                 set { needsRestartedCopying = value; }
             }
-
-            private uint installPriority = 0;
-
-            public uint InstallPriority
-            {
-                get { return installPriority; }
-                set { installPriority = value; }
-            }
-
 
             public virtual bool NeedsInstalling
             {
@@ -909,16 +914,28 @@ namespace MeGUI
         #region Enums
         public enum ErrorState
         {
+            [EnumTitle("File cannot be found on the server")]
             FileNotOnServer,
+            [EnumTitle("Update server is not available")]
             ServerNotAvailable,
+            [EnumTitle("File cannot be downloaded")]
             CouldNotDownloadFile,
+            [EnumTitle("Backup file cannot be removed")]
             CouldNotRemoveBackup,
+            [EnumTitle("File cannot be saved")]
             CouldNotSaveNewFile,
+            [EnumTitle("File cannot be renamed")]
             CouldNotRenameExistingFile,
+            [EnumTitle("File cannot be installed")]
             CouldNotInstall,
+            [EnumTitle("Update successful")]
             Successful,
+            [EnumTitle("File cannot be extracted")]
             CouldNotUnzip,
-            InvalidXML
+            [EnumTitle("Update XML is invalid")]
+            InvalidXML,
+            [EnumTitle("The requirements for this file are not met")]
+            RequirementNotMet
         }
         #endregion
         #region con/de struction
@@ -1486,12 +1503,6 @@ namespace MeGUI
                     ParseFileData(childnode, groupNode, path);
                     continue;
                 }
-                string displayName = childnode.Name;
-                try
-                {
-                    displayName = childnode.Attributes["displayname"].Value;
-                }
-                catch (Exception) { }
     
                 string newPath = path + "." + childnode.Name;
                 if (childnode.Attributes["type"].Value.Equals("tree"))
@@ -1500,6 +1511,7 @@ namespace MeGUI
                     ParseUpgradeXml(childnode, groupNode, newPath);
             }
         }
+
         /// <summary>
         /// Once a "file" is found in the upgrade XML file, the files node is passed
         /// to this function which generates the correct iUpgradeable filetype (i.e. MeGUIFile
@@ -1512,28 +1524,29 @@ namespace MeGUI
             Version availableFile = null;
             bool fileAlreadyAdded = false;
 
-            try
+            if (node.Name.Equals("neroaacenc") && !MainForm.Instance.Settings.UseNeroAacEnc)
+                return;
+            if (node.Name.Equals("dgindexnv") && !MainForm.Instance.Settings.UseDGIndexNV)
+                return;
+            if (node.Name.Equals("qaac") && !MainForm.Instance.Settings.UseQAAC)
+                return;
+            if (node.Name.Equals("x264_10b") && !MainForm.Instance.Settings.Use10bitsX264)
+                return;
+
+            var nameAttribute = node.Attributes["platform"];
+            if (nameAttribute != null)
             {
-                if (node.Name.Equals("neroaacenc") && !MainForm.Instance.Settings.UseNeroAacEnc)
-                    return;
-                if (node.Name.Equals("dgindexnv") && !MainForm.Instance.Settings.UseDGIndexNV)
-                    return;
-                if (node.Name.Equals("qaac") && !MainForm.Instance.Settings.UseQAAC)
-                    return;
-                if (node.Name.Equals("x264_10b") && !MainForm.Instance.Settings.Use10bitsX264)
-                    return;
 #if x86
-                if (node.Attributes["platform"].Value.Equals("x64"))
+                if (nameAttribute.Value.Equals("x64"))
 #endif
 #if x64
-                if (node.Attributes["platform"].Value.Equals("x86"))
+                if (nameAttribute.Value.Equals("x86"))
 #endif
                     return;
             }
-            catch (Exception) { }
             
-            if ((file = upgradeData.FindByName(node.Name)) == null) // If this file isn't already in
-            {                                                       // the upgradeData list.
+            if ((file = upgradeData.FindByName(node.Name)) == null) // If this file isn't already in the upgradeData list
+            {
                 try
                 {
                     if (groupNode.Name.Equals("MeGUI"))
@@ -1561,37 +1574,44 @@ namespace MeGUI
                 if (file is ProfilesFile)
                     (file as ProfilesFile).MainForm = mainForm;
             }
-            try
-            {
-                if (node.Attributes["needsrestart"].Value.Equals("true"))
-                    file.NeedsRestartedCopying = true;
-                else
-                    file.NeedsRestartedCopying = false;
-            }
-            catch (Exception) { }
 
             file.Platform = iUpgradeable.PlatformModes.any;
-            try
+            if (nameAttribute != null)
             {
-                if (node.Attributes["platform"].Value.Equals("x86"))
+                if (nameAttribute.Value.Equals("x86"))
                     file.Platform = iUpgradeable.PlatformModes.x86;
-                else if (node.Attributes["platform"].Value.Equals("x64"))
+                else if (nameAttribute.Value.Equals("x64"))
                     file.Platform = iUpgradeable.PlatformModes.x64;
             }
-            catch (Exception) { }
+
+            file.NeedsRestartedCopying = false;
+            nameAttribute = node.Attributes["needsrestart"];
+            if (nameAttribute != null)
+            {
+                if (nameAttribute.Value.Equals("true"))
+                    file.NeedsRestartedCopying = true;    
+            }
 
             file.RequiredBuild = 0;
-            try
+            nameAttribute = node.Attributes["requiredbuild"];
+            if (nameAttribute != null)
             {
-                file.RequiredBuild = Int32.Parse(node.Attributes["requiredbuild"].Value);
+                file.RequiredBuild = Int32.Parse(nameAttribute.Value);
             }
-            catch (Exception) { }
-            
-            try
+
+            file.DisplayName = node.Name;
+            nameAttribute = node.Attributes["name"];
+            if (nameAttribute != null)
             {
-                file.InstallPriority = uint.Parse(node.Attributes["installpriority"].Value);
+                file.DisplayName = nameAttribute.Value;
             }
-            catch (Exception) { }
+
+            file.RequiredNET = String.Empty;
+            nameAttribute = node.Attributes["net"];
+            if (nameAttribute != null)
+            {
+                file.RequiredNET = nameAttribute.Value;
+            }
 
             foreach (XmlNode filenode in node.ChildNodes) // each filenode contains the upgrade url and version
             {
@@ -1737,22 +1757,13 @@ namespace MeGUI
             ErrorState result;
             List<iUpgradeable> succeededFiles = new List<iUpgradeable>();
             List<iUpgradeable> failedFiles = new List<iUpgradeable>();
-
+            List<iUpgradeable> missingFiles = new List<iUpgradeable>();
             
             // Count the number of files we can update before we restart
             int updateableFileCount = 0;
-            uint indexOfRestart = 0;
             bool needsRestart = false;
             foreach (List<iUpgradeable> group in groups.Values)
-            {
-                needsRestart = group.Exists(delegate(iUpgradeable f) { return f.NeedsRestartedCopying; });
                 updateableFileCount += group.Count;
-                if (needsRestart)
-                {
-                    indexOfRestart = group[0].InstallPriority;
-                    break;
-                }
-            }
 
             // Now update the files we can
             foreach (List<iUpgradeable> group in groups.Values)
@@ -1795,7 +1806,7 @@ namespace MeGUI
                         if (result != ErrorState.Successful)
                         {
                             failedFiles.Add(file);
-                            AddTextToLog(string.Format("Failed to download file {0} with error: {1}.", file.Name, result), ImageType.Error);
+                            AddTextToLog(string.Format("Failed to download file {0} with error: {1}.", file.Name, EnumProxy.Create(result).ToString()), ImageType.Error);
                         }
                         else
                         {
@@ -1809,13 +1820,20 @@ namespace MeGUI
 
                                 if (state != ErrorState.Successful)
                                 {
-                                    failedFiles.Add(file);
-                                    AddTextToLog(string.Format("Failed to install file {0} with error: {1}.", file.Name, state), ImageType.Error);
+                                    if (state != ErrorState.RequirementNotMet)
+                                    {
+                                        AddTextToLog(string.Format("Failed to install file {0} with error: {1}.", file.Name, EnumProxy.Create(state).ToString()), ImageType.Error);
+                                        failedFiles.Add(file);
+                                    }
+                                    else
+                                        missingFiles.Add(file);
                                 }
                                 else
                                 {
                                     succeededFiles.Add(file);
                                     file.DownloadChecked = false;
+                                    if (file.NeedsRestartedCopying)
+                                        needsRestart = true;
                                 }
                             }
                             finally { str.Close(); }
@@ -1824,32 +1842,21 @@ namespace MeGUI
                     currentFile++;
                 }
 
-                if (currentFile >= updateableFileCount) break;
-            }
-
-            // Tell MeGUI to update the remaining files after restarting
-            bool firstTime = true;
-            foreach (List<iUpgradeable> group in groups.Values)
-            {
-                foreach (iUpgradeable file in group)
-                {
-                    if (file.InstallPriority > indexOfRestart)
-                    {
-                        if (firstTime)
-                            AddTextToLog("The following files could not be updated, since they depend on another component which will only be installed when MeGUI restarts. Please run the updater later", ImageType.Error);
-                        firstTime = false;
-                        AddTextToLog(file.Name, ImageType.Information);
-                    }
-                }
+                if (currentFile >= updateableFileCount) 
+                    break;
             }
 
             SetProgressBar(0, 1, 1); //make sure progress bar is at 100%.
 
-            AddTextToLog("Update completed", ImageType.Information);
             if (succeededFiles.Count > 0)
                 AddTextToLog("Files which have been successfully updated: " + succeededFiles.Count, ImageType.Information);
-            if (failedFiles.Count > 0)
-                AddTextToLog("Files which have not been successfully updated: " + failedFiles.Count, ImageType.Error);
+            if (failedFiles.Count + missingFiles.Count > 0)
+            {
+                if (failedFiles.Count == 0)
+                    AddTextToLog("Files which have not been successfully updated: " + missingFiles.Count, ImageType.Warning);
+                else
+                    AddTextToLog("Files which have not been successfully updated: " + (failedFiles.Count + missingFiles.Count), ImageType.Error);
+            }
             else
             {
 #if x86
@@ -1892,7 +1899,6 @@ namespace MeGUI
                 btnAbort.Enabled = false;
                 btnUpdate.Enabled = true;
             }));
-            /*return false;*/
         }
 
         /// <summary>
@@ -1907,9 +1913,9 @@ namespace MeGUI
             {
                 if (file.DownloadChecked)
                 {
-                    if (!groups.ContainsKey(file.InstallPriority))
-                        groups[file.InstallPriority] = new List<iUpgradeable>();
-                    groups[file.InstallPriority].Add(file);
+                    if (!groups.ContainsKey(0))
+                        groups[0] = new List<iUpgradeable>();
+                    groups[0].Add(file);
                 }
             }
 
@@ -1920,15 +1926,23 @@ namespace MeGUI
         {
             if (file.RequiredBuild > 0 && new System.Version(Application.ProductVersion).Build < file.RequiredBuild)
             {
-                AddTextToLog(string.Format("Could not install module '{0}' as at least MeGUI build {1} is required.", file.Name, file.RequiredBuild), ImageType.Information);
-                return ErrorState.CouldNotInstall;
+                AddTextToLog(string.Format("Could not install module '{0}' as at least MeGUI build {1} is required.", file.Name, file.RequiredBuild), ImageType.Warning);
+                return ErrorState.RequirementNotMet;
             }
+
+            if (!String.IsNullOrEmpty(file.RequiredNET) && String.IsNullOrEmpty(OSInfo.GetDotNetVersion(file.RequiredNET)))
+            {
+                AddTextToLog(string.Format("Could not install module '{0}' as .NET {1} is required.", file.Name, file.RequiredNET), ImageType.Warning);
+                return ErrorState.RequirementNotMet;
+            }
+
             ErrorState state = file.Install(fileData);
             if (state == ErrorState.Successful)
             {
                 file.CurrentVersion = file.GetLatestVersion();
                 return ErrorState.Successful;
             }
+
             AddTextToLog(string.Format("Could not install module '{0}'.", file.Name), ImageType.Error);
             return state;
         }
@@ -1945,8 +1959,14 @@ namespace MeGUI
         {
             if (file.RequiredBuild > 0 && new System.Version(Application.ProductVersion).Build < file.RequiredBuild)
             {
-                AddTextToLog(string.Format("Could not install module '{0}' as at least MeGUI build {1} is required.", file.Name, file.RequiredBuild), ImageType.Information);
-                return ErrorState.CouldNotSaveNewFile;
+                AddTextToLog(string.Format("Could not install module '{0}' as at least MeGUI build {1} is required.", file.Name, file.RequiredBuild), ImageType.Warning);
+                return ErrorState.RequirementNotMet;
+            }
+
+            if (!String.IsNullOrEmpty(file.RequiredNET) && String.IsNullOrEmpty(OSInfo.GetDotNetVersion(file.RequiredNET)))
+            {
+                AddTextToLog(string.Format("Could not install module '{0}' as .NET {1} is required.", file.Name, file.RequiredNET), ImageType.Warning);
+                return ErrorState.RequirementNotMet;
             }
 
             string filepath = null, filename = null;

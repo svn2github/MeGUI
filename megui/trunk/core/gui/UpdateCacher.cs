@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -75,8 +75,8 @@ namespace MeGUI
             ensureSensibleCacheFolderExists();
             UpdateWindow.ErrorState er = UpdateWindow.ErrorState.Successful;
             string updateCache = MainForm.Instance.Settings.MeGUIUpdateCache;
-
             string localFilename = Path.Combine(updateCache, url);
+            bool downloadFile = true;
 
             if (File.Exists(localFilename))
             {
@@ -88,7 +88,7 @@ namespace MeGUI
                 }
 
                 // check the zip file
-                if (localFilename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".zip"))
+                if (localFilename.ToLowerInvariant().EndsWith(".zip"))
                 {
                     try
                     {
@@ -99,7 +99,7 @@ namespace MeGUI
                             UpdateCacher.FlushFile(localFilename, oUpdate);
                         }
                         else
-                            goto gotLocalFile;
+                            downloadFile = false;
                     }
                     catch
                     {
@@ -107,7 +107,7 @@ namespace MeGUI
                         UpdateCacher.FlushFile(localFilename, oUpdate);
                     }
                 }
-                else if (localFilename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".7z")) // check the 7-zip file
+                else if (localFilename.ToLowerInvariant().EndsWith(".7z")) // check the 7-zip file
                 {
                     try
                     {
@@ -118,7 +118,7 @@ namespace MeGUI
                             UpdateCacher.FlushFile(localFilename, oUpdate);
                         }
                         else
-                            goto gotLocalFile;
+                            downloadFile = false;
                     }
                     catch
                     {
@@ -127,34 +127,44 @@ namespace MeGUI
                     }
                 }
                 else
+                    downloadFile = false;
+            }
+
+            if (downloadFile)
+            {
+                WebClient wc = new WebClient();
+
+                // check for proxy authentication...
+                wc.Proxy = HttpProxy.GetProxy(MainForm.Instance.Settings);
+
+                ManualResetEvent mre = new ManualResetEvent(false);
+                wc.DownloadFileCompleted += delegate(object sender, AsyncCompletedEventArgs e)
                 {
-                    goto gotLocalFile;
+                    if (e.Error != null)
+                        er = UpdateWindow.ErrorState.CouldNotDownloadFile;
+
+                    mre.Set();
+                };
+
+                wc.DownloadProgressChanged += wc_DownloadProgressChanged;
+
+                wc.DownloadFileAsync(new Uri(serverAddress, url), localFilename);
+                mre.WaitOne();
+
+                if (File.Exists(localFilename))
+                {
+                    FileInfo finfo = new FileInfo(localFilename);
+                    if (finfo.Length == 0)
+                        UpdateCacher.FlushFile(localFilename, oUpdate);
                 }
             }
 
-            WebClient wc = new WebClient();
-
-            // check for proxy authentication...
-            wc.Proxy = HttpProxy.GetProxy(MainForm.Instance.Settings);
-
-            ManualResetEvent mre = new ManualResetEvent(false);
-            wc.DownloadFileCompleted += delegate(object sender, AsyncCompletedEventArgs e)
-            {
-                if (e.Error != null)
-                    er = UpdateWindow.ErrorState.CouldNotDownloadFile;
-
-                mre.Set();
-            };
-
-            wc.DownloadProgressChanged += wc_DownloadProgressChanged;
-
-            wc.DownloadFileAsync(new Uri(serverAddress, url), localFilename);
-            mre.WaitOne();
-
-        gotLocalFile:
             try
             {
-                str = File.OpenRead(localFilename);
+                if (File.Exists(localFilename))
+                    str = File.OpenRead(localFilename);
+                else
+                    str = null;
             }
             catch (IOException)
             {

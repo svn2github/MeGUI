@@ -1,3 +1,7 @@
+2419 [Update] added possibility to use display names for the update files
+              added possibility to use .NET requirements for the update files
+              improved error handling and log output
+2418 [Main] improved Windows 7/8 support
 2417 [Queue] fixed crash when opening the right click menu (regression of 2402)
 2416 [Log] added .NET 4.5.1 detection
 2415 [Log] added Windows 8.1 detection

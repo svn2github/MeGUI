@@ -93,6 +93,7 @@ namespace MeGUI
         {
             System.Diagnostics.Process.Start("http://mewiki.project357.com/wiki/Main_Page");
         }
+
         /// <summary>
         /// launches the encoder gui forum in the default browser
         /// </summary>
@@ -102,6 +103,7 @@ namespace MeGUI
         {
 
         }
+
         /// <summary>
         /// shows the changelog dialog window
         /// </summary>
@@ -1188,8 +1190,9 @@ namespace MeGUI
 
         private void runRestarter()
         {
-            if (filesToReplace.Keys.Count == 0 /*&& otherFilesToInstall.Count == 0*/)
+            if (filesToReplace.Keys.Count == 0)
                 return;
+
             Process proc = new Process();
             ProcessStartInfo pstart = new ProcessStartInfo();
             pstart.FileName = Path.Combine(Application.StartupPath, "updatecopier.exe");
@@ -1421,7 +1424,7 @@ namespace MeGUI
             i.LogValue("MeGUI Version ", new System.Version(Application.ProductVersion).Build + " x64");
 #endif
             i.LogValue("Operating System", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
-            i.LogValue(".Net Framework", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
+            i.LogValue(".Net Framework", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.GetDotNetVersion())));
 
             VideoUtil.getAvisynthVersion(i);
 

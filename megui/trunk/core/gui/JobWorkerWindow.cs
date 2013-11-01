@@ -726,8 +726,8 @@ namespace MeGUI.core.gui
             LogItem i = new LogItem("Deleting aborted output");
 
             i.LogValue("Delete aborted output set", mainForm.Settings.DeleteAbortedOutput);
-            
-            if (mainForm.Settings.DeleteAbortedOutput)
+
+            if (mainForm.Settings.DeleteAbortedOutput && File.Exists(job.Job.Output))
             {
                 i.LogValue("File to delete", job.Job.Output);
                 while (File.Exists(job.Job.Output))
