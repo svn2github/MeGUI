@@ -228,7 +228,7 @@ namespace MeGUI
             get { return preset; }
             set { preset = value; }
         }
-#warning Deprecated since 2327; delete after next stable release
+#warning Deprecated since 2327
         public string x264Tuning
         {
             get { return "migrated"; }
@@ -745,7 +745,7 @@ namespace MeGUI
             get { return profile; }
             set { profile = value; }
         }
-#warning Deprecated since 2327; delete after next stable release
+#warning Deprecated since 2327
         public string Level
         {
             get { return "migrated"; }

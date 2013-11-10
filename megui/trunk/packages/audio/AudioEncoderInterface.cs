@@ -337,6 +337,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (System.Text.RegularExpressions.Regex.IsMatch(line.ToLowerInvariant(), @"^progress: "))
                     return;
             }
+            else if (audioJob.Settings is AC3Settings || audioJob.Settings is MP2Settings)
+            {
+                if (System.Text.RegularExpressions.Regex.IsMatch(line.ToLowerInvariant(), @"^size= "))
+                    return;
+            }
 
             if (stream == StreamType.Stderr)
                 _encoderStdErr += line + "\n";
