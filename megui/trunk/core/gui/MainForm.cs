@@ -1054,6 +1054,7 @@ namespace MeGUI
 
             PackageSystem.JobProcessors.Register(ffmpegEncoder.Factory);
             PackageSystem.JobProcessors.Register(x264Encoder.Factory);
+            PackageSystem.JobProcessors.Register(x265Encoder.Factory);
             PackageSystem.JobProcessors.Register(XviDEncoder.Factory);
 
             PackageSystem.JobProcessors.Register(MkvMergeMuxer.Factory);

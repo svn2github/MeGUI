@@ -787,6 +787,14 @@
     <Compile Include="packages\video\x264\x264SettingsHandler.cs" />
     <Compile Include="packages\video\x264\x264Encoder.cs" />
     <Compile Include="packages\video\x264\x264Settings.cs" />
+    <Compile Include="packages\video\x265\x265ConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\video\x265\x265ConfigurationPanel.Designer.cs">
+      <DependentUpon>x265ConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\video\x265\x265Settings.cs" />
+    <Compile Include="packages\video\x265\x265Encoder.cs" />
     <Compile Include="packages\video\xvid\xvidConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1063,6 +1071,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>x264ConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="packages\video\x265\x265ConfigurationPanel.resx">
+      <DependentUpon>x265ConfigurationPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="packages\video\xvid\xvidConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>xvidConfigurationPanel.cs</DependentUpon>
@@ -1116,8 +1128,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>cmd /c "SubWCRev $(ProjectDir) $(ProjectDir)AssemblyInfo.template $(ProjectDir)AssemblyInfo.cs&amp;&amp;exit 0"
-</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
     <PostBuildEvent>MOVE /Y "$(TargetDir)lib_$(PlatformName)\*.*" "$(TargetDir)"
 RD /S /Q "$(TargetDir)lib_$(PlatformName)"</PostBuildEvent>
   </PropertyGroup>

@@ -37,6 +37,8 @@ namespace MeGUI.core.details.video
         private double bytesPerFrame;
         private bool advancedToolTips;
         protected int lastEncodingMode = 0;
+        protected int lastBitrateEncodingValue = 1000;
+        protected int lastQuantizerEncodingValue = 32;
 
         private bool loaded;
         protected string input = "input", output = "output", encoderPath = "program";

@@ -33,6 +33,8 @@ using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
 using MeGUI.packages.tools.oneclick;
 using MeGUI.packages.video.x264;
+using MeGUI.packages.video.x265;
+using MeGUI.packages.video.xvid;
 
 namespace MeGUI
 {
@@ -53,7 +55,8 @@ namespace MeGUI
             this.path = path;
             profileGroups.Add(new ProfileGroup(typeof(VideoCodecSettings), "Video"));
             SafeRegister<x264Settings, x264ConfigurationPanel>("Video");
-            SafeRegister<xvidSettings, MeGUI.packages.video.xvid.xvidConfigurationPanel>("Video");
+            SafeRegister<x265Settings, x265ConfigurationPanel>("Video");
+            SafeRegister<xvidSettings, xvidConfigurationPanel>("Video");
             profileGroups.Add(new ProfileGroup(typeof(AudioCodecSettings), "Audio"));
             SafeRegister<AftenSettings, MeGUI.packages.audio.aften.AftenConfigurationPanel>("Audio");
             SafeRegister<AC3Settings, MeGUI.packages.audio.ffac3.AC3ConfigurationPanel>("Audio");

@@ -103,6 +103,11 @@ namespace MeGUI
                 switch (this.name)
                 {
                     case "base": arrPath.Add(System.Windows.Forms.Application.ExecutablePath); break;
+                    case "x265":
+                        arrPath.Add(MainForm.Instance.Settings.X265Path);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265Path);
+                        arrPath.Add(System.IO.Path.Combine(strPath, "avs4x265.exe"));
+                        break;
                     case "x264":
                         {
                             arrPath.Add(MainForm.Instance.Settings.X264Path);
@@ -681,6 +686,8 @@ namespace MeGUI
                             return meGUISettings.AviMuxGUIPath;
                         case ("avs"):
                             return meGUISettings.AviSynthPath;
+                        case ("x265"):
+                            return meGUISettings.X265Path;
                         case ("x264"):
                             return meGUISettings.X264Path;
                         case ("x264_10b"):
@@ -1028,6 +1035,11 @@ namespace MeGUI
                 }
 #endif
             }
+
+            // x265
+            arrPath.Add(MainForm.Instance.Settings.X265Path);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265Path);
+            arrPath.Add(System.IO.Path.Combine(strPath, "avs4x265.exe"));
 
             // dgindex
             arrPath.Add(MainForm.Instance.Settings.DgIndexPath);

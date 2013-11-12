@@ -519,7 +519,7 @@ namespace MeGUI
                                 infoLog.Info("FrameRateOriginal: " + track.FrameRateOriginal);
 
                             }
-                            infoLog.LogEvent("fps cannot be determined. 23.976 will be used as default.", ImageType.Error);
+                            infoLog.LogEvent("fps cannot be determined. 23.976 will be used as default.", ImageType.Warning);
                         }
                         _VideoInfo.FPS = (double)fps;
                     }

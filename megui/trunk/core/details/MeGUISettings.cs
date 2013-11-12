@@ -54,7 +54,7 @@ namespace MeGUI
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4, flacPath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath,
                        mkvExtractPath, appendToForcedStreams, pgcDemuxPath, lastUsedOneClickFolder, lastUpdateServer,
-                       x26410BitsPath;
+                       x26410BitsPath, x265Path;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll,
@@ -116,6 +116,7 @@ namespace MeGUI
             if (OSInfo.isWow64())
                 b64bitX264 = true;
 #endif
+            x265Path = getDownloadPath(@"tools\x265\x265.exe");
             dgIndexPath = getDownloadPath(@"tools\dgindex\dgindex.exe");
             ffmsIndexPath = getDownloadPath(@"tools\ffms\ffmsindex.exe");
             xvidEncrawPath = getDownloadPath(@"tools\xvid_encraw\xvid_encraw.exe");
@@ -685,6 +686,15 @@ namespace MeGUI
 		{
 			get {return x264Path;}
 		}
+
+
+        /// <summary>
+        /// filename and full path of the x265 executable
+        /// </summary>
+        public string X265Path
+        {
+            get { return x265Path; }
+        }
 
         /// <summary>
         /// filename and full path of the x264 10b executable

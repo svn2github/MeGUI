@@ -478,6 +478,7 @@ namespace MeGUI
             supportedVideoTypes.Add(VideoType.RAWASP);
             supportedVideoTypes.Add(VideoType.RAWAVC);
             supportedVideoTypes.Add(VideoType.RAWAVC2);
+            supportedVideoTypes.Add(VideoType.RAWHEVC);
             supportedVideoTypes.Add(VideoType.MPEG2);
             supportedVideoTypes.Add(VideoType.MP4);
             supportedAudioTypes.Add(AudioType.AC3);
@@ -1121,6 +1122,7 @@ namespace MeGUI
             : base()
         {
             this.RegisterEncoder(new X264EncoderProvider());
+            this.RegisterEncoder(new X265EncoderProvider());
             this.RegisterEncoder(new XviDEncoderProvider());
         }
     }
@@ -1173,6 +1175,22 @@ namespace MeGUI
         public override IJobProcessor CreateEncoder(MeGUISettings settings)
         {
             return new x264Encoder(settings.X264Path);
+        }
+    }
+
+    public class X265EncoderProvider : EncodingProvider<VideoCodec, VideoType, VideoEncoderType>
+    {
+        public X265EncoderProvider()
+        {
+            supportedCodecs.Add(VideoCodec.HEVC);
+            supportedTypes.Add(VideoType.MP4); 
+            supportedTypes.Add(VideoType.RAWHEVC);
+            supportedEncoderTypes.Add(VideoEncoderType.X265);
+        }
+
+        public override IJobProcessor CreateEncoder(MeGUISettings settings)
+        {
+            return new x265Encoder(settings.X265Path);
         }
     }
     #endregion
