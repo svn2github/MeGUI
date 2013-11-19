@@ -410,7 +410,7 @@ namespace MeGUI
                     }
 
                     VideoCodecSettings settings = GetCurrentVideoSettings();
-                    if (settings != null && settings.SettingsID != "x264") // mod16 restriction
+                    if (settings != null && !settings.SettingsID.Equals("x264") && !settings.SettingsID.Equals("x265")) // mod16 restriction
                     {
                         if (avi.Clip.VideoHeight % 16 != 0 ||
                             avi.Clip.VideoWidth % 16 != 0)

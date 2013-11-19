@@ -111,7 +111,7 @@ namespace MeGUI
 
                     if (job.Settings.EncodingMode == 1) // QP mode
                         stats.LogValue("Constant Quantizer Mode", "Quantizer " + job.Settings.BitrateQuantizer + " computed...");
-                    else if (job.Settings.EncodingMode == 9) // CRF mode
+                    else if (job.Settings.EncodingMode == 9 || (job.Settings is x265Settings && job.Settings.EncodingMode == 2)) // CRF mode
                         stats.LogValue("Constant Quality Mode", "Quality " + job.Settings.BitrateQuantizer + " computed...");
                     else
                         stats.LogValue("Video Bitrate Desired", job.Settings.BitrateQuantizer + " kbit/s");

@@ -1,3 +1,5 @@
+2423 [x265] fixed default encoding mode
+2422 [x265] added basic x265 encoding support
 2421 [Log] do not log progress messages from the FFMpeg encoder
 2420 delete devil.dll in the MeGUI root folder if avisynth.dll is not available also
 2419 [Update] added possibility to use display names for the update files

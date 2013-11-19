@@ -181,15 +181,14 @@ namespace MeGUI
             VideoCodecSettings vSettings = this.CurrentSettings.Clone();
 
             string videoOutput = info.VideoOutput;
-            if (vSettings.SettingsID.Equals("x264") && (MainForm.Instance.Settings.UseExternalMuxerX264) || (fileType.Text.Equals("MP4")))
+            if ((vSettings.SettingsID.Equals("x264") || vSettings.SettingsID.Equals("x265")) 
+                && (MainForm.Instance.Settings.UseExternalMuxerX264 || (fileType.Text.Equals("MP4"))))
             {
-                if (!fileType.Text.Equals("RAWAVC"))
+                if (!fileType.Text.Equals("RAWAVC") && vSettings.SettingsID.Equals("x264"))
                     videoOutput = Path.ChangeExtension(videoOutput, "264");
-            }
-            if (vSettings.SettingsID.Equals("x265") && (MainForm.Instance.Settings.UseExternalMuxerX264) || (fileType.Text.Equals("MP4")))
-            {
-                if (!fileType.Text.Equals("RAWHEVC"))
+                else if (!fileType.Text.Equals("RAWAVC"))
                     videoOutput = Path.ChangeExtension(videoOutput, "hevc");
+                    
             }
 
             JobChain prepareJobs = mainForm.JobUtil.AddVideoJobs(info.VideoInput, videoOutput, this.CurrentSettings.Clone(),
@@ -197,39 +196,18 @@ namespace MeGUI
 
             if ((MainForm.Instance.Settings.UseExternalMuxerX264) || (fileType.Text.Equals("MP4")))
             {
-                if ((vSettings.SettingsID.Equals("x264")) && (!fileType.Text.Equals("RAWAVC")))
+                if ((vSettings.SettingsID.Equals("x264") || vSettings.SettingsID.Equals("x265")) && (!fileType.Text.Equals("RAWAVC")))
                 {
                     // create job
                     MuxJob mJob = new MuxJob();
                     mJob.Input = videoOutput;
 
-                    if (fileType.Text.Equals("MKV"))
+                    if (vSettings.SettingsID.Equals("x264") && fileType.Text.Equals("MKV"))
                     {
                         mJob.MuxType = MuxerType.MKVMERGE;
                         mJob.Output = Path.ChangeExtension(videoOutput, "mkv");
                     }
-                    else if (fileType.Text.Equals("MP4"))
-                    {
-                        mJob.MuxType = MuxerType.MP4BOX;
-                        mJob.Output = Path.ChangeExtension(videoOutput, "mp4");
-                    }
-
-                    mJob.Settings.MuxAll = true;
-                    mJob.Settings.Framerate = decimal.Round((decimal)FrameRate,3,MidpointRounding.AwayFromZero);
-                    mJob.Settings.MuxedInput = mJob.Input;
-                    mJob.Settings.MuxedOutput = mJob.Output;
-                    mJob.FilesToDelete.Add(videoOutput);
-
-                    // add job to queue
-                    prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(mJob));
-                }
-                else if ((vSettings.SettingsID.Equals("x265")) && (!fileType.Text.Equals("RAWHEVC")))
-                {
-                    // create job
-                    MuxJob mJob = new MuxJob();
-                    mJob.Input = videoOutput;
-
-                    if (fileType.Text.Equals("MP4"))
+                    else
                     {
                         mJob.MuxType = MuxerType.MP4BOX;
                         mJob.Output = Path.ChangeExtension(videoOutput, "mp4");
@@ -264,7 +242,7 @@ namespace MeGUI
         private void updateIOConfig()
         {
             int encodingMode = CurrentSettings.EncodingMode;
-            if (encodingMode == 2 || encodingMode == 5) // first pass
+            if (!(CurrentSettings is x265Settings) && encodingMode == 2 || encodingMode == 5) // first pass
             {
                 videoOutput.Enabled = false;
             }
