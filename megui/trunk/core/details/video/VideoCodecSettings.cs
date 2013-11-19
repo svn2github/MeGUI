@@ -89,7 +89,12 @@ namespace MeGUI
         }
 		public int EncodingMode
 		{
-			get { return encodingMode; }
+			get 
+            {
+                if (id.Equals("x265") && encodingMode > 2)
+                    encodingMode = 2;
+                return encodingMode; 
+            }
 			set { encodingMode = value; }
 		}
 		public int BitrateQuantizer
