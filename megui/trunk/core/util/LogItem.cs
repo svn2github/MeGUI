@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -200,21 +200,8 @@ namespace MeGUI.core.util
         private void WriteLogEntry()
         {
             StringBuilder res = new StringBuilder();
-
-            try
-            {
-                MainForm.Instance.LogLock.WaitOne(10000, false);
-                res.AppendFormat("{0}[{1}] {2}{3}", dashes(iLevel), Type, Text, Environment.NewLine);
-                System.IO.File.AppendAllText(MainForm.Instance.LogFile, res.ToString());
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Error writing log file", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                MainForm.Instance.LogLock.Release();
-            }
+            res.AppendFormat("{0}[{1}] {2}{3}", dashes(iLevel), Type, Text, Environment.NewLine);
+            FileUtil.WriteToFile(MainForm.Instance.LogFile, res.ToString(), true);
         }
 
         private static string dashes(int number)

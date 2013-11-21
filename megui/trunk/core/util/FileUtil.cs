@@ -568,5 +568,24 @@ namespace MeGUI.core.util
             return v;
         }
 
+        private static object _locker = new object();
+        public static void WriteToFile(string fileName, string text, bool append)
+        {
+            try
+            {
+                lock (_locker)
+                {
+                    if (append)
+                        System.IO.File.AppendAllText(fileName, text);
+                    else
+                        System.IO.File.WriteAllText(fileName, text);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error writing file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }

@@ -56,8 +56,6 @@ namespace MeGUI
         private ITaskbarList3 taskbarItem;
         private Icon taskbarIcon;
         private string strLogFile;
-        private Semaphore logLock;
-        private int avsLock;
         private LogItem _oneClickLog;
         private LogItem _aVSScriptCreatorLog;
         private LogItem _fileIndexerLog;
@@ -66,8 +64,6 @@ namespace MeGUI
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
         public bool IsOverlayIconActive { get { return taskbarIcon != null; } }
         public string LogFile { get { return strLogFile; } }
-        public Semaphore LogLock { get { return logLock; } set { logLock = value; } }
-        public int AvsLock { get { return avsLock; } set { avsLock = value; } }
         public LogItem OneClickLog { get { return _oneClickLog; } set { _oneClickLog = value; } }
         public LogItem AVSScriptCreatorLog { get { return _aVSScriptCreatorLog; } set { _aVSScriptCreatorLog = value; } }
         public LogItem FileIndexerLog { get { return _fileIndexerLog; } set { _fileIndexerLog = value; } }
@@ -139,18 +135,7 @@ namespace MeGUI
             string strMeGUILogPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\logs";
             FileUtil.ensureDirectoryExists(strMeGUILogPath);
             strLogFile = strMeGUILogPath + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
-            logLock = new Semaphore(1, 1);
-            avsLock = 0;
-            try
-            {
-                logLock.WaitOne(10000, false);
-                File.WriteAllText(strLogFile, "Preliminary log file only. During closing of MeGUI the well formed log file will be written.\r\n\r\n");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Log File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            logLock.Release();
+            FileUtil.WriteToFile(strLogFile, "Preliminary log file only. During closing of MeGUI the well formed log file will be written.\r\n\r\n", false);
             Instance = this;
             constructMeGUIInfo();
             InitializeComponent();
@@ -451,24 +436,14 @@ namespace MeGUI
         public void saveLog()
         {
             string text = Log.ToString();
-            try
-            {
-                logLock.WaitOne(10000, false);
-                File.WriteAllText(strLogFile, text);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Log file cannot be saved", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                logLock.Release();
-            }
+            FileUtil.WriteToFile(strLogFile, text, false);
         }
+
         private void exitMeGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
+
         /// <summary>
         /// returns the profile manager to whomever might require it
         /// </summary>

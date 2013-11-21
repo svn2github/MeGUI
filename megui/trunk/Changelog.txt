@@ -1,3 +1,4 @@
+2425 [Queue] fixed crash if more than one worker is opening an avs script
 2424 [x265] fixed default encoding mode part II
 2423 [x265] fixed default encoding mode
 2422 [x265] added basic x265 encoding support

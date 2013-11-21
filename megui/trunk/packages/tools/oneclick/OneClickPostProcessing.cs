@@ -718,7 +718,7 @@ namespace MeGUI
             if (error || info == null)
             {
                 LogItem oSourceLog = _log.LogEvent("Source detection");
-                oSourceLog.LogEvent("Source detection failed: " + errorMessage, ImageType.Warning);
+                oSourceLog.LogValue("Source detection failed", errorMessage, ImageType.Warning);
                 filters = new DeinterlaceFilter[] {
                 new DeinterlaceFilter("Error", "#An error occurred in source detection. Doing no processing")};
                 interlaced = false;
