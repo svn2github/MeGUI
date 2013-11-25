@@ -104,9 +104,12 @@ namespace MeGUI
                 {
                     case "base": arrPath.Add(System.Windows.Forms.Application.ExecutablePath); break;
                     case "x265":
-                        arrPath.Add(MainForm.Instance.Settings.X265Path);
-                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265Path);
-                        arrPath.Add(System.IO.Path.Combine(strPath, "avs4x265.exe"));
+                        if (MainForm.Instance.Settings.UseX265)
+                        {
+                            arrPath.Add(MainForm.Instance.Settings.X265Path);
+                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265Path);
+                            arrPath.Add(System.IO.Path.Combine(strPath, "avs4x265.exe"));
+                        }
                         break;
                     case "x264":
                         {
@@ -1037,9 +1040,12 @@ namespace MeGUI
             }
 
             // x265
-            arrPath.Add(MainForm.Instance.Settings.X265Path);
-            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265Path);
-            arrPath.Add(System.IO.Path.Combine(strPath, "avs4x265.exe"));
+            if (MainForm.Instance.Settings.UseX265)
+            {
+                arrPath.Add(MainForm.Instance.Settings.X265Path);
+                strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265Path);
+                arrPath.Add(System.IO.Path.Combine(strPath, "avs4x265.exe"));
+            }
 
             // dgindex
             arrPath.Add(MainForm.Instance.Settings.DgIndexPath);
@@ -1271,6 +1277,8 @@ namespace MeGUI
                         if (file.Name.Equals("dgindexnv") && !MainForm.Instance.Settings.UseDGIndexNV)
                             continue;
                         if (file.Name.Equals("qaac") && !MainForm.Instance.Settings.UseQAAC)
+                            continue;
+                        if (file.Name.Equals("x265") && !MainForm.Instance.Settings.UseX265)
                             continue;
                         this.upgradeData.Add(file);
                     }
@@ -1543,6 +1551,8 @@ namespace MeGUI
             if (node.Name.Equals("qaac") && !MainForm.Instance.Settings.UseQAAC)
                 return;
             if (node.Name.Equals("x264_10b") && !MainForm.Instance.Settings.Use10bitsX264)
+                return;
+            if (node.Name.Equals("x265") && !MainForm.Instance.Settings.UseX265)
                 return;
 
             var nameAttribute = node.Attributes["platform"];

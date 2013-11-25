@@ -60,7 +60,8 @@ namespace MeGUI
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll,
                      alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU, bUse10BitsX264,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bUseQAAC,
-                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc, bExternalMuxerX264;
+                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc, bExternalMuxerX264,
+                     bUseX265;
         private ulong audioSamplesPerUpdate;
         private decimal forceFilmThreshold, acceptableFPSError;
         private int nbPasses, autoUpdateServerSubList, minComplexity, updateFormSplitter,
@@ -202,7 +203,7 @@ namespace MeGUI
             startColumnWidth = 55;
             endColumnWidth = 55;
             fpsColumnWidth = 35;
-            bEnsureCorrectPlaybackSpeed = bUseDGIndexNV = bUseNeroAacEnc = bUseQAAC = false;
+            bEnsureCorrectPlaybackSpeed = bUseDGIndexNV = bUseNeroAacEnc = bUseQAAC = bUseX265 = false;
             ffmsThreads = 1;
             appendToForcedStreams = "";
             ocGUIMode = OCGUIMode.Default;
@@ -1248,6 +1249,12 @@ namespace MeGUI
             set { bUseQAAC = value; }
         }
 
+        public bool UseX265
+        {
+            get { return bUseX265; }
+            set { bUseX265 = value; }
+        }
+
         #endregion
 
         private bool bAutoUpdateSession;
@@ -1281,6 +1288,11 @@ namespace MeGUI
         public bool IsQAACAvailable()
         {
             return bUseQAAC && System.IO.File.Exists(qaacPath);
+        }
+
+        public bool IsX265Available()
+        {
+            return bUseX265 && System.IO.File.Exists(x265Path);
         }
 
         public bool IsDGIIndexerAvailable()

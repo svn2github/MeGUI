@@ -1,3 +1,69 @@
+2418 [Main] improved Windows 7/8 support
+2417 [Queue] fixed crash when opening the right click menu (regression of 2402)
+2416 [Log] added .NET 4.5.1 detection
+2415 [Log] added Windows 8.1 detection
+2414 [x264] if --bluray-compat is used without a BluRay device selected:
+            --ref is restricted to 6
+            --bframes is restricted to 3
+            --slices 4 is not forced anymore
+2413 [OneClick] fixed option to set a language by default if it cannot be determined (regression of 2363)
+2412 [Update] enabled megui.xvidvideo.ru again
+2411 [x264] fixed wrong number format of the zone modifier in same cases
+2410 [Settings] sort the default languages alphabetically
+2409 [Update] fixed grammar/spelling errors
+2408 [AviSynth] fixed DirectShowSource in non-portable mode (regression of 2406)
+2407 [Update] disabled megui.xvidvideo.ru mirror as it is out of sync
+2406 [AviSynth] only load portable DirectShowSource.dll if portable mode is used
+2405 [Log] improved avs log information
+2404 [MediaInfo] ignore phantom audio tracks
+2403 [M2TS Muxer] added A_LPCM as Audio Codec ID for WAV/PCM files. Bug #730
+2402 [Queue] extended "Open" option to open input/output files/folders and in any job state if available
+2401 [Audio Encoder] fixed TimeStretch support for 23.976 <--> 25 fps conversion (regression of 2383)
+2400 [MediaInfo] added log output if fps cannot be determined
+2399 [x264] if --bluray-compat is used without a BluRay device selected:
+            --open-gop is not forced anymore
+            --weightp is restricted to 0 or 1
+2398 [Queue] allowed to open output folder when job is done. This is available via the right click on the Job Queue.
+2397 [MediaInfo] use 23.976 instead of 99 as default value if fps cannot be determined
+2396 [AutoEncode] fixed mp4 output (regression of 2381)
+2395 [x264] only download 10bit files if enabled
+2394 [x264] added x264 10bit to the update server
+2393 [Main] create external job muxer jobs with dependencies (regression of 2381)
+2392 [x264] added 10 bit encoding support. This can be enabled through the MeGUI settings. Thanks to Detmek for the tests.
+2391 [Aften] do not log progress messages
+2390 [OneClick] improved AddBorders calculation for AviSynth 2.6
+2389 [Main] updated the correct video output file extension according to the muxer used (regression of 2381)
+2388 [x264] added --stitchable option (requires x264 revision 2345+)
+2387 [Update] update server will not be changed during every update check
+2386 [AVS Script Creator] changed default mod value to 8
+2385 [Main] added FrameRate information concerning external JobMuxer
+2384 [MediaInfo] added Bits Depth information in the log
+2383 [Audio Encoder] added TimeStretch support. Feature Request #493
+2382 [x264] force to use external mp4 muxer because the current x264 build doesn't have the mp4 support
+2381 [x264] introduced external muxer job feature for the x264 encoder (only MKV & MP4). Can be enabled/disabled through the MeGUI settings. 
+2380 [AVS Script Creator] fixed a crash when opening first a smaller and then a bigger input file
+2379 [Audio Encoder] added 32000 Hz as Sample Rate. Feature Request #518
+2378 [OneClick] A_MS/ACM (PCM) audio tracks in MKV files will be extracted with eac3to
+2377 [QAAC] added "no delay" feature
+2376 [Log] changed format of some date/times
+2375 [OneClick] fixed anamorphic encodings (regression of 2357)
+2373 [MP4 Muxer] default GPAC string will be erased
+2372 [MP4 Muxer] added TTXT Subtitles Files support. Feature request #437
+2370 [OneClick] fixed "close after Go!" in batch mode
+2369 [x264] disabled direct mp4 output as the official builds do not have this support enabled
+2368 [OneClick] fixed internal chapters wrongly detected in VOB files
+                enhanced logging
+2367 [MainForm] show avs script errors. Feature request #513
+2366 [Opus] raised default bitrate to 96 Kbps
+2365 [x264] allow max bitrate up to 300000 Kbps instead of 100000 Kbps
+2364 [Opus] allow max bitrate up to 512 Kbps. Feature request #512
+2363 [OneClick] added option to set a language by default if it cannot be determined
+2362 [Chapter Creator] automatically preselect chapter file name
+2361 [AVS Script Creator] fixed not possible to change the height (regression of 2357)
+2360 [OneClick] fixed using a resolution of 16x16 or lower in some cases (regression of 2357)
+2359 [OneClick] fixed adding only the first track when using File\Open in the MainForm. Bug #724
+2358 [MediaInfo] enhanced handling of incorrect avs files. Bug #722
+2357 [AVS Script Creator] + [OneClick] aligned resolution calculation of both tools
 2356 [OneClick] + [HD Streams Extractor] fixed detection of Blu-Ray if not using the root folder of the BD. Bug #721
 2355 [OneClick] added option to disable intermediate MKV files
 2354 [MainForm] improved File\Open and drag & drop handling

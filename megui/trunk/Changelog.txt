@@ -1,3 +1,4 @@
+2426 [x265] added option to enable/disable x265 in the MeGUI settings (disabled by default)
 2425 [Queue] fixed crash if more than one worker is opening an avs script
 2424 [x265] fixed default encoding mode part II
 2423 [x265] fixed default encoding mode
@@ -7,72 +8,58 @@
 2419 [Update] added possibility to use display names for the update files
               added possibility to use .NET requirements for the update files
               improved error handling and log output
-2418 [Main] improved Windows 7/8 support
-2417 [Queue] fixed crash when opening the right click menu (regression of 2402)
-2416 [Log] added .NET 4.5.1 detection
-2415 [Log] added Windows 8.1 detection
-2414 [x264] if --bluray-compat is used without a BluRay device selected:
-            --ref is restricted to 6
-            --bframes is restricted to 3
-            --slices 4 is not forced anymore 
-2413 [OneClick] fixed option to set a language by default if it cannot be determined (regression of 2363)
-2412 [Update] enabled megui.xvidvideo.ru again
-2411 [x264] fixed wrong number format of the zone modifier in same cases
-2410 [Settings] sort the default languages alphabetically
-2409 [Update] fixed grammar/spelling errors
-2408 [AviSynth] fixed DirectShowSource in non-portable mode (regression of 2406)
-2407 [Update] disabled megui.xvidvideo.ru mirror as it is out of sync
-2406 [AviSynth] only load portable DirectShowSource.dll if portable mode is used
-2405 [Log] improved avs log information
-2404 [MediaInfo] ignore phantom audio tracks
-2403 [M2TS Muxer] added A_LPCM as Audio Codec ID for WAV/PCM files. Bug #730
-2402 [Queue] extended "Open" option to open input/output files/folders and in any job state if available
-2401 [Audio Encoder] fixed TimeStretch support for 23.976 <--> 25 fps conversion (regression of 2383)
-2400 [MediaInfo] added log output if fps cannot be determined
-2399 [x264] if --bluray-compat is used without a BluRay device selected:
-            --open-gop is not forced anymore
-            --weightp is restricted to 0 or 1
-2398 [Queue] allowed to open output folder when job is done. This is available via the right click on the Job Queue.
-2397 [MediaInfo] use 23.976 instead of 99 as default value if fps cannot be determined
-2396 [AutoEncode] fixed mp4 output (regression of 2381)
-2395 [x264] only download 10bit files if enabled
-2394 [x264] added x264 10bit to the update server
-2393 [Main] create external job muxer jobs with dependencies (regression of 2381)
-2392 [x264] added 10 bit encoding support. This can be enabled through the MeGUI settings. Thanks to Detmek for the tests.
-2391 [Aften] do not log progress messages
-2390 [OneClick] improved AddBorders calculation for AviSynth 2.6
-2389 [Main] updated the correct video output file extension according to the muxer used (regression of 2381)
-2388 [x264] added --stitchable option (requires x264 revision 2345+)
-2387 [Update] update server will not be changed during every update check
-2386 [AVS Script Creator] changed default mod value to 8
-2385 [Main] added FrameRate information concerning external JobMuxer
-2384 [MediaInfo] added Bits Depth information in the log
-2383 [Audio Encoder] added TimeStretch support. Feature Request #493
-2382 [x264] force to use external mp4 muxer because the current x264 build doesn't have the mp4 support
-2381 [x264] introduced external muxer job feature for the x264 encoder (only MKV & MP4). Can be enabled/disabled through the MeGUI settings. 
-2380 [AVS Script Creator] fixed a crash when opening first a smaller and then a bigger input file
-2379 [Audio Encoder] added 32000 Hz as Sample Rate. Feature Request #518
-2378 [OneClick] A_MS/ACM (PCM) audio tracks in MKV files will be extracted with eac3to
-2377 [QAAC] added "no delay" feature
-2376 [Log] changed format of some date/times
-2375 [OneClick] fixed anamorphic encodings (regression of 2357)
-2373 [MP4 Muxer] default GPAC string will be erased
-2372 [MP4 Muxer] added TTXT Subtitles Files support. Feature request #437
-2370 [OneClick] fixed "close after Go!" in batch mode
-2369 [x264] disabled direct mp4 output as the official builds do not have this support enabled
-2368 [OneClick] fixed internal chapters wrongly detected in VOB files
-                enhanced logging
-2367 [MainForm] show avs script errors. Feature request #513
-2366 [Opus] raised default bitrate to 96 Kbps
-2365 [x264] allow max bitrate up to 300000 Kbps instead of 100000 Kbps
-2364 [Opus] allow max bitrate up to 512 Kbps. Feature request #512
-2363 [OneClick] added option to set a language by default if it cannot be determined
-2362 [Chapter Creator] automatically preselect chapter file name
-2361 [AVS Script Creator] fixed not possible to change the height (regression of 2357)
-2360 [OneClick] fixed using a resolution of 16x16 or lower in some cases (regression of 2357)
-2359 [OneClick] fixed adding only the first track when using File\Open in the MainForm. Bug #724
-2358 [MediaInfo] enhanced handling of incorrect avs files. Bug #722
-2357 [AVS Script Creator] + [OneClick] aligned resolution calculation of both tools
+
+Changelog 2356 --> 2418
+
+Features/Changes:
+[x264] added 10 bit encoding support. This must be enabled through the MeGUI settings if you want to use it.
+[x264] disabled direct mp4 output as the official builds do not have this support enabled anymore.
+[x264] therefore introduced external muxer job feature for the x264 encoder (only MKV & MP4). Can be changed through the MeGUI settings.
+[x264] forced to use external mp4 muxer in any case
+
+Enhancements/Fixes:
+[Aften] do not log progress messages
+[Audio Encoder] added 32000 Hz as Sample Rate. Feature Request #518
+[Audio Encoder] added TimeStretch support. Feature Request #493
+[AviSynth] only load portable DirectShowSource.dll if portable mode is used
+[AVS Script Creator] + [OneClick] aligned resolution calculation of both tools
+[AVS Script Creator] changed default mod value to 8
+[AVS Script Creator] fixed a crash when opening first a smaller (width/height) and then a bigger input file
+[Chapter Creator] automatically preselect chapter file name
+[Log] changed format of some date/times
+[Log] improved avs log information
+[M2TS Muxer] added A_LPCM as Audio Codec ID for WAV/PCM files. Bug #730
+[Main] improved Windows 7/8 support. Added .NET 4.5.1 and Windows 8.1 detection
+[MainForm] show avs script errors. Feature request #513
+[MediaInfo] added Bits Depth information in the log
+[MediaInfo] enhanced handling of incorrect avs files. Bug #722
+[MediaInfo] ignore phantom audio tracks
+[MediaInfo] use 23.976 instead of 99 as default value if fps cannot be determined
+[MP4 Muxer] added TTXT Subtitles Files support. Feature request #437
+[MP4 Muxer] default GPAC string will be erased
+[OneClick] A_MS/ACM (PCM) audio tracks in MKV files will be extracted with eac3to
+[OneClick] added option to set a language by default if it cannot be determined
+[OneClick] fixed "close after Go!" in batch mode
+[OneClick] fixed adding only the first track when using File\Open in the main window. Bug #724
+[OneClick] fixed internal chapters wrongly detected in VOB files
+[OneClick] improved AddBorders calculation for AviSynth 2.6
+[Opus] allow max bitrate up to 512 Kbps. Feature request #512
+[Opus] raised default bitrate to 96 Kbps
+[QAAC] added "no delay" feature
+[Queue] open input/output files/folders and in any job state (right click on the job queue)
+[Settings] sort the default languages alphabetically
+[Update] fixed grammar/spelling errors
+[Update] update server will not be changed during every update check
+[x264] added --stitchable option (requires x264 revision 2345+)
+[x264] allow max bitrate up to 300000 Kbps instead of 100000 Kbps
+[x264] fixed wrong number format of the zone modifier in same cases
+[x264] if --bluray-compat is used without a BluRay device selected:
+       --bframes is restricted to 3
+       --open-gop is not forced anymore
+       --ref is restricted to 6
+       --slices 4 is not forced anymore 
+       --weightp is restricted to 0 or 1
+
 
 Changelog 2341 --> 2356
 
@@ -97,123 +84,10 @@ Enhancements/Fixes:
 [x264] fixed wrong detection of errors if file name contains "error"
 [x264] vbv values are shown in red if the values are too high or not limited
 
-
-Changelog 2308 --> 2341
-
-Features/Changes:
-[x264] extended apple device profile support and removed/merged some others
-[x264] added vbv restrictions based on the selected AVC level
-[OneClick] improved muxing into intermediate MKV
-[MKV Muxer] improved playback performance with some players (requires MkvMerge 5.9.0+)
-
-Enhancements/Fixes:
-[AVS Script Creator] fixed missing DAR values in the AVS script if using "Clever (TM) anamorphic encoding"
-[File Indexer] enhanced index file selection behavior
-[MKV Muxer] enhanced projected file size calculation if using intermediate MKV files
-[OneClick] enhanced generation of demux file names
-[OneClick] fixed a problem when aborting during automatic deinterlacing
-[OneClick] fixed audio delay handling if pgcdemux will be used together with an intermediate MKV file
-[OneClick] fixed AVS audio processing. Bug #711
-[OneClick] fixed missing subtitle tracks if using intermediate MKV files. Bug #710
-[OneClick] fixed not removing chapter option if selected input file has no internal chapters
-[OneClick] improved working path detection
-[OneClick] modified "and open next" behavior
-[OneClick] not correctly extracted subtitle files will be ignored
-[OneClick] set "Force using Key-Frames for chapters marks" even if "Don't encode video" is checked
-[OneClick] the audio track encode selection will not be disabled anymore
-[x264] added "stillimage" to the psy tunings and moved "zerolatency" and "fastdecode" to the misc tab
-[x264] added AVC levels 1b and 5.2
-[x264] log enhancement
-[x264] set default --crf value to 23
-
-
-Changelog 2296 --> 2308
-
-Features/Changes:
-[AVS Script Creator] removed cropping limit
-[MP4 Muxer] allow Nero & Apple Chapters styles muxing for better interoperability with players. Patch by Eli Bildirici (#66)
-
-Enhancements/Fixes:
-[AVS Script Creator] added detailed analysis result to the log
-[AVS Script Creator] fixed "TDeint (with EDI + BOB)"
-[AVS Script Creator] fixed not applying film when manually choosing "Partially film"
-[AVS Script Creator] fixed recreating the index file during "Analyse" if using FFMS with a non-default index file location
-[AVS Script Creator] fixed wrong resize values in some cases if using cropping without anamorphic encoding
-[MediaInfo] fixed wrong aspect ratio if using anamorphic AVS files
-[MediaInfo] fixed wrong aspect ratio in some cases
-[MKV Demuxer] fixed wrong detection of errors if file name contains "error"
-[MP4 Muxer] avoid quote truncation within Chapters Names. Patch by Eli Bildirici (#66)
-[MP4 Muxer] cosmetic - "disable" instead of "disabled" parameter
-
-
-Changelog 2287 --> 2296
-
-Features/Changes:
-- added support for Apple TV & iPad in the MP4 muxer
-
-Enhancements/Fixes:
-[AVS Cutter] fixed not fading to black
-[AVS Script Creator] fixed "Clever (TM) anamorphic encoding" if using "Encode non-mod 16"
-[AVS Script Creator] removed "Successfully converted to YV12" message
-[M2TS Muxer] disabled pure TrueHD as it is not supported by tsMuxeR
-[OneClick] fixed some "index out of bounds" errors. Bug #703 + #707
-[OneClick] only supported subtitle tracks will be added
-[x264] fixed --crf and --partitions not set to default settings for new MeGUI installations
-
-
-Changelog 2237 --> 2287
-
-Features/Changes:
-- enhanced AVS Script Creator (read details in the block below) 
-- added BassAudioSource() as audio decoder
-  the default order is now: NicAudio, BassAudio, FFAudioSource, DirectShow
-- enhanced OneClick e.g. mux input files into MKV if possible for better audio/video processing support
-
-Enhancements/Fixes:
-[Adaptive Muxer] fixed handling of the "and close" button
-[Audio Encoding Window] cosmetics
-[Audio] changed default value of the normalization to disabled
-[AVS Script Creator] added "Aspect Ratio Error"
-[AVS Script Creator] added option to enable upsizing in the profile (disabled by default)
-[AVS Script Creator] added option to select the default mod value in the profile (mod16 by default)
-[AVS Script Creator] adjusted "Clever (TM) anamorphic encoding" so the new mod values are used
-[AVS Script Creator] always show the correct output resolution when not resizing
-[AVS Script Creator] even with upsizing allowed the default resolution will use no upsizing
-[AVS Script Creator] moved "acceptable aspect error" setting into the AviSynth profile (1% by default)
-[AVS Script Creator] resize is enabled by default in the profiles (only for new profiles)
-[AVS Script Creator] suggest resolution is automatically pre-selected when doing a resize
-[AVS Script Creator] use very high accuracy for anamorphic encodings if acceptable aspect error is set to 0%
-[HD Streams Extractor] + [MP4 Muxer] fixed wrong detection of errors if file name contains "error"
-[HD Streams Extractor] fixed handling of seamless branching EVO files
-[HD Streams Extractor] log adjustments for eac3to 3.25+
-[Job] improved aborting of Jobs
-[MediaInfo] improved aspect ratio detection
-[MP4 Muxer] improved iOS compatibility when using multiple audio/subtitle tracks. Patch #65 by Eli Bildirici
-[OneClick] added option to extract the core from HD audio tracks
-[OneClick] added option to reset the working/output directories in the profile
-[OneClick] added option to use only the first audio track from a specific language
-[OneClick] lowered default priority of the DGA indexer
-[OneClick] pgcdemux will only be used if more than one PGC is found
-[OneClick] remove phantom audio/subtitle tracks detected by MediaInfo when processing Blu-ray
-[OneClick] warn if identical tracks are about to be processed
-[QAAC] disable TVBR in HE-AAC. Bug #699
-[QAAC] if CoreAudioToolbox.dll is missing an information will be displayed
-[Queue] related jobs are highlighted when selecting a job
-[Queue] warn if intermediate files of an incomplete job are going to be deleted
-[Queue] when deleting a job warn always if it is part of a related job series
-[Update] added system proxy. Patch by Shevek
-[Update] fixed a crash if the proxy has been enabled without server address
-[Worker] a finished temporary worker will not start anymore idle workers. Bug #691
-[Worker] a temporary worker will always be deleted after a job is finished (successful or not)
-[Worker] fixed temporary worker only processing one job
-[Worker] if a job is aborted the corresponding worker will be stopped
-[Worker] several small optimizations
-
-
 Known Problems:
 - Unicode is not supported
 - non default DPI values are not supported
 - M2TS bitrate calculator does not calculate correct values as the specifications are not known
 
 Full changelog: 
-https://sourceforge.net/p/megui/code/2356/tree/megui/trunk/Changelog_full.txt
+https://sourceforge.net/p/megui/code/2418/tree/megui/trunk/Changelog_full.txt
