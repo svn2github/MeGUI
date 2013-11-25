@@ -1272,11 +1272,13 @@ namespace MeGUI
                     
                     foreach (iUpgradeable file in upgradeDataTemp)
                     {
-                        if (file.Name.Equals("neroaacenc") && !MainForm.Instance.Settings.UseNeroAacEnc)
-                            continue;
                         if (file.Name.Equals("dgindexnv") && !MainForm.Instance.Settings.UseDGIndexNV)
                             continue;
+                        if (file.Name.Equals("neroaacenc") && !MainForm.Instance.Settings.UseNeroAacEnc)
+                            continue;
                         if (file.Name.Equals("qaac") && !MainForm.Instance.Settings.UseQAAC)
+                            continue;
+                        if (file.Name.Equals("x264_10b") && !MainForm.Instance.Settings.Use10bitsX264)
                             continue;
                         if (file.Name.Equals("x265") && !MainForm.Instance.Settings.UseX265)
                             continue;

@@ -1,3 +1,4 @@
+2427 [Update] hide x264 10bit completly if disabled (regression of 2395)
 2426 [x265] added option to enable/disable x265 in the MeGUI settings (disabled by default)
 2425 [Queue] fixed crash if more than one worker is opening an avs script
 2424 [x265] fixed default encoding mode part II
