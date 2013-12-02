@@ -1261,46 +1261,39 @@ namespace MeGUI
         private void LoadSettings()
         {
             string path = Path.Combine(Application.StartupPath, "AutoUpdate.xml");
-            if (File.Exists(path))
+            if (!File.Exists(path))
+                return;
+
+            try
             {
-                try
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(AviSynthFile), typeof(ProfilesFile) , typeof(MeGUIFile)});
-                    StreamReader settingsReader = new StreamReader(path);
-                    iUpgradeableCollection upgradeDataTemp = (iUpgradeableCollection)serializer.Deserialize(settingsReader);
-                    settingsReader.Dispose();
-                    
-                    foreach (iUpgradeable file in upgradeDataTemp)
-                    {
-                        if (file.Name.Equals("dgindexnv") && !MainForm.Instance.Settings.UseDGIndexNV)
-                            continue;
-                        if (file.Name.Equals("neroaacenc") && !MainForm.Instance.Settings.UseNeroAacEnc)
-                            continue;
-                        if (file.Name.Equals("qaac") && !MainForm.Instance.Settings.UseQAAC)
-                            continue;
-                        if (file.Name.Equals("x264_10b") && !MainForm.Instance.Settings.Use10bitsX264)
-                            continue;
-                        if (file.Name.Equals("x265") && !MainForm.Instance.Settings.UseX265)
-                            continue;
-                        this.upgradeData.Add(file);
-                    }
+                XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(AviSynthFile), typeof(ProfilesFile) , typeof(MeGUIFile)});
+                StreamReader settingsReader = new StreamReader(path);
+                iUpgradeableCollection upgradeDataTemp = (iUpgradeableCollection)serializer.Deserialize(settingsReader);
+                settingsReader.Dispose();
 
-                    foreach (iUpgradeable file in upgradeData)
-                    {
-                        try
-                        {
-                            file.init();
-                        }
-                        catch (FileNotRegisteredYetException) { }
-                    }
-
-                    return; //settings loaded correctly
-                }
-                catch(Exception)
+                upgradeData = new iUpgradeableCollection();
+                foreach (iUpgradeable file in upgradeDataTemp)
                 {
-                    MessageBox.Show("Error: Could not load previous settings", "Error", MessageBoxButtons.OK);
-                    return; // error loading settings
+                    if (!IsUpdateAllowed(file))
+                        file.AllowUpdate = false;
+                    this.upgradeData.Add(file);
                 }
+
+                foreach (iUpgradeable file in upgradeData)
+                {
+                    try
+                    {
+                        file.init();
+                    }
+                    catch (FileNotRegisteredYetException) { }
+                }
+
+                return; //settings loaded correctly
+            }
+            catch(Exception)
+            {
+                MessageBox.Show("Error: Could not load previous settings", "Error", MessageBoxButtons.OK);
+                return; // error loading settings
             }
         }
         public void SaveSettings()
@@ -1535,6 +1528,24 @@ namespace MeGUI
         }
 
         /// <summary>
+        /// Checks if the file can be updated
+        /// false if package is disabled in the settings
+        /// </summary>
+        private bool IsUpdateAllowed(iUpgradeable file)
+        {
+            bool bUpdateAllowed = true;
+            switch (file.Name)
+            {
+                case "dgindexnv": bUpdateAllowed = !MainForm.Instance.Settings.UseDGIndexNV; break;
+                case "neroaacenc": bUpdateAllowed = !MainForm.Instance.Settings.UseNeroAacEnc; break;
+                case "qaac": bUpdateAllowed = !MainForm.Instance.Settings.UseQAAC; break;
+                case "x264_10b": bUpdateAllowed = !MainForm.Instance.Settings.Use10bitsX264; break;
+                case "x265": bUpdateAllowed = !MainForm.Instance.Settings.UseX265; break;
+            }
+            return bUpdateAllowed;
+        }
+
+        /// <summary>
         /// Once a "file" is found in the upgrade XML file, the files node is passed
         /// to this function which generates the correct iUpgradeable filetype (i.e. MeGUIFile
         /// or AviSynthFile) and then fills in all the relevant data.
@@ -1545,17 +1556,6 @@ namespace MeGUI
             iUpgradeable file = null;
             Version availableFile = null;
             bool fileAlreadyAdded = false;
-
-            if (node.Name.Equals("neroaacenc") && !MainForm.Instance.Settings.UseNeroAacEnc)
-                return;
-            if (node.Name.Equals("dgindexnv") && !MainForm.Instance.Settings.UseDGIndexNV)
-                return;
-            if (node.Name.Equals("qaac") && !MainForm.Instance.Settings.UseQAAC)
-                return;
-            if (node.Name.Equals("x264_10b") && !MainForm.Instance.Settings.Use10bitsX264)
-                return;
-            if (node.Name.Equals("x265") && !MainForm.Instance.Settings.UseX265)
-                return;
 
             var nameAttribute = node.Attributes["platform"];
             if (nameAttribute != null)
@@ -1646,22 +1646,24 @@ namespace MeGUI
                 {
                     if (oAttribute.Name.Equals("version"))
                         availableFile.FileVersion = filenode.Attributes["version"].Value;
+                    else if (oAttribute.Name.Equals("url"))
+                        availableFile.Web = filenode.Attributes["url"].Value;
                     else if (oAttribute.Name.Equals("date"))
                     {
                         DateTime oDate = new DateTime();
                         DateTime.TryParse(filenode.Attributes["date"].Value, new System.Globalization.CultureInfo("en-us"), System.Globalization.DateTimeStyles.None, out oDate);
                         availableFile.UploadDate = oDate;
                     }
-                    else if (oAttribute.Name.Equals("url"))
-                    {
-                        availableFile.Web = filenode.Attributes["url"].Value;
-                    }
                 }
 
                 file.AvailableVersions.Add(availableFile);
             }
+
             if (file.GetLatestVersion().CompareTo(file.CurrentVersion) != 0 && file.AllowUpdate && file.HasAvailableVersions)
                 file.DownloadChecked = true;
+
+            if (!IsUpdateAllowed(file))
+                file.AllowUpdate = false;
 
             if (!fileAlreadyAdded)
                 upgradeData.Add(file);
@@ -1676,13 +1678,11 @@ namespace MeGUI
             {
                 if (!bShowAllFiles)
                 {
-                    if (file.HasAvailableVersions || file.DownloadChecked)
+                    if (file.AllowUpdate && (file.HasAvailableVersions || file.DownloadChecked))
                         AddToListview(file.CreateListViewItem());
                 }
                 else
-                {
                     AddToListview(file.CreateListViewItem());
-                }
             }
         }
         private void listViewDetails_ItemCheck(object sender, ItemCheckEventArgs e)
