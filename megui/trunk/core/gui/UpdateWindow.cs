@@ -104,39 +104,31 @@ namespace MeGUI
                 {
                     case "base": arrPath.Add(System.Windows.Forms.Application.ExecutablePath); break;
                     case "x265":
-                        if (MainForm.Instance.Settings.UseX265)
-                        {
-                            arrPath.Add(MainForm.Instance.Settings.X265Path);
-                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265Path);
-                            arrPath.Add(System.IO.Path.Combine(strPath, "avs4x265.exe"));
-                        }
+                        arrPath.Add(MainForm.Instance.Settings.X265Path);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265Path);
+                        arrPath.Add(System.IO.Path.Combine(strPath, "avs4x265.exe"));
                         break;
                     case "x264":
-                        {
-                            arrPath.Add(MainForm.Instance.Settings.X264Path);
+                        arrPath.Add(MainForm.Instance.Settings.X264Path);
 #if x86
-                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
-                            if (OSInfo.isWow64())
-                            { 
-                                arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
-                                arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
-                            }
-#endif
-                            break;
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
+                        if (OSInfo.isWow64())
+                        { 
+                            arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
+                            arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
                         }
+#endif
+                        break;
                     case "x264_10b":
-                        if (MainForm.Instance.Settings.Use10bitsX264)
-                        {
-                            arrPath.Add(MainForm.Instance.Settings.X26410BitsPath);
+                        arrPath.Add(MainForm.Instance.Settings.X26410BitsPath);
 #if x86
-                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath);
-                            if (OSInfo.isWow64())
-                            {
-                                arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
-                                arrPath.Add(System.IO.Path.Combine(strPath, "x264-10b_64.exe"));
-                            }
-#endif
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath);
+                        if (OSInfo.isWow64())
+                        {
+                            arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
+                            arrPath.Add(System.IO.Path.Combine(strPath, "x264-10b_64.exe"));
                         }
+#endif
                         break;
                     case "dgindex": 
                         arrPath.Add(MainForm.Instance.Settings.DgIndexPath);
@@ -149,12 +141,9 @@ namespace MeGUI
                         arrPath.Add(System.IO.Path.Combine(strPath, "DGAVCDecode.dll")); 
                         break;
                     case "dgindexnv":
-                        if (MainForm.Instance.Settings.UseDGIndexNV)
-                        {
-                            arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
-                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
-                            arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
-                        }
+                        arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
+                        arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
                         break;
                     case "ffms":
                         arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);
@@ -177,21 +166,14 @@ namespace MeGUI
                     case "aften": arrPath.Add(MainForm.Instance.Settings.AftenPath); break;
                     case "flac": arrPath.Add(MainForm.Instance.Settings.FlacPath); break;
                     case "eac3to": arrPath.Add(MainForm.Instance.Settings.EAC3toPath); break;
-                    case "qaac":
-                        if (MainForm.Instance.Settings.UseQAAC)
-                        {
-                            arrPath.Add(MainForm.Instance.Settings.QaacPath);
-                        }
-                        break;
+                    case "qaac": arrPath.Add(MainForm.Instance.Settings.QaacPath); break;
                     case "opus": arrPath.Add(MainForm.Instance.Settings.OpusPath); break;
                     case "libs":
-                        {
-                            strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
-                            arrPath.Add((System.IO.Path.Combine(strPath, @"ICSharpCode.SharpZipLib.dll")));
-                            arrPath.Add((System.IO.Path.Combine(strPath, @"MessageBoxExLib.dll")));
-                            arrPath.Add((System.IO.Path.Combine(strPath, @"LinqBridge.dll")));
-                            break;
-                        }
+                        strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+                        arrPath.Add((System.IO.Path.Combine(strPath, @"ICSharpCode.SharpZipLib.dll")));
+                        arrPath.Add((System.IO.Path.Combine(strPath, @"MessageBoxExLib.dll")));
+                        arrPath.Add((System.IO.Path.Combine(strPath, @"LinqBridge.dll")));
+                        break;
                     case "mediainfo": arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfo.dll")); break;
                     case "mediainfowrapper": arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfoWrapper.dll")); break;
                     case "sevenzip": arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"7z.dll")); break;
@@ -212,38 +194,29 @@ namespace MeGUI
                     case "vsfilter": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll")); break;
                     case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
                     case "bassaudio":
-                        {
-                            arrPath.Add(MainForm.Instance.Settings.BassPath);
-                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.BassPath);
-                            arrPath.Add(System.IO.Path.Combine(strPath, "bass.dll"));
-                            arrPath.Add(System.IO.Path.Combine(strPath, "bass_aac.dll"));
-                            break;
-                        }
+                        arrPath.Add(MainForm.Instance.Settings.BassPath);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.BassPath);
+                        arrPath.Add(System.IO.Path.Combine(strPath, "bass.dll"));
+                        arrPath.Add(System.IO.Path.Combine(strPath, "bass_aac.dll"));
+                        break;
                     case "vobsub": arrPath.Add(MainForm.Instance.Settings.VobSubPath); break;
                     case "besplit": arrPath.Add(MainForm.Instance.Settings.BeSplitPath); break;
                     case "avs":
-                        {
-                            strPath = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
-                            arrPath.Add((Path.Combine(strPath, @"avisynth.dll")));
-                            arrPath.Add((Path.Combine(strPath, @"directshowsource.dll")));
-                            arrPath.Add((Path.Combine(strPath, @"devil.dll")));
-                            break;
-                        }
+                        strPath = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
+                        arrPath.Add((Path.Combine(strPath, @"avisynth.dll")));
+                        arrPath.Add((Path.Combine(strPath, @"directshowsource.dll")));
+                        arrPath.Add((Path.Combine(strPath, @"devil.dll")));
+                        break;
                     case "neroaacenc":
+                        arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
+                        if (File.Exists(MainForm.Instance.Settings.NeroAacEncPath))
                         {
-                            if (MainForm.Instance.Settings.UseNeroAacEnc)
-                            {
-                                arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
-                                if (File.Exists(MainForm.Instance.Settings.NeroAacEncPath))
-                                {
-                                    System.Diagnostics.FileVersionInfo finfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(MainForm.Instance.Settings.NeroAacEncPath);
-                                    FileInfo fi = new FileInfo(MainForm.Instance.Settings.NeroAacEncPath);
-                                    this.currentVersion.FileVersion = finfo.FileMajorPart + "." + finfo.FileMinorPart + "." + finfo.FileBuildPart + "." + finfo.FilePrivatePart;
-                                    this.currentVersion.UploadDate = fi.LastWriteTimeUtc;
-                                }
-                            }
-                            break;
+                            System.Diagnostics.FileVersionInfo finfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(MainForm.Instance.Settings.NeroAacEncPath);
+                            FileInfo fi = new FileInfo(MainForm.Instance.Settings.NeroAacEncPath);
+                            this.currentVersion.FileVersion = finfo.FileMajorPart + "." + finfo.FileMinorPart + "." + finfo.FileBuildPart + "." + finfo.FilePrivatePart;
+                            this.currentVersion.UploadDate = fi.LastWriteTimeUtc;
                         }
+                        break;
                 }
 
                 foreach (string strAppPath in arrPath)
@@ -294,7 +267,7 @@ namespace MeGUI
                     latestDate.Text = "unknown";
                 }
 
-                if (this.CurrentVersion != null)
+                if (this.CurrentVersion != null && !String.IsNullOrEmpty(this.CurrentVersion.FileVersion))
                 {
                     existingVersion.Text = this.CurrentVersion.FileVersion;
                     existingDate.Text = this.CurrentVersion.UploadDate.ToShortDateString();
@@ -1898,7 +1871,12 @@ namespace MeGUI
 
             List<string> files = new List<string>();
             foreach (iUpgradeable u in upgradeData)
-                files.Add(u.GetLatestVersion().Url);
+            {
+                if (!String.IsNullOrEmpty(u.GetLatestVersion().Url))
+                    files.Add(u.GetLatestVersion().Url);
+                if (!files.Contains(u.CurrentVersion.Url) && !String.IsNullOrEmpty(u.CurrentVersion.Url))
+                    files.Add(u.CurrentVersion.Url);
+            }
             UpdateCacher.flushOldCachedFilesAsync(files, this);
 
             if (needsRestart)
