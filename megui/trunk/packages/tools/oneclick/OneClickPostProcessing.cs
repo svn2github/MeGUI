@@ -579,7 +579,10 @@ namespace MeGUI
             }
 
             Dar? suggestedDar = null;
-            outputWidthIncludingPadding = desiredOutputWidth;
+            if (desiredOutputWidth == 0)
+                outputWidthIncludingPadding = (int)iMediaFile.VideoInfo.Width;
+            else
+                outputWidthIncludingPadding = desiredOutputWidth;
             CropValues paddingValues;
 
             bool resizeEnabled = !keepInputResolution;

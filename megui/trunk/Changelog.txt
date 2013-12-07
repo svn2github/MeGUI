@@ -1,3 +1,4 @@
+2430 [OneClick] fixed unnecessary resize/crop in some cases (regression of 2357)
 2429 [Update] version/date information will be shown also for disabled packages
 2428 [Update] disabled packages are not hidden anymore
 2427 [Update] hide x264 10bit completly if disabled (regression of 2395)
@@ -6,7 +7,7 @@
 2424 [x265] fixed default encoding mode part II
 2423 [x265] fixed default encoding mode
 2422 [x265] added basic x265 encoding support
-2421 [Log] do not log progress messages from the FFMpeg encoder
+2421 [Log] do not log progress messages from the FFmpeg encoder
 2420 delete devil.dll in the MeGUI root folder if avisynth.dll is not available also
 2419 [Update] added possibility to use display names for the update files
               added possibility to use .NET requirements for the update files
