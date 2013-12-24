@@ -42,8 +42,6 @@ namespace MeGUI.packages.video.x264
         private x264Device oTargetDevice;
         private bool updateDevice, updateDeviceBlocked;
         #endregion
-
-
         #region start / stop
         public x264ConfigurationPanel()
             : base()
@@ -1829,7 +1827,6 @@ namespace MeGUI.packages.video.x264
                 cbTarget.Visible = false;
                 avcProfileGroupbox.Enabled = !ch10BitsEncoder.Checked;
                 avcLevelGroupbox.Enabled = true;
-                ch10BitsEncoder.Visible = MainForm.Instance.Settings.Is10Bitx264Available();
             }
             else
             {
@@ -1845,7 +1842,6 @@ namespace MeGUI.packages.video.x264
                 cbTarget.Visible = true;
                 avcProfileGroupbox.Enabled = false;
                 avcLevelGroupbox.Enabled = false;
-                ch10BitsEncoder.Visible = false;
             }
             genericUpdate();
         }

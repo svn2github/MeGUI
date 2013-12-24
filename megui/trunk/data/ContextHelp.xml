@@ -835,6 +835,17 @@ If not it is recommended to select "Targeting quality".
 		<Recommended></Recommended>
 		<Default></Default>
 	</targetmode>
+	<encoder10bit name="10bit Encoder">
+		<Advanced>
+10 bit encodings have a higher quality than 8 bit encodings
+but no hardware player can play such files.
+		</Advanced>
+		<Basic>
+		Enables 10bit encode
+		</Basic>
+		<Recommended>disabled</Recommended>
+		<Default>disabled</Default>
+	</encoder10bit>
 	</Codec>
 	<Codec name="Xvid">
 		<setting1 name="setting1">

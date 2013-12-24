@@ -36,11 +36,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x265Encoder");
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is VideoJob &&
-                (j as VideoJob).Settings is x265Settings)
+            if (j is VideoJob && (j as VideoJob).Settings is x265Settings)
             {
                 x265Settings xs = (x265Settings)((j as VideoJob).Settings);
-                    return new x265Encoder(mf.Settings.X265Path);
+                    return new x265Encoder(mf.Settings.X265.Path);
             }
             return null;
         }
@@ -48,10 +47,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "x265Encoder");
         public x265Encoder(string encoderPath)
             : base()
         {
+            UpdateCacher.CheckPackage("x265");
             executable = encoderPath;
-                string x265Path = Path.Combine(Path.GetDirectoryName(encoderPath), "avs4x265.exe");
-                if (System.IO.File.Exists(x265Path))
-                    executable = x265Path;
+
+            string x265Path = Path.Combine(Path.GetDirectoryName(encoderPath), "avs4x265.exe");
+            if (File.Exists(x265Path))
+                executable = x265Path;
         }
 
         public override void ProcessLine(string line, StreamType stream, ImageType oType)

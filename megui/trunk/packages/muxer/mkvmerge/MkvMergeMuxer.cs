@@ -36,12 +36,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is MuxJob && (j as MuxJob).MuxType == MuxerType.MKVMERGE)
-                return new MkvMergeMuxer(mf.Settings.MkvmergePath);
+                return new MkvMergeMuxer(mf.Settings.MkvMerge.Path);
             return null;
         }
         
         public MkvMergeMuxer(string executablePath)
         {
+            UpdateCacher.CheckPackage("mkvmerge");
             this.executable = executablePath;
         }
 

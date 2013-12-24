@@ -36,14 +36,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is VideoJob &&
-                (j as VideoJob).Settings is x264Settings)
+            if (j is VideoJob && (j as VideoJob).Settings is x264Settings)
             {
                 x264Settings xs = (x264Settings)((j as VideoJob).Settings);
                 if (xs.X26410Bits)
-                    return new x264Encoder(mf.Settings.X26410BitsPath);
+                {
+                    UpdateCacher.CheckPackage("x264_10b");
+                    return new x264Encoder(mf.Settings.X264_10B.Path);
+                }
                 else
-                    return new x264Encoder(mf.Settings.X264Path);
+                {
+                    UpdateCacher.CheckPackage("x264");
+                    return new x264Encoder(mf.Settings.X264.Path);
+                }
             }
             return null;
         }
@@ -113,7 +118,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.X26410Bits && !input.Equals("input") && !output.Equals("output"))
             {
                 if (OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
-                    sb.Append(" -L \"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath), "x264-10b_64.exe") + "\" ");
+                    sb.Append(" -L \"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.X264_10B.Path), "x264-10b_64.exe") + "\" ");
             }
 #endif
             // AVC Profiles

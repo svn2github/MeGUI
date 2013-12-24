@@ -166,9 +166,10 @@ namespace MeGUI
                     inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nAVCSource(\"" + indexFile + "\")"; 
                     break;
                 case PossibleSources.dgi:
+                    UpdateCacher.CheckPackage("dgindexnv");
                     if (String.IsNullOrEmpty(indexFile))
                         indexFile = input;
-                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "DGDecodeNV.dll");
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DGIndexNV.Path), "DGDecodeNV.dll");
                     inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGSource(\"" + indexFile + "\"";
                     if (MainForm.Instance.Settings.AutoForceFilm &&
                         MainForm.Instance.Settings.ForceFilmThreshold <= (decimal)dgiFile.GetFilmPercent(indexFile))

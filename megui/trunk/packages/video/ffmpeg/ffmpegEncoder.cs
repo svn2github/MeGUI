@@ -35,16 +35,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "FFmpegEncoder");
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is VideoJob &&
-                ((j as VideoJob).Settings is hfyuSettings))
-                return new ffmpegEncoder(mf.Settings.FFMpegPath);
+            if (j is VideoJob && ((j as VideoJob).Settings is hfyuSettings))
+                return new ffmpegEncoder(mf.Settings.FFmpeg.Path);
             return null;
         }
 
         public ffmpegEncoder(string encoderPath)
             : base()
         {
-                executable = encoderPath;
+            UpdateCacher.CheckPackage("ffmpeg");
+            executable = encoderPath;
         }
 
         #region commandline generation
@@ -55,7 +55,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "FFmpegEncoder");
                 StringBuilder sb = new StringBuilder();
                 sb.Append("-y -i \"" + job.Input + "\" -c:v ffvhuff -threads 0 -sn -an -context 1 -vstrict -2 -pred 2 \"" + job.Output + "\" ");
                 return sb.ToString();
-                throw new Exception();
             }
         }
         #endregion

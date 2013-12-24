@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -74,9 +74,10 @@ namespace MeGUI
         public dgiFile(string fileName)
         {
             this.fileName = fileName;
+            UpdateCacher.CheckPackage("dgindexnv");
 
             string strScript = "";
-            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
+            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DGIndexNV.Path);
             strScript = "LoadPlugin(\"" + Path.Combine(strPath, "DGDecodeNV.dll") + "\")\r\nDGSource(\"" + this.fileName + "\"";
             if (MainForm.Instance.Settings.AutoForceFilm &&
                         MainForm.Instance.Settings.ForceFilmThreshold <= (decimal)dgiFile.GetFilmPercent(this.fileName))

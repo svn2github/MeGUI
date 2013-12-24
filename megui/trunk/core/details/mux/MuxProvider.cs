@@ -567,7 +567,7 @@ namespace MeGUI
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
         {
-            return new MkvMergeMuxer(settings.MkvmergePath);
+            return new MkvMergeMuxer(settings.MkvMerge.Path);
         }
     }
     public class AVIMuxGUIMuxerProvider : MuxerProvider
@@ -1174,7 +1174,7 @@ namespace MeGUI
 
         public override IJobProcessor CreateEncoder(MeGUISettings settings)
         {
-            return new x264Encoder(settings.X264Path);
+            return new x264Encoder(settings.X264.Path);
         }
     }
 
@@ -1190,7 +1190,7 @@ namespace MeGUI
 
         public override IJobProcessor CreateEncoder(MeGUISettings settings)
         {
-            return new x265Encoder(settings.X265Path);
+            return new x265Encoder(settings.X265.Path);
         }
     }
     #endregion

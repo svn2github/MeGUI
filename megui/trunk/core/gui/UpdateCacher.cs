@@ -25,6 +25,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 using ICSharpCode.SharpZipLib.Zip;
 using SevenZip;
@@ -36,6 +37,8 @@ namespace MeGUI
 {
     class UpdateCacher
     {
+        public const int REMOVE_PACKAGE_AFTER_DAYS = 60;
+
         public static void flushOldCachedFilesAsync(List<string> urls, UpdateWindow oUpdate)
         {
             string updateCache = MainForm.Instance.Settings.MeGUIUpdateCache;
@@ -55,7 +58,7 @@ namespace MeGUI
             {
                 if (urls.IndexOf(f.Name.ToLower(System.Globalization.CultureInfo.InvariantCulture)) < 0)
                 {
-                    if (DateTime.Now - f.LastWriteTime > new TimeSpan(60, 0, 0, 0, 0))
+                    if (DateTime.Now - f.LastWriteTime > new TimeSpan(REMOVE_PACKAGE_AFTER_DAYS, 0, 0, 0, 0))
                     {
                         f.Delete();
                         oUpdate.AddTextToLog("Deleted cached file " + f.Name, ImageType.Information);
@@ -185,6 +188,27 @@ namespace MeGUI
             catch (IOException) 
             {
                 oUpdate.AddTextToLog("Could not delete file " + localFilename, ImageType.Error);
+            }
+        }
+
+        public static bool CheckPackage(string package)
+        {
+            return CheckPackage(package, true, true);
+        }
+
+        public static bool CheckPackage(string package, bool enablePackage, bool forceUpdate)
+        {
+            switch (package)
+            {
+                case "dgindexnv": return MainForm.Instance.Settings.DGIndexNV.Update(package, enablePackage, forceUpdate);
+                case "ffmpeg": return MainForm.Instance.Settings.FFmpeg.Update(package, enablePackage, forceUpdate);
+                case "mkvmerge": return MainForm.Instance.Settings.MkvMerge.Update(package, enablePackage, forceUpdate);
+                case "neroaacenc": return MainForm.Instance.Settings.NeroAacEnc.Update(package, enablePackage, forceUpdate);
+                case "qaac": return MainForm.Instance.Settings.QAAC.Update(package, enablePackage, forceUpdate);
+                case "x264": return MainForm.Instance.Settings.X264.Update(package, enablePackage, forceUpdate);
+                case "x264_10b": return MainForm.Instance.Settings.X264_10B.Update(package, enablePackage, forceUpdate);
+                case "x265": return MainForm.Instance.Settings.X265.Update(package, enablePackage, forceUpdate);
+                default: return false;
             }
         }
     }

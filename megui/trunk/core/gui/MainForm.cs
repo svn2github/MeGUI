@@ -344,6 +344,7 @@ namespace MeGUI
                     }
                 }
             }
+            this.settings.SetProgramPaths();
         }
 
         #endregion
@@ -547,7 +548,6 @@ namespace MeGUI
         }
 
         #endregion
-
 
         public MeGUISettings Settings
         {
@@ -908,12 +908,11 @@ namespace MeGUI
         /// </summary>
         public void constructMeGUIInfo()
         {
-            muxProvider = new MuxProvider(this);
+            this.muxProvider = new MuxProvider(this);
             this.codecs = new CodecManager();
             this.path = System.Windows.Forms.Application.StartupPath;
             this.jobUtil = new JobUtil(this);
-            this.settings = new MeGUISettings();
-            addPackages();
+            this.addPackages();
             this.profileManager = new ProfileManager(this.path);
             this.profileManager.LoadProfiles();
             this.mediaFileFactory = new MediaFileFactory(this);
@@ -1388,6 +1387,19 @@ namespace MeGUI
             Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
             updateCheck.IsBackground = true;
             updateCheck.Start();
+        }
+
+        public void startUpdateCheckAndWait()
+        {
+            // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
+            Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
+            updateCheck.IsBackground = true;
+            updateCheck.Start();
+            while (updateCheck.IsAlive)
+            {
+                System.Threading.Thread.Sleep(100);
+                Application.DoEvents();
+            }
         }
 
         private void getVersionInformation()

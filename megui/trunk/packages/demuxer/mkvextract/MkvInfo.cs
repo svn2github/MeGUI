@@ -61,7 +61,8 @@ namespace MeGUI
             _strResult = null;
             using (Process mkvinfo = new Process())
             {
-                mkvinfo.StartInfo.FileName = MainForm.Instance.Settings.MkvmergePath;
+                UpdateCacher.CheckPackage("mkvmerge");
+                mkvinfo.StartInfo.FileName = MainForm.Instance.Settings.MkvMerge.Path;
                 mkvinfo.StartInfo.Arguments = string.Format("--ui-language en --identify-verbose \"{0}\"", _strFile);
                 mkvinfo.StartInfo.CreateNoWindow = true;
                 mkvinfo.StartInfo.UseShellExecute = false;
@@ -110,7 +111,8 @@ namespace MeGUI
             bool bResult = false;
             using (Process mkvinfo = new Process())
             {
-                mkvinfo.StartInfo.FileName = MainForm.Instance.Settings.MkvExtractPath;
+                UpdateCacher.CheckPackage("mkvmerge");
+                mkvinfo.StartInfo.FileName = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.MkvMerge.Path), "mkvextract.exe");
                 mkvinfo.StartInfo.Arguments = string.Format("chapters \"{0}\" --ui-language en --simple", _strFile);
                 mkvinfo.StartInfo.CreateNoWindow = true;
                 mkvinfo.StartInfo.UseShellExecute = false;

@@ -1150,11 +1150,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             if (audioJob.Settings.AutoGain)
             {
                 if (audioJob.Settings.Normalize != 100)
-                     script.AppendFormat("Normalize(" + (audioJob.Settings.Normalize / 100.0).ToString(new CultureInfo("en-us")) + "){0}", Environment.NewLine);
-                else script.AppendFormat("Normalize(){0}", Environment.NewLine);
+                    script.AppendFormat("Normalize(" + (audioJob.Settings.Normalize / 100.0).ToString(new CultureInfo("en-us")) + "){0}", Environment.NewLine);
+                else 
+                    script.AppendFormat("Normalize(){0}", Environment.NewLine);
             }
 
-            //let's obtain command line & other staff
+            //let's obtain command line & other stuff
             if (audioJob.Settings is AftenSettings)
             {
                 _mustSendWavHeaderToEncoderStdIn = true;
@@ -1162,7 +1163,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _encoderExecutablePath = this._settings.AftenPath;
                 _encoderCommandLine = "-readtoeof 1 -b " + n.Bitrate + " - \"{0}\"";
             }
-            if (audioJob.Settings is FlacSettings)
+            else if (audioJob.Settings is FlacSettings)
             {
                 script.Append("AudioBits(last)>24?ConvertAudioTo24bit(last):last " + Environment.NewLine); // flac encoder doesn't support 32bits streams
                 _mustSendWavHeaderToEncoderStdIn = false;
@@ -1170,36 +1171,39 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _encoderExecutablePath = this._settings.FlacPath;
                 _encoderCommandLine = "--force --force-raw-format --endian=little --sign=signed -" + n.CompressionLevel + " - -o \"{0}\""; 
             }
-            if (audioJob.Settings is AC3Settings)
+            else if (audioJob.Settings is AC3Settings)
             {
+                UpdateCacher.CheckPackage("ffmpeg");
                 script.Append("6<=Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);
                 script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine); // ffac3 encoder doesn't support 32bits streams
                 _mustSendWavHeaderToEncoderStdIn = true;
                 AC3Settings n = audioJob.Settings as AC3Settings;
-                _encoderExecutablePath = this._settings.FFMpegPath;
+                _encoderExecutablePath = this._settings.FFmpeg.Path;
                 _encoderCommandLine = "-i - -y -acodec ac3 -ab " + n.Bitrate + "k \"{0}\"";
             }
-            if (audioJob.Settings is MP2Settings)
+            else if (audioJob.Settings is MP2Settings)
             {
+                UpdateCacher.CheckPackage("ffmpeg");
                 script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine); // ffmp2 encoder doesn't support 32 bits streams
                 _mustSendWavHeaderToEncoderStdIn = true;
                 MP2Settings n = audioJob.Settings as MP2Settings;
-                _encoderExecutablePath = this._settings.FFMpegPath;
+                _encoderExecutablePath = this._settings.FFmpeg.Path;
                 _encoderCommandLine = "-i - -y -acodec mp2 -ab " + n.Bitrate + "k \"{0}\"";
             } 
-            if (audioJob.Settings is OggVorbisSettings)
+            else if (audioJob.Settings is OggVorbisSettings)
             {
                 _mustSendWavHeaderToEncoderStdIn = true;
                 OggVorbisSettings n = audioJob.Settings as OggVorbisSettings;
                 _encoderExecutablePath = this._settings.OggEnc2Path;
                 _encoderCommandLine = "--ignorelength --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
             }
-            if (audioJob.Settings is NeroAACSettings)
+            else if (audioJob.Settings is NeroAACSettings)
             {
+                UpdateCacher.CheckPackage("neroaacenc");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 NeroAACSettings n = audioJob.Settings as NeroAACSettings;
                 NeroAACSettings nas = n;
-                _encoderExecutablePath = this._settings.NeroAacEncPath;
+                _encoderExecutablePath = this._settings.NeroAacEnc.Path;
                 StringBuilder sb = new StringBuilder("-ignorelength ");
                 switch (n.Profile)
                 {
@@ -1231,7 +1235,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                 _encoderCommandLine = sb.ToString();
             }
-            if (audioJob.Settings is MP3Settings)
+            else if (audioJob.Settings is MP3Settings)
             {
                 MP3Settings m = audioJob.Settings as MP3Settings;
                 _mustSendWavHeaderToEncoderStdIn = true;
@@ -1251,11 +1255,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         break;
                 }
             }
-
-            if (audioJob.Settings is QaacSettings)
+            else if (audioJob.Settings is QaacSettings)
             {
+                UpdateCacher.CheckPackage("qaac");
                 QaacSettings q = audioJob.Settings as QaacSettings;
-                _encoderExecutablePath = this._settings.QaacPath;
+                _encoderExecutablePath = this._settings.QAAC.Path;
                 _mustSendWavHeaderToEncoderStdIn = true;
                 StringBuilder sb = new StringBuilder("--ignorelength --threading ");
 
@@ -1281,8 +1285,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                 _encoderCommandLine = sb.ToString();
             }
-
-            if (audioJob.Settings is OpusSettings)
+            else if (audioJob.Settings is OpusSettings)
             {
                 OpusSettings o = audioJob.Settings as OpusSettings;
                 _encoderExecutablePath = this._settings.OpusPath;

@@ -21,6 +21,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 
 using MeGUI.core.util;
@@ -46,22 +48,20 @@ namespace MeGUI
         };
         private string[][] autoUpdateServerLists;
         private DateTime lastUpdateCheck;
-        private string qaacPath, opusPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
-                       ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat, bassPath,
+        private string opusPath, lamePath, mp4boxPath, strMainAudioFormat,
+                       besplitPath, yadifPath, aftenPath, strMainFileFormat, bassPath,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath, aviSynthPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
-                       strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4, flacPath,
-                       httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath,
-                       mkvExtractPath, appendToForcedStreams, pgcDemuxPath, lastUsedOneClickFolder, lastUpdateServer,
-                       x26410BitsPath, x265Path;
+                       strLastDestinationPath, strLastSourcePath, tempDirMP4, flacPath, neroAacEncPath,
+                       httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir,
+                       appendToForcedStreams, pgcDemuxPath, lastUsedOneClickFolder, lastUpdateServer;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll,
-                     alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU, bUse10BitsX264,
-                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bUseQAAC,
-                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc, bExternalMuxerX264,
-                     bUseX265;
+                     alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU,
+                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264,
+                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bExternalMuxerX264;
         private ulong audioSamplesPerUpdate;
         private decimal forceFilmThreshold, acceptableFPSError;
         private int nbPasses, autoUpdateServerSubList, minComplexity, updateFormSplitter,
@@ -82,10 +82,31 @@ namespace MeGUI
         private OCGUIMode ocGUIMode;
         private AfterEncoding afterEncoding;
         private ProxyMode httpProxyMode;
+        private ProgramSettings dgindexnv, ffmpeg, mkvmerge, neroaacenc, qaac, x264, x264_10b, x265;
         #endregion
         public MeGUISettings()
 		{
-            strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+            string strMeGUIPath = Path.GetDirectoryName(Application.ExecutablePath);
+
+            // initialize external program settings
+            dgindexnv = new ProgramSettings();
+            ffmpeg = new ProgramSettings();
+            mkvmerge = new ProgramSettings();
+            neroaacenc = new ProgramSettings();
+            qaac = new ProgramSettings();
+#if x64
+            x264 = new ProgramSettings();
+            b64bitX264 = true;
+            x264_10b = new ProgramSettings();
+#endif
+#if x86
+            x264 = new ProgramSettings();
+            x264_10b = new ProgramSettings();
+            if (OSInfo.isWow64())
+                b64bitX264 = true;
+#endif
+            x265 = new ProgramSettings();
+
             autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
                 new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
@@ -101,30 +122,13 @@ namespace MeGUI
             audioSamplesPerUpdate = 100000;
             aviMuxGUIPath = getDownloadPath(@"tools\avimux_gui\avimux_gui.exe");
 			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
-			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
-            mkvExtractPath = getDownloadPath(@"tools\mkvmerge\mkvextract.exe");
             pgcDemuxPath = getDownloadPath(@"tools\pgcdemux\pgcdemux.exe");
-            qaacPath = getDownloadPath(@"tools\qaac\qaac.exe");
             opusPath = getDownloadPath(@"tools\opus\opusenc.exe");
-#if x64
-            x264Path = getDownloadPath(@"tools\x264\x264_64.exe");
-            b64bitX264 = true;
-            x26410BitsPath = getDownloadPath(@"tools\x264_10b\x264-10b_64.exe");
-#endif
-#if x86
-            x264Path = getDownloadPath(@"tools\x264\x264.exe");
-            x26410BitsPath = getDownloadPath(@"tools\x264_10b\x264-10b.exe");
-            if (OSInfo.isWow64())
-                b64bitX264 = true;
-#endif
-            x265Path = getDownloadPath(@"tools\x265\x265.exe");
             dgIndexPath = getDownloadPath(@"tools\dgindex\dgindex.exe");
             ffmsIndexPath = getDownloadPath(@"tools\ffms\ffmsindex.exe");
             xvidEncrawPath = getDownloadPath(@"tools\xvid_encraw\xvid_encraw.exe");
             lamePath = getDownloadPath(@"tools\lame\lame.exe");
-            neroAacEncPath = strMeGUIPath + @"\tools\eac3to\neroAacEnc.exe";
             oggEnc2Path = getDownloadPath(@"tools\oggenc2\oggenc2.exe");
-            ffmpegPath = getDownloadPath(@"tools\ffmpeg\ffmpeg.exe");
             aftenPath = getDownloadPath(@"tools\aften\aften.exe");
             flacPath = getDownloadPath(@"tools\flac\flac.exe");
             yadifPath = getDownloadPath(@"tools\yadif\yadif.dll");
@@ -132,12 +136,11 @@ namespace MeGUI
             vobSubPath = getDownloadPath(@"tools\vobsub\vobsub.dll");
             besplitPath = getDownloadPath(@"tools\besplit\besplit.exe");
             dgavcIndexPath = getDownloadPath(@"tools\dgavcindex\dgavcindex.exe");
-            dgnvIndexPath = getDownloadPath(@"tools\dgindexnv\dgindexnv.exe");
             eac3toPath = getDownloadPath(@"tools\eac3to\eac3to.exe");
             tsmuxerPath = getDownloadPath(@"tools\tsmuxer\tsmuxer.exe");
             aviSynthPath = getDownloadPath(@"tools\avs\avisynth.dll");
-            meguiupdatecache = System.IO.Path.Combine(strMeGUIPath, "update_cache");
-            avisynthpluginspath = System.IO.Path.Combine(strMeGUIPath, @"tools\avisynth_plugin");
+            meguiupdatecache = Path.Combine(strMeGUIPath, "update_cache");
+            avisynthpluginspath = Path.Combine(strMeGUIPath, @"tools\avisynth_plugin");
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
             bAutoLoadDG = true;
@@ -203,19 +206,18 @@ namespace MeGUI
             startColumnWidth = 55;
             endColumnWidth = 55;
             fpsColumnWidth = 35;
-            bEnsureCorrectPlaybackSpeed = bUseDGIndexNV = bUseNeroAacEnc = bUseQAAC = bUseX265 = false;
+            bEnsureCorrectPlaybackSpeed = false;
             ffmsThreads = 1;
             appendToForcedStreams = "";
             ocGUIMode = OCGUIMode.Default;
             bUseITU = true;
             bOpenAVSInThread = true;
             lastUsedOneClickFolder = "";
-            bUse10BitsX264 = false;
         }
 
         private string getDownloadPath(string strPath)
         {
-            strPath = System.IO.Path.Combine(strMeGUIPath, @strPath);
+            strPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @strPath);
             return strPath;
         }
 
@@ -542,15 +544,6 @@ namespace MeGUI
             set { b64bitX264 = value; }
         }
 
-        /// <summary>
-        /// bool to decide whether to use 10bit x264
-        /// </summary>
-        public bool Use10bitsX264
-        {
-            get { return bUse10BitsX264; }
-            set { bUse10BitsX264 = value; }
-        }
-
         ///<summary>
         /// gets / sets whether megui puts the Video Preview Form "Alwyas on Top" or not
         /// </summary>
@@ -593,7 +586,7 @@ namespace MeGUI
         {
             get 
             {
-                if (String.IsNullOrEmpty(tempDirMP4) || System.IO.Path.GetPathRoot(tempDirMP4).Equals(tempDirMP4, StringComparison.CurrentCultureIgnoreCase))
+                if (String.IsNullOrEmpty(tempDirMP4) || Path.GetPathRoot(tempDirMP4).Equals(tempDirMP4, StringComparison.CurrentCultureIgnoreCase))
                     return String.Empty;
                 return tempDirMP4;
             }
@@ -606,14 +599,6 @@ namespace MeGUI
         public string BeSplitPath
         {
             get { return besplitPath; }
-        }
-
-        /// <summary>
-        /// filename and full path of the ffmpeg executable
-        /// </summary>
-        public string FFMpegPath
-        {
-            get { return ffmpegPath; }
         }
 
         /// <summary>
@@ -646,22 +631,6 @@ namespace MeGUI
         public string LamePath
         {
             get { return lamePath; }
-        }	
-	    
-	    /// <summary>
-		/// filename and full path of the mkvmerge executable
-		/// </summary>
-		public string MkvmergePath
-		{
-			get {return mkvmergePath;}
-		}
-
-        /// <summary>
-        /// filename and full path of the mkvextract executable
-        /// </summary>
-        public string MkvExtractPath
-        {
-            get { return mkvExtractPath; }
         }
 
         /// <summary>
@@ -678,31 +647,6 @@ namespace MeGUI
         public string PgcDemuxPath
         {
             get { return pgcDemuxPath; }
-        }
-
-		/// <summary>
-		/// filename and full path of the x264 executable
-		/// </summary>
-		public string X264Path
-		{
-			get {return x264Path;}
-		}
-
-
-        /// <summary>
-        /// filename and full path of the x265 executable
-        /// </summary>
-        public string X265Path
-        {
-            get { return x265Path; }
-        }
-
-        /// <summary>
-        /// filename and full path of the x264 10b executable
-        /// </summary>
-        public string X26410BitsPath
-        {
-            get { return x26410BitsPath; }
         }
 
 		/// <summary>
@@ -761,13 +705,7 @@ namespace MeGUI
         {
             get { return dgavcIndexPath; }
         }
-        /// <summary>
-        /// filename and full path of the dgmpgindex executable
-        /// </summary>
-        public string DgnvIndexPath
-        {
-            get { return dgnvIndexPath; }
-        }
+
         /// <summary>
         /// filename and full path of the eac3to executable
         /// </summary>
@@ -781,14 +719,6 @@ namespace MeGUI
         public string TSMuxerPath
         {
             get { return tsmuxerPath; }
-        }
-
-        /// <summary>
-        /// filename and full path of the qaac executable
-        /// </summary>
-        public string QaacPath
-        {
-            get { return qaacPath; }
         }
 
         /// <summary>
@@ -1216,12 +1146,6 @@ namespace MeGUI
             set { bUseITU = value; }
         }
 
-        public bool UseDGIndexNV
-        {
-            get { return bUseDGIndexNV; }
-            set { bUseDGIndexNV = value; }
-        }
-
         /// <summary>
         /// filename and full path of the neroaacenc executable
         /// </summary>
@@ -1230,31 +1154,73 @@ namespace MeGUI
             get { return neroAacEncPath; }
             set
             {
-                if (!System.IO.File.Exists(value))
-                    neroAacEncPath = strMeGUIPath + @"\tools\eac3to\neroAacEnc.exe";
+                if (!File.Exists(value))
+                    neroAacEncPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"\tools\eac3to\neroAacEnc.exe");
                 else
                     neroAacEncPath = value;
+                neroaacenc.Path = neroAacEncPath;
             }
-        }	
-
-        public bool UseNeroAacEnc
-        {
-            get { return bUseNeroAacEnc; }
-            set { bUseNeroAacEnc = value; }
         }
 
-        public bool UseQAAC
+        public ProgramSettings DGIndexNV
         {
-            get { return bUseQAAC; }
-            set { bUseQAAC = value; }
+            get { return dgindexnv; }
+            set { dgindexnv = value; }
         }
 
-        public bool UseX265
+        /// <summary>
+        /// program settings of ffmpeg
+        /// </summary>
+        public ProgramSettings FFmpeg
         {
-            get { return bUseX265; }
-            set { bUseX265 = value; }
+            get { return ffmpeg; }
+            set { ffmpeg = value; }
         }
 
+        /// <summary>
+        /// program settings of mkvmerge
+        /// </summary>
+        public ProgramSettings MkvMerge
+        {
+            get { return mkvmerge; }
+            set { mkvmerge = value; }
+        }
+
+        public ProgramSettings NeroAacEnc
+        {
+            get { return neroaacenc; }
+            set { neroaacenc = value; }
+        }
+
+        public ProgramSettings QAAC
+        {
+            get { return qaac; }
+            set { qaac = value; }
+        }
+
+        /// <summary>
+        /// program settings of x264 8bit
+        /// </summary>
+        public ProgramSettings X264
+        {
+            get { return x264; }
+            set { x264 = value; }
+        }
+
+        /// <summary>
+        /// program settings of x264 10bit
+        /// </summary>
+        public ProgramSettings X264_10B
+        {
+            get { return x264_10b; }
+            set { x264_10b = value; }
+        }
+
+        public ProgramSettings X265
+        {
+            get { return x265; }
+            set { x265 = value; }
+        }
         #endregion
 
         private bool bAutoUpdateSession;
@@ -1282,34 +1248,34 @@ namespace MeGUI
         #region Methods
         public bool IsNeroAACEncAvailable()
         {
-            return bUseNeroAacEnc && System.IO.File.Exists(neroAacEncPath);
+            return neroaacenc.Enabled && File.Exists(neroaacenc.Path);
         }
 
         public bool IsQAACAvailable()
         {
-            return bUseQAAC && System.IO.File.Exists(qaacPath);
+            return qaac.Enabled && File.Exists(qaac.Path);
         }
 
         public bool IsX265Available()
         {
-            return bUseX265 && System.IO.File.Exists(x265Path);
+            return x265.Enabled && File.Exists(x265.Path);
         }
 
         public bool IsDGIIndexerAvailable()
         {
-            if (!bUseDGIndexNV)
+            if (!dgindexnv.Enabled)
                 return false;
 
             // check if the license file is available
-            if (!System.IO.File.Exists(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "license.txt")))
+            if (!File.Exists(Path.Combine(Path.GetDirectoryName(dgindexnv.Path), "license.txt")))
                 return false;
 
             // DGI is not available in a RDP connection
-            if (System.Windows.Forms.SystemInformation.TerminalServerSession == true)
+            if (SystemInformation.TerminalServerSession == true)
                 return false;
 
             // check if the indexer is available
-            if (!System.IO.File.Exists(MainForm.Instance.Settings.DgnvIndexPath))
+            if (!File.Exists(dgindexnv.Path))
                 return false;
 
             return true;
@@ -1317,11 +1283,104 @@ namespace MeGUI
 
         public bool Is10Bitx264Available()
         {
-            return bUse10BitsX264 && System.IO.File.Exists(x26410BitsPath);
+            return x264_10b.Enabled && File.Exists(x264_10b.Path);
         }
 
+        public void SetProgramPaths()
+        {
+            // set default program paths
+            dgindexnv.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindexnv\dgindexnv.exe");
+            ffmpeg.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffmpeg\ffmpeg.exe");
+            mkvmerge.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvmerge.exe");
+            neroaacenc.Path = neroAacEncPath;
+            qaac.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\qaac\qaac.exe");
+#if x64
+            x264.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264_64.exe");
+            x264_10b.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b_64.exe");
+#endif
+#if x86
+            x264.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264.exe");
+            x264_10b.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b.exe");
+#endif
+            x265.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x265\x265.exe");
+        }
         #endregion
     }
+
+    public class ProgramSettings
+    {
+        private bool _enabled;
+        private string _path;
+        private DateTime _lastused;
+
+        public ProgramSettings()
+        {
+            _enabled = false;
+            _path = String.Empty;
+            _lastused = new DateTime();
+        }
+
+        public ProgramSettings(string path)
+        {
+            _enabled = false;
+            _path = path;
+            _lastused = new DateTime();
+        }
+
+        public bool Enabled
+        {
+            get { return _enabled; }
+            set { _enabled = value; }
+        }
+
+        [XmlIgnore()]
+        public string Path
+        {
+            get { return _path; }
+            set { _path = value; }
+        }
+
+        public DateTime LastUsed
+        {
+            get { return _lastused; }
+            set { _lastused = value; }
+        }
+
+        public bool Update(string name, bool enable, bool forceUpdate)
+        {
+            if (enable && forceUpdate)
+                _lastused = DateTime.Now;
+            else if (enable && !_enabled)
+                _lastused = DateTime.Now.AddDays(-System.Math.Floor(UpdateCacher.REMOVE_PACKAGE_AFTER_DAYS / 2.0));
+            _enabled = enable;
+
+            if (!enable || (!String.IsNullOrEmpty(_path) && File.Exists(_path)))
+                return true;
+
+            if (forceUpdate)
+            {
+                // package is not available. Therefore an update check is necessary
+                if (MessageBox.Show("The package " + name + " is not installed.\n\nDo you want to search now online for updates?", "MeGUI package missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    MainForm.Instance.startUpdateCheckAndWait();
+                    if (File.Exists(_path))
+                        return true;
+                }
+                else
+                    MessageBox.Show(String.Format("You have selected to not update {0}. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to download it later.", name), name + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return false;
+        }
+
+        public bool UpdateAllowed()
+        {
+            if (_enabled && _lastused.AddDays(UpdateCacher.REMOVE_PACKAGE_AFTER_DAYS) > DateTime.Now)
+                return true;
+            else
+                return false;
+        }
+    }
+
     public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2, CloseMeGUI = 3 }
     public enum ProxyMode { None = 0, SystemProxy = 1, CustomProxy = 2, CustomProxyWithLogin = 3 }
 }

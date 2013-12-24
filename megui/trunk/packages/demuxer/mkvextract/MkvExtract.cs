@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -34,12 +35,13 @@ namespace MeGUI
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is MkvExtractJob) 
-                return new MkvExtract(mf.Settings.MkvExtractPath);
+                return new MkvExtract(Path.Combine(Path.GetDirectoryName(mf.Settings.MkvMerge.Path), "mkvextract.exe"));
             return null;
         }
 
         public MkvExtract(string executablePath)
         {
+            UpdateCacher.CheckPackage("mkvmerge");
             this.executable = executablePath;
         }
 

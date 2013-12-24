@@ -35,12 +35,14 @@ namespace MeGUI
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is DGIIndexJob) return new DGIIndexer(mf.Settings.DgnvIndexPath);
+            if (j is DGIIndexJob) 
+                return new DGIIndexer(mf.Settings.DGIndexNV.Path);
             return null;
         }
 
         public DGIIndexer(string executableName)
         {
+            UpdateCacher.CheckPackage("dgindexnv");
             executable = executableName;
         }
 

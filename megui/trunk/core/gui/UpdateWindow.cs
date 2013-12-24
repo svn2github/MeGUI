@@ -104,14 +104,14 @@ namespace MeGUI
                 {
                     case "base": arrPath.Add(System.Windows.Forms.Application.ExecutablePath); break;
                     case "x265":
-                        arrPath.Add(MainForm.Instance.Settings.X265Path);
-                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265Path);
+                        arrPath.Add(MainForm.Instance.Settings.X265.Path);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265.Path);
                         arrPath.Add(System.IO.Path.Combine(strPath, "avs4x265.exe"));
                         break;
                     case "x264":
-                        arrPath.Add(MainForm.Instance.Settings.X264Path);
+                        arrPath.Add(MainForm.Instance.Settings.X264.Path);
 #if x86
-                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264.Path);
                         if (OSInfo.isWow64())
                         { 
                             arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
@@ -120,9 +120,9 @@ namespace MeGUI
 #endif
                         break;
                     case "x264_10b":
-                        arrPath.Add(MainForm.Instance.Settings.X26410BitsPath);
+                        arrPath.Add(MainForm.Instance.Settings.X264_10B.Path);
 #if x86
-                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264_10B.Path);
                         if (OSInfo.isWow64())
                         {
                             arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
@@ -141,8 +141,8 @@ namespace MeGUI
                         arrPath.Add(System.IO.Path.Combine(strPath, "DGAVCDecode.dll")); 
                         break;
                     case "dgindexnv":
-                        arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
-                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
+                        arrPath.Add(MainForm.Instance.Settings.DGIndexNV.Path);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DGIndexNV.Path);
                         arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
                         break;
                     case "ffms":
@@ -156,17 +156,17 @@ namespace MeGUI
                     case "tsmuxer": arrPath.Add(MainForm.Instance.Settings.TSMuxerPath); break;
                     case "xvid_encraw": arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath); break;
                     case "mkvmerge":
-                        arrPath.Add(MainForm.Instance.Settings.MkvmergePath);
-                        arrPath.Add(MainForm.Instance.Settings.MkvExtractPath);
+                        arrPath.Add(MainForm.Instance.Settings.MkvMerge.Path);
+                        arrPath.Add(Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.MkvMerge.Path), "mkvextract.exe"));
                         break;
-                    case "ffmpeg": arrPath.Add(MainForm.Instance.Settings.FFMpegPath); break;
+                    case "ffmpeg": arrPath.Add(MainForm.Instance.Settings.FFmpeg.Path); break;
                     case "oggenc2": arrPath.Add(MainForm.Instance.Settings.OggEnc2Path); break;
                     case "yadif": arrPath.Add(MainForm.Instance.Settings.YadifPath); break;
                     case "lame": arrPath.Add(MainForm.Instance.Settings.LamePath); break;
                     case "aften": arrPath.Add(MainForm.Instance.Settings.AftenPath); break;
                     case "flac": arrPath.Add(MainForm.Instance.Settings.FlacPath); break;
                     case "eac3to": arrPath.Add(MainForm.Instance.Settings.EAC3toPath); break;
-                    case "qaac": arrPath.Add(MainForm.Instance.Settings.QaacPath); break;
+                    case "qaac": arrPath.Add(MainForm.Instance.Settings.QAAC.Path); break;
                     case "opus": arrPath.Add(MainForm.Instance.Settings.OpusPath); break;
                     case "libs":
                         strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
@@ -208,11 +208,11 @@ namespace MeGUI
                         arrPath.Add((Path.Combine(strPath, @"devil.dll")));
                         break;
                     case "neroaacenc":
-                        arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
-                        if (File.Exists(MainForm.Instance.Settings.NeroAacEncPath))
+                        arrPath.Add(MainForm.Instance.Settings.NeroAacEnc.Path);
+                        if (File.Exists(MainForm.Instance.Settings.NeroAacEnc.Path))
                         {
-                            System.Diagnostics.FileVersionInfo finfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(MainForm.Instance.Settings.NeroAacEncPath);
-                            FileInfo fi = new FileInfo(MainForm.Instance.Settings.NeroAacEncPath);
+                            System.Diagnostics.FileVersionInfo finfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(MainForm.Instance.Settings.NeroAacEnc.Path);
+                            FileInfo fi = new FileInfo(MainForm.Instance.Settings.NeroAacEnc.Path);
                             this.currentVersion.FileVersion = finfo.FileMajorPart + "." + finfo.FileMinorPart + "." + finfo.FileBuildPart + "." + finfo.FilePrivatePart;
                             this.currentVersion.UploadDate = fi.LastWriteTimeUtc;
                         }
@@ -293,7 +293,10 @@ namespace MeGUI
                         if (this.Name.Equals("core"))
                         {
                             if ((Int32.Parse(existingVersion.Text)) > (Int32.Parse(latestVersion.Text)))
+                            {
+                                this.AllowUpdate = false;
                                 status.Text = "Update Ignored";
+                            }
                             else
                                 status.Text = "Update Available";
                         }
@@ -620,16 +623,7 @@ namespace MeGUI
             {
                 if (MeGUIFilePath == null)
                     throw new FileNotRegisteredYetException(Name);
-                SavePath = Path.Combine(Application.StartupPath, MeGUIFilePath);
-                // If the file doesn't exist, assume it isn't set up, so put it in the standard install location
-                if (!File.Exists(SavePath))
-                {
-                    string extension = Path.GetExtension(SavePath);
-                    string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "tools");
-                    path = Path.Combine(path, Name);
-                    SavePath = Path.Combine(path,  Name + extension);
-                    MeGUIFilePath = SavePath;
-                }
+                SavePath = MeGUIFilePath;
             }
             
             public ProgramFile(string treeViewID, string name) // Constructor
@@ -649,7 +643,7 @@ namespace MeGUI
                         case ("dgindex"):
                             return meGUISettings.DgIndexPath;
                         case ("mkvmerge"):
-                            return meGUISettings.MkvmergePath;
+                            return meGUISettings.MkvMerge.Path;
                         case ("lame"):
                             return meGUISettings.LamePath;
                         case ("mp4box"):
@@ -657,21 +651,21 @@ namespace MeGUI
                         case ("pgcdemux"):
                             return meGUISettings.PgcDemuxPath;
                         case ("neroaacenc"):
-                            return meGUISettings.NeroAacEncPath;
+                            return meGUISettings.NeroAacEnc.Path;
                         case ("avimux_gui"):
                             return meGUISettings.AviMuxGUIPath;
                         case ("avs"):
                             return meGUISettings.AviSynthPath;
                         case ("x265"):
-                            return meGUISettings.X265Path;
+                            return meGUISettings.X265.Path;
                         case ("x264"):
-                            return meGUISettings.X264Path;
+                            return meGUISettings.X264.Path;
                         case ("x264_10b"):
-                            return meGUISettings.X26410BitsPath;
+                            return meGUISettings.X264_10B.Path;
                         case ("xvid_encraw"):
                             return meGUISettings.XviDEncrawPath;
                         case ("ffmpeg"):
-                            return meGUISettings.FFMpegPath;
+                            return meGUISettings.FFmpeg.Path;
                         case ("oggenc2"):
                             return meGUISettings.OggEnc2Path;
                         case ("yadif"):
@@ -691,26 +685,17 @@ namespace MeGUI
                         case ("dgavcindex"):
                             return meGUISettings.DgavcIndexPath;
                         case ("dgindexnv"):
-                            return meGUISettings.DgnvIndexPath;
+                            return meGUISettings.DGIndexNV.Path;
                         case ("ffms"):
                             return meGUISettings.FFMSIndexPath;
                         case ("tsmuxer"):
                             return meGUISettings.TSMuxerPath;
                         case ("qaac"):
-                            return meGUISettings.QaacPath;
+                            return meGUISettings.QAAC.Path;
                         case ("opus"):
                             return meGUISettings.OpusPath;                                 
                         default:
                             return null;
-                    }
-                }
-                set
-                {
-                    switch (this.Name)
-                    {
-                        case ("neroaacenc"):
-                            meGUISettings.NeroAacEncPath = value;
-                            break;
                     }
                 }
             }
@@ -989,9 +974,9 @@ namespace MeGUI
             // base 
             arrPath.Add(System.Windows.Forms.Application.ExecutablePath);
             // x264
-            arrPath.Add(MainForm.Instance.Settings.X264Path);
+            arrPath.Add(MainForm.Instance.Settings.X264.Path);
 #if x86
-            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264.Path);
             if (OSInfo.isWow64())
             {
                 arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
@@ -999,11 +984,11 @@ namespace MeGUI
             }
 #endif
             //x264 10bit
-            if (MainForm.Instance.Settings.Use10bitsX264)
+            if (MainForm.Instance.Settings.X264_10B.Enabled)
             {
-                arrPath.Add(MainForm.Instance.Settings.X26410BitsPath);
+                arrPath.Add(MainForm.Instance.Settings.X264_10B.Path);
 #if x86
-                strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X26410BitsPath);
+                strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264_10B.Path);
                 if (OSInfo.isWow64())
                 {
                     arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
@@ -1013,10 +998,10 @@ namespace MeGUI
             }
 
             // x265
-            if (MainForm.Instance.Settings.UseX265)
+            if (MainForm.Instance.Settings.X265.Enabled)
             {
-                arrPath.Add(MainForm.Instance.Settings.X265Path);
-                strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265Path);
+                arrPath.Add(MainForm.Instance.Settings.X265.Path);
+                strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X265.Path);
                 arrPath.Add(System.IO.Path.Combine(strPath, "avs4x265.exe"));
             }
 
@@ -1045,10 +1030,11 @@ namespace MeGUI
             //xvid_encraw
             arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath);
             //mkvmerge
-            arrPath.Add(MainForm.Instance.Settings.MkvmergePath);
-            arrPath.Add(MainForm.Instance.Settings.MkvExtractPath);
+            arrPath.Add(MainForm.Instance.Settings.MkvMerge.Path);
+            arrPath.Add(Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.MkvMerge.Path), "mkvextract.exe"));
             //ffmpeg
-            arrPath.Add(MainForm.Instance.Settings.FFMpegPath);
+            if (MainForm.Instance.Settings.FFmpeg.Enabled)
+                arrPath.Add(MainForm.Instance.Settings.FFmpeg.Path);
             //oggenc2
             arrPath.Add(MainForm.Instance.Settings.OggEnc2Path);
             //yadif
@@ -1119,18 +1105,18 @@ namespace MeGUI
             arrPath.Add(MainForm.Instance.Settings.BeSplitPath);
 
             //qaac
-            if (MainForm.Instance.Settings.UseQAAC)
-                arrPath.Add(MainForm.Instance.Settings.QaacPath);
+            if (MainForm.Instance.Settings.QAAC.Enabled)
+                arrPath.Add(MainForm.Instance.Settings.QAAC.Path);
 
             //neroaacenc
-            if (MainForm.Instance.Settings.UseNeroAacEnc)
-                arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
+            if (MainForm.Instance.Settings.NeroAacEnc.Enabled)
+                arrPath.Add(MainForm.Instance.Settings.NeroAacEnc.Path);
 
             // dgindexnv
-            if (MainForm.Instance.Settings.UseDGIndexNV)
+            if (MainForm.Instance.Settings.DGIndexNV.Enabled)
             {
-                arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
-                strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
+                arrPath.Add(MainForm.Instance.Settings.DGIndexNV.Path);
+                strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DGIndexNV.Path);
                 arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
             }
 
@@ -1247,8 +1233,9 @@ namespace MeGUI
                 upgradeData = new iUpgradeableCollection();
                 foreach (iUpgradeable file in upgradeDataTemp)
                 {
-                    if (!IsUpdateAllowed(file))
-                        file.AllowUpdate = false;
+                    bool bUpdateStatus = false;
+                    if (GetUpdateStatus(file, ref bUpdateStatus))
+                        file.AllowUpdate = bUpdateStatus;
                     this.upgradeData.Add(file);
                 }
 
@@ -1501,21 +1488,24 @@ namespace MeGUI
         }
 
         /// <summary>
-        /// Checks if the file can be updated
-        /// false if package is disabled in the settings
+        /// Checks if the file can or must be updated
+        /// true if found
         /// </summary>
-        private bool IsUpdateAllowed(iUpgradeable file)
+        private bool GetUpdateStatus(iUpgradeable file, ref bool bUpdateAllowed)
         {
-            bool bUpdateAllowed = true;
             switch (file.Name)
             {
-                case "dgindexnv": bUpdateAllowed = !MainForm.Instance.Settings.UseDGIndexNV; break;
-                case "neroaacenc": bUpdateAllowed = !MainForm.Instance.Settings.UseNeroAacEnc; break;
-                case "qaac": bUpdateAllowed = !MainForm.Instance.Settings.UseQAAC; break;
-                case "x264_10b": bUpdateAllowed = !MainForm.Instance.Settings.Use10bitsX264; break;
-                case "x265": bUpdateAllowed = !MainForm.Instance.Settings.UseX265; break;
+                case "dgindexnv": bUpdateAllowed = MainForm.Instance.Settings.DGIndexNV.UpdateAllowed(); break;
+                case "ffmpeg": bUpdateAllowed = MainForm.Instance.Settings.FFmpeg.UpdateAllowed(); break;
+                case "mkvmerge": bUpdateAllowed = MainForm.Instance.Settings.MkvMerge.UpdateAllowed(); break;
+                case "neroaacenc": bUpdateAllowed = MainForm.Instance.Settings.NeroAacEnc.UpdateAllowed(); break;
+                case "qaac": bUpdateAllowed = MainForm.Instance.Settings.QAAC.UpdateAllowed(); break;
+                case "x264": bUpdateAllowed = MainForm.Instance.Settings.X264.UpdateAllowed(); break;
+                case "x264_10b": bUpdateAllowed = MainForm.Instance.Settings.X264_10B.UpdateAllowed(); break;
+                case "x265": bUpdateAllowed = MainForm.Instance.Settings.X265.UpdateAllowed(); break;
+                default: return false;
             }
-            return bUpdateAllowed;
+            return true;
         }
 
         /// <summary>
@@ -1635,8 +1625,9 @@ namespace MeGUI
             if (file.GetLatestVersion().CompareTo(file.CurrentVersion) != 0 && file.AllowUpdate && file.HasAvailableVersions)
                 file.DownloadChecked = true;
 
-            if (!IsUpdateAllowed(file))
-                file.AllowUpdate = false;
+            bool bUpdateStatus = false;
+            if (GetUpdateStatus(file, ref bUpdateStatus))
+                file.AllowUpdate = bUpdateStatus;
 
             if (!fileAlreadyAdded)
                 upgradeData.Add(file);
@@ -1729,6 +1720,7 @@ namespace MeGUI
                     item.Checked = false;
                     item.SubItems["Status"].Text = "Update Ignored";
                 }
+                UpdateCacher.CheckPackage(file.Name, file.AllowUpdate, false);
             }
         }
 
