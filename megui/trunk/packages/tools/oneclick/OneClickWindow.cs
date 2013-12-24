@@ -738,6 +738,7 @@ namespace MeGUI
                 sb.Append(string.Format("{0}:\"{1}\" ", _videoInputInfo.VideoInfo.Track.TrackID, dpp.VideoInput));
                 inputContainer = ContainerType.MKV;
                 dpp.FilesToDelete.Add(dpp.VideoInput);
+                dpp.FilesToDelete.Add(dpp.VideoInput + ".gaps");
                 dpp.FilesToDelete.Add(Path.Combine(dpp.WorkingDirectory, Path.GetFileNameWithoutExtension(dpp.VideoInput) + " - Log.txt"));
                 
                 if (dpp.ChapterFile.Equals("<internal chapters>"))

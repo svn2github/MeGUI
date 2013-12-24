@@ -125,13 +125,13 @@ namespace MeGUI.core.gui
             comboBox1.Items.Clear();
             foreach (Named<Profile> oProfile in Manager.Profiles(ProfileSet))
             {
-                if ((oProfile.Data.BaseSettings is NeroAACSettings) && !MainForm.Instance.Settings.IsNeroAACEncAvailable())
+                if ((oProfile.Data.BaseSettings is NeroAACSettings) && !MainForm.Instance.Settings.NeroAacEnc.Enabled)
                     continue;
 
-                if ((oProfile.Data.BaseSettings is QaacSettings) && !MainForm.Instance.Settings.IsQAACAvailable())
+                if ((oProfile.Data.BaseSettings is QaacSettings) && !MainForm.Instance.Settings.QAAC.Enabled)
                     continue;
 
-                if ((oProfile.Data.BaseSettings is x265Settings) && !MainForm.Instance.Settings.IsX265Available())
+                if ((oProfile.Data.BaseSettings is x265Settings) && !MainForm.Instance.Settings.X265.Enabled)
                     continue;
 
                 comboBox1.Items.Add(oProfile);

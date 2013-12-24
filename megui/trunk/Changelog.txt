@@ -1,10 +1,11 @@
+2432 [Update] fixed DGIndexNV, NeroAACenc, QAAC and x265 update handling (regression of 2431)
 2431 [Update] optional packages will only be downloaded/enabled if needed
               therefore during first use of such packages an online connection may be required
-			  if a package is not used in 60 days it will be disabled again
-			  currently the following packages are disabled by default (more to come):
-			  DGIndexNV, FFmpeg, MKVMerge, NeroAACenc, QAAC, x264, x264_10b, x265
-			  DGIndexNV, NeroAACenc, QAAC and x265 still need to be enabled in the MeGUI settings
-			  NeroAACenc, QAAC and x265 need a restart of MeGUI so that the presets are enabled
+              if a package is not used in 60 days it will be disabled again
+              currently the following packages are disabled by default (more to come):
+              DGIndexNV, FFmpeg, MKVMerge, NeroAACenc, QAAC, x264, x264_10b, x265
+              DGIndexNV, NeroAACenc, QAAC and x265 still need to be enabled in the MeGUI settings
+              NeroAACenc, QAAC and x265 need a restart of MeGUI so that the presets are enabled
 2430 [OneClick] fixed unnecessary resize/crop in some cases (regression of 2357)
 2429 [Update] version/date information will be shown also for disabled packages
 2428 [Update] disabled packages are not hidden anymore

@@ -1155,7 +1155,7 @@ namespace MeGUI
             set
             {
                 if (!File.Exists(value))
-                    neroAacEncPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"\tools\eac3to\neroAacEnc.exe");
+                    neroAacEncPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\eac3to\neroAacEnc.exe");
                 else
                     neroAacEncPath = value;
                 neroaacenc.Path = neroAacEncPath;
@@ -1246,20 +1246,6 @@ namespace MeGUI
         }
 
         #region Methods
-        public bool IsNeroAACEncAvailable()
-        {
-            return neroaacenc.Enabled && File.Exists(neroaacenc.Path);
-        }
-
-        public bool IsQAACAvailable()
-        {
-            return qaac.Enabled && File.Exists(qaac.Path);
-        }
-
-        public bool IsX265Available()
-        {
-            return x265.Enabled && File.Exists(x265.Path);
-        }
 
         public bool IsDGIIndexerAvailable()
         {
@@ -1274,16 +1260,7 @@ namespace MeGUI
             if (SystemInformation.TerminalServerSession == true)
                 return false;
 
-            // check if the indexer is available
-            if (!File.Exists(dgindexnv.Path))
-                return false;
-
             return true;
-        }
-
-        public bool Is10Bitx264Available()
-        {
-            return x264_10b.Enabled && File.Exists(x264_10b.Path);
         }
 
         public void SetProgramPaths()
