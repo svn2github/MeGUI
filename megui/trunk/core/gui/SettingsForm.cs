@@ -1685,10 +1685,10 @@ namespace MeGUI
                 settings.FFMSThreads = Decimal.ToInt32(ffmsThreads.Value);
                 settings.AppendToForcedStreams = txtForcedName.Text;
                 settings.UseITUValues = cbUseITUValues.Checked;
-                settings.NeroAacEnc.Enabled = useNeroAacEnc.Checked;
-                settings.DGIndexNV.Enabled = useDGIndexNV.Checked;
-                settings.QAAC.Enabled = useQAAC.Checked;
-                settings.X265.Enabled = useX265.Checked;
+                settings.UseDGIndexNV = useDGIndexNV.Checked;
+                settings.UseNeroAacEnc = useNeroAacEnc.Checked;
+                settings.UseQAAC = useQAAC.Checked;
+                settings.UseX265 = useX265.Checked;
                 settings.UseExternalMuxerX264 = chx264ExternalMuxer.Checked;
 				return settings;
 			}
@@ -1755,10 +1755,10 @@ namespace MeGUI
                 else
                     ffmsThreads.Value = settings.FFMSThreads;
                 cbUseITUValues.Checked = settings.UseITUValues;
-                useNeroAacEnc.Checked = settings.NeroAacEnc.Enabled;
-                useDGIndexNV.Checked = settings.DGIndexNV.Enabled;
-                useQAAC.Checked = settings.QAAC.Enabled;
-                useX265.Checked = settings.X265.Enabled;
+                useDGIndexNV.Checked = settings.UseDGIndexNV;
+                useNeroAacEnc.Checked = settings.UseNeroAacEnc;
+                useQAAC.Checked = settings.UseQAAC;
+                useX265.Checked = settings.UseX265;
                 chx264ExternalMuxer.Checked = settings.UseExternalMuxerX264;
 			}
 		}
@@ -1820,25 +1820,25 @@ namespace MeGUI
         private void useNeroAacEnc_CheckedChanged(object sender, EventArgs e)
         {
             neroaacencLocation.Enabled = lblNero.Enabled = useNeroAacEnc.Checked;
-            if (useNeroAacEnc.Checked && !internalSettings.NeroAacEnc.Enabled)
+            if (useNeroAacEnc.Checked && !internalSettings.UseNeroAacEnc)
             {
-                MessageBox.Show("You have to restart MeGUI in order to get access to NeroAacEnc", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You have to restart MeGUI in order to get access to NeroAacEnc.\r\nAlso the program files are not available on the MeGUI update server. They have to be downloaded from:\r\nhttp://www.nero.com/eng/downloads-nerodigital-nero-aac-codec.php", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 UpdateCacher.CheckPackage("neroaacenc", useNeroAacEnc.Checked, false);
             }
         }
 
         private void useQAAC_CheckedChanged(object sender, EventArgs e)
         {
-            if (useQAAC.Checked && !internalSettings.QAAC.Enabled)
+            if (useQAAC.Checked && !internalSettings.UseQAAC)
             {
-                MessageBox.Show("You have to restart MeGUI in order to get access to QAAC.", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You have to restart MeGUI in order to get access to QAAC.\r\nAlso external dependencies must be installed if not already available. More information can be found here:\r\nhttps://sites.google.com/site/qaacpage/", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 UpdateCacher.CheckPackage("qaac", useQAAC.Checked, false);
             }
         }
 
         private void useX265_CheckedChanged(object sender, EventArgs e)
         {
-            if (useX265.Checked && !internalSettings.X265.Enabled)
+            if (useX265.Checked && !internalSettings.UseX265)
             {
                 MessageBox.Show("You have to restart MeGUI in order to get access to x265.", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 UpdateCacher.CheckPackage("x265", useX265.Checked, false);
@@ -1847,8 +1847,12 @@ namespace MeGUI
 
         private void useDGIndexNV_CheckedChanged(object sender, EventArgs e)
         {
-            if (useDGIndexNV.Checked && !internalSettings.DGIndexNV.Enabled)
+            if (useDGIndexNV.Checked && !internalSettings.UseDGIndexNV)
                 UpdateCacher.CheckPackage("dgindexnv", useDGIndexNV.Checked, false);
+
+            // check if the license file is available
+            if (useDGIndexNV.Checked && !File.Exists(Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DGIndexNV.Path), "license.txt")))
+                MessageBox.Show("DGIndexNV cannot be used for free. Therefore you have to copy/create the file license.txt into your ..\\tools\\dgindexnv directory or you have to disable DGIndexNV.", "license.txt for DGIndexNV missing", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 	}
 }

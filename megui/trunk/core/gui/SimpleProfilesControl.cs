@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -125,13 +125,13 @@ namespace MeGUI.core.gui
             comboBox1.Items.Clear();
             foreach (Named<Profile> oProfile in Manager.Profiles(ProfileSet))
             {
-                if ((oProfile.Data.BaseSettings is NeroAACSettings) && !MainForm.Instance.Settings.NeroAacEnc.Enabled)
+                if ((oProfile.Data.BaseSettings is NeroAACSettings) && !MainForm.Instance.Settings.UseNeroAacEnc)
                     continue;
 
-                if ((oProfile.Data.BaseSettings is QaacSettings) && !MainForm.Instance.Settings.QAAC.Enabled)
+                if ((oProfile.Data.BaseSettings is QaacSettings) && !MainForm.Instance.Settings.UseQAAC)
                     continue;
 
-                if ((oProfile.Data.BaseSettings is x265Settings) && !MainForm.Instance.Settings.X265.Enabled)
+                if ((oProfile.Data.BaseSettings is x265Settings) && !MainForm.Instance.Settings.UseX265)
                     continue;
 
                 comboBox1.Items.Add(oProfile);

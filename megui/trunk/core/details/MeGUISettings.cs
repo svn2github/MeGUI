@@ -61,7 +61,8 @@ namespace MeGUI
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll,
                      alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264,
-                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bExternalMuxerX264;
+                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bExternalMuxerX264, bUseNeroAacEnc,
+                     bUseQAAC, bUseX265, bUseDGIndexNV;
         private ulong audioSamplesPerUpdate;
         private decimal forceFilmThreshold, acceptableFPSError;
         private int nbPasses, autoUpdateServerSubList, minComplexity, updateFormSplitter,
@@ -213,6 +214,7 @@ namespace MeGUI
             bUseITU = true;
             bOpenAVSInThread = true;
             lastUsedOneClickFolder = "";
+            bUseNeroAacEnc = bUseQAAC = bUseX265 = bUseDGIndexNV = false;
         }
 
         private string getDownloadPath(string strPath)
@@ -1162,6 +1164,30 @@ namespace MeGUI
             }
         }
 
+        public bool UseDGIndexNV
+        {
+            get { return bUseDGIndexNV; }
+            set { bUseDGIndexNV = value; }
+        }
+
+        public bool UseNeroAacEnc
+        {
+            get { return bUseNeroAacEnc; }
+            set { bUseNeroAacEnc = value; }
+        }
+
+        public bool UseQAAC
+        {
+            get { return bUseQAAC; }
+            set { bUseQAAC = value; }
+        }
+
+        public bool UseX265
+        {
+            get { return bUseX265; }
+            set { bUseX265 = value; }
+        }
+
         public ProgramSettings DGIndexNV
         {
             get { return dgindexnv; }
@@ -1249,7 +1275,7 @@ namespace MeGUI
 
         public bool IsDGIIndexerAvailable()
         {
-            if (!dgindexnv.Enabled)
+            if (!bUseDGIndexNV)
                 return false;
 
             // check if the license file is available
