@@ -404,7 +404,10 @@ namespace MeGUI
                     script.Append("AssumeTFF().");
                 else if (order == FieldOrder.BFF)
                     script.Append("AssumeBFF().");
-                script.Append("SeparateFields().EEDI2(field=-1)\r\n");
+                script.Append("SeparateFields().");
+                if (!bob)
+                    script.Append("SelectEven().");
+                script.Append("EEDI2(field=-1)\r\n");
             }
             script.Append("TDeint(");
 

@@ -1,3 +1,4 @@
+2433 [AVS Script Creator] fixed "TDeint (with EDI)" (regression of 2305)
 2432 [Update] fixed DGIndexNV, NeroAACenc, QAAC and x265 update handling (regression of 2431)
 2431 [Update] optional packages will only be downloaded/enabled if needed
               therefore during first use of such packages an online connection may be required
