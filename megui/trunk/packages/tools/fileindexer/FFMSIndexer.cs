@@ -35,12 +35,13 @@ namespace MeGUI
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is FFMSIndexJob) return new FFMSIndexer(mf.Settings.FFMSIndexPath);
+            if (j is FFMSIndexJob) return new FFMSIndexer(mf.Settings.FFMS.Path);
             return null;
         }
 
         public FFMSIndexer(string executableName)
         {
+            UpdateCacher.CheckPackage("ffms");
             executable = executableName;
         }
 
@@ -99,7 +100,7 @@ namespace MeGUI
                 for (int iCurrentTrack = 0; iCurrentTrack <= 29; iCurrentTrack++) // hard limit to max. 30 tracks
                 {
                     StringBuilder strAVSScript = new StringBuilder();
-                    String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
+                    String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path), "ffms2.dll");
                     strAVSScript.AppendLine("LoadPlugin(\"" + strDLLPath + "\")");
                     strAVSScript.AppendLine("FFAudioSource(\"" + job.Input + "\", track=" + iCurrentTrack + (!string.IsNullOrEmpty(job.Output) ? ", cachefile=\"" + job.Output + "\"" : String.Empty) + ")");
 

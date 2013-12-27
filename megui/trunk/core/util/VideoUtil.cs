@@ -956,10 +956,11 @@ namespace MeGUI
 
         private static string getFFMSBasicInputLine(string inputFile, string indexFile, int rffmode, int fpsnum, int fpsden)
         {
+            UpdateCacher.CheckPackage("ffms");
             StringBuilder script = new StringBuilder();
             if (inputFile.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
                 inputFile = inputFile.Substring(0, inputFile.Length - 8);
-            script.AppendLine("LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll") + "\")");
+            script.AppendLine("LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path), "ffms2.dll") + "\")");
             script.Append("FFVideoSource(\"" + inputFile + "\"");
             if (!String.IsNullOrEmpty(indexFile)
                 && !indexFile.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(inputFile.ToLower(System.Globalization.CultureInfo.InvariantCulture) + ".ffindex"))

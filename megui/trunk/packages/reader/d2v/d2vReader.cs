@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -89,8 +89,9 @@ namespace MeGUI
 		/// <param name="fileName">the dvd2avi project file that this reader will process</param>
         public d2vFile(string fileName)
 		{
+            UpdateCacher.CheckPackage("dgindex");
 			this.fileName = fileName;
-            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath);
+            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DGIndex.Path);
             string strDLL = Path.Combine(strPath, "DGDecode.dll");
             reader = AvsFile.ParseScript("LoadPlugin(\"" + strDLL + "\")\r\nDGDecode_Mpeg2Source(\"" + this.fileName + "\")");
             this.readFileProperties();

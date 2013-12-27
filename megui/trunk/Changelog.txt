@@ -1,3 +1,5 @@
+2435 [Update] optional packages will only be downloaded/enabled if needed (part II)
+              now all external programs are disabled by default
 2434 [Update] an update to 2431+ will not disable DGIndexNV, NeroAACenc, QAAC or x265 if already enabled
 2433 [AVS Script Creator] fixed "TDeint (with EDI)" (regression of 2305)
 2432 [Update] fixed DGIndexNV, NeroAACenc, QAAC and x265 update handling (regression of 2431)

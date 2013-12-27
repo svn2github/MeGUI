@@ -34,12 +34,13 @@ namespace MeGUI
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is PgcDemuxJob) 
-                return new PgcDemux(mf.Settings.PgcDemuxPath);
+                return new PgcDemux(mf.Settings.PgcDemux.Path);
             return null;
         }
 
         public PgcDemux(string executablePath)
         {
+            UpdateCacher.CheckPackage("pgcdemux");
             this.executable = executablePath;
         }
 

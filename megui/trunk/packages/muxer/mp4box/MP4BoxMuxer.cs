@@ -38,7 +38,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is MuxJob && (j as MuxJob).MuxType == MuxerType.MP4BOX)
-                return new MP4BoxMuxer(mf.Settings.Mp4boxPath);
+                return new MP4BoxMuxer(mf.Settings.Mp4Box.Path);
             return null;
         }
         
@@ -48,6 +48,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
 
         public MP4BoxMuxer(string executablePath)
         {
+            UpdateCacher.CheckPackage("mp4box");
             this.executable = executablePath;
             trackNumber = 0;
             lastLine = "";

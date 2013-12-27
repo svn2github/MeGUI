@@ -147,9 +147,10 @@ namespace MeGUI
                     inputLine = "Import(\"" + input + "\")";
                     break;
                 case PossibleSources.d2v:
+                    UpdateCacher.CheckPackage("dgindex");
                     if (String.IsNullOrEmpty(indexFile))
                         indexFile = input;
-                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath), "DGDecode.dll");
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DGIndex.Path), "DGDecode.dll");
                     inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGDecode_mpeg2source(\"" + indexFile + "\"";
                     if (mpeg2deblock)
                         inputLine += ", cpu=4";
@@ -160,9 +161,10 @@ namespace MeGUI
                         inputLine += string.Format("\r\nLoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "ColorMatrix.dll") + "\")\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
                     break;
                 case PossibleSources.dga:
+                    UpdateCacher.CheckPackage("dgavcindex");
                     if (String.IsNullOrEmpty(indexFile))
                         indexFile = input;
-                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath), "DGAVCDecode.dll");
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DGAVCIndex.Path), "DGAVCDecode.dll");
                     inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nAVCSource(\"" + indexFile + "\")"; 
                     break;
                 case PossibleSources.dgi:
@@ -378,10 +380,11 @@ namespace MeGUI
 
         public static void AddYadif(FieldOrder order, List<DeinterlaceFilter> filters, bool bobber)
         {
+            UpdateCacher.CheckPackage("yadif");
             filters.Add(new DeinterlaceFilter(
                 bobber ? "Yadif (with Bob)" : "Yadif",
                 string.Format("Load_Stdcall_Plugin(\"{0}\"){1}Yadif({2}order={3})", 
-                    MainForm.Instance.Settings.YadifPath, Environment.NewLine,
+                    MainForm.Instance.Settings.Yadif.Path, Environment.NewLine,
                     bobber ? "mode=1, " : "", Order(order))));
         }
 

@@ -130,14 +130,14 @@ namespace MeGUI
                         }
 #endif
                         break;
-                    case "dgindex": 
-                        arrPath.Add(MainForm.Instance.Settings.DgIndexPath);
-                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath);
+                    case "dgindex":
+                        arrPath.Add(MainForm.Instance.Settings.DGIndex.Path);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DGIndex.Path);
                         arrPath.Add(System.IO.Path.Combine(strPath, "DGDecode.dll"));
                         break;
-                    case "dgavcindex": 
-                        arrPath.Add(MainForm.Instance.Settings.DgavcIndexPath);
-                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
+                    case "dgavcindex":
+                        arrPath.Add(MainForm.Instance.Settings.DGAVCIndex.Path);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DGAVCIndex.Path);
                         arrPath.Add(System.IO.Path.Combine(strPath, "DGAVCDecode.dll")); 
                         break;
                     case "dgindexnv":
@@ -146,28 +146,28 @@ namespace MeGUI
                         arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
                         break;
                     case "ffms":
-                        arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);
-                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
+                        arrPath.Add(MainForm.Instance.Settings.FFMS.Path);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path);
                         arrPath.Add(System.IO.Path.Combine(strPath, "ffms2.dll"));
                         break;
-                    case "mp4box": arrPath.Add(MainForm.Instance.Settings.Mp4boxPath); break;
-                    case "pgcdemux": arrPath.Add(MainForm.Instance.Settings.PgcDemuxPath); break;
-                    case "avimux_gui": arrPath.Add(MainForm.Instance.Settings.AviMuxGUIPath); break;
-                    case "tsmuxer": arrPath.Add(MainForm.Instance.Settings.TSMuxerPath); break;
-                    case "xvid_encraw": arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath); break;
+                    case "mp4box": arrPath.Add(MainForm.Instance.Settings.Mp4Box.Path); break;
+                    case "pgcdemux": arrPath.Add(MainForm.Instance.Settings.PgcDemux.Path); break;
+                    case "avimux_gui": arrPath.Add(MainForm.Instance.Settings.AviMuxGui.Path); break;
+                    case "tsmuxer": arrPath.Add(MainForm.Instance.Settings.TSMuxer.Path); break;
+                    case "xvid_encraw": arrPath.Add(MainForm.Instance.Settings.XviD.Path); break;
                     case "mkvmerge":
                         arrPath.Add(MainForm.Instance.Settings.MkvMerge.Path);
                         arrPath.Add(Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.MkvMerge.Path), "mkvextract.exe"));
                         break;
                     case "ffmpeg": arrPath.Add(MainForm.Instance.Settings.FFmpeg.Path); break;
-                    case "oggenc2": arrPath.Add(MainForm.Instance.Settings.OggEnc2Path); break;
-                    case "yadif": arrPath.Add(MainForm.Instance.Settings.YadifPath); break;
-                    case "lame": arrPath.Add(MainForm.Instance.Settings.LamePath); break;
-                    case "aften": arrPath.Add(MainForm.Instance.Settings.AftenPath); break;
-                    case "flac": arrPath.Add(MainForm.Instance.Settings.FlacPath); break;
-                    case "eac3to": arrPath.Add(MainForm.Instance.Settings.EAC3toPath); break;
+                    case "oggenc2": arrPath.Add(MainForm.Instance.Settings.OggEnc.Path); break;
+                    case "yadif": arrPath.Add(MainForm.Instance.Settings.Yadif.Path); break;
+                    case "lame": arrPath.Add(MainForm.Instance.Settings.Lame.Path); break;
+                    case "aften": arrPath.Add(MainForm.Instance.Settings.Aften.Path); break;
+                    case "flac": arrPath.Add(MainForm.Instance.Settings.Flac.Path); break;
+                    case "eac3to": arrPath.Add(MainForm.Instance.Settings.Eac3to.Path); break;
                     case "qaac": arrPath.Add(MainForm.Instance.Settings.QAAC.Path); break;
-                    case "opus": arrPath.Add(MainForm.Instance.Settings.OpusPath); break;
+                    case "opus": arrPath.Add(MainForm.Instance.Settings.Opus.Path); break;
                     case "libs":
                         strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
                         arrPath.Add((System.IO.Path.Combine(strPath, @"ICSharpCode.SharpZipLib.dll")));
@@ -194,13 +194,13 @@ namespace MeGUI
                     case "vsfilter": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll")); break;
                     case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
                     case "bassaudio":
-                        arrPath.Add(MainForm.Instance.Settings.BassPath);
-                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.BassPath);
+                        arrPath.Add(MainForm.Instance.Settings.BassAudio.Path);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.BassAudio.Path);
                         arrPath.Add(System.IO.Path.Combine(strPath, "bass.dll"));
                         arrPath.Add(System.IO.Path.Combine(strPath, "bass_aac.dll"));
                         break;
-                    case "vobsub": arrPath.Add(MainForm.Instance.Settings.VobSubPath); break;
-                    case "besplit": arrPath.Add(MainForm.Instance.Settings.BeSplitPath); break;
+                    case "vobsub": arrPath.Add(MainForm.Instance.Settings.VobSub.Path); break;
+                    case "besplit": arrPath.Add(MainForm.Instance.Settings.BeSplit.Path); break;
                     case "avs":
                         strPath = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
                         arrPath.Add((Path.Combine(strPath, @"avisynth.dll")));
@@ -641,19 +641,19 @@ namespace MeGUI
                     switch (this.Name)
                     {
                         case ("dgindex"):
-                            return meGUISettings.DgIndexPath;
+                            return meGUISettings.DGIndex.Path;
                         case ("mkvmerge"):
                             return meGUISettings.MkvMerge.Path;
                         case ("lame"):
-                            return meGUISettings.LamePath;
+                            return meGUISettings.Lame.Path;
                         case ("mp4box"):
-                            return meGUISettings.Mp4boxPath;
+                            return meGUISettings.Mp4Box.Path;
                         case ("pgcdemux"):
-                            return meGUISettings.PgcDemuxPath;
+                            return meGUISettings.PgcDemux.Path;
                         case ("neroaacenc"):
                             return meGUISettings.NeroAacEnc.Path;
                         case ("avimux_gui"):
-                            return meGUISettings.AviMuxGUIPath;
+                            return meGUISettings.AviMuxGui.Path;
                         case ("avs"):
                             return meGUISettings.AviSynthPath;
                         case ("x265"):
@@ -663,37 +663,37 @@ namespace MeGUI
                         case ("x264_10b"):
                             return meGUISettings.X264_10B.Path;
                         case ("xvid_encraw"):
-                            return meGUISettings.XviDEncrawPath;
+                            return meGUISettings.XviD.Path;
                         case ("ffmpeg"):
                             return meGUISettings.FFmpeg.Path;
                         case ("oggenc2"):
-                            return meGUISettings.OggEnc2Path;
+                            return meGUISettings.OggEnc.Path;
                         case ("yadif"):
-                            return meGUISettings.YadifPath;
+                            return meGUISettings.Yadif.Path;
                         case ("bassaudio"):
-                            return meGUISettings.BassPath;
+                            return meGUISettings.BassAudio.Path;
                         case ("vobsub"):
-                            return meGUISettings.VobSubPath;
+                            return meGUISettings.VobSub.Path;
                         case ("besplit"):
-                            return meGUISettings.BeSplitPath;
+                            return meGUISettings.BeSplit.Path;
                         case ("aften"):
-                            return meGUISettings.AftenPath;
+                            return meGUISettings.Aften.Path;
                         case ("flac"):
-                            return meGUISettings.FlacPath;
+                            return meGUISettings.Flac.Path;
                         case ("eac3to"):
-                            return meGUISettings.EAC3toPath;
+                            return meGUISettings.Eac3to.Path;
                         case ("dgavcindex"):
-                            return meGUISettings.DgavcIndexPath;
+                            return meGUISettings.DGAVCIndex.Path;
                         case ("dgindexnv"):
                             return meGUISettings.DGIndexNV.Path;
                         case ("ffms"):
-                            return meGUISettings.FFMSIndexPath;
+                            return meGUISettings.FFMS.Path;
                         case ("tsmuxer"):
-                            return meGUISettings.TSMuxerPath;
+                            return meGUISettings.TSMuxer.Path;
                         case ("qaac"):
                             return meGUISettings.QAAC.Path;
                         case ("opus"):
-                            return meGUISettings.OpusPath;                                 
+                            return meGUISettings.Opus.Path;                                 
                         default:
                             return null;
                     }
@@ -1006,29 +1006,29 @@ namespace MeGUI
             }
 
             // dgindex
-            arrPath.Add(MainForm.Instance.Settings.DgIndexPath);
-            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath);
+            arrPath.Add(MainForm.Instance.Settings.DGIndex.Path);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DGIndex.Path);
             arrPath.Add(System.IO.Path.Combine(strPath, "DGDecode.dll"));
 #if x86
             // dgavcindex
-            arrPath.Add(MainForm.Instance.Settings.DgavcIndexPath);
-            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
+            arrPath.Add(MainForm.Instance.Settings.DGAVCIndex.Path);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DGAVCIndex.Path);
             arrPath.Add(System.IO.Path.Combine(strPath, "DGAVCDecode.dll"));
 #endif
             //ffms
-            arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);
-            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
+            arrPath.Add(MainForm.Instance.Settings.FFMS.Path);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path);
             arrPath.Add(System.IO.Path.Combine(strPath, "ffms2.dll"));
             //mp4box
-            arrPath.Add(MainForm.Instance.Settings.Mp4boxPath);
+            arrPath.Add(MainForm.Instance.Settings.Mp4Box.Path);
             //pgcdemux
-            arrPath.Add(MainForm.Instance.Settings.PgcDemuxPath);
+            arrPath.Add(MainForm.Instance.Settings.PgcDemux.Path);
             //avimux_gui
-            arrPath.Add(MainForm.Instance.Settings.AviMuxGUIPath);
+            arrPath.Add(MainForm.Instance.Settings.AviMuxGui.Path);
             //tsmuxer
-            arrPath.Add(MainForm.Instance.Settings.TSMuxerPath);
+            arrPath.Add(MainForm.Instance.Settings.TSMuxer.Path);
             //xvid_encraw
-            arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath);
+            arrPath.Add(MainForm.Instance.Settings.XviD.Path);
             //mkvmerge
             arrPath.Add(MainForm.Instance.Settings.MkvMerge.Path);
             arrPath.Add(Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.MkvMerge.Path), "mkvextract.exe"));
@@ -1036,19 +1036,19 @@ namespace MeGUI
             if (MainForm.Instance.Settings.FFmpeg.Enabled)
                 arrPath.Add(MainForm.Instance.Settings.FFmpeg.Path);
             //oggenc2
-            arrPath.Add(MainForm.Instance.Settings.OggEnc2Path);
+            arrPath.Add(MainForm.Instance.Settings.OggEnc.Path);
             //yadif
-            arrPath.Add(MainForm.Instance.Settings.YadifPath);
+            arrPath.Add(MainForm.Instance.Settings.Yadif.Path);
             //lame
-            arrPath.Add(MainForm.Instance.Settings.LamePath);
+            arrPath.Add(MainForm.Instance.Settings.Lame.Path);
             //aften
-            arrPath.Add(MainForm.Instance.Settings.AftenPath);
+            arrPath.Add(MainForm.Instance.Settings.Aften.Path);
             //flac
-            arrPath.Add(MainForm.Instance.Settings.FlacPath);
+            arrPath.Add(MainForm.Instance.Settings.Flac.Path);
             //eac3to
-            arrPath.Add(MainForm.Instance.Settings.EAC3toPath);
+            arrPath.Add(MainForm.Instance.Settings.Eac3to.Path);
             //opus
-            arrPath.Add(MainForm.Instance.Settings.OpusPath);
+            arrPath.Add(MainForm.Instance.Settings.Opus.Path);
             //libs":
             strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             arrPath.Add((System.IO.Path.Combine(strPath, @"ICSharpCode.SharpZipLib.dll")));
@@ -1088,8 +1088,8 @@ namespace MeGUI
             //nicaudio
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll"));
             //bassaudio
-            arrPath.Add(MainForm.Instance.Settings.BassPath);
-            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.BassPath);
+            arrPath.Add(MainForm.Instance.Settings.BassAudio.Path);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.BassAudio.Path);
             arrPath.Add(System.IO.Path.Combine(strPath, "bass.dll"));
             arrPath.Add(System.IO.Path.Combine(strPath, "bass_aac.dll"));
 #endif
@@ -1100,9 +1100,9 @@ namespace MeGUI
             //leakkerneldeint
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"LeakKernelDeint.dll"));
             //vobsub
-            arrPath.Add(MainForm.Instance.Settings.VobSubPath);
+            arrPath.Add(MainForm.Instance.Settings.VobSub.Path);
             //besplit
-            arrPath.Add(MainForm.Instance.Settings.BeSplitPath);
+            arrPath.Add(MainForm.Instance.Settings.BeSplit.Path);
 
             //qaac
             if (MainForm.Instance.Settings.QAAC.Enabled)

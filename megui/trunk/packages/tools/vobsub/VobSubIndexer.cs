@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -45,12 +45,13 @@ namespace MeGUI
         {
             get
             {
-                return "\"" + MainForm.Instance.Settings.VobSubPath + "\",Configure " + configFile;
+                return "\"" + MainForm.Instance.Settings.VobSub.Path + "\",Configure " + configFile;
             }
         }
 
         public VobSubIndexer()
         {
+            UpdateCacher.CheckPackage("vobsub");
             executable = Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\rundll32.exe";
         }
         #region IJobProcessor Members

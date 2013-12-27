@@ -327,7 +327,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             eac3toArgs args = new eac3toArgs();
             HDStreamsExJob job;
 
-            args.eac3toPath = settings.EAC3toPath;
+            args.eac3toPath = settings.Eac3to.Path;
             if (FolderSelection.Checked)
                 args.featureNumber = ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number.ToString();
             args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);

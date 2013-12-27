@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -72,8 +72,9 @@ namespace MeGUI
         /// <param name="fileName">the DGAVCIndex project file that this reader will process</param>
         public dgaFile(string fileName)
         {
+            UpdateCacher.CheckPackage("dgavcindex");
             this.fileName = fileName;
-            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
+            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DGAVCIndex.Path);
             string strDLL = Path.Combine(strPath, "DGAVCDecode.dll");
             reader = AvsFile.ParseScript("LoadPlugin(\"" + strDLL + "\")\r\nAVCSource(\"" + this.fileName + "\")");
             this.readFileProperties();

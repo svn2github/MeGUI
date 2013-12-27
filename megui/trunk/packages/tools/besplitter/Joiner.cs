@@ -34,7 +34,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is AudioJoinJob) return new Joiner(mf.Settings.BeSplitPath);
+            if (j is AudioJoinJob) return new Joiner(mf.Settings.BeSplit.Path);
             return null;
         }
 
@@ -42,6 +42,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
 
         public Joiner(string exe)
         {
+            UpdateCacher.CheckPackage("besplit");
             executable = exe;
         }
 

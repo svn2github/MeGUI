@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -133,12 +133,13 @@ namespace MeGUI.packages.tools.hdbdextractor
 
         public void FetchFeatureInformation()
         {
+            UpdateCacher.CheckPackage("eac3to");
             initBackgroundWorker();
             args = new eac3toArgs();
-            args.eac3toPath = MainForm.Instance.Settings.EAC3toPath;
+            args.eac3toPath = MainForm.Instance.Settings.Eac3to.Path;
             args.resultState = ResultState.FeatureCompleted;
             args.args = string.Empty;
-            args.workingFolder = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.EAC3toPath);
+            args.workingFolder = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.Eac3to.Path);
             features = new List<Feature>();
             backgroundWorker.ReportProgress(0, "Retrieving features...");
             backgroundWorker.RunWorkerAsync(args);
@@ -146,13 +147,14 @@ namespace MeGUI.packages.tools.hdbdextractor
 
         public void FetchStreamInformation(int iFeatureNumber)
         {
+            UpdateCacher.CheckPackage("eac3to");
             initBackgroundWorker();
             args = new eac3toArgs();
-            args.eac3toPath = MainForm.Instance.Settings.EAC3toPath;
+            args.eac3toPath = MainForm.Instance.Settings.Eac3to.Path;
             args.resultState = ResultState.StreamCompleted;
             args.args = iFeatureNumber.ToString();
             args.featureNumber = iFeatureNumber.ToString();
-            args.workingFolder = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.EAC3toPath);
+            args.workingFolder = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.Eac3to.Path);
             backgroundWorker.ReportProgress(0, "Retrieving streams...");
             backgroundWorker.RunWorkerAsync(args);
         }

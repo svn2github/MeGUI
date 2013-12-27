@@ -48,14 +48,11 @@ namespace MeGUI
         };
         private string[][] autoUpdateServerLists;
         private DateTime lastUpdateCheck;
-        private string opusPath, lamePath, mp4boxPath, strMainAudioFormat,
-                       besplitPath, yadifPath, aftenPath, strMainFileFormat, bassPath,
-                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath, aviSynthPath,
-                       eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
+        private string strMainAudioFormat, strMainFileFormat, aviSynthPath, meguiupdatecache, avisynthpluginspath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
-                       strLastDestinationPath, strLastSourcePath, tempDirMP4, flacPath, neroAacEncPath,
+                       strLastDestinationPath, strLastSourcePath, tempDirMP4, neroAacEncPath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir,
-                       appendToForcedStreams, pgcDemuxPath, lastUsedOneClickFolder, lastUpdateServer;
+                       appendToForcedStreams, lastUsedOneClickFolder, lastUpdateServer;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll,
@@ -83,18 +80,36 @@ namespace MeGUI
         private OCGUIMode ocGUIMode;
         private AfterEncoding afterEncoding;
         private ProxyMode httpProxyMode;
-        private ProgramSettings dgindexnv, ffmpeg, mkvmerge, neroaacenc, qaac, x264, x264_10b, x265;
+        private ProgramSettings aften, avimuxgui, bassaudio, besplit, dgavcindex, dgindex, dgindexnv, eac3to, 
+                                ffmpeg, ffms, flac, lame, mkvmerge, mp4box, neroaacenc, oggenc, opus, pgcdemux, 
+                                qaac, tsmuxer, vobsub, x264, x264_10b, x265, xvid, yadif;
         #endregion
         public MeGUISettings()
 		{
             string strMeGUIPath = Path.GetDirectoryName(Application.ExecutablePath);
 
             // initialize external program settings
+            aften = new ProgramSettings();
+            avimuxgui = new ProgramSettings();
+            bassaudio = new ProgramSettings();
+            besplit = new ProgramSettings();
+            dgavcindex = new ProgramSettings();
+            dgindex = new ProgramSettings();
             dgindexnv = new ProgramSettings();
+            eac3to = new ProgramSettings();
             ffmpeg = new ProgramSettings();
+            ffms = new ProgramSettings();
+            flac = new ProgramSettings();
+            lame = new ProgramSettings();
             mkvmerge = new ProgramSettings();
+            mp4box = new ProgramSettings();
             neroaacenc = new ProgramSettings();
+            oggenc = new ProgramSettings();
+            opus = new ProgramSettings();
+            pgcdemux = new ProgramSettings();
             qaac = new ProgramSettings();
+            tsmuxer = new ProgramSettings();
+            vobsub = new ProgramSettings();
 #if x64
             x264 = new ProgramSettings();
             b64bitX264 = true;
@@ -107,6 +122,8 @@ namespace MeGUI
                 b64bitX264 = true;
 #endif
             x265 = new ProgramSettings();
+            xvid = new ProgramSettings();
+            yadif = new ProgramSettings();
 
             autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
@@ -121,25 +138,7 @@ namespace MeGUI
             AedSettings = new AutoEncodeDefaultsSettings();
             useadvancedtooltips = true;
             audioSamplesPerUpdate = 100000;
-            aviMuxGUIPath = getDownloadPath(@"tools\avimux_gui\avimux_gui.exe");
-			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
-            pgcDemuxPath = getDownloadPath(@"tools\pgcdemux\pgcdemux.exe");
-            opusPath = getDownloadPath(@"tools\opus\opusenc.exe");
-            dgIndexPath = getDownloadPath(@"tools\dgindex\dgindex.exe");
-            ffmsIndexPath = getDownloadPath(@"tools\ffms\ffmsindex.exe");
-            xvidEncrawPath = getDownloadPath(@"tools\xvid_encraw\xvid_encraw.exe");
-            lamePath = getDownloadPath(@"tools\lame\lame.exe");
-            oggEnc2Path = getDownloadPath(@"tools\oggenc2\oggenc2.exe");
-            aftenPath = getDownloadPath(@"tools\aften\aften.exe");
-            flacPath = getDownloadPath(@"tools\flac\flac.exe");
-            yadifPath = getDownloadPath(@"tools\yadif\yadif.dll");
-            bassPath = getDownloadPath(@"tools\bassaudio\bassaudio.dll");
-            vobSubPath = getDownloadPath(@"tools\vobsub\vobsub.dll");
-            besplitPath = getDownloadPath(@"tools\besplit\besplit.exe");
-            dgavcIndexPath = getDownloadPath(@"tools\dgavcindex\dgavcindex.exe");
-            eac3toPath = getDownloadPath(@"tools\eac3to\eac3to.exe");
-            tsmuxerPath = getDownloadPath(@"tools\tsmuxer\tsmuxer.exe");
-            aviSynthPath = getDownloadPath(@"tools\avs\avisynth.dll");
+            aviSynthPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avs\avisynth.dll");
             meguiupdatecache = Path.Combine(strMeGUIPath, "update_cache");
             avisynthpluginspath = Path.Combine(strMeGUIPath, @"tools\avisynth_plugin");
             recalculateMainMovieBitrate = false;
@@ -217,17 +216,7 @@ namespace MeGUI
             bUseNeroAacEnc = bUseQAAC = bUseX265 = bUseDGIndexNV = false;
         }
 
-        private string getDownloadPath(string strPath)
-        {
-            strPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @strPath);
-            return strPath;
-        }
-
         #region properties
-        public string YadifPath
-        {
-            get { return yadifPath; }
-        }
 
         public Point MainFormLocation
         {
@@ -572,6 +561,7 @@ namespace MeGUI
             get { return bExternalMuxerX264; }
             set { bExternalMuxerX264 = value; }
         }
+
         /// <summary>
         /// gets / sets the default output directory
         /// </summary>
@@ -596,139 +586,11 @@ namespace MeGUI
         }
 
         /// <summary>
-        /// path of besplit.exe
-        /// </summary>
-        public string BeSplitPath
-        {
-            get { return besplitPath; }
-        }
-
-        /// <summary>
-        /// filename and full path of the vobsub dll
-        /// </summary>
-        public string VobSubPath
-        {
-            get { return vobSubPath; }
-        }
-
-        /// <summary>
-        /// filename and full path of the bassaudio dll
-        /// </summary>
-        public string BassPath
-        {
-            get { return bassPath; }
-        }
-        
-        /// <summary>
-        /// filename and full path of the oggenc2 executable
-        /// </summary>
-        public string OggEnc2Path
-        {
-            get { return oggEnc2Path; }
-        }
-
-        /// <summary>
-        /// filename and full path of the lame executable
-        /// </summary>
-        public string LamePath
-        {
-            get { return lamePath; }
-        }
-
-        /// <summary>
-		/// filename and full path of the mp4creator executable
-		/// </summary>
-		public string Mp4boxPath
-		{
-			get {return mp4boxPath;}
-		}
-
-        /// <summary>
-        /// filename and full path of the pgcdemux executable
-        /// </summary>
-        public string PgcDemuxPath
-        {
-            get { return pgcDemuxPath; }
-        }
-
-		/// <summary>
-		/// filename and full path of the dgindex executable
-		/// </summary>
-		public string DgIndexPath
-		{
-			get {return dgIndexPath;}
-		}
-        /// <summary>
-        /// filename and full path of the ffmsindex executable
-        /// </summary>
-        public string FFMSIndexPath
-        {
-            get { return ffmsIndexPath; }
-        }
-        /// <summary>
         /// filename and full path of the avisynth dll
         /// </summary>
         public string AviSynthPath
         {
             get { return aviSynthPath; }
-        }
-        /// <summary>
-        /// filename and full path of the xvid_encraw executable
-        /// </summary>
-        public string XviDEncrawPath
-        {
-            get { return xvidEncrawPath; }
-        }
-        /// <summary>
-        /// gets / sets the path of the avimuxgui executable
-        /// </summary>
-        public string AviMuxGUIPath
-        {
-            get { return aviMuxGUIPath; }
-        }
-        /// <summary>
-        /// filename and full path of the aften executable
-        /// </summary>
-        public string AftenPath
-        {
-            get { return aftenPath; }
-        }
-        /// <summary>
-        /// filename and full path of the flac executable
-        /// </summary>
-        public string FlacPath
-        {
-            get { return flacPath; }
-        }
-        /// <summary>
-        /// filename and full path of the dgavcindex executable
-        /// </summary>
-        public string DgavcIndexPath
-        {
-            get { return dgavcIndexPath; }
-        }
-
-        /// <summary>
-        /// filename and full path of the eac3to executable
-        /// </summary>
-        public string EAC3toPath
-        {
-            get { return eac3toPath; }
-        }
-        /// <summary>
-        /// filename and full path of the tsmuxer executable
-        /// </summary>
-        public string TSMuxerPath
-        {
-            get { return tsmuxerPath; }
-        }
-
-        /// <summary>
-        /// filename and full path of the opus executable
-        /// </summary>
-        public string OpusPath
-        {
-            get { return opusPath; }
         }
 
         ///<summary>
@@ -739,6 +601,7 @@ namespace MeGUI
             get { return alwaysbackupfiles; }
             set { alwaysbackupfiles = value; }
         }
+
         ///<summary>
         /// gets / sets whether to force raw AVC file Extension for QuickTime compatibility
         /// more infos here : http://forum.doom9.org/showthread.php?p=1243370#post1243370
@@ -1188,10 +1051,52 @@ namespace MeGUI
             set { bUseX265 = value; }
         }
 
+        public ProgramSettings Aften
+        {
+            get { return aften; }
+            set { aften = value; }
+        }
+
+        public ProgramSettings AviMuxGui
+        {
+            get { return avimuxgui; }
+            set { avimuxgui = value; }
+        }
+
+        public ProgramSettings BassAudio
+        {
+            get { return bassaudio; }
+            set { bassaudio = value; }
+        }
+
+        public ProgramSettings BeSplit
+        {
+            get { return besplit; }
+            set { besplit = value; }
+        }
+
+        public ProgramSettings DGAVCIndex
+        {
+            get { return dgavcindex; }
+            set { dgavcindex = value; }
+        }
+
+        public ProgramSettings DGIndex
+        {
+            get { return dgindex; }
+            set { dgindex = value; }
+        }
+
         public ProgramSettings DGIndexNV
         {
             get { return dgindexnv; }
             set { dgindexnv = value; }
+        }
+
+        public ProgramSettings Eac3to
+        {
+            get { return eac3to; }
+            set { eac3to = value; }
         }
 
         /// <summary>
@@ -1203,6 +1108,24 @@ namespace MeGUI
             set { ffmpeg = value; }
         }
 
+        public ProgramSettings FFMS
+        {
+            get { return ffms; }
+            set { ffms = value; }
+        }
+
+        public ProgramSettings Flac
+        {
+            get { return flac; }
+            set { flac = value; }
+        }
+
+        public ProgramSettings Lame
+        {
+            get { return lame; }
+            set { lame = value; }
+        }
+
         /// <summary>
         /// program settings of mkvmerge
         /// </summary>
@@ -1212,16 +1135,52 @@ namespace MeGUI
             set { mkvmerge = value; }
         }
 
+        public ProgramSettings Mp4Box
+        {
+            get { return mp4box; }
+            set { mp4box = value; }
+        }
+
         public ProgramSettings NeroAacEnc
         {
             get { return neroaacenc; }
             set { neroaacenc = value; }
         }
 
+        public ProgramSettings OggEnc
+        {
+            get { return oggenc; }
+            set { oggenc = value; }
+        }
+
+        public ProgramSettings Opus
+        {
+            get { return opus; }
+            set { opus = value; }
+        }
+
+        public ProgramSettings PgcDemux
+        {
+            get { return pgcdemux; }
+            set { pgcdemux = value; }
+        }
+
         public ProgramSettings QAAC
         {
             get { return qaac; }
             set { qaac = value; }
+        }
+
+        public ProgramSettings TSMuxer
+        {
+            get { return tsmuxer; }
+            set { tsmuxer = value; }
+        }
+
+        public ProgramSettings VobSub
+        {
+            get { return vobsub; }
+            set { vobsub = value; }
         }
 
         /// <summary>
@@ -1246,6 +1205,18 @@ namespace MeGUI
         {
             get { return x265; }
             set { x265 = value; }
+        }
+
+        public ProgramSettings XviD
+        {
+            get { return xvid; }
+            set { xvid = value; }
+        }
+
+        public ProgramSettings Yadif
+        {
+            get { return yadif; }
+            set { yadif = value; }
         }
         #endregion
 
@@ -1292,11 +1263,27 @@ namespace MeGUI
         public void SetProgramPaths()
         {
             // set default program paths
+            aften.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\aften\aften.exe");
+            avimuxgui.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avimux_gui\avimux_gui.exe");
+            bassaudio.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bassaudio.dll");
+            besplit.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\besplit\besplit.exe");
+            dgavcindex.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgavcindex\dgavcindex.exe");
+            dgindex.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindex\dgindex.exe");
             dgindexnv.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindexnv\dgindexnv.exe");
+            eac3to.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\eac3to\eac3to.exe");
             ffmpeg.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffmpeg\ffmpeg.exe");
+            ffms.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffms\ffmsindex.exe");
+            flac.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\flac\flac.exe");
+            lame.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lame\lame.exe");
             mkvmerge.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvmerge.exe");
+            mp4box.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mp4box\mp4box.exe");
             neroaacenc.Path = neroAacEncPath;
+            oggenc.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\oggenc2\oggenc2.exe");
+            opus.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\opus\opusenc.exe");
+            pgcdemux.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\pgcdemux\pgcdemux.exe");
             qaac.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\qaac\qaac.exe");
+            tsmuxer.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\tsmuxer\tsmuxer.exe");
+            vobsub.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\vobsub\vobsub.dll");
 #if x64
             x264.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264_64.exe");
             x264_10b.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b_64.exe");
@@ -1306,6 +1293,8 @@ namespace MeGUI
             x264_10b.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b.exe");
 #endif
             x265.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x265\x265.exe");
+            xvid.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\xvid_encraw\xvid_encraw.exe");
+            yadif.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\yadif\yadif.dll");
         }
         #endregion
     }

@@ -516,7 +516,7 @@ namespace MeGUI
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
         {
-            return new MP4BoxMuxer(settings.Mp4boxPath);
+            return new MP4BoxMuxer(settings.Mp4Box.Path);
         }
     }
     public class MKVMergeMuxerProvider : MuxerProvider
@@ -602,7 +602,7 @@ namespace MeGUI
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
         {
-            return new AMGMuxer(settings.AviMuxGUIPath);
+            return new AMGMuxer(settings.AviMuxGui.Path);
         }
     }
 
@@ -647,7 +647,7 @@ namespace MeGUI
  
         public override IJobProcessor GetMuxer(MeGUISettings settings)
         {
-            return new tsMuxeR(settings.TSMuxerPath);
+            return new tsMuxeR(settings.TSMuxer.Path);
         }
     }
 
@@ -1157,7 +1157,7 @@ namespace MeGUI
 
         public override IJobProcessor CreateEncoder(MeGUISettings settings)
         {
-            return new XviDEncoder(settings.XviDEncrawPath);
+            return new XviDEncoder(settings.XviD.Path);
         }
     }
 

@@ -43,12 +43,13 @@ namespace MeGUI
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is D2VIndexJob) return new D2VIndexer(mf.Settings.DgIndexPath);
+            if (j is D2VIndexJob) return new D2VIndexer(mf.Settings.DGIndex.Path);
             return null;
         }
 
         public D2VIndexer(string executableName)
         {
+            UpdateCacher.CheckPackage("dgindex");
             executable = executableName;
         }
 

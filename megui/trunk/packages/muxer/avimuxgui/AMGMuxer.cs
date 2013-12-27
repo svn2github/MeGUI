@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is MuxJob && (j as MuxJob).MuxType == MuxerType.AVIMUXGUI)
-                return new AMGMuxer(mf.Settings.AviMuxGUIPath);
+                return new AMGMuxer(mf.Settings.AviMuxGui.Path);
             return null;
         }
 
@@ -45,6 +45,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
 
         public AMGMuxer(string executablePath)
         {
+            UpdateCacher.CheckPackage("avimux_gui");
             this.executable = executablePath;
         }
         #region setup/start overrides

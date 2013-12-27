@@ -39,13 +39,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
         {
             if (j is VideoJob &&
                 (j as VideoJob).Settings is xvidSettings)
-                return new XviDEncoder(mf.Settings.XviDEncrawPath);
+                return new XviDEncoder(mf.Settings.XviD.Path);
             return null;
         }
 
         public XviDEncoder(string exePath)
             : base()
         {
+            UpdateCacher.CheckPackage("xvid_encraw");
             executable = exePath;
         }
 

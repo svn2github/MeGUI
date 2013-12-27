@@ -622,8 +622,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         private bool OpenSourceWithFFAudioSource(out StringBuilder sbOpen)
         {
+            UpdateCacher.CheckPackage("ffms");
             sbOpen = new StringBuilder();
-            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
+            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path), "ffms2.dll"), Environment.NewLine);
             sbOpen.AppendFormat("FFAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
             _log.LogEvent("Trying to open the file with FFAudioSource()", ImageType.Information);
             string strErrorText = String.Empty;
@@ -644,8 +645,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         private bool OpenSourceWithBassAudio(out StringBuilder sbOpen)
         {
+            UpdateCacher.CheckPackage("bassaudio");
             sbOpen = new StringBuilder();
-            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", MainForm.Instance.Settings.BassPath, Environment.NewLine);
+            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", MainForm.Instance.Settings.BassAudio.Path, Environment.NewLine);
             sbOpen.AppendFormat("BassAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
             _log.LogEvent("Trying to open the file with BassAudioSource()", ImageType.Information);
             string strErrorText = String.Empty;
@@ -1158,17 +1160,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             //let's obtain command line & other stuff
             if (audioJob.Settings is AftenSettings)
             {
+                UpdateCacher.CheckPackage("aften");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 AftenSettings n = audioJob.Settings as AftenSettings;
-                _encoderExecutablePath = this._settings.AftenPath;
+                _encoderExecutablePath = this._settings.Aften.Path;
                 _encoderCommandLine = "-readtoeof 1 -b " + n.Bitrate + " - \"{0}\"";
             }
             else if (audioJob.Settings is FlacSettings)
             {
+                UpdateCacher.CheckPackage("flac");
                 script.Append("AudioBits(last)>24?ConvertAudioTo24bit(last):last " + Environment.NewLine); // flac encoder doesn't support 32bits streams
                 _mustSendWavHeaderToEncoderStdIn = false;
                 FlacSettings n = audioJob.Settings as FlacSettings;
-                _encoderExecutablePath = this._settings.FlacPath;
+                _encoderExecutablePath = this._settings.Flac.Path;
                 _encoderCommandLine = "--force --force-raw-format --endian=little --sign=signed -" + n.CompressionLevel + " - -o \"{0}\""; 
             }
             else if (audioJob.Settings is AC3Settings)
@@ -1192,9 +1196,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             } 
             else if (audioJob.Settings is OggVorbisSettings)
             {
+                UpdateCacher.CheckPackage("oggenc2");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 OggVorbisSettings n = audioJob.Settings as OggVorbisSettings;
-                _encoderExecutablePath = this._settings.OggEnc2Path;
+                _encoderExecutablePath = this._settings.OggEnc.Path;
                 _encoderCommandLine = "--ignorelength --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
             }
             else if (audioJob.Settings is NeroAACSettings)
@@ -1237,9 +1242,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
             else if (audioJob.Settings is MP3Settings)
             {
+                UpdateCacher.CheckPackage("lame");
                 MP3Settings m = audioJob.Settings as MP3Settings;
                 _mustSendWavHeaderToEncoderStdIn = true;
-                _encoderExecutablePath = this._settings.LamePath;
+                _encoderExecutablePath = this._settings.Lame.Path;
                 script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine); // lame encoder doesn't support 32bits streams
 
                 switch (m.BitrateMode)
@@ -1287,8 +1293,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
             else if (audioJob.Settings is OpusSettings)
             {
+                UpdateCacher.CheckPackage("opus");
                 OpusSettings o = audioJob.Settings as OpusSettings;
-                _encoderExecutablePath = this._settings.OpusPath;
+                _encoderExecutablePath = this._settings.Opus.Path;
                 _mustSendWavHeaderToEncoderStdIn = true;
                 StringBuilder sb = new StringBuilder("--ignorelength ");
 

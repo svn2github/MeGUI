@@ -914,10 +914,6 @@ namespace MeGUI
             if (!_VideoInfo.HasVideo)
                 return false;
 
-            // check if the indexer is available
-            if (!File.Exists(MainForm.Instance.Settings.DgIndexPath))
-                return false;
-
             // only MPEG1 and MPEG2 are supported
             if (!_VideoInfo.Track.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-1 VIDEO") &&
                 !_VideoInfo.Track.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-2 VIDEO"))
@@ -941,10 +937,6 @@ namespace MeGUI
             if (!_VideoInfo.HasVideo)
                 return false;
 
-            // check if the indexer is available
-            if (!File.Exists(MainForm.Instance.Settings.DgavcIndexPath))
-                return false;
-
             // only AVC is supported
             if (!_VideoInfo.Track.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVC"))
                 return false;
@@ -966,10 +958,6 @@ namespace MeGUI
         {
             // check if the file is a video file
             if (!_VideoInfo.HasVideo)
-                return false;
-
-            // check if the indexer is available
-            if (!File.Exists(MainForm.Instance.Settings.FFMSIndexPath))
                 return false;
 
             // interlaced VC-1 is not supported
@@ -1128,10 +1116,6 @@ namespace MeGUI
         /// <returns>true if demuxable, false if not</returns>
         public bool isEac3toDemuxable()
         {
-            // check if the indexer is available
-            if (!File.Exists(MainForm.Instance.Settings.EAC3toPath))
-                return false;
-
             // only the following container formats are supported
             if (_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BLU-RAY PLAYLIST"))
                 return true;

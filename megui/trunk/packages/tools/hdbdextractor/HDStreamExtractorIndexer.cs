@@ -36,7 +36,7 @@ namespace MeGUI
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is HDStreamsExJob) 
-                return new HDStreamExtractorIndexer(mf.Settings.EAC3toPath);
+                return new HDStreamExtractorIndexer(mf.Settings.Eac3to.Path);
             return null;
         }
 
@@ -44,6 +44,7 @@ namespace MeGUI
 
         public HDStreamExtractorIndexer(string executablePath)
         {
+            UpdateCacher.CheckPackage("eac3to");
             this.executable = executablePath;
         }
 

@@ -41,7 +41,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is MuxJob && (j as MuxJob).MuxType == MuxerType.TSMUXER)
-                return new tsMuxeR(mf.Settings.TSMuxerPath);
+                return new tsMuxeR(mf.Settings.TSMuxer.Path);
             return null;
         }
 
@@ -50,6 +50,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
 
         public tsMuxeR(string executablePath)
         {
+            UpdateCacher.CheckPackage("tsmuxer");
             this.executable = executablePath;
         }
         #region setup/start overrides

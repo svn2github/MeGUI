@@ -33,7 +33,7 @@ namespace MeGUI.packages.tools.besplitter
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is AudioSplitJob) return new Splitter(mf.Settings.BeSplitPath);
+            if (j is AudioSplitJob) return new Splitter(mf.Settings.BeSplit.Path);
             return null;
         }
 
@@ -44,6 +44,7 @@ namespace MeGUI.packages.tools.besplitter
 
         public Splitter(string exe)
         {
+            UpdateCacher.CheckPackage("besplit");
             executable = exe;
         }
 

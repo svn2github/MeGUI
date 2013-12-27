@@ -35,12 +35,13 @@ public static readonly JobProcessorFactory Factory =
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is DGAIndexJob) return new DGAIndexer(mf.Settings.DgavcIndexPath);
+            if (j is DGAIndexJob) return new DGAIndexer(mf.Settings.DGAVCIndex.Path);
             return null;
         }
 
         public DGAIndexer(string executableName)
         {
+            UpdateCacher.CheckPackage("dgavcindex");
             executable = executableName;
         }
 
