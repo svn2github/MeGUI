@@ -645,7 +645,7 @@ namespace MeGUI
         private void createOneClickJob(List<OneClickFilesToProcess> arrFilesToProcess)
         {
             // checks if there is a suitable container
-            if (ignoreRestrictions)
+            if (ignoreRestrictions && bAutomatedProcessing)
             {
                 _oLog.LogEvent(_videoInputInfo.FileName + ": No container type could be found that matches the list of acceptable types in your chosen one click profile. Skipping...");
                 if (arrFilesToProcess != null)
@@ -657,7 +657,7 @@ namespace MeGUI
             string strWorkingDirectory = string.Empty;
             if (Directory.Exists(workingDirectory.Filename) && FileUtil.IsDirWriteable(workingDirectory.Filename))
                 strWorkingDirectory = workingDirectory.Filename;
-            else if (File.Exists(output.Filename))
+            else if (Directory.Exists(Path.GetDirectoryName(output.Filename)))
                 strWorkingDirectory = Path.GetDirectoryName(output.Filename);
             else if (File.Exists(_videoInputInfo.FileName))
                 strWorkingDirectory = Path.GetDirectoryName(_videoInputInfo.FileName);
