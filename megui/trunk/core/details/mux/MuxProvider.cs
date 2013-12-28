@@ -475,12 +475,13 @@ namespace MeGUI
         public MP4BoxMuxerProvider() : base("MP4Box")
         {
             supportedVideoTypes.Add(VideoType.AVI);
+            supportedVideoTypes.Add(VideoType.MP4);
+            supportedVideoTypes.Add(VideoType.MPEG2);
             supportedVideoTypes.Add(VideoType.RAWASP);
             supportedVideoTypes.Add(VideoType.RAWAVC);
             supportedVideoTypes.Add(VideoType.RAWAVC2);
             supportedVideoTypes.Add(VideoType.RAWHEVC);
-            supportedVideoTypes.Add(VideoType.MPEG2);
-            supportedVideoTypes.Add(VideoType.MP4);
+
             supportedAudioTypes.Add(AudioType.AC3);
             supportedAudioTypes.Add(AudioType.RAWAAC);
             supportedAudioTypes.Add(AudioType.MP4AAC);
@@ -488,26 +489,35 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.MP3);
             supportedAudioTypes.Add(AudioType.VBRMP3);
             supportedAudioTypes.Add(AudioType.CBRMP3);
+
             supportedVideoCodecs.Add(VideoCodec.ASP);
             supportedVideoCodecs.Add(VideoCodec.AVC);
+            supportedVideoCodecs.Add(VideoCodec.HEVC);
+            supportsAnyInputtableVideoCodec = false;
+
             supportedAudioCodecs.Add(AudioCodec.AAC);
             supportedAudioCodecs.Add(AudioCodec.AC3);
             supportedAudioCodecs.Add(AudioCodec.MP3);
+            supportsAnyInputtableAudioCodec = false;
+
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
             supportedSubtitleTypes.Add(SubtitleType.TTXT);
+
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
+
             supportedContainers.Add(ContainerType.MP4);
+
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MP4);
+
             supportedDeviceTypes.Add(DeviceType.APPLETV);
             supportedDeviceTypes.Add(DeviceType.IPAD);
             supportedDeviceTypes.Add(DeviceType.IPHONE);
             supportedDeviceTypes.Add(DeviceType.IPOD);
             supportedDeviceTypes.Add(DeviceType.ISMA);
             supportedDeviceTypes.Add(DeviceType.PSP);   
-            supportsAnyInputtableAudioCodec = false;
-            supportsAnyInputtableVideoCodec = false;
+            
             base.type = MuxerType.MP4BOX;
             maxFilesOfType = new int[] { 1, -1, -1, 1, 1};
             name = "MP4 Muxer";
@@ -530,6 +540,7 @@ namespace MeGUI
             supportedVideoTypes.Add(VideoType.RAWAVC2);
             supportedVideoTypes.Add(VideoType.MPEG2);
             supportedVideoTypes.Add(VideoType.VC1);
+
             supportedAudioTypes.Add(AudioType.RAWAAC);
             supportedAudioTypes.Add(AudioType.MP4AAC);
             supportedAudioTypes.Add(AudioType.M4A);
@@ -546,19 +557,45 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.THD);
             supportedAudioTypes.Add(AudioType.DTSHD);
             supportedAudioTypes.Add(AudioType.DTSMA);
-            supportsAnyInputtableAudioCodec = true;
-            supportsAnyInputtableVideoCodec = true;
+
+            supportedVideoCodecs.Add(VideoCodec.ASP);
+            supportedVideoCodecs.Add(VideoCodec.AVC);
+            supportedVideoCodecs.Add(VideoCodec.HFYU);
+            supportedVideoCodecs.Add(VideoCodec.MPEG2);
+            supportedVideoCodecs.Add(VideoCodec.VC1);
+            supportsAnyInputtableVideoCodec = false;
+
+            supportedAudioCodecs.Add(AudioCodec.AAC);
+            supportedAudioCodecs.Add(AudioCodec.AC3);
+            supportedAudioCodecs.Add(AudioCodec.DTS);
+            supportedAudioCodecs.Add(AudioCodec.DTSHD);
+            supportedAudioCodecs.Add(AudioCodec.DTSMA);
+            supportedAudioCodecs.Add(AudioCodec.EAC3);
+            supportedAudioCodecs.Add(AudioCodec.FLAC);
+            supportedAudioCodecs.Add(AudioCodec.MP2);
+            supportedAudioCodecs.Add(AudioCodec.MP3);
+            supportedAudioCodecs.Add(AudioCodec.OPUS);
+            supportedAudioCodecs.Add(AudioCodec.PCM);
+            supportedAudioCodecs.Add(AudioCodec.THD);
+            supportedAudioCodecs.Add(AudioCodec.VORBIS);
+            supportedAudioCodecs.Add(AudioCodec.WAV);
+            supportsAnyInputtableAudioCodec = false;
+
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
             supportedSubtitleTypes.Add(SubtitleType.SSA);
             supportedSubtitleTypes.Add(SubtitleType.ASS);
             supportedSubtitleTypes.Add(SubtitleType.BDSUP);
+
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
             supportedChapterTypes.Add(ChapterType.MKV_XML);
+
             supportedContainers.Add(ContainerType.MKV);
+
             supportedContainerInputTypes.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MKV);
+
             maxFilesOfType = new int[] { -1, -1, -1, 1, 0};
             base.type = MuxerType.MKVMERGE;
             name = "MKV Muxer";
@@ -575,7 +612,11 @@ namespace MeGUI
         public AVIMuxGUIMuxerProvider(): base("AVIMuxGUI")
         {
             supportedVideoTypes.Add(VideoType.AVI);
-            supportsAnyInputtableVideoCodec = true;
+            
+            supportedVideoCodecs.Add(VideoCodec.ASP);
+            supportedVideoCodecs.Add(VideoCodec.AVC);
+            supportedVideoCodecs.Add(VideoCodec.HFYU);
+            supportsAnyInputtableVideoCodec = false;
 
             supportedAudioTypes.Add(AudioType.AC3);
             supportedAudioTypes.Add(AudioType.DTS);
@@ -584,7 +625,13 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.CBRMP3);
             supportedAudioTypes.Add(AudioType.MP2);
             supportedAudioTypes.Add(AudioType.RAWAAC);
-            supportsAnyInputtableAudioCodec = true;
+
+            supportedAudioCodecs.Add(AudioCodec.AAC);
+            supportedAudioCodecs.Add(AudioCodec.AC3);
+            supportedAudioCodecs.Add(AudioCodec.DTS);
+            supportedAudioCodecs.Add(AudioCodec.MP2);
+            supportedAudioCodecs.Add(AudioCodec.MP3);
+            supportsAnyInputtableAudioCodec = false;
 
             supportedDeviceTypes.Add(DeviceType.PC);
             
@@ -593,6 +640,7 @@ namespace MeGUI
             supportedContainers.Add(ContainerType.AVI);
 
             supportedContainerInputTypes.Add(ContainerType.AVI);
+            supportedContainerInputTypes.Add(ContainerType.MKV);
             
             maxFilesOfType = new int[] { 1, -1, -1, 0, 1};
             base.type = MuxerType.AVIMUXGUI;
@@ -610,11 +658,14 @@ namespace MeGUI
     {
         public TSMuxerProvider() : base("tsMuxeR")
         {
-            supportedVideoTypes.Add(VideoType.MPEG2);
             supportedVideoTypes.Add(VideoType.RAWAVC);
             supportedVideoTypes.Add(VideoType.RAWAVC2);
+            supportedVideoTypes.Add(VideoType.RAWHEVC);
             supportedVideoTypes.Add(VideoType.VC1);
+            supportedVideoTypes.Add(VideoType.MPEG2);
             supportedVideoTypes.Add(VideoType.MP4);
+            supportedVideoTypes.Add(VideoType.MKV);
+
             supportedAudioTypes.Add(AudioType.AC3);
             supportedAudioTypes.Add(AudioType.DTS);
             supportedAudioTypes.Add(AudioType.EAC3);
@@ -624,21 +675,36 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.MP4AAC);
             supportedAudioTypes.Add(AudioType.WAV);
             supportedAudioTypes.Add(AudioType.PCM);
+
             supportedVideoCodecs.Add(VideoCodec.AVC);
+            supportedVideoCodecs.Add(VideoCodec.HEVC);
+            supportedVideoCodecs.Add(VideoCodec.MPEG2);
+            supportedVideoCodecs.Add(VideoCodec.VC1);
+            supportsAnyInputtableVideoCodec = false;
+
             supportedAudioCodecs.Add(AudioCodec.AAC);
             supportedAudioCodecs.Add(AudioCodec.AC3);
             supportedAudioCodecs.Add(AudioCodec.DTS);
+            supportedAudioCodecs.Add(AudioCodec.DTSHD);
+            supportedAudioCodecs.Add(AudioCodec.DTSMA);
+            supportedAudioCodecs.Add(AudioCodec.PCM);
+            supportedAudioCodecs.Add(AudioCodec.WAV);
+            supportsAnyInputtableAudioCodec = false;
+
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             supportedSubtitleTypes.Add(SubtitleType.BDSUP);
+
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
+
             supportedContainers.Add(ContainerType.M2TS);
+
             supportedContainerInputTypes.Add(ContainerType.MKV);
             supportedContainerInputTypes.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.M2TS);
+
             supportedDeviceTypes.Add(DeviceType.AVCHD);
             supportedDeviceTypes.Add(DeviceType.BD);
-            supportsAnyInputtableAudioCodec = true;
-            supportsAnyInputtableVideoCodec = true;
+
             base.type = MuxerType.TSMUXER;
             maxFilesOfType = new int[] { 1, -1, -1, 1, 1};
             name = "M2TS Muxer";

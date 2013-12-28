@@ -142,6 +142,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
             {
                 string vcodecID = "";
                 string extra = "";
+                string trackID = "";
+                MediaInfoFile oVideoInfo = null;
 
                 sw.Write("MUXOPT --no-pcr-on-video-pid --new-audio-pes"); // mux options
                 if (!string.IsNullOrEmpty(settings.DeviceType) && settings.DeviceType != "Standard")
@@ -164,61 +166,51 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                 if (settings.SplitSize.HasValue)
                     sw.Write(" --split-size=" + settings.SplitSize.Value.MB + "MB");
 
-                MediaInfoFile oVideoInfo = null;
+                string videoFile = null;
                 if (!string.IsNullOrEmpty(settings.VideoInput))
+                    videoFile = settings.VideoInput;
+                else if (!string.IsNullOrEmpty(settings.MuxedInput))
+                    videoFile = settings.MuxedInput;
+                if (!String.IsNullOrEmpty(videoFile))
                 {
-                    oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
-                    if (!oVideoInfo.HasVideo)
-                        log.Error("No video track found: " + settings.VideoInput);
-                    else
+                    oVideoInfo = new MediaInfoFile(videoFile, ref log);     
+                    if (oVideoInfo.HasVideo)
                     {
                         if (oVideoInfo.VideoInfo.Codec == VideoCodec.AVC)
                         {
                             vcodecID = "V_MPEG4/ISO/AVC";
-                            extra = " insertSEI, contSPS";
-                            if (oVideoInfo.ContainerFileType == ContainerType.MP4)
-                                extra += " , track=1";
+                            extra = "insertSEI, contSPS";
                         }
+                        else if (oVideoInfo.VideoInfo.Codec == VideoCodec.HEVC)
+                            vcodecID = "V_MPEGH/ISO/HEVC";
                         else if (oVideoInfo.VideoInfo.Codec == VideoCodec.MPEG2)
                             vcodecID = "V_MPEG-2";
                         else if (oVideoInfo.VideoInfo.Codec == VideoCodec.VC1)
                             vcodecID = "V_MS/VFW/WVC1";
-                    }
-                    sw.Write("\n" + vcodecID + ", ");
 
-                    sw.Write("\"" + settings.VideoInput + "\"");
-                }
-                else if (!string.IsNullOrEmpty(settings.MuxedInput))
-                {
-                    oVideoInfo = new MediaInfoFile(settings.MuxedInput, ref log);
-                    if (!oVideoInfo.HasVideo)
-                        log.Error("No video track found: " + settings.MuxedInput);
-                    else
-                    {
-                        if (oVideoInfo.VideoInfo.Codec == VideoCodec.AVC)
+                        if (oVideoInfo.ContainerFileType == ContainerType.MP4)
+                            trackID = "track=1";
+                        else if (oVideoInfo.ContainerFileType == ContainerType.MKV)
+                            trackID = "track=" + oVideoInfo.VideoInfo.Track.TrackID;
+
+                        sw.Write("\n" + vcodecID + ", ");
+                        sw.Write("\"" + videoFile + "\"");
+
+                        if (settings.Framerate.HasValue)
                         {
-                            vcodecID = "V_MPEG4/ISO/AVC";
-                            extra = " insertSEI, contSPS";
-                            if (oVideoInfo.ContainerFileType == ContainerType.MP4)
-                                extra += " , track=1";
+                            string fpsString = settings.Framerate.Value.ToString(ci);
+                            sw.Write(", fps=" + fpsString);
                         }
-                        else if (oVideoInfo.HasVideo && oVideoInfo.VideoInfo.Codec == VideoCodec.MPEG2)
-                            vcodecID = "V_MPEG-2";
-                        else if (oVideoInfo.HasVideo && oVideoInfo.VideoInfo.Codec == VideoCodec.VC1)
-                            vcodecID = "V_MS/VFW/WVC1";
+
+                        if (!String.IsNullOrEmpty(extra))
+                            sw.Write(" ," + extra);
+
+                        if (!String.IsNullOrEmpty(trackID))
+                            sw.Write(" ," + trackID);
                     }
-                    sw.Write(vcodecID + ", ");
-
-                    sw.Write("\"" + settings.MuxedInput + "\"");
+                    else
+                        log.Error("No video track found: " + videoFile);
                 }
-
-                if (settings.Framerate.HasValue)
-                {
-                    string fpsString = settings.Framerate.Value.ToString(ci);
-                    sw.Write(", fps=" + fpsString);
-                }
-
-                if (extra != "") sw.Write(" ," + extra);
 
                 foreach (object o in settings.AudioStreams)
                 {
@@ -248,11 +240,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     if (stream.delay != 0)
                        sw.Write(", timeshift={0}ms", stream.delay);
 
-                    if (!string.IsNullOrEmpty(stream.language))
+                    if (!String.IsNullOrEmpty(stream.language))
                     {
                         foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                         {
-                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                            if (stream.language.ToLowerInvariant().Equals(strLanguage.Key.ToLowerInvariant()))
                             {
                                 sw.Write(", lang=" + strLanguage.Value);
                                 break;
@@ -266,7 +258,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     MuxStream stream = (MuxStream)o;
                     string scodecID = "";
 
-                    if (stream.path.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".srt"))
+                    if (stream.path.ToLowerInvariant().EndsWith(".srt"))
                         scodecID = "S_TEXT/UTF8";
                     else 
                         scodecID = "S_HDMV/PGS"; // sup files
@@ -277,16 +269,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     if (stream.delay != 0)
                         sw.Write(", timeshift={0}ms", stream.delay);
 
-                    if (stream.path.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".srt"))
-                    {
+                    if (stream.path.ToLowerInvariant().EndsWith(".srt") && oVideoInfo != null)
                         sw.Write(", video-width={0}, video-height={1}, fps={2}", oVideoInfo.VideoInfo.Width, oVideoInfo.VideoInfo.Height, settings.Framerate.Value.ToString(ci));
-                    }
 
-                    if (!string.IsNullOrEmpty(stream.language))
+                    if (!String.IsNullOrEmpty(stream.language))
                     {
                         foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                         {
-                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                            if (stream.language.ToLowerInvariant().Equals(strLanguage.Key.ToLowerInvariant()))
                             {
                                 sw.Write(", lang=" + strLanguage.Value);
                                 break;

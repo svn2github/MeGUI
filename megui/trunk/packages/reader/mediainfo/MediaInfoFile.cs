@@ -1232,6 +1232,7 @@ namespace MeGUI
             knownVideoDescriptions.Add("mpeg-4v", VideoCodec.ASP);
             knownVideoDescriptions.Add("vc-1", VideoCodec.VC1);
             knownVideoDescriptions.Add("mpeg-2v", VideoCodec.MPEG2);
+            knownVideoDescriptions.Add("hevc", VideoCodec.HEVC);
 
             knownAudioDescriptions = new Dictionary<string, AudioCodec>();
             knownAudioDescriptions.Add("aac", AudioCodec.AAC);

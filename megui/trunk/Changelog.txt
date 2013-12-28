@@ -1,3 +1,5 @@
+2436 [M2TS Muxer] added HEVC/x265 and MKV support (requires tsmuxer 2.5.5+)
+     [OneClick] added HEVC/x265 support for MP4 and removed it for MKV
 2435 [Update] optional packages will only be downloaded/enabled if needed (part II)
               now all external programs are disabled by default
 2434 [Update] an update to 2431+ will not disable DGIndexNV, NeroAACenc, QAAC or x265 if already enabled
