@@ -1,3 +1,4 @@
+2442 [x265] fixed error during preset startup (regression of 2422)
 2441 [OneClick] fixed PCM audio track handling in mkv files (regression of 2378)
 2440 [XviD] hide FourCC box as it will not be used
 2439 [FFMS Indexer] automatically switch to LoadCPlugin if required

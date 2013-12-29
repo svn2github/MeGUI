@@ -538,7 +538,7 @@ namespace MeGUI.packages.video.x265
         /// <returns>true if the mode is a bitrate mode, false otherwise</returns>
         private bool isBitrateMode(int mode)
         {
-            return !(mode == (int)VideoCodecSettings.Mode.CQ ||  mode == (int)VideoCodecSettings.Mode.quality);
+            return !(mode == 1 || mode == 2);
         }
 
         private void doEncodingModeAdjustments()
