@@ -427,6 +427,7 @@ namespace MeGUI.packages.video.xvid
             this.fourCCLabel.Size = new System.Drawing.Size(46, 18);
             this.fourCCLabel.TabIndex = 6;
             this.fourCCLabel.Text = "FourCC";
+            this.fourCCLabel.Visible = false;
             // 
             // fourCC
             // 
@@ -440,6 +441,7 @@ namespace MeGUI.packages.video.xvid
             this.fourCC.Name = "fourCC";
             this.fourCC.Size = new System.Drawing.Size(72, 21);
             this.fourCC.TabIndex = 7;
+            this.fourCC.Visible = false;
             this.fourCC.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // xvidCodecToolsGroupBox
@@ -502,6 +504,7 @@ namespace MeGUI.packages.video.xvid
             this.cqmComboBox1.SelectedItem = null;
             this.cqmComboBox1.Size = new System.Drawing.Size(302, 29);
             this.cqmComboBox1.TabIndex = 16;
+            this.cqmComboBox1.Type = MeGUI.core.gui.FileSCBox.FileSCBoxType.Default;
             this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
             // 
             // xvidUseVHQForBframes
@@ -1390,8 +1393,8 @@ namespace MeGUI.packages.video.xvid
             // 
             // customCommandlineOptions
             // 
-            this.customCommandlineOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.customCommandlineOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.customCommandlineOptions.Location = new System.Drawing.Point(10, 16);
             this.customCommandlineOptions.Name = "customCommandlineOptions";
             this.customCommandlineOptions.Size = new System.Drawing.Size(466, 20);
