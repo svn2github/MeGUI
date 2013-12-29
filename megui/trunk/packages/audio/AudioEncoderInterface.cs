@@ -622,10 +622,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         private bool OpenSourceWithFFAudioSource(out StringBuilder sbOpen)
         {
-            UpdateCacher.CheckPackage("ffms");
             sbOpen = new StringBuilder();
-            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path), "ffms2.dll"), Environment.NewLine);
-            sbOpen.AppendFormat("FFAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+            sbOpen.Append(VideoUtil.getFFMSAudioInputLine(audioJob.Input, null, -1));
             _log.LogEvent("Trying to open the file with FFAudioSource()", ImageType.Information);
             string strErrorText = String.Empty;
             if (AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))

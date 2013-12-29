@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ namespace MeGUI
                     fps = oInfo.VideoInfo.FPS;
             }
 
-            reader = AvsFile.ParseScript(VideoUtil.getFFMSInputLine(this.fileName, indexFile, fps));
+            reader = AvsFile.ParseScript(VideoUtil.getFFMSVideoInputLine(this.fileName, indexFile, fps));
             info = reader.VideoInfo.Clone();
             if (oInfo != null)
                 info.DAR = oInfo.VideoInfo.DAR;

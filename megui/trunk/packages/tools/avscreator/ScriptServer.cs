@@ -180,7 +180,7 @@ namespace MeGUI
                         inputLine += ",fieldop=0";
                     break;
                 case PossibleSources.ffindex:
-                    inputLine = VideoUtil.getFFMSInputLine(input, indexFile, fps);
+                    inputLine = VideoUtil.getFFMSVideoInputLine(input, indexFile, fps);
                     break;
                 case PossibleSources.vdr:
                     inputLine = "AVISource(\"" + input + "\", audio=false)" + VideoUtil.getAssumeFPS(fps, input);

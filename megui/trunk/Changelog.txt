@@ -1,3 +1,5 @@
+2439 [FFMS Indexer] automatically switch to LoadCPlugin if required
+                    add fpsnum and fpsden if required
 2438 [x264] custom --fps values will be detected and used
 2437 [OneClick] improved working directory generation
                 improved handling if selected output container cannot be used

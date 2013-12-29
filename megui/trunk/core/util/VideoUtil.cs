@@ -949,29 +949,62 @@ namespace MeGUI
             MainForm.Instance.Settings.PortableAviSynth = bLocal;
         }
 
-        public static string getFFMSInputLine(string inputFile, string indexFile, double fps)
-        {
-            return getFFMSBasicInputLine(inputFile, indexFile, 0, 0, 0);
-        }
-
-        private static string getFFMSBasicInputLine(string inputFile, string indexFile, int rffmode, int fpsnum, int fpsden)
+        public static string getFFMSVideoInputLine(string inputFile, string indexFile, double fps)
         {
             UpdateCacher.CheckPackage("ffms");
+            int fpsnum, fpsden;
+            getFPSFraction(fps, inputFile, out fpsnum, out fpsden);
+            return getFFMSBasicInputLine(isFFMSCPluginRequired(), inputFile, indexFile, -1, 0, fpsnum, fpsden, true);             
+        }
+
+        public static string getFFMSAudioInputLine(string inputFile, string indexFile, int track)
+        {
+            UpdateCacher.CheckPackage("ffms");
+            return getFFMSBasicInputLine(isFFMSCPluginRequired(), inputFile, indexFile, track, 0, 0, 0, false);
+        }
+
+        private static bool isFFMSCPluginRequired()
+        {
             StringBuilder script = new StringBuilder();
-            if (inputFile.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
+            script.AppendFormat("LoadCPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path), "ffms2.dll"), Environment.NewLine);
+            script.AppendFormat("BlankClip(){0}", Environment.NewLine);
+            string errorText;
+            return OpenAVSScript(script.ToString(), out errorText);
+        }
+
+        private static string getFFMSBasicInputLine(bool loadCPlugin, string inputFile, string indexFile, int track, int rffmode, int fpsnum, int fpsden, bool video)
+        {
+            StringBuilder script = new StringBuilder();
+            script.AppendFormat("Load{0}Plugin(\"{1}\"){2}",
+                (loadCPlugin ? "C" : String.Empty),
+                Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path), "ffms2.dll"), 
+                Environment.NewLine);
+
+            if (inputFile.ToLowerInvariant().EndsWith(".ffindex"))
                 inputFile = inputFile.Substring(0, inputFile.Length - 8);
-            script.AppendLine("LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path), "ffms2.dll") + "\")");
-            script.Append("FFVideoSource(\"" + inputFile + "\"");
-            if (!String.IsNullOrEmpty(indexFile)
-                && !indexFile.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(inputFile.ToLower(System.Globalization.CultureInfo.InvariantCulture) + ".ffindex"))
-                script.Append(", cachefile=\"" + indexFile + "\"");
-            if (fpsnum > 0 && fpsden > 0)
-                script.Append(", fpsnum=" + fpsnum + ", fpsden=" + fpsden);
-            if (MainForm.Instance.Settings.FFMSThreads > 0)
-                script.Append(", threads=" + MainForm.Instance.Settings.FFMSThreads);
-            if (rffmode > 0)
-                script.Append(", rffmode=" + rffmode);
-            script.Append(")");
+            if (!String.IsNullOrEmpty(indexFile) && indexFile.ToLowerInvariant().Equals(inputFile.ToLowerInvariant() + ".ffindex"))
+                indexFile = null;
+
+            if (video)
+            {
+                // use FFVideoSource
+                script.AppendFormat("FFVideoSource(\"{0}\"{1}{2}{3}{4}{5})",
+                    inputFile,
+                    (track > -1 ? ", track=" + track : String.Empty),
+                    (!String.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty),
+                    ((fpsnum > 0 && fpsden > 0) ? ", fpsnum=" + fpsnum + ", fpsden=" + fpsden : String.Empty),
+                    (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty),
+                    (rffmode > 0 ? ", rffmode=" + rffmode : String.Empty));
+            }
+            else
+            {
+                // use FFAudioSource
+                script.AppendFormat("FFAudioSource(\"{0}\"{1}{2}){3}", 
+                    inputFile,
+                    (track > -1 ? ", track=" + track : String.Empty),
+                    (!String.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty),
+                    Environment.NewLine);
+            }           
             return script.ToString();
         }
 
@@ -1067,6 +1100,22 @@ namespace MeGUI
             catch
             {
                 return 0;
+            }
+        }
+
+        private static bool OpenAVSScript(String strAVSScript, out string strErrorText)
+        {
+            try
+            {
+                strErrorText = String.Empty;
+                using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
+                    using (AviSynthClip a = env.ParseScript(strAVSScript))
+                        return true;
+            }
+            catch (Exception ex)
+            {
+                strErrorText = ex.Message;
+                return false;
             }
         }
     }

@@ -349,7 +349,7 @@ namespace MeGUI
                 try
                 {
                     StreamWriter hfyuWrapper = new StreamWriter(inputAVS, false, Encoding.Default);
-                    hfyuWrapper.WriteLine(VideoUtil.getFFMSInputLine(hfyuFile, null, 0));
+                    hfyuWrapper.WriteLine(VideoUtil.getFFMSVideoInputLine(hfyuFile, null, 0));
                     hfyuWrapper.Close();
                 }
                 catch (Exception)
