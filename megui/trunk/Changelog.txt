@@ -1,3 +1,4 @@
+2438 [x264] custom --fps values will be detected and used
 2437 [OneClick] improved working directory generation
                 improved handling if selected output container cannot be used
 2436 [M2TS Muxer] added HEVC/x265 and MKV support (requires tsmuxer 2.5.5+)

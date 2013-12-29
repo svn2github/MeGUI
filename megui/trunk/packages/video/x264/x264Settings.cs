@@ -228,28 +228,6 @@ namespace MeGUI
             get { return preset; }
             set { preset = value; }
         }
-#warning Deprecated since 2327
-        public string x264Tuning
-        {
-            get { return "migrated"; }
-            set 
-            {
-                if (value.Equals("migrated"))
-                    return;
-                if (value.Equals("1"))
-                    psyTuningMode = x264PsyTuningModes.FILM;
-                if (value.Equals("2"))
-                    psyTuningMode = x264PsyTuningModes.ANIMATION;
-                if (value.Equals("3"))
-                    psyTuningMode = x264PsyTuningModes.GRAIN;
-                if (value.Equals("4"))
-                    psyTuningMode = x264PsyTuningModes.PSNR;
-                if (value.Equals("5"))
-                    psyTuningMode = x264PsyTuningModes.SSIM;
-                if (value.Equals("6"))
-                    tuneFastDecode = true;
-            }
-        }
         public x264PsyTuningModes x264PsyTuning
         {
             get { return psyTuningMode; }
@@ -744,49 +722,6 @@ namespace MeGUI
         {
             get { return profile; }
             set { profile = value; }
-        }
-#warning Deprecated since 2327
-        public string Level
-        {
-            get { return "migrated"; }
-            set
-            {
-                if (value.Equals("migrated"))
-                    return;
-
-                if (value.Equals("0"))
-                    avcLevel = AVCLevels.Levels.L_10;
-                if (value.Equals("1"))
-                    avcLevel = AVCLevels.Levels.L_11;
-                if (value.Equals("2"))
-                    avcLevel = AVCLevels.Levels.L_12;
-                if (value.Equals("3"))
-                    avcLevel = AVCLevels.Levels.L_13;
-                if (value.Equals("4"))
-                    avcLevel = AVCLevels.Levels.L_20;
-                if (value.Equals("5"))
-                    avcLevel = AVCLevels.Levels.L_21;
-                if (value.Equals("6"))
-                    avcLevel = AVCLevels.Levels.L_22;
-                if (value.Equals("7"))
-                    avcLevel = AVCLevels.Levels.L_30;
-                if (value.Equals("8"))
-                    avcLevel = AVCLevels.Levels.L_31;
-                if (value.Equals("9"))
-                    avcLevel = AVCLevels.Levels.L_32;
-                if (value.Equals("10"))
-                    avcLevel = AVCLevels.Levels.L_40;
-                if (value.Equals("11"))
-                    avcLevel = AVCLevels.Levels.L_41;
-                if (value.Equals("12"))
-                    avcLevel = AVCLevels.Levels.L_42;
-                if (value.Equals("13"))
-                    avcLevel = AVCLevels.Levels.L_50;
-                if (value.Equals("14"))
-                    avcLevel = AVCLevels.Levels.L_51;
-                if (value.Equals("15"))
-                    avcLevel = AVCLevels.Levels.L_UNRESTRICTED;
-            }
         }
         public AVCLevels.Levels AVCLevel
         {

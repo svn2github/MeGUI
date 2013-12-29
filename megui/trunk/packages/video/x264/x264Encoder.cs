@@ -61,7 +61,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
             {
                 string x264Path = Path.Combine(Path.GetDirectoryName(encoderPath), "avs4x264mod.exe");
-                if (System.IO.File.Exists(x264Path))
+                if (File.Exists(x264Path))
                     executable = x264Path;
             }
 #endif
@@ -108,6 +108,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (!String.IsNullOrEmpty(xs.CustomEncoderOptions))
                     log.LogEvent("custom command line: " + xs.CustomEncoderOptions);
             }
+
+            oSettingsHandler.getFPS(ref fps_n, ref fps_d);
 
             #region main tab
             ///<summary>

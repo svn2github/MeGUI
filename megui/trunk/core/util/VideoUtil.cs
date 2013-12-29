@@ -986,7 +986,7 @@ namespace MeGUI
             return ".AssumeFPS(" + fpsnum + "," + fpsden + ")";
         }
 
-        private static bool getFPSFraction(double fps, string strInput, out int fpsnum, out int fpsden)
+        public static bool getFPSFraction(double fps, string strInput, out int fpsnum, out int fpsden)
         {
             fpsnum = fpsden = 0;
 
@@ -994,9 +994,9 @@ namespace MeGUI
             {
                 if (!File.Exists(strInput))
                     return false;
-                if (strInput.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
+                if (strInput.ToLowerInvariant().EndsWith(".ffindex"))
                     strInput = strInput.Substring(0, strInput.Length - 8);
-                if (Path.GetExtension(strInput).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
+                if (Path.GetExtension(strInput).ToLowerInvariant().Equals(".avs"))
                 {
                     fps = GetFPSFromAVSFile(strInput);
                     if (fps <= 0)
@@ -1015,38 +1015,36 @@ namespace MeGUI
             double dFPS = Math.Round(fps, 3);
             if (dFPS == 23.976)
             {
-                fpsnum = 24000; fpsden = 1001;
+                fpsnum = 24000;
+                fpsden = 1001;
             }
             else if (dFPS == 29.970)
             {
-                fpsnum = 30000; fpsden = 1001;
+                fpsnum = 30000;
+                fpsden = 1001;
             }
             else if (dFPS == 59.940)
             {
-                fpsnum = 60000; fpsden = 1001;
+                fpsnum = 60000;
+                fpsden = 1001;
             }
             else if (dFPS == 119.880)
             {
-                fpsnum = 120000; fpsden = 1001;
+                fpsnum = 120000;
+                fpsden = 1001;
             }
             else
             {
-                dFPS = dFPS * 1000;
-                if (dFPS % 1000 == 0)
+                try
                 {
-                    fpsnum = (int)Math.Floor(dFPS / 1000); fpsden = 1;
+                    ulong x, y;
+                    MeGUI.core.util.RatioUtils.approximate((decimal)fps, out x, out y);
+                    fpsnum = (int)x;
+                    fpsden = (int)y;
                 }
-                else if (dFPS % 100 == 0)
+                catch
                 {
-                    fpsnum = (int)Math.Floor(dFPS / 100); fpsden = 10;
-                }
-                else if (dFPS % 1000 == 0)
-                {
-                    fpsnum = (int)Math.Floor(dFPS / 10); fpsden = 100;
-                }
-                else
-                {
-                    fpsnum = (int)dFPS; fpsden = 1000;
+                    return false;
                 }
             }
             return true;

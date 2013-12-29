@@ -897,6 +897,45 @@ namespace MeGUI.packages.video.x264
         }
 
         /// <summary>
+        /// Gets the --fps value
+        /// </summary>
+        /// <returns>the --fps value</returns>
+        public void getFPS(ref int fps_n, ref int fps_d)
+        {
+            string custom = _xs.CustomEncoderOptions;
+            string strCustomValue;
+            if (!extractCustomCommand("fps", out strCustomValue))
+                return;
+            _xs.CustomEncoderOptions = custom;
+
+            int fpsnum, fpsden;
+            System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+            if (strCustomValue.Contains("/"))
+            {
+                if (!Int32.TryParse(strCustomValue.Split('/')[0], System.Globalization.NumberStyles.None, culture, out fpsnum))
+                    return;
+
+                if (!Int32.TryParse(strCustomValue.Split('/')[1], System.Globalization.NumberStyles.None, culture, out fpsden))
+                    return;
+            }
+            else
+            {
+                double fps;
+                if (!Double.TryParse(strCustomValue, System.Globalization.NumberStyles.AllowDecimalPoint, culture, out fps))
+                    return;
+
+                if (!VideoUtil.getFPSFraction(fps, null, out fpsnum, out fpsden))
+                    return;
+            }
+
+            if (_log != null)
+                _log.LogEvent("custom frame rate: " + fpsnum + "/" + fpsden);
+
+            fps_n = fpsnum;
+            fps_d = fpsden;
+        }
+
+        /// <summary>
         /// returns the value for the selected command in the custom command line 
         /// and removes the command from the custom command line
         /// </summary>
@@ -911,7 +950,7 @@ namespace MeGUI.packages.video.x264
 
             foreach (String strCommand in System.Text.RegularExpressions.Regex.Split(_xs.CustomEncoderOptions, "--"))
             {
-                if (strCommand.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith(strCommandToExtract.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                if (strCommand.Trim().ToLowerInvariant().StartsWith(strCommandToExtract.ToLowerInvariant()))
                 {
                     strCommandValue = strCommand.Substring(strCommandToExtract.Length).Trim();
                     bFound = true;
