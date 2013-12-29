@@ -950,7 +950,7 @@ namespace MeGUI
                     strAudioCodec = oAudioTrackInfo.Codec;
                     if (inputContainer == ContainerType.MKV && !dpp.Eac3toDemux) // only if container MKV and no demux with eac3to
                     {
-                        if (!strAudioCodec.Equals("PCM", StringComparison.InvariantCultureIgnoreCase)) // PCM track cannot be extracted by mkvextract
+                        if (!strAudioCodec.Equals("PCM", StringComparison.InvariantCultureIgnoreCase)) // some PCM tracks cannot be extracted by mkvextract
                         {
                             oExtractMKVTrack.Add(oStreamControl.SelectedStream.TrackInfo);
                             bExtractMKVTrack = true;
@@ -974,6 +974,18 @@ namespace MeGUI
                     (oStreamControl.SelectedStream.EncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
                     oStreamControl.SelectedStream.EncoderSettings.EncoderType.ACodec.ID.Equals(strAudioCodec, StringComparison.InvariantCultureIgnoreCase))))
                 {
+                    if (oStreamControl.SelectedItem.IsStandard && inputContainer == ContainerType.MKV 
+                        && strAudioCodec.Equals("PCM", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        int trackID = oStreamControl.SelectedStream.TrackInfo.TrackID;
+                        if (_videoInputInfo.ContainerFileType != ContainerType.MKV)
+                            trackID++;
+                        aInput = Path.Combine(strWorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName);
+                        HDStreamsExJob oJob = new HDStreamsExJob(new List<string>() { dpp.VideoInput }, aInput, null, trackID + ":\"" + aInput + "\"", 2);
+                        audioJobs = new SequentialChain(audioJobs, new SequentialChain(oJob));
+                        dpp.FilesToDelete.Add(FileUtil.AddToFileName(Path.ChangeExtension(aInput, "txt"), " - Log"));
+                        dpp.FilesToDelete.Add(aInput);
+                    }
                     dpp.AudioTracks.Add(new OneClickAudioTrack(null, new MuxStream(aInput, strLanguage, strName, delay, false, false, null), oAudioTrackInfo, bExtractMKVTrack));
                 }
                 else
@@ -1034,10 +1046,13 @@ namespace MeGUI
                         }
                         else if (oStreamControl.SelectedItem.IsStandard && strAudioCodec.Equals("PCM", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            if (_videoInputInfo.ContainerFileType == ContainerType.MKV)
+                            if (inputContainer == ContainerType.MKV)
                             {
+                                int trackID = oStreamControl.SelectedStream.TrackInfo.TrackID;
+                                if (_videoInputInfo.ContainerFileType != ContainerType.MKV)
+                                    trackID++;
                                 aInput = Path.Combine(strWorkingDirectory, oStreamControl.SelectedStream.TrackInfo.DemuxFileName);
-                                HDStreamsExJob oJob = new HDStreamsExJob(new List<string>() { dpp.VideoInput }, aInput, null, oStreamControl.SelectedStream.TrackInfo.TrackID + ":\"" + aInput + "\"", 2);
+                                HDStreamsExJob oJob = new HDStreamsExJob(new List<string>() { dpp.VideoInput }, aInput, null, trackID + ":\"" + aInput + "\"", 2);
                                 audioJobs = new SequentialChain(audioJobs, new SequentialChain(oJob));
                                 dpp.FilesToDelete.Add(FileUtil.AddToFileName(Path.ChangeExtension(aInput, "txt"), " - Log"));
                                 dpp.FilesToDelete.Add(aInput);

@@ -339,11 +339,7 @@ namespace MeGUI
                 // audio detection
                 _AudioInfo.Codecs = new AudioCodec[info.Audio.Count];
                 _AudioInfo.BitrateModes = new BitrateManagementMode[info.Audio.Count];
-
-                if (_AudioInfo.Codecs.Length == 1)
-                    _AudioInfo.Type = getAudioType(_AudioInfo.Codecs[0], cType, file);
-                else
-                    _AudioInfo.Type = null;
+                _AudioInfo.Type = null;
 
                 for (int counter = 0; counter < info.Audio.Count; counter++)
                 {
@@ -354,6 +350,9 @@ namespace MeGUI
                         continue;
 
                     _AudioInfo.Codecs[counter] = getAudioCodec(atrack.Format);
+                    if (_AudioInfo.Codecs.Length == 1)
+                        _AudioInfo.Type = getAudioType(_AudioInfo.Codecs[counter], cType, file);
+
                     if (atrack.BitRateMode == "VBR")
                         _AudioInfo.BitrateModes[counter] = BitrateManagementMode.VBR;
                     else
@@ -1172,16 +1171,16 @@ namespace MeGUI
 
         private static AudioCodec getAudioCodec(string description)
         {
-            description = description.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            description = description.ToLowerInvariant();
             foreach (string knownDescription in knownAudioDescriptions.Keys)
                 if (description.Contains(knownDescription))
                     return knownAudioDescriptions[knownDescription];
-            return null; ;
+            return null;
         }
 
         private static VideoCodec getVideoCodec(string description)
         {
-            description = description.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            description = description.ToLowerInvariant();
             foreach (string knownDescription in knownVideoDescriptions.Keys)
                 if (description.Contains(knownDescription))
                     return knownVideoDescriptions[knownDescription];
@@ -1190,7 +1189,7 @@ namespace MeGUI
 
         private static VideoType getVideoType(VideoCodec codec, ContainerType cft, string filename)
         {
-            string extension = Path.GetExtension(filename).ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            string extension = Path.GetExtension(filename).ToLowerInvariant();
             foreach (VideoType t in ContainerManager.VideoTypes.Values)
             {
                 if (t.ContainerType == cft && Array.IndexOf<VideoCodec>(t.SupportedCodecs, codec) >= 0 && "." + t.Extension == extension)
@@ -1201,13 +1200,10 @@ namespace MeGUI
 
         private static AudioType getAudioType(AudioCodec codec, ContainerType cft, string filename)
         {
-            string extension = Path.GetExtension(filename).ToLower(System.Globalization.CultureInfo.InvariantCulture);
-            ContainerType type = null;
-            if (cft != null)
-                type = cft;
+            string extension = Path.GetExtension(filename).ToLowerInvariant();
             foreach (AudioType t in ContainerManager.AudioTypes.Values)
             {
-                if (t.ContainerType == type && Array.IndexOf<AudioCodec>(t.SupportedCodecs, codec) >= 0 && "." + t.Extension == extension)
+                if (t.ContainerType == cft && Array.IndexOf<AudioCodec>(t.SupportedCodecs, codec) >= 0 && "." + t.Extension == extension)
                     return t;
             }
             return null;
@@ -1244,6 +1240,7 @@ namespace MeGUI
             knownAudioDescriptions.Add("mpeg-2 audio", AudioCodec.MP2);
             knownAudioDescriptions.Add("mpeg-4 audio", AudioCodec.AAC);
             knownAudioDescriptions.Add("flac", AudioCodec.FLAC);
+            knownAudioDescriptions.Add("pcm", AudioCodec.PCM);
 
             knownContainerTypes = new Dictionary<string, ContainerType>();
             knownContainerTypes.Add("AVI", ContainerType.AVI);

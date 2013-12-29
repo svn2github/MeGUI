@@ -548,10 +548,12 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.VBRMP3);
             supportedAudioTypes.Add(AudioType.CBRMP3);
             supportedAudioTypes.Add(AudioType.VORBIS);
+            supportedAudioTypes.Add(AudioType.OPUS);
             supportedAudioTypes.Add(AudioType.MP2);
             supportedAudioTypes.Add(AudioType.AC3);
             supportedAudioTypes.Add(AudioType.DTS);
             supportedAudioTypes.Add(AudioType.WAV);
+            supportedAudioTypes.Add(AudioType.PCM);
             supportedAudioTypes.Add(AudioType.EAC3);
             supportedAudioTypes.Add(AudioType.FLAC);
             supportedAudioTypes.Add(AudioType.THD);
@@ -674,6 +676,7 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.DTSMA);
             supportedAudioTypes.Add(AudioType.MP4AAC);
             supportedAudioTypes.Add(AudioType.WAV);
+            supportedAudioTypes.Add(AudioType.W64);
             supportedAudioTypes.Add(AudioType.PCM);
 
             supportedVideoCodecs.Add(VideoCodec.AVC);

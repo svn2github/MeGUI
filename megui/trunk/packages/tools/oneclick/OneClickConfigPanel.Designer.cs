@@ -859,6 +859,7 @@ namespace MeGUI.packages.tools.oneclick
             this.cbUnknownLanguage.Location = new System.Drawing.Point(268, 201);
             this.cbUnknownLanguage.Name = "cbUnknownLanguage";
             this.cbUnknownLanguage.Size = new System.Drawing.Size(130, 21);
+            this.cbUnknownLanguage.Sorted = true;
             this.cbUnknownLanguage.TabIndex = 49;
             // 
             // avsProfile

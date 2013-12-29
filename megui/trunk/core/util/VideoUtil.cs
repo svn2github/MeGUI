@@ -65,7 +65,7 @@ namespace MeGUI
             string[] files = Directory.GetFiles(path, vts + "*Chapter Information*");
 			foreach (string file in files)
 			{
-				if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".txt") || file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".qpf"))
+				if (file.ToLowerInvariant().EndsWith(".txt") || file.ToLowerInvariant().EndsWith(".qpf"))
                 {
 					chapterFile = file;
 					break;
@@ -81,8 +81,8 @@ namespace MeGUI
         /// <returns>chapter file name</returns>
         public static String getChaptersFromIFO(string fileName, bool qpfile, string outputDirectory, int iPGCNumber)
         {
-            if (Path.GetExtension(fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture)) == ".vob"
-                || Path.GetExtension(fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture)) == ".ifo")
+            if (Path.GetExtension(fileName.ToLowerInvariant()) == ".vob"
+                || Path.GetExtension(fileName.ToLowerInvariant()) == ".ifo")
             {
                 string ifoFile;
                 string fileNameNoPath = Path.GetFileName(fileName);
@@ -218,8 +218,8 @@ namespace MeGUI
 
             if (audioTracks != null && audioTracks.Count > 0)
             {
-                if (audioTracks[0].ContainerType.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("matroska") ||
-                    (Path.GetExtension(projectName).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".dgi") && audioTracks[0].ContainerType == "MPEG-4"))
+                if (audioTracks[0].ContainerType.ToLowerInvariant().Equals("matroska") ||
+                    (Path.GetExtension(projectName).ToLowerInvariant().Equals(".dgi") && audioTracks[0].ContainerType == "MPEG-4"))
                     strTrackName = " [";
                 else if (audioTracks[0].ContainerType == "MPEG-TS" || audioTracks[0].ContainerType == "BDAV")
                     strTrackName = " PID ";
@@ -230,9 +230,9 @@ namespace MeGUI
                 {
                     bool bFound = false;
                     string trackFile = strTrackName + audioTracks[counter].TrackIDx + "*";
-                    if (Path.GetExtension(projectName).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".dga"))
+                    if (Path.GetExtension(projectName).ToLowerInvariant().Equals(".dga"))
                         trackFile = Path.GetFileName(projectName) + trackFile;
-                    else if (Path.GetExtension(projectName).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".ffindex"))
+                    else if (Path.GetExtension(projectName).ToLowerInvariant().Equals(".ffindex"))
                         trackFile = Path.GetFileNameWithoutExtension(projectName) + "_track_" + (audioTracks[counter].TrackIndex + 1) + "_*.avs";
                     else
                         trackFile = Path.GetFileNameWithoutExtension(projectName) + trackFile;
@@ -264,7 +264,7 @@ namespace MeGUI
                 }
 
                 // Find files which can be deleted
-                if (Path.GetExtension(projectName).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".dga"))
+                if (Path.GetExtension(projectName).ToLowerInvariant().Equals(".dga"))
                     strTrackName = Path.GetFileName(projectName) + strTrackName;
                 else
                     strTrackName = Path.GetFileNameWithoutExtension(projectName) + strTrackName;
@@ -456,7 +456,7 @@ namespace MeGUI
                             strLastLine = line;
                     }
                 }
-                if (strLastLine.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("converttoyv12()"))
+                if (strLastLine.ToLowerInvariant().Equals("converttoyv12()"))
                     return true;
                 else
                     return false;
@@ -662,7 +662,7 @@ namespace MeGUI
 
             foreach (SubtitleType type in ContainerManager.SubtitleTypes.Values)
             {
-                if (Path.GetExtension(p.ToLower(System.Globalization.CultureInfo.InvariantCulture)) == "." + type.Extension)
+                if (Path.GetExtension(p.ToLowerInvariant()) == "." + type.Extension)
                     return type;
             }
             return null;
@@ -672,7 +672,7 @@ namespace MeGUI
         {
             foreach (VideoType type in ContainerManager.VideoTypes.Values)
             {
-                if (Path.GetExtension(p.ToLower(System.Globalization.CultureInfo.InvariantCulture)) == "." + type.Extension)
+                if (Path.GetExtension(p.ToLowerInvariant()) == "." + type.Extension)
                     return type;
             }
             return null;
@@ -682,7 +682,7 @@ namespace MeGUI
         {
             foreach (AudioType type in ContainerManager.AudioTypes.Values)
             {
-                if (Path.GetExtension(p.ToLower(System.Globalization.CultureInfo.InvariantCulture)) == "." + type.Extension)
+                if (Path.GetExtension(p.ToLowerInvariant()) == "." + type.Extension)
                     return type;
             }
             return null;
@@ -692,7 +692,7 @@ namespace MeGUI
         {
             foreach (ChapterType type in ContainerManager.ChapterTypes.Values)
             {
-                if (Path.GetExtension(p.ToLower(System.Globalization.CultureInfo.InvariantCulture)) == "." + type.Extension)
+                if (Path.GetExtension(p.ToLowerInvariant()) == "." + type.Extension)
                     return type;
             }
             return null;
@@ -834,7 +834,7 @@ namespace MeGUI
             bool bFound = false;
 
             string syswow64path = Environment.GetFolderPath(Environment.SpecialFolder.System)
-                .ToLower(System.Globalization.CultureInfo.InvariantCulture).Replace("\\system32", "\\SysWOW64");
+                .ToLowerInvariant().Replace("\\system32", "\\SysWOW64");
 #if x86
             // on x86, try the SysWOW64 folder first
             if (File.Exists(Path.Combine(syswow64path, "avisynth.dll")))
@@ -1087,7 +1087,7 @@ namespace MeGUI
         {
             try
             {
-                if (!Path.GetExtension(strAVSScript).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
+                if (!Path.GetExtension(strAVSScript).ToLowerInvariant().Equals(".avs"))
                     return 0;
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
                 {

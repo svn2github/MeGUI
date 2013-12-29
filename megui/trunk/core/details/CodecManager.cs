@@ -197,7 +197,7 @@ namespace MeGUI
                 AudioCodecs.Register(AudioCodec.PCM)    &&
                 AudioCodecs.Register(AudioCodec.THD)    &&
                 AudioCodecs.Register(AudioCodec.FLAC)   &&
-                AudioCodecs.Register(AudioCodec.WAV)))
+                AudioCodecs.Register(AudioCodec.WAV))) 
                 throw new Exception("Failed to register a standard audio codec");
             if (!(
                 VideoEncoderTypes.Register(VideoEncoderType.HFYU) &&
@@ -272,7 +272,8 @@ namespace MeGUI
         public static readonly AudioType MP2    = new AudioType("MP2", "MP2 Files", "mp2", null, AudioCodec.MP2);
         public static readonly AudioType DTS    = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.DTS);
         public static readonly AudioType WAV    = new AudioType("WAV", "WAV Files", "wav", null, AudioCodec.WAV);
-        public static readonly AudioType PCM    = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.PCM);
+        public static readonly AudioType W64    = new AudioType("W64", "W64 Files", "w64", null, AudioCodec.PCM);
+        public static readonly AudioType PCM    = new AudioType("PCM", "PCM Files", "pcm", null, AudioCodec.PCM);
         public static readonly AudioType CBRMP3 = new AudioType("CBR MP3", "CBR MP3 Files", "mp3", null, AudioCodec.MP3);
         public static readonly AudioType VBRMP3 = new AudioType("VBR MP3", "VBR MP3 Files", "mp3", null, AudioCodec.MP3);
         public static readonly AudioType EAC3   = new AudioType("EAC3", "EAC3 Files", "ddp", null, AudioCodec.EAC3);
@@ -361,6 +362,8 @@ namespace MeGUI
                 AudioTypes.Register(AudioType.MP3)    &&
                 AudioTypes.Register(AudioType.DTS)    &&
                 AudioTypes.Register(AudioType.WAV)    &&
+                AudioTypes.Register(AudioType.W64)    &&
+                AudioTypes.Register(AudioType.PCM)    &&
                 AudioTypes.Register(AudioType.MP2)    &&
                 AudioTypes.Register(AudioType.MP4AAC) &&
                 AudioTypes.Register(AudioType.M4A)    &&
@@ -371,6 +374,7 @@ namespace MeGUI
                 AudioTypes.Register(AudioType.EAC3)   &&
                 AudioTypes.Register(AudioType.FLAC)   &&
                 AudioTypes.Register(AudioType.AVS)    &&
+                AudioTypes.Register(AudioType.OPUS)   &&
                 AudioTypes.Register(AudioType.THD)))
                 throw new Exception("Failed to register an audio type");
             if (!(
