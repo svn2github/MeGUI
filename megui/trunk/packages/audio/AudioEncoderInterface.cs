@@ -79,7 +79,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private static readonly System.Text.RegularExpressions.Regex _cleanUpStringRegex = new System.Text.RegularExpressions.Regex(@"\n[^\n]+\r", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
 
         private MeGUISettings _settings = null;
-        private int SAMPLES_PER_UPDATE;
         private AudioJob audioJob;
         private StatusUpdate su;
         private DateTime _start;
@@ -252,7 +251,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         internal AviSynthAudioEncoder(MeGUISettings settings)
         {
-            SAMPLES_PER_UPDATE = (int)settings.AudioSamplesPerUpdate;
             _settings = settings;
         }
 
@@ -445,7 +443,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                         target.Write(frameBuffer, 0, nHowMany * a.ChannelsCount * a.BytesPerSample);
                                         target.Flush();
                                         frameSample += nHowMany;
-                                        if (frameSample - lastUpdateSample > SAMPLES_PER_UPDATE)
+                                        if (frameSample - lastUpdateSample > 100000) // 100000 samples per update
                                         {
                                             setProgress((decimal)frameSample / (decimal)a.SamplesCount);
                                             lastUpdateSample = frameSample;

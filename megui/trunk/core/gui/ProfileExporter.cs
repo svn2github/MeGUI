@@ -119,7 +119,7 @@ namespace MeGUI.core.gui
 
             if (nl.Count == 1) // if it finds the required HelpText, count should be 1
             {
-                HelpText.AppendLine(nl[0]["Basic"].InnerText);
+                HelpText.AppendLine(nl[0]["Text"].InnerText);
                 HelpText.AppendLine();
             }
             else // If count isn't 1, then theres no valid data.

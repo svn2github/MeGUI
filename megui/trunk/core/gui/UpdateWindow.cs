@@ -1859,7 +1859,7 @@ namespace MeGUI
             }
 
             // call function so that avisynth dlls will be copied to the root if needed
-            VideoUtil.getAvisynthVersion(null);
+            FileUtil.getAvisynthVersion(null);
 
             List<string> files = new List<string>();
             foreach (iUpgradeable u in upgradeData)

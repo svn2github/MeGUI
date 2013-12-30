@@ -49,7 +49,6 @@ namespace MeGUI.packages.video.x264
             InitializeComponent();
             cqmComboBox1.StandardItems = new string[] { "Flat (none)", "JVT" };
             cqmComboBox1.SelectedIndex = 0;
-            this.AdvancedToolTips = MainForm.Instance.Settings.UseAdvancedTooltips;
             AVCLevels al = new AVCLevels();
             this.avcLevel.Items.AddRange(EnumProxy.CreateArray(AVCLevels.SupportedLevels));
             this.avcLevel.SelectedItem = EnumProxy.Create(AVCLevels.Levels.L_UNRESTRICTED);
@@ -1476,10 +1475,7 @@ namespace MeGUI.packages.video.x264
             {
                 HelpText.Append(nl[0].Attributes["name"].Value);
                 HelpText.AppendLine();
-                if (AdvancedToolTips)
-                    HelpText.AppendLine(nl[0]["Advanced"].InnerText);
-                else
-                    HelpText.AppendLine(nl[0]["Basic"].InnerText);
+                HelpText.AppendLine(nl[0]["Text"].InnerText);
                 HelpText.AppendLine();
                 HelpText.AppendLine("Default : " + nl[0]["Default"].InnerText);
                 HelpText.AppendLine("Recommended : " + nl[0]["Recommended"].InnerText);

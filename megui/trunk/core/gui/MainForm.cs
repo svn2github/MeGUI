@@ -1414,7 +1414,7 @@ namespace MeGUI
             i.LogValue("Operating System", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
             i.LogValue(".Net Framework", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.GetDotNetVersion())));
 
-            VideoUtil.getAvisynthVersion(i);
+            FileUtil.getAvisynthVersion(i);
 
             string devil = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "devil.dll");
             if (File.Exists(devil))

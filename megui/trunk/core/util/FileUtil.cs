@@ -133,20 +133,6 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// Generates a filename not in the list
-        /// </summary>
-        /// <param name="original"></param>
-        /// <param name="filenames"></param>
-        /// <returns></returns>
-        public static string getUniqueFilename(string original, List<string> filenames)
-        {
-            return getUniqueFilename(original, new FileExists(delegate(string test)
-            {
-                return filenames.Contains(test);
-            }));
-        }
-
-        /// <summary>
         /// Generates a unique filename by adding numbers to the filename.
         /// </summary>
         /// <param name="original"></param>
@@ -274,34 +260,6 @@ namespace MeGUI.core.util
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Copy File
-        /// </summary>
-        /// <param name"sourcePath">Path of the Source file</param>
-        /// <param name"targetPath">Path of the Target File</param>
-        /// <param name"targetName">Name of the Target file</param>
-        /// <param name="overwrite"></param>
-        public static void CopyFile(string sourcePath, string targetPath, string targetName, bool overwrite)
-        {
-            if (Directory.Exists(sourcePath))
-            {
-                string[] files = Directory.GetFiles(sourcePath);
-
-                foreach (string s in files)
-                {
-                    // Use static Path methods to extract only the file name from the path.
-                    string fileName = Path.GetFileName(s);
-                    if (fileName == targetName)
-                    {
-                        string destFile = Path.Combine(targetPath, fileName);
-                        File.Copy(s, destFile, overwrite);
-                    }
-                }
-            }
-            else
-                MessageBox.Show("Source path does not exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /// <summary>
@@ -457,6 +415,133 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
+        /// Detects the AviSynth version/date and writes it into the log
+        /// </summary>
+        /// <param name="oLog">the LogItem where the information should be added</param>
+        public static void getAvisynthVersion(LogItem oLog)
+        {
+            string fileVersion = string.Empty;
+            string fileDate = string.Empty;
+            bool bLocal = false;
+            bool bFound = false;
+
+            string syswow64path = Environment.GetFolderPath(Environment.SpecialFolder.System)
+                .ToLowerInvariant().Replace("\\system32", "\\SysWOW64");
+#if x86
+            // on x86, try the SysWOW64 folder first
+            if (File.Exists(Path.Combine(syswow64path, "avisynth.dll")))
+            {
+                string path = Path.Combine(syswow64path, "avisynth.dll");
+                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
+                fileVersion = FileProperties.FileVersion;
+                fileDate = File.GetLastWriteTimeUtc(path).ToString("dd-MM-yyyy");
+                bFound = true;
+            }
+            else if (!Directory.Exists(syswow64path)
+                && File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "avisynth.dll")))
+#endif
+#if x64
+            if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "avisynth.dll")))
+#endif
+            {
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "avisynth.dll");
+                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
+                fileVersion = FileProperties.FileVersion;
+                fileDate = File.GetLastWriteTimeUtc(path).ToString("dd-MM-yyyy");
+                bFound = true;
+            }
+
+            if (File.Exists(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll")))
+            {
+                string pathRoot = Path.GetDirectoryName(Application.ExecutablePath);
+                if (File.Exists(MainForm.Instance.Settings.AviSynthPath))
+                {
+                    string pathTool = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
+                    if (File.GetLastWriteTimeUtc(Path.Combine(pathRoot, "avisynth.dll")) != File.GetLastWriteTimeUtc(Path.Combine(pathTool, "avisynth.dll")))
+                        File.Copy(Path.Combine(pathTool, "avisynth.dll"), Path.Combine(pathRoot, "Avisynth.dll"), true);
+                    if (!File.Exists(Path.Combine(pathRoot, "devil.dll")) ||
+                        File.GetLastWriteTimeUtc(Path.Combine(pathRoot, "devil.dll")) != File.GetLastWriteTimeUtc(Path.Combine(pathTool, "devil.dll")))
+                        File.Copy(Path.Combine(pathTool, "devil.dll"), Path.Combine(pathRoot, "DevIL.dll"), true);
+                }
+
+                if (bFound && oLog != null)
+                {
+                    string strVersion = string.Empty;
+                    if (string.IsNullOrEmpty(fileVersion))
+                        strVersion = " (" + fileDate + ")";
+                    else
+                        strVersion = fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")";
+                    oLog.LogValue("AviSynth", strVersion + " (inactive)");
+                }
+
+                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(Path.Combine(pathRoot, "avisynth.dll"));
+                fileVersion = FileProperties.FileVersion;
+                fileDate = File.GetLastWriteTimeUtc(Path.Combine(pathRoot, "avisynth.dll")).ToString("dd-MM-yyyy");
+                bLocal = true;
+
+                if (oLog != null)
+                {
+                    string strVersion = string.Empty;
+                    if (string.IsNullOrEmpty(fileVersion))
+                        strVersion = " (" + fileDate + ")";
+                    else
+                        strVersion = fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")";
+                    if (bFound)
+                        strVersion += " (active)";
+                    oLog.LogValue("AviSynth portable", strVersion);
+                }
+            }
+            else
+            {
+                if (File.Exists(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "devil.dll")))
+                    FileUtil.DeleteFile(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "devil.dll"));
+                if (bFound && oLog != null)
+                {
+                    string strVersion = string.Empty;
+                    if (string.IsNullOrEmpty(fileVersion))
+                        strVersion = " (" + fileDate + ")";
+                    else
+                        strVersion = fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")";
+                    oLog.LogValue("AviSynth", strVersion);
+                }
+            }
+
+            if (!bFound && !bLocal)
+            {
+                if (File.Exists(MainForm.Instance.Settings.AviSynthPath))
+                {
+                    if (oLog != null)
+                        oLog.LogValue("AviSynth", "files will be copied into the MeGUI directory as AviSynth is not installed");
+                    string path = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
+                    try
+                    {
+                        File.Copy(Path.Combine(path, "avisynth.dll"), Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Avisynth.dll"), true);
+                        File.Copy(Path.Combine(path, "devil.dll"), Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "DevIL.dll"), true);
+                        path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "avisynth.dll");
+                        FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(path);
+                        fileVersion = FileProperties.FileVersion;
+                        fileDate = File.GetLastWriteTimeUtc(path).ToString("dd-MM-yyyy");
+                        bLocal = true;
+
+                        if (oLog != null)
+                        {
+                            string strVersion = string.Empty;
+                            if (string.IsNullOrEmpty(fileVersion))
+                                strVersion = " (" + fileDate + ")";
+                            else
+                                strVersion = fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")";
+                            oLog.LogValue("AviSynth portable", strVersion);
+                        }
+                    }
+                    catch { }
+                }
+            }
+            if (!bLocal && !bFound && oLog != null)
+                oLog.LogValue("AviSynth", "not installed", ImageType.Error);
+            MainForm.Instance.Settings.PortableAviSynth = bLocal;
+        }
+
+        /// <summary>
         /// Detects the file version/date and writes it into the log
         /// </summary>
         /// <param name="strName">the name in the log</param>
@@ -530,42 +615,6 @@ namespace MeGUI.core.util
             {
                 e.Message.ToString();
             }
-        }
-
-        public static Int16 GetFileEncoding(string srcFile)
-        {
-            // *** Use Default of Encoding.Default (Ansi CodePage)
-            Encoding enc = Encoding.Default;
-            Int16 v = 0;
-
-            // *** Detect byte order mark if any - otherwise assume default
-            byte[] buffer = new byte[5];
-            FileStream file = new FileStream(srcFile, FileMode.Open);
-            file.Read(buffer, 0, 5);
-            file.Close();
-
-            if (buffer[0] == 0xef && buffer[1] == 0xbb && buffer[2] == 0xbf) // UTF8
-            {
-                enc = Encoding.UTF8;
-                v = 1;
-            }
-            else if (buffer[0] == 0xfe && buffer[1] == 0xff) // Unicode
-            {
-                enc = Encoding.Unicode;
-                v = 2;
-            }
-            else if (buffer[0] == 0 && buffer[1] == 0 && buffer[2] == 0xfe && buffer[3] == 0xff) // UTF32
-            {
-                enc = Encoding.UTF32;
-                v = 3;
-            }
-            else if (buffer[0] == 0x2b && buffer[1] == 0x2f && buffer[2] == 0x76) // UTF7
-            {
-                enc = Encoding.UTF7;
-                v = 4;
-            }
-
-            return v;
         }
 
         private static object _locker = new object();

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ namespace MeGUI.core.details.video
         #region variables
         protected bool updating = false;
         private double bytesPerFrame;
-        private bool advancedToolTips;
         protected int lastEncodingMode = 0;
         protected int lastBitrateEncodingValue = 1000;
         protected int lastQuantizerEncodingValue = 32;
@@ -131,12 +130,6 @@ namespace MeGUI.core.details.video
         }
         #endregion
         #region properties
-
-        public bool AdvancedToolTips
-        {
-            get { return advancedToolTips; }
-            set { advancedToolTips = value; }
-        }
 
         public double BytesPerFrame
         {

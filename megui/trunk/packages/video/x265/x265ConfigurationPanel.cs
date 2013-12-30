@@ -48,7 +48,6 @@ namespace MeGUI.packages.video.x265
             InitializeComponent();
             cqmComboBox1.StandardItems = new string[] { "Flat (none)", "JVT" };
             cqmComboBox1.SelectedIndex = 0;
-            this.AdvancedToolTips = MainForm.Instance.Settings.UseAdvancedTooltips;
             x265Tunes.Items.AddRange(EnumProxy.CreateArray(x265Settings.SupportedPsyTuningModes));
             x265Tunes.SelectedItem = EnumProxy.Create(x265Settings.x265PsyTuningModes.NONE);
         }
@@ -894,10 +893,7 @@ namespace MeGUI.packages.video.x265
             {
                 HelpText.Append(nl[0].Attributes["name"].Value);
                 HelpText.AppendLine();
-                if (AdvancedToolTips)
-                    HelpText.AppendLine(nl[0]["Advanced"].InnerText);
-                else
-                    HelpText.AppendLine(nl[0]["Basic"].InnerText);
+                HelpText.AppendLine(nl[0]["Text"].InnerText);
                 HelpText.AppendLine();
                 HelpText.AppendLine("Default : " + nl[0]["Default"].InnerText);
                 HelpText.AppendLine("Recommended : " + nl[0]["Recommended"].InnerText);

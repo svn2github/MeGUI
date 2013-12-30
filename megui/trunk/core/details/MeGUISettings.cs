@@ -55,12 +55,11 @@ namespace MeGUI
                        appendToForcedStreams, lastUsedOneClickFolder, lastUpdateServer;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
-                     deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll,
+                     deleteAbortedOutput, openProgressWindow, autoSelectHDStreams, autoscroll,
                      alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU,
-                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264,
+                     bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264,
                      bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bExternalMuxerX264, bUseNeroAacEnc,
                      bUseQAAC, bUseX265, bUseDGIndexNV;
-        private ulong audioSamplesPerUpdate;
         private decimal forceFilmThreshold, acceptableFPSError;
         private int nbPasses, autoUpdateServerSubList, minComplexity, updateFormSplitter,
                     maxComplexity, jobColumnWidth, inputColumnWidth, outputColumnWidth, codecColumnWidth,
@@ -136,8 +135,6 @@ namespace MeGUI
             dialogSettings = new DialogSettings();
             sdSettings = new SourceDetectorSettings();
             AedSettings = new AutoEncodeDefaultsSettings();
-            useadvancedtooltips = true;
-            audioSamplesPerUpdate = 100000;
             aviSynthPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avs\avisynth.dll");
             meguiupdatecache = Path.Combine(strMeGUIPath, "update_cache");
             avisynthpluginspath = Path.Combine(strMeGUIPath, @"tools\avisynth_plugin");
@@ -175,7 +172,6 @@ namespace MeGUI
             tempDirMP4 = "";
             addTimePosition = true;
             alwaysbackupfiles = true;
-            forcerawavcextension = false;
             strMainFileFormat = "";
             strMainAudioFormat = "";
             strLastSourcePath = "";
@@ -380,12 +376,6 @@ namespace MeGUI
             set { customDARs = value; }
         }
 
-        public ulong AudioSamplesPerUpdate
-        {
-            get { return audioSamplesPerUpdate; }
-            set { audioSamplesPerUpdate = value; }
-        }
-
         public string LastSourcePath
         {
             get { return strLastSourcePath; }
@@ -518,15 +508,6 @@ namespace MeGUI
         }
 
         /// <summary>
-        /// bool to decide whether to use advanced or basic tooltips
-        /// </summary>
-        public bool UseAdvancedTooltips
-        {
-            get { return useadvancedtooltips; }
-            set { useadvancedtooltips = value; }
-        }
-
-        /// <summary>
         /// bool to decide whether to use 64bit x264
         /// </summary>
         public bool Use64bitX264
@@ -600,16 +581,6 @@ namespace MeGUI
         {
             get { return alwaysbackupfiles; }
             set { alwaysbackupfiles = value; }
-        }
-
-        ///<summary>
-        /// gets / sets whether to force raw AVC file Extension for QuickTime compatibility
-        /// more infos here : http://forum.doom9.org/showthread.php?p=1243370#post1243370
-        /// </summary>
-        public bool ForceRawAVCExtension
-        {
-            get { return forcerawavcextension; }
-            set { forcerawavcextension = value; }
         }
 
         /// <summary>
