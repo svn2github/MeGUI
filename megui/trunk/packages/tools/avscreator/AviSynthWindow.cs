@@ -633,7 +633,7 @@ namespace MeGUI
                         this.flipVertical.Checked ? ".FlipVertical()" : string.Empty
                         );
                     if (MainForm.Instance.Settings.PortableAviSynth)
-                        tempAvs = "LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll") + "\")\r\n" + tempAvs;
+                        tempAvs = "LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), @"plugins\directshowsource.dll") + "\")\r\n" + tempAvs;
                 } 
                 if (file != null)
                     file.Dispose();

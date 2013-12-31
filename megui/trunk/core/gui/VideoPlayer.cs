@@ -197,12 +197,9 @@ namespace MeGUI
                 return false;
             }
             catch (Exception e)
-            {
-#warning fix up this error message to be more correct
-                
-                MessageBox.Show("The file " + path + " cannot be opened.\r\n Please make sure it's a valid AviSynth script and that AviSynth is "
-                    + " properly installed.\r\nYou can check the validity of your script and AviSynth installation by opening the file in your favorite media player.\r\n"
-                    + " If that works, try opening the video in VirtualDub(Mod) as well. If the former works and the latter doesn't, install a YV12 codec.\r\n"
+            {               
+                MessageBox.Show("The file " + path + " cannot be opened.\r\n"
+                    + "Please make sure it's a valid AviSynth script and that AviSynth is properly installed\r\n"
                     + "Error message for your reference: " + e.Message,
                     "Cannot open video input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
@@ -271,11 +268,8 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-#warning fix up this error message to be more correct
-
-                MessageBox.Show("The file " + strFileName + " cannot be opened.\r\n Please make sure it's a valid AviSynth script and that AviSynth is "
-                    + " properly installed.\r\nYou can check the validity of your script and AviSynth installation by opening the file in your favorite media player.\r\n"
-                    + " If that works, try opening the video in VirtualDub(Mod) as well. If the former works and the latter doesn't, install a YV12 codec.\r\n"
+                MessageBox.Show("The file " + strFileName + " cannot be opened.\r\n"
+                    + "Please make sure it's a valid AviSynth script and that AviSynth is properly installed\r\n"
                     + "Error message for your reference: " + e.Message,
                     "Cannot open video input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;

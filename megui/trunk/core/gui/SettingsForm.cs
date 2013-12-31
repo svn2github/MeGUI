@@ -138,6 +138,7 @@ namespace MeGUI
         private ComboBox cbHttpProxyMode;
         private CheckBox chx264ExternalMuxer;
         private CheckBox useX265;
+        private CheckBox cbUseIncludedAviSynth;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -188,17 +189,24 @@ namespace MeGUI
         {
             StringBuilder HelpText = new StringBuilder(64);
 
-            string xpath = "/ContextHelp/Form[@name='SettingsForm']/" + node;
-            XmlNodeList nl = ContextHelp.SelectNodes(xpath); // Return the details for the specified node
-
-            if (nl.Count == 1) // if it finds the required HelpText, count should be 1
+            try
             {
-                HelpText.Append(nl[0].Attributes["name"].Value);
-                HelpText.AppendLine();
-                HelpText.AppendLine(nl[0]["Text"].InnerText);
+                string xpath = "/ContextHelp/Form[@name='SettingsForm']/" + node;
+                XmlNodeList nl = ContextHelp.SelectNodes(xpath); // Return the details for the specified node
+
+                if (nl.Count == 1) // if it finds the required HelpText, count should be 1
+                {
+                    HelpText.Append(nl[0].Attributes["name"].Value);
+                    HelpText.AppendLine();
+                    HelpText.AppendLine(nl[0]["Text"].InnerText);
+                }
+                else // If count isn't 1, then theres no valid data.
+                    HelpText.Append("Error: No data available");
             }
-            else // If count isn't 1, then theres no valid data.
+            catch
+            {
                 HelpText.Append("Error: No data available");
+            }
 
             return (HelpText.ToString());
         }
@@ -236,6 +244,7 @@ namespace MeGUI
             this.saveButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.otherGroupBox = new System.Windows.Forms.GroupBox();
+            this.cbUseIncludedAviSynth = new System.Windows.Forms.CheckBox();
             this.cbOpenAVSinThread = new System.Windows.Forms.CheckBox();
             this.cbUseITUValues = new System.Windows.Forms.CheckBox();
             this.cbAutoStartQueueStartup = new System.Windows.Forms.CheckBox();
@@ -259,8 +268,10 @@ namespace MeGUI
             this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
             this.defaultLanguage1 = new System.Windows.Forms.ComboBox();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
+            this.targetSizeSCBox1 = new MeGUI.core.gui.TargetSizeSCBox();
             this.btnClearOutputDirecoty = new System.Windows.Forms.Button();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
+            this.defaultOutputDir = new MeGUI.FileBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -308,8 +319,10 @@ namespace MeGUI
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.useNeroAacEnc = new System.Windows.Forms.CheckBox();
             this.lblNero = new System.Windows.Forms.Label();
+            this.neroaacencLocation = new MeGUI.FileBar();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnClearMP4TempDirectory = new System.Windows.Forms.Button();
+            this.tempDirMP4 = new MeGUI.FileBar();
             this.vobGroupBox = new System.Windows.Forms.GroupBox();
             this.useDGIndexNV = new System.Windows.Forms.CheckBox();
             this.cbAutoLoadDG = new System.Windows.Forms.CheckBox();
@@ -321,10 +334,6 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.targetSizeSCBox1 = new MeGUI.core.gui.TargetSizeSCBox();
-            this.defaultOutputDir = new MeGUI.FileBar();
-            this.neroaacencLocation = new MeGUI.FileBar();
-            this.tempDirMP4 = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -437,6 +446,7 @@ namespace MeGUI
             // 
             // otherGroupBox
             // 
+            this.otherGroupBox.Controls.Add(this.cbUseIncludedAviSynth);
             this.otherGroupBox.Controls.Add(this.cbOpenAVSinThread);
             this.otherGroupBox.Controls.Add(this.cbUseITUValues);
             this.otherGroupBox.Controls.Add(this.cbAutoStartQueueStartup);
@@ -460,11 +470,20 @@ namespace MeGUI
             this.otherGroupBox.Tag = "";
             this.otherGroupBox.Text = " Main Settings ";
             // 
+            // cbUseIncludedAviSynth
+            // 
+            this.cbUseIncludedAviSynth.Location = new System.Drawing.Point(13, 27);
+            this.cbUseIncludedAviSynth.Name = "cbUseIncludedAviSynth";
+            this.cbUseIncludedAviSynth.Size = new System.Drawing.Size(203, 17);
+            this.cbUseIncludedAviSynth.TabIndex = 22;
+            this.cbUseIncludedAviSynth.Text = "Always use the inlcuded AviSynth";
+            this.cbUseIncludedAviSynth.CheckedChanged += new System.EventHandler(this.cbUseIncludedAviSynth_CheckedChanged);
+            // 
             // cbOpenAVSinThread
             // 
             this.cbOpenAVSinThread.Checked = true;
             this.cbOpenAVSinThread.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbOpenAVSinThread.Location = new System.Drawing.Point(296, 184);
+            this.cbOpenAVSinThread.Location = new System.Drawing.Point(309, 50);
             this.cbOpenAVSinThread.Name = "cbOpenAVSinThread";
             this.cbOpenAVSinThread.Size = new System.Drawing.Size(144, 17);
             this.cbOpenAVSinThread.TabIndex = 21;
@@ -474,7 +493,7 @@ namespace MeGUI
             // 
             this.cbUseITUValues.Checked = true;
             this.cbUseITUValues.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbUseITUValues.Location = new System.Drawing.Point(296, 161);
+            this.cbUseITUValues.Location = new System.Drawing.Point(309, 27);
             this.cbUseITUValues.Name = "cbUseITUValues";
             this.cbUseITUValues.Size = new System.Drawing.Size(144, 17);
             this.cbUseITUValues.TabIndex = 20;
@@ -483,7 +502,7 @@ namespace MeGUI
             // cbAutoStartQueueStartup
             // 
             this.cbAutoStartQueueStartup.AutoSize = true;
-            this.cbAutoStartQueueStartup.Location = new System.Drawing.Point(13, 229);
+            this.cbAutoStartQueueStartup.Location = new System.Drawing.Point(13, 96);
             this.cbAutoStartQueueStartup.Name = "cbAutoStartQueueStartup";
             this.cbAutoStartQueueStartup.Size = new System.Drawing.Size(224, 17);
             this.cbAutoStartQueueStartup.TabIndex = 19;
@@ -498,7 +517,7 @@ namespace MeGUI
             0,
             0,
             196608});
-            this.acceptableFPSError.Location = new System.Drawing.Point(150, 47);
+            this.acceptableFPSError.Location = new System.Drawing.Point(151, 197);
             this.acceptableFPSError.Maximum = new decimal(new int[] {
             5,
             0,
@@ -520,7 +539,7 @@ namespace MeGUI
             // 
             // label15
             // 
-            this.label15.Location = new System.Drawing.Point(9, 47);
+            this.label15.Location = new System.Drawing.Point(10, 197);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(130, 32);
             this.label15.TabIndex = 6;
@@ -528,7 +547,7 @@ namespace MeGUI
             // 
             // resetDialogs
             // 
-            this.resetDialogs.Location = new System.Drawing.Point(296, 14);
+            this.resetDialogs.Location = new System.Drawing.Point(300, 164);
             this.resetDialogs.Name = "resetDialogs";
             this.resetDialogs.Size = new System.Drawing.Size(154, 23);
             this.resetDialogs.TabIndex = 16;
@@ -538,7 +557,7 @@ namespace MeGUI
             // 
             // configSourceDetector
             // 
-            this.configSourceDetector.Location = new System.Drawing.Point(296, 47);
+            this.configSourceDetector.Location = new System.Drawing.Point(300, 197);
             this.configSourceDetector.Name = "configSourceDetector";
             this.configSourceDetector.Size = new System.Drawing.Size(154, 23);
             this.configSourceDetector.TabIndex = 17;
@@ -550,7 +569,7 @@ namespace MeGUI
             // 
             this.openProgressWindow.Checked = true;
             this.openProgressWindow.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.openProgressWindow.Location = new System.Drawing.Point(296, 253);
+            this.openProgressWindow.Location = new System.Drawing.Point(309, 119);
             this.openProgressWindow.Name = "openProgressWindow";
             this.openProgressWindow.Size = new System.Drawing.Size(144, 17);
             this.openProgressWindow.TabIndex = 15;
@@ -558,7 +577,9 @@ namespace MeGUI
             // 
             // deleteIntermediateFiles
             // 
-            this.deleteIntermediateFiles.Location = new System.Drawing.Point(296, 229);
+            this.deleteIntermediateFiles.Checked = true;
+            this.deleteIntermediateFiles.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.deleteIntermediateFiles.Location = new System.Drawing.Point(309, 96);
             this.deleteIntermediateFiles.Name = "deleteIntermediateFiles";
             this.deleteIntermediateFiles.Size = new System.Drawing.Size(152, 17);
             this.deleteIntermediateFiles.TabIndex = 13;
@@ -566,7 +587,9 @@ namespace MeGUI
             // 
             // deleteAbortedOutput
             // 
-            this.deleteAbortedOutput.Location = new System.Drawing.Point(13, 184);
+            this.deleteAbortedOutput.Checked = true;
+            this.deleteAbortedOutput.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.deleteAbortedOutput.Location = new System.Drawing.Point(13, 50);
             this.deleteAbortedOutput.Name = "deleteAbortedOutput";
             this.deleteAbortedOutput.Size = new System.Drawing.Size(184, 17);
             this.deleteAbortedOutput.TabIndex = 12;
@@ -574,7 +597,7 @@ namespace MeGUI
             // 
             // deleteCompletedJobs
             // 
-            this.deleteCompletedJobs.Location = new System.Drawing.Point(296, 206);
+            this.deleteCompletedJobs.Location = new System.Drawing.Point(309, 73);
             this.deleteCompletedJobs.Name = "deleteCompletedJobs";
             this.deleteCompletedJobs.Size = new System.Drawing.Size(144, 17);
             this.deleteCompletedJobs.TabIndex = 11;
@@ -582,7 +605,9 @@ namespace MeGUI
             // 
             // openScript
             // 
-            this.openScript.Location = new System.Drawing.Point(13, 252);
+            this.openScript.Checked = true;
+            this.openScript.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.openScript.Location = new System.Drawing.Point(13, 119);
             this.openScript.Name = "openScript";
             this.openScript.Size = new System.Drawing.Size(277, 17);
             this.openScript.TabIndex = 10;
@@ -590,7 +615,9 @@ namespace MeGUI
             // 
             // autostartQueue
             // 
-            this.autostartQueue.Location = new System.Drawing.Point(13, 207);
+            this.autostartQueue.Checked = true;
+            this.autostartQueue.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.autostartQueue.Location = new System.Drawing.Point(13, 73);
             this.autostartQueue.Name = "autostartQueue";
             this.autostartQueue.Size = new System.Drawing.Size(224, 17);
             this.autostartQueue.TabIndex = 9;
@@ -605,14 +632,14 @@ namespace MeGUI
             "Normal",
             "Above Normal",
             "High"});
-            this.priority.Location = new System.Drawing.Point(150, 16);
+            this.priority.Location = new System.Drawing.Point(151, 166);
             this.priority.Name = "priority";
             this.priority.Size = new System.Drawing.Size(80, 21);
             this.priority.TabIndex = 1;
             // 
             // priorityLabel
             // 
-            this.priorityLabel.Location = new System.Drawing.Point(8, 19);
+            this.priorityLabel.Location = new System.Drawing.Point(9, 169);
             this.priorityLabel.Name = "priorityLabel";
             this.priorityLabel.Size = new System.Drawing.Size(88, 13);
             this.priorityLabel.TabIndex = 0;
@@ -686,6 +713,19 @@ namespace MeGUI
             this.gbDefaultOutput.TabStop = false;
             this.gbDefaultOutput.Text = " Default Output Directory + Custom File Size Values ";
             // 
+            // targetSizeSCBox1
+            // 
+            this.targetSizeSCBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.targetSizeSCBox1.Location = new System.Drawing.Point(8, 56);
+            this.targetSizeSCBox1.MaximumSize = new System.Drawing.Size(1000, 28);
+            this.targetSizeSCBox1.MinimumSize = new System.Drawing.Size(64, 28);
+            this.targetSizeSCBox1.Name = "targetSizeSCBox1";
+            this.targetSizeSCBox1.NullString = "Modify custom file size values";
+            this.targetSizeSCBox1.SaveCustomValues = true;
+            this.targetSizeSCBox1.SelectedIndex = 0;
+            this.targetSizeSCBox1.Size = new System.Drawing.Size(273, 28);
+            this.targetSizeSCBox1.TabIndex = 44;
+            // 
             // btnClearOutputDirecoty
             // 
             this.btnClearOutputDirecoty.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -704,6 +744,22 @@ namespace MeGUI
             this.clearDefaultOutputDir.TabIndex = 41;
             this.clearDefaultOutputDir.Text = "x";
             this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
+            // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(8, 24);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(243, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
             // 
             // tabPage3
             // 
@@ -1243,6 +1299,23 @@ namespace MeGUI
             this.lblNero.TabIndex = 45;
             this.lblNero.Text = "Location";
             // 
+            // neroaacencLocation
+            // 
+            this.neroaacencLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.neroaacencLocation.Enabled = false;
+            this.neroaacencLocation.Filename = "";
+            this.neroaacencLocation.Filter = "NeroAacEnc|neroaacenc.exe";
+            this.neroaacencLocation.FilterIndex = 0;
+            this.neroaacencLocation.FolderMode = false;
+            this.neroaacencLocation.Location = new System.Drawing.Point(64, 26);
+            this.neroaacencLocation.Name = "neroaacencLocation";
+            this.neroaacencLocation.ReadOnly = true;
+            this.neroaacencLocation.SaveMode = false;
+            this.neroaacencLocation.Size = new System.Drawing.Size(399, 26);
+            this.neroaacencLocation.TabIndex = 44;
+            this.neroaacencLocation.Title = null;
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.btnClearMP4TempDirectory);
@@ -1262,6 +1335,23 @@ namespace MeGUI
             this.btnClearMP4TempDirectory.TabIndex = 42;
             this.btnClearMP4TempDirectory.Text = "x";
             this.btnClearMP4TempDirectory.Click += new System.EventHandler(this.btnClearMP4TempDirectory_Click);
+            // 
+            // tempDirMP4
+            // 
+            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tempDirMP4.Filename = "";
+            this.tempDirMP4.Filter = null;
+            this.tempDirMP4.FilterIndex = 0;
+            this.tempDirMP4.FolderMode = true;
+            this.tempDirMP4.Location = new System.Drawing.Point(12, 20);
+            this.tempDirMP4.Name = "tempDirMP4";
+            this.tempDirMP4.ReadOnly = true;
+            this.tempDirMP4.SaveMode = false;
+            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
+            this.tempDirMP4.TabIndex = 41;
+            this.tempDirMP4.Title = null;
+            this.tempDirMP4.FileSelected += new MeGUI.FileBarEventHandler(this.tempDirMP4_FileSelected);
             // 
             // vobGroupBox
             // 
@@ -1373,69 +1463,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
-            // 
-            // targetSizeSCBox1
-            // 
-            this.targetSizeSCBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.targetSizeSCBox1.Location = new System.Drawing.Point(8, 56);
-            this.targetSizeSCBox1.MaximumSize = new System.Drawing.Size(1000, 28);
-            this.targetSizeSCBox1.MinimumSize = new System.Drawing.Size(64, 28);
-            this.targetSizeSCBox1.Name = "targetSizeSCBox1";
-            this.targetSizeSCBox1.NullString = "Modify custom file size values";
-            this.targetSizeSCBox1.SaveCustomValues = true;
-            this.targetSizeSCBox1.SelectedIndex = 0;
-            this.targetSizeSCBox1.Size = new System.Drawing.Size(273, 28);
-            this.targetSizeSCBox1.TabIndex = 44;
-            // 
-            // defaultOutputDir
-            // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(8, 24);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(243, 26);
-            this.defaultOutputDir.TabIndex = 40;
-            this.defaultOutputDir.Title = null;
-            // 
-            // neroaacencLocation
-            // 
-            this.neroaacencLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.neroaacencLocation.Enabled = false;
-            this.neroaacencLocation.Filename = "";
-            this.neroaacencLocation.Filter = "NeroAacEnc|neroaacenc.exe";
-            this.neroaacencLocation.FilterIndex = 0;
-            this.neroaacencLocation.FolderMode = false;
-            this.neroaacencLocation.Location = new System.Drawing.Point(64, 26);
-            this.neroaacencLocation.Name = "neroaacencLocation";
-            this.neroaacencLocation.ReadOnly = true;
-            this.neroaacencLocation.SaveMode = false;
-            this.neroaacencLocation.Size = new System.Drawing.Size(399, 26);
-            this.neroaacencLocation.TabIndex = 44;
-            this.neroaacencLocation.Title = null;
-            // 
-            // tempDirMP4
-            // 
-            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tempDirMP4.Filename = "";
-            this.tempDirMP4.Filter = null;
-            this.tempDirMP4.FilterIndex = 0;
-            this.tempDirMP4.FolderMode = true;
-            this.tempDirMP4.Location = new System.Drawing.Point(12, 20);
-            this.tempDirMP4.Name = "tempDirMP4";
-            this.tempDirMP4.ReadOnly = true;
-            this.tempDirMP4.SaveMode = false;
-            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
-            this.tempDirMP4.TabIndex = 41;
-            this.tempDirMP4.Title = null;
-            this.tempDirMP4.FileSelected += new MeGUI.FileBarEventHandler(this.tempDirMP4_FileSelected);
             // 
             // SettingsForm
             // 
@@ -1626,6 +1653,7 @@ namespace MeGUI
                 settings.UseQAAC = useQAAC.Checked;
                 settings.UseX265 = useX265.Checked;
                 settings.UseExternalMuxerX264 = chx264ExternalMuxer.Checked;
+                settings.AlwaysUsePortableAviSynth = cbUseIncludedAviSynth.Checked;
 				return settings;
 			}
 			set
@@ -1693,6 +1721,7 @@ namespace MeGUI
                 useQAAC.Checked = settings.UseQAAC;
                 useX265.Checked = settings.UseX265;
                 chx264ExternalMuxer.Checked = settings.UseExternalMuxerX264;
+                cbUseIncludedAviSynth.Checked = settings.AlwaysUsePortableAviSynth;
 			}
 		}
 		#endregion
@@ -1786,6 +1815,12 @@ namespace MeGUI
             // check if the license file is available
             if (useDGIndexNV.Checked && !File.Exists(Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DGIndexNV.Path), "license.txt")))
                 MessageBox.Show("DGIndexNV cannot be used for free. Therefore you have to copy/create the file license.txt into your ..\\tools\\dgindexnv directory or you have to disable DGIndexNV.", "license.txt for DGIndexNV missing", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void cbUseIncludedAviSynth_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbUseIncludedAviSynth.Checked != internalSettings.AlwaysUsePortableAviSynth)
+                MessageBox.Show("You have to restart MeGUI so that the new AviSynth configuration can be changed.", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 	}
 }

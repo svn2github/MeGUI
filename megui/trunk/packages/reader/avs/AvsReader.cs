@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -252,13 +252,11 @@ namespace MeGUI
             public long ReadAudioSamples(long nStart, int nAmount, IntPtr buf)
             {
                 clip.ReadAudio(buf, nStart, nAmount);
-#warning Need to check whether nAmount samples are guaranteed to be returned
                 return nAmount;
             }
 
             public byte[] ReadAudioSamples(long nStart, int nAmount)
             {
-#warning slow reading is not supported here
                 return null;
             }
         }

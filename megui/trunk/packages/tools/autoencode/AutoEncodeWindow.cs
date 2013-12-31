@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2013 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -828,7 +828,6 @@ namespace MeGUI
                 MessageBox.Show(error, "Unsupported audio configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-#warning must be fixed up to be more generic
             if (info.Video.CurrentSettings.EncodingMode == 2 || info.Video.CurrentSettings.EncodingMode == 5)
             {
                 MessageBox.Show("First pass encoding is not supported for automated encoding as no output is generated.\nPlease choose another encoding mode", "Improper configuration",

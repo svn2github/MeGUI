@@ -886,20 +886,27 @@ namespace MeGUI.packages.video.x265
         {
             StringBuilder HelpText = new StringBuilder(64);
 
-            string xpath = "/ContextHelp/Codec[@name='x265']/" + node;
-            XmlNodeList nl = ContextHelp.SelectNodes(xpath); // Return the details for the specified node
-
-            if (nl.Count == 1) // if it finds the required HelpText, count should be 1
+            try
             {
-                HelpText.Append(nl[0].Attributes["name"].Value);
-                HelpText.AppendLine();
-                HelpText.AppendLine(nl[0]["Text"].InnerText);
-                HelpText.AppendLine();
-                HelpText.AppendLine("Default : " + nl[0]["Default"].InnerText);
-                HelpText.AppendLine("Recommended : " + nl[0]["Recommended"].InnerText);
+                string xpath = "/ContextHelp/Codec[@name='x265']/" + node;
+                XmlNodeList nl = ContextHelp.SelectNodes(xpath); // Return the details for the specified node
+
+                if (nl.Count == 1) // if it finds the required HelpText, count should be 1
+                {
+                    HelpText.Append(nl[0].Attributes["name"].Value);
+                    HelpText.AppendLine();
+                    HelpText.AppendLine(nl[0]["Text"].InnerText);
+                    HelpText.AppendLine();
+                    HelpText.AppendLine("Default : " + nl[0]["Default"].InnerText);
+                    HelpText.AppendLine("Recommended : " + nl[0]["Recommended"].InnerText);
+                }
+                else // If count isn't 1, then theres no valid data.
+                    HelpText.Append("Error: No data available");
             }
-            else // If count isn't 1, then theres no valid data.
-                HelpText.Append("No help available");
+            catch
+            {
+                HelpText.Append("Error: No data available");
+            }
 
             return (HelpText.ToString());
         }

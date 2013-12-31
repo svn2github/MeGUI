@@ -204,7 +204,7 @@ namespace MeGUI
                     case "avs":
                         strPath = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
                         arrPath.Add((Path.Combine(strPath, @"avisynth.dll")));
-                        arrPath.Add((Path.Combine(strPath, @"directshowsource.dll")));
+                        arrPath.Add((Path.Combine(strPath, @"plugins\directshowsource.dll")));
                         arrPath.Add((Path.Combine(strPath, @"devil.dll")));
                         break;
                     case "neroaacenc":
@@ -1123,7 +1123,7 @@ namespace MeGUI
             // avisynth
             arrPath.Add(MainForm.Instance.Settings.AviSynthPath);
             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
-            arrPath.Add(System.IO.Path.Combine(strPath, "directshowsource.dll"));
+            arrPath.Add(System.IO.Path.Combine(strPath, @"plugins\directshowsource.dll"));
             arrPath.Add(System.IO.Path.Combine(strPath, "devil.dll"));
 
             bool bComponentMissing = false;
@@ -1857,9 +1857,6 @@ namespace MeGUI
                 if (File.Exists(strLocalUpdateXML))
                     File.Delete(strLocalUpdateXML);
             }
-
-            // call function so that avisynth dlls will be copied to the root if needed
-            FileUtil.getAvisynthVersion(null);
 
             List<string> files = new List<string>();
             foreach (iUpgradeable u in upgradeData)

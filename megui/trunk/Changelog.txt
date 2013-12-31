@@ -1,3 +1,6 @@
+2444 [Settings] added option to always use the included/portable AviSynth build (disabled by default)
+     [Update]   improved AviSynth portable support for external tools
+     [Log]      added AviSynth+ detection
 2443 [Settings] removed "Force Video File Extension for QT compatibility"
                 removed "Samples between audio progress updates"
                 removed "Use Advanced ToolTips"

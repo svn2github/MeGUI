@@ -200,7 +200,7 @@ namespace MeGUI
                         {
                             inputLine = String.Empty;
                             if (MainForm.Instance.Settings.PortableAviSynth)
-                                inputLine = "LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), "directshowsource.dll") + "\")\r\n";
+                                inputLine = "LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), @"plugins\directshowsource.dll") + "\")\r\n";
                             inputLine += "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)" + VideoUtil.getAssumeFPS(fps, input);
                         }
                         if (flipVertical)

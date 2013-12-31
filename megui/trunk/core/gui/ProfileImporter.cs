@@ -147,16 +147,23 @@ namespace MeGUI.core.gui
         {
             StringBuilder HelpText = new StringBuilder(64);
 
-            string xpath = "/ContextHelp/Form[@name='PresetImporter']/" + node;
-            XmlNodeList nl = ContextHelp.SelectNodes(xpath); // Return the details for the specified node
-
-            if (nl.Count == 1) // if it finds the required HelpText, count should be 1
+            try
             {
-                HelpText.AppendLine(nl[0]["Text"].InnerText);
-                HelpText.AppendLine();
+                string xpath = "/ContextHelp/Form[@name='PresetImporter']/" + node;
+                XmlNodeList nl = ContextHelp.SelectNodes(xpath); // Return the details for the specified node
+
+                if (nl.Count == 1) // if it finds the required HelpText, count should be 1
+                {
+                    HelpText.AppendLine(nl[0]["Text"].InnerText);
+                    HelpText.AppendLine();
+                }
+                else // If count isn't 1, then theres no valid data.
+                    HelpText.Append("Error: No data available");
             }
-            else // If count isn't 1, then theres no valid data.
+            catch
+            {
                 HelpText.Append("Error: No data available");
+            }
 
             return (HelpText.ToString());
         }

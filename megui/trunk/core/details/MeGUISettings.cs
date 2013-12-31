@@ -57,7 +57,7 @@ namespace MeGUI
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, autoSelectHDStreams, autoscroll,
                      alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU,
-                     bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264,
+                     bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bAlwayUsePortableAviSynth,
                      bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bExternalMuxerX264, bUseNeroAacEnc,
                      bUseQAAC, bUseX265, bUseDGIndexNV;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -202,7 +202,7 @@ namespace MeGUI
             startColumnWidth = 55;
             endColumnWidth = 55;
             fpsColumnWidth = 35;
-            bEnsureCorrectPlaybackSpeed = false;
+            bEnsureCorrectPlaybackSpeed = bAlwayUsePortableAviSynth = false;
             ffmsThreads = 1;
             appendToForcedStreams = "";
             ocGUIMode = OCGUIMode.Default;
@@ -983,6 +983,15 @@ namespace MeGUI
         }
 
         /// <summary>
+        /// always use portable avisynth
+        /// </summary>
+        public bool AlwaysUsePortableAviSynth
+        {
+            get { return bAlwayUsePortableAviSynth; }
+            set { bAlwayUsePortableAviSynth = value; }
+        }
+
+        /// <summary>
         /// filename and full path of the neroaacenc executable
         /// </summary>
         public string NeroAacEncPath
@@ -1327,10 +1336,14 @@ namespace MeGUI
                 {
                     MainForm.Instance.startUpdateCheckAndWait();
                     if (File.Exists(_path))
+                    {
+                        if (MainForm.Instance.Settings.PortableAviSynth &&
+                            (name.Equals("ffmpeg") || name.StartsWith("x26") || name.Equals("xvid_encraw")))
+                            FileUtil.PortableAviSynthActions(false);
                         return true;
+                    }
                 }
-                else
-                    MessageBox.Show(String.Format("You have selected to not update {0}. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to download it later.", name), name + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(String.Format("You have selected to not update {0}. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to download it later.", name), name + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return false;
         }
