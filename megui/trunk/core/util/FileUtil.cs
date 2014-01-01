@@ -453,6 +453,7 @@ namespace MeGUI.core.util
             }
 
             // detects included avisynth
+            MainForm.Instance.Settings.PortableAviSynth = false;
             if (GetFileInformation(MainForm.Instance.Settings.AviSynthPath, out fileVersion, out fileDate, out fileProductName))
             {
                 MainForm.Instance.Settings.PortableAviSynth = true;
@@ -466,8 +467,10 @@ namespace MeGUI.core.util
             {
                 if (oLog != null)
                     oLog.LogValue("AviSynth", "not found", ImageType.Error);
-                MainForm.Instance.Settings.PortableAviSynth = false;
+                PortableAviSynthActions(true);
             }
+            else
+                PortableAviSynthActions(true);
         }
 
         /// <summary>
@@ -540,10 +543,15 @@ namespace MeGUI.core.util
             ArrayList sourceFiles = new ArrayList();
             sourceFiles.Add("AviSynth.dll");
             sourceFiles.Add("DevIL.dll");
-            DirectoryInfo fi = new DirectoryInfo(avisynthPath);
-            FileInfo[] files = fi.GetFiles("msvc*.dll");
-            foreach (FileInfo f in files)
-                sourceFiles.Add(f.Name);
+            if (Directory.Exists(avisynthPath))
+            {
+                DirectoryInfo fi = new DirectoryInfo(avisynthPath);
+                FileInfo[] files = fi.GetFiles("msvc*.dll");
+                foreach (FileInfo f in files)
+                    sourceFiles.Add(f.Name);
+            }
+            else if (!bRemove)
+                return;
 
             foreach (String dir in targetDirectories)
             {
@@ -567,8 +575,8 @@ namespace MeGUI.core.util
                 }
                 else
                 {
-                    fi = new DirectoryInfo(dir);
-                    files = fi.GetFiles();
+                    DirectoryInfo fi = new DirectoryInfo(dir);
+                    FileInfo[] files = fi.GetFiles();
                     foreach (FileInfo f in files)
                     {
                         foreach (String file in sourceFiles)

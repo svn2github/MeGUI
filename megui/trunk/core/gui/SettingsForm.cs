@@ -476,7 +476,7 @@ namespace MeGUI
             this.cbUseIncludedAviSynth.Name = "cbUseIncludedAviSynth";
             this.cbUseIncludedAviSynth.Size = new System.Drawing.Size(203, 17);
             this.cbUseIncludedAviSynth.TabIndex = 22;
-            this.cbUseIncludedAviSynth.Text = "Always use the inlcuded AviSynth";
+            this.cbUseIncludedAviSynth.Text = "Always use the included AviSynth";
             this.cbUseIncludedAviSynth.CheckedChanged += new System.EventHandler(this.cbUseIncludedAviSynth_CheckedChanged);
             // 
             // cbOpenAVSinThread

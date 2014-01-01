@@ -1,3 +1,4 @@
+2445 [Update] fixed an error if tools\avs does not exists (regression of 2444)
 2444 [Settings] added option to always use the included/portable AviSynth build (disabled by default)
      [Update]   improved AviSynth portable support for external tools
      [Log]      added AviSynth+ detection
