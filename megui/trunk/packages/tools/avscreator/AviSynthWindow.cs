@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -97,7 +97,8 @@ namespace MeGUI
             this.cbNvDeInt.Items.Clear();
             this.cbNvDeInt.DataSource = ScriptServer.ListOfNvDeIntType;
             this.cbNvDeInt.BindingContext = new BindingContext();
-            
+
+            sourceType = PossibleSources.directShow;
             deintFieldOrder.SelectedIndex = -1;
             deintSourceType.SelectedIndex = -1;
             cbNvDeInt.SelectedIndex = 0;
@@ -425,7 +426,6 @@ namespace MeGUI
             {            
                 case PossibleSources.d2v:
                 case PossibleSources.dga:
-                case PossibleSources.mpeg2:
                     this.mpeg2Deblocking.Enabled = true;
                     this.colourCorrect.Enabled = true;
                     this.fpsBox.Enabled = false;
@@ -1402,7 +1402,7 @@ namespace MeGUI
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
-    public enum PossibleSources { d2v, dga, dgi, mpeg2, vdr, directShow, avs, ffindex };
+    public enum PossibleSources { d2v, dga, dgi, vdr, directShow, avs, ffindex };
     public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal, undercrop };
     public enum modValue : int { mod16 = 0, mod8, mod4, mod2 };
 

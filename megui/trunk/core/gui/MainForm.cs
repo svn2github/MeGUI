@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -61,6 +61,8 @@ namespace MeGUI
         private LogItem _fileIndexerLog;
         private LogItem _updateLog;
         private LogItem _eac3toLog;
+        private List<ProgramSettings> _programsettings;
+        public List<ProgramSettings> ProgramSettings { get { return _programsettings; } set { _programsettings = value; } }
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
         public bool IsOverlayIconActive { get { return taskbarIcon != null; } }
         public string LogFile { get { return strLogFile; } }
@@ -69,6 +71,18 @@ namespace MeGUI
         public LogItem FileIndexerLog { get { return _fileIndexerLog; } set { _fileIndexerLog = value; } }
         public LogItem UpdateLog { get { return _updateLog; } set { _updateLog = value; } }
         public LogItem Eac3toLog { get { return _eac3toLog; } set { _eac3toLog = value; } }
+        public MuxProvider MuxProvider { get { return muxProvider; } }
+        private bool restart = false;
+        private Dictionary<string, CommandlineUpgradeData> filesToReplace = new Dictionary<string, CommandlineUpgradeData>();
+        private DialogManager dialogManager;
+        private string path; // path the program was started from
+        private MediaFileFactory mediaFileFactory;
+        private PackageSystem packageSystem = new PackageSystem();
+        private JobUtil jobUtil;
+        private MuxProvider muxProvider;
+        private MeGUISettings settings = new MeGUISettings();
+        private ProfileManager profileManager;
+        private CodecManager codecs;
         #endregion
 
         public void RegisterForm(Form f)
@@ -327,6 +341,7 @@ namespace MeGUI
         /// </summary>
         public void loadSettings()
         {
+            this._programsettings = new List<ProgramSettings>();
             string fileName = Path.Combine(path, "settings.xml");
             if (File.Exists(fileName))
             {
@@ -344,7 +359,7 @@ namespace MeGUI
                     }
                 }
             }
-            this.settings.SetProgramPaths();
+            MainForm.Instance.Settings.InitializeProgramSettings();
         }
 
         #endregion
@@ -854,30 +869,6 @@ namespace MeGUI
         }
 
         #region MeGUIInfo
-        #region variable declaration
-        private bool restart = false;
-        private Dictionary<string, CommandlineUpgradeData> filesToReplace = new Dictionary<string, CommandlineUpgradeData>();
-        private DialogManager dialogManager;
-        private string path; // path the program was started from
-        private MediaFileFactory mediaFileFactory;
-        private PackageSystem packageSystem = new PackageSystem();
-        private JobUtil jobUtil;
-        private MuxProvider muxProvider;
-        private MeGUISettings settings = new MeGUISettings();
-        private ProfileManager profileManager;
-
-        //public MeGUISettings Settings
-        //{
-        //    get { return settings; }
-        //}
-
-        public MuxProvider MuxProvider
-        {
-            get { return muxProvider; }
-        }
-
-        private CodecManager codecs;
-        #endregion
         #region start and end
         public void handleCommandline(CommandlineParser parser)
         {

@@ -45,7 +45,7 @@ namespace MeGUI
             this.colLatestVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colExistingDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colLatestDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colPlatform = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colLastUsed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.txtBoxLog = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -118,7 +118,7 @@ namespace MeGUI
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
-            this.splitContainer1.Size = new System.Drawing.Size(710, 375);
+            this.splitContainer1.Size = new System.Drawing.Size(721, 375);
             this.splitContainer1.SplitterDistance = 305;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 11;
@@ -138,7 +138,7 @@ namespace MeGUI
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.txtBoxLog);
-            this.splitContainer2.Size = new System.Drawing.Size(710, 305);
+            this.splitContainer2.Size = new System.Drawing.Size(721, 305);
             this.splitContainer2.SplitterDistance = 199;
             this.splitContainer2.TabIndex = 0;
             this.splitContainer2.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer2_SplitterMoved);
@@ -153,14 +153,14 @@ namespace MeGUI
             this.colLatestVersion,
             this.colExistingDate,
             this.colLatestDate,
-            this.colPlatform,
+            this.colLastUsed,
             this.colStatus});
             this.listViewDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewDetails.FullRowSelect = true;
             this.listViewDetails.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewDetails.Location = new System.Drawing.Point(0, 0);
             this.listViewDetails.Name = "listViewDetails";
-            this.listViewDetails.Size = new System.Drawing.Size(710, 199);
+            this.listViewDetails.Size = new System.Drawing.Size(721, 199);
             this.listViewDetails.TabIndex = 6;
             this.listViewDetails.UseCompatibleStateImageBehavior = false;
             this.listViewDetails.View = System.Windows.Forms.View.Details;
@@ -199,15 +199,15 @@ namespace MeGUI
             this.colLatestDate.Text = "Server Date";
             this.colLatestDate.Width = 70;
             // 
-            // colPlatform
+            // colLastUsed
             // 
-            this.colPlatform.Text = "Platform";
-            this.colPlatform.Width = 52;
+            this.colLastUsed.Text = "Last Used";
+            this.colLastUsed.Width = 59;
             // 
             // colStatus
             // 
             this.colStatus.Text = "Status";
-            this.colStatus.Width = 111;
+            this.colStatus.Width = 131;
             // 
             // txtBoxLog
             // 
@@ -216,7 +216,7 @@ namespace MeGUI
             this.txtBoxLog.Multiline = true;
             this.txtBoxLog.Name = "txtBoxLog";
             this.txtBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtBoxLog.Size = new System.Drawing.Size(710, 102);
+            this.txtBoxLog.Size = new System.Drawing.Size(721, 102);
             this.txtBoxLog.TabIndex = 9;
             // 
             // panel1
@@ -229,14 +229,14 @@ namespace MeGUI
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(710, 65);
+            this.panel1.Size = new System.Drawing.Size(721, 65);
             this.panel1.TabIndex = 13;
             // 
             // chkShowAllFiles
             // 
             this.chkShowAllFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chkShowAllFiles.AutoSize = true;
-            this.chkShowAllFiles.Location = new System.Drawing.Point(421, 34);
+            this.chkShowAllFiles.Location = new System.Drawing.Point(432, 34);
             this.chkShowAllFiles.Name = "chkShowAllFiles";
             this.chkShowAllFiles.Size = new System.Drawing.Size(87, 17);
             this.chkShowAllFiles.TabIndex = 9;
@@ -259,13 +259,13 @@ namespace MeGUI
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.progressBar.Location = new System.Drawing.Point(0, 0);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(710, 23);
+            this.progressBar.Size = new System.Drawing.Size(721, 23);
             this.progressBar.TabIndex = 7;
             // 
             // btnUpdate
             // 
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdate.Location = new System.Drawing.Point(545, 30);
+            this.btnUpdate.Location = new System.Drawing.Point(556, 30);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
             this.btnUpdate.TabIndex = 3;
@@ -278,7 +278,7 @@ namespace MeGUI
             this.btnAbort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAbort.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnAbort.Enabled = false;
-            this.btnAbort.Location = new System.Drawing.Point(626, 30);
+            this.btnAbort.Location = new System.Drawing.Point(637, 30);
             this.btnAbort.Name = "btnAbort";
             this.btnAbort.Size = new System.Drawing.Size(72, 23);
             this.btnAbort.TabIndex = 4;
@@ -290,7 +290,7 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 375);
+            this.ClientSize = new System.Drawing.Size(721, 375);
             this.Controls.Add(this.splitContainer1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -334,7 +334,7 @@ namespace MeGUI
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ToolStripMenuItem reinstallToolStripMenuItem;
-        private System.Windows.Forms.ColumnHeader colPlatform;
+        private System.Windows.Forms.ColumnHeader colLastUsed;
         private System.Windows.Forms.ColumnHeader colExistingDate;
         private System.Windows.Forms.ColumnHeader colLatestDate;
         private System.Windows.Forms.Panel panel1;

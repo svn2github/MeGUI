@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -196,38 +196,24 @@ namespace MeGUI
             return CheckPackage(package, true, true);
         }
 
+        public static ProgramSettings GetPackage(string package)
+        {
+            foreach (ProgramSettings pSettings in MainForm.Instance.ProgramSettings)
+            {
+                if (!package.Equals(pSettings.Name))
+                    continue;
+                return pSettings;
+            }
+
+            return null;
+        }
+
         public static bool CheckPackage(string package, bool enablePackage, bool forceUpdate)
         {
-            switch (package)
-            {
-                case "aften": return MainForm.Instance.Settings.Aften.Update(package, enablePackage, forceUpdate);
-                case "avimux_gui": return MainForm.Instance.Settings.AviMuxGui.Update(package, enablePackage, forceUpdate);
-                case "bassaudio": return MainForm.Instance.Settings.BassAudio.Update(package, enablePackage, forceUpdate);
-                case "besplit": return MainForm.Instance.Settings.BeSplit.Update(package, enablePackage, forceUpdate);
-                case "dgavcindex": return MainForm.Instance.Settings.DGAVCIndex.Update(package, enablePackage, forceUpdate);
-                case "dgindex": return MainForm.Instance.Settings.DGIndex.Update(package, enablePackage, forceUpdate);
-                case "dgindexnv": return MainForm.Instance.Settings.DGIndexNV.Update(package, enablePackage, forceUpdate);
-                case "eac3to": return MainForm.Instance.Settings.Eac3to.Update(package, enablePackage, forceUpdate);
-                case "ffmpeg": return MainForm.Instance.Settings.FFmpeg.Update(package, enablePackage, forceUpdate);
-                case "ffms": return MainForm.Instance.Settings.FFMS.Update(package, enablePackage, forceUpdate);
-                case "flac": return MainForm.Instance.Settings.Flac.Update(package, enablePackage, forceUpdate);
-                case "lame": return MainForm.Instance.Settings.Lame.Update(package, enablePackage, forceUpdate);
-                case "mkvmerge": return MainForm.Instance.Settings.MkvMerge.Update(package, enablePackage, forceUpdate);
-                case "mp4box": return MainForm.Instance.Settings.Mp4Box.Update(package, enablePackage, forceUpdate);
-                case "neroaacenc": return MainForm.Instance.Settings.NeroAacEnc.Update(package, enablePackage, forceUpdate);
-                case "oggenc2": return MainForm.Instance.Settings.OggEnc.Update(package, enablePackage, forceUpdate);
-                case "opus": return MainForm.Instance.Settings.Opus.Update(package, enablePackage, forceUpdate);
-                case "pgcdemux": return MainForm.Instance.Settings.PgcDemux.Update(package, enablePackage, forceUpdate);
-                case "qaac": return MainForm.Instance.Settings.QAAC.Update(package, enablePackage, forceUpdate);
-                case "tsmuxer": return MainForm.Instance.Settings.TSMuxer.Update(package, enablePackage, forceUpdate);
-                case "vobsub": return MainForm.Instance.Settings.VobSub.Update(package, enablePackage, forceUpdate);
-                case "x264": return MainForm.Instance.Settings.X264.Update(package, enablePackage, forceUpdate);
-                case "x264_10b": return MainForm.Instance.Settings.X264_10B.Update(package, enablePackage, forceUpdate);
-                case "x265": return MainForm.Instance.Settings.X265.Update(package, enablePackage, forceUpdate);
-                case "xvid_encraw": return MainForm.Instance.Settings.XviD.Update(package, enablePackage, forceUpdate);
-                case "yadif": return MainForm.Instance.Settings.Yadif.Update(package, enablePackage, forceUpdate);
-                default: return false;
-            }
+            ProgramSettings pSettings = GetPackage(package);
+            if (pSettings != null)
+                return pSettings.Update(enablePackage, forceUpdate);
+            return false;
         }
     }
 }

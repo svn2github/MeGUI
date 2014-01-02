@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ namespace MeGUI
                     modeColumnWidth, statusColumnWidth, ownerColumnWidth, startColumnWidth, endColumnWidth, fpsColumnWidth,
                     updateFormUpdateColumnWidth, updateFormNameColumnWidth, updateFormLocalVersionColumnWidth, 
                     updateFormServerVersionColumnWidth, updateFormLocalDateColumnWidth, updateFormServerDateColumnWidth, 
-                    updateFormPlatformColumnWidth, updateFormStatusColumnWidth, ffmsThreads;
+                    updateFormLastUsedColumnWidth, updateFormStatusColumnWidth, ffmsThreads;
         private SourceDetectorSettings sdSettings;
         private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;
@@ -86,43 +86,13 @@ namespace MeGUI
         public MeGUISettings()
 		{
             string strMeGUIPath = Path.GetDirectoryName(Application.ExecutablePath);
-
-            // initialize external program settings
-            aften = new ProgramSettings();
-            avimuxgui = new ProgramSettings();
-            bassaudio = new ProgramSettings();
-            besplit = new ProgramSettings();
-            dgavcindex = new ProgramSettings();
-            dgindex = new ProgramSettings();
-            dgindexnv = new ProgramSettings();
-            eac3to = new ProgramSettings();
-            ffmpeg = new ProgramSettings();
-            ffms = new ProgramSettings();
-            flac = new ProgramSettings();
-            lame = new ProgramSettings();
-            mkvmerge = new ProgramSettings();
-            mp4box = new ProgramSettings();
-            neroaacenc = new ProgramSettings();
-            oggenc = new ProgramSettings();
-            opus = new ProgramSettings();
-            pgcdemux = new ProgramSettings();
-            qaac = new ProgramSettings();
-            tsmuxer = new ProgramSettings();
-            vobsub = new ProgramSettings();
 #if x64
-            x264 = new ProgramSettings();
             b64bitX264 = true;
-            x264_10b = new ProgramSettings();
 #endif
 #if x86
-            x264 = new ProgramSettings();
-            x264_10b = new ProgramSettings();
             if (OSInfo.isWow64())
                 b64bitX264 = true;
 #endif
-            x265 = new ProgramSettings();
-            xvid = new ProgramSettings();
-            yadif = new ProgramSettings();
 
             autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
@@ -181,7 +151,7 @@ namespace MeGUI
             mainFormLocation = new Point(0, 0);
             mainFormSize = new Size(604, 478);
             updateFormLocation = new Point(0, 0);
-            updateFormSize = new Size(710, 313);
+            updateFormSize = new Size(730, 313);
             updateFormSplitter = 180;
             updateFormUpdateColumnWidth = 47;
             updateFormNameColumnWidth = 105;
@@ -189,7 +159,7 @@ namespace MeGUI
             updateFormServerVersionColumnWidth = 117;
             updateFormLocalDateColumnWidth = 70;
             updateFormServerDateColumnWidth = 70;
-            updateFormPlatformColumnWidth = 52;
+            updateFormLastUsedColumnWidth = 70;
             updateFormStatusColumnWidth = 111;
             jobWorkerSize = new Size(565, 498);
             jobColumnWidth = 40;
@@ -280,10 +250,10 @@ namespace MeGUI
             set { updateFormServerDateColumnWidth = value; }
         }
 
-        public int UpdateFormPlatformColumnWidth
+        public int UpdateFormLastUsedColumnWidth
         {
-            get { return updateFormPlatformColumnWidth; }
-            set { updateFormPlatformColumnWidth = value; }
+            get { return updateFormLastUsedColumnWidth; }
+            set { updateFormLastUsedColumnWidth = value; }
         }
 
         public int UpdateFormStatusColumnWidth
@@ -1240,41 +1210,110 @@ namespace MeGUI
             return true;
         }
 
-        public void SetProgramPaths()
+        public void InitializeProgramSettings()
         {
-            // set default program paths
-            aften.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\aften\aften.exe");
-            avimuxgui.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avimux_gui\avimux_gui.exe");
-            bassaudio.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bassaudio.dll");
-            besplit.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\besplit\besplit.exe");
-            dgavcindex.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgavcindex\dgavcindex.exe");
-            dgindex.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindex\dgindex.exe");
-            dgindexnv.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindexnv\dgindexnv.exe");
-            eac3to.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\eac3to\eac3to.exe");
-            ffmpeg.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffmpeg\ffmpeg.exe");
-            ffms.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffms\ffmsindex.exe");
-            flac.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\flac\flac.exe");
-            lame.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lame\lame.exe");
-            mkvmerge.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvmerge.exe");
-            mp4box.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mp4box\mp4box.exe");
-            neroaacenc.Path = neroAacEncPath;
-            oggenc.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\oggenc2\oggenc2.exe");
-            opus.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\opus\opusenc.exe");
-            pgcdemux.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\pgcdemux\pgcdemux.exe");
-            qaac.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\qaac\qaac.exe");
-            tsmuxer.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\tsmuxer\tsmuxer.exe");
-            vobsub.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\vobsub\vobsub.dll");
+            // initialize program settings if required
+            if (aften == null)
+                aften = new ProgramSettings("aften");
+            if (avimuxgui == null)
+                avimuxgui = new ProgramSettings("avimux_gui");
+            if (bassaudio == null)
+                bassaudio = new ProgramSettings("bassaudio");
+            if (besplit == null)
+                besplit = new ProgramSettings("besplit");
+            if (dgavcindex == null)
+                dgavcindex = new ProgramSettings("dgavcindex");
+            if (dgindex == null)
+                dgindex = new ProgramSettings("dgindex");
+            if (dgindexnv == null)
+                dgindexnv = new ProgramSettings("dgindexnv");
+            if (eac3to == null)
+                eac3to = new ProgramSettings("eac3to");
+            if (ffmpeg == null)
+                ffmpeg = new ProgramSettings("ffmpeg");
+            if (ffms == null)
+                ffms = new ProgramSettings("ffms");
+            if (flac == null)
+                flac = new ProgramSettings("flac");
+            if (lame == null)
+                lame = new ProgramSettings("lame");
+            if (mkvmerge == null)
+                mkvmerge = new ProgramSettings("mkvmerge");
+            if (mp4box == null)
+                mp4box = new ProgramSettings("mp4box");
+            if (neroaacenc == null)
+                neroaacenc = new ProgramSettings("neroaacenc");
+            if (oggenc == null)
+                oggenc = new ProgramSettings("oggenc2");
+            if (opus == null)
+                opus = new ProgramSettings("opus");
+            if (pgcdemux == null)
+                pgcdemux = new ProgramSettings("pgcdemux");
+            if (qaac == null)
+                qaac = new ProgramSettings("qaac");
+            if (tsmuxer == null)
+                tsmuxer = new ProgramSettings("tsmuxer");
+            if (vobsub == null)
+                vobsub = new ProgramSettings("vobsub");
+            if (x264 == null)
+                x264 = new ProgramSettings("x264");
+            if (x264_10b == null)
+                x264_10b = new ProgramSettings("x264_10b");
+            if (x265 == null)
+                x265 = new ProgramSettings("x265");
+            if (xvid == null)
+                xvid = new ProgramSettings("xvid_encraw");
+            if (yadif == null)
+                yadif = new ProgramSettings("yadif");
+
+            // set default name, program paths & files
+            aften.UpdateInformation("aften", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\aften\aften.exe"));
+            avimuxgui.UpdateInformation("avimux_gui", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avimux_gui\avimux_gui.exe"));
+            bassaudio.UpdateInformation("bassaudio", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bassaudio.dll"));
+            bassaudio.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bass.dll"));
+            bassaudio.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bass_aac.dll"));
+            besplit.UpdateInformation("besplit", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\besplit\besplit.exe"));
+            dgavcindex.UpdateInformation("dgavcindex", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgavcindex\dgavcindex.exe"));
+            dgavcindex.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgavcindex\dgavcdecode.dll"));
+            dgindex.UpdateInformation("dgindex", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindex\dgindex.exe"));
+            dgindex.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindex\dgdecode.dll"));
+            dgindexnv.UpdateInformation("dgindexnv", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindexnv\dgindexnv.exe"));
+            dgindexnv.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindexnv\dgdecodenv.dll"));
+            eac3to.UpdateInformation("eac3to", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\eac3to\eac3to.exe"));
+            ffmpeg.UpdateInformation("ffmpeg", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffmpeg\ffmpeg.exe"));
+            ffms.UpdateInformation("ffms", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffms\ffmsindex.exe"));
+            ffms.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffms\ffms2.dll"));
+            flac.UpdateInformation("flac", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\flac\flac.exe"));
+            lame.UpdateInformation("lame", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lame\lame.exe"));
+            mkvmerge.UpdateInformation("mkvmerge", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvmerge.exe"));
+            mkvmerge.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvextract.exe"));
+            mp4box.UpdateInformation("mp4box", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mp4box\mp4box.exe"));
+            neroaacenc.UpdateInformation("neroaacenc", neroAacEncPath);
+            oggenc.UpdateInformation("oggenc2", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\oggenc2\oggenc2.exe"));
+            opus.UpdateInformation("opus", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\opus\opusenc.exe"));
+            pgcdemux.UpdateInformation("pgcdemux", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\pgcdemux\pgcdemux.exe"));
+            qaac.UpdateInformation("qaac", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\qaac\qaac.exe"));
+            tsmuxer.UpdateInformation("tsmuxer", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\tsmuxer\tsmuxer.exe"));
+            vobsub.UpdateInformation("vobsub", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\vobsub\vobsub.dll"));
 #if x64
-            x264.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264_64.exe");
-            x264_10b.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b_64.exe");
+            x264.UpdateInformation("x264", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264_64.exe"));
+            x264_10b.UpdateInformation("x264_10b", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b_64.exe"));
 #endif
 #if x86
-            x264.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264.exe");
-            x264_10b.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b.exe");
+            x264.UpdateInformation("x264", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264.exe"));
+            x264_10b.UpdateInformation("x264_10b", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b.exe"));
+            if (OSInfo.isWow64())
+            {
+                x264.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\avs4x264mod.exe"));
+                x264.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264_64.exe"));
+                x264_10b.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\avs4x264mod.exe"));
+                x264_10b.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b_64.exe"));
+            }
 #endif
-            x265.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x265\x265.exe");
-            xvid.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\xvid_encraw\xvid_encraw.exe");
-            yadif.Path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\yadif\yadif.dll");
+            x265.UpdateInformation("x265", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x265\x265.exe"));
+            x265.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x265\avs4x265.exe"));
+            xvid.UpdateInformation("xvid_encraw", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\xvid_encraw\xvid_encraw.exe"));
+            yadif.UpdateInformation("yadif", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\yadif\yadif.dll"));
         }
         #endregion
     }
@@ -1284,19 +1323,36 @@ namespace MeGUI
         private bool _enabled;
         private string _path;
         private DateTime _lastused;
+        private string _name;
+        private string _displayname;
+        private List<string> _files;
 
         public ProgramSettings()
         {
+            _files = new List<string>();
+            _enabled = false;
+            _path = _name = _displayname = String.Empty;
+            _lastused = new DateTime();
+            MainForm.Instance.ProgramSettings.Add(this);
+        }
+
+        public ProgramSettings(string name)
+        {
+            _files = new List<string>();
             _enabled = false;
             _path = String.Empty;
             _lastused = new DateTime();
+            _name = _displayname = name;
+            MainForm.Instance.ProgramSettings.Add(this);
         }
 
-        public ProgramSettings(string path)
+        public void UpdateInformation(string name, string path)
         {
-            _enabled = false;
+            _name = name;
+            if (String.IsNullOrEmpty(_displayname))
+                _displayname = name;
             _path = path;
-            _lastused = new DateTime();
+            _files.Add(path);
         }
 
         public bool Enabled
@@ -1309,7 +1365,32 @@ namespace MeGUI
         public string Path
         {
             get { return _path; }
-            set { _path = value; }
+            set 
+            { 
+                _path = value;
+                _files.Clear();
+                _files.Add(_path);
+            }
+        }
+
+        [XmlIgnore()]
+        public List<string> Files
+        {
+            get { return _files; }
+            set { _files = value; }
+        }
+
+        [XmlIgnore()]
+        public string Name
+        {
+            get { return _name; }
+        }
+
+        [XmlIgnore()]
+        public string DisplayName
+        {
+            get { return _displayname; }
+            set { _displayname = value; }
         }
 
         public DateTime LastUsed
@@ -1318,12 +1399,10 @@ namespace MeGUI
             set { _lastused = value; }
         }
 
-        public bool Update(string name, bool enable, bool forceUpdate)
+        public bool Update(bool enable, bool forceUpdate)
         {
-            if (enable && forceUpdate)
+            if (enable && (forceUpdate || !_enabled))
                 _lastused = DateTime.Now;
-            else if (enable && !_enabled)
-                _lastused = DateTime.Now.AddDays(-System.Math.Floor(UpdateCacher.REMOVE_PACKAGE_AFTER_DAYS / 2.0));
             _enabled = enable;
 
             if (!enable || (!String.IsNullOrEmpty(_path) && File.Exists(_path)))
@@ -1332,18 +1411,18 @@ namespace MeGUI
             if (forceUpdate)
             {
                 // package is not available. Therefore an update check is necessary
-                if (MessageBox.Show("The package " + name + " is not installed.\n\nDo you want to search now online for updates?", "MeGUI package missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                if (MessageBox.Show("The package " + _displayname + " is not installed.\n\nDo you want to search now online for updates?", "MeGUI package missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     MainForm.Instance.startUpdateCheckAndWait();
                     if (File.Exists(_path))
                     {
                         if (MainForm.Instance.Settings.PortableAviSynth &&
-                            (name.Equals("ffmpeg") || name.StartsWith("x26") || name.Equals("xvid_encraw")))
+                            (_name.Equals("ffmpeg") || _name.StartsWith("x26") || _name.Equals("xvid_encraw")))
                             FileUtil.PortableAviSynthActions(false);
                         return true;
                     }
                 }
-                MessageBox.Show(String.Format("You have selected to not update {0}. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to download it later.", name), name + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(String.Format("You have selected to not update {0}. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to download it later.", _displayname), _displayname + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return false;
         }
