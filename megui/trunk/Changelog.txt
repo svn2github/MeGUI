@@ -1,3 +1,4 @@
+2447 [Update] fixed a regression in 2446
 2446 [Update] removed "Platform" column
               added "Last Used" column
               sort based on first column

@@ -973,7 +973,6 @@ namespace MeGUI
                     neroAacEncPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\eac3to\neroAacEnc.exe");
                 else
                     neroAacEncPath = value;
-                neroaacenc.Path = neroAacEncPath;
             }
         }
 
@@ -1365,12 +1364,6 @@ namespace MeGUI
         public string Path
         {
             get { return _path; }
-            set 
-            { 
-                _path = value;
-                _files.Clear();
-                _files.Add(_path);
-            }
         }
 
         [XmlIgnore()]
