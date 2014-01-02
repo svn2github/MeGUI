@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ namespace MeGUI.core.details.audio
                     );
 
             InitializeComponent();
-            this.primaryDecoding.DataSource = EnumProxy.CreateArray(new object[] { AudioDecodingEngine.NicAudio, AudioDecodingEngine.FFAudioSource, AudioDecodingEngine.DirectShow, AudioDecodingEngine.BassAudio });
+            this.primaryDecoding.DataSource = EnumProxy.CreateArray(new object[] { AudioDecodingEngine.NicAudio, AudioDecodingEngine.LWLibavAudioSource, AudioDecodingEngine.FFAudioSource, AudioDecodingEngine.DirectShow, AudioDecodingEngine.BassAudio });
             this.besweetDownmixMode.DataSource = _avisynthChannelSet;
             this.besweetDownmixMode.BindingContext = new BindingContext();
             this.cbSampleRate.SelectedIndex = 0;

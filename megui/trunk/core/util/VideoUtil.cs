@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -232,7 +232,7 @@ namespace MeGUI
                     string trackFile = strTrackName + audioTracks[counter].TrackIDx + "*";
                     if (Path.GetExtension(projectName).ToLowerInvariant().Equals(".dga"))
                         trackFile = Path.GetFileName(projectName) + trackFile;
-                    else if (Path.GetExtension(projectName).ToLowerInvariant().Equals(".ffindex"))
+                    else if (Path.GetExtension(projectName).ToLowerInvariant().Equals(".ffindex") || Path.GetExtension(projectName).ToLowerInvariant().Equals(".lwi"))
                         trackFile = Path.GetFileNameWithoutExtension(projectName) + "_track_" + (audioTracks[counter].TrackIndex + 1) + "_*.avs";
                     else
                         trackFile = Path.GetFileNameWithoutExtension(projectName) + trackFile;
@@ -845,7 +845,7 @@ namespace MeGUI
             script.AppendFormat("LoadCPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path), "ffms2.dll"), Environment.NewLine);
             script.AppendFormat("BlankClip(){0}", Environment.NewLine);
             string errorText;
-            return OpenAVSScript(script.ToString(), out errorText);
+            return AVSScriptHasVideo(script.ToString(), out errorText);
         }
 
         private static string getFFMSBasicInputLine(bool loadCPlugin, string inputFile, string indexFile, int track, int rffmode, int fpsnum, int fpsden, bool video)
@@ -881,6 +881,53 @@ namespace MeGUI
                     (!String.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty),
                     Environment.NewLine);
             }           
+            return script.ToString();
+        }
+
+        public static string getLSMASHVideoInputLine(string inputFile, string indexFile, double fps)
+        {
+            UpdateCacher.CheckPackage("lsmash");
+            int fpsnum, fpsden;
+            getFPSFraction(fps, inputFile, out fpsnum, out fpsden);
+            return getLSMASHBasicInputLine(inputFile, indexFile, -1, 0, fpsnum, fpsden, true);
+        }
+
+        public static string getLSMASHAudioInputLine(string inputFile, string indexFile, int track)
+        {
+            UpdateCacher.CheckPackage("lsmash");
+            return getLSMASHBasicInputLine(inputFile, indexFile, track, 0, 0, 0, false);
+        }
+
+        private static string getLSMASHBasicInputLine(string inputFile, string indexFile, int track, int rffmode, int fpsnum, int fpsden, bool video)
+        {
+            StringBuilder script = new StringBuilder();
+            script.AppendFormat("LoadPlugin(\"{0}\"){1}",
+                MainForm.Instance.Settings.LSMASH.Path,
+                Environment.NewLine);
+
+            if (inputFile.ToLowerInvariant().EndsWith(".lwi") && File.Exists(inputFile))
+                indexFile = inputFile;
+            if (!String.IsNullOrEmpty(indexFile) && indexFile.ToLowerInvariant().Equals(inputFile.ToLowerInvariant() + ".lwi"))
+                indexFile = null;
+
+            string extension = Path.GetExtension(inputFile).ToLowerInvariant();
+            if (video)
+            {
+                script.AppendFormat("{0}(\"{1}\"{2})",
+                    ((extension.Equals(".mp4") || extension.Equals(".m4v") || extension.Equals(".mov") || extension.Equals(".3gp") || 
+                    extension.Equals(".3g2") || extension.Equals(".qt")) ? "LSMASHVideoSource" : "LWLibavVideoSource"),
+                    (!String.IsNullOrEmpty(indexFile) ? indexFile : inputFile),
+                    (track > -1 ? ", track=" + track : String.Empty));
+            }
+            else
+            {
+                script.AppendFormat("{0}(\"{1}\"{2}){3}",
+                    ((extension.Equals(".mp4") || extension.Equals(".m4v") || extension.Equals(".mov") || extension.Equals(".3gp") ||
+                    extension.Equals(".3g2") || extension.Equals(".qt")) ? "LSMASHAudioSource" : "LWLibavAudioSource"),
+                    (!String.IsNullOrEmpty(indexFile) ? indexFile : inputFile),
+                    (track > -1 ? ", track=" + track : String.Empty),
+                    Environment.NewLine);
+            }
             return script.ToString();
         }
 
@@ -979,14 +1026,14 @@ namespace MeGUI
             }
         }
 
-        private static bool OpenAVSScript(String strAVSScript, out string strErrorText)
+        public static bool AVSScriptHasVideo(String strAVSScript, out string strErrorText)
         {
             try
             {
                 strErrorText = String.Empty;
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
                     using (AviSynthClip a = env.ParseScript(strAVSScript))
-                        return true;
+                        return a.HasVideo;
             }
             catch (Exception ex)
             {

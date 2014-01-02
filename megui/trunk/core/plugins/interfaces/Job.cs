@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -90,7 +90,7 @@ namespace MeGUI
     XmlInclude(typeof(SubtitleIndexJob)), XmlInclude(typeof(AudioSplitJob)), XmlInclude(typeof(AudioJoinJob)),
     XmlInclude(typeof(CleanupJob)), XmlInclude(typeof(DGAIndexJob)), XmlInclude(typeof(FFMSIndexJob)),
     XmlInclude(typeof(DGIIndexJob)), XmlInclude(typeof(HDStreamsExJob)), XmlInclude(typeof(PgcDemuxJob)),
-    XmlInclude(typeof(MkvExtractJob)), XmlInclude(typeof(OneClickPostProcessingJob))]
+    XmlInclude(typeof(MkvExtractJob)), XmlInclude(typeof(OneClickPostProcessingJob)), XmlInclude(typeof(LSMASHIndexJob))]
 	public abstract class Job
 	{
         #region important details

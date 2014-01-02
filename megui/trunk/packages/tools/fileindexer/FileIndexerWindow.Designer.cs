@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -66,6 +66,7 @@ namespace MeGUI
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
             this.gbIndexer = new System.Windows.Forms.GroupBox();
+            this.btnLSMASH = new System.Windows.Forms.RadioButton();
             this.btnDGA = new System.Windows.Forms.RadioButton();
             this.btnFFMS = new System.Windows.Forms.RadioButton();
             this.btnD2V = new System.Windows.Forms.RadioButton();
@@ -93,7 +94,7 @@ namespace MeGUI
             this.gbInput.Controls.Add(this.inputLabel);
             this.gbInput.Location = new System.Drawing.Point(12, 6);
             this.gbInput.Name = "gbInput";
-            this.gbInput.Size = new System.Drawing.Size(424, 50);
+            this.gbInput.Size = new System.Drawing.Size(449, 50);
             this.gbInput.TabIndex = 0;
             this.gbInput.TabStop = false;
             this.gbInput.Text = " Input ";
@@ -111,7 +112,7 @@ namespace MeGUI
             this.input.Name = "input";
             this.input.ReadOnly = true;
             this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(329, 34);
+            this.input.Size = new System.Drawing.Size(354, 34);
             this.input.TabIndex = 4;
             this.input.Title = null;
             this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
@@ -126,7 +127,7 @@ namespace MeGUI
             // 
             // queueButton
             // 
-            this.queueButton.Location = new System.Drawing.Point(362, 395);
+            this.queueButton.Location = new System.Drawing.Point(385, 394);
             this.queueButton.Name = "queueButton";
             this.queueButton.Size = new System.Drawing.Size(74, 23);
             this.queueButton.TabIndex = 10;
@@ -152,7 +153,7 @@ namespace MeGUI
             this.gbAudio.Enabled = false;
             this.gbAudio.Location = new System.Drawing.Point(12, 187);
             this.gbAudio.Name = "gbAudio";
-            this.gbAudio.Size = new System.Drawing.Size(424, 125);
+            this.gbAudio.Size = new System.Drawing.Size(449, 125);
             this.gbAudio.TabIndex = 8;
             this.gbAudio.TabStop = false;
             this.gbAudio.Text = " Audio Demux ";
@@ -161,7 +162,7 @@ namespace MeGUI
             // 
             this.demuxAll.AutoSize = true;
             this.demuxAll.Checked = true;
-            this.demuxAll.Location = new System.Drawing.Point(304, 20);
+            this.demuxAll.Location = new System.Drawing.Point(345, 20);
             this.demuxAll.Name = "demuxAll";
             this.demuxAll.Size = new System.Drawing.Size(100, 17);
             this.demuxAll.TabIndex = 15;
@@ -177,7 +178,7 @@ namespace MeGUI
             this.AudioTracks.FormattingEnabled = true;
             this.AudioTracks.Location = new System.Drawing.Point(16, 43);
             this.AudioTracks.Name = "AudioTracks";
-            this.AudioTracks.Size = new System.Drawing.Size(394, 68);
+            this.AudioTracks.Size = new System.Drawing.Size(415, 68);
             this.AudioTracks.TabIndex = 14;
             // 
             // demuxNoAudiotracks
@@ -192,7 +193,7 @@ namespace MeGUI
             // demuxTracks
             // 
             this.demuxTracks.Enabled = false;
-            this.demuxTracks.Location = new System.Drawing.Point(155, 16);
+            this.demuxTracks.Location = new System.Drawing.Point(178, 16);
             this.demuxTracks.Name = "demuxTracks";
             this.demuxTracks.Size = new System.Drawing.Size(120, 24);
             this.demuxTracks.TabIndex = 7;
@@ -208,7 +209,7 @@ namespace MeGUI
             this.gbOutput.Enabled = false;
             this.gbOutput.Location = new System.Drawing.Point(12, 318);
             this.gbOutput.Name = "gbOutput";
-            this.gbOutput.Size = new System.Drawing.Size(424, 69);
+            this.gbOutput.Size = new System.Drawing.Size(447, 69);
             this.gbOutput.TabIndex = 12;
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = " Output ";
@@ -225,7 +226,7 @@ namespace MeGUI
             // 
             // pickOutputButton
             // 
-            this.pickOutputButton.Location = new System.Drawing.Point(380, 16);
+            this.pickOutputButton.Location = new System.Drawing.Point(401, 16);
             this.pickOutputButton.Name = "pickOutputButton";
             this.pickOutputButton.Size = new System.Drawing.Size(30, 23);
             this.pickOutputButton.TabIndex = 5;
@@ -237,7 +238,7 @@ namespace MeGUI
             this.output.Location = new System.Drawing.Point(81, 17);
             this.output.Name = "output";
             this.output.ReadOnly = true;
-            this.output.Size = new System.Drawing.Size(289, 21);
+            this.output.Size = new System.Drawing.Size(314, 21);
             this.output.TabIndex = 4;
             // 
             // outputLabel
@@ -257,7 +258,7 @@ namespace MeGUI
             // 
             this.closeOnQueue.Checked = true;
             this.closeOnQueue.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.closeOnQueue.Location = new System.Drawing.Point(281, 395);
+            this.closeOnQueue.Location = new System.Drawing.Point(310, 394);
             this.closeOnQueue.Name = "closeOnQueue";
             this.closeOnQueue.Size = new System.Drawing.Size(72, 24);
             this.closeOnQueue.TabIndex = 13;
@@ -265,6 +266,7 @@ namespace MeGUI
             // 
             // gbIndexer
             // 
+            this.gbIndexer.Controls.Add(this.btnLSMASH);
             this.gbIndexer.Controls.Add(this.btnDGA);
             this.gbIndexer.Controls.Add(this.btnFFMS);
             this.gbIndexer.Controls.Add(this.btnD2V);
@@ -272,15 +274,27 @@ namespace MeGUI
             this.gbIndexer.Enabled = false;
             this.gbIndexer.Location = new System.Drawing.Point(12, 135);
             this.gbIndexer.Name = "gbIndexer";
-            this.gbIndexer.Size = new System.Drawing.Size(424, 46);
+            this.gbIndexer.Size = new System.Drawing.Size(451, 46);
             this.gbIndexer.TabIndex = 15;
             this.gbIndexer.TabStop = false;
             this.gbIndexer.Text = " File Indexer ";
             // 
+            // btnLSMASH
+            // 
+            this.btnLSMASH.AutoSize = true;
+            this.btnLSMASH.Location = new System.Drawing.Point(345, 20);
+            this.btnLSMASH.Name = "btnLSMASH";
+            this.btnLSMASH.Size = new System.Drawing.Size(104, 17);
+            this.btnLSMASH.TabIndex = 4;
+            this.btnLSMASH.TabStop = true;
+            this.btnLSMASH.Text = "L-SMASH Source";
+            this.btnLSMASH.UseVisualStyleBackColor = true;
+            this.btnLSMASH.Click += new System.EventHandler(this.btnLSMASH_Click);
+            // 
             // btnDGA
             // 
             this.btnDGA.AutoSize = true;
-            this.btnDGA.Location = new System.Drawing.Point(115, 19);
+            this.btnDGA.Location = new System.Drawing.Point(85, 20);
             this.btnDGA.Name = "btnDGA";
             this.btnDGA.Size = new System.Drawing.Size(87, 17);
             this.btnDGA.TabIndex = 3;
@@ -292,7 +306,7 @@ namespace MeGUI
             // btnFFMS
             // 
             this.btnFFMS.AutoSize = true;
-            this.btnFFMS.Location = new System.Drawing.Point(329, 19);
+            this.btnFFMS.Location = new System.Drawing.Point(262, 20);
             this.btnFFMS.Name = "btnFFMS";
             this.btnFFMS.Size = new System.Drawing.Size(79, 17);
             this.btnFFMS.TabIndex = 2;
@@ -316,7 +330,7 @@ namespace MeGUI
             // btnDGI
             // 
             this.btnDGI.AutoSize = true;
-            this.btnDGI.Location = new System.Drawing.Point(229, 19);
+            this.btnDGI.Location = new System.Drawing.Point(178, 20);
             this.btnDGI.Name = "btnDGI";
             this.btnDGI.Size = new System.Drawing.Size(80, 17);
             this.btnDGI.TabIndex = 0;
@@ -337,7 +351,7 @@ namespace MeGUI
             this.gbFileInformation.Controls.Add(this.lblContainer);
             this.gbFileInformation.Location = new System.Drawing.Point(12, 62);
             this.gbFileInformation.Name = "gbFileInformation";
-            this.gbFileInformation.Size = new System.Drawing.Size(424, 67);
+            this.gbFileInformation.Size = new System.Drawing.Size(449, 67);
             this.gbFileInformation.TabIndex = 16;
             this.gbFileInformation.TabStop = false;
             this.gbFileInformation.Text = " File Information ";
@@ -347,7 +361,7 @@ namespace MeGUI
             this.cbPGC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPGC.Enabled = false;
             this.cbPGC.FormattingEnabled = true;
-            this.cbPGC.Location = new System.Drawing.Point(354, 34);
+            this.cbPGC.Location = new System.Drawing.Point(375, 34);
             this.cbPGC.Name = "cbPGC";
             this.cbPGC.Size = new System.Drawing.Size(56, 21);
             this.cbPGC.TabIndex = 7;
@@ -355,7 +369,7 @@ namespace MeGUI
             // lblPGC
             // 
             this.lblPGC.AutoSize = true;
-            this.lblPGC.Location = new System.Drawing.Point(351, 18);
+            this.lblPGC.Location = new System.Drawing.Point(372, 18);
             this.lblPGC.Name = "lblPGC";
             this.lblPGC.Size = new System.Drawing.Size(27, 13);
             this.lblPGC.TabIndex = 6;
@@ -364,17 +378,17 @@ namespace MeGUI
             // txtContainerInformation
             // 
             this.txtContainerInformation.Enabled = false;
-            this.txtContainerInformation.Location = new System.Drawing.Point(240, 34);
+            this.txtContainerInformation.Location = new System.Drawing.Point(253, 34);
             this.txtContainerInformation.Name = "txtContainerInformation";
-            this.txtContainerInformation.Size = new System.Drawing.Size(108, 21);
+            this.txtContainerInformation.Size = new System.Drawing.Size(115, 21);
             this.txtContainerInformation.TabIndex = 5;
             // 
             // txtScanTypeInformation
             // 
             this.txtScanTypeInformation.Enabled = false;
-            this.txtScanTypeInformation.Location = new System.Drawing.Point(126, 34);
+            this.txtScanTypeInformation.Location = new System.Drawing.Point(132, 34);
             this.txtScanTypeInformation.Name = "txtScanTypeInformation";
-            this.txtScanTypeInformation.Size = new System.Drawing.Size(108, 21);
+            this.txtScanTypeInformation.Size = new System.Drawing.Size(115, 21);
             this.txtScanTypeInformation.TabIndex = 4;
             // 
             // txtCodecInformation
@@ -382,13 +396,13 @@ namespace MeGUI
             this.txtCodecInformation.Enabled = false;
             this.txtCodecInformation.Location = new System.Drawing.Point(12, 34);
             this.txtCodecInformation.Name = "txtCodecInformation";
-            this.txtCodecInformation.Size = new System.Drawing.Size(108, 21);
+            this.txtCodecInformation.Size = new System.Drawing.Size(114, 21);
             this.txtCodecInformation.TabIndex = 3;
             // 
             // lblScanType
             // 
             this.lblScanType.AutoSize = true;
-            this.lblScanType.Location = new System.Drawing.Point(123, 18);
+            this.lblScanType.Location = new System.Drawing.Point(129, 18);
             this.lblScanType.Name = "lblScanType";
             this.lblScanType.Size = new System.Drawing.Size(57, 13);
             this.lblScanType.TabIndex = 2;
@@ -407,7 +421,7 @@ namespace MeGUI
             // lblContainer
             // 
             this.lblContainer.AutoSize = true;
-            this.lblContainer.Location = new System.Drawing.Point(237, 18);
+            this.lblContainer.Location = new System.Drawing.Point(253, 18);
             this.lblContainer.Name = "lblContainer";
             this.lblContainer.Size = new System.Drawing.Size(54, 13);
             this.lblContainer.TabIndex = 0;
@@ -426,7 +440,7 @@ namespace MeGUI
             // FileIndexerWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(444, 425);
+            this.ClientSize = new System.Drawing.Size(471, 425);
             this.Controls.Add(this.gbFileInformation);
             this.Controls.Add(this.gbIndexer);
             this.Controls.Add(this.helpButton1);
@@ -490,5 +504,6 @@ namespace MeGUI
         private System.Windows.Forms.TextBox txtScanTypeInformation;
         private System.Windows.Forms.Label lblPGC;
         private System.Windows.Forms.ComboBox cbPGC;
+        private System.Windows.Forms.RadioButton btnLSMASH;
     }
 }

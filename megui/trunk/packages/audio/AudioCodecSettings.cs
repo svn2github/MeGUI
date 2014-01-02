@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -55,7 +55,8 @@ namespace MeGUI
         NicAudio,
         FFAudioSource,
         DirectShow,
-        BassAudio
+        BassAudio,
+        LWLibavAudioSource
     };
      
     [
@@ -145,6 +146,8 @@ namespace MeGUI
                     preferredDecoder = AudioDecodingEngine.DirectShow;
                 else if (value.Equals("BassAudio"))
                     preferredDecoder = AudioDecodingEngine.BassAudio;
+                else if (value.Equals("LWLibavAudioSource"))
+                    preferredDecoder = AudioDecodingEngine.LWLibavAudioSource;
             }
         }
 

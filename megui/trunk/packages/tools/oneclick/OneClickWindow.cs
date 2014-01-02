@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -809,7 +809,10 @@ namespace MeGUI
                 if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
                     bRemuxInput = true;
 
-                if (!bRemuxInput && (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE))
+                if (!bRemuxInput && 
+                    (dpp.IndexType == FileIndexerWindow.IndexType.FFMS ||
+                    dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE ||
+                    dpp.IndexType == FileIndexerWindow.IndexType.LSMASH))
                 {
                     foreach (OneClickStreamControl oStreamControl in audioTracks)
                     {
@@ -854,7 +857,9 @@ namespace MeGUI
                         dpp.FilesToDelete.Add(mJob.Output);
 
                         // change input file properties
-                        if (dpp.IndexType == FileIndexerWindow.IndexType.FFMS || dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
+                        if (dpp.IndexType == FileIndexerWindow.IndexType.FFMS ||
+                            dpp.IndexType == FileIndexerWindow.IndexType.LSMASH ||
+                            dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
                         {
                             inputContainer = ContainerType.MKV;
                             dpp.VideoInput = mJob.Output;
@@ -1140,11 +1145,15 @@ namespace MeGUI
                 OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(dpp.VideoInput, indexFile, dpp);
                 finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(job), new SequentialChain(ocJob));
             }
-            else if (dpp.IndexType == FileIndexerWindow.IndexType.DGI || dpp.IndexType == FileIndexerWindow.IndexType.FFMS)
+            else if (dpp.IndexType == FileIndexerWindow.IndexType.DGI ||
+                dpp.IndexType == FileIndexerWindow.IndexType.FFMS ||
+                dpp.IndexType == FileIndexerWindow.IndexType.LSMASH)
             {
                 string indexFile = string.Empty;
                 if (dpp.IndexType == FileIndexerWindow.IndexType.DGI)
                     indexFile = Path.Combine(dpp.WorkingDirectory, workingName.Text + ".dgi");
+                else if (dpp.IndexType == FileIndexerWindow.IndexType.LSMASH)
+                    indexFile = dpp.VideoInput + ".lwi";
                 else
                     indexFile = Path.Combine(dpp.WorkingDirectory, Path.GetFileName(dpp.VideoInput) + ".ffindex");
                 OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(dpp.VideoInput, indexFile, dpp);
@@ -1154,6 +1163,8 @@ namespace MeGUI
                 {
                     if (dpp.IndexType == FileIndexerWindow.IndexType.DGI)
                         job = new DGIIndexJob(dpp.VideoInput, indexFile, 0, null, false, false);
+                    else if (dpp.IndexType == FileIndexerWindow.IndexType.LSMASH)
+                        job = new LSMASHIndexJob(dpp.VideoInput, indexFile, 0, null, false);
                     else
                         job = new FFMSIndexJob(dpp.VideoInput, indexFile, 0, null, false);
                     if (!String.IsNullOrEmpty(dpp.VideoFileToMux) && dpp.Container == ContainerType.MKV)
@@ -1168,6 +1179,8 @@ namespace MeGUI
                 {
                     if (dpp.IndexType == FileIndexerWindow.IndexType.DGI)
                         job = new DGIIndexJob(dpp.VideoInput, indexFile, 2, arrAudioTrackInfo, false, false);
+                    else if (dpp.IndexType == FileIndexerWindow.IndexType.LSMASH)
+                        job = new LSMASHIndexJob(dpp.VideoInput, indexFile, 2, arrAudioTrackInfo, false);
                     else
                         job = new FFMSIndexJob(dpp.VideoInput, indexFile, 2, arrAudioTrackInfo, false);
                     finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(job), new SequentialChain(ocJob));

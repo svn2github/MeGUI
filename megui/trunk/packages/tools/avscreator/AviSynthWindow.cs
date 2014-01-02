@@ -354,10 +354,14 @@ namespace MeGUI
                     break;
                 case ".ffindex":
                     sourceType = PossibleSources.ffindex;
-                    if (videoInput.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
+                    if (videoInput.ToLowerInvariant().EndsWith(".ffindex"))
                         openVideo(videoInput.Substring(0, videoInput.Length - 8));
                     else
                         openVideo(videoInput);
+                    break;
+                case ".lwi":
+                    sourceType = PossibleSources.lsmash;
+                    openVideo(videoInput);
                     break;
                 case ".vdr":
                     sourceType = PossibleSources.vdr;
@@ -367,6 +371,11 @@ namespace MeGUI
                     if (File.Exists(videoInput + ".ffindex"))
                     {
                         sourceType = PossibleSources.ffindex;
+                        openVideo(videoInput);
+                    }
+                    if (File.Exists(videoInput + ".lwi"))
+                    {
+                        sourceType = PossibleSources.lsmash;
                         openVideo(videoInput);
                     }
                     else
@@ -457,6 +466,7 @@ namespace MeGUI
                     this.tabSources.SelectedTab = tabPage1;
                     break;
                 case PossibleSources.ffindex:
+                case PossibleSources.lsmash:
                     this.mpeg2Deblocking.Checked = false;
                     this.mpeg2Deblocking.Enabled = false;
                     this.colourCorrect.Enabled = false;
@@ -1402,7 +1412,7 @@ namespace MeGUI
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
-    public enum PossibleSources { d2v, dga, dgi, vdr, directShow, avs, ffindex };
+    public enum PossibleSources { d2v, dga, dgi, vdr, directShow, avs, ffindex, lsmash };
     public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal, undercrop };
     public enum modValue : int { mod16 = 0, mod8, mod4, mod2 };
 

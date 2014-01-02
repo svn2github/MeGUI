@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ namespace MeGUI
     {
         public enum IndexType
         {
-            D2V, DGA, DGI, FFMS, AVISOURCE, NONE
+            AVISOURCE, D2V, DGA, DGI, FFMS, LSMASH, NONE
         };
 
         #region variables
@@ -188,6 +188,27 @@ namespace MeGUI
                             this.gbAudio.Text = " Audio Encoding ";
                         break;
                     }
+                case IndexType.LSMASH:
+                    {
+                        this.saveProjectDialog.Filter = "LSMASHIndex project files|*.lwi";
+                        this.gbOutput.Enabled = false;
+                        this.gbAudio.Enabled = true;
+                        if (this.demuxTracks.Checked)
+                            this.demuxAll.Checked = true;
+                        this.demuxTracks.Enabled = true;
+                        this.demuxVideo.Checked = false;
+                        this.demuxVideo.Enabled = false;
+                        IndexerUsed = IndexType.LSMASH;
+                        btnLSMASH.Checked = true;
+                        if (txtContainerInformation.Text.Trim().ToUpperInvariant().Equals("MATROSKA"))
+                        {
+                            generateAudioList();
+                            this.gbAudio.Text = " Audio Demux ";
+                        }
+                        else
+                            this.gbAudio.Text = " Audio Encoding ";
+                        break;
+                    }
             }
             setOutputFileName();
             recommendSettings();
@@ -266,11 +287,13 @@ namespace MeGUI
             btnDGA.Enabled = iFile.isDGAIndexable();
             btnDGI.Enabled = iFile.isDGIIndexable();
             btnFFMS.Enabled = iFile.isFFMSIndexable();
+            btnLSMASH.Enabled = iFile.isLSMASHIndexable();
 
             IndexType newType = IndexType.NONE;
             iFile.recommendIndexer(out newType);
             if (newType == IndexType.D2V || newType == IndexType.DGA ||
-                newType == IndexType.DGI || newType == IndexType.FFMS)
+                newType == IndexType.DGI || newType == IndexType.FFMS ||
+                newType == IndexType.LSMASH)
             {
                 gbIndexer.Enabled = gbAudio.Enabled = gbOutput.Enabled = true;
                 changeIndexer(newType);
@@ -278,7 +301,7 @@ namespace MeGUI
             else
             {
                 gbIndexer.Enabled = gbAudio.Enabled = gbOutput.Enabled = false;
-                btnFFMS.Checked = btnD2V.Checked = btnDGA.Checked = btnDGI.Checked = false;
+                btnFFMS.Checked = btnD2V.Checked = btnDGA.Checked = btnDGI.Checked = btnLSMASH.Checked = false;
                 output.Text = "";
                 demuxNoAudiotracks.Checked = true;
                 MessageBox.Show("No indexer for this file found. Please try open it directly in the AVS Script Creator", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -350,6 +373,7 @@ namespace MeGUI
                     case IndexType.DGA: output.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dga")); ; break;
                     case IndexType.DGI: output.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dgi")); ; break;
                     case IndexType.FFMS: output.Text = Path.Combine(projectPath, fileNameNoPath + ".ffindex"); break;
+                    case IndexType.LSMASH: output.Text = Path.Combine(projectPath, fileNameNoPath + ".lwi"); break;
                 }
             }
         }
@@ -452,6 +476,23 @@ namespace MeGUI
                             this.Close();
                         break;
                     }
+                case IndexType.LSMASH:
+                    {
+                        LSMASHIndexJob job = generateLSMASHIndexJob(videoInput);
+                        if (txtContainerInformation.Text.Trim().ToUpperInvariant().Equals("MATROSKA")
+                            && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
+                        {
+                            job.AudioTracksDemux = job.AudioTracks;
+                            job.AudioTracks = new List<AudioTrackInfo>();
+                            MkvExtractJob extractJob = new MkvExtractJob(videoInput, Path.GetDirectoryName(this.output.Text), job.AudioTracksDemux);
+                            prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(extractJob));
+                        }
+                        prepareJobs = new SequentialChain(prepareJobs, new SequentialChain(job));
+                        mainForm.Jobs.addJobsWithDependencies(prepareJobs, true);
+                        if (this.closeOnQueue.Checked)
+                            this.Close();
+                        break;
+                    }
             }              
         }
         #endregion
@@ -464,6 +505,7 @@ namespace MeGUI
             else
                 queueButton.DialogResult = DialogResult.None;
         }
+
         private D2VIndexJob generateD2VIndexJob(string videoInput)
         {
             int demuxType = 0;
@@ -480,6 +522,7 @@ namespace MeGUI
 
             return new D2VIndexJob(videoInput, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
         }
+
         private DGIIndexJob generateDGNVIndexJob(string videoInput)
         {
             int demuxType = 0;
@@ -496,6 +539,7 @@ namespace MeGUI
 
             return new DGIIndexJob(videoInput, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
         }
+
         private DGAIndexJob generateDGAIndexJob(string videoInput)
         {
             int demuxType = 0;
@@ -512,6 +556,7 @@ namespace MeGUI
 
             return new DGAIndexJob(videoInput, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
         }
+
         private FFMSIndexJob generateFFMSIndexJob(string videoInput)
         {
             int demuxType = 0;
@@ -527,6 +572,23 @@ namespace MeGUI
                 audioTracks.Add(ati);
 
             return new FFMSIndexJob(videoInput, output.Text, demuxType, audioTracks, loadOnComplete.Checked);
+        }
+
+        private LSMASHIndexJob generateLSMASHIndexJob(string videoInput)
+        {
+            int demuxType = 0;
+            if (demuxTracks.Checked)
+                demuxType = 1;
+            else if (demuxNoAudiotracks.Checked)
+                demuxType = 0;
+            else
+                demuxType = 2;
+
+            List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
+            foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
+                audioTracks.Add(ati);
+
+            return new LSMASHIndexJob(videoInput, output.Text, demuxType, audioTracks, loadOnComplete.Checked);
         }
         #endregion
 
@@ -556,6 +618,11 @@ namespace MeGUI
         private void btnD2V_Click(object sender, EventArgs e)
         {
             changeIndexer(IndexType.D2V);
+        }
+
+        private void btnLSMASH_Click(object sender, EventArgs e)
+        {
+            changeIndexer(IndexType.LSMASH);
         }
     }
 
@@ -716,6 +783,46 @@ namespace MeGUI
         {
             if (!(ajob is FFMSIndexJob)) return null;
             FFMSIndexJob job = (FFMSIndexJob)ajob;
+
+            StringBuilder logBuilder = new StringBuilder();
+            VideoUtil vUtil = new VideoUtil(mainForm);
+            List<string> arrFilesToDelete = new List<string>();
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, job.AudioTracksDemux, out arrFilesToDelete, job.Output, null);
+            if (job.LoadSources)
+            {
+                if (job.DemuxMode != 0)
+                {
+                    string[] files = new string[audioFiles.Values.Count];
+                    audioFiles.Values.CopyTo(files, 0);
+                    Util.ThreadSafeRun(mainForm, new MethodInvoker(
+                        delegate
+                        {
+                            mainForm.Audio.openAudioFile(files);
+                        }));
+                }
+                // if the above needed delegation for openAudioFile this needs it for openVideoFile?
+                // It seems to fix the problem of ASW dissapearing as soon as it appears on a system (Vista X64)
+                Util.ThreadSafeRun(mainForm, new MethodInvoker(
+                    delegate
+                    {
+                        AviSynthWindow asw = new AviSynthWindow(mainForm, job.Input, job.Output);
+                        asw.OpenScript += new OpenScriptCallback(mainForm.Video.openVideoFile);
+                        asw.Show();
+                    }));
+            }
+
+            return null;
+        }
+    }
+
+    public class lsmashIndexJobPostProcessor
+    {
+        public static JobPostProcessor PostProcessor = new JobPostProcessor(postprocess, "LSMASH_postprocessor");
+        private static LogItem postprocess(MainForm mainForm, Job ajob)
+        {
+            if (!(ajob is LSMASHIndexJob)) 
+                return null;
+            LSMASHIndexJob job = (LSMASHIndexJob)ajob;
 
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);

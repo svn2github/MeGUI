@@ -283,6 +283,7 @@
     <Compile Include="core\gui\AspectRatioChooser.Designer.cs">
       <DependentUpon>AspectRatioChooser.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\reader\lmash\lsmashReader.cs" />
     <Compile Include="packages\reader\ttxt\ttxtReader.cs" />
     <Compile Include="packages\tools\avscreator\AviSynthProfileConfigPanel.cs">
       <SubType>UserControl</SubType>
@@ -607,10 +608,8 @@
     <Compile Include="packages\reader\d2v\d2vReader.cs" />
     <Compile Include="packages\reader\dga\dgaReader.cs" />
     <Compile Include="packages\reader\dgi\dgiReader.cs" />
-    <Compile Include="packages\reader\dvddecrypter\DVDD_File.cs" />
     <Compile Include="packages\reader\ffms\ffmsReader.cs" />
     <Compile Include="packages\reader\mediainfo\MediaInfoFile.cs" />
-    <Compile Include="packages\reader\video\VideoReader.cs" />
     <Compile Include="packages\reader\vobsub\idxReader.cs" />
     <Compile Include="packages\tools\autoencode\AutoEncodeDefaults.cs">
       <SubType>Form</SubType>
@@ -694,6 +693,8 @@
     <Compile Include="packages\tools\cutter\Cutter.Designer.cs">
       <DependentUpon>Cutter.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\tools\fileindexer\LSMASHIndexer.cs" />
+    <Compile Include="packages\tools\fileindexer\LSMASHIndexJob.cs" />
     <Compile Include="packages\tools\fileindexer\FileIndexerWindow.cs">
       <SubType>Form</SubType>
     </Compile>

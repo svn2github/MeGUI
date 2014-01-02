@@ -1,3 +1,7 @@
+2448 [LSMASH Indexer] added LSMASHVideoSource/LWLibavVideoSource support
+                      as no indexer is available no progress during "indexing" is available
+                      also the cache file must be created in the same directory as the source file
+     [Audio Encoder]  added LSMASHAudioSource/LWLibavAudioSource support
 2447 [Update] fixed a regression in 2446
 2446 [Update] removed "Platform" column
               added "Last Used" column

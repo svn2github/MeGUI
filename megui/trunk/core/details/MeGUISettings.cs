@@ -80,8 +80,8 @@ namespace MeGUI
         private AfterEncoding afterEncoding;
         private ProxyMode httpProxyMode;
         private ProgramSettings aften, avimuxgui, bassaudio, besplit, dgavcindex, dgindex, dgindexnv, eac3to, 
-                                ffmpeg, ffms, flac, lame, mkvmerge, mp4box, neroaacenc, oggenc, opus, pgcdemux, 
-                                qaac, tsmuxer, vobsub, x264, x264_10b, x265, xvid, yadif;
+                                ffmpeg, ffms, flac, lame, lsmash, mkvmerge, mp4box, neroaacenc, oggenc, opus,
+                                pgcdemux, qaac, tsmuxer, vobsub, x264, x264_10b, x265, xvid, yadif;
         #endregion
         public MeGUISettings()
 		{
@@ -1075,6 +1075,12 @@ namespace MeGUI
             set { lame = value; }
         }
 
+        public ProgramSettings LSMASH
+        {
+            get { return lsmash; }
+            set { lsmash = value; }
+        }
+
         /// <summary>
         /// program settings of mkvmerge
         /// </summary>
@@ -1236,6 +1242,8 @@ namespace MeGUI
                 flac = new ProgramSettings("flac");
             if (lame == null)
                 lame = new ProgramSettings("lame");
+            if (lsmash == null)
+                lsmash = new ProgramSettings("lsmash");
             if (mkvmerge == null)
                 mkvmerge = new ProgramSettings("mkvmerge");
             if (mp4box == null)
@@ -1284,6 +1292,7 @@ namespace MeGUI
             ffms.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffms\ffms2.dll"));
             flac.UpdateInformation("flac", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\flac\flac.exe"));
             lame.UpdateInformation("lame", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lame\lame.exe"));
+            lsmash.UpdateInformation("lsmash", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lsmash\LSMASHSource.dll"));
             mkvmerge.UpdateInformation("mkvmerge", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvmerge.exe"));
             mkvmerge.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvextract.exe"));
             mp4box.UpdateInformation("mp4box", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mp4box\mp4box.exe"));

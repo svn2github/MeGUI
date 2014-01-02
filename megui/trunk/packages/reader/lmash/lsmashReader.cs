@@ -29,7 +29,7 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
-    public class ffmsFileFactory : IMediaFileFactory
+    public class lsmashFileFactory : IMediaFileFactory
     {
 
         #region IMediaFileFactory Members
@@ -37,17 +37,17 @@ namespace MeGUI
         public IMediaFile Open(string file)
         {
             if (file.Contains("|"))
-                return new ffmsFile(file.Split('|')[0], file.Split('|')[1]);
-            else if (file.ToLowerInvariant().EndsWith(".ffindex"))
-                return new ffmsFile(null, file);
+                return new lsmashFile(file.Split('|')[0], file.Split('|')[1]);
+            else if (file.ToLowerInvariant().EndsWith(".lwi"))
+                return new lsmashFile(null, file);
             else
-                return new ffmsFile(file, null);
+                return new lsmashFile(file, null);
         }
 
         public int HandleLevel(string file)
         {
-            if (file.ToLowerInvariant().EndsWith(".ffindex") || File.Exists(file + ".ffindex"))
-                return 12;
+            if (file.ToLowerInvariant().EndsWith(".lwi") || File.Exists(file + ".lwi"))
+                return 13;
             return -1;
         }
 
@@ -57,32 +57,44 @@ namespace MeGUI
 
         public string ID
         {
-            get { return "ffms"; }
+            get { return "lsmash"; }
         }
 
         #endregion
     }
 
     /// <summary>
-    /// Summary description for ffmsReader.
+    /// Summary description for lsmashReader.
     /// </summary>
-    public class ffmsFile : IMediaFile
+    public class lsmashFile : IMediaFile
     {
         private AvsFile reader;
         private string fileName;
         private VideoInformation info;
 
         /// <summary>
-        /// initializes the ffms reader
+        /// initializes the lsmash reader
         /// </summary>
-        /// <param name="fileName">the FFMSIndex source file file that this reader will process</param>
-        /// <param name="indexFile">the FFMSIndex index file that this reader will process</param>
-        public ffmsFile(string fileName, string indexFile)
+        /// <param name="fileName">the LSMASHIndex source file file that this reader will process</param>
+        /// <param name="indexFile">the LSMASHIndex index file that this reader will process</param>
+        public lsmashFile(string fileName, string indexFile)
         {
             if (!String.IsNullOrEmpty(indexFile) && String.IsNullOrEmpty(fileName))
             {
-                this.fileName = indexFile.Substring(0, indexFile.Length - 8);
-                indexFile = null;
+                using (StreamReader sr = new StreamReader(indexFile, System.Text.Encoding.Default))
+                {
+                    string line = null;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line.StartsWith("<InputFilePath>"))
+                        {
+                            string strSourceFile = line.Substring(15, line.LastIndexOf("</InputFilePath>") - 15);
+                            if (File.Exists(strSourceFile))
+                                this.fileName = strSourceFile;
+                            break;
+                        }
+                    }
+                }
             }
             else
                 this.fileName = fileName;
@@ -96,7 +108,7 @@ namespace MeGUI
                     fps = oInfo.VideoInfo.FPS;
             }
 
-            reader = AvsFile.ParseScript(VideoUtil.getFFMSVideoInputLine(this.fileName, indexFile, fps));
+            reader = AvsFile.ParseScript(VideoUtil.getLSMASHVideoInputLine(this.fileName, indexFile, fps));
             info = reader.VideoInfo.Clone();
             if (oInfo != null)
                 info.DAR = oInfo.VideoInfo.DAR;

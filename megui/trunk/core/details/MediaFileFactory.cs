@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -41,14 +41,18 @@ namespace MeGUI
                 int handleLevel = factory.HandleLevel(file);
                 if (handleLevel < 0)
                     continue;
-                IMediaFile mFile = factory.Open(file);
-                if (mFile != null && handleLevel > bestHandleLevel)
+                try
                 {
-                    bestHandleLevel = handleLevel;
-                    bestMediaFile = mFile;
+                    IMediaFile mFile = factory.Open(file);
+                    if (mFile != null && handleLevel > bestHandleLevel)
+                    {
+                        bestHandleLevel = handleLevel;
+                        bestMediaFile = mFile;
+                    }
+                    else if (mFile != null)
+                        mFile.Dispose();
                 }
-                else if (mFile != null)
-                    mFile.Dispose();
+                catch {}
             }
             return bestMediaFile;
         }

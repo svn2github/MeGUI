@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -181,6 +181,9 @@ namespace MeGUI
                     break;
                 case PossibleSources.ffindex:
                     inputLine = VideoUtil.getFFMSVideoInputLine(input, indexFile, fps);
+                    break;
+                case PossibleSources.lsmash:
+                    inputLine = VideoUtil.getLSMASHVideoInputLine(input, indexFile, fps);
                     break;
                 case PossibleSources.vdr:
                     inputLine = "AVISource(\"" + input + "\", audio=false)" + VideoUtil.getAssumeFPS(fps, input);

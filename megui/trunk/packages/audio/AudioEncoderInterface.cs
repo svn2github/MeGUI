@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -639,6 +639,27 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             return false;
         }
 
+        private bool OpenSourceWithLSMASHAudioSource(out StringBuilder sbOpen)
+        {
+            sbOpen = new StringBuilder();
+            sbOpen.Append(VideoUtil.getLSMASHAudioInputLine(audioJob.Input, null, -1));
+            _log.LogEvent("Trying to open the file with LWLibavAudioSource()", ImageType.Information);
+            string strErrorText = String.Empty;
+            if (AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
+            {
+                _log.LogEvent("Successfully opened the file with LWLibavAudioSource()", ImageType.Information);
+                audioJob.FilesToDelete.Add(audioJob.Input + ".lwi");
+                return true;
+            }
+            sbOpen = new StringBuilder();
+            FileUtil.DeleteFile(audioJob.Input + ".lwi");
+            if (String.IsNullOrEmpty(strErrorText))
+                _log.LogEvent("Failed opening the file with LWLibavAudioSource()", ImageType.Information);
+            else
+                _log.LogEvent("Failed opening the file with LWLibavAudioSource(). " + strErrorText, ImageType.Information);
+            return false;
+        }
+
         private bool OpenSourceWithBassAudio(out StringBuilder sbOpen)
         {
             UpdateCacher.CheckPackage("bassaudio");
@@ -882,6 +903,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (!bFound)
                     bFound = OpenSourceWithBassAudio(out script);
                 if (!bFound)
+                    bFound = OpenSourceWithLSMASHAudioSource(out script);
+                if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
                 if (!bFound)
                     bFound = OpenSourceWithDirectShow(out script, oInfo);
@@ -892,7 +915,21 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (!bFound)
                     bFound = OpenSourceWithNicAudio(out script, oInfo, false);
                 if (!bFound)
+                    bFound = OpenSourceWithLSMASHAudioSource(out script);
+                if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithDirectShow(out script, oInfo);
+            }
+            else if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.LWLibavAudioSource)
+            {
+                bFound = OpenSourceWithLSMASHAudioSource(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithNicAudio(out script, oInfo, false);
+                if (!bFound)
+                    bFound = OpenSourceWithFFAudioSource(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithBassAudio(out script);
                 if (!bFound)
                     bFound = OpenSourceWithDirectShow(out script, oInfo);
             }
@@ -901,6 +938,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 bFound = OpenSourceWithFFAudioSource(out script);
                 if (!bFound)
                     bFound = OpenSourceWithNicAudio(out script, oInfo, false);
+                if (!bFound)
+                    bFound = OpenSourceWithLSMASHAudioSource(out script);
                 if (!bFound)
                     bFound = OpenSourceWithBassAudio(out script);
                 if (!bFound)
@@ -913,6 +952,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     bFound = OpenSourceWithNicAudio(out script, oInfo, false);
                 if (!bFound)
                     bFound = OpenSourceWithBassAudio(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithLSMASHAudioSource(out script);
                 if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
             }

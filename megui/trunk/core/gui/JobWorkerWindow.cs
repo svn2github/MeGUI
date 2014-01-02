@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -591,7 +591,10 @@ namespace MeGUI.core.gui
                 MeGUI.core.util.WindowUtil.PreventSystemPowerdown();
 
                 //Check to see if output file already exists before encoding.
-                if (File.Exists(job.Job.Output) && !mainForm.DialogManager.overwriteJobOutput(job.Job.Output))
+                if (File.Exists(job.Job.Output) &&
+                    (!Path.GetExtension(job.Job.Output).Equals(".lwi") && !Path.GetExtension(job.Job.Output).Equals(".ffindex") &&
+                    !Path.GetExtension(job.Job.Output).Equals(".dga") && !Path.GetExtension(job.Job.Output).Equals(".d2v") &&
+                    !Path.GetExtension(job.Job.Output).Equals(".dgi")) && !mainForm.DialogManager.overwriteJobOutput(job.Job.Output))
                     throw new JobStartException("File exists and the user doesn't want to overwrite", ExceptionType.UserSkip);
 
                 // Get IJobProcessor

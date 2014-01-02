@@ -1037,6 +1037,7 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(DGAIndexer.Factory);
             PackageSystem.JobProcessors.Register(DGIIndexer.Factory);
             PackageSystem.JobProcessors.Register(FFMSIndexer.Factory);
+            PackageSystem.JobProcessors.Register(LSMASHIndexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Joiner.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
@@ -1063,12 +1064,14 @@ namespace MeGUI
             PackageSystem.MediaFileTypes.Register(new dgaFileFactory());
             PackageSystem.MediaFileTypes.Register(new dgiFileFactory());
             PackageSystem.MediaFileTypes.Register(new ffmsFileFactory());
+            PackageSystem.MediaFileTypes.Register(new lsmashFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
             PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
             PackageSystem.JobPostProcessors.Register(d2vIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(dgaIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(dgiIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(ffmsIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(lsmashIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(CleanupJobRunner.DeleteIntermediateFilesPostProcessor);
             PackageSystem.JobConfigurers.Register(MuxWindow.Configurer);
             PackageSystem.JobConfigurers.Register(AudioEncodingWindow.Configurer);

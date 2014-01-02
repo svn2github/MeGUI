@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -303,6 +303,21 @@ namespace MeGUI
                     Array.Resize<string>(ref value, 5);
                     value[4] = FileIndexerWindow.IndexType.AVISOURCE.ToString();
                 }
+                if (value.Length == 5)
+                {
+                    bool bFound = false;
+                    Array.Resize<string>(ref value, 6);
+                    for (int i = 4; i >= 0; i--)
+                    {
+                        if (!bFound)
+                            value[i + 1] = value[i];
+                        if (value[i].Equals(FileIndexerWindow.IndexType.FFMS.ToString()))
+                        {
+                            value[i] = FileIndexerWindow.IndexType.LSMASH.ToString();
+                            bFound = true;
+                        }
+                    }
+                }
                 indexerPriority = new List<string>(value); 
             }
         }
@@ -347,6 +362,7 @@ namespace MeGUI
             }
             IndexerPriority.Add(FileIndexerWindow.IndexType.DGI.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.D2V.ToString());
+            IndexerPriority.Add(FileIndexerWindow.IndexType.LSMASH.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.FFMS.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.AVISOURCE.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.DGA.ToString());

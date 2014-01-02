@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -196,10 +196,11 @@ namespace MeGUI
                 return iResult;
 
             if (oIndexer != FileIndexerWindow.IndexType.D2V && oIndexer != FileIndexerWindow.IndexType.DGA &&
-                oIndexer != FileIndexerWindow.IndexType.DGI && oIndexer != FileIndexerWindow.IndexType.FFMS)
+                oIndexer != FileIndexerWindow.IndexType.DGI && oIndexer != FileIndexerWindow.IndexType.FFMS &&
+                oIndexer != FileIndexerWindow.IndexType.LSMASH)
                 return iResult;
 
-            if (iFile.ContainerFileTypeString.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVI"))
+            if (iFile.ContainerFileTypeString.ToUpperInvariant().Equals("AVI"))
             {
                 iResult = askAbout3("Do you want to open this file with\r\n" +
                     "- One Click Encoder (full automated, easy to use) or\r\n" +

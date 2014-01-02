@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -286,9 +286,9 @@ namespace MeGUI
                 }
 
                 // if an index file is used extract the real file name
-                if (Path.GetExtension(file).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".d2v") ||
-                    Path.GetExtension(file).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".dga") ||
-                    Path.GetExtension(file).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".dgi"))
+                if (Path.GetExtension(file).ToLowerInvariant().Equals(".d2v") ||
+                    Path.GetExtension(file).ToLowerInvariant().Equals(".dga") ||
+                    Path.GetExtension(file).ToLowerInvariant().Equals(".dgi"))
                 {
                     using (StreamReader sr = new StreamReader(file, Encoding.Default))
                     {
@@ -297,10 +297,10 @@ namespace MeGUI
                         while ((line = sr.ReadLine()) != null)
                         {
                             iLineCount++;
-                            if (iLineCount == 3 && !Path.GetExtension(file).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".dgi"))
+                            if (iLineCount == 3 && !Path.GetExtension(file).ToLowerInvariant().Equals(".dgi"))
                             {
                                 string strSourceFile = line;
-                                if (Path.GetExtension(file).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".dgi"))
+                                if (Path.GetExtension(file).ToLowerInvariant().Equals(".dgi"))
                                     strSourceFile = line.Substring(0, line.LastIndexOf(" "));
                                 if (File.Exists(strSourceFile))
                                     _file = file = strSourceFile;
@@ -309,6 +309,25 @@ namespace MeGUI
                             else if (iLineCount == 4)
                             {
                                 string strSourceFile = line.Substring(0, line.LastIndexOf(" "));
+                                if (File.Exists(strSourceFile))
+                                    _file = file = strSourceFile;
+                                break;
+                            }
+                        }
+                    }
+                    if (infoLog != null)
+                        infoLog.Info("Indexed File: " + _file);
+                }
+                else if (Path.GetExtension(file).ToLowerInvariant().Equals(".lwi"))
+                {
+                    using (StreamReader sr = new StreamReader(file, Encoding.Default))
+                    {
+                        string line = null;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            if (line.StartsWith("<InputFilePath>"))
+                            {
+                                string strSourceFile = line.Substring(15, line.LastIndexOf("</InputFilePath>") - 15);
                                 if (File.Exists(strSourceFile))
                                     _file = file = strSourceFile;
                                 break;
@@ -360,8 +379,8 @@ namespace MeGUI
 
                     AudioTrackInfo ati = new AudioTrackInfo();
                     ati.SourceFileName = _file;
-                    ati.DefaultTrack = atrack.DefaultString.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("yes");
-                    ati.ForcedTrack = atrack.ForcedString.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("yes");
+                    ati.DefaultTrack = atrack.DefaultString.ToLowerInvariant().Equals("yes");
+                    ati.ForcedTrack = atrack.ForcedString.ToLowerInvariant().Equals("yes");
                     // DGIndex expects audio index not ID for TS
                     ati.ContainerType = info.General[0].Format;
                     ati.TrackIndex = counter;
@@ -444,8 +463,8 @@ namespace MeGUI
                     if (!Int32.TryParse(oTextTrack.StreamOrder, out mmgTrackID) && oTextTrack.StreamOrder.Contains("-"))
                         Int32.TryParse(oTextTrack.StreamOrder.Split('-')[1], out mmgTrackID);
                     SubtitleTrackInfo oTrack = new SubtitleTrackInfo(mmgTrackID, oTextTrack.LanguageString, oTextTrack.Title);
-                    oTrack.DefaultTrack = oTextTrack.DefaultString.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("yes");
-                    oTrack.ForcedTrack = oTextTrack.ForcedString.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("yes");
+                    oTrack.DefaultTrack = oTextTrack.DefaultString.ToLowerInvariant().Equals("yes");
+                    oTrack.ForcedTrack = oTextTrack.ForcedString.ToLowerInvariant().Equals("yes");
                     oTrack.SourceFileName = file;
                     oTrack.Codec = oTextTrack.CodecString;
                     oTrack.ContainerType = _strContainer;
@@ -455,7 +474,7 @@ namespace MeGUI
                     oTrack.Delay = delay;
 
                     // only add supported subtitle tracks
-                    string strCodec = oTrack.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+                    string strCodec = oTrack.Codec.ToUpperInvariant();
                     if (cType == ContainerType.MKV)
                     {
                         string[] arrCodec = new string[] { };
@@ -667,10 +686,10 @@ namespace MeGUI
         {
             try
             {
-                if (oInfo.Video.Count > 0 && Path.GetExtension(strFile.ToLower(System.Globalization.CultureInfo.InvariantCulture)) == ".vob")
+                if (oInfo.Video.Count > 0 && Path.GetExtension(strFile.ToLowerInvariant()) == ".vob")
                 {
                     string ifoFile;
-                    if (Path.GetFileName(strFile).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
+                    if (Path.GetFileName(strFile).ToUpperInvariant().Substring(0, 4) == "VTS_")
                         ifoFile = strFile.Substring(0, strFile.LastIndexOf("_")) + "_0.IFO";
                     else
                         ifoFile = Path.ChangeExtension(strFile, ".IFO");
@@ -713,14 +732,14 @@ namespace MeGUI
                             oTextTrack.LanguageString = strLanguage[1].Trim();
                             if (strSubtitle.IndexOf('-', 7) > 0)
                                 oTextTrack.Title = strSubtitle.Substring(7);
-                            if (strSubtitle.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("force"))
+                            if (strSubtitle.ToLowerInvariant().Contains("force"))
                                 oTextTrack.ForcedString = "yes";
                             oTextTrack.CodecString = SubtitleType.VOBSUB.ToString();
                             oInfo.Text.Add(oTextTrack);
                         }
                     }
                 }
-                else if (oInfo.General[0].FormatString.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("blu-ray playlist"))
+                else if (oInfo.General[0].FormatString.ToLowerInvariant().Equals("blu-ray playlist"))
                 {
                     // Blu-ray Input File
                     if (infoLog != null)
@@ -751,7 +770,7 @@ namespace MeGUI
                     oInfo.Audio.RemoveRange(iAudioCount, oInfo.Audio.Count - iAudioCount);
                     oInfo.Text.RemoveRange(iTextCount, oInfo.Text.Count - iTextCount);
                 }
-                else if (oInfo.Audio.Count == 0 && oInfo.Video.Count == 0 && Path.GetExtension(strFile).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
+                else if (oInfo.Audio.Count == 0 && oInfo.Video.Count == 0 && Path.GetExtension(strFile).ToLowerInvariant().Equals(".avs"))
                 {
                     // AVS Input File
                     if (infoLog != null)
@@ -885,21 +904,21 @@ namespace MeGUI
                 return false;
 
             // only AVC, VC1 and MPEG2 are supported
-            if (!_VideoInfo.Track.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVC") &&
-                !_VideoInfo.Track.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("VC-1") &&
-                !_VideoInfo.Track.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-2 VIDEO"))
+            if (!_VideoInfo.Track.Codec.ToUpperInvariant().Equals("AVC") &&
+                !_VideoInfo.Track.Codec.ToUpperInvariant().Equals("VC-1") &&
+                !_VideoInfo.Track.Codec.ToUpperInvariant().Equals("MPEG-2 VIDEO"))
                 return false;
 
             // only the following container formats are supported
-            if (!_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-TS") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-PS") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG VIDEO") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-4") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("VC-1") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVC") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BDAV") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BLU-RAY PLAYLIST"))
+            if (!_strContainer.ToUpperInvariant().Equals("MATROSKA") &&
+                !_strContainer.ToUpperInvariant().Equals("MPEG-TS") &&
+                !_strContainer.ToUpperInvariant().Equals("MPEG-PS") &&
+                !_strContainer.ToUpperInvariant().Equals("MPEG VIDEO") &&
+                !_strContainer.ToUpperInvariant().Equals("MPEG-4") &&
+                !_strContainer.ToUpperInvariant().Equals("VC-1") &&
+                !_strContainer.ToUpperInvariant().Equals("AVC") &&
+                !_strContainer.ToUpperInvariant().Equals("BDAV") &&
+                !_strContainer.ToUpperInvariant().Equals("BLU-RAY PLAYLIST"))
                 return false;
 
             return true;
@@ -914,15 +933,15 @@ namespace MeGUI
                 return false;
 
             // only MPEG1 and MPEG2 are supported
-            if (!_VideoInfo.Track.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-1 VIDEO") &&
-                !_VideoInfo.Track.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-2 VIDEO"))
+            if (!_VideoInfo.Track.Codec.ToUpperInvariant().Equals("MPEG-1 VIDEO") &&
+                !_VideoInfo.Track.Codec.ToUpperInvariant().Equals("MPEG-2 VIDEO"))
                 return false;
 
             // only the following container formats are supported
-            if (!_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-TS") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-PS") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG VIDEO") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BDAV"))
+            if (!_strContainer.ToUpperInvariant().Equals("MPEG-TS") &&
+                !_strContainer.ToUpperInvariant().Equals("MPEG-PS") &&
+                !_strContainer.ToUpperInvariant().Equals("MPEG VIDEO") &&
+                !_strContainer.ToUpperInvariant().Equals("BDAV"))
                 return false;
 
             return true;
@@ -937,15 +956,15 @@ namespace MeGUI
                 return false;
 
             // only AVC is supported
-            if (!_VideoInfo.Track.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVC"))
+            if (!_VideoInfo.Track.Codec.ToUpperInvariant().Equals("AVC"))
                 return false;
 
             // only the following container formats are supported
-            if (!_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-TS") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-PS") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG VIDEO") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVC") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BDAV"))
+            if (!_strContainer.ToUpperInvariant().Equals("MPEG-TS") &&
+                !_strContainer.ToUpperInvariant().Equals("MPEG-PS") &&
+                !_strContainer.ToUpperInvariant().Equals("MPEG VIDEO") &&
+                !_strContainer.ToUpperInvariant().Equals("AVC") &&
+                !_strContainer.ToUpperInvariant().Equals("BDAV"))
                 return false;
 
             return true;
@@ -960,27 +979,52 @@ namespace MeGUI
                 return false;
 
             // interlaced VC-1 is not supported
-            if (_VideoInfo.Track.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("VC-1") &&
-                !_VideoInfo.ScanType.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("PROGRESSIVE"))
+            if (_VideoInfo.Track.Codec.ToUpperInvariant().Equals("VC-1") &&
+                !_VideoInfo.ScanType.ToUpperInvariant().Equals("PROGRESSIVE"))
                 return false;
 
             // some codecs are not supported by FFMS
-            if (_VideoInfo.Track.CodecMediaInfo.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("DFSC/VFW")
-                || _VideoInfo.Track.CodecMediaInfo.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("CFHD/CINEFORM"))
+            if (_VideoInfo.Track.CodecMediaInfo.ToUpperInvariant().Equals("DFSC/VFW")
+                || _VideoInfo.Track.CodecMediaInfo.ToUpperInvariant().Equals("CFHD/CINEFORM"))
                 return false;
 
             // only the following container formats are supported
-            if (_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-TS") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-PS") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG VIDEO") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVI") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-4") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("FLASH VIDEO") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("OGG") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("WINDOWS MEDIA") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BDAV") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BLU-RAY PLAYLIST"))
+            if (_strContainer.ToUpperInvariant().Equals("MATROSKA") ||
+                _strContainer.ToUpperInvariant().Equals("MPEG-TS") ||
+                _strContainer.ToUpperInvariant().Equals("MPEG-PS") ||
+                _strContainer.ToUpperInvariant().Equals("MPEG VIDEO") ||
+                _strContainer.ToUpperInvariant().Equals("AVI") ||
+                _strContainer.ToUpperInvariant().Equals("MPEG-4") ||
+                _strContainer.ToUpperInvariant().Equals("FLASH VIDEO") ||
+                _strContainer.ToUpperInvariant().Equals("OGG") ||
+                _strContainer.ToUpperInvariant().Equals("WINDOWS MEDIA") ||
+                _strContainer.ToUpperInvariant().Equals("BDAV") ||
+                _strContainer.ToUpperInvariant().Equals("BLU-RAY PLAYLIST"))
+                return true;
+
+            return false;
+        }
+
+        /// <summary>checks if the file is indexable by LSMASH</summary>
+        /// <returns>true if indexable, false if not</returns>
+        public bool isLSMASHIndexable()
+        {
+            // check if the file is a video file
+            if (!_VideoInfo.HasVideo)
+                return false;
+
+            // only the following container formats are supported
+            if (_strContainer.ToUpperInvariant().Equals("MATROSKA") ||
+                _strContainer.ToUpperInvariant().Equals("MPEG-TS") ||
+                _strContainer.ToUpperInvariant().Equals("MPEG-PS") ||
+                _strContainer.ToUpperInvariant().Equals("MPEG VIDEO") ||
+                _strContainer.ToUpperInvariant().Equals("AVI") ||
+                _strContainer.ToUpperInvariant().Equals("MPEG-4") ||
+                _strContainer.ToUpperInvariant().Equals("FLASH VIDEO") ||
+                _strContainer.ToUpperInvariant().Equals("OGG") ||
+                _strContainer.ToUpperInvariant().Equals("WINDOWS MEDIA") ||
+                _strContainer.ToUpperInvariant().Equals("BDAV") ||
+                _strContainer.ToUpperInvariant().Equals("BLU-RAY PLAYLIST"))
                 return true;
 
             return false;
@@ -995,7 +1039,7 @@ namespace MeGUI
                 return false;
 
             // only the following container format is supported
-            if (!_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVI"))
+            if (!_strContainer.ToUpperInvariant().Equals("AVI"))
                 return false;
 
             // if all AVI files should be processed or only the ones where FFMS cannot handle them
@@ -1003,8 +1047,8 @@ namespace MeGUI
                 return true;
 
             // some codecs are not supported by FFMS
-            if (_VideoInfo.Track.CodecMediaInfo.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("DFSC/VFW") ||
-                _VideoInfo.Track.CodecMediaInfo.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("CFHD/CINEFORM"))
+            if (_VideoInfo.Track.CodecMediaInfo.ToUpperInvariant().Equals("DFSC/VFW") ||
+                _VideoInfo.Track.CodecMediaInfo.ToUpperInvariant().Equals("CFHD/CINEFORM"))
                 return true;
 
             return false;
@@ -1023,11 +1067,13 @@ namespace MeGUI
                 oType = FileIndexerWindow.IndexType.D2V;
             else if (isAVISourceIndexable(true))
                 oType = FileIndexerWindow.IndexType.AVISOURCE;
+            else if (isLSMASHIndexable())
+                oType = FileIndexerWindow.IndexType.LSMASH;
             else if (isFFMSIndexable())
                 oType = FileIndexerWindow.IndexType.FFMS;
             else
             {
-                oType = FileIndexerWindow.IndexType.FFMS;
+                oType = FileIndexerWindow.IndexType.LSMASH;
                 if (_indexerToUse == FileIndexerWindow.IndexType.NONE)
                     _indexerToUse = oType;
                 return false;
@@ -1046,6 +1092,15 @@ namespace MeGUI
             FileIndexerWindow.IndexType oType = FileIndexerWindow.IndexType.NONE;
             foreach (string strIndexer in arrIndexer)
             {
+                if (strIndexer.Equals(FileIndexerWindow.IndexType.LSMASH.ToString()))
+                {
+                    if (isLSMASHIndexable())
+                    {
+                        oType = FileIndexerWindow.IndexType.LSMASH;
+                        break;
+                    }
+                    continue;
+                }
                 if (strIndexer.Equals(FileIndexerWindow.IndexType.FFMS.ToString()))
                 {
                     if (isFFMSIndexable())
@@ -1116,7 +1171,7 @@ namespace MeGUI
         public bool isEac3toDemuxable()
         {
             // only the following container formats are supported
-            if (_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BLU-RAY PLAYLIST"))
+            if (_strContainer.ToUpperInvariant().Equals("BLU-RAY PLAYLIST"))
                 return true;
 
             return false;
@@ -1162,7 +1217,7 @@ namespace MeGUI
         {
             if (knownContainerTypes.ContainsKey(codec))
                 return knownContainerTypes[codec];
-            description = description.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            description = description.ToLowerInvariant();
             foreach (string knownDescription in knownContainerDescriptions.Keys)
                 if (description.Contains(knownDescription))
                     return knownContainerDescriptions[knownDescription];
