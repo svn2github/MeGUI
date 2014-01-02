@@ -563,6 +563,8 @@ namespace MeGUI
                             return meGUISettings.MkvMerge.Path;
                         case ("lame"):
                             return meGUISettings.Lame.Path;
+                        case ("lsmash"):
+                            return meGUISettings.LSMASH.Path;
                         case ("mp4box"):
                             return meGUISettings.Mp4Box.Path;
                         case ("pgcdemux"):

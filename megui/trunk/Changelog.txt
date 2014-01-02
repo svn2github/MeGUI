@@ -1,3 +1,4 @@
+2449 [Update] show the lsmash package in the updater
 2448 [LSMASH Indexer] added LSMASHVideoSource/LWLibavVideoSource support
                       as no indexer is available no progress during "indexing" is available
                       also the cache file must be created in the same directory as the source file
