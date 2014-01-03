@@ -192,7 +192,7 @@ namespace MeGUI
             MediaInfoFile iFile = new MediaInfoFile(videoInput);
             FileIndexerWindow.IndexType oIndexer;
 
-            if (!iFile.recommendIndexer(out oIndexer))
+            if (!iFile.recommendIndexer(out oIndexer, true))
                 return iResult;
 
             if (oIndexer != FileIndexerWindow.IndexType.D2V && oIndexer != FileIndexerWindow.IndexType.DGA &&
@@ -203,7 +203,7 @@ namespace MeGUI
             if (iFile.ContainerFileTypeString.ToUpperInvariant().Equals("AVI"))
             {
                 iResult = askAbout3("Do you want to open this file with\r\n" +
-                    "- One Click Encoder (full automated, easy to use) or\r\n" +
+                    "- One Click Encoder (fully automated, easy to use) or\r\n" +
                     "- File Indexer (manual, advanced) or \r\n" +
                     "- AviSource (manual, expert, may cause problems)?", "Please choose your prefered way to open this file",
                     "One Click Encoder", "File Indexer", "AviSource", MessageBoxIcon.Question);
@@ -211,7 +211,7 @@ namespace MeGUI
             else
             {
                 iResult = askAbout3("Do you want to open this file with\r\n" +
-                    "- One Click Encoder (full automated, easy to use) or\r\n" +
+                    "- One Click Encoder (fully automated, easy to use) or\r\n" +
                     "- File Indexer (manual, advanced) or \r\n" +
                     "- DirectShowSource (manual, expert, may cause problems)?", "Please choose your prefered way to open this file",
                     "One Click Encoder", "File Indexer", "DirectShowSource", MessageBoxIcon.Question);

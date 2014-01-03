@@ -109,15 +109,22 @@ namespace MeGUI
 
         private void CheckDGIIndexer()
         {
+            string filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp";
+            filter += "|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro";
+            filter += "|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts";
+            filter += "|All LSMASH Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts";
             if (MainForm.Instance.Settings.IsDGIIndexerAvailable())
             {
-                input.Filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All DGIndexNV supported files|*.264;*.h264;*.avc;*.m2v;*.mpv;*.vc1;*.mkv;*.vob;*.mpg;*.mpeg;*.m2t;*.m2ts;*.mts;*.tp;*.ts;*.trp|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|All supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.vc1|All files|*.*";
-                input.FilterIndex = 5;
+                filter += "|All DGIndexNV supported files|*.264;*.h264;*.avc;*.m2v;*.mpv;*.vc1;*.mkv;*.vob;*.mp4;*.mpg;*.mpeg;*.m2t;*.m2ts;*.mts;*.tp;*.ts;*.trp";
+                filter += "|All supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.vc1|All files|*.*";
+                input.Filter = filter;
+                input.FilterIndex = 6;
             }
             else
             {
-                input.Filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|All supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro|All files|*.*";
-                input.FilterIndex = 4;
+                filter += "|All supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro|All files|*.*";
+                input.Filter = filter;
+                input.FilterIndex = 5;
             }
         }
 
@@ -191,7 +198,7 @@ namespace MeGUI
                 case IndexType.LSMASH:
                     {
                         this.saveProjectDialog.Filter = "LSMASHIndex project files|*.lwi";
-                        this.gbOutput.Enabled = false;
+                        //this.gbOutput.Enabled = false;
                         this.gbAudio.Enabled = true;
                         if (this.demuxTracks.Checked)
                             this.demuxAll.Checked = true;
@@ -287,10 +294,10 @@ namespace MeGUI
             btnDGA.Enabled = iFile.isDGAIndexable();
             btnDGI.Enabled = iFile.isDGIIndexable();
             btnFFMS.Enabled = iFile.isFFMSIndexable();
-            btnLSMASH.Enabled = iFile.isLSMASHIndexable();
+            btnLSMASH.Enabled = iFile.isLSMASHIndexable(true);
 
             IndexType newType = IndexType.NONE;
-            iFile.recommendIndexer(out newType);
+            iFile.recommendIndexer(out newType, true);
             if (newType == IndexType.D2V || newType == IndexType.DGA ||
                 newType == IndexType.DGI || newType == IndexType.FFMS ||
                 newType == IndexType.LSMASH)

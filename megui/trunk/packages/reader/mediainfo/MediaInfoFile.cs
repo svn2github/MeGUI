@@ -1006,11 +1006,16 @@ namespace MeGUI
         }
 
         /// <summary>checks if the file is indexable by LSMASH</summary>
+        /// <param name="bWriteableDirOnly">if true only writebale input directories are supported</param>
         /// <returns>true if indexable, false if not</returns>
-        public bool isLSMASHIndexable()
+        public bool isLSMASHIndexable(bool bWriteableDirOnly)
         {
             // check if the file is a video file
             if (!_VideoInfo.HasVideo)
+                return false;
+
+            // index file must be created in the input directory
+            if (bWriteableDirOnly && !FileUtil.IsDirWriteable(Path.GetDirectoryName(_file)))
                 return false;
 
             // only the following container formats are supported
@@ -1056,24 +1061,25 @@ namespace MeGUI
 
         /// <summary>gets the recommended indexer</summary>
         /// <param name="oType">the recommended indexer</param>
+        /// <param name="bWriteableDirOnly">if true only writebale input directories are supported for lsmash</param>
         /// <returns>true if a indexer can be recommended, false if no indexer is available</returns>
-        public bool recommendIndexer(out FileIndexerWindow.IndexType oType)
+        public bool recommendIndexer(out FileIndexerWindow.IndexType oType, bool bWriteableDirOnly)
         {
             if (isDGIIndexable())
                 oType = FileIndexerWindow.IndexType.DGI;
-            else if (isDGAIndexable())
-                oType = FileIndexerWindow.IndexType.DGA;
             else if (isD2VIndexable())
                 oType = FileIndexerWindow.IndexType.D2V;
             else if (isAVISourceIndexable(true))
                 oType = FileIndexerWindow.IndexType.AVISOURCE;
-            else if (isLSMASHIndexable())
-                oType = FileIndexerWindow.IndexType.LSMASH;
             else if (isFFMSIndexable())
                 oType = FileIndexerWindow.IndexType.FFMS;
+            else if (isLSMASHIndexable(bWriteableDirOnly))
+                oType = FileIndexerWindow.IndexType.LSMASH;
+            else if (isDGAIndexable())
+                oType = FileIndexerWindow.IndexType.DGA;
             else
             {
-                oType = FileIndexerWindow.IndexType.LSMASH;
+                oType = FileIndexerWindow.IndexType.FFMS;
                 if (_indexerToUse == FileIndexerWindow.IndexType.NONE)
                     _indexerToUse = oType;
                 return false;
@@ -1084,17 +1090,17 @@ namespace MeGUI
         }
 
         /// <summary>gets the recommended indexer based on the priority</summary>
-        /// <param name="oType">the recommended indexer</param>
         /// <param name="arrIndexer">the indexer priority</param>
+        /// <param name="bWriteableDirOnly">if true only writebale input directories are supported for lsmash</param>
         /// <returns>true if a indexer can be recommended, false if no indexer is available</returns>
-        public bool recommendIndexer(List<string> arrIndexer)
+        public bool recommendIndexer(List<string> arrIndexer, bool bWriteableDirOnly)
         {
             FileIndexerWindow.IndexType oType = FileIndexerWindow.IndexType.NONE;
             foreach (string strIndexer in arrIndexer)
             {
                 if (strIndexer.Equals(FileIndexerWindow.IndexType.LSMASH.ToString()))
                 {
-                    if (isLSMASHIndexable())
+                    if (isLSMASHIndexable(bWriteableDirOnly))
                     {
                         oType = FileIndexerWindow.IndexType.LSMASH;
                         break;
@@ -1155,7 +1161,7 @@ namespace MeGUI
                 return true;
             }
 
-            return recommendIndexer(out oType);
+            return recommendIndexer(out oType, bWriteableDirOnly);
         }
 
         private FileIndexerWindow.IndexType _indexerToUse;

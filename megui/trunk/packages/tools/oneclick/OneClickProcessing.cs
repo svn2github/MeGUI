@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ namespace MeGUI.packages.tools.oneclick
                 if (iFile == null)
                 {
                     MediaInfoFile iFileTemp = new MediaInfoFile(oFileToProcess.FilePath, ref _log, oFileToProcess.TrackNumber);
-                    if (iFileTemp.recommendIndexer(oSettings.IndexerPriority))
+                    if (iFileTemp.recommendIndexer(oSettings.IndexerPriority, true))
                         iFile = iFileTemp;
                     else if (iFileTemp.ContainerFileTypeString.Equals("AVS"))
                     {
@@ -90,12 +90,12 @@ namespace MeGUI.packages.tools.oneclick
             string videoIFO;
             string path;
 
-            if (File.Exists(this.strInput) && Path.GetExtension(this.strInput).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".ifo"))
+            if (File.Exists(this.strInput) && Path.GetExtension(this.strInput).ToLowerInvariant().Equals(".ifo"))
             {
                 path = Path.GetDirectoryName(this.strInput);
                 videoIFO = this.strInput;
             }
-            else if (File.Exists(this.strInput) && Path.GetExtension(this.strInput).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".vob"))
+            else if (File.Exists(this.strInput) && Path.GetExtension(this.strInput).ToLowerInvariant().Equals(".vob"))
             {
                 path = Path.GetDirectoryName(this.strInput);
                 if (Path.GetFileName(this.strInput).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
@@ -141,7 +141,7 @@ namespace MeGUI.packages.tools.oneclick
                             if (iFile == null && File.Exists(strVOBFile))
                             {
                                 MediaInfoFile iFileTemp = new MediaInfoFile(strVOBFile, ref _log, oChapterInfo.TitleNumber);
-                                if (iFileTemp.recommendIndexer(oSettings.IndexerPriority))
+                                if (iFileTemp.recommendIndexer(oSettings.IndexerPriority, false))
                                 {
                                     iFile = iFileTemp;
                                     iTitleNumber = oChapterInfo.TitleNumber;
@@ -206,7 +206,7 @@ namespace MeGUI.packages.tools.oneclick
                             if (iFile == null && File.Exists(strFile))
                             {
                                 iFile = new MediaInfoFile(strFile, ref _log);
-                                iFile.recommendIndexer(oSettings.IndexerPriority);
+                                iFile.recommendIndexer(oSettings.IndexerPriority, false);
                             }
                             else
                                 arrFilesToProcess.Add(new OneClickFilesToProcess(strFile, 1));
@@ -242,7 +242,7 @@ namespace MeGUI.packages.tools.oneclick
                 if (iFile == null)
                 {
                     MediaInfoFile iFileTemp = new MediaInfoFile(strFileName, ref _log);
-                    if (iFileTemp.recommendIndexer(oSettings.IndexerPriority))
+                    if (iFileTemp.recommendIndexer(oSettings.IndexerPriority, true))
                         iFile = iFileTemp;
                     else if (iFileTemp.ContainerFileTypeString.Equals("AVS"))
                     {
@@ -273,7 +273,7 @@ namespace MeGUI.packages.tools.oneclick
             if (File.Exists(this.strInput))
             {
                 MediaInfoFile iFile = new MediaInfoFile(this.strInput, ref this._log);
-                if (iFile.recommendIndexer(oSettings.IndexerPriority))
+                if (iFile.recommendIndexer(oSettings.IndexerPriority, true))
                     return getInputIndexerBased(iFile, oSettings);
                 else if (iFile.ContainerFileTypeString.Equals("AVS"))
                 {

@@ -830,19 +830,19 @@ namespace MeGUI
             UpdateCacher.CheckPackage("ffms");
             int fpsnum, fpsden;
             getFPSFraction(fps, inputFile, out fpsnum, out fpsden);
-            return getFFMSBasicInputLine(isFFMSCPluginRequired(), inputFile, indexFile, -1, 0, fpsnum, fpsden, true);             
+            return getFFMSBasicInputLine(!isFFMSDefaultPluginRequired(), inputFile, indexFile, -1, 0, fpsnum, fpsden, true);             
         }
 
         public static string getFFMSAudioInputLine(string inputFile, string indexFile, int track)
         {
             UpdateCacher.CheckPackage("ffms");
-            return getFFMSBasicInputLine(isFFMSCPluginRequired(), inputFile, indexFile, track, 0, 0, 0, false);
+            return getFFMSBasicInputLine(!isFFMSDefaultPluginRequired(), inputFile, indexFile, track, 0, 0, 0, false);
         }
 
-        private static bool isFFMSCPluginRequired()
+        private static bool isFFMSDefaultPluginRequired()
         {
             StringBuilder script = new StringBuilder();
-            script.AppendFormat("LoadCPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path), "ffms2.dll"), Environment.NewLine);
+            script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMS.Path), "ffms2.dll"), Environment.NewLine);
             script.AppendFormat("BlankClip(){0}", Environment.NewLine);
             string errorText;
             return AVSScriptHasVideo(script.ToString(), out errorText);
@@ -898,8 +898,23 @@ namespace MeGUI
             return getLSMASHBasicInputLine(inputFile, indexFile, track, 0, 0, 0, false);
         }
 
+        public static void CheckLSMASHRuntime()
+        {
+            if (MainForm.Instance.Settings.LSMASHRuntimesChecked || MainForm.Instance.Settings.AviSynthPlus)
+                return;
+            MainForm.Instance.Settings.LSMASHRuntimesChecked = true;
+            StringBuilder script = new StringBuilder();
+            script.AppendFormat("LoadPlugin(\"{0}\"){1}", MainForm.Instance.Settings.LSMASH.Path, Environment.NewLine);
+            script.AppendFormat("BlankClip()");
+            string errorText;
+            if (!AVSScriptHasVideo(script.ToString(), out errorText))
+                FileUtil.LSMASHFileActions(false);
+        }
+
         private static string getLSMASHBasicInputLine(string inputFile, string indexFile, int track, int rffmode, int fpsnum, int fpsden, bool video)
         {
+            CheckLSMASHRuntime();
+
             StringBuilder script = new StringBuilder();
             script.AppendFormat("LoadPlugin(\"{0}\"){1}",
                 MainForm.Instance.Settings.LSMASH.Path,
@@ -907,7 +922,8 @@ namespace MeGUI
 
             if (inputFile.ToLowerInvariant().EndsWith(".lwi") && File.Exists(inputFile))
                 indexFile = inputFile;
-            if (!String.IsNullOrEmpty(indexFile) && indexFile.ToLowerInvariant().Equals(inputFile.ToLowerInvariant() + ".lwi"))
+            if (!String.IsNullOrEmpty(indexFile) && 
+                (indexFile.ToLowerInvariant().Equals(inputFile.ToLowerInvariant() + ".lwi") || !File.Exists(indexFile)))
                 indexFile = null;
 
             string extension = Path.GetExtension(inputFile).ToLowerInvariant();

@@ -309,13 +309,13 @@ namespace MeGUI
                     Array.Resize<string>(ref value, 6);
                     for (int i = 4; i >= 0; i--)
                     {
-                        if (!bFound)
-                            value[i + 1] = value[i];
                         if (value[i].Equals(FileIndexerWindow.IndexType.FFMS.ToString()))
                         {
-                            value[i] = FileIndexerWindow.IndexType.LSMASH.ToString();
+                            value[i + 1] = FileIndexerWindow.IndexType.LSMASH.ToString();
                             bFound = true;
                         }
+                        if (!bFound)
+                            value[i + 1] = value[i];
                     }
                 }
                 indexerPriority = new List<string>(value); 
@@ -362,8 +362,8 @@ namespace MeGUI
             }
             IndexerPriority.Add(FileIndexerWindow.IndexType.DGI.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.D2V.ToString());
-            IndexerPriority.Add(FileIndexerWindow.IndexType.LSMASH.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.FFMS.ToString());
+            IndexerPriority.Add(FileIndexerWindow.IndexType.LSMASH.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.AVISOURCE.ToString());
             IndexerPriority.Add(FileIndexerWindow.IndexType.DGA.ToString());
 		}

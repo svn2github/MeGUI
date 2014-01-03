@@ -1,3 +1,10 @@
+2450 [LSMASH Indexer] show time/file progress during indexing
+                      added possibility to set output file/folder
+                      blocked indexer if input file is in a read only directory
+                      lowered the default priority so that it will be used after FFMS
+                      added log information
+                      copy the runtimes if required
+     [FFMS Indexer]   defaults to LoadPlugin if LoadCPlugin is also possible
 2449 [Update] show the lsmash package in the updater
 2448 [LSMASH Indexer] added LSMASHVideoSource/LWLibavVideoSource support
                       as no indexer is available no progress during "indexing" is available

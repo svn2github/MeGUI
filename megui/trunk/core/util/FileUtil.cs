@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -442,6 +442,8 @@ namespace MeGUI.core.util
 
             if (bFoundInstalledAviSynth)
             {
+                if (fileProductName.Contains("+") && !MainForm.Instance.Settings.AlwaysUsePortableAviSynth)
+                    MainForm.Instance.Settings.AviSynthPlus = true;
                 if (oLog != null)
                     oLog.LogValue("AviSynth" + (fileProductName.Contains("+") ? "+" : String.Empty),
                         fileVersion + " (" + fileDate + ")" + (!MainForm.Instance.Settings.AlwaysUsePortableAviSynth ? String.Empty : " (inactive)"));
@@ -461,7 +463,11 @@ namespace MeGUI.core.util
                     oLog.LogValue("AviSynth" + (fileProductName.Contains("+") ? "+" : String.Empty) + " portable",
                         fileVersion + " (" + fileDate + ")" + (!bFoundInstalledAviSynth ? String.Empty : " (active)"));
                 if (!bFoundInstalledAviSynth || MainForm.Instance.Settings.AlwaysUsePortableAviSynth)
+                {
                     PortableAviSynthActions(false);
+                    if (fileProductName.Contains("+"))
+                        MainForm.Instance.Settings.AviSynthPlus = true;
+                }
             }
             else if (!bFoundInstalledAviSynth)
             {
@@ -471,6 +477,9 @@ namespace MeGUI.core.util
             }
             else
                 PortableAviSynthActions(true);
+
+            if (MainForm.Instance.Settings.AviSynthPlus)
+                LSMASHFileActions(true);
         }
 
         /// <summary>
@@ -592,6 +601,75 @@ namespace MeGUI.core.util
                         }
                     }
                 }        
+            }
+        }
+
+        /// <summary>
+        /// Enables or disables lsmash visual runtimes build
+        /// </summary>
+        /// <param name="bRemove">if true the files will be removed</param>
+        public static void LSMASHFileActions(bool bRemove)
+        {
+            string lsmashPath = Path.GetDirectoryName(MainForm.Instance.Settings.LSMASH.Path);
+
+            ArrayList targetDirectories = new ArrayList();
+            targetDirectories.Add(Path.GetDirectoryName(Application.ExecutablePath));
+            targetDirectories.Add(Path.GetDirectoryName(MainForm.Instance.Settings.FFmpeg.Path));
+            targetDirectories.Add(Path.GetDirectoryName(MainForm.Instance.Settings.X264.Path));
+            targetDirectories.Add(Path.GetDirectoryName(MainForm.Instance.Settings.X264_10B.Path));
+            targetDirectories.Add(Path.GetDirectoryName(MainForm.Instance.Settings.X265.Path));
+            targetDirectories.Add(Path.GetDirectoryName(MainForm.Instance.Settings.XviD.Path));
+
+            ArrayList sourceFiles = new ArrayList();
+            if (Directory.Exists(lsmashPath))
+            {
+                DirectoryInfo fi = new DirectoryInfo(lsmashPath);
+                FileInfo[] files = fi.GetFiles("msvc*.dll");
+                foreach (FileInfo f in files)
+                    sourceFiles.Add(f.Name);
+            }
+            else if (!bRemove)
+                return;
+
+            foreach (String dir in targetDirectories)
+            {
+                if (!Directory.Exists(dir))
+                    continue;
+
+                if (!bRemove)
+                {
+                    foreach (String file in sourceFiles)
+                    {
+                        if (File.Exists(Path.Combine(dir, file)) &&
+                            File.GetLastWriteTimeUtc(Path.Combine(dir, file)) == File.GetLastWriteTimeUtc(Path.Combine(lsmashPath, file)))
+                            continue;
+
+                        try
+                        {
+                            File.Copy(Path.Combine(lsmashPath, file), Path.Combine(dir, file), true);
+                        }
+                        catch { }
+                    }
+                }
+                else
+                {
+                    DirectoryInfo fi = new DirectoryInfo(dir);
+                    FileInfo[] files = fi.GetFiles();
+                    foreach (FileInfo f in files)
+                    {
+                        foreach (String file in sourceFiles)
+                        {
+                            if (!file.ToLowerInvariant().Equals(f.Name.ToLowerInvariant()))
+                                continue;
+
+                            try
+                            {
+                                f.Delete();
+                            }
+                            catch { }
+                        }
+                    }
+                }
             }
         }
 

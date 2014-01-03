@@ -40,24 +40,12 @@ namespace MeGUI
             return null;
         }
 
+        private bool indexer;
         public LSMASHIndexer(string executableName)
         {
             UpdateCacher.CheckPackage("lsmash");
-            executable = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe");
-        }
-
-        public override void ProcessLine(string line, StreamType stream, ImageType oType)
-        {
-            //if (Regex.IsMatch(line, "^Indexing, please wait... [0-9]{1,3}%", RegexOptions.Compiled))
-            //{
-            //    su.PercentageDoneExact = Int32.Parse(line.Substring(25).Split('%')[0]);
-            //    su.Status = "Creating LSMASH index...";
-            //    return;
-            //}
-
-            //if (Regex.IsMatch(line, "^Writing index...", RegexOptions.Compiled))
-            //    su.Status = "Writing LSMASH index...";
-            base.ProcessLine(line, stream, oType);
+            executable = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "ping.exe");
+            bForceClosing = true;
         }
 
         protected override string Commandline
@@ -65,12 +53,7 @@ namespace MeGUI
             get
             {
                 StringBuilder sb = new StringBuilder();
-                //if (job.DemuxMode > 0)
-                //    sb.Append("-t -1 ");
-                //sb.Append("-f \"" + job.Input + "\"");
-                //if (!String.IsNullOrEmpty(job.Output))
-                //    sb.Append(" \"" + job.Output + "\"");
-                sb.Append("/c");
+                sb.Append("127.0.0.1 -t");
                 return sb.ToString();
             }
         }
@@ -93,20 +76,75 @@ namespace MeGUI
             su.Status = "Creating LSMASH index...";
         }
 
+        public override void ProcessLine(string line, StreamType stream, ImageType oType)
+        {
+            if (indexer)
+                return;
+            indexer = true;
+            stdoutLog.LogEvent("Creating LSMASH index...");
+
+            string strErrorText;
+            StringBuilder strAVSScript = new StringBuilder();
+            string outputIndex = job.Output;
+
+            strAVSScript.Append(VideoUtil.getLSMASHVideoInputLine(job.Input, job.Output, 0));
+            stdoutLog.LogValue("AviSynth script", strAVSScript.ToString(), ImageType.Information);
+            job.Output = job.Input + ".lwi";
+            if (File.Exists(job.Output))
+                File.Delete(job.Output);
+            if (!VideoUtil.AVSScriptHasVideo(strAVSScript.ToString(), out strErrorText))
+            {
+                stderrLog.LogEvent(strErrorText, ImageType.Error);
+                su.HasError = true;
+            }
+            else
+            {
+                string inputIndex = job.Output;
+                if (!String.IsNullOrEmpty(outputIndex) && !outputIndex.ToLowerInvariant().Equals(inputIndex.ToLowerInvariant()))
+                {
+                    try
+                    {
+                        su.Status = "Copying LSMASH index...";
+                        File.Delete(outputIndex);
+                        File.Copy(inputIndex, outputIndex);
+                        File.Delete(inputIndex);
+                        stdoutLog.LogEvent(inputIndex + " moved to " + outputIndex);
+                    }
+                    catch (Exception e)
+                    {
+                        stderrLog.LogEvent(inputIndex + ".lwi not moved to " + outputIndex + ". error: " + e.Message, ImageType.Error);
+                        su.HasError = true;
+                    }
+                }
+            }
+            job.Output = outputIndex;
+
+            if (proc == null || proc.HasExited)
+                return;
+
+            try
+            {
+                bWaitForExit = true;
+                mre.Set(); // if it's paused, then unpause
+                proc.Kill();
+                while (bWaitForExit) // wait until the process has terminated without locking the GUI
+                {
+                    System.Windows.Forms.Application.DoEvents();
+                    System.Threading.Thread.Sleep(100);
+                }
+                proc.WaitForExit();
+                return;
+            }
+            catch (Exception e)
+            {
+                throw new JobRunException(e);
+            }
+        }
+
         protected override void doExitConfig()
         {
             if (su.HasError || su.WasAborted)
             {
-                base.doExitConfig();
-                return;
-            }
-
-            string strErrorText;
-            StringBuilder strAVSScript = new StringBuilder();
-            strAVSScript.Append(VideoUtil.getLSMASHVideoInputLine(job.Input, job.Output, 0));
-            if (!VideoUtil.AVSScriptHasVideo(strAVSScript.ToString(), out strErrorText))
-            {
-                su.HasError = true;
                 base.doExitConfig();
                 return;
             }
@@ -117,10 +155,11 @@ namespace MeGUI
                 int iCurrentAudioTrack = -1;
                 for (int iCurrentTrack = 0; iCurrentTrack <= 29; iCurrentTrack++) // hard limit to max. 30 tracks
                 {
-                    strAVSScript = new StringBuilder();
+                    StringBuilder strAVSScript = new StringBuilder();
                     strAVSScript.Append(VideoUtil.getLSMASHAudioInputLine(job.Input, job.Output, iCurrentTrack));
 
                     // is this an audio track?
+                    string strErrorText;
                     if (AudioUtil.AVSScriptHasAudio(strAVSScript.ToString(), out strErrorText) == false)
                         continue;
                     iCurrentAudioTrack++;
@@ -153,6 +192,11 @@ namespace MeGUI
                 }
             }
             base.doExitConfig();
+        }
+
+        protected override bool checkExitCode
+        {
+            get { return false; }
         }
     }
 }

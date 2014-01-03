@@ -1153,7 +1153,7 @@ namespace MeGUI
                 if (dpp.IndexType == FileIndexerWindow.IndexType.DGI)
                     indexFile = Path.Combine(dpp.WorkingDirectory, workingName.Text + ".dgi");
                 else if (dpp.IndexType == FileIndexerWindow.IndexType.LSMASH)
-                    indexFile = dpp.VideoInput + ".lwi";
+                    indexFile = Path.Combine(dpp.WorkingDirectory, Path.GetFileName(dpp.VideoInput) + ".lwi");
                 else
                     indexFile = Path.Combine(dpp.WorkingDirectory, Path.GetFileName(dpp.VideoInput) + ".ffindex");
                 OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(dpp.VideoInput, indexFile, dpp);
