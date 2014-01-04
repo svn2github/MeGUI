@@ -71,7 +71,7 @@ namespace MeGUI.core.details.audio
                     );
 
             InitializeComponent();
-            this.primaryDecoding.DataSource = EnumProxy.CreateArray(new object[] { AudioDecodingEngine.NicAudio, AudioDecodingEngine.LWLibavAudioSource, AudioDecodingEngine.FFAudioSource, AudioDecodingEngine.DirectShow, AudioDecodingEngine.BassAudio });
+            this.primaryDecoding.DataSource = EnumProxy.CreateArray(new object[] { AudioDecodingEngine.NicAudio, AudioDecodingEngine.FFAudioSource, AudioDecodingEngine.DirectShow, AudioDecodingEngine.BassAudio, AudioDecodingEngine.LWLibavAudioSource, });
             this.besweetDownmixMode.DataSource = _avisynthChannelSet;
             this.besweetDownmixMode.BindingContext = new BindingContext();
             this.cbSampleRate.SelectedIndex = 0;

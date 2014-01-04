@@ -1,4 +1,6 @@
-2452 [LSMASH Indexer]     lowered also the priority for the audio decoder
+2453 [Audio Encoder]      fixed sometimes choosing the wrong decoder (regression of 2448)
+2452 [Audio Encoder]      lowered also the priority for the audio decoder
+     [Audio Encoder]      default order: NicAudio, BassAudio, FFAudioSource, LWLibavAudioSource, DirectShow
 2451 [Chapter Creator]    added support for mkv input files
      [Chapter Creator]    added option to specify the minimum title length
      [Chapter Creator]    added option to specify the FPS value
