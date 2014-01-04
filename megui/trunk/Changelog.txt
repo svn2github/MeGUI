@@ -1,3 +1,5 @@
+2454 [Log]                show information about .NET 2.0 and 4.0
+     [Log]                removed information about highest .NET build
 2453 [Audio Encoder]      fixed sometimes choosing the wrong decoder (regression of 2448)
 2452 [Audio Encoder]      lowered also the priority for the audio decoder
      [Audio Encoder]      default order: NicAudio, BassAudio, FFAudioSource, LWLibavAudioSource, DirectShow
@@ -55,7 +57,7 @@
 2430 [OneClick]           fixed unnecessary resize/crop in some cases (regression of 2357)
 2429 [Update]             version/date information will be shown also for disabled packages
 2428 [Update]             disabled packages are not hidden anymore
-2427 [Update]             hide x264 10bit completly if disabled (regression of 2395)
+2427 [Update]             hide x264 10bit completely if disabled (regression of 2395)
 2426 [x265]               added option to enable/disable x265 in the MeGUI settings (disabled by default)
 2425 [Queue]              fixed crash if more than one worker is opening an avs script
 2424 [x265]               fixed default encoding mode part II
