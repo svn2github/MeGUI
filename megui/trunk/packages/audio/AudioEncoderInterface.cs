@@ -903,9 +903,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (!bFound)
                     bFound = OpenSourceWithBassAudio(out script);
                 if (!bFound)
-                    bFound = OpenSourceWithLSMASHAudioSource(out script);
-                if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithLSMASHAudioSource(out script);
                 if (!bFound)
                     bFound = OpenSourceWithDirectShow(out script, oInfo);
             }
@@ -915,9 +915,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (!bFound)
                     bFound = OpenSourceWithNicAudio(out script, oInfo, false);
                 if (!bFound)
-                    bFound = OpenSourceWithLSMASHAudioSource(out script);
-                if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithLSMASHAudioSource(out script);
                 if (!bFound)
                     bFound = OpenSourceWithDirectShow(out script, oInfo);
             }
@@ -927,9 +927,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (!bFound)
                     bFound = OpenSourceWithNicAudio(out script, oInfo, false);
                 if (!bFound)
-                    bFound = OpenSourceWithFFAudioSource(out script);
-                if (!bFound)
                     bFound = OpenSourceWithBassAudio(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithFFAudioSource(out script);
                 if (!bFound)
                     bFound = OpenSourceWithDirectShow(out script, oInfo);
             }
@@ -939,9 +939,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (!bFound)
                     bFound = OpenSourceWithNicAudio(out script, oInfo, false);
                 if (!bFound)
-                    bFound = OpenSourceWithLSMASHAudioSource(out script);
-                if (!bFound)
                     bFound = OpenSourceWithBassAudio(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithLSMASHAudioSource(out script);
                 if (!bFound)
                     bFound = OpenSourceWithDirectShow(out script, oInfo);
             }
@@ -953,9 +953,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (!bFound)
                     bFound = OpenSourceWithBassAudio(out script);
                 if (!bFound)
-                    bFound = OpenSourceWithLSMASHAudioSource(out script);
-                if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithLSMASHAudioSource(out script);
             }
 
             if (!bFound && oInfo.AudioInfo.Tracks.Count > 0 && oInfo.AudioInfo.Tracks[0].Codec.Equals("DTS-HD Master Audio"))
