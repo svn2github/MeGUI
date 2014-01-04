@@ -51,7 +51,6 @@ namespace MeGUI
 
             List<Clip> chapterClips = GetClips(data);
             pgc.Duration = new TimeSpan((long)(chapterClips.Sum(c => c.Length) * (double)TimeSpan.TicksPerSecond));
-            OnStreamDetected(pgc);
 
             int chaptersIndex =
             ((int)data[12] << 24) +
@@ -98,9 +97,10 @@ namespace MeGUI
             }
             pgc.Chapters = chapters;
 
-            //TODO: get real FPS
-            pgc.FramesPerSecond = 25.0;
+            MediaInfoFile oInfo = new MediaInfoFile(pgc.SourceName);
+            pgc.FramesPerSecond = oInfo.VideoInfo.FPS;
 
+            OnStreamDetected(pgc);
             OnChaptersLoaded(pgc);
             OnExtractionComplete();
             return new List<ChapterInfo>() { pgc };

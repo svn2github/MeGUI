@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -121,7 +121,7 @@ namespace MeGUI.packages.tools.cutter
                 if (item.Index % 2 != 0)
                     item.BackColor = Color.White;
                 else
-                    item.BackColor = Color.WhiteSmoke;
+                    item.BackColor = Color.FromArgb(255, 225, 235, 255);
             }
             clearZonesButton.Enabled = sections.Items.Count > 0;
             sections.EndUpdate();

@@ -38,10 +38,7 @@ namespace MeGUI
             pgc.SourceType = "Blu-Ray";
 
             FileInfo fileInfo = new FileInfo(location);
-      
-            OnStreamDetected(pgc);
             TSPlaylistFile mpls = new TSPlaylistFile(fileInfo);
-            //Dictionary<string, TSStreamClipFile> clips = new Dictionary<string,TSStreamClipFile>();
             mpls.Scan(); int count = 1;
             foreach (double d in mpls.Chapters)
             {
@@ -62,8 +59,7 @@ namespace MeGUI
                 {
                     if (stream.IsVideoStream)
                     {
-                        pgc.FramesPerSecond = (double)((TSVideoStream)stream).FrameRateEnumerator /
-                        (double)((TSVideoStream)stream).FrameRateDenominator;
+                        pgc.FramesPerSecond = VideoUtil.ConvertFPSFractionToDouble(((TSVideoStream)stream).FrameRateEnumerator, ((TSVideoStream)stream).FrameRateDenominator);
                         break;
                     }
                 }
@@ -71,7 +67,13 @@ namespace MeGUI
                     break;
             }
 
-            OnChaptersLoaded(pgc);
+            if (pgc.Duration.TotalSeconds > MainForm.Instance.Settings.ChapterCreatorMinimumLength)
+            {
+                OnStreamDetected(pgc);
+                OnChaptersLoaded(pgc);
+            }
+            else
+                pgc = null;
             OnExtractionComplete();
             return new List<ChapterInfo>() { pgc };
         }

@@ -67,8 +67,11 @@ namespace MeGUI
             pgc.Chapters = GetChapters(location, titleSetNum, out duration, out fps);
             pgc.Duration = duration;
             pgc.FramesPerSecond = fps;
-            
-            OnStreamDetected(pgc);
+
+            if (pgc.Duration.TotalSeconds > MainForm.Instance.Settings.ChapterCreatorMinimumLength)
+                OnStreamDetected(pgc);
+            else
+                pgc = null;
             OnExtractionComplete();
             return pgc;
         }

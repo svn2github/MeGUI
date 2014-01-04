@@ -35,6 +35,8 @@ namespace MeGUI
             foreach (string file in Directory.GetFiles(path, "*.mpls"))
             {
                 ChapterInfo pl = ex.GetStreams(file)[0];
+                if (pl == null)
+                    continue;
                 pl.SourceName = Path.GetFileName(file);
                 mpls.Add(pl);
             }

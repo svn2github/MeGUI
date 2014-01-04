@@ -66,7 +66,7 @@ namespace MeGUI
                     modeColumnWidth, statusColumnWidth, ownerColumnWidth, startColumnWidth, endColumnWidth, fpsColumnWidth,
                     updateFormUpdateColumnWidth, updateFormNameColumnWidth, updateFormLocalVersionColumnWidth, 
                     updateFormServerVersionColumnWidth, updateFormLocalDateColumnWidth, updateFormServerDateColumnWidth, 
-                    updateFormLastUsedColumnWidth, updateFormStatusColumnWidth, ffmsThreads;
+                    updateFormLastUsedColumnWidth, updateFormStatusColumnWidth, ffmsThreads, chapterCreatorMinimumLength;
         private SourceDetectorSettings sdSettings;
         private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;
@@ -180,6 +180,7 @@ namespace MeGUI
             bOpenAVSInThread = true;
             lastUsedOneClickFolder = "";
             bUseNeroAacEnc = bUseQAAC = bUseX265 = bUseDGIndexNV = false;
+            chapterCreatorMinimumLength = 900;
         }
 
         #region properties
@@ -950,6 +951,12 @@ namespace MeGUI
         {
             get { return bUseITU; }
             set { bUseITU = value; }
+        }
+
+        public int ChapterCreatorMinimumLength
+        {
+            get { return chapterCreatorMinimumLength; }
+            set { chapterCreatorMinimumLength = value; }
         }
 
         /// <summary>

@@ -672,6 +672,9 @@
     <Compile Include="packages\tools\chaptercreator\ChapterCreator.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="packages\tools\chaptercreator\ChapterCreator.Designer.cs">
+      <DependentUpon>ChapterCreator.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\tools\chaptercreator\ChapterExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\ChapterInfo.cs" />
     <Compile Include="packages\tools\chaptercreator\DvdExtractor.cs" />
@@ -683,6 +686,7 @@
     </Compile>
     <Compile Include="packages\tools\chaptercreator\IfoExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\MplsExtractor.cs" />
+    <Compile Include="packages\tools\chaptercreator\MkvExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\TextExtractor.cs" />
     <Compile Include="packages\tools\cqmeditor\QuantizerMatrixDialog.cs">
       <SubType>Form</SubType>

@@ -1022,6 +1022,20 @@ namespace MeGUI
             return true;
         }
 
+        public static double ConvertFPSFractionToDouble(int fpsnum, int fpsden)
+        {
+            string fps = fpsnum + "/" + fpsden;
+            switch (fps)
+            {
+                case "24000/1001": return 23.976;
+                case "30000/1001": return 29.97;
+                case "60000/1001": return 59.94;
+                case "120000/1001": return 119.88;
+            }
+
+            return (double)fpsnum / (double)fpsden;
+        }
+
         public static double GetFPSFromAVSFile(String strAVSScript)
         {
             try
