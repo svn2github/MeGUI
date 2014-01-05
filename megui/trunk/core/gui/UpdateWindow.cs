@@ -779,11 +779,6 @@ namespace MeGUI
             }
             else
                 this.listViewDetails.Items.Add(item);
-
-            if (item.Index % 2 != 0)
-                item.BackColor = Color.White;
-            else
-                item.BackColor = Color.FromArgb(255, 225, 235, 255);
         }
         private void ClearListview(ListView listview)
         {
@@ -1389,12 +1384,17 @@ namespace MeGUI
 
             file.DisplayName = node.Name;
             nameAttribute = node.Attributes["name"];
+            ProgramSettings pSettings = UpdateCacher.GetPackage(file.Name);
             if (nameAttribute != null)
             {
                 file.DisplayName = nameAttribute.Value;
-                ProgramSettings pSettings = UpdateCacher.GetPackage(file.Name);
                 if (pSettings != null)
                     pSettings.DisplayName = file.DisplayName;
+            }
+            else
+            {
+                if (pSettings != null)
+                    file.DisplayName = pSettings.DisplayName;
             }
 
             file.RequiredNET = String.Empty;
@@ -1456,6 +1456,14 @@ namespace MeGUI
             lvwColumnSorter.SortColumn = 1;
             lvwColumnSorter.Order = SortOrder.Ascending;
             listViewDetails.Sort();
+
+            foreach (ListViewItem item in listViewDetails.Items)
+            {
+                if (item.Index % 2 != 0)
+                    item.BackColor = Color.White;
+                else
+                    item.BackColor = Color.FromArgb(255, 225, 235, 255);
+            }
         }
         private void listViewDetails_ItemCheck(object sender, ItemCheckEventArgs e)
         {

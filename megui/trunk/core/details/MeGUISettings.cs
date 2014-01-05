@@ -1303,42 +1303,42 @@ namespace MeGUI
                 yadif = new ProgramSettings("yadif");
 
             // set default name, program paths & files
-            aften.UpdateInformation("aften", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\aften\aften.exe"));
-            avimuxgui.UpdateInformation("avimux_gui", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avimux_gui\avimux_gui.exe"));
-            bassaudio.UpdateInformation("bassaudio", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bassaudio.dll"));
+            aften.UpdateInformation("aften", "Aften", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\aften\aften.exe"));
+            avimuxgui.UpdateInformation("avimux_gui", "AVI-Mux GUI", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avimux_gui\avimux_gui.exe"));
+            bassaudio.UpdateInformation("bassaudio", "BassAudio", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bassaudio.dll"));
             bassaudio.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bass.dll"));
             bassaudio.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bass_aac.dll"));
-            besplit.UpdateInformation("besplit", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\besplit\besplit.exe"));
-            dgavcindex.UpdateInformation("dgavcindex", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgavcindex\dgavcindex.exe"));
+            besplit.UpdateInformation("besplit", "Besplit", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\besplit\besplit.exe"));
+            dgavcindex.UpdateInformation("dgavcindex", "DGAVCIndex", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgavcindex\dgavcindex.exe"));
             dgavcindex.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgavcindex\dgavcdecode.dll"));
-            dgindex.UpdateInformation("dgindex", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindex\dgindex.exe"));
+            dgindex.UpdateInformation("dgindex", "DGIndex", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindex\dgindex.exe"));
             dgindex.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindex\dgdecode.dll"));
-            dgindexnv.UpdateInformation("dgindexnv", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindexnv\dgindexnv.exe"));
+            dgindexnv.UpdateInformation("dgindexnv", "DGIndexNV", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindexnv\dgindexnv.exe"));
             dgindexnv.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgindexnv\dgdecodenv.dll"));
-            eac3to.UpdateInformation("eac3to", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\eac3to\eac3to.exe"));
-            ffmpeg.UpdateInformation("ffmpeg", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffmpeg\ffmpeg.exe"));
-            ffms.UpdateInformation("ffms", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffms\ffmsindex.exe"));
+            eac3to.UpdateInformation("eac3to", "eac3to", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\eac3to\eac3to.exe"));
+            ffmpeg.UpdateInformation("ffmpeg", "FFmpeg", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffmpeg\ffmpeg.exe"));
+            ffms.UpdateInformation("ffms", "FFMS", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffms\ffmsindex.exe"));
             ffms.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffms\ffms2.dll"));
-            flac.UpdateInformation("flac", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\flac\flac.exe"));
-            lame.UpdateInformation("lame", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lame\lame.exe"));
-            lsmash.UpdateInformation("lsmash", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lsmash\LSMASHSource.dll"));
-            mkvmerge.UpdateInformation("mkvmerge", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvmerge.exe"));
+            flac.UpdateInformation("flac", "FLAC", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\flac\flac.exe"));
+            lame.UpdateInformation("lame", "LAME", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lame\lame.exe"));
+            lsmash.UpdateInformation("lsmash", "L-SMASH Source", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lsmash\LSMASHSource.dll"));
+            mkvmerge.UpdateInformation("mkvmerge", "mkvmerge", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvmerge.exe"));
             mkvmerge.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvextract.exe"));
-            mp4box.UpdateInformation("mp4box", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mp4box\mp4box.exe"));
-            neroaacenc.UpdateInformation("neroaacenc", neroAacEncPath);
-            oggenc.UpdateInformation("oggenc2", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\oggenc2\oggenc2.exe"));
-            opus.UpdateInformation("opus", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\opus\opusenc.exe"));
-            pgcdemux.UpdateInformation("pgcdemux", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\pgcdemux\pgcdemux.exe"));
-            qaac.UpdateInformation("qaac", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\qaac\qaac.exe"));
-            tsmuxer.UpdateInformation("tsmuxer", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\tsmuxer\tsmuxer.exe"));
-            vobsub.UpdateInformation("vobsub", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\vobsub\vobsub.dll"));
+            mp4box.UpdateInformation("mp4box", "MP4Box", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mp4box\mp4box.exe"));
+            neroaacenc.UpdateInformation("neroaacenc", "NeroAACEnc", neroAacEncPath);
+            oggenc.UpdateInformation("oggenc2", "OggEnc2", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\oggenc2\oggenc2.exe"));
+            opus.UpdateInformation("opus", "Opus", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\opus\opusenc.exe"));
+            pgcdemux.UpdateInformation("pgcdemux", "PgcDemux", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\pgcdemux\pgcdemux.exe"));
+            qaac.UpdateInformation("qaac", "QAAC", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\qaac\qaac.exe"));
+            tsmuxer.UpdateInformation("tsmuxer", "tsMuxeR", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\tsmuxer\tsmuxer.exe"));
+            vobsub.UpdateInformation("vobsub", "VobSub", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\vobsub\vobsub.dll"));
 #if x64
-            x264.UpdateInformation("x264", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264_64.exe"));
-            x264_10b.UpdateInformation("x264_10b", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b_64.exe"));
+            x264.UpdateInformation("x264", "x264", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264_64.exe"));
+            x264_10b.UpdateInformation("x264_10b", "x264 10bit", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b_64.exe"));
 #endif
 #if x86
-            x264.UpdateInformation("x264", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264.exe"));
-            x264_10b.UpdateInformation("x264_10b", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b.exe"));
+            x264.UpdateInformation("x264", "x264", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\x264.exe"));
+            x264_10b.UpdateInformation("x264_10b", "x264 10bit", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b.exe"));
             if (OSInfo.isWow64())
             {
                 x264.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264\avs4x264mod.exe"));
@@ -1347,10 +1347,10 @@ namespace MeGUI
                 x264_10b.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x264_10b\x264-10b_64.exe"));
             }
 #endif
-            x265.UpdateInformation("x265", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x265\x265.exe"));
+            x265.UpdateInformation("x265", "x265", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x265\x265.exe"));
             x265.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x265\avs4x265.exe"));
-            xvid.UpdateInformation("xvid_encraw", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\xvid_encraw\xvid_encraw.exe"));
-            yadif.UpdateInformation("yadif", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\yadif\yadif.dll"));
+            xvid.UpdateInformation("xvid_encraw", "Xvid", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\xvid_encraw\xvid_encraw.exe"));
+            yadif.UpdateInformation("yadif", "Yadif", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\yadif\yadif.dll"));
         }
         #endregion
     }
@@ -1383,9 +1383,11 @@ namespace MeGUI
             MainForm.Instance.ProgramSettings.Add(this);
         }
 
-        public void UpdateInformation(string name, string path)
+        public void UpdateInformation(string name, string displayname, string path)
         {
             _name = name;
+            if (!String.IsNullOrEmpty(displayname))
+                _displayname = displayname;
             if (String.IsNullOrEmpty(_displayname))
                 _displayname = name;
             _path = path;
