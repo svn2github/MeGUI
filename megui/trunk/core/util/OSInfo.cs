@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -366,19 +366,14 @@ namespace MeGUI
         }
 
         /// <summary>
-        /// Returns the name of the dotNet Framework running on this computer.
+        /// Returns the version of the .NET framework running on this computer.
         /// </summary>
         /// <param name="getSpecificVersion">if not empty only the specified version and if empty the highest version will be returned</param>
-        /// <returns>A string containing the Name of the Framework Version.</returns>
-        /// 
+        /// <returns>A string containing the version of the framework version.</returns>
         public static string GetDotNetVersion(string getSpecificVersion)
         {
             string fv = "unknown";
             string componentsKeyName = "SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\";
-            
-            // Find out in the registry anything under:
-            // HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP & ".NET Framework" in the name
-
             using (Microsoft.Win32.RegistryKey componentsKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(componentsKeyName))
             {
                 try
@@ -388,22 +383,37 @@ namespace MeGUI
                     
                     foreach (string instComp in instComps)
                     {
+                        if (!instComp.StartsWith("v"))
+                            continue;
+
+                        bool bFound = false;
                         Microsoft.Win32.RegistryKey key = componentsKey.OpenSubKey(instComp);
-                        string version = (string)key.GetValue("Version");
+                        string version = (string)key.GetValue("Version", "");
 
                         if (!String.IsNullOrEmpty(version))
                         {
                             versions.Add(version);
+                            continue;
                         }
                         else
                         {
                             foreach (string strRegKey in key.GetSubKeyNames())
                             {
                                 Microsoft.Win32.RegistryKey strKey = key.OpenSubKey(strRegKey);
-                                string strVersion = (string)strKey.GetValue("Version");
-                                if (!String.IsNullOrEmpty(strVersion))
-                                    versions.Add(strVersion);
+                                version = (string)strKey.GetValue("Version", "");
+                                if (!String.IsNullOrEmpty(version))
+                                {
+                                    bFound = true;
+                                    versions.Add(version);
+                                }
                             }
+                        }
+                        if (!bFound)
+                        {
+                            string install = key.GetValue("Install", "").ToString();
+                            version = instComp.Substring(1);
+                            if (!version.Equals("4") && install.Equals("1"))
+                                versions.Add(version);
                         }
                     }
                     versions.Sort();

@@ -1409,7 +1409,7 @@ namespace MeGUI
 
             string version = OSInfo.GetDotNetVersion("2.0");
             if (String.IsNullOrEmpty(version))
-                i.LogEvent(".Net Framework 2.0 not installed", ImageType.Error);
+                i.LogEvent(".Net Framework 2.0 not installed", ImageType.Warning);
             else
                 i.LogValue(".Net Framework", string.Format("{0}", version));
             version = OSInfo.GetDotNetVersion("4.0");
@@ -1419,10 +1419,6 @@ namespace MeGUI
                 i.LogValue(".Net Framework", string.Format("{0}", version));
 
             FileUtil.CheckAviSynth(i);
-
-            string devil = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "devil.dll");
-            if (File.Exists(devil))
-                FileUtil.GetFileInformation("DevIL", devil, ref i);
             FileUtil.GetFileInformation("AvisynthWrapper", Path.GetDirectoryName(Application.ExecutablePath) + @"\AvisynthWrapper.dll", ref i);
 
             // check if Haali Matroska Splitter is properly installed
