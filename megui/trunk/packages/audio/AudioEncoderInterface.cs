@@ -216,7 +216,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         MediaInfoFile oInfo = new MediaInfoFile(audioJob.Output, ref _log);
                     }
                 }
-                else if (su.HasError && audioJob.Settings is QaacSettings && _encoderStdErr.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("coreaudiotoolbox.dll"))
+                else if (su.HasError && audioJob.Settings is QaacSettings && _encoderStdErr.ToLowerInvariant().Contains("coreaudiotoolbox.dll"))
                 {
                     _log.LogEvent("CoreAudioToolbox.dll is missing and must be installed. Please have a look at https://sites.google.com/site/qaacpage", ImageType.Error);
                     if (MessageBox.Show("CoreAudioToolbox.dll is missing and must be installed.\r\nOtherwise QAAC cannot be used.\r\n\r\nDo you want to open the installation instructions?", "CoreAudioToolbox.dll missing", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
@@ -426,8 +426,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                         _mre.WaitOne();
 
                                         if (_encoderProcess != null)
+                                        {
                                             if (_encoderProcess.HasExited)
-                                                throw new ApplicationException("Abnormal encoder termination. Exit code: " + _encoderProcess.ExitCode.ToString());
+                                            {
+                                                string strError = WindowUtil.GetErrorText(_encoderProcess.ExitCode);
+                                                throw new ApplicationException("Abnormal encoder termination. Exit code: " + strError);
+                                            }
+                                        }
                                         int nHowMany = Math.Min((int)(a.SamplesCount - frameSample), MAX_SAMPLES_PER_ONCE);
 
                                         a.ReadAudio(address, frameSample, nHowMany);
@@ -470,8 +475,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                             _readFromStdErrThread.Join();
                             _readFromStdOutThread.Join();
                             if (0 != _encoderProcess.ExitCode)
-                                throw new ApplicationException("Abnormal encoder termination " + _encoderProcess.ExitCode.ToString());
-
+                            {
+                                string strError = WindowUtil.GetErrorText(_encoderProcess.ExitCode);
+                                throw new ApplicationException("Abnormal encoder termination. Exit code: " + strError);
+                            }
                         }
                         finally
                         {
@@ -501,14 +508,27 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     _log.LogEvent("Aborting...");
                     su.WasAborted = true;
                     raiseEvent();
+                    return;
                 }
+                else if (e is AviSynthException)
+                {
+                    stderrDone.Set();
+                    stdoutDone.Set();
+                    _log.LogValue("An error occurred", e.Message, ImageType.Error);
+                    su.HasError = true;
+                }
+                else if (e is ApplicationException)
+                {
+                    _log.LogValue("An error occurred", e.Message, ImageType.Error);
+                    su.HasError = true;
+                }  
                 else
                 {
                     _log.LogValue("An error occurred", e, ImageType.Error);
                     su.HasError = true;
                     raiseEvent();
+                    return;
                 }
-                return;
             }
             finally
             {
@@ -1149,6 +1169,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
 
             // SampleRate
+            if (audioJob.Settings.SampleRateType > 0 &&
+                MainForm.Instance.Settings.PortableAviSynth && MainForm.Instance.Settings.AviSynthPlus)
+                script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), @"plugins\Shibatch.dll"), Environment.NewLine);
             switch (audioJob.Settings.SampleRateType)
             {
                 case 0:

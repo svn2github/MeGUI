@@ -1,3 +1,5 @@
+2257 [Audio Encoder]      fixed missing SSRC() function in included AviSynth+
+     [Audio Encoder]      improved error handling
 2456 [Log]                improved .NET detection
 2455 [Update]             cosmetics
 2454 [Log]                show information about .NET 2.0 and 4.0
