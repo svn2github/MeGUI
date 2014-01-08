@@ -194,8 +194,11 @@ namespace MeGUI
                                     }
                                 }
                             }
-                            audioFiles.Add(oAudioTrack.AudioTrackInfo.TrackID, job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
-                            arrAudioFilesDelete.Add(job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
+                            if (!audioFiles.ContainsKey(oAudioTrack.AudioTrackInfo.TrackID))
+                            {
+                                audioFiles.Add(oAudioTrack.AudioTrackInfo.TrackID, job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
+                                arrAudioFilesDelete.Add(job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
+                            }
                         }
                         else
                             arrAudioTracks.Add(oAudioTrack.AudioTrackInfo);

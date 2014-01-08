@@ -1,11 +1,12 @@
-2257 [Audio Encoder]      fixed missing SSRC() function in included AviSynth+
+2458 [OneClick]           fixed problem if using the same internal audio track several times
+2457 [Audio Encoder]      fixed missing SSRC() function in included AviSynth+
      [Audio Encoder]      improved error handling
 2456 [Log]                improved .NET detection
 2455 [Update]             cosmetics
 2454 [Log]                show information about .NET 2.0 and 4.0
      [Log]                removed information about highest .NET build
 2453 [Audio Encoder]      fixed sometimes choosing the wrong decoder (regression of 2448)
-2452 [Audio Encoder]      lowered also the priority for the audio decoder
+2452 [Audio Encoder]      lowered also the priority for the LWLibavAudioSource decoder
      [Audio Encoder]      default order: NicAudio, BassAudio, FFAudioSource, LWLibavAudioSource, DirectShow
 2451 [Chapter Creator]    added support for mkv input files
      [Chapter Creator]    added option to specify the minimum title length

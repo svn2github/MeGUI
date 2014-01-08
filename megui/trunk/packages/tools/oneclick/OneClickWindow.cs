@@ -764,7 +764,7 @@ namespace MeGUI
                     if (!isDontEncodeAudioPossible(_videoInputInfo, oStreamControl.SelectedItem.IsStandard, inputContainer) || oStreamControl.SelectedStream.EncodingMode != AudioEncodingMode.Never)
                     {
                         //check if core must be extracted
-                        if (oStreamControl.SelectedStream.TrackInfo.Codec.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("truehd"))
+                        if (oStreamControl.SelectedStream.TrackInfo.Codec.ToLowerInvariant().Contains("truehd"))
                         {
                             oStreamControl.SelectedStream.TrackInfo.Codec = "AC-3";
                             bCoreOnly = true;
@@ -1006,7 +1006,7 @@ namespace MeGUI
                     string strFileName = string.Empty;
                     if (!oStreamControl.SelectedItem.IsStandard || !dpp.Eac3toDemux)
                     {
-                        if (strAudioCodec.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("truehd"))
+                        if (strAudioCodec.ToLowerInvariant().Contains("truehd"))
                         {
                             strAudioCodec = "AC-3";
                             if (oStreamControl.SelectedItem.IsStandard)
@@ -1081,7 +1081,7 @@ namespace MeGUI
 
                 if (oStream.SelectedItem.IsStandard)
                 {
-                    string strExtension = Path.GetExtension(oStream.SelectedStream.TrackInfo.SourceFileName.ToLower(System.Globalization.CultureInfo.InvariantCulture));
+                    string strExtension = Path.GetExtension(oStream.SelectedStream.TrackInfo.SourceFileName.ToLowerInvariant());
                     if (strExtension.Equals(".ifo") || strExtension.Equals(".vob"))
                     {
                         string strInput = oStream.SelectedStream.TrackInfo.SourceFileName;
@@ -1554,7 +1554,7 @@ namespace MeGUI
             {
                 for (int i = 0; i < arrSubtitleTrackInfo.Count; i++)
                 {
-                    if (arrSubtitleTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                    if (arrSubtitleTrackInfo[i].Language.ToLowerInvariant().Equals(strLanguage.ToLowerInvariant()))
                     {
                         if (iCounter > 0)
                             SubtitleAddTrack(false);
@@ -1732,7 +1732,7 @@ namespace MeGUI
             {
                 for (int i = 0; i < arrAudioTrackInfo.Count; i++)
                 {
-                    if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                    if (arrAudioTrackInfo[i].Language.ToLowerInvariant().Equals(strLanguage.ToLowerInvariant()))
                     {
                         // should only the first audio track for this language be processed?
                         bool bUseFirstTrackOnly = true;
@@ -1740,7 +1740,7 @@ namespace MeGUI
                             bUseFirstTrackOnly = settings.AudioSettings[0].UseFirstTrackOnly;
                         foreach (OneClickAudioSettings oAudioSettings in settings.AudioSettings)
                         {
-                            if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(oAudioSettings.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                            if (arrAudioTrackInfo[i].Language.ToLowerInvariant().Equals(oAudioSettings.Language.ToLowerInvariant()))
                             {
                                 bUseFirstTrackOnly = oAudioSettings.UseFirstTrackOnly;
                                 break;
@@ -1753,7 +1753,7 @@ namespace MeGUI
                             foreach (OneClickStreamControl oAudioControl in audioTracks)
                             {
                                 if (oAudioControl.SelectedStreamIndex > 0 &&
-                                    oAudioControl.SelectedStream.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                                    oAudioControl.SelectedStream.Language.ToLowerInvariant().Equals(arrAudioTrackInfo[i].Language.ToLowerInvariant()))
                                 {
                                     bAddTrack = false;
                                     break;
@@ -1781,7 +1781,7 @@ namespace MeGUI
                         bUseFirstTrackOnly = settings.AudioSettings[0].UseFirstTrackOnly;
                     foreach (OneClickAudioSettings oAudioSettings in settings.AudioSettings)
                     {
-                        if (arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(oAudioSettings.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                        if (arrAudioTrackInfo[i].Language.ToLowerInvariant().Equals(oAudioSettings.Language.ToLowerInvariant()))
                         {
                             bUseFirstTrackOnly = oAudioSettings.UseFirstTrackOnly;
                             break;
@@ -1794,7 +1794,7 @@ namespace MeGUI
                         foreach (OneClickStreamControl oAudioControl in audioTracks)
                         {
                             if (oAudioControl.SelectedStreamIndex > 0 &&
-                                oAudioControl.SelectedStream.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(arrAudioTrackInfo[i].Language.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                                oAudioControl.SelectedStream.Language.ToLowerInvariant().Equals(arrAudioTrackInfo[i].Language.ToLowerInvariant()))
                             {
                                 bAddTrack = false;
                                 break;

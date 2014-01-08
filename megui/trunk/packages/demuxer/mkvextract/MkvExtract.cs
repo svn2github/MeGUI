@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 //
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -128,13 +128,19 @@ namespace MeGUI
                 sb.Append("tracks \"" + job.Input + "\" --ui-language en");
 
                 // Tracks to extract
+                System.Collections.ArrayList trackID = new System.Collections.ArrayList();
                 foreach (TrackInfo oTrack in job.MkvTracks)
                 {
                     // Extract only audio/subtitle tracks
                     if (oTrack.TrackType != TrackType.Audio && oTrack.TrackType != TrackType.Subtitle)
                         continue;
 
+                    // extract every track only once
+                    if (trackID.Contains(oTrack.MMGTrackID))
+                        continue;
+
                     sb.Append(" " + oTrack.MMGTrackID + ":\"" + job.OutputPath + "\\" + oTrack.DemuxFileName + "\"");
+                    trackID.Add(oTrack.MMGTrackID);
                 }
 
                 return sb.ToString();
