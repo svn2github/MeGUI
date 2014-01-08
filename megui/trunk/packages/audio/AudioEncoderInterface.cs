@@ -987,6 +987,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 throw new JobRunException("Input file cannot be opened: " + audioJob.Input);
             }
 
+            if (MainForm.Instance.Settings.PortableAviSynth && MainForm.Instance.Settings.AviSynthPlus)
+            {
+                script.Insert(0, String.Format("ClearAutoloadDirs(){0}AddAutoloadDir(\"{1}\"){0}", 
+                    Environment.NewLine, 
+                    Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), @"plugins")));
+            }
+
             if (audioJob.Delay != 0)
                 script.AppendFormat("DelayAudio({0}.0/1000.0){1}", audioJob.Delay, Environment.NewLine);
 
@@ -1169,9 +1176,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
 
             // SampleRate
-            if (audioJob.Settings.SampleRateType > 0 &&
-                MainForm.Instance.Settings.PortableAviSynth && MainForm.Instance.Settings.AviSynthPlus)
-                script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), @"plugins\Shibatch.dll"), Environment.NewLine);
             switch (audioJob.Settings.SampleRateType)
             {
                 case 0:

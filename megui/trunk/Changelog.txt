@@ -1,3 +1,4 @@
+2459 [Audio Encoder]      added AddAutoloadDir() if using the included AviSynth+
 2458 [OneClick]           fixed problem if using the same internal audio track several times
 2457 [Audio Encoder]      fixed missing SSRC() function in included AviSynth+
      [Audio Encoder]      improved error handling
