@@ -302,6 +302,7 @@ namespace MeGUI
             this.Text = "MeGUI - Updater";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UpdateWindow_FormClosing);
             this.Load += new System.EventHandler(this.UpdateWindow_Load);
+            this.Shown += new System.EventHandler(this.UpdateWindow_Shown);
             this.Move += new System.EventHandler(this.UpdateWindow_Move);
             this.Resize += new System.EventHandler(this.UpdateWindow_Resize);
             this.statusToolStrip.ResumeLayout(false);

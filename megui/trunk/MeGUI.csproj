@@ -418,6 +418,9 @@
     <Compile Include="core\gui\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
+	<Compile Include="core\gui\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\SimpleProfilesControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

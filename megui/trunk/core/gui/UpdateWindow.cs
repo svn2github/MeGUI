@@ -1105,7 +1105,6 @@ namespace MeGUI
                 CreateTreeview.Start();
                 if (wait)
                     webUpdate.WaitOne();
-                DisplayItems(chkShowAllFiles.Checked);
             }
         }
         /// <summary>
@@ -2086,6 +2085,11 @@ namespace MeGUI
         private void splitContainer1_SizeChanged(object sender, EventArgs e)
         {
             this.splitContainer1.SplitterDistance = this.splitContainer1.Size.Height - 65;
+        }
+
+        private void UpdateWindow_Shown(object sender, EventArgs e)
+        {
+            DisplayItems(chkShowAllFiles.Checked);
         }
     }
 
