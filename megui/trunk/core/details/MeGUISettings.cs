@@ -1321,7 +1321,7 @@ namespace MeGUI
             ffms.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\ffms\ffms2.dll"));
             flac.UpdateInformation("flac", "FLAC", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\flac\flac.exe"));
             lame.UpdateInformation("lame", "LAME", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lame\lame.exe"));
-            lsmash.UpdateInformation("lsmash", "L-SMASH Source", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lsmash\LSMASHSource.dll"));
+            lsmash.UpdateInformation("lsmash", "L-SMASH Works", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\lsmash\LSMASHSource.dll"));
             mkvmerge.UpdateInformation("mkvmerge", "mkvmerge", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvmerge.exe"));
             mkvmerge.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvextract.exe"));
             mp4box.UpdateInformation("mp4box", "MP4Box", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mp4box\mp4box.exe"));
@@ -1353,120 +1353,6 @@ namespace MeGUI
             yadif.UpdateInformation("yadif", "Yadif", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\yadif\yadif.dll"));
         }
         #endregion
-    }
-
-    public class ProgramSettings
-    {
-        private bool _enabled;
-        private string _path;
-        private DateTime _lastused;
-        private string _name;
-        private string _displayname;
-        private List<string> _files;
-
-        public ProgramSettings()
-        {
-            _files = new List<string>();
-            _enabled = false;
-            _path = _name = _displayname = String.Empty;
-            _lastused = new DateTime();
-            MainForm.Instance.ProgramSettings.Add(this);
-        }
-
-        public ProgramSettings(string name)
-        {
-            _files = new List<string>();
-            _enabled = false;
-            _path = String.Empty;
-            _lastused = new DateTime();
-            _name = _displayname = name;
-            MainForm.Instance.ProgramSettings.Add(this);
-        }
-
-        public void UpdateInformation(string name, string displayname, string path)
-        {
-            _name = name;
-            if (!String.IsNullOrEmpty(displayname))
-                _displayname = displayname;
-            if (String.IsNullOrEmpty(_displayname))
-                _displayname = name;
-            _path = path;
-            _files.Add(path);
-        }
-
-        public bool Enabled
-        {
-            get { return _enabled; }
-            set { _enabled = value; }
-        }
-
-        [XmlIgnore()]
-        public string Path
-        {
-            get { return _path; }
-        }
-
-        [XmlIgnore()]
-        public List<string> Files
-        {
-            get { return _files; }
-            set { _files = value; }
-        }
-
-        [XmlIgnore()]
-        public string Name
-        {
-            get { return _name; }
-        }
-
-        [XmlIgnore()]
-        public string DisplayName
-        {
-            get { return _displayname; }
-            set { _displayname = value; }
-        }
-
-        public DateTime LastUsed
-        {
-            get { return _lastused; }
-            set { _lastused = value; }
-        }
-
-        public bool Update(bool enable, bool forceUpdate)
-        {
-            if (enable && (forceUpdate || !_enabled))
-                _lastused = DateTime.Now;
-            _enabled = enable;
-
-            if (!enable || (!String.IsNullOrEmpty(_path) && File.Exists(_path)))
-                return true;
-
-            if (forceUpdate)
-            {
-                // package is not available. Therefore an update check is necessary
-                if (MessageBox.Show("The package " + _displayname + " is not installed.\n\nDo you want to search now online for updates?", "MeGUI package missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    MainForm.Instance.startUpdateCheckAndWait();
-                    if (File.Exists(_path))
-                    {
-                        if (MainForm.Instance.Settings.PortableAviSynth &&
-                            (_name.Equals("ffmpeg") || _name.StartsWith("x26") || _name.Equals("xvid_encraw")))
-                            FileUtil.PortableAviSynthActions(false);
-                        return true;
-                    }
-                }
-                MessageBox.Show(String.Format("You have selected to not update {0}. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to download it later.", _displayname), _displayname + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return false;
-        }
-
-        public bool UpdateAllowed()
-        {
-            if (_enabled && _lastused.AddDays(UpdateCacher.REMOVE_PACKAGE_AFTER_DAYS) > DateTime.Now)
-                return true;
-            else
-                return false;
-        }
     }
 
     public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2, CloseMeGUI = 3 }

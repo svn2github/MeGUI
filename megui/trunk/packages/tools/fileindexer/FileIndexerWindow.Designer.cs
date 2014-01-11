@@ -287,7 +287,7 @@ namespace MeGUI
             this.btnLSMASH.Size = new System.Drawing.Size(104, 17);
             this.btnLSMASH.TabIndex = 4;
             this.btnLSMASH.TabStop = true;
-            this.btnLSMASH.Text = "L-SMASH Source";
+            this.btnLSMASH.Text = "L-SMASH Works";
             this.btnLSMASH.UseVisualStyleBackColor = true;
             this.btnLSMASH.Click += new System.EventHandler(this.btnLSMASH_Click);
             // 

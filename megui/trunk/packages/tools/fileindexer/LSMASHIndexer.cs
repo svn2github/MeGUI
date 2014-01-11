@@ -45,7 +45,6 @@ namespace MeGUI
         {
             UpdateCacher.CheckPackage("lsmash");
             executable = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "ping.exe");
-            bForceClosing = true;
         }
 
         protected override string Commandline
@@ -126,6 +125,8 @@ namespace MeGUI
             {
                 bWaitForExit = true;
                 mre.Set(); // if it's paused, then unpause
+                stdoutDone.Set();
+                stderrDone.Set();
                 proc.Kill();
                 while (bWaitForExit) // wait until the process has terminated without locking the GUI
                 {
@@ -143,53 +144,50 @@ namespace MeGUI
 
         protected override void doExitConfig()
         {
-            if (su.HasError || su.WasAborted)
+            if (su.HasError || su.WasAborted || job.DemuxMode == 0 || job.AudioTracks.Count == 0)
             {
                 base.doExitConfig();
                 return;
             }
 
-            if (job.DemuxMode > 0 && job.AudioTracks.Count > 0)
+            int iTracksFound = 0;
+            int iCurrentAudioTrack = -1;
+            for (int iCurrentTrack = 0; iCurrentTrack <= 29; iCurrentTrack++) // hard limit to max. 30 tracks
             {
-                int iTracksFound = 0;
-                int iCurrentAudioTrack = -1;
-                for (int iCurrentTrack = 0; iCurrentTrack <= 29; iCurrentTrack++) // hard limit to max. 30 tracks
+                StringBuilder strAVSScript = new StringBuilder();
+                strAVSScript.Append(VideoUtil.getLSMASHAudioInputLine(job.Input, job.Output, iCurrentTrack));
+
+                // is this an audio track?
+                string strErrorText;
+                if (AudioUtil.AVSScriptHasAudio(strAVSScript.ToString(), out strErrorText) == false)
+                    continue;
+                iCurrentAudioTrack++;
+
+                foreach (AudioTrackInfo oAudioTrack in job.AudioTracks)
                 {
-                    StringBuilder strAVSScript = new StringBuilder();
-                    strAVSScript.Append(VideoUtil.getLSMASHAudioInputLine(job.Input, job.Output, iCurrentTrack));
-
-                    // is this an audio track?
-                    string strErrorText;
-                    if (AudioUtil.AVSScriptHasAudio(strAVSScript.ToString(), out strErrorText) == false)
+                    if (oAudioTrack.TrackIndex != iCurrentAudioTrack)
                         continue;
-                    iCurrentAudioTrack++;
 
-                    foreach (AudioTrackInfo oAudioTrack in job.AudioTracks)
+                    // write avs file
+                    string strAudioAVSFile;
+                    strAudioAVSFile = Path.GetFileNameWithoutExtension(job.Output) + "_track_" + (oAudioTrack.TrackIndex + 1) + "_" + oAudioTrack.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture) + ".avs";
+                    strAudioAVSFile = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileName(strAudioAVSFile));
+                    try
                     {
-                        if (oAudioTrack.TrackIndex != iCurrentAudioTrack)
-                            continue;
-
-                        // write avs file
-                        string strAudioAVSFile;
-                        strAudioAVSFile = Path.GetFileNameWithoutExtension(job.Output) + "_track_" + (oAudioTrack.TrackIndex + 1) + "_" + oAudioTrack.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture) + ".avs";
-                        strAudioAVSFile = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileName(strAudioAVSFile));
-                        try
-                        {
-                            strAVSScript.AppendLine(@"# detected channels: " + oAudioTrack.NbChannels);
-                            strAVSScript.Append(@"# detected channel positions: " + oAudioTrack.ChannelPositions);
-                            StreamWriter oAVSWriter = new StreamWriter(strAudioAVSFile, false, Encoding.Default);
-                            oAVSWriter.Write(strAVSScript);
-                            oAVSWriter.Close();
-                        }
-                        catch (IOException ex)
-                        {
-                            log.LogValue("Error creating audio AVS file", ex);
-                        }
-                        break;
+                        strAVSScript.AppendLine(@"# detected channels: " + oAudioTrack.NbChannels);
+                        strAVSScript.Append(@"# detected channel positions: " + oAudioTrack.ChannelPositions);
+                        StreamWriter oAVSWriter = new StreamWriter(strAudioAVSFile, false, Encoding.Default);
+                        oAVSWriter.Write(strAVSScript);
+                        oAVSWriter.Close();
                     }
-                    if (++iTracksFound == job.AudioTracks.Count)
-                        break;
+                    catch (IOException ex)
+                    {
+                        log.LogValue("Error creating audio AVS file", ex);
+                    }
+                    break;
                 }
+                if (++iTracksFound == job.AudioTracks.Count)
+                    break;
             }
             base.doExitConfig();
         }

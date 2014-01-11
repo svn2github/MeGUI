@@ -418,7 +418,7 @@
     <Compile Include="core\gui\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-	<Compile Include="core\gui\SettingsForm.Designer.cs">
+    <Compile Include="core\gui\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\SimpleProfilesControl.cs">
@@ -450,11 +450,12 @@
     <Compile Include="core\gui\TextViewer.Designer.cs">
       <DependentUpon>TextViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="core\gui\UpdateCacher.cs" />
-    <Compile Include="core\gui\UpdateWindow.cs">
+    <Compile Include="packages\tools\update\ProgramSettings.cs" />
+    <Compile Include="packages\tools\update\UpdateCacher.cs" />
+    <Compile Include="packages\tools\update\UpdateWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="core\gui\UpdateWindow.designer.cs">
+    <Compile Include="packages\tools\update\UpdateWindow.designer.cs">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\VideoPlayer.cs">
@@ -944,7 +945,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>TextViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="core\gui\UpdateWindow.resx">
+    <EmbeddedResource Include="packages\tools\update\UpdateWindow.resx">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

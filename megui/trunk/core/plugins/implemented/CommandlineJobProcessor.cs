@@ -53,7 +53,6 @@ namespace MeGUI
         protected List<string> tempFiles = new List<string>();
         protected bool bRunSecondTime = false;
         protected bool bWaitForExit = false;
-        protected bool bForceClosing = false;
 
         #endregion
 
@@ -124,16 +123,8 @@ namespace MeGUI
         protected void proc_Exited(object sender, EventArgs e)
         {
             mre.Set();  // Make sure nothing is waiting for pause to stop
-            if (bForceClosing)
-            {
-                stdoutDone.WaitOne(100); // wait for stdout to finish processing
-                stderrDone.WaitOne(100); // wait for stderr to finish processing
-            }
-            else
-            {
-                stdoutDone.WaitOne(); // wait for stdout to finish processing
-                stderrDone.WaitOne(); // wait for stderr to finish processing
-            }
+            stdoutDone.WaitOne(); // wait for stdout to finish processing
+            stderrDone.WaitOne(); // wait for stderr to finish processing
 
             // check the exitcode
             if (checkExitCode && proc.ExitCode != 0) 

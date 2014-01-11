@@ -1,3 +1,5 @@
+2461 [L-SMASH Indexer]    renamed to L-SMASH Works
+     [L-SMASH Indexer]    internal optimizations
 2460 [Update]             if external tools are disabled in the settings they are also disabled for updates
 2459 [Audio Encoder]      added AddAutoloadDir() if using the included AviSynth+
 2458 [OneClick]           fixed problem if using the same internal audio track several times
@@ -14,17 +16,17 @@
      [Chapter Creator]    added option to specify the minimum title length
      [Chapter Creator]    added option to specify the FPS value
      [Chapter Creator]    improved FPS detection for DVD/Bluray
-2450 [LSMASH Indexer]     show time/file progress during indexing
-     [LSMASH Indexer]     added possibility to set output file/folder
-     [LSMASH Indexer]     blocked indexer if input file is in a read only directory
-     [LSMASH Indexer]     lowered the default priority so that it will be used after FFMS
-     [LSMASH Indexer]     added log information
-     [LSMASH Indexer]     copy the runtimes if required
+2450 [L-SMASH Indexer]    show time/file progress during indexing
+     [L-SMASH Indexer]    added possibility to set output file/folder
+     [L-SMASH Indexer]    blocked indexer if input file is in a read only directory
+     [L-SMASH Indexer]    lowered the default priority so that it will be used after FFMS
+     [L-SMASH Indexer]    added log information
+     [L-SMASH Indexer]    copy the runtimes if required
      [FFMS Indexer]       defaults to LoadPlugin if LoadCPlugin is also possible
 2449 [Update]             show the lsmash package in the updater
-2448 [LSMASH Indexer]     added LSMASHVideoSource/LWLibavVideoSource support
-     [LSMASH Indexer]     as no indexer is available no progress during "indexing" is available
-     [LSMASH Indexer]     also the cache file must be created in the same directory as the source file
+2448 [L-SMASH Indexer]    added LSMASHVideoSource/LWLibavVideoSource support
+     [L-SMASH Indexer]    as no indexer is available no progress during "indexing" is available
+     [L-SMASH Indexer]    also the cache file must be created in the same directory as the source file
      [Audio Encoder]      added LSMASHAudioSource/LWLibavAudioSource support
 2447 [Update]             fixed a regression in 2446
 2446 [Update]             removed "Platform" column
