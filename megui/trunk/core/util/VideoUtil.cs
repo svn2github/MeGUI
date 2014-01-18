@@ -898,23 +898,8 @@ namespace MeGUI
             return getLSMASHBasicInputLine(inputFile, indexFile, track, 0, 0, 0, false);
         }
 
-        public static void CheckLSMASHRuntime()
-        {
-            if (MainForm.Instance.Settings.LSMASHRuntimesChecked || MainForm.Instance.Settings.AviSynthPlus)
-                return;
-            MainForm.Instance.Settings.LSMASHRuntimesChecked = true;
-            StringBuilder script = new StringBuilder();
-            script.AppendFormat("LoadPlugin(\"{0}\"){1}", MainForm.Instance.Settings.LSMASH.Path, Environment.NewLine);
-            script.AppendFormat("BlankClip()");
-            string errorText;
-            if (!AVSScriptHasVideo(script.ToString(), out errorText))
-                FileUtil.LSMASHFileActions(false);
-        }
-
         private static string getLSMASHBasicInputLine(string inputFile, string indexFile, int track, int rffmode, int fpsnum, int fpsden, bool video)
         {
-            CheckLSMASHRuntime();
-
             StringBuilder script = new StringBuilder();
             script.AppendFormat("LoadPlugin(\"{0}\"){1}",
                 MainForm.Instance.Settings.LSMASH.Path,

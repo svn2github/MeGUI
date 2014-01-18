@@ -32,9 +32,8 @@ namespace MeGUI
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateWindow));
             this.statusToolStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.enableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setIgnoreValue = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uncheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reinstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -67,39 +66,35 @@ namespace MeGUI
             // statusToolStrip
             // 
             this.statusToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableToolStripMenuItem,
             this.setIgnoreValue,
-            this.checkToolStripMenuItem,
-            this.uncheckToolStripMenuItem,
             this.reinstallToolStripMenuItem});
             this.statusToolStrip.Name = "statusToolStrip";
-            this.statusToolStrip.Size = new System.Drawing.Size(213, 92);
+            this.statusToolStrip.ShowCheckMargin = true;
+            this.statusToolStrip.ShowImageMargin = false;
+            this.statusToolStrip.Size = new System.Drawing.Size(156, 92);
+            // 
+            // enableToolStripMenuItem
+            // 
+            this.enableToolStripMenuItem.CheckOnClick = true;
+            this.enableToolStripMenuItem.Name = "enableToolStripMenuItem";
+            this.enableToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.enableToolStripMenuItem.Text = "Enable";
+            this.enableToolStripMenuItem.Click += new System.EventHandler(this.enableToolStripMenuItem_Click);
             // 
             // setIgnoreValue
             // 
             this.setIgnoreValue.CheckOnClick = true;
             this.setIgnoreValue.Name = "setIgnoreValue";
-            this.setIgnoreValue.Size = new System.Drawing.Size(212, 22);
-            this.setIgnoreValue.Text = "Ignore updates for this file";
+            this.setIgnoreValue.Size = new System.Drawing.Size(155, 22);
+            this.setIgnoreValue.Text = "Ignore updates";
             this.setIgnoreValue.Click += new System.EventHandler(this.setIgnoreValue_Click);
-            // 
-            // checkToolStripMenuItem
-            // 
-            this.checkToolStripMenuItem.Name = "checkToolStripMenuItem";
-            this.checkToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.checkToolStripMenuItem.Text = "Check";
-            this.checkToolStripMenuItem.Click += new System.EventHandler(this.checkToolStripMenuItem_Click);
-            // 
-            // uncheckToolStripMenuItem
-            // 
-            this.uncheckToolStripMenuItem.Name = "uncheckToolStripMenuItem";
-            this.uncheckToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.uncheckToolStripMenuItem.Text = "Uncheck";
-            this.uncheckToolStripMenuItem.Click += new System.EventHandler(this.uncheckToolStripMenuItem_Click);
             // 
             // reinstallToolStripMenuItem
             // 
+            this.reinstallToolStripMenuItem.CheckOnClick = true;
             this.reinstallToolStripMenuItem.Name = "reinstallToolStripMenuItem";
-            this.reinstallToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.reinstallToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.reinstallToolStripMenuItem.Text = "Force (re)install";
             this.reinstallToolStripMenuItem.Click += new System.EventHandler(this.reinstallToolStripMenuItem_Click);
             // 
@@ -240,7 +235,7 @@ namespace MeGUI
             this.chkShowAllFiles.Name = "chkShowAllFiles";
             this.chkShowAllFiles.Size = new System.Drawing.Size(87, 17);
             this.chkShowAllFiles.TabIndex = 9;
-            this.chkShowAllFiles.Text = "Show all files";
+            this.chkShowAllFiles.Text = "Show all packages";
             this.chkShowAllFiles.UseVisualStyleBackColor = true;
             this.chkShowAllFiles.CheckedChanged += new System.EventHandler(this.chkShowAllFiles_CheckedChanged);
             // 
@@ -330,8 +325,6 @@ namespace MeGUI
         private System.Windows.Forms.TextBox txtBoxLog;
         private System.Windows.Forms.ContextMenuStrip statusToolStrip;
         private System.Windows.Forms.ToolStripMenuItem setIgnoreValue;
-        private System.Windows.Forms.ToolStripMenuItem checkToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem uncheckToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ToolStripMenuItem reinstallToolStripMenuItem;
@@ -344,5 +337,6 @@ namespace MeGUI
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnAbort;
+        private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem;
     }
 }

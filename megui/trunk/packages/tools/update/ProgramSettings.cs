@@ -112,25 +112,22 @@ namespace MeGUI
                 _lastused = DateTime.Now;
             _enabled = enable;
 
-            if (!enable || (!String.IsNullOrEmpty(_path) && File.Exists(_path)))
+            if (!enable || FilesAvailable())
                 return true;
 
-            if (forceUpdate)
+            if (!forceUpdate)
+                return false;
+
+            // package is not available. Therefore an update check is necessary
+            if (MessageBox.Show("The package " + _displayname + " is not installed.\n\nDo you want to search now online for updates?", "MeGUI package missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                // package is not available. Therefore an update check is necessary
-                if (MessageBox.Show("The package " + _displayname + " is not installed.\n\nDo you want to search now online for updates?", "MeGUI package missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    MainForm.Instance.startUpdateCheckAndWait();
-                    if (File.Exists(_path))
-                    {
-                        if (MainForm.Instance.Settings.PortableAviSynth &&
-                            (_name.Equals("ffmpeg") || _name.StartsWith("x26") || _name.Equals("xvid_encraw")))
-                            FileUtil.PortableAviSynthActions(false);
-                        return true;
-                    }
-                }
-                MessageBox.Show(String.Format("You have selected to not update {0}. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to download it later.", _displayname), _displayname + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MainForm.Instance.startUpdateCheckAndWait();
+                if (FilesAvailable())
+                    return true;
+                MessageBox.Show(String.Format("The update for {0} failed. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to try it later.", _displayname), _displayname + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            else
+                MessageBox.Show(String.Format("You have selected to not update {0}. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to download it later.", _displayname), _displayname + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
 
@@ -140,6 +137,14 @@ namespace MeGUI
                 return true;
             else
                 return false;
+        }
+
+        private bool FilesAvailable()
+        {
+            foreach (String file in _files)
+                if (!File.Exists(file))
+                    return false;
+            return true;
         }
     }
 }

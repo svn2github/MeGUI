@@ -1215,17 +1215,6 @@ namespace MeGUI
             set { bAviSynthPlus = value; }
         }
 
-        private bool bLSMASHRuntimesChecked;
-        /// <summary>
-        /// true if the lsmash runtimes have been checked
-        /// </summary>
-        [XmlIgnore()]
-        public bool LSMASHRuntimesChecked
-        {
-            get { return bLSMASHRuntimesChecked; }
-            set { bLSMASHRuntimesChecked = value; }
-        }
-
         #region Methods
 
         public bool IsDGIIndexerAvailable()

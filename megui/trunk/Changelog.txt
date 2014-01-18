@@ -1,3 +1,5 @@
+2462 [Update]             improved status handling
+     [Update]             cosmetics
 2461 [L-SMASH Indexer]    renamed to L-SMASH Works
      [L-SMASH Indexer]    internal optimizations
 2460 [Update]             if external tools are disabled in the settings they are also disabled for updates

@@ -191,11 +191,6 @@ namespace MeGUI
             }
         }
 
-        public static bool CheckPackage(string package)
-        {
-            return CheckPackage(package, true, true);
-        }
-
         public static ProgramSettings GetPackage(string package)
         {
             foreach (ProgramSettings pSettings in MainForm.Instance.ProgramSettings)
@@ -206,6 +201,11 @@ namespace MeGUI
             }
 
             return null;
+        }
+
+        public static bool CheckPackage(string package)
+        {
+            return CheckPackage(package, true, true);
         }
 
         public static bool CheckPackage(string package, bool enablePackage, bool forceUpdate)

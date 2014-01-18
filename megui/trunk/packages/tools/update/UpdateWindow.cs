@@ -55,6 +55,44 @@ namespace MeGUI
         private LogItem oLog;
         private String ServerAddress;
         private ListViewColumnSorter lvwColumnSorter;
+        private enum PackageStatus
+        {
+            [EnumTitle("no update available")]
+            NoUpdateAvailable,
+            [EnumTitle("update available")]
+            UpdateAvailable,
+            [EnumTitle("update ignored")]
+            UpdateIgnored,
+            [EnumTitle("reinstalling")]
+            Reinstall,
+            [EnumTitle("package disabled")]
+            Disabled
+        };
+        public enum ErrorState
+        {
+            [EnumTitle("File cannot be found on the server")]
+            FileNotOnServer,
+            [EnumTitle("Update server is not available")]
+            ServerNotAvailable,
+            [EnumTitle("File cannot be downloaded")]
+            CouldNotDownloadFile,
+            [EnumTitle("Backup file cannot be removed")]
+            CouldNotRemoveBackup,
+            [EnumTitle("File cannot be saved")]
+            CouldNotSaveNewFile,
+            [EnumTitle("File cannot be renamed")]
+            CouldNotRenameExistingFile,
+            [EnumTitle("File cannot be installed")]
+            CouldNotInstall,
+            [EnumTitle("Update successful")]
+            Successful,
+            [EnumTitle("File cannot be extracted")]
+            CouldNotUnzip,
+            [EnumTitle("Update XML is invalid")]
+            InvalidXML,
+            [EnumTitle("The requirements for this file are not met")]
+            RequirementNotMet
+        }
         #endregion
         #region Classes
 
@@ -67,26 +105,16 @@ namespace MeGUI
             
             internal iUpgradeable()
             {
-                availableVersions = new Versions(2);
+                availableVersion = new Version();
 
             } // constructor
 
             // Overrideable methods
-            public Version GetLatestVersion()
-            {
-                Version latest = new Version();
-                foreach (Version v in this.availableVersions)
-                    if (v.CompareTo(latest) != 0)
-                        latest = v;
-
-                return latest;
-            }
-
-            public bool HasAvailableVersions
+            public bool HasAvailableVersion
             {
                 get
                 {
-                    Version latest = GetLatestVersion();
+                    Version latest = this.availableVersion;
                     if (this.name == "neroaacenc")
                     {
                         if (currentVersion.FileVersion != null && currentVersion.FileVersion.Equals(latest.FileVersion))
@@ -130,14 +158,22 @@ namespace MeGUI
                     case "vsfilter": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll")); break;
                     case "nicaudio": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
                     case "neroaacenc":
-                        arrPath.Add(MainForm.Instance.Settings.NeroAacEnc.Path);
-                        if (File.Exists(MainForm.Instance.Settings.NeroAacEnc.Path))
+                        if (MainForm.Instance.Settings.UseNeroAacEnc)
                         {
-                            System.Diagnostics.FileVersionInfo finfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(MainForm.Instance.Settings.NeroAacEnc.Path);
-                            FileInfo fi = new FileInfo(MainForm.Instance.Settings.NeroAacEnc.Path);
-                            this.currentVersion.FileVersion = finfo.FileMajorPart + "." + finfo.FileMinorPart + "." + finfo.FileBuildPart + "." + finfo.FilePrivatePart;
-                            this.currentVersion.UploadDate = fi.LastWriteTimeUtc;
+                            arrPath.Add(MainForm.Instance.Settings.NeroAacEnc.Path);
+                            if (File.Exists(MainForm.Instance.Settings.NeroAacEnc.Path))
+                            {
+                                System.Diagnostics.FileVersionInfo finfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(MainForm.Instance.Settings.NeroAacEnc.Path);
+                                FileInfo fi = new FileInfo(MainForm.Instance.Settings.NeroAacEnc.Path);
+                                this.currentVersion.FileVersion = finfo.FileMajorPart + "." + finfo.FileMinorPart + "." + finfo.FileBuildPart + "." + finfo.FilePrivatePart;
+                                this.currentVersion.UploadDate = fi.LastWriteTimeUtc;
+                            }
                         }
+                        break;
+                    default:
+                        ProgramSettings pSettings = UpdateCacher.GetPackage(this.name);
+                        if (pSettings != null && pSettings.UpdateAllowed())
+                            arrPath.AddRange(pSettings.Files);
                         break;
                 }
 
@@ -177,7 +213,7 @@ namespace MeGUI
 
                 name.Text = this.DisplayName;
 
-                Version v = GetLatestVersion();
+                Version v = this.availableVersion;
                 if (v != null)
                 {
                     latestVersion.Text = v.FileVersion;
@@ -192,7 +228,10 @@ namespace MeGUI
                 if (this.CurrentVersion != null && !String.IsNullOrEmpty(this.CurrentVersion.FileVersion))
                 {
                     existingVersion.Text = this.CurrentVersion.FileVersion;
-                    existingDate.Text = this.CurrentVersion.UploadDate.ToShortDateString();
+                    if (this.CurrentVersion.UploadDate.Year > 1)
+                        existingDate.Text = this.CurrentVersion.UploadDate.ToShortDateString();
+                    else
+                        existingDate.Text = "N/A";
                 }
                 else
                 {
@@ -200,34 +239,29 @@ namespace MeGUI
                     existingDate.Text = "N/A";
                 }
 
-                if (!HasAvailableVersions)
+                ProgramSettings pSettings = UpdateCacher.GetPackage(this.name);
+                if (pSettings != null && !pSettings.UpdateAllowed())
+                {
+                    status.Text = EnumProxy.Create(PackageStatus.Disabled).ToString();
+                }
+                else if (!this.isAvailable())
+                {
+                    status.Text = EnumProxy.Create(PackageStatus.Reinstall).ToString();
+                    this.DownloadChecked = this.AllowUpdate = true;
+                }
+                else if (!HasAvailableVersion)
                 {
                     if (this.DownloadChecked)
-                        status.Text = "Reinstalling";
+                        status.Text = EnumProxy.Create(PackageStatus.Reinstall).ToString();
                     else
-                        status.Text = "No Update Available";
+                        status.Text = EnumProxy.Create(PackageStatus.NoUpdateAvailable).ToString();
                 }
                 else
                 {
                     if (this.AllowUpdate)
-                    {
-#if DEBUG
-                        if (this.Name.Equals("core"))
-                        {
-                            if ((Int32.Parse(existingVersion.Text)) > (Int32.Parse(latestVersion.Text)))
-                            {
-                                this.AllowUpdate = false;
-                                status.Text = "Update Ignored";
-                            }
-                            else
-                                status.Text = "Update Available";
-                        }
-                        else
-#endif
-                        status.Text = "Update Available";
-                    }
+                        status.Text = EnumProxy.Create(PackageStatus.UpdateAvailable).ToString();
                     else
-                        status.Text = "Update Ignored";
+                        status.Text = EnumProxy.Create(PackageStatus.UpdateIgnored).ToString();
                 }
 
                 if (this.AllowUpdate)
@@ -238,7 +272,6 @@ namespace MeGUI
                         myitem.Checked = false;
                 }
 
-                ProgramSettings pSettings = UpdateCacher.GetPackage(this.name);
                 if (pSettings != null)
                 {
                     if (pSettings.LastUsed.Year > 1)
@@ -269,12 +302,15 @@ namespace MeGUI
             }
 
             private string savePath;
+            [XmlIgnore]
             public string SavePath
             {
                 get { return savePath; }
                 set { savePath = value; }
             }
+
             private string saveFolder;
+            [XmlIgnore]
             public string SaveFolder
             {
                 get { return saveFolder; }
@@ -288,18 +324,16 @@ namespace MeGUI
                 {
                     if (currentVersion == null)
                         currentVersion = new Version();
-                    else if (this.isAvailable() == false)
-                        currentVersion = new Version();
                     return currentVersion;
                 }
                 set { currentVersion = value; }
             }
 
-            private Versions availableVersions;
-            public Versions AvailableVersions
+            private Version availableVersion;
+            public Version AvailableVersion
             {
-                get { return availableVersions; }
-                set { availableVersions = value; }
+                get { return availableVersion; }
+                set { availableVersion = value; }
             }
 
             private bool allowUpdate;
@@ -313,8 +347,6 @@ namespace MeGUI
                     allowUpdate = value;
                 }
             }
-
-            public bool Reinstall;
 
             private string name;
             public string Name
@@ -342,13 +374,6 @@ namespace MeGUI
             {
                 get { return requiredNET; }
                 set { requiredNET = value; }
-            }
-
-            internal string treeViewID;
-            public string TreeViewID
-            {
-                get { return this.treeViewID; }
-                set { this.treeViewID = value; }
             }
 
             private bool needsRestartedCopying = false;
@@ -417,9 +442,8 @@ namespace MeGUI
             {
             }
 
-            public ProfilesFile(string treeviewid, string name, MainForm mainForm)
+            public ProfilesFile(string name, MainForm mainForm)
             {
-                this.treeViewID = treeviewid;
                 this.Name = name;
                 this.AllowUpdate = true;
                 this.mainForm = mainForm;
@@ -469,15 +493,16 @@ namespace MeGUI
                 base.init();
                 this.SaveFolder = MainForm.Instance.Settings.AvisynthPluginsPath;
             }
+
             private AviSynthFile()
             {
                 this.SaveFolder = MainForm.Instance.Settings.AvisynthPluginsPath;
             }
-            public AviSynthFile(string treeviewid, string name)
+
+            public AviSynthFile(string name)
             {
                 this.Name = name;
                 this.AllowUpdate = true;
-                this.treeViewID = treeviewid;
                 this.SaveFolder = MainForm.Instance.Settings.AvisynthPluginsPath;
             }
 
@@ -492,11 +517,10 @@ namespace MeGUI
             {
             }
 
-            public MeGUIFile(string treeViewID, string name)
+            public MeGUIFile(string name)
             {
                 this.Name = name;
                 this.AllowUpdate = true;
-                this.treeViewID = treeViewID;
                 this.SaveFolder = Application.StartupPath;
             }
 
@@ -505,11 +529,7 @@ namespace MeGUI
                 get
                 {
                     if (Name == "core")
-                    {
                         base.CurrentVersion.FileVersion = new System.Version(Application.ProductVersion).Build.ToString();
-                        //FileInfo fi = new FileInfo(System.Windows.Forms.Application.ExecutablePath);
-                        //base.CurrentVersion.UploadDate = fi.LastWriteTimeUtc.Date.AddMinutes(Math.Floor(fi.LastWriteTimeUtc.TimeOfDay.TotalMinutes));
-                    }
                     return base.CurrentVersion;
                 }
                 set
@@ -538,85 +558,17 @@ namespace MeGUI
 
             public override void init()
             {
-                if (MeGUIFilePath == null)
+                ProgramSettings pSettings = UpdateCacher.GetPackage(this.Name);
+                if (pSettings == null || String.IsNullOrEmpty(pSettings.Path))
                     throw new FileNotRegisteredYetException(Name);
-                SavePath = MeGUIFilePath;
+                SavePath = pSettings.Path;
             }
             
-            public ProgramFile(string treeViewID, string name) // Constructor
+            public ProgramFile(string name) // Constructor
             {
                 this.Name = name;
                 this.AllowUpdate = true;
-                this.treeViewID = treeViewID;
                 init();
-            }
-
-            private string MeGUIFilePath
-            {
-                get
-                {
-                    switch (this.Name)
-                    {
-                        case ("dgindex"):
-                            return meGUISettings.DGIndex.Path;
-                        case ("mkvmerge"):
-                            return meGUISettings.MkvMerge.Path;
-                        case ("lame"):
-                            return meGUISettings.Lame.Path;
-                        case ("lsmash"):
-                            return meGUISettings.LSMASH.Path;
-                        case ("mp4box"):
-                            return meGUISettings.Mp4Box.Path;
-                        case ("pgcdemux"):
-                            return meGUISettings.PgcDemux.Path;
-                        case ("neroaacenc"):
-                            return meGUISettings.NeroAacEnc.Path;
-                        case ("avimux_gui"):
-                            return meGUISettings.AviMuxGui.Path;
-                        case ("avs"):
-                            return meGUISettings.AviSynthPath;
-                        case ("x265"):
-                            return meGUISettings.X265.Path;
-                        case ("x264"):
-                            return meGUISettings.X264.Path;
-                        case ("x264_10b"):
-                            return meGUISettings.X264_10B.Path;
-                        case ("xvid_encraw"):
-                            return meGUISettings.XviD.Path;
-                        case ("ffmpeg"):
-                            return meGUISettings.FFmpeg.Path;
-                        case ("oggenc2"):
-                            return meGUISettings.OggEnc.Path;
-                        case ("yadif"):
-                            return meGUISettings.Yadif.Path;
-                        case ("bassaudio"):
-                            return meGUISettings.BassAudio.Path;
-                        case ("vobsub"):
-                            return meGUISettings.VobSub.Path;
-                        case ("besplit"):
-                            return meGUISettings.BeSplit.Path;
-                        case ("aften"):
-                            return meGUISettings.Aften.Path;
-                        case ("flac"):
-                            return meGUISettings.Flac.Path;
-                        case ("eac3to"):
-                            return meGUISettings.Eac3to.Path;
-                        case ("dgavcindex"):
-                            return meGUISettings.DGAVCIndex.Path;
-                        case ("dgindexnv"):
-                            return meGUISettings.DGIndexNV.Path;
-                        case ("ffms"):
-                            return meGUISettings.FFMS.Path;
-                        case ("tsmuxer"):
-                            return meGUISettings.TSMuxer.Path;
-                        case ("qaac"):
-                            return meGUISettings.QAAC.Path;
-                        case ("opus"):
-                            return meGUISettings.Opus.Path;                                 
-                        default:
-                            return null;
-                    }
-                }
             }
 
             public override ErrorState Upgrade()
@@ -696,30 +648,6 @@ namespace MeGUI
 
             #endregion
         }
-        public class Versions : CollectionBase
-        {
-            public Versions()
-            {
-                this.Capacity = 2;
-            }
-            public Versions(int capacity)
-            {
-                this.Capacity = capacity;
-            }
-            public Version this[int index]
-            {
-                get { return (Version)this.List[index]; }
-                set { this.List[index] = value; }
-            }
-            public void Add(Version item)
-            {
-                this.InnerList.Add(item);
-            }
-            public void Remove(Version item)
-            {
-                this.InnerList.Remove(item);
-            }
-        }
         #endregion
         #region Delegates and delegate methods
         delegate void BeginParseUpgradeXml(XmlNode node, XmlNode groupNode, string path);
@@ -746,6 +674,7 @@ namespace MeGUI
                 this.progressBar.Value = (int)currentValue;
             }
         }
+
         public void AddTextToLog(string text, ImageType oLogType)
         {
             oLog.LogEvent(text, oLogType);
@@ -793,33 +722,7 @@ namespace MeGUI
             }
         }
         #endregion
-        #region Enums
-        public enum ErrorState
-        {
-            [EnumTitle("File cannot be found on the server")]
-            FileNotOnServer,
-            [EnumTitle("Update server is not available")]
-            ServerNotAvailable,
-            [EnumTitle("File cannot be downloaded")]
-            CouldNotDownloadFile,
-            [EnumTitle("Backup file cannot be removed")]
-            CouldNotRemoveBackup,
-            [EnumTitle("File cannot be saved")]
-            CouldNotSaveNewFile,
-            [EnumTitle("File cannot be renamed")]
-            CouldNotRenameExistingFile,
-            [EnumTitle("File cannot be installed")]
-            CouldNotInstall,
-            [EnumTitle("Update successful")]
-            Successful,
-            [EnumTitle("File cannot be extracted")]
-            CouldNotUnzip,
-            [EnumTitle("Update XML is invalid")]
-            InvalidXML,
-            [EnumTitle("The requirements for this file are not met")]
-            RequirementNotMet
-        }
-        #endregion
+
         #region con/de struction
         private void UpdateWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -943,7 +846,7 @@ namespace MeGUI
 
             foreach (ProgramSettings pSettings in MainForm.Instance.ProgramSettings)
             {
-                if (!pSettings.Enabled)
+                if (!pSettings.UpdateAllowed())
                     continue;
                 arrPath.AddRange(pSettings.Files);
             }
@@ -1054,12 +957,7 @@ namespace MeGUI
 
                 upgradeData = new iUpgradeableCollection();
                 foreach (iUpgradeable file in upgradeDataTemp)
-                {
-                    bool bUpdateStatus = false;
-                    if (GetUpdateStatus(file, ref bUpdateStatus))
-                        file.AllowUpdate = bUpdateStatus;
                     this.upgradeData.Add(file);
-                }
 
                 foreach (iUpgradeable file in upgradeData)
                 {
@@ -1069,15 +967,13 @@ namespace MeGUI
                     }
                     catch (FileNotRegisteredYetException) { }
                 }
-
-                return; //settings loaded correctly
             }
             catch(Exception)
             {
-                MessageBox.Show("Error: Could not load previous settings", "Error", MessageBoxButtons.OK);
-                return; // error loading settings
+                MessageBox.Show("Error: Could not load previous settings", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public void SaveSettings()
         {
             try
@@ -1086,12 +982,10 @@ namespace MeGUI
                 StreamWriter output = new StreamWriter(Path.Combine(Application.StartupPath, "AutoUpdate.xml"), false);
                 serializer.Serialize(output, this.upgradeData);
                 output.Dispose();
-                return; //settings saved
             }
             catch (Exception)
             {
                 MessageBox.Show("Error: Could not save settings", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
         }
         #endregion
@@ -1226,11 +1120,11 @@ namespace MeGUI
 
             int iUpdatesCount = NumUpdatableFiles();
             if (iUpdatesCount > 1)
-                AddTextToLog(string.Format("There are {0} files which can be updated.", iUpdatesCount), ImageType.Information);
+                AddTextToLog(string.Format("There are {0} packages which can be updated.", iUpdatesCount), ImageType.Information);
             else if (iUpdatesCount == 1)
-                AddTextToLog("There is 1 file which can be updated.", ImageType.Information);
+                AddTextToLog("There is 1 package which can be updated.", ImageType.Information);
             else
-                AddTextToLog("All files are up to date", ImageType.Information);
+                AddTextToLog("All packages are up to date", ImageType.Information);
 
             bool bChecked = chkShowAllFiles.Checked;
             if (chkShowAllFiles.InvokeRequired)
@@ -1296,7 +1190,7 @@ namespace MeGUI
             {
                 if (childnode.Attributes["type"].Value.Equals("file"))
                 {
-                    ParseFileData(childnode, groupNode, path);
+                    ParseFileData(childnode, groupNode);
                     continue;
                 }
     
@@ -1309,28 +1203,12 @@ namespace MeGUI
         }
 
         /// <summary>
-        /// Checks if the file can or must be updated
-        /// true if found
-        /// </summary>
-        private bool GetUpdateStatus(iUpgradeable file, ref bool bUpdateAllowed)
-        {
-            ProgramSettings pSettings = UpdateCacher.GetPackage(file.Name);
-            if (pSettings != null)
-            {
-                bUpdateAllowed = pSettings.UpdateAllowed();
-                return true;
-            }
-            else
-                return false;
-        }
-
-        /// <summary>
         /// Once a "file" is found in the upgrade XML file, the files node is passed
         /// to this function which generates the correct iUpgradeable filetype (i.e. MeGUIFile
         /// or AviSynthFile) and then fills in all the relevant data.
         /// </summary>
         /// <param name="node"></param>
-        private void ParseFileData(XmlNode node, XmlNode groupNode, string treePath)
+        private void ParseFileData(XmlNode node, XmlNode groupNode)
         {
             iUpgradeable file = null;
             Version availableFile = null;
@@ -1341,13 +1219,13 @@ namespace MeGUI
                 try
                 {
                     if (groupNode.Name.Equals("MeGUI"))
-                        file = new MeGUIFile(treePath, node.Name);
+                        file = new MeGUIFile(node.Name);
                     else if (groupNode.Name.Equals("ProgramFile"))
-                        file = new ProgramFile(treePath, node.Name);
+                        file = new ProgramFile(node.Name);
                     else if (groupNode.Name.Equals("AviSynthFile"))
-                        file = new AviSynthFile(treePath, node.Name);
+                        file = new AviSynthFile(node.Name);
                     else if (groupNode.Name.Equals("ProfilesFile"))
-                        file = new ProfilesFile(treePath, node.Name, mainForm);
+                        file = new ProfilesFile(node.Name, mainForm);
                     else
                         return;
                 }
@@ -1358,9 +1236,8 @@ namespace MeGUI
             }
             else
             {
-                file.AvailableVersions = new Versions();
+                file.AvailableVersion = new Version();
                 file.DownloadChecked = false;
-                file.treeViewID = treePath;
                 fileAlreadyAdded = true;
                 if (file is ProfilesFile)
                     (file as ProfilesFile).MainForm = mainForm;
@@ -1422,15 +1299,12 @@ namespace MeGUI
                     }
                 }
 
-                file.AvailableVersions.Add(availableFile);
+                file.AvailableVersion = availableFile;
             }
 
-            if (file.GetLatestVersion().CompareTo(file.CurrentVersion) != 0 && file.AllowUpdate && file.HasAvailableVersions)
+            if (!file.isAvailable() || (file.AvailableVersion.CompareTo(file.CurrentVersion) != 0 
+                && file.AllowUpdate && file.HasAvailableVersion && (pSettings == null || pSettings.Enabled)))
                 file.DownloadChecked = true;
-
-            bool bUpdateStatus = false;
-            if (GetUpdateStatus(file, ref bUpdateStatus))
-                file.AllowUpdate = bUpdateStatus;
 
             if (!fileAlreadyAdded)
                 upgradeData.Add(file);
@@ -1445,7 +1319,7 @@ namespace MeGUI
             {
                 if (!bShowAllFiles)
                 {
-                    if (file.AllowUpdate && (file.HasAvailableVersions || file.DownloadChecked))
+                    if (file.AllowUpdate && (file.HasAvailableVersion || file.DownloadChecked))
                         AddToListview(file.CreateListViewItem());
                 }
                 else
@@ -1464,40 +1338,103 @@ namespace MeGUI
                     item.BackColor = Color.FromArgb(255, 225, 235, 255);
             }
         }
+
         private void listViewDetails_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             ListViewItem itm = this.listViewDetails.Items[e.Index];
             // Do not allow checking if there are no updates or it is set to ignore.
-            if (itm.SubItems["Status"].Text.Equals("No Update Available")
-                || itm.SubItems["Status"].Text.Equals("Update Ignored"))
+            if (itm.SubItems["Status"].Text.Equals(EnumProxy.Create(PackageStatus.NoUpdateAvailable).ToString())
+                || itm.SubItems["Status"].Text.Equals(EnumProxy.Create(PackageStatus.UpdateIgnored).ToString())
+                || itm.SubItems["Status"].Text.Equals(EnumProxy.Create(PackageStatus.Disabled).ToString()))
                 e.NewValue = CheckState.Unchecked;
 
             iUpgradeable file = upgradeData.FindByName(itm.Name);
             if (e.NewValue == CheckState.Checked)
-                file.DownloadChecked = true;
+                file.DownloadChecked = file.AllowUpdate = true;
             else
                 file.DownloadChecked = false;
 
-            if (e.NewValue == CheckState.Unchecked && itm.SubItems["Status"].Text == "Reinstalling")
-                itm.SubItems["Status"].Text = file.AllowUpdate ? (file.HasAvailableVersions ? "Update Available" : "No Update Available") : "Update Ignored";
+            if (e.NewValue == CheckState.Unchecked
+                && itm.SubItems["Status"].Text.Equals(EnumProxy.Create(PackageStatus.Reinstall).ToString()))
+            {
+                ProgramSettings pSettings = UpdateCacher.GetPackage(itm.Name);
+                if (pSettings != null && !pSettings.UpdateAllowed())
+                    itm.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.Disabled).ToString();
+                else if (!file.isAvailable())
+                    file.DownloadChecked = file.AllowUpdate = true;
+                else if (!file.AllowUpdate && file.HasAvailableVersion)
+                    itm.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.UpdateIgnored).ToString();
+                else if (file.HasAvailableVersion)
+                    itm.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.UpdateAvailable).ToString();
+                else
+                    itm.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.NoUpdateAvailable).ToString();
+            }
         }
 
         private void listViewDetails_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            if (e.Button != MouseButtons.Right || listViewDetails.SelectedItems.Count != 1)
+                return;
+
+            // get the program settings
+            ProgramSettings pSettings = UpdateCacher.GetPackage(listViewDetails.SelectedItems[0].Name);
+            iUpgradeable file = upgradeData.FindByName(listViewDetails.SelectedItems[0].Name);
+
+            // set the enable package value
+            ToolStripMenuItem ts = (ToolStripMenuItem)statusToolStrip.Items[0];
+            if (pSettings == null)
             {
-                if (listViewDetails.SelectedItems.Count > 0)
-                {
-                    ToolStripMenuItem ts = (ToolStripMenuItem)statusToolStrip.Items[0];
-                    bool allowupdate = false;
-                    foreach (ListViewItem item in listViewDetails.SelectedItems)
-                    {
-                        allowupdate |= upgradeData.FindByName(item.Name).AllowUpdate;
-                    }
-                    ts.Checked = !allowupdate;
-                    statusToolStrip.Show(Cursor.Position);
-                }
+                ts.Checked = true;
+                ts.Enabled = false;
             }
+            else
+            {
+                ts.Checked = pSettings.UpdateAllowed();
+                ts.Enabled = true;
+            }
+
+            // set the ignore update data value
+            ts = (ToolStripMenuItem)statusToolStrip.Items[1];
+            if (pSettings != null && !pSettings.UpdateAllowed())
+            {
+                ts.Checked = true;
+                ts.Enabled = false;
+            }
+            else if (!file.isAvailable())
+            {
+                ts.Checked = false;
+                ts.Enabled = false;
+            }
+            else
+            {
+                ts.Checked = !file.AllowUpdate;
+                ts.Enabled = true;
+            }
+
+            // set the force reinstall data value
+            ts = (ToolStripMenuItem)statusToolStrip.Items[2];
+            if (pSettings != null && !pSettings.UpdateAllowed())
+            {
+                ts.Checked = false;
+                ts.Enabled = false;
+            }
+            else if (!file.isAvailable())
+            {
+                ts.Checked = true;
+                ts.Enabled = false;
+            }
+            else
+            {
+                ts.Checked = file.DownloadChecked;
+                ts.Enabled = true;
+            }
+
+            if (file.HasAvailableVersion)
+                ts.Text = "Install";
+            else
+                ts.Text = "Force reinstall";
+
+            statusToolStrip.Show(Cursor.Position);
         }
 
         private void setIgnoreValue_Click(object sender, EventArgs e)
@@ -1505,37 +1442,114 @@ namespace MeGUI
             ToolStripMenuItem ts = (ToolStripMenuItem)sender;
             foreach (ListViewItem item in listViewDetails.SelectedItems)
             {
+                ProgramSettings pSettings = UpdateCacher.GetPackage(item.Name);
                 iUpgradeable file = upgradeData.FindByName(item.Name);
-
+                Version latest = file.AvailableVersion;
                 file.AllowUpdate = !(ts.Checked);
-                Version latest = file.GetLatestVersion();
 
-                if (file.AllowUpdate)
+                if (pSettings != null && !pSettings.UpdateAllowed())
                 {
-                    if (latest == null && file.CurrentVersion == null)
+                    item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.Disabled).ToString();
+                    item.Checked = false;
+                }
+                else if (!file.isAvailable())
+                {
+                    item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.Reinstall).ToString();
+                    item.Checked = true;
+                    file.AllowUpdate = true;
+                }
+                else if (latest != null && file.CurrentVersion == null || latest.CompareTo(file.CurrentVersion) != 0)
+                {
+                    if (!file.AllowUpdate)
                     {
-                        item.SubItems["Status"].Text = "No Update Available";
+                        item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.UpdateIgnored).ToString();
                         item.Checked = false;
                     }
-                    else if (latest != null && file.CurrentVersion == null)
-                    {
-                        item.SubItems["Status"].Text = "Update Available";
-                        item.Checked = true;
-                    }
-                    else if (latest.CompareTo(file.CurrentVersion) != 0)
-                    {
-                        item.SubItems["Status"].Text = "Update Available";
-                        item.Checked = true;
-                    }
                     else
-                        item.SubItems["Status"].Text = "No Update Available";
+                    {
+                        item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.UpdateAvailable).ToString();
+                        item.Checked = true;
+                    }
                 }
                 else
                 {
+                    item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.NoUpdateAvailable).ToString();
                     item.Checked = false;
-                    item.SubItems["Status"].Text = "Update Ignored";
                 }
-                UpdateCacher.CheckPackage(file.Name, file.AllowUpdate, false);
+            }
+        }
+
+        private void reinstallToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ts = (ToolStripMenuItem)sender;
+            foreach (ListViewItem item in listViewDetails.SelectedItems)
+            {
+                ProgramSettings pSettings = UpdateCacher.GetPackage(item.Name);
+                iUpgradeable file = upgradeData.FindByName(item.Name);
+                Version latest = file.AvailableVersion;
+
+                if (pSettings != null && !pSettings.UpdateAllowed())
+                {
+                    item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.Disabled).ToString();
+                    item.Checked = false;
+                }
+                else if (ts.Checked || (!file.isAvailable()))
+                {
+                    item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.Reinstall).ToString();
+                    item.Checked = true;
+                }
+                else if (latest != null && file.CurrentVersion == null || latest.CompareTo(file.CurrentVersion) != 0)
+                {
+                    if (!file.AllowUpdate)
+                    {
+                        item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.UpdateIgnored).ToString();
+                        item.Checked = false;
+                    }
+                    else
+                    {
+                        item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.UpdateAvailable).ToString();
+                        item.Checked = false;
+                    }
+                }
+                else
+                {
+                    item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.NoUpdateAvailable).ToString();
+                    item.Checked = false;
+                }
+            }
+        }
+
+        private void enableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ts = (ToolStripMenuItem)sender;
+            foreach (ListViewItem item in listViewDetails.SelectedItems)
+            {
+                ProgramSettings pSettings = UpdateCacher.GetPackage(item.Name);
+                if (pSettings != null)
+                    UpdateCacher.CheckPackage(item.Name, ts.Checked, false);
+                iUpgradeable file = upgradeData.FindByName(item.Name);
+                Version latest = file.AvailableVersion;
+
+                if (pSettings != null && !pSettings.UpdateAllowed())
+                {
+                    item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.Disabled).ToString();
+                    item.Checked = false;
+                }
+                else if (!file.isAvailable())
+                {
+                    item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.Reinstall).ToString();
+                    item.Checked = true;
+                }
+                else if (latest != null && file.CurrentVersion == null || latest.CompareTo(file.CurrentVersion) != 0)
+                {
+                    item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.UpdateAvailable).ToString();
+                    item.Checked = true;
+                }
+                else
+                {
+                    item.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.NoUpdateAvailable).ToString();
+                    item.Checked = false;
+                }             
             }
         }
 
@@ -1582,7 +1596,7 @@ namespace MeGUI
 
                     AddTextToLog(string.Format("Updating {0}. File {1}/{2}.", file.Name, currentFile, updateableFileCount), ImageType.Information);
 
-                    if (!String.IsNullOrEmpty(file.GetLatestVersion().Web))
+                    if (!String.IsNullOrEmpty(file.AvailableVersion.Web))
                     {
                         string strText;
 
@@ -1597,7 +1611,7 @@ namespace MeGUI
                         if (MessageBox.Show(strText, "Component not found",
                                      MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         {
-                            System.Diagnostics.Process.Start(file.GetLatestVersion().Web);
+                            System.Diagnostics.Process.Start(file.AvailableVersion.Web);
                             succeededFiles.Add(file);
                         }
                         else
@@ -1606,7 +1620,7 @@ namespace MeGUI
                     else
                     {
                         Stream str;
-                        result = UpdateCacher.DownloadFile(file.GetLatestVersion().Url, new Uri(ServerAddress), out str, wc_DownloadProgressChanged, this);
+                        result = UpdateCacher.DownloadFile(file.AvailableVersion.Url, new Uri(ServerAddress), out str, wc_DownloadProgressChanged, this);
                         if (result != ErrorState.Successful)
                         {
                             failedFiles.Add(file);
@@ -1638,6 +1652,15 @@ namespace MeGUI
                                     file.DownloadChecked = false;
                                     if (file.NeedsRestartedCopying)
                                         needsRestart = true;
+
+                                    if (file.Name.Equals("ffmpeg") || file.Name.StartsWith("x26")
+                                        || file.Name.Equals("xvid_encraw"))
+                                    {
+                                        if (MainForm.Instance.Settings.PortableAviSynth)
+                                            FileUtil.PortableAviSynthActions(false);
+                                        if (!MainForm.Instance.Settings.AviSynthPlus)
+                                            FileUtil.LSMASHFileActions(false);
+                                    }
                                 }
                             }
                             finally { str.Close(); }
@@ -1676,8 +1699,8 @@ namespace MeGUI
             List<string> files = new List<string>();
             foreach (iUpgradeable u in upgradeData)
             {
-                if (!String.IsNullOrEmpty(u.GetLatestVersion().Url))
-                    files.Add(u.GetLatestVersion().Url);
+                if (!String.IsNullOrEmpty(u.AvailableVersion.Url))
+                    files.Add(u.AvailableVersion.Url);
                 if (!files.Contains(u.CurrentVersion.Url) && !String.IsNullOrEmpty(u.CurrentVersion.Url))
                     files.Add(u.CurrentVersion.Url);
             }
@@ -1745,7 +1768,7 @@ namespace MeGUI
             ErrorState state = file.Install(fileData);
             if (state == ErrorState.Successful)
             {
-                file.CurrentVersion = file.GetLatestVersion();
+                file.CurrentVersion = file.AvailableVersion;
                 return ErrorState.Successful;
             }
 
@@ -1788,7 +1811,7 @@ namespace MeGUI
             if (file.SavePath != null)
                 filename = file.SavePath;
             else
-                filename = filepath + @"\" + Path.GetFileName(file.GetLatestVersion().Url);
+                filename = filepath + @"\" + Path.GetFileName(file.AvailableVersion.Url);
 
             try
             {
@@ -1801,15 +1824,15 @@ namespace MeGUI
                 return ErrorState.CouldNotSaveNewFile;
             }
 
-            if (file.GetLatestVersion().Url.EndsWith(".zip"))
+            if (file.AvailableVersion.Url.EndsWith(".zip"))
             {
                 try
                 {
-                    ZipFile zipFile = new ZipFile(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, Path.GetFileName(file.GetLatestVersion().Url)));
+                    ZipFile zipFile = new ZipFile(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, Path.GetFileName(file.AvailableVersion.Url)));
                     if (zipFile.TestArchive(true) == false)
                     {
                         AddTextToLog("Could not unzip " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
-                        UpdateCacher.FlushFile(file.GetLatestVersion().Url, this);
+                        UpdateCacher.FlushFile(file.AvailableVersion.Url, this);
                         return ErrorState.CouldNotUnzip;
                     }
 
@@ -1845,24 +1868,24 @@ namespace MeGUI
                             File.SetLastWriteTime(filename, zipentry.DateTime);
                             if (file.NeedsRestartedCopying)
                             {
-                                mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
-                                file.CurrentVersion.FileVersion = file.GetLatestVersion().FileVersion;
+                                mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.AvailableVersion.UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
+                                file.CurrentVersion.FileVersion = file.AvailableVersion.FileVersion;
                                 needsRestart = true;
                             }
                         }
                         if (!file.NeedsRestartedCopying)
-                            file.CurrentVersion = file.GetLatestVersion(); // the current installed version
+                            file.CurrentVersion = file.AvailableVersion; // the current installed version
                         // is now the latest available version
                     }
                 }
                 catch
                 {
                     AddTextToLog("Could not unzip " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
-                    UpdateCacher.FlushFile(file.GetLatestVersion().Url, this);
+                    UpdateCacher.FlushFile(file.AvailableVersion.Url, this);
                     return ErrorState.CouldNotUnzip;
                 }
             }
-            else if (file.GetLatestVersion().Url.EndsWith(".7z"))
+            else if (file.AvailableVersion.Url.EndsWith(".7z"))
             {
                 try
                 {
@@ -1870,7 +1893,7 @@ namespace MeGUI
                     if (oArchiveCheck.Check() == false)
                     {
                         AddTextToLog("Could not extract " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
-                        UpdateCacher.FlushFile(file.GetLatestVersion().Url, this);
+                        UpdateCacher.FlushFile(file.AvailableVersion.Url, this);
                         return ErrorState.CouldNotUnzip;
                     }
 
@@ -1894,7 +1917,7 @@ namespace MeGUI
                             }
                             if (file.NeedsRestartedCopying)
                             {   
-                                mainForm.AddFileToReplace(file.Name, e.FileName + ".tempcopy", e.FileName, file.GetLatestVersion().UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
+                                mainForm.AddFileToReplace(file.Name, e.FileName + ".tempcopy", e.FileName, file.AvailableVersion.UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
                                 needsRestart = true;
                                 e.FileName += ".tempcopy";
                                 bNeedRestartForCopying = true;
@@ -1902,15 +1925,15 @@ namespace MeGUI
                         };
                         oArchive.ExtractArchive(filepath);
                         if (bNeedRestartForCopying == false)
-                            file.CurrentVersion = file.GetLatestVersion();  // the current installed version is now the latest available version
+                            file.CurrentVersion = file.AvailableVersion;  // the current installed version is now the latest available version
                         else
-                            file.CurrentVersion.FileVersion = file.GetLatestVersion().FileVersion; // after the restart the new files will be active
+                            file.CurrentVersion.FileVersion = file.AvailableVersion.FileVersion; // after the restart the new files will be active
                     }
                 }
                 catch
                 {
                     AddTextToLog("Could not unzip " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
-                    UpdateCacher.FlushFile(file.GetLatestVersion().Url, this);
+                    UpdateCacher.FlushFile(file.AvailableVersion.Url, this);
                     return ErrorState.CouldNotUnzip;
                 }
             }
@@ -1932,16 +1955,14 @@ namespace MeGUI
                 {
                     using (Stream output = File.OpenWrite(filename))
                     {
-                        
-                        //filename, data);
                         if (file.NeedsRestartedCopying)
                         {
-                            mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
-                            file.CurrentVersion.FileVersion = file.GetLatestVersion().FileVersion;
+                            mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.AvailableVersion.UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
+                            file.CurrentVersion.FileVersion = file.AvailableVersion.FileVersion;
                             needsRestart = true;
                         }
                         else
-                            file.CurrentVersion = file.GetLatestVersion(); // current installed version
+                            file.CurrentVersion = file.AvailableVersion; // current installed version
                         // is now the latest available version
                     }
                 }
@@ -2002,11 +2023,10 @@ namespace MeGUI
             {
                 if (upgradeable.Name.Equals("neroaacenc"))
                 {
-                    if (upgradeable.CurrentVersion.FileVersion != null && upgradeable.CurrentVersion.FileVersion.Equals(upgradeable.GetLatestVersion().FileVersion))
-                        upgradeable.GetLatestVersion().UploadDate = upgradeable.CurrentVersion.UploadDate;
+                    if (upgradeable.CurrentVersion.FileVersion != null && upgradeable.CurrentVersion.FileVersion.Equals(upgradeable.AvailableVersion.FileVersion))
+                        upgradeable.AvailableVersion.UploadDate = upgradeable.CurrentVersion.UploadDate;
                 }
-                if (upgradeable.AllowUpdate && 
-                    upgradeable.GetLatestVersion().CompareTo(upgradeable.CurrentVersion) != 0)
+                if (upgradeable.DownloadChecked)
                     numUpdateableFiles++;
             }
             return numUpdateableFiles;
@@ -2022,29 +2042,6 @@ namespace MeGUI
             bool bReady = DateTime.TryParse(strDate, new System.Globalization.CultureInfo("en-us"), System.Globalization.DateTimeStyles.None, out oDate);
             if (bReady)
                 up.CurrentVersion.UploadDate = oDate;
-        }
-
-        private void checkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem ts = (ToolStripMenuItem)sender;
-            foreach (ListViewItem item in listViewDetails.SelectedItems)
-                item.Checked = true;
-        }
-
-        private void uncheckToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem ts = (ToolStripMenuItem)sender;
-            foreach (ListViewItem item in listViewDetails.SelectedItems)
-                item.Checked = false;
-        }
-
-        private void reinstallToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in listViewDetails.SelectedItems)
-            {
-                item.SubItems["Status"].Text = "Reinstalling";
-                item.Checked = true;
-            }
         }
 
         private void btnAbort_Click(object sender, EventArgs e)

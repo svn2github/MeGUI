@@ -480,6 +480,8 @@ namespace MeGUI.core.util
 
             if (MainForm.Instance.Settings.AviSynthPlus)
                 LSMASHFileActions(true);
+            else
+                LSMASHFileActions(false);
         }
 
         /// <summary>
