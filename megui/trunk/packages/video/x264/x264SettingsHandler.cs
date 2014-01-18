@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -121,69 +121,12 @@ namespace MeGUI.packages.video.x264
                 }
                 else if (hres == 720 && vres == 576)
                 {
-                    Double dfps = Double.Parse(fps_n.ToString()) / fps_d;
-                    if (dfps == 25)
-                    {
-                        if (_xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
-                            _xs.FakeInterlaced = _xs.PicStruct = true;
-                        else
-                            _xs.FakeInterlaced = _xs.PicStruct = false;
-
-                        if (_xs.SampleAR != 5 && _xs.SampleAR != 6)
-                        {
-                            if (!d.HasValue)
-                            {
-                                _xs.SampleAR = 5;
-                                _log.LogEvent("assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ". for the selected device", ImageType.Warning);
-                            }
-                            else
-                            {
-                                Sar s = d.Value.ToSar(hres, vres);
-                                _log.LogEvent("detected --sar "+ s.X + ":" + s.Y, ImageType.Information);
-                                Double dDiff16 = 16.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
-                                Double dDiff4 = 12.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
-                                if (dDiff16 <= 0)
-                                {
-                                    _xs.SampleAR = 6;
-                                    _log.LogEvent("assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
-                                }
-                                else if (dDiff4 >= 0)
-                                {
-                                    _xs.SampleAR = 5;
-                                    _log.LogEvent("assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
-                                }
-                                else if (Math.Min(dDiff16, -dDiff4) == dDiff16)
-                                {
-                                    _xs.SampleAR = 6;
-                                    _log.LogEvent("assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
-                                }
-                                else
-                                {
-                                    _xs.SampleAR = 5;
-                                    _log.LogEvent("assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
-                                }
-                            }
-                        }
-                    }
-                    else
-                        _log.LogEvent("the selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported is 25/1.", ImageType.Warning);
-                    _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 3;
-                    _xs.X264PullDown = 0;
-                }
-                else if (hres == 720 && vres == 480)
-                {
-                    if (_xs.SampleAR != 8 && _xs.SampleAR != 4)
-                    {
-                        _xs.SampleAR = 8;
-                        _log.LogEvent("assume --sar 40:33 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
-                    }
-
-                    if (_xs.SampleAR != 8 && _xs.SampleAR != 4)
+                    if (_xs.SampleAR != 5 && _xs.SampleAR != 6)
                     {
                         if (!d.HasValue)
                         {
-                            _xs.SampleAR = 4;
-                            _log.LogEvent("assume --sar 10:11 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
+                            _xs.SampleAR = 6;
+                            _log.LogEvent("assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ". for the selected device", ImageType.Warning);
                         }
                         else
                         {
@@ -191,6 +134,58 @@ namespace MeGUI.packages.video.x264
                             _log.LogEvent("detected --sar " + s.X + ":" + s.Y, ImageType.Information);
                             Double dDiff16 = 16.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
                             Double dDiff4 = 12.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
+                            if (dDiff16 <= 0)
+                            {
+                                _xs.SampleAR = 6;
+                                _log.LogEvent("assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
+                            }
+                            else if (dDiff4 >= 0)
+                            {
+                                _xs.SampleAR = 5;
+                                _log.LogEvent("assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
+                            }
+                            else if (Math.Min(dDiff16, -dDiff4) == dDiff16)
+                            {
+                                _xs.SampleAR = 6;
+                                _log.LogEvent("assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
+                            }
+                            else
+                            {
+                                _xs.SampleAR = 5;
+                                _log.LogEvent("assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
+                            }
+                        }
+                    }
+
+                    Double dfps = Double.Parse(fps_n.ToString()) / fps_d;
+                    if (dfps == 25)
+                    {
+                        if (_xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
+                            _xs.FakeInterlaced = _xs.PicStruct = true;
+                        else
+                            _xs.FakeInterlaced = _xs.PicStruct = false;
+                    }
+                    else
+                        _log.LogEvent("the selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported is 25/1.", ImageType.Warning);
+
+                    _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 3;
+                    _xs.X264PullDown = 0;
+                }
+                else if (hres == 720 && vres == 480)
+                {
+                    if (_xs.SampleAR != 8 && _xs.SampleAR != 4)
+                    {
+                        if (!d.HasValue)
+                        {
+                            _xs.SampleAR = 8;
+                            _log.LogEvent("assume --sar 40:33 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + " for the selected device.", ImageType.Warning);
+                        }
+                        else
+                        {
+                            Sar s = d.Value.ToSar(hres, vres);
+                            _log.LogEvent("detected --sar " + s.X + ":" + s.Y, ImageType.Information);
+                            Double dDiff16 = 40.0 / 33 - Double.Parse(s.X.ToString()) / s.Y;
+                            Double dDiff4 = 10.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
                             if (dDiff16 <= 0)
                             {
                                 _xs.SampleAR = 8;
@@ -240,6 +235,7 @@ namespace MeGUI.packages.video.x264
                     }
                     else
                         _log.LogEvent("the selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 30000/1001 and 24000/1001.", ImageType.Warning);
+                    
                     _xs.ColorPrim = _xs.ColorMatrix = 4;
                     _xs.Transfer = 7;
                 }

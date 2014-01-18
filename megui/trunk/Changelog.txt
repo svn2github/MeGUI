@@ -1,3 +1,4 @@
+2464 [x264]               fixed --sar detection for 720x480 if using the Blu-ray target device
 2463 [AVS Script Creator] improved anamorphic calculation. if the output DAR is the same as the input DAR 
      +[OneClick]             it will not be rounded within in the "acceptable anamorhphic aspect error" tolerance
 2462 [Update]             improved status handling
