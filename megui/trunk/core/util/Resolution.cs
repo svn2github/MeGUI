@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -355,26 +355,31 @@ namespace MeGUI.core.util
                 resizedVerticalResolution = (decimal)horizontalResolution / inputWidthOnHeight; // Scale vertical resolution appropriately
                 scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / (decimal)mod) * mod);
 
-                int parX = 0;
-                int parY = 0;
-                int iLimit = 101;
-                decimal distance = 999999;
-                if (acceptableAspectErrorPercent == 0)
-                    iLimit = 100001;
-                for (int i = 1; i < iLimit; i++)
+                if (inputDAR.AR != realAspectRatio)
                 {
-                    // We create a fraction with integers, and then convert back to a decimal, and see how big the rounding error is
-                    decimal fractionApproximation = (decimal)Math.Round(realAspectRatio * ((decimal)i)) / (decimal)i;
-                    decimal approximationDifference = Math.Abs(realAspectRatio - fractionApproximation);
-                    if (approximationDifference < distance)
+                    int parX = 0;
+                    int parY = 0;
+                    int iLimit = 101;
+                    decimal distance = 999999;
+                    if (acceptableAspectErrorPercent == 0)
+                        iLimit = 100001;
+                    for (int i = 1; i < iLimit; i++)
                     {
-                        distance = approximationDifference;
-                        parY = i;
-                        parX = (int)Math.Round(realAspectRatio * ((decimal)parY));
+                        // We create a fraction with integers, and then convert back to a decimal, and see how big the rounding error is
+                        decimal fractionApproximation = (decimal)Math.Round(realAspectRatio * ((decimal)i)) / (decimal)i;
+                        decimal approximationDifference = Math.Abs(realAspectRatio - fractionApproximation);
+                        if (approximationDifference < distance)
+                        {
+                            distance = approximationDifference;
+                            parY = i;
+                            parX = (int)Math.Round(realAspectRatio * ((decimal)parY));
+                        }
                     }
+                    Debug.Assert(parX > 0 && parY > 0);
+                    dar = new Dar((ulong)parX, (ulong)parY);
                 }
-                Debug.Assert(parX > 0 && parY > 0);
-                dar = new Dar((ulong)parX, (ulong)parY);
+                else
+                    dar = inputDAR;
             }
             else
             {
