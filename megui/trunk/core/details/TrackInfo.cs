@@ -253,7 +253,7 @@ namespace MeGUI
                     if (!String.IsNullOrEmpty(_language))
                         strFileName += " " + _language;
                     if (_delay != 0)
-                        strFileName += " " + _delay + "ms";
+                        strFileName += " Delay " + _delay + "ms";
                     strFileName += "." + strExtension;
                 }
                 else
