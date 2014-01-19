@@ -1,3 +1,5 @@
+2467 [OneClick]           "Don't encode video" is now used for all containers
+     [OneClick]           improved detection of suitable output containers
 2466 [Update]             automatically download needed and missing packages after confirmation if the package was disabled
 2465 [Queue]              changed default main window size and queue column size
 2464 [x264]               fixed --sar detection for 720x480 if using the Blu-ray target device

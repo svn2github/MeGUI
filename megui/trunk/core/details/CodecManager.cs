@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ namespace MeGUI
         public static readonly VideoCodec AVC   = new VideoCodec("AVC");
         public static readonly VideoCodec HEVC  = new VideoCodec("HEVC");
         public static readonly VideoCodec HFYU  = new VideoCodec("HFYU");
+        public static readonly VideoCodec MPEG1 = new VideoCodec("MPEG1");
         public static readonly VideoCodec MPEG2 = new VideoCodec("MPEG2");
         public static readonly VideoCodec VC1   = new VideoCodec("VC1");
     }
@@ -181,6 +182,7 @@ namespace MeGUI
                 VideoCodecs.Register(VideoCodec.AVC)  &&
                 VideoCodecs.Register(VideoCodec.HEVC) &&
                 VideoCodecs.Register(VideoCodec.HFYU) &&
+                VideoCodecs.Register(VideoCodec.MPEG1) &&
                 VideoCodecs.Register(VideoCodec.MPEG2) &&
                 VideoCodecs.Register(VideoCodec.VC1)))
                 throw new Exception("Failed to register a standard video codec");
@@ -237,9 +239,10 @@ namespace MeGUI
                 this.supportedCodecs = supportedCodecs;
         }
         public static readonly VideoType AVI     = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU });
-        public static readonly VideoType M2TS = new VideoType("M2TS", "M2TS Files", "m2ts", ContainerType.M2TS, new VideoCodec[] { VideoCodec.AVC, VideoCodec.HEVC, VideoCodec.MPEG2, VideoCodec.VC1 });
-        public static readonly VideoType MKV     = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.MPEG2, VideoCodec.VC1 });
-        public static readonly VideoType MP4 = new VideoType("MP4", "MP4 Files", "mp4", ContainerType.MP4, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HEVC, VideoCodec.MPEG2 });
+        public static readonly VideoType M2TS    = new VideoType("M2TS", "M2TS Files", "m2ts", ContainerType.M2TS, new VideoCodec[] { VideoCodec.AVC, VideoCodec.HEVC, VideoCodec.MPEG2, VideoCodec.VC1 });
+        public static readonly VideoType MKV     = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.MPEG1, VideoCodec.MPEG2, VideoCodec.VC1 });
+        public static readonly VideoType MP4     = new VideoType("MP4", "MP4 Files", "mp4", ContainerType.MP4, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HEVC, VideoCodec.MPEG1, VideoCodec.MPEG2 });
+        public static readonly VideoType MPEG1   = new VideoType("MPEG1", "MPEG-1 Files", "m1v", null, VideoCodec.MPEG1);
         public static readonly VideoType MPEG2   = new VideoType("MPEG2", "MPEG-2 Files", "m2v", null, VideoCodec.MPEG2);
         public static readonly VideoType RAWASP  = new VideoType("RAWASP", "RAW MPEG-4 ASP Files", "m4v", null, VideoCodec.ASP);
         public static readonly VideoType RAWAVC  = new VideoType("RAWAVC", "RAW MPEG-4 AVC Files", "264", null, VideoCodec.AVC);

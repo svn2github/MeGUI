@@ -77,11 +77,11 @@ namespace MeGUI
                 return;
             }
 
-            if (!line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("extracting track"))
+            if (!line.ToLowerInvariant().StartsWith("extracting track"))
             {
-                if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("error"))
+                if (line.ToLowerInvariant().StartsWith("error"))
                     oType = ImageType.Error;
-                else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("warning"))
+                else if (line.ToLowerInvariant().StartsWith("warning"))
                     oType = ImageType.Warning;
             }
             base.ProcessLine(line, stream, oType);
@@ -121,7 +121,6 @@ namespace MeGUI
                         if (!bFound)
                             oTrack.MMGTrackID = oFile.SubtitleInfo.Tracks[oTrack.TrackIndex].MMGTrackID;
                     }
-
                 }
 
                 // Input File
@@ -131,8 +130,8 @@ namespace MeGUI
                 System.Collections.ArrayList trackID = new System.Collections.ArrayList();
                 foreach (TrackInfo oTrack in job.MkvTracks)
                 {
-                    // Extract only audio/subtitle tracks
-                    if (oTrack.TrackType != TrackType.Audio && oTrack.TrackType != TrackType.Subtitle)
+                    // Extract only audio/subtitle/video tracks
+                    if (oTrack.TrackType == TrackType.Unknown)
                         continue;
 
                     // extract every track only once

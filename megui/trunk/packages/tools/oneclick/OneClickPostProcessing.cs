@@ -168,9 +168,9 @@ namespace MeGUI
                     {
                         if (oAudioTrack.AudioTrackInfo.ExtractMKVTrack)
                         {
-                            if (job.PostprocessingProperties.ApplyDelayCorrection && File.Exists(job.PostprocessingProperties.VideoFileToMux))
+                            if (job.PostprocessingProperties.ApplyDelayCorrection && File.Exists(job.PostprocessingProperties.IntermediateMKVFile))
                             {
-                                MediaInfoFile oFile = new MediaInfoFile(job.PostprocessingProperties.VideoFileToMux, ref _log);
+                                MediaInfoFile oFile = new MediaInfoFile(job.PostprocessingProperties.IntermediateMKVFile, ref _log);
                                 bool bFound = false;
                                 foreach (AudioTrackInfo oAudioInfo in oFile.AudioInfo.Tracks)
                                 {
@@ -252,7 +252,7 @@ namespace MeGUI
                             else
                                 job.PostprocessingProperties.ChapterFile = strTempFile;
                         }
-                        else if (Path.GetExtension(job.PostprocessingProperties.VideoInput).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".mkv"))
+                        else if (Path.GetExtension(job.PostprocessingProperties.VideoInput).ToLowerInvariant().Equals(".mkv"))
                         {
                             MediaInfoFile oInfo = new MediaInfoFile(job.PostprocessingProperties.VideoInput, ref _log);
                             if (oInfo.hasMKVChapters())
@@ -307,9 +307,16 @@ namespace MeGUI
                 else
                 {
                     myVideo.Output = job.PostprocessingProperties.VideoFileToMux;
-                    myVideo.Settings = videoSettings;
-
                     MediaInfoFile oInfo = new MediaInfoFile(myVideo.Output, ref _log);
+                    if (Path.GetExtension(job.PostprocessingProperties.VideoFileToMux).Equals(".unknown") && !String.IsNullOrEmpty(oInfo.ContainerFileTypeString))
+                    {
+                        job.PostprocessingProperties.VideoFileToMux = Path.ChangeExtension(job.PostprocessingProperties.VideoFileToMux, oInfo.ContainerFileTypeString.ToLowerInvariant());
+                        File.Move(myVideo.Output, job.PostprocessingProperties.VideoFileToMux);
+                        myVideo.Output = job.PostprocessingProperties.VideoFileToMux;
+                        job.PostprocessingProperties.FilesToDelete.Add(myVideo.Output);
+                    }
+
+                    myVideo.Settings = videoSettings;
                     videoSettings.VideoName = oInfo.VideoInfo.Track.Name;
                     myVideo.Framerate = (decimal)oInfo.VideoInfo.FPS;
                 }
@@ -326,9 +333,9 @@ namespace MeGUI
                 foreach (string file in job.PostprocessingProperties.FilesToDelete)
                     intermediateFiles.Add(file);
 
-                // subtitle handling
                 if (!string.IsNullOrEmpty(avsFile) || !String.IsNullOrEmpty(job.PostprocessingProperties.VideoFileToMux))
                 {
+                    // subtitle handling
                     List<MuxStream> subtitles = new List<MuxStream>();
                     if (job.PostprocessingProperties.SubtitleTracks.Count > 0)
                     {
@@ -341,7 +348,7 @@ namespace MeGUI
                                 if (File.Exists(trackFile))
                                 {
                                     intermediateFiles.Add(trackFile);
-                                    if (Path.GetExtension(trackFile).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".idx"))
+                                    if (Path.GetExtension(trackFile).ToLowerInvariant().Equals(".idx"))
                                         intermediateFiles.Add(FileUtil.GetPathWithoutExtension(trackFile) + ".sub");
 
                                     subtitles.Add(new MuxStream(trackFile, oTrack.Language, oTrack.Name, oTrack.Delay, oTrack.DefaultStream, oTrack.ForcedStream, null));
@@ -566,7 +573,7 @@ namespace MeGUI
                 if (!String.IsNullOrEmpty(job.PostprocessingProperties.ChapterFile) && useChaptersMarks)
                 {
                     qpfile = job.PostprocessingProperties.ChapterFile;
-                    if ((Path.GetExtension(qpfile).ToLower(System.Globalization.CultureInfo.InvariantCulture)) == ".txt")
+                    if ((Path.GetExtension(qpfile).ToLowerInvariant()) == ".txt")
                         qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, iMediaFile.VideoInfo.FPS);
                     if (File.Exists(qpfile))
                     {

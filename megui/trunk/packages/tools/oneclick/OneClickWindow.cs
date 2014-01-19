@@ -128,18 +128,23 @@ namespace MeGUI
             this.muxProvider = mainForm.MuxProvider;
             acceptableContainerTypes = muxProvider.GetSupportedContainers().ToArray();
             InitializeComponent();
-            videoProfile.Manager = mainForm.Profiles;
-            initTabs();
-            initAudioHandler();
-            avsProfile.Manager = mainForm.Profiles;
-            initOneClickHandler();
 
-            //if containerFormat has not yet been set by the oneclick profile, add supported containers
+            
+            //add all container types
             if (containerFormat.Items.Count == 0)
             {
                 containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
                 this.containerFormat.SelectedIndex = 0;
             }
+
+            beingCalled = true;
+            videoProfile.Manager = mainForm.Profiles;
+            initTabs();
+            initAudioHandler();
+            avsProfile.Manager = mainForm.Profiles;
+            initOneClickHandler();
+            beingCalled = false;
+            updatePossibleContainers();
 
             //add device type
             if (devicetype.Items.Count == 0)
@@ -166,9 +171,10 @@ namespace MeGUI
             bLock = false;
 
             if (MainForm.Instance.Settings.IsDGIIndexerAvailable())
-                input.Filter = "All supported files|*.avs;*.ifo;*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.ifo;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.vc1;*.mpls|All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All DGIndexNV supported files|*.264;*.h264;*.avc;*.m2v;*.mpv;*.vc1;*.mkv;*.vob;*.mpg;*.mpeg;*.m2t;*.m2ts;*.mts;*.tp;*.ts;*.trp|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|AviSynth Scripts|*.avs|IFO DVD files|*.ifo|Blu-Ray Playlist|*.mpls|All files|*.*";
+                input.Filter = "All supported files|*.avs;*.ifo;*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.ifo;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.vc1;*.mpls|All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All DGIndexNV supported files|*.264;*.h264;*.avc;*.m2v;*.mpv;*.vc1;*.mkv;*.vob;*.mpg;*.mpeg;*.m2t;*.m2ts;*.mts;*.tp;*.ts;*.trp|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|All LSMASH Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|AviSynth Scripts|*.avs|IFO DVD files|*.ifo|Blu-Ray Playlist|*.mpls|All files|*.*";
             else
-                input.Filter = "All supported files|*.avs;*.ifo;*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.ifo;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.mpls|All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|AviSynth Scripts|*.avs|IFO DVD files|*.ifo|Blu-Ray Playlist|*.mpls|All files|*.*";
+                input.Filter = "All supported files|*.avs;*.ifo;*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.ifo;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.mpls|All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|All LSMASH Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|AviSynth Scripts|*.avs|IFO DVD files|*.ifo|Blu-Ray Playlist|*.mpls|All files|*.*";
+            
             DragDropUtil.RegisterMultiFileDragDrop(input, setInput, delegate() { return input.Filter + "|All folders|*."; });
             DragDropUtil.RegisterSingleFileDragDrop(output, setOutput);
             DragDropUtil.RegisterSingleFileDragDrop(chapterFile, null, delegate() { return chapterFile.Filter; });
@@ -405,11 +411,12 @@ namespace MeGUI
                 DialogResult dr = MessageBox.Show(question, "Automated folder processing", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
-                    bAutomatedProcessing = true;
+                    bAutomatedProcessing = beingCalled = true;
                     SetOneClickProfile((OneClickSettings)oneclickProfile.SelectedProfile.BaseSettings);
                     _oSettings.LeadingName = MeGUI.core.gui.InputBox.Show("If desired please enter a leading name", "Please enter a leading name", _oSettings.LeadingName);
                 }
             }
+            beingCalled = true;
             bLock = true;
             if (input.SelectedSCItem == null || !iFile.FileName.Equals((string)input.SelectedObject))
             {
@@ -431,6 +438,9 @@ namespace MeGUI
             foreach (SubtitleTrackInfo oInfo in iFile.SubtitleInfo.Tracks)
                 arrSubtitleTrackInfo.Add(new OneClickStream(oInfo));
             SubtitleResetTrack(arrSubtitleTrackInfo, _oSettings);
+
+            beingCalled = false;
+            updatePossibleContainers();
 
             horizontalResolution.Maximum = maxHorizontalResolution;
             
@@ -485,9 +495,12 @@ namespace MeGUI
                     if (audioTracks[i].SelectedStreamIndex == 0) // "None"
                         continue;
 
-                    if (audioTracks[i].SelectedStream.EncoderSettings != null && audioTracks[i].SelectedStream.EncodingMode != AudioEncodingMode.Never)
+                    if (audioTracks[i].SelectedStream.EncoderSettings != null 
+                        && (audioTracks[i].SelectedStream.EncodingMode == AudioEncodingMode.IfCodecDoesNotMatch
+                        || audioTracks[i].SelectedStream.EncodingMode == AudioEncodingMode.Always))
                         audioCodecs.Add(audioTracks[i].SelectedStream.EncoderSettings.EncoderType);
-                    else if (audioTracks[i].SelectedStream.EncodingMode == AudioEncodingMode.Never)
+                    else if (audioTracks[i].SelectedStream.EncodingMode == AudioEncodingMode.Never 
+                        || audioTracks[i].SelectedStream.EncodingMode == AudioEncodingMode.NeverOnlyCore)
                     {
                         string typeString;
                         if (audioTracks[i].SelectedItem.IsStandard)
@@ -496,12 +509,19 @@ namespace MeGUI
                             typeString = "file." + ati.Codec;
                         }
                         else
-                        {
                             typeString = audioTracks[i].SelectedFile;
-                        }
 
                         if (VideoUtil.guessAudioType(typeString) != null)
+                        {
                             dictatedOutputTypes.Add(VideoUtil.guessAudioMuxableType(typeString, false));
+                        }
+                        else if (audioTracks[i].SelectedItem.IsStandard)
+                        {
+                            AudioTrackInfo ati = (AudioTrackInfo)audioTracks[i].SelectedStream.TrackInfo;
+                            typeString = ati.DemuxFileName;
+                            if (VideoUtil.guessAudioType(typeString) != null)
+                                dictatedOutputTypes.Add(VideoUtil.guessAudioMuxableType(typeString, false));
+                        }
                     }
                 }
             }
@@ -525,11 +545,10 @@ namespace MeGUI
                 }
             }
 
-            List<ContainerType> tempSupportedOutputTypes = this.muxProvider.GetSupportedContainers(
-                VideoSettings.EncoderType, audioCodecs.ToArray(), dictatedOutputTypes.ToArray());
+            List<ContainerType> tempSupportedOutputTypes = new List<ContainerType>();
+            tempSupportedOutputTypes = this.muxProvider.GetSupportedContainers(VideoSettings.EncoderType, audioCodecs.ToArray(), dictatedOutputTypes.ToArray());
 
             List<ContainerType> supportedOutputTypes = new List<ContainerType>();
-
             foreach (ContainerType c in acceptableContainerTypes)
                 if (tempSupportedOutputTypes.Contains(c))
                     supportedOutputTypes.Add(c);
@@ -556,14 +575,26 @@ namespace MeGUI
                     if (bAutomatedProcessing)
                         ignoreRestrictions = true;
                     else
-                        MessageBox.Show("No container type could be found for your current settings. Please modify the codecs you use", "No container found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("No container type could be found for your current settings.\nPlease modify the codecs you use.", "No container found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             if (supportedOutputTypes.Count > 0)
             {
+                ContainerType cType = (ContainerType)this.containerFormat.SelectedItem;
                 this.containerFormat.Items.Clear();
                 this.containerFormat.Items.AddRange(supportedOutputTypes.ToArray());
-                this.containerFormat.SelectedIndex = 0;
+                bool bFound = false;
+                foreach (ContainerType selType in this.containerFormat.Items)
+                {
+                    if (selType == cType)
+                    {
+                        this.containerFormat.SelectedItem = cType;
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (!bFound)
+                    this.containerFormat.SelectedIndex = 0;
                 this.output.Filename = Path.ChangeExtension(output.Filename, (this.containerFormat.SelectedItem as ContainerType).Extension);
             }
             beingCalled = false;
@@ -699,14 +730,34 @@ namespace MeGUI
             dpp.ChapterFile = chapterFile.Filename;
             dpp.AutoCrop = autoCrop.Checked;
 
+            bool muxVideo = chkDontEncodeVideo.Checked;
+            // check if muxing of video input is supported
+            if (muxVideo && _videoInputInfo != null)
+            {
+                MuxerProvider muxer = new MKVMergeMuxerProvider();
+                if (dpp.Container == ContainerType.AVI)
+                    muxer = new AVIMuxGUIMuxerProvider();
+                else if (dpp.Container == ContainerType.M2TS)
+                    muxer = new TSMuxerProvider();
+                else if (dpp.Container == ContainerType.MP4)
+                    muxer = new MP4BoxMuxerProvider();
+
+                VideoCodec vCodec = _videoInputInfo.VideoInfo.Codec;
+                if (!muxer.SupportsVideoCodec(vCodec))
+                {
+                    muxVideo = false;
+                    _oLog.LogEvent("The video file cannot be muxed as the codec " + vCodec.ID + " is not supported for the container " + dpp.Container.ID, ImageType.Warning);
+                }
+            }
+
 
             // prepare input file
-            if (Path.GetExtension(_videoInputInfo.FileName.ToUpper(System.Globalization.CultureInfo.InvariantCulture)) == ".VOB")
+            if (Path.GetExtension(_videoInputInfo.FileName.ToUpperInvariant()) == ".VOB")
             {
                 // create pgcdemux job if needed
                 string videoIFO;
                 // PGC numbers are not present in VOB, so we check the main IFO
-                if (Path.GetFileName(_videoInputInfo.FileName).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
+                if (Path.GetFileName(_videoInputInfo.FileName).ToUpperInvariant().Substring(0, 4) == "VTS_")
                     videoIFO = _videoInputInfo.FileName.Substring(0, _videoInputInfo.FileName.LastIndexOf("_")) + "_0.IFO";
                 else
                     videoIFO = Path.ChangeExtension(_videoInputInfo.FileName, ".IFO");
@@ -727,7 +778,7 @@ namespace MeGUI
                 }
             }
 
-            string intermediateMKVFile = String.Empty;
+            dpp.IntermediateMKVFile = String.Empty;
             if (_videoInputInfo.isEac3toDemuxable())
             {
                 // create eac3to demux job if needed
@@ -806,7 +857,7 @@ namespace MeGUI
             {
                 // mux input file into MKV if possible and necessary
                 bool bRemuxInput = false;
-                if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
+                if (muxVideo)
                     bRemuxInput = true;
 
                 if (!bRemuxInput && 
@@ -827,7 +878,7 @@ namespace MeGUI
                     }
                 }
 
-                if (!bRemuxInput && Path.GetExtension(_videoInputInfo.FileName.ToUpper(System.Globalization.CultureInfo.InvariantCulture)) != ".VOB")
+                if (!bRemuxInput && Path.GetExtension(_videoInputInfo.FileName.ToUpperInvariant()) != ".VOB")
                 {
                     foreach (OneClickStreamControl oStreamControl in subtitleTracks)
                     {
@@ -862,10 +913,10 @@ namespace MeGUI
                             dpp.IndexType == FileIndexerWindow.IndexType.AVISOURCE)
                         {
                             inputContainer = ContainerType.MKV;
-                            dpp.VideoInput = mJob.Output;
+                            dpp.IntermediateMKVFile = dpp.VideoInput = mJob.Output;
                         }
                         else
-                            intermediateMKVFile = mJob.Output;
+                            dpp.IntermediateMKVFile = mJob.Output;
 
                         // add job to queue
                         prepareJobs = new SequentialChain(prepareJobs, mJob);
@@ -881,14 +932,12 @@ namespace MeGUI
             }
 
             // set video mux handling
-            if (chkDontEncodeVideo.Checked)
+            if (muxVideo)
             {
-                if (dpp.Container != ContainerType.MKV)
-                    _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the target container MKV is supported");
-                else if (!String.IsNullOrEmpty(intermediateMKVFile))
-                    dpp.VideoFileToMux = intermediateMKVFile;
+                if (!String.IsNullOrEmpty(dpp.IntermediateMKVFile))
+                    dpp.VideoFileToMux = dpp.IntermediateMKVFile;
                 else if (inputContainer != ContainerType.MKV)
-                    _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the source container MKV is supported");
+                    _oLog.LogEvent("\"Don't encode video\" has been disabled as it is not supported");
                 else
                     dpp.VideoFileToMux = dpp.VideoInput;
             }
@@ -1087,7 +1136,7 @@ namespace MeGUI
                         string strInput = oStream.SelectedStream.TrackInfo.SourceFileName;
                         if (strExtension.Equals(".vob"))
                         {
-                            if (Path.GetFileName(strInput).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
+                            if (Path.GetFileName(strInput).ToUpperInvariant().Substring(0, 4) == "VTS_")
                                 strInput = strInput.Substring(0, strInput.LastIndexOf("_")) + "_0.IFO";
                             else
                                 strInput = Path.ChangeExtension(strInput, ".IFO");
@@ -1111,6 +1160,28 @@ namespace MeGUI
                     dpp.SubtitleTracks.Add(oStream.SelectedStream);
             }
 
+            if (muxVideo && dpp.Container != ContainerType.MKV && inputContainer == ContainerType.MKV 
+                && (!String.IsNullOrEmpty(dpp.IntermediateMKVFile) || !String.IsNullOrEmpty(dpp.VideoFileToMux)))
+            {
+                VideoTrackInfo vInfo = _videoInputInfo.VideoInfo.Track;
+                if (_videoInputInfo.VideoInfo.Codec != null)
+                    vInfo.Codec = _videoInputInfo.VideoInfo.Codec.ID;
+                if (!String.IsNullOrEmpty(dpp.IntermediateMKVFile))
+                {
+                    vInfo.SourceFileName = dpp.IntermediateMKVFile;
+                    dpp.VideoFileToMux = Path.Combine(Path.GetDirectoryName(dpp.IntermediateMKVFile), vInfo.DemuxFileName);
+                }
+                else
+                {
+                    vInfo.SourceFileName = dpp.VideoFileToMux;
+                    dpp.VideoFileToMux = Path.Combine(Path.GetDirectoryName(dpp.VideoFileToMux), vInfo.DemuxFileName);
+                }
+                if (!dpp.WorkingDirectory.Equals(Path.GetDirectoryName(dpp.VideoFileToMux)))
+                    dpp.VideoFileToMux = Path.Combine(dpp.WorkingDirectory, Path.GetFileName(dpp.VideoFileToMux));
+
+                dpp.FilesToDelete.Add(dpp.VideoFileToMux);
+                oExtractMKVTrack.Add(_videoInputInfo.VideoInfo.Track);
+            }
 
             // create MKV extract job if required
             if (oExtractMKVTrack.Count > 0)
@@ -1167,7 +1238,7 @@ namespace MeGUI
                         job = new LSMASHIndexJob(dpp.VideoInput, indexFile, 0, null, false);
                     else
                         job = new FFMSIndexJob(dpp.VideoInput, indexFile, 0, null, false);
-                    if (!String.IsNullOrEmpty(dpp.VideoFileToMux) && dpp.Container == ContainerType.MKV)
+                    if (!String.IsNullOrEmpty(dpp.VideoFileToMux))
                     {
                         finalJobChain = new SequentialChain(prepareJobs, new SequentialChain(ocJob));
                         dpp.IndexType = FileIndexerWindow.IndexType.NONE;
@@ -1391,6 +1462,7 @@ namespace MeGUI
                 else
                     horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = ar.Enabled = true;
             }
+            updatePossibleContainers();
         }
 
 

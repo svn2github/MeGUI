@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -172,7 +172,7 @@ namespace MeGUI
             if (String.IsNullOrEmpty(_containerType))
                 return false;
             else
-                return _containerType.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA");
+                return _containerType.Trim().ToUpperInvariant().Equals("MATROSKA");
         }
 
         public bool ExtractMKVTrack
@@ -194,7 +194,7 @@ namespace MeGUI
                 string strFileName = String.Empty;
 
                 if (!String.IsNullOrEmpty(_codec))
-                    strCodec = _codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+                    strCodec = _codec.ToUpperInvariant();
 
                 if (IsMKVContainer())
                 {
@@ -202,17 +202,18 @@ namespace MeGUI
                     arrCodec = _codec.Split('/');
                     if (arrCodec[0].Substring(1, 1).Equals("_"))
                         arrCodec[0] = arrCodec[0].Substring(2);
-                    strCodec = arrCodec[0].ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+                    strCodec = arrCodec[0].ToUpperInvariant();
                 }
 
                 if (strCodec.StartsWith("DTS", StringComparison.InvariantCultureIgnoreCase))
                     strCodec = "DTS";
 
-                if (strCodec.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("TRUEHD"))
+                if (strCodec.ToUpperInvariant().Contains("TRUEHD"))
                     strCodec = "TRUEHD";
 
                 switch (strCodec)
                 {
+                    // audio
                     case "AC-3": strExtension = "ac3"; break;
                     case "TRUEHD": strExtension = "thd"; break;
                     case "DTS": strExtension = "dts"; break;
@@ -224,6 +225,9 @@ namespace MeGUI
                     case "FLAC": strExtension = "flac"; break;
                     case "REAL": strExtension = "ra"; break;
                     case "AAC": strExtension = "aac"; break;
+                    case "AVS": strExtension = "avs"; break;
+
+                    // subtitle
                     case "VOBSUB": strExtension = "idx"; break;
                     case "ASS": strExtension = "ass"; break;
                     case "UTF-8": strExtension = "srt"; break;
@@ -231,7 +235,15 @@ namespace MeGUI
                     case "USF": strExtension = "usf"; break;
                     case "HDMV": strExtension = "sup"; break;
                     case "PGS": strExtension = "sup"; break;
-                    case "AVS": strExtension = "avs"; break;
+                    
+                    // video
+                    case "ASP": strExtension = "avi"; break;
+                    case "AVC": strExtension = "264"; break;
+                    case "HEVC": strExtension = "265"; break;
+                    case "HFYU": strExtension = "avi"; break;
+                    case "MPEG1": strExtension = "m1v"; break;
+                    case "MPEG2": strExtension = "m2v"; break;
+                    case "VC1": strExtension = "vc1"; break;
                     default: strExtension = strCodec + ".unknown"; break;
                 }
 

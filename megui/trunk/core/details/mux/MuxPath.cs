@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -101,13 +101,13 @@ namespace MeGUI
                     return false;
 
                 return (initialInputTypes.Count == 0 || 
-                    (initialInputTypes.Count == 1 && !alwaysMux &&
-                     initialInputTypes[0].outputType.ContainerType == this.targetType));
+                    (initialInputTypes.Count == 1 && !alwaysMux && initialInputTypes[0].outputType != null 
+                    && initialInputTypes[0].outputType.ContainerType == this.targetType));
             }
             else
             {
                 return (path[path.Count - 1].unhandledInputTypes.Count == 0 &&
-                    path[path.Count - 1].muxerInterface.GetSupportedContainerTypes().Contains(targetType));
+                    path[path.Count - 1].muxerInterface.GetSupportedContainerOutputTypes().Contains(targetType));
             }
         }
     }

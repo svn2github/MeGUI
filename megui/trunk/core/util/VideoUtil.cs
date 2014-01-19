@@ -711,13 +711,14 @@ namespace MeGUI
         {
             if (string.IsNullOrEmpty(p))
                 return null;
+
             if (useMediaInfo)
             {
                 MediaInfoFile info = new MediaInfoFile(p);
                 if (info.VideoInfo.HasVideo)
                     return new MuxableType(info.VideoInfo.Type, info.VideoInfo.Codec);
-                // otherwise we may as well try the other route too
             }
+
             VideoType vType = guessVideoType(p);
             if (vType != null)
             {
@@ -733,12 +734,14 @@ namespace MeGUI
         {
             if (string.IsNullOrEmpty(p))
                 return null;
+
             if (useMediaInfo)
             {
                 MediaInfoFile info = new MediaInfoFile(p);
                 if (info.AudioInfo.Type != null)
                     return new MuxableType(info.AudioInfo.Type, info.AudioInfo.Codecs[0]);
             }
+
             AudioType aType = guessAudioType(p);
             if (aType != null)
             {

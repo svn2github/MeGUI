@@ -428,6 +428,10 @@ namespace MeGUI
                     }
                     else
                         ati.Codec = atrack.Format;
+#if DEBUG
+                    if (String.IsNullOrEmpty(ati.Codec))
+                        _Log.LogEvent("Unknown audio codec found: " + atrack.FormatProfile + " / " + atrack.Format, ImageType.Warning);
+#endif
                     ati.NbChannels = atrack.ChannelsString;
                     ati.ChannelPositions = atrack.ChannelPositionsString2;
                     ati.SamplingRate = atrack.SamplingRateString;
@@ -522,6 +526,10 @@ namespace MeGUI
                         _VideoInfo.Codec = getVideoCodec(track.Codec);
                         if (_VideoInfo.Codec == null)
                             _VideoInfo.Codec = getVideoCodec(track.Format); // sometimes codec info is not available, check the format then...
+#if DEBUG
+                        if (_VideoInfo.Codec == null)
+                            _Log.LogEvent("Unknown video codec found: " + track.Codec + " / " + track.Format, ImageType.Warning);
+#endif
                         _VideoInfo.Type = getVideoType(_VideoInfo.Codec, cType, file);
                         _VideoInfo.DAR = Resolution.GetDAR((int)_VideoInfo.Width, (int)_VideoInfo.Height, track.AspectRatio, easyParseDecimal(track.PixelAspectRatio), track.AspectRatioString);
 
@@ -1243,7 +1251,7 @@ namespace MeGUI
         {
             description = description.ToLowerInvariant();
             foreach (string knownDescription in knownVideoDescriptions.Keys)
-                if (description.Contains(knownDescription))
+                if (description.Contains(knownDescription.ToLowerInvariant()))
                     return knownVideoDescriptions[knownDescription];
             return null;
         }
@@ -1288,7 +1296,10 @@ namespace MeGUI
             knownVideoDescriptions.Add("ffvh", VideoCodec.HFYU);
             knownVideoDescriptions.Add("mpeg-4v", VideoCodec.ASP);
             knownVideoDescriptions.Add("vc-1", VideoCodec.VC1);
+            knownVideoDescriptions.Add("mpeg-1v", VideoCodec.MPEG1);
+            knownVideoDescriptions.Add("V_MPEG1", VideoCodec.MPEG1);
             knownVideoDescriptions.Add("mpeg-2v", VideoCodec.MPEG2);
+            knownVideoDescriptions.Add("V_MPEG2", VideoCodec.MPEG2);
             knownVideoDescriptions.Add("hevc", VideoCodec.HEVC);
 
             knownAudioDescriptions = new Dictionary<string, AudioCodec>();
@@ -1297,6 +1308,7 @@ namespace MeGUI
             knownAudioDescriptions.Add("ac-3", AudioCodec.AC3);
             knownAudioDescriptions.Add("dts", AudioCodec.DTS);
             knownAudioDescriptions.Add("vorbis", AudioCodec.VORBIS);
+            knownAudioDescriptions.Add("ogg", AudioCodec.VORBIS);
             knownAudioDescriptions.Add(" l3", AudioCodec.MP3);
             knownAudioDescriptions.Add("mpeg-2 audio", AudioCodec.MP2);
             knownAudioDescriptions.Add("mpeg-4 audio", AudioCodec.AAC);

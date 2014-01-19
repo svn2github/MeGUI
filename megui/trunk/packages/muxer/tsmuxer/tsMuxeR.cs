@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -56,6 +56,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
         #region setup/start overrides
         protected override void checkJobIO()
         {
+            su.Status = "Muxing...";
             this.numberOfAudioTracks = job.Settings.AudioStreams.Count;
             this.numberOfSubtitleTracks = job.Settings.SubtitleStreams.Count;
             generateMetaFile();

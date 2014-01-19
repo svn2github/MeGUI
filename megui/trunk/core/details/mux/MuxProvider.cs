@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -83,8 +83,8 @@ namespace MeGUI
                 inputCodecs.Add(ac);
             
             List<MuxableType> decidedTypeList = new List<MuxableType>();
-            foreach (MuxableType st in dictatedTypes)
-                decidedTypeList.Add(st);
+            decidedTypeList.AddRange(dictatedTypes);
+
             return findBestMuxPathAndConfig(inputCodecs, decidedTypeList, containerType);
         }
 
@@ -126,8 +126,7 @@ namespace MeGUI
             List<ContainerType> supportedContainers = new List<ContainerType>();
             foreach (IMuxing muxerInterface in mainForm.PackageSystem.MuxerProviders.Values)
             {
-                List<ContainerType> outputTypes = muxerInterface.GetSupportedContainers();
-                foreach (ContainerType type in outputTypes)
+                foreach (ContainerType type in muxerInterface.GetSupportedContainerOutputTypes())
                 {
                     if (!supportedContainers.Contains(type))
                         supportedContainers.Add(type);
@@ -141,8 +140,7 @@ namespace MeGUI
             List<DeviceType> supportedDevices = new List<DeviceType>();
             foreach (IMuxing muxerInterface in mainForm.PackageSystem.MuxerProviders.Values)
             {
-                List<DeviceType> outputTypes = muxerInterface.GetSupportedDeviceTypes();
-                foreach (DeviceType type in outputTypes)
+                foreach (DeviceType type in muxerInterface.GetSupportedDeviceTypes())
                 {
                     if (type.ContainerType == oType)
                         if (!supportedDevices.Contains(type))
@@ -206,7 +204,7 @@ namespace MeGUI
                 bool bFound = false;
                 foreach (MuxableType oAllType in allTypes)
                 {
-                    if (oType.outputType.ID.Equals(oAllType.outputType.ID))
+                    if (oType.outputType != null && oAllType.outputType != null && oType.outputType.ID.Equals(oAllType.outputType.ID))
                     {
                         bFound = true;
                         break;
@@ -420,11 +418,25 @@ namespace MeGUI
 
             foreach (IMuxing muxer in mainForm.PackageSystem.MuxerProviders.Values)
             {
+                bool bFound = false;
+                foreach (ContainerType ctype in muxer.GetSupportedContainerOutputTypes())
+                {
+                    if (desiredContainerType.Equals(ctype))
+                    {
+                        bFound = true;
+                        break;
+                    }
+                }
+
+                // proceed only if muxer is a possible muxer for the selected output container
+                if (!bFound)
+                    continue;
+
                 ProcessingLevel level;
                 if (currentMuxPath.Length > 0)
                 {
                     level = muxer.CanBeProcessed(
-                        currentMuxPath[currentMuxPath.Length - 1].muxerInterface.GetSupportedContainerTypes().ToArray(),
+                        currentMuxPath[currentMuxPath.Length - 1].muxerInterface.GetSupportedContainerOutputTypes().ToArray(),
                         unhandledDesiredInputTypes.ToArray(), out handledInputTypes, out unhandledInputTypes);
                 }
                 else
@@ -476,6 +488,7 @@ namespace MeGUI
         {
             supportedVideoTypes.Add(VideoType.AVI);
             supportedVideoTypes.Add(VideoType.MP4);
+            supportedVideoTypes.Add(VideoType.MPEG1);
             supportedVideoTypes.Add(VideoType.MPEG2);
             supportedVideoTypes.Add(VideoType.RAWASP);
             supportedVideoTypes.Add(VideoType.RAWAVC);
@@ -486,6 +499,7 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.RAWAAC);
             supportedAudioTypes.Add(AudioType.MP4AAC);
             supportedAudioTypes.Add(AudioType.M4A);
+            supportedAudioTypes.Add(AudioType.MP2);
             supportedAudioTypes.Add(AudioType.MP3);
             supportedAudioTypes.Add(AudioType.VBRMP3);
             supportedAudioTypes.Add(AudioType.CBRMP3);
@@ -493,10 +507,13 @@ namespace MeGUI
             supportedVideoCodecs.Add(VideoCodec.ASP);
             supportedVideoCodecs.Add(VideoCodec.AVC);
             supportedVideoCodecs.Add(VideoCodec.HEVC);
+            supportedVideoCodecs.Add(VideoCodec.MPEG1);
+            supportedVideoCodecs.Add(VideoCodec.MPEG2);
             supportsAnyInputtableVideoCodec = false;
 
             supportedAudioCodecs.Add(AudioCodec.AAC);
             supportedAudioCodecs.Add(AudioCodec.AC3);
+            supportedAudioCodecs.Add(AudioCodec.MP2);
             supportedAudioCodecs.Add(AudioCodec.MP3);
             supportsAnyInputtableAudioCodec = false;
 
@@ -506,7 +523,7 @@ namespace MeGUI
 
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
 
-            supportedContainers.Add(ContainerType.MP4);
+            supportedContainerOutputTypes.Add(ContainerType.MP4);
 
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MP4);
@@ -538,6 +555,7 @@ namespace MeGUI
             supportedVideoTypes.Add(VideoType.MP4);
             supportedVideoTypes.Add(VideoType.RAWAVC);
             supportedVideoTypes.Add(VideoType.RAWAVC2);
+            supportedVideoTypes.Add(VideoType.MPEG1);
             supportedVideoTypes.Add(VideoType.MPEG2);
             supportedVideoTypes.Add(VideoType.VC1);
 
@@ -563,6 +581,7 @@ namespace MeGUI
             supportedVideoCodecs.Add(VideoCodec.ASP);
             supportedVideoCodecs.Add(VideoCodec.AVC);
             supportedVideoCodecs.Add(VideoCodec.HFYU);
+            supportedVideoCodecs.Add(VideoCodec.MPEG1);
             supportedVideoCodecs.Add(VideoCodec.MPEG2);
             supportedVideoCodecs.Add(VideoCodec.VC1);
             supportsAnyInputtableVideoCodec = false;
@@ -592,7 +611,7 @@ namespace MeGUI
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
             supportedChapterTypes.Add(ChapterType.MKV_XML);
 
-            supportedContainers.Add(ContainerType.MKV);
+            supportedContainerOutputTypes.Add(ContainerType.MKV);
 
             supportedContainerInputTypes.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.AVI);
@@ -639,7 +658,7 @@ namespace MeGUI
             
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             
-            supportedContainers.Add(ContainerType.AVI);
+            supportedContainerOutputTypes.Add(ContainerType.AVI);
 
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MKV);
@@ -699,7 +718,7 @@ namespace MeGUI
 
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
 
-            supportedContainers.Add(ContainerType.M2TS);
+            supportedContainerOutputTypes.Add(ContainerType.M2TS);
 
             supportedContainerInputTypes.Add(ContainerType.MKV);
             supportedContainerInputTypes.Add(ContainerType.MP4);
@@ -730,7 +749,7 @@ namespace MeGUI
         protected List<AudioType> supportedAudioTypes;
         protected List<SubtitleType> supportedSubtitleTypes;
         protected List<ChapterType> supportedChapterTypes;
-        protected List<ContainerType> supportedContainers;
+        protected List<ContainerType> supportedContainerOutputTypes;
         protected List<ContainerType> supportedContainerInputTypes;
         protected List<DeviceType> supportedDeviceTypes;
         protected bool supportsAnyInputtableAudioCodec = false;
@@ -749,7 +768,7 @@ namespace MeGUI
             supportedChapterTypes = new List<ChapterType>();
             supportedAudioCodecs = new List<AudioCodec>();
             supportedVideoCodecs = new List<VideoCodec>();
-            supportedContainers = new List<ContainerType>();
+            supportedContainerOutputTypes = new List<ContainerType>();
             supportedContainerInputTypes = new List<ContainerType>();
             supportedDeviceTypes = new List<DeviceType>();
             videoInputFilter = audioInputFilter = subtitleInputFilter = "";
@@ -825,25 +844,14 @@ namespace MeGUI
             return this.supportedChapterTypes;
         }
 
-        public List<ContainerType> GetSupportedContainers()
+        public List<ContainerType> GetSupportedContainerOutputTypes()
         {
-            return this.supportedContainers;
+            return this.supportedContainerOutputTypes;
         }
 
         public List<DeviceType> GetSupportedDeviceTypes()
         {
             return this.supportedDeviceTypes;
-        }
-
-        public List<ContainerType> GetSupportedContainerTypes()
-        {
-            List<ContainerType> supportedOutputTypes = GetSupportedContainers();
-            List<ContainerType> supportedContainers = new List<ContainerType>();
-            foreach (ContainerType cot in supportedOutputTypes)
-            {
-                supportedContainers.Add(cot);
-            }
-            return supportedContainers;
         }
 
         public List<ContainerType> GetSupportedContainerInputTypes()
@@ -853,7 +861,7 @@ namespace MeGUI
 
         public List<ContainerType> GetContainersInCommon(IMuxing iMuxing)
         {
-            List<ContainerType> supportedOutputTypes = GetSupportedContainers();
+            List<ContainerType> supportedOutputTypes = GetSupportedContainerOutputTypes();
             List<ContainerType> nextSupportedInputTypes = iMuxing.GetSupportedContainerInputTypes();
             List<ContainerType> commonContainers = new List<ContainerType>();
             foreach (ContainerType eligibleType in supportedOutputTypes)
@@ -944,7 +952,7 @@ namespace MeGUI
 
         public string GetOutputTypeFilter(ContainerType containerType)
         {
-            foreach (ContainerType type in this.supportedContainers)
+            foreach (ContainerType type in this.supportedContainerOutputTypes)
             {
                 if (type == containerType)
                 {
@@ -956,7 +964,7 @@ namespace MeGUI
 
         public string GetOutputTypeFilter()
         {
-            return VideoUtil.GenerateCombinedFilter(supportedContainers.ToArray());
+            return VideoUtil.GenerateCombinedFilter(supportedContainerOutputTypes.ToArray());
         }
 
         public string GetVideoInputFilter()

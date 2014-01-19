@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -43,8 +43,7 @@ namespace MeGUI
         List<SubtitleType> GetSupportedSubtitleTypes();
         List<ChapterType> GetSupportedChapterTypes();
         List<DeviceType> GetSupportedDeviceTypes();
-        List<ContainerType> GetSupportedContainers();
-        List<ContainerType> GetSupportedContainerTypes();
+        List<ContainerType> GetSupportedContainerOutputTypes();
         List<ContainerType> GetSupportedContainerInputTypes();
         /// <summary>
         /// checks all the given input stream types if they can be handled by this muxer

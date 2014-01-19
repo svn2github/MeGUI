@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -199,20 +199,20 @@ namespace MeGUI
 
         protected override void ChangeOutputExtension()
         {
-            foreach (ContainerType t in muxer.GetSupportedContainers())
+            foreach (ContainerType t in muxer.GetSupportedContainerOutputTypes())
             {
-                if (output.Filename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(t.Extension.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                if (output.Filename.ToLowerInvariant().EndsWith(t.Extension.ToLowerInvariant()))
                     return;
             }
-            output.Filename = Path.ChangeExtension(output.Filename, muxer.GetSupportedContainers()[0].Extension);
+            output.Filename = Path.ChangeExtension(output.Filename, muxer.GetSupportedContainerOutputTypes()[0].Extension);
         }
 
         private ContainerType getContainerType(string outputFilename)
         {
             Debug.Assert(outputFilename != null);
-            foreach (ContainerType t in muxer.GetSupportedContainers())
+            foreach (ContainerType t in muxer.GetSupportedContainerOutputTypes())
             {
-                if (outputFilename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(t.Extension.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                if (outputFilename.ToLowerInvariant().EndsWith(t.Extension.ToLowerInvariant()))
                     return t;
             }
             Debug.Assert(false);

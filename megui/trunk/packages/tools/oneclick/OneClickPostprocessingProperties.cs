@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ namespace MeGUI
 		private VideoCodecSettings videoSettings;
         private AviSynthSettings avsSettings;
 		private double customAR;
-        private string chapterFile, finalOutput, aviSynthScript, deviceType, inputFile, workingDirectory, _videoFileToMux, ifoFile;
+        private string chapterFile, finalOutput, aviSynthScript, deviceType, inputFile,
+            workingDirectory, _videoFileToMux, ifoFile, _intermediateMKVFile;
         private List<string> filesToDelete;
         private List<OneClickAudioTrack> _audioTracks;
         private List<OneClickStream> _subtitleTrack;
@@ -68,6 +69,7 @@ namespace MeGUI
             _audioTracks = new List<OneClickAudioTrack>();
             _subtitleTrack = new List<OneClickStream>();
             _videoFileToMux = null;
+            _intermediateMKVFile = null;
             _oneClickSettings = null;
             _filesToProcess = new List<OneClickFilesToProcess>();
             chapterExtracted = false;
@@ -326,6 +328,15 @@ namespace MeGUI
         {
             get { return _videoFileToMux; }
             set { _videoFileToMux = value; }
+        }
+
+        /// <summary>
+        /// gets / sets the intermediate mkv file
+        /// </summary>
+        public string IntermediateMKVFile
+        {
+            get { return _intermediateMKVFile; }
+            set { _intermediateMKVFile = value; }
         }
 
         /// <summary>
