@@ -149,7 +149,7 @@ namespace MeGUI
             minComplexity = 72;
             maxComplexity = 78;
             mainFormLocation = new Point(0, 0);
-            mainFormSize = new Size(604, 478);
+            mainFormSize = new Size(713, 478);
             updateFormLocation = new Point(0, 0);
             updateFormSize = new Size(730, 313);
             updateFormSplitter = 180;
@@ -165,13 +165,13 @@ namespace MeGUI
             jobColumnWidth = 40;
             inputColumnWidth = 89;
             outputColumnWidth = 89;
-            codecColumnWidth = 43;
-            ModeColumnWidth = 75;
-            statusColumnWidth = 51;
+            codecColumnWidth = 79;
+            ModeColumnWidth = 51;
+            statusColumnWidth = 65;
             ownerColumnWidth = 60;
-            startColumnWidth = 55;
-            endColumnWidth = 55;
-            fpsColumnWidth = 35;
+            startColumnWidth = 58;
+            endColumnWidth = 58;
+            fpsColumnWidth = 95;
             bEnsureCorrectPlaybackSpeed = bAlwayUsePortableAviSynth = false;
             ffmsThreads = 1;
             appendToForcedStreams = "";
