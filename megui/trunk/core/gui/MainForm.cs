@@ -747,51 +747,25 @@ namespace MeGUI
 
         private void beginUpdateCheck()
         {
-#if x86
-            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
-#endif
-#if x64
-            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
-#endif
-            if (File.Exists(strLocalUpdateXML))
-                MainForm.Instance.Settings.AutoUpdateSession = true;
-
             UpdateWindow update = new UpdateWindow(this, false);
             update.GetUpdateData(true);
             bool bIsComponentMissing = UpdateWindow.isComponentMissing();
-            if (bIsComponentMissing || update.HasUpdatableFiles()) // If there are updated or missing files, display the window
+            if (!bIsComponentMissing && !update.HasUpdatableFiles()) // If there are updated or missing files, display the window
+                return;
+
+            if (MainForm.Instance.Settings.AutoUpdateSession)
             {
-                if (MainForm.Instance.Settings.AutoUpdateSession)
+                update.Visible = true;
+                update.StartAutoUpdate();
+                while (update.Visible == true)
                 {
-                    update.Visible = true;
-                    update.StartAutoUpdate();
-                    while (update.Visible == true)
-                    {
-                        Application.DoEvents();
-                        System.Threading.Thread.Sleep(100);
-                    }
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(100);
                 }
-                else
-                {
-                    if (bIsComponentMissing)
-                    {
-                        if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
-                        {
-                            if (filesToReplace.Keys.Count > 0) // restart required
-                            {
-                                this.Restart = true;
-                                this.Invoke(new MethodInvoker(delegate { this.Close(); }));
-                                return;
-                            }
-                        }
-                        else
-                            return;
-                    }
-                    if (MessageBox.Show("There are updated files available that may be necessary for MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live e.g. in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
-                            "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                        update.ShowDialog();
-                }
-                if (UpdateWindow.isComponentMissing() && !this.Restart)
+            }
+            else
+            {
+                if (bIsComponentMissing)
                 {
                     if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
                     {
@@ -801,15 +775,27 @@ namespace MeGUI
                             this.Invoke(new MethodInvoker(delegate { this.Close(); }));
                             return;
                         }
-                        else
-                            beginUpdateCheck();
                     }
+                    else
+                        return;
                 }
+                if (MessageBox.Show("There are updated files available that may be necessary for MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live e.g. in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
+                        "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    update.ShowDialog();
             }
-            else
+            if (UpdateWindow.isComponentMissing() && !this.Restart)
             {
-                if (File.Exists(strLocalUpdateXML))
-                    File.Delete(strLocalUpdateXML);
+                if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
+                {
+                    if (filesToReplace.Keys.Count > 0) // restart required
+                    {
+                        this.Restart = true;
+                        this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+                        return;
+                    }
+                    else
+                        beginUpdateCheck();
+                }
             }
         }
 
@@ -1385,6 +1371,7 @@ namespace MeGUI
 
         public void startUpdateCheckAndWait()
         {
+            MainForm.Instance.Settings.AutoUpdateSession = true;
             // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
             Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
             updateCheck.IsBackground = true;
@@ -1394,6 +1381,7 @@ namespace MeGUI
                 System.Threading.Thread.Sleep(100);
                 Application.DoEvents();
             }
+            MainForm.Instance.Settings.AutoUpdateSession = false;
         }
 
         private void getVersionInformation()

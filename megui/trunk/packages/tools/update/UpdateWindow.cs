@@ -854,22 +854,26 @@ namespace MeGUI
             bool bComponentMissing = false;
             foreach (string strAppPath in arrPath)
             {
+                ImageType image = ImageType.Error;
+                if (MainForm.Instance.Settings.AutoUpdateSession)
+                    image = ImageType.Information;
+
                 if (String.IsNullOrEmpty(strAppPath))
                 {
-                    MainForm.Instance.UpdateLog.LogEvent("No path to check for missing components!", ImageType.Error);
+                    MainForm.Instance.UpdateLog.LogEvent("No path to check for missing components!", image);
                     bComponentMissing = true;
                     continue;
                 }
                 else if (File.Exists(strAppPath) == false)
                 {
-                    MainForm.Instance.UpdateLog.LogEvent("Component not found: " + strAppPath, ImageType.Error);
+                    MainForm.Instance.UpdateLog.LogEvent("Component not found: " + strAppPath, image);
                     bComponentMissing = true;
                     continue;
                 }
                 FileInfo fInfo = new FileInfo(strAppPath);
                 if (fInfo.Length == 0)
                 {
-                    MainForm.Instance.UpdateLog.LogEvent("Component has 0 bytes: " + strAppPath, ImageType.Error);
+                    MainForm.Instance.UpdateLog.LogEvent("Component has 0 bytes: " + strAppPath, image);
                     bComponentMissing = true;
                 }
             }
