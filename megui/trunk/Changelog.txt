@@ -1,4 +1,5 @@
-2468 [MKV Demuxer]        if a delay is needed e.g. "Delay 123ms" will be added to the demuxed file name
+2469 [FFMS Indexer]       do not index audio tracks if they will be demuxed
+2468 [MKV Demuxer]        if a delay is needed e.g. "Delay 123ms" (instead of "123ms") will be added to the demuxed file name
 2467 [OneClick]           "Don't encode video" is now used for all containers
      [OneClick]           improved detection of suitable output containers
 2466 [Update]             automatically download needed and missing packages after confirmation if the package was disabled

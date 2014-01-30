@@ -430,7 +430,11 @@ namespace MeGUI
                         ati.Codec = atrack.Format;
 #if DEBUG
                     if (String.IsNullOrEmpty(ati.Codec))
+                    {
+                        if (_Log == null)
+                            _Log = MainForm.Instance.Log.Info("MediaInfo");
                         _Log.LogEvent("Unknown audio codec found: " + atrack.FormatProfile + " / " + atrack.Format, ImageType.Warning);
+                    }
 #endif
                     ati.NbChannels = atrack.ChannelsString;
                     ati.ChannelPositions = atrack.ChannelPositionsString2;
@@ -528,7 +532,11 @@ namespace MeGUI
                             _VideoInfo.Codec = getVideoCodec(track.Format); // sometimes codec info is not available, check the format then...
 #if DEBUG
                         if (_VideoInfo.Codec == null)
+                        {
+                            if (_Log == null)
+                                _Log = MainForm.Instance.Log.Info("MediaInfo");
                             _Log.LogEvent("Unknown video codec found: " + track.Codec + " / " + track.Format, ImageType.Warning);
+                        }
 #endif
                         _VideoInfo.Type = getVideoType(_VideoInfo.Codec, cType, file);
                         _VideoInfo.DAR = Resolution.GetDAR((int)_VideoInfo.Width, (int)_VideoInfo.Height, track.AspectRatio, easyParseDecimal(track.PixelAspectRatio), track.AspectRatioString);

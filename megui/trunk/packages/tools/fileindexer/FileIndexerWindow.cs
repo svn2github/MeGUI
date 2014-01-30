@@ -144,7 +144,7 @@ namespace MeGUI
                         this.demuxVideo.Enabled = true;
                         IndexerUsed = IndexType.DGI;
                         btnDGI.Checked = true;
-                        if (txtContainerInformation.Text.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA"))
+                        if (txtContainerInformation.Text.Trim().ToUpperInvariant().Equals("MATROSKA"))
                             generateAudioList();
                         break;
                     }
@@ -186,7 +186,7 @@ namespace MeGUI
                         this.demuxVideo.Enabled = false;
                         IndexerUsed = IndexType.FFMS;
                         btnFFMS.Checked = true;
-                        if (txtContainerInformation.Text.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA"))
+                        if (txtContainerInformation.Text.Trim().ToUpperInvariant().Equals("MATROSKA"))
                         {
                             generateAudioList();
                             this.gbAudio.Text = " Audio Demux ";
@@ -353,10 +353,10 @@ namespace MeGUI
 
             if (IndexerUsed == IndexType.FFMS)
             {
-                if (!strContainerFormat.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") &&
-                    !strContainerFormat.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVI") &&
-                    !strContainerFormat.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-4") &&
-                    !strContainerFormat.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("FLASH VIDEO"))
+                if (!strContainerFormat.ToUpperInvariant().Equals("MATROSKA") &&
+                    !strContainerFormat.ToUpperInvariant().Equals("AVI") &&
+                    !strContainerFormat.ToUpperInvariant().Equals("MPEG-4") &&
+                    !strContainerFormat.ToUpperInvariant().Equals("FLASH VIDEO"))
                 {
                     MessageBox.Show("It is recommended to use a MKV, AVI, MP4 or FLV container to index files with the FFMS2 indexer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
@@ -414,11 +414,11 @@ namespace MeGUI
 
             // create pgcdemux job if needed
             if (cbPGC.SelectedIndex > 0 
-                && Path.GetExtension(input.Filename.ToUpper(System.Globalization.CultureInfo.InvariantCulture)) == ".VOB")
+                && Path.GetExtension(input.Filename.ToUpperInvariant()) == ".VOB")
             {
                 string videoIFO;
                 // PGC numbers are not present in VOB, so we check the main IFO
-                if (Path.GetFileName(input.Filename).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Substring(0, 4) == "VTS_")
+                if (Path.GetFileName(input.Filename).ToUpperInvariant().Substring(0, 4) == "VTS_")
                     videoIFO = input.Filename.Substring(0, input.Filename.LastIndexOf("_")) + "_0.IFO";
                 else
                     videoIFO = Path.ChangeExtension(input.Filename, ".IFO");
@@ -469,9 +469,10 @@ namespace MeGUI
                 case IndexType.FFMS:
                     {
                         FFMSIndexJob job = generateFFMSIndexJob(videoInput);
-                        if (txtContainerInformation.Text.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") 
+                        if (txtContainerInformation.Text.Trim().ToUpperInvariant().Equals("MATROSKA") 
                             && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
                         {
+                            job.DemuxMode = 0;
                             job.AudioTracksDemux = job.AudioTracks;
                             job.AudioTracks = new List<AudioTrackInfo>();
                             MkvExtractJob extractJob = new MkvExtractJob(videoInput, Path.GetDirectoryName(this.output.Text), job.AudioTracksDemux);
@@ -489,6 +490,7 @@ namespace MeGUI
                         if (txtContainerInformation.Text.Trim().ToUpperInvariant().Equals("MATROSKA")
                             && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
                         {
+                            job.DemuxMode = 0;
                             job.AudioTracksDemux = job.AudioTracks;
                             job.AudioTracks = new List<AudioTrackInfo>();
                             MkvExtractJob extractJob = new MkvExtractJob(videoInput, Path.GetDirectoryName(this.output.Text), job.AudioTracksDemux);
