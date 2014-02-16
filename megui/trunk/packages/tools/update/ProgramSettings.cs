@@ -70,7 +70,12 @@ namespace MeGUI
 
         public bool Enabled
         {
-            get { return _enabled; }
+            get 
+            {
+                if (_required)
+                    return true;
+                return _enabled; 
+            }
             set { _enabled = value; }
         }
 

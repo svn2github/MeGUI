@@ -1,3 +1,4 @@
+2472 [Update]             required packages are always enabled
 2471 [Update]             merged some avisynth plugins into one package
      [Update]             fixed problem with the installation of the avs package
      [Update]             internal optimizations
