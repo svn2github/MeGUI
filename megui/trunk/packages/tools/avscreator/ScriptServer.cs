@@ -203,7 +203,7 @@ namespace MeGUI
                         {
                             inputLine = String.Empty;
                             if (MainForm.Instance.Settings.PortableAviSynth)
-                                inputLine = "LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), @"plugins\directshowsource.dll") + "\")\r\n";
+                                inputLine = "LoadPlugin(\"" + Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynth.Path), @"plugins\directshowsource.dll") + "\")\r\n";
                             inputLine += "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)" + VideoUtil.getAssumeFPS(fps, input);
                         }
                         if (flipVertical)
@@ -383,11 +383,11 @@ namespace MeGUI
 
         public static void AddYadif(FieldOrder order, List<DeinterlaceFilter> filters, bool bobber)
         {
-            UpdateCacher.CheckPackage("yadif");
+            string path = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AvisynthPluginsPath), "yadif.dll");
             filters.Add(new DeinterlaceFilter(
                 bobber ? "Yadif (with Bob)" : "Yadif",
-                string.Format("Load_Stdcall_Plugin(\"{0}\"){1}Yadif({2}order={3})", 
-                    MainForm.Instance.Settings.Yadif.Path, Environment.NewLine,
+                string.Format("LoadCPlugin(\"{0}\"){1}Yadif({2}order={3})", 
+                    path, Environment.NewLine,
                     bobber ? "mode=1, " : "", Order(order))));
         }
 

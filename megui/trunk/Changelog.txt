@@ -1,3 +1,6 @@
+2471 [Update]             merged some avisynth plugins into one package
+     [Update]             fixed problem with the installation of the avs package
+     [Update]             internal optimizations
 2470 [AVS Script Creator] fixed sometimes using VobSub instead of TextSub
 2469 [FFMS Indexer]       do not index audio tracks if they will be demuxed
 2468 [MKV Demuxer]        if a delay is needed e.g. "Delay 123ms" (instead of "123ms") will be added to the demuxed file name

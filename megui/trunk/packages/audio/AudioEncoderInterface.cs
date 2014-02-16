@@ -682,9 +682,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         private bool OpenSourceWithBassAudio(out StringBuilder sbOpen)
         {
-            UpdateCacher.CheckPackage("bassaudio");
             sbOpen = new StringBuilder();
-            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", MainForm.Instance.Settings.BassAudio.Path, Environment.NewLine);
+            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AvisynthPluginsPath), "BassAudio.dll"), Environment.NewLine);
             sbOpen.AppendFormat("BassAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
             _log.LogEvent("Trying to open the file with BassAudioSource()", ImageType.Information);
             string strErrorText = String.Empty;
@@ -710,7 +709,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (oInfo.HasAudio)
                 {
                     if (MainForm.Instance.Settings.PortableAviSynth)
-                        sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), @"plugins\directshowsource.dll"), Environment.NewLine);
+                        sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynth.Path), @"plugins\directshowsource.dll"), Environment.NewLine);
                     if (oInfo.HasVideo)
                         sbOpen.AppendFormat("DirectShowSource(\"{0}\", video=false){1}", audioJob.Input, Environment.NewLine);
                     else 
@@ -991,7 +990,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 script.Insert(0, String.Format("ClearAutoloadDirs(){0}AddAutoloadDir(\"{1}\"){0}", 
                     Environment.NewLine, 
-                    Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath), @"plugins")));
+                    Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AviSynth.Path), @"plugins")));
             }
 
             if (audioJob.Delay != 0)

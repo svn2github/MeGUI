@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -27,8 +27,6 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-
-using ICSharpCode.SharpZipLib.Zip;
 
 using MeGUI.core.util;
 

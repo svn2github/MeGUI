@@ -30,11 +30,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 
-using ICSharpCode.SharpZipLib.Zip;
-using SevenZip;
-
 using MeGUI.core.util;
-
 
 namespace MeGUI
 {
@@ -42,8 +38,6 @@ namespace MeGUI
     {
         #region Variables
         private List<string> serverList;
-        private MainForm mainForm = null;
-        public static MeGUISettings meGUISettings = null;
         private bool continueUpdate = true;
         private iUpgradeableCollection upgradeData = null;
         private Thread updateThread = null;
@@ -51,9 +45,9 @@ namespace MeGUI
         private System.Threading.ManualResetEvent webUpdate = new ManualResetEvent(false);
         private XmlDocument upgradeXml = null;
         public bool needsRestart = false;
-        private bool isOrHasDownloadedUpgradeData = false;
         private LogItem oLog;
         private String ServerAddress;
+        private UpdateStep _updateStep;
         private ListViewColumnSorter lvwColumnSorter;
         private enum PackageStatus
         {
@@ -80,18 +74,26 @@ namespace MeGUI
             CouldNotRemoveBackup,
             [EnumTitle("File cannot be saved")]
             CouldNotSaveNewFile,
-            [EnumTitle("File cannot be renamed")]
-            CouldNotRenameExistingFile,
+            [EnumTitle("Backup file cannot be created")]
+            CouldNotCreateBackup,
             [EnumTitle("File cannot be installed")]
             CouldNotInstall,
             [EnumTitle("Update successful")]
             Successful,
             [EnumTitle("File cannot be extracted")]
-            CouldNotUnzip,
+            CouldNotExtract,
             [EnumTitle("Update XML is invalid")]
             InvalidXML,
             [EnumTitle("The requirements for this file are not met")]
             RequirementNotMet
+        }
+        public enum UpdateStep
+        {
+            Manual,
+            AutomaticCheck,
+            AutomaticInstall,
+            AutomaticStartup,
+            ServerCheckOnly
         }
         #endregion
         #region Classes
@@ -145,18 +147,6 @@ namespace MeGUI
                     case "data": arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"Data\ContextHelp.xml")); break;
                     case "avswrapper": arrPath.Add((Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"AvisynthWrapper.dll"))); break;
                     case "updatecopier": arrPath.Add((Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"updatecopier.exe"))); break;
-                    case "convolution3dyv12": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"Convolution3DYV12.dll")); break;
-                    case "undot": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"UnDot.dll")); break;
-                    case "fluxsmooth": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"FluxSmooth.dll")); break;
-                    case "eedi2": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"EEDI2.dll")); break;
-                    case "decomb": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"Decomb.dll")); break;
-                    case "leakkerneldeint": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"LeakKernelDeint.dll")); break;
-                    case "tomsmocomp": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TomsMoComp.dll")); break;
-                    case "tdeint": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TDeint.dll")); break;
-                    case "tivtc": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TIVTC.dll")); break;
-                    case "colormatrix": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"ColorMatrix.dll")); break;
-                    case "vsfilter": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll")); break;
-                    case "nicaudio": arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
                     case "neroaacenc":
                         if (MainForm.Instance.Settings.UseNeroAacEnc)
                         {
@@ -291,8 +281,6 @@ namespace MeGUI
                 myitem.SubItems.Add(status);
                 return myitem;
             }
-            public abstract ErrorState Upgrade();
-
             
             private bool downloadChecked;
             public bool DownloadChecked
@@ -383,14 +371,9 @@ namespace MeGUI
                 set { needsRestartedCopying = value; }
             }
 
-            public virtual bool NeedsInstalling
+            public virtual ErrorState Install(iUpgradeable file, UpdateWindow oUpdate)
             {
-                get { return false; }
-            }
-
-            public virtual ErrorState Install(Stream fileData)
-            {
-                throw new Exception("This kind of file cannot be installed.");
+                return UpdateCacher.ExtractFile(file, oUpdate);
             }
         }
         public class iUpgradeableCollection : CollectionBase
@@ -456,19 +439,12 @@ namespace MeGUI
                 set { mainForm = value; }
             }
 
-            public override bool NeedsInstalling
-            {
-                get
-                {
-                    return true;
-                }
-            }
-
-            public override ErrorState Install(Stream fileData)
+            public override ErrorState Install(iUpgradeable file, UpdateWindow oUpdate)
             {
                 try
                 {
-                    mainForm.importProfiles(fileData);
+                    string filename = Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, Path.GetFileName(file.AvailableVersion.Url));
+                    mainForm.importProfiles(filename, true);
                     if (mainForm.ImportProfileSuccessful == true)
                         return ErrorState.Successful;
                     else
@@ -478,39 +454,27 @@ namespace MeGUI
                 {
                     return ErrorState.CouldNotInstall;
                 }
-                
-            }
-
-            public override ErrorState Upgrade()
-            {
-                throw new Exception("The method or operation is not implemented.");
             }
         }
+
         public class AviSynthFile : iUpgradeable
         {
             public override void init()
             {
                 base.init();
-                this.SaveFolder = MainForm.Instance.Settings.AvisynthPluginsPath;
             }
 
             private AviSynthFile()
             {
-                this.SaveFolder = MainForm.Instance.Settings.AvisynthPluginsPath;
             }
 
             public AviSynthFile(string name)
             {
                 this.Name = name;
                 this.AllowUpdate = true;
-                this.SaveFolder = MainForm.Instance.Settings.AvisynthPluginsPath;
-            }
-
-            public override ErrorState Upgrade()
-            {
-                return ErrorState.CouldNotDownloadFile;
             }
         }
+
         public class MeGUIFile : iUpgradeable
         {
             private MeGUIFile()
@@ -543,13 +507,8 @@ namespace MeGUI
                 base.init();
                 this.SaveFolder = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             }
-
-
-            public override ErrorState Upgrade()
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
         }
+
         public class ProgramFile : iUpgradeable
         {
             private ProgramFile()
@@ -570,12 +529,8 @@ namespace MeGUI
                 this.AllowUpdate = true;
                 init();
             }
-
-            public override ErrorState Upgrade()
-            {
-                return ErrorState.CouldNotDownloadFile;
-            }
         }
+
         public class Version : IComparable<Version>
         {
             public Version()
@@ -656,7 +611,7 @@ namespace MeGUI
         private delegate void ClearItems(ListView listview);
 
         private delegate void UpdateProgressBar(int minValue, int maxValue, int currentValue);
-        private void SetProgressBar(int minValue, int maxValue, int currentValue)
+        public void SetProgressBar(int minValue, int maxValue, int currentValue)
         {
             if (this.progressBar.InvokeRequired)
             {
@@ -683,8 +638,7 @@ namespace MeGUI
                 logBuilder.AppendLine(oLogType + ": " + text);
             else
                 logBuilder.AppendLine(text);
-            if (!this.Visible)
-                return;
+
             SetLogText d = new SetLogText(UpdateLogText);
             if (this.txtBoxLog.InvokeRequired)
                 this.Invoke(d);
@@ -726,6 +680,8 @@ namespace MeGUI
         #region con/de struction
         private void UpdateWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            this.Visible = false;
+            e.Cancel = true;
             SaveSettings();
         }
 
@@ -735,54 +691,46 @@ namespace MeGUI
         /// <param name="mainForm">MainForm instance</param>
         /// <param name="savedSettings">Current MeGUI settings</param>
         /// <param name="bSilent">whether the update window should be displayed</param>
-        public UpdateWindow(MainForm mainForm, bool bSilent)
+        public UpdateWindow()
         {
             InitializeComponent();
             lvwColumnSorter = new ListViewColumnSorter();
             this.listViewDetails.ListViewItemSorter = lvwColumnSorter;
-            this.mainForm = mainForm;
-            this.oLog = mainForm.UpdateLog;
+            if (MainForm.Instance.UpdateLog == null)
+                MainForm.Instance.UpdateLog = MainForm.Instance.Log.Info("Update detection");
+            this.oLog = MainForm.Instance.UpdateLog;
+            _updateStep = UpdateStep.ServerCheckOnly;
             LoadComponentSettings();
-            this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
-            meGUISettings = mainForm.Settings; // Load up the MeGUI settings so i can access filepaths
-            if (bSilent)
-                return;
-            if (mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList].Length <= 1)
-            {
-                MessageBox.Show("Couldn't run auto-update since there are no servers registered.", "No servers registered", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            serverList = getUpdateServerList(mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList]);
-            LoadSettings();
+            LoadSettings(); // load upgradeData
         }
 
         private void LoadComponentSettings()
         {
             // Restore Size/Position of the window
-            this.ClientSize = mainForm.Settings.UpdateFormSize;
-            this.Location = mainForm.Settings.UpdateFormLocation;
-            this.splitContainer2.SplitterDistance = mainForm.Settings.UpdateFormSplitter;
+            this.ClientSize = MainForm.Instance.Settings.UpdateFormSize;
+            this.Location = MainForm.Instance.Settings.UpdateFormLocation;
+            this.splitContainer2.SplitterDistance = MainForm.Instance.Settings.UpdateFormSplitter;
 
-            colUpdate.Width = mainForm.Settings.UpdateFormUpdateColumnWidth;
-            colName.Width = mainForm.Settings.UpdateFormNameColumnWidth;
-            colExistingVersion.Width = mainForm.Settings.UpdateFormLocalVersionColumnWidth;
-            colLatestVersion.Width = mainForm.Settings.UpdateFormServerVersionColumnWidth;
-            colExistingDate.Width = mainForm.Settings.UpdateFormLocalDateColumnWidth;
-            colLatestDate.Width = mainForm.Settings.UpdateFormServerDateColumnWidth;
-            colLastUsed.Width = mainForm.Settings.UpdateFormLastUsedColumnWidth;
-            colStatus.Width = mainForm.Settings.UpdateFormStatusColumnWidth;
+            colUpdate.Width = MainForm.Instance.Settings.UpdateFormUpdateColumnWidth;
+            colName.Width = MainForm.Instance.Settings.UpdateFormNameColumnWidth;
+            colExistingVersion.Width = MainForm.Instance.Settings.UpdateFormLocalVersionColumnWidth;
+            colLatestVersion.Width = MainForm.Instance.Settings.UpdateFormServerVersionColumnWidth;
+            colExistingDate.Width = MainForm.Instance.Settings.UpdateFormLocalDateColumnWidth;
+            colLatestDate.Width = MainForm.Instance.Settings.UpdateFormServerDateColumnWidth;
+            colLastUsed.Width = MainForm.Instance.Settings.UpdateFormLastUsedColumnWidth;
+            colStatus.Width = MainForm.Instance.Settings.UpdateFormStatusColumnWidth;
         }
 
         private void SaveComponentSettings()
         {
-            mainForm.Settings.UpdateFormUpdateColumnWidth = colUpdate.Width;
-            mainForm.Settings.UpdateFormNameColumnWidth = colName.Width;
-            mainForm.Settings.UpdateFormLocalVersionColumnWidth = colExistingVersion.Width;
-            mainForm.Settings.UpdateFormServerVersionColumnWidth = colLatestVersion.Width;
-            mainForm.Settings.UpdateFormLocalDateColumnWidth = colExistingDate.Width;
-            mainForm.Settings.UpdateFormServerDateColumnWidth = colLatestDate.Width;
-            mainForm.Settings.UpdateFormLastUsedColumnWidth = colLastUsed.Width;
-            mainForm.Settings.UpdateFormStatusColumnWidth = colStatus.Width;
+            MainForm.Instance.Settings.UpdateFormUpdateColumnWidth = colUpdate.Width;
+            MainForm.Instance.Settings.UpdateFormNameColumnWidth = colName.Width;
+            MainForm.Instance.Settings.UpdateFormLocalVersionColumnWidth = colExistingVersion.Width;
+            MainForm.Instance.Settings.UpdateFormServerVersionColumnWidth = colLatestVersion.Width;
+            MainForm.Instance.Settings.UpdateFormLocalDateColumnWidth = colExistingDate.Width;
+            MainForm.Instance.Settings.UpdateFormServerDateColumnWidth = colLatestDate.Width;
+            MainForm.Instance.Settings.UpdateFormLastUsedColumnWidth = colLastUsed.Width;
+            MainForm.Instance.Settings.UpdateFormStatusColumnWidth = colStatus.Width;
         }
 
         public static bool isComponentMissing()
@@ -790,7 +738,7 @@ namespace MeGUI
             ArrayList arrPath = new ArrayList();
             string strPath;
 
-            // base 
+            //base 
             arrPath.Add(System.Windows.Forms.Application.ExecutablePath);
             //libs":
             strPath = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
@@ -811,38 +759,6 @@ namespace MeGUI
             arrPath.Add((Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"AvisynthWrapper.dll")));
             //updatecopier
             arrPath.Add((Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"updatecopier.exe")));
-#if x86
-            //convolution3dyv12
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"Convolution3DYV12.dll"));
-            //fluxsmooth
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"FluxSmooth.dll"));
-            //decomb
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"Decomb.dll"));
-            //tomsmocomp
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TomsMoComp.dll"));
-            //tdeint
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TDeint.dll"));
-            //tivtc
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TIVTC.dll"));
-            //colormatrix
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"ColorMatrix.dll"));
-            //vsfilter
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll"));
-            //nicaudio
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll"));
-#endif
-            //undot
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"UnDot.dll"));
-            //eedi2
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"EEDI2.dll"));
-            //leakkerneldeint
-            arrPath.Add(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"LeakKernelDeint.dll"));
-
-            // avisynth
-            arrPath.Add(MainForm.Instance.Settings.AviSynthPath);
-            strPath = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
-            arrPath.Add(Path.Combine(strPath, @"plugins\directshowsource.dll"));
-            arrPath.Add(Path.Combine(strPath, "devil.dll"));
 
             foreach (ProgramSettings pSettings in MainForm.Instance.ProgramSettings)
             {
@@ -938,8 +854,6 @@ namespace MeGUI
                 this.Location = new Point(oLocation.X, this.Location.Y);
             else if (this.Location.X + this.Size.Width > iScreenWidth)
                 this.Location = new Point(iScreenWidth - this.Size.Width, this.Location.Y);
-       
-            GetUpdateData(false);
 
             if (VistaStuff.IsVistaOrNot)
                 VistaStuff.SetWindowTheme(listViewDetails.Handle, "explorer", null);
@@ -954,14 +868,17 @@ namespace MeGUI
 
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(AviSynthFile), typeof(ProfilesFile) , typeof(MeGUIFile)});
+                XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(AviSynthFile), typeof(ProfilesFile), typeof(MeGUIFile) });
                 StreamReader settingsReader = new StreamReader(path);
                 iUpgradeableCollection upgradeDataTemp = (iUpgradeableCollection)serializer.Deserialize(settingsReader);
                 settingsReader.Dispose();
 
                 upgradeData = new iUpgradeableCollection();
                 foreach (iUpgradeable file in upgradeDataTemp)
-                    this.upgradeData.Add(file);
+                {
+                    if (UpdateCacher.IsPackage(file.Name))
+                        this.upgradeData.Add(file);
+                }
 
                 foreach (iUpgradeable file in upgradeData)
                 {
@@ -974,7 +891,7 @@ namespace MeGUI
             }
             catch(Exception)
             {
-                MessageBox.Show("Error: Could not load previous settings", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: Could not load previous download settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -982,7 +899,7 @@ namespace MeGUI
         {
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(AviSynthFile), typeof(ProfilesFile), typeof(MeGUIFile) });
+                XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(ProfilesFile), typeof(MeGUIFile) });
                 StreamWriter output = new StreamWriter(Path.Combine(Application.StartupPath, "AutoUpdate.xml"), false);
                 serializer.Serialize(output, this.upgradeData);
                 output.Dispose();
@@ -994,99 +911,72 @@ namespace MeGUI
         }
         #endregion
         #region getting update data
-        public void GetUpdateData(bool wait)
+        public void GetUpdateData(bool wait, UpdateStep updateStep)
         {
-            if (!isOrHasDownloadedUpgradeData)
+            if (MainForm.Instance.Settings.AutoUpdateServerLists[MainForm.Instance.Settings.AutoUpdateServerSubList].Length <= 1)
             {
-                Thread CreateTreeview = new Thread(new ThreadStart(ProcessUpdateXML));
-                CreateTreeview.IsBackground = true;
-                CreateTreeview.Start();
-                if (wait)
-                    webUpdate.WaitOne();
+                AddTextToLog("Couldn't run update since there are no servers registered.", ImageType.Error);
+                return;
             }
+
+            serverList = getUpdateServerList(MainForm.Instance.Settings.AutoUpdateServerLists[MainForm.Instance.Settings.AutoUpdateServerSubList]);
+            _updateStep = updateStep;
+
+            Thread CreateTreeview = new Thread(new ThreadStart(ProcessUpdateXML));
+            CreateTreeview.IsBackground = true;
+            CreateTreeview.Start();
+            if (wait)
+                webUpdate.WaitOne();
         }
+
         /// <summary>
         /// This method is called to retrieve the update data from the webserver
         /// and then set the relevant information to the grid.
         /// </summary>
         public ErrorState GetUpdateXML(string strServerAddress)
         {
-            if (upgradeXml != null) // the update file has already been downloaded and processed
-                return ErrorState.Successful;
-
-            string data = null;
             upgradeXml = new XmlDocument();
 
-            if (String.IsNullOrEmpty(strServerAddress))
+            if (!String.IsNullOrEmpty(strServerAddress))
             {
-                // check local file
-#if x86
-                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
-#endif
+                string xmlFile = "upgrade.xml";
 #if x64
-                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
+                xmlFile = "upgrade_x64.xml";
 #endif
-                if (File.Exists(strLocalUpdateXML))
+                ErrorState result = UpdateCacher.DownloadFile(xmlFile, "upgrade.xml", new Uri(strServerAddress), null, this);
+                if (result != ErrorState.Successful)
                 {
-                    AddTextToLog("Retrieving local update file", ImageType.Information);
-                    StreamReader sr = new StreamReader(strLocalUpdateXML);
-                    data = sr.ReadToEnd();
-                    sr.Close();
-                    AddTextToLog("Local update file opened successfully", ImageType.Information);
-                }
-                else
-                {
+                    AddTextToLog("Could not retrieve update data. " + EnumProxy.Create(result).ToString(), ImageType.Information);
                     upgradeXml = null;
-                    return ErrorState.ServerNotAvailable;
+                    return result;
                 }
+            }
+
+            if (File.Exists(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, "upgrade.xml")))
+            {
+                upgradeXml.Load(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, "upgrade.xml"));
+                return ErrorState.Successful;
             }
             else
-            {
-                WebClient serverClient = new WebClient();
-
-                // check for proxy authentication...
-                serverClient.Proxy = HttpProxy.GetProxy(meGUISettings);
-                
-                try
-                {
-#if x86
-                    data = serverClient.DownloadString(strServerAddress + "upgrade.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
-#endif
-#if x64
-                    data = serverClient.DownloadString(strServerAddress + "upgrade_x64.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
-#endif
-                }
-                catch
-                {
-                    AddTextToLog("Could not connect to server " + strServerAddress, ImageType.Error);
-                    upgradeXml = null;
-                    return ErrorState.ServerNotAvailable;
-                }
-            }
-
-            try
-            {
-                upgradeXml.LoadXml(data);
-            }
-            catch
-            {
-                AddTextToLog("Invalid or missing update file. Aborting.", ImageType.Error);
-                upgradeXml = null;
-                return ErrorState.InvalidXML;
-            }
-            return ErrorState.Successful;
+                return ErrorState.ServerNotAvailable;
         }
+
         /// <summary>
         /// This function downloads the update XML file from the server and then processes it.
         /// </summary>
         private void ProcessUpdateXML()
         {
-            isOrHasDownloadedUpgradeData = true;
+            // delete cached xml file if the automatic update process is not used
+            if (_updateStep != UpdateStep.AutomaticInstall && _updateStep != UpdateStep.AutomaticStartup)
+                UpdateCacher.DeleteCacheFile("upgrade.xml", this);
+
+            //if (upgradeXml != null) // the update file has already been downloaded and processed
+            //    return ErrorState.Successful;
+
             ErrorState value = ErrorState.ServerNotAvailable;
             foreach (string serverName in serverList)
             {
                 ServerAddress = serverName;
-                AddTextToLog("Connecting to server: " + serverName, ImageType.Information);
                 value = GetUpdateXML(serverName);
                 if (value == ErrorState.Successful)
                 {
@@ -1120,8 +1010,7 @@ namespace MeGUI
                     d(node, null, node.Name);
                 }
             }
-            RemoveOldFiles();
-
+            
             int iUpdatesCount = NumUpdatableFiles();
             if (iUpdatesCount > 1)
                 AddTextToLog(string.Format("There are {0} packages which can be updated.", iUpdatesCount), ImageType.Information);
@@ -1135,50 +1024,8 @@ namespace MeGUI
                 chkShowAllFiles.Invoke(new MethodInvoker(delegate { chkShowAllFiles.Checked = iUpdatesCount == 0; }));
             else
                 chkShowAllFiles.Checked = iUpdatesCount == 0;
-            if (chkShowAllFiles.Checked == bChecked)
-            {
-                if (chkShowAllFiles.InvokeRequired)
-                    chkShowAllFiles.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
-                else
-                    DisplayItems(chkShowAllFiles.Checked);   
-            }
 
             webUpdate.Set();
-        }
-
-        private void RemoveOldFiles()
-        {
-            iUpgradeable iFileToRemove = null;
-            XmlNodeList xnList = upgradeXml.SelectNodes("/UpdateableFiles");
-            do
-            {
-                iFileToRemove = null;
-                foreach (iUpgradeable iFile in upgradeData)
-                {
-                    if (FindFileInUpdateXML(xnList, iFile.Name) == false)
-                    {
-                        iFileToRemove = iFile;
-                        break;
-                    }
-                }
-                upgradeData.Remove(iFileToRemove);
-            } while (iFileToRemove != null);
-        }
-
-        private bool FindFileInUpdateXML(XmlNodeList xnList, string strFile)
-        { 
-            foreach (XmlNode l1 in xnList)
-            {
-                if (l1.Attributes["type"].Value.Equals("file"))
-                {
-                    if (l1.Name.Equals(strFile))
-                        return true;
-                    continue;
-                }
-                if (FindFileInUpdateXML(l1.ChildNodes, strFile) == true)
-                    return true;
-            }
-            return false;
         }
 
         /// <summary>
@@ -1222,14 +1069,14 @@ namespace MeGUI
             {
                 try
                 {
+                    if (!UpdateCacher.IsPackage(node.Name))
+                        return;
                     if (groupNode.Name.Equals("MeGUI"))
                         file = new MeGUIFile(node.Name);
                     else if (groupNode.Name.Equals("ProgramFile"))
                         file = new ProgramFile(node.Name);
-                    else if (groupNode.Name.Equals("AviSynthFile"))
-                        file = new AviSynthFile(node.Name);
                     else if (groupNode.Name.Equals("ProfilesFile"))
-                        file = new ProfilesFile(node.Name, mainForm);
+                        file = new ProfilesFile(node.Name, MainForm.Instance);
                     else
                         return;
                 }
@@ -1244,7 +1091,7 @@ namespace MeGUI
                 file.DownloadChecked = false;
                 fileAlreadyAdded = true;
                 if (file is ProfilesFile)
-                    (file as ProfilesFile).MainForm = mainForm;
+                    (file as ProfilesFile).MainForm = MainForm.Instance;
             }
 
             file.NeedsRestartedCopying = false;
@@ -1323,7 +1170,9 @@ namespace MeGUI
             {
                 if (!bShowAllFiles)
                 {
-                    if (file.AllowUpdate && (file.HasAvailableVersion || file.DownloadChecked))
+                    ProgramSettings pSettings = UpdateCacher.GetPackage(file.Name);
+                    if ((pSettings == null || pSettings.Enabled) && file.AllowUpdate 
+                        && (file.HasAvailableVersion || file.DownloadChecked))
                         AddToListview(file.CreateListViewItem());
                 }
                 else
@@ -1394,7 +1243,7 @@ namespace MeGUI
             else
             {
                 ts.Checked = pSettings.UpdateAllowed();
-                ts.Enabled = true;
+                ts.Enabled = !pSettings.Required;
             }
 
             // set the ignore update data value
@@ -1566,165 +1415,149 @@ namespace MeGUI
         {
             btnUpdate.Enabled = false;
             btnAbort.Enabled = true;
-            updateThread = new Thread(new ThreadStart(BeginUpdate));
+            updateThread = new Thread(new ThreadStart(ProcessUpdate));
             updateThread.IsBackground = true;
             updateThread.Start();
         }
         #endregion
         #region updating
-        private void InstallFiles(SortedDictionary<uint, List<iUpgradeable>> groups)
+        private void ProcessUpdate()
         {
             continueUpdate = true;
+            bool needsRestart = false;
             int currentFile = 1; //the first file we update is file 1.
             ErrorState result;
             List<iUpgradeable> succeededFiles = new List<iUpgradeable>();
             List<iUpgradeable> failedFiles = new List<iUpgradeable>();
             List<iUpgradeable> missingFiles = new List<iUpgradeable>();
-            
+
             // Count the number of files we can update before we restart
             int updateableFileCount = 0;
-            bool needsRestart = false;
-            foreach (List<iUpgradeable> group in groups.Values)
-                updateableFileCount += group.Count;
+            foreach (iUpgradeable file in upgradeData)
+                if (file.DownloadChecked)
+                    updateableFileCount++;
 
             // Now update the files we can
-            foreach (List<iUpgradeable> group in groups.Values)
+            foreach (iUpgradeable file in upgradeData)
             {
-                foreach (iUpgradeable file in group)
+                if (!continueUpdate)
                 {
-                    if (!continueUpdate)
-                    {
-                        AddTextToLog("Update aborted by user", ImageType.Information);
-                        return /* false*/;
-                    }
-
-                    AddTextToLog(string.Format("Updating {0}. File {1}/{2}.", file.Name, currentFile, updateableFileCount), ImageType.Information);
-
-                    if (!String.IsNullOrEmpty(file.AvailableVersion.Web))
-                    {
-                        string strText;
-
-                        if (file.Name.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("neroaacenc"))
-                        {
-                            string strPath = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\tools\eac3to\neroAacEnc.exe";
-                            strText = "MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own and extract neroaacenc.exe to:\n" + strPath + "\n\nIf necessary change the path in the settings:\n\"Settings\\External Program Settings\"\n\nDo you would like to download it now?";
-                        }
-                        else
-                            strText = "MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own, extract it and set the path to the " + file.Name + ".exe in the MeGUI settings\n(\"Settings\\External Program Settings\").\n\nDo you would like to download it now?";
-
-                        if (MessageBox.Show(strText, "Component not found",
-                                     MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                        {
-                            System.Diagnostics.Process.Start(file.AvailableVersion.Web);
-                            succeededFiles.Add(file);
-                        }
-                        else
-                            failedFiles.Add(file); 
-                    }
-                    else
-                    {
-                        Stream str;
-                        result = UpdateCacher.DownloadFile(file.AvailableVersion.Url, new Uri(ServerAddress), out str, wc_DownloadProgressChanged, this);
-                        if (result != ErrorState.Successful)
-                        {
-                            failedFiles.Add(file);
-                            AddTextToLog(string.Format("Failed to download file {0} with error: {1}.", file.Name, EnumProxy.Create(result).ToString()), ImageType.Error);
-                        }
-                        else
-                        {
-                            try
-                            {
-                                ErrorState state;
-                                if (file.NeedsInstalling)
-                                    state = Install(file, str);
-                                else
-                                    state = SaveNewFile(file, str);
-
-                                if (state != ErrorState.Successful)
-                                {
-                                    if (state != ErrorState.RequirementNotMet)
-                                    {
-                                        AddTextToLog(string.Format("Failed to install file {0} with error: {1}.", file.Name, EnumProxy.Create(state).ToString()), ImageType.Error);
-                                        failedFiles.Add(file);
-                                    }
-                                    else
-                                        missingFiles.Add(file);
-                                }
-                                else
-                                {
-                                    succeededFiles.Add(file);
-                                    file.DownloadChecked = false;
-                                    if (file.NeedsRestartedCopying)
-                                        needsRestart = true;
-
-                                    if (file.Name.Equals("ffmpeg") || file.Name.StartsWith("x26")
-                                        || file.Name.Equals("xvid_encraw"))
-                                    {
-                                        if (MainForm.Instance.Settings.PortableAviSynth)
-                                            FileUtil.PortableAviSynthActions(false);
-                                        if (!MainForm.Instance.Settings.AviSynthPlus)
-                                            FileUtil.LSMASHFileActions(false);
-                                    }
-                                }
-                            }
-                            finally { str.Close(); }
-                        }
-                    }
-                    currentFile++;
+                    AddTextToLog("Update aborted by user", ImageType.Information);
+                    return /* false*/;
                 }
 
-                if (currentFile >= updateableFileCount) 
+                if (!file.DownloadChecked)
+                    continue;
+
+                AddTextToLog(string.Format("Updating {0}. Package {1}/{2}.", file.DisplayName, currentFile, updateableFileCount), ImageType.Information);
+
+                if (!String.IsNullOrEmpty(file.AvailableVersion.Web))
+                {
+                    string strText;
+                    if (file.Name.ToLowerInvariant().Equals("neroaacenc"))
+                    {
+                        string strPath = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\tools\eac3to\neroAacEnc.exe";
+                        strText = "MeGUI cannot find " + file.DisplayName + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own and extract neroaacenc.exe to:\n" + strPath + "\n\nIf necessary change the path in the settings:\n\"Settings\\External Program Settings\"\n\nWould you like to download it now?";
+                    }
+                    else
+                        strText = "MeGUI cannot find " + file.DisplayName + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own, extract it and set the path to the " + file.Name + ".exe in the MeGUI settings\n(\"Settings\\External Program Settings\").\n\nWould you like to download it now?";
+
+                    if (MessageBox.Show(strText, "Component not found", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(file.AvailableVersion.Web);
+                        succeededFiles.Add(file);
+                    }
+                    else
+                        failedFiles.Add(file);
+                }
+                else
+                {
+                    result = UpdateCacher.DownloadFile(file.AvailableVersion.Url, null, new Uri(ServerAddress), wc_DownloadProgressChanged, this);
+                    if (result != ErrorState.Successful)
+                    {
+                        failedFiles.Add(file);
+                        AddTextToLog(string.Format("Failed to download package {0}: {1}.", file.DisplayName, EnumProxy.Create(result).ToString()), ImageType.Error);
+                    }
+                    else if (_updateStep != UpdateStep.AutomaticCheck)
+                    {
+                        // install only if not in full automatic mode and if download successful
+                        ErrorState state = Install(file);
+                        if (state != ErrorState.Successful)
+                        {
+                            if (state != ErrorState.RequirementNotMet)
+                            {
+                                AddTextToLog(string.Format("Failed to install package {0}: {1}.", file.DisplayName, EnumProxy.Create(state).ToString()), ImageType.Error);
+                                failedFiles.Add(file);
+                            }
+                            else
+                                missingFiles.Add(file);
+                        }
+                        else
+                        {
+                            succeededFiles.Add(file);
+                            file.DownloadChecked = false;
+                            if (file.NeedsRestartedCopying)
+                                needsRestart = true;
+
+                            if (file.Name.Equals("ffmpeg") || file.Name.StartsWith("x26")
+                                || file.Name.Equals("xvid_encraw"))
+                            {
+                                if (MainForm.Instance.Settings.PortableAviSynth)
+                                    FileUtil.PortableAviSynthActions(false);
+                                if (!MainForm.Instance.Settings.AviSynthPlus)
+                                    FileUtil.LSMASHFileActions(false);
+                            }
+                        }
+                    }
+                }
+                currentFile++;
+
+                if (currentFile >= updateableFileCount)
                     break;
+            }
+
+            if (_updateStep == UpdateStep.AutomaticCheck)
+            {
+                if (this.InvokeRequired)
+                    this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+                else
+                    this.Close();
+                return;
             }
 
             SetProgressBar(0, 1, 1); //make sure progress bar is at 100%.
 
             if (succeededFiles.Count > 0)
-                AddTextToLog("Files which have been successfully updated: " + succeededFiles.Count, ImageType.Information);
+                AddTextToLog("Packages which have been successfully updated: " + succeededFiles.Count, ImageType.Information);
             if (failedFiles.Count + missingFiles.Count > 0)
             {
                 if (failedFiles.Count == 0)
-                    AddTextToLog("Files which have not been successfully updated: " + missingFiles.Count, ImageType.Warning);
+                    AddTextToLog("Packages which have not been successfully updated: " + missingFiles.Count, ImageType.Warning);
                 else
-                    AddTextToLog("Files which have not been successfully updated: " + (failedFiles.Count + missingFiles.Count), ImageType.Error);
-            }
-            else
-            {
-#if x86
-                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
-#endif
-#if x64
-                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
-#endif
-                if (File.Exists(strLocalUpdateXML))
-                    File.Delete(strLocalUpdateXML);
+                    AddTextToLog("Packages which have not been successfully updated: " + (failedFiles.Count + missingFiles.Count), ImageType.Error);
             }
 
-            List<string> files = new List<string>();
-            foreach (iUpgradeable u in upgradeData)
+            UpdateCacher.flushOldCachedFilesAsync(upgradeData, this);
+
+            if (MainForm.Instance.Settings.UpdateMode == UpdateMode.Automatic)
             {
-                if (!String.IsNullOrEmpty(u.AvailableVersion.Url))
-                    files.Add(u.AvailableVersion.Url);
-                if (!files.Contains(u.CurrentVersion.Url) && !String.IsNullOrEmpty(u.CurrentVersion.Url))
-                    files.Add(u.CurrentVersion.Url);
+                if (this.InvokeRequired)
+                    this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+                else
+                    this.Close();
+                return;
             }
-            UpdateCacher.flushOldCachedFilesAsync(files, this);
 
             if (needsRestart)
             {
                 if (MessageBox.Show("In order to finish the update, MeGUI needs to be restarted. Do you want to restart now?",
                     "Restart now?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    mainForm.Restart = true;
+                    MainForm.Instance.Restart = true;
                     this.Invoke(new MethodInvoker(delegate { this.Close(); }));
-                    mainForm.Invoke(new MethodInvoker(delegate { mainForm.Close(); }));
+                    MainForm.Instance.Invoke(new MethodInvoker(delegate { MainForm.Instance.Close(); }));
                     return/* true*/;
                 }
-            }
-            if (MainForm.Instance.Settings.AutoUpdateSession)
-            {
-                this.Invoke(new MethodInvoker(delegate { this.Close(); }));
-                return;
             }
             listViewDetails.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
             Invoke(new MethodInvoker(delegate
@@ -1734,28 +1567,7 @@ namespace MeGUI
             }));
         }
 
-        /// <summary>
-        /// This function iterates through all the selected files and downloads them
-        /// one by one.
-        /// </summary>
-        private void BeginUpdate()
-        {
-            // Sort the files to download according to their install priority
-            SortedDictionary<uint, List<iUpgradeable>> groups = new SortedDictionary<uint, List<iUpgradeable>>();
-            foreach (iUpgradeable file in upgradeData)
-            {
-                if (file.DownloadChecked)
-                {
-                    if (!groups.ContainsKey(0))
-                        groups[0] = new List<iUpgradeable>();
-                    groups[0].Add(file);
-                }
-            }
-
-            InstallFiles(groups /*, false*/ );
-        }
-
-        private ErrorState Install(iUpgradeable file, Stream fileData)
+        private ErrorState Install(iUpgradeable file)
         {
             if (file.RequiredBuild > 0 && new System.Version(Application.ProductVersion).Build < file.RequiredBuild)
             {
@@ -1769,7 +1581,7 @@ namespace MeGUI
                 return ErrorState.RequirementNotMet;
             }
 
-            ErrorState state = file.Install(fileData);
+            ErrorState state = file.Install(file, this);
             if (state == ErrorState.Successful)
             {
                 file.CurrentVersion = file.AvailableVersion;
@@ -1778,235 +1590,6 @@ namespace MeGUI
 
             AddTextToLog(string.Format("Could not install module '{0}'.", file.Name), ImageType.Error);
             return state;
-        }
-
-        /// <summary>
-        /// This function takes in the byte array containing a downloaded file
-        /// and the iUpgradeable file and saves the new file to the disk, it also unzips
-        /// the file if necessary.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private ErrorState SaveNewFile(iUpgradeable file, Stream data)
-        {
-            if (file.RequiredBuild > 0 && new System.Version(Application.ProductVersion).Build < file.RequiredBuild)
-            {
-                AddTextToLog(string.Format("Could not install module '{0}' as at least MeGUI build {1} is required.", file.Name, file.RequiredBuild), ImageType.Warning);
-                return ErrorState.RequirementNotMet;
-            }
-
-            if (!String.IsNullOrEmpty(file.RequiredNET) && String.IsNullOrEmpty(OSInfo.GetDotNetVersion(file.RequiredNET)))
-            {
-                AddTextToLog(string.Format("Could not install module '{0}' as .NET {1} is required.", file.Name, file.RequiredNET), ImageType.Warning);
-                return ErrorState.RequirementNotMet;
-            }
-
-            string filepath = null, filename = null;
-            if (file.SaveFolder != null)
-                filepath = file.SaveFolder;
-            else if (file.SavePath != null)
-                filepath = Path.GetDirectoryName(file.SavePath);
-            else
-            {
-                AddTextToLog("The path to save " + file.Name + " to is invalid.", ImageType.Error);
-                return ErrorState.CouldNotSaveNewFile;
-            }
-            if (file.SavePath != null)
-                filename = file.SavePath;
-            else
-                filename = filepath + @"\" + Path.GetFileName(file.AvailableVersion.Url);
-
-            try
-            {
-                if (!Directory.Exists(filepath))
-                    Directory.CreateDirectory(filepath);
-            }
-            catch (IOException)
-            {
-                AddTextToLog(string.Format("Could not create directory {0}.", filepath), ImageType.Error);
-                return ErrorState.CouldNotSaveNewFile;
-            }
-
-            if (file.AvailableVersion.Url.EndsWith(".zip"))
-            {
-                try
-                {
-                    ZipFile zipFile = new ZipFile(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, Path.GetFileName(file.AvailableVersion.Url)));
-                    if (zipFile.TestArchive(true) == false)
-                    {
-                        AddTextToLog("Could not unzip " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
-                        UpdateCacher.FlushFile(file.AvailableVersion.Url, this);
-                        return ErrorState.CouldNotUnzip;
-                    }
-
-                    using (ZipInputStream zip = new ZipInputStream(data))
-                    {
-                        ZipEntry zipentry;
-                        while ((zipentry = zip.GetNextEntry()) != null)
-                        {
-                            filename = Path.Combine(filepath, zipentry.Name);
-                            if (zipentry.IsDirectory)
-                            {
-                                if (!Directory.Exists(filename))
-                                    Directory.CreateDirectory(filename);
-                                continue;
-                            }
-                            if (mainForm.Settings.AlwaysBackUpFiles)
-                            {
-                                ErrorState result = manageBackups(filename, file.Name, file.NeedsRestartedCopying);
-                                if (result != ErrorState.Successful)
-                                    return result;
-                            }
-                            string oldFileName = null;
-                            if (file.NeedsRestartedCopying)
-                            {
-                                oldFileName = filename;
-                                filename += ".tempcopy";
-                            }
-                            // create the output writer to save the file onto the harddisc
-                            using (Stream outputWriter = new FileStream(filename, FileMode.Create))
-                            {
-                                FileUtil.copyData(zip, outputWriter);
-                            }
-                            File.SetLastWriteTime(filename, zipentry.DateTime);
-                            if (file.NeedsRestartedCopying)
-                            {
-                                mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.AvailableVersion.UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
-                                file.CurrentVersion.FileVersion = file.AvailableVersion.FileVersion;
-                                needsRestart = true;
-                            }
-                        }
-                        if (!file.NeedsRestartedCopying)
-                            file.CurrentVersion = file.AvailableVersion; // the current installed version
-                        // is now the latest available version
-                    }
-                }
-                catch
-                {
-                    AddTextToLog("Could not unzip " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
-                    UpdateCacher.FlushFile(file.AvailableVersion.Url, this);
-                    return ErrorState.CouldNotUnzip;
-                }
-            }
-            else if (file.AvailableVersion.Url.EndsWith(".7z"))
-            {
-                try
-                {
-                    SevenZipExtractor oArchiveCheck = new SevenZipExtractor(data);
-                    if (oArchiveCheck.Check() == false)
-                    {
-                        AddTextToLog("Could not extract " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
-                        UpdateCacher.FlushFile(file.AvailableVersion.Url, this);
-                        return ErrorState.CouldNotUnzip;
-                    }
-
-                    bool bNeedRestartForCopying = false;
-                    using (var oArchive = new SevenZipExtractor(data))
-                    {
-                        oArchive.Extracting += (s, e) =>
-                        {
-                            SetProgressBar(0, 100, e.PercentDone);
-                        };
-                        oArchive.FileExists += (o, e) =>
-                        {
-                            if (mainForm.Settings.AlwaysBackUpFiles)
-                            {
-                                ErrorState result = manageBackups(e.FileName, file.Name, file.NeedsRestartedCopying);
-                                if (result != ErrorState.Successful)
-                                {
-                                    e.Cancel = true;
-                                    return;
-                                }
-                            }
-                            if (file.NeedsRestartedCopying)
-                            {   
-                                mainForm.AddFileToReplace(file.Name, e.FileName + ".tempcopy", e.FileName, file.AvailableVersion.UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
-                                needsRestart = true;
-                                e.FileName += ".tempcopy";
-                                bNeedRestartForCopying = true;
-                            }
-                        };
-                        oArchive.ExtractArchive(filepath);
-                        if (bNeedRestartForCopying == false)
-                            file.CurrentVersion = file.AvailableVersion;  // the current installed version is now the latest available version
-                        else
-                            file.CurrentVersion.FileVersion = file.AvailableVersion.FileVersion; // after the restart the new files will be active
-                    }
-                }
-                catch
-                {
-                    AddTextToLog("Could not unzip " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
-                    UpdateCacher.FlushFile(file.AvailableVersion.Url, this);
-                    return ErrorState.CouldNotUnzip;
-                }
-            }
-            else
-            {
-                if (mainForm.Settings.AlwaysBackUpFiles)
-                {
-                    ErrorState result = manageBackups(filename, file.Name, file.NeedsRestartedCopying);
-                    if (result != ErrorState.Successful)
-                        return result;
-                }
-                string oldFileName = null;
-                if (file.NeedsRestartedCopying)
-                {
-                    oldFileName = filename;
-                    filename = filename + ".tempcopy";
-                }
-                try
-                {
-                    using (Stream output = File.OpenWrite(filename))
-                    {
-                        if (file.NeedsRestartedCopying)
-                        {
-                            mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.AvailableVersion.UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
-                            file.CurrentVersion.FileVersion = file.AvailableVersion.FileVersion;
-                            needsRestart = true;
-                        }
-                        else
-                            file.CurrentVersion = file.AvailableVersion; // current installed version
-                        // is now the latest available version
-                    }
-                }
-                catch
-                {
-                    AddTextToLog("Latest version of " + file.Name + " could not be saved to disk. Check there is enough free space.", ImageType.Error);
-                    return ErrorState.CouldNotSaveNewFile;
-                }
-            }
-            return ErrorState.Successful;
-        }
-
-        private ErrorState manageBackups(string savePath, string name, bool bCopyFile)
-        {
-            try
-            {
-                if (File.Exists(savePath + ".backup"))
-                    File.Delete(savePath + ".backup");
-            }
-            catch
-            {
-                AddTextToLog("Outdated backup version of " + name + " could not be deleted. Check if it is in use.", ImageType.Error);
-                return ErrorState.CouldNotRemoveBackup;
-            }
-            try
-            {
-                if (File.Exists(savePath))
-                {
-                    if (bCopyFile == false)
-                        File.Move(savePath, (savePath + ".backup"));
-                    else
-                        File.Copy(savePath, (savePath + ".backup"));
-                }
-            }
-            catch
-            {
-                AddTextToLog("Old version of " + name + " could not be backed up correctly. Restart MeGUI and try again.", ImageType.Error);
-                return ErrorState.CouldNotRenameExistingFile;
-            }
-            return ErrorState.Successful;
         }
 
         void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -2063,19 +1646,19 @@ namespace MeGUI
         private void UpdateWindow_Move(object sender, EventArgs e)
         {
             if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
-                mainForm.Settings.UpdateFormLocation = this.Location;
+                MainForm.Instance.Settings.UpdateFormLocation = this.Location;
         }
 
         private void UpdateWindow_Resize(object sender, EventArgs e)
         {
             if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
-                mainForm.Settings.UpdateFormSize = this.ClientSize;
+                MainForm.Instance.Settings.UpdateFormSize = this.ClientSize;
         }
 
         private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
         {
             if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
-                mainForm.Settings.UpdateFormSplitter = this.splitContainer2.SplitterDistance;
+                MainForm.Instance.Settings.UpdateFormSplitter = this.splitContainer2.SplitterDistance;
         }
 
         private void listViewDetails_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
@@ -2208,8 +1791,12 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            UpdateWindow update = new UpdateWindow(info, false);
-            update.ShowDialog();
+            UpdateWindow _updateWindow = MainForm.Instance.UpdateWindow;
+            _updateWindow.GetUpdateData(false, UpdateWindow.UpdateStep.Manual);
+            if (_updateWindow.InvokeRequired)
+                _updateWindow.Invoke(new MethodInvoker(delegate { _updateWindow.ShowDialog(); }));
+            else
+                _updateWindow.ShowDialog();
         }
 
         public Shortcut[] Shortcuts

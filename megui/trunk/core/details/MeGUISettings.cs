@@ -48,7 +48,7 @@ namespace MeGUI
         };
         private string[][] autoUpdateServerLists;
         private DateTime lastUpdateCheck;
-        private string strMainAudioFormat, strMainFileFormat, aviSynthPath, meguiupdatecache, avisynthpluginspath,
+        private string strMainAudioFormat, strMainFileFormat, meguiupdatecache,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        strLastDestinationPath, strLastSourcePath, tempDirMP4, neroAacEncPath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir,
@@ -79,9 +79,9 @@ namespace MeGUI
         private OCGUIMode ocGUIMode;
         private AfterEncoding afterEncoding;
         private ProxyMode httpProxyMode;
-        private ProgramSettings aften, avimuxgui, bassaudio, besplit, dgavcindex, dgindex, dgindexnv, eac3to, 
-                                ffmpeg, ffms, flac, lame, lsmash, mkvmerge, mp4box, neroaacenc, oggenc, opus,
-                                pgcdemux, qaac, tsmuxer, vobsub, x264, x264_10b, x265, xvid, yadif;
+        private ProgramSettings aften, avimuxgui, avisynth, avisynthplugins, besplit, dgavcindex, dgindex, dgindexnv,
+                                eac3to, ffmpeg, ffms, flac, lame, lsmash, mkvmerge, mp4box, neroaacenc, oggenc,
+                                opus, pgcdemux, qaac, tsmuxer, vobsub, x264, x264_10b, x265, xvid;
         #endregion
         public MeGUISettings()
 		{
@@ -105,9 +105,7 @@ namespace MeGUI
             dialogSettings = new DialogSettings();
             sdSettings = new SourceDetectorSettings();
             AedSettings = new AutoEncodeDefaultsSettings();
-            aviSynthPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avs\avisynth.dll");
             meguiupdatecache = Path.Combine(strMeGUIPath, "update_cache");
-            avisynthpluginspath = Path.Combine(strMeGUIPath, @"tools\avisynth_plugin");
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
             bAutoLoadDG = true;
@@ -435,6 +433,7 @@ namespace MeGUI
         {
             get
             {
+#if x86 && !DEBUG
                 if (autoUpdateServerLists.Length > 2)
                 {
                     autoUpdateServerLists[0] = new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" };
@@ -445,7 +444,8 @@ namespace MeGUI
                     autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
                                                              new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] {"Custom"}};
                 }
-#if x64
+#endif
+#if x64 && !DEBUG
                 autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" },
                                                          new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" },
                                                          new string[] { "Custom", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }};
@@ -537,14 +537,6 @@ namespace MeGUI
             set { tempDirMP4 = value; }
         }
 
-        /// <summary>
-        /// filename and full path of the avisynth dll
-        /// </summary>
-        public string AviSynthPath
-        {
-            get { return aviSynthPath; }
-        }
-
         ///<summary>
         /// gets / sets whether megui backup files from updater or not
         /// </summary>
@@ -590,7 +582,11 @@ namespace MeGUI
         /// </summary>
         public string AvisynthPluginsPath
         {
-            get { return avisynthpluginspath; }
+            get 
+            {
+                UpdateCacher.CheckPackage("avisynth_plugin");
+                return Path.GetDirectoryName(avisynthplugins.Path); 
+            }
         }
 
         /// <summary>
@@ -819,6 +815,19 @@ namespace MeGUI
             get { return audioExtension; }
             set { audioExtension = value; }
         }
+        /// <summary>
+        /// gets / sets the settings for the update mode
+        /// </summary>
+        public UpdateMode UpdateMode
+        {
+            get
+            {
+                if (autoUpdate)
+                    return MeGUI.UpdateMode.Manual;
+                else
+                    return MeGUI.UpdateMode.Disabled;
+            }
+        }
         public bool AutoUpdate
         {
             get { return autoUpdate; }
@@ -973,7 +982,12 @@ namespace MeGUI
         /// </summary>
         public string NeroAacEncPath
         {
-            get { return neroAacEncPath; }
+            get 
+            {
+                if (!File.Exists(neroAacEncPath))
+                    neroAacEncPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\eac3to\neroAacEnc.exe");
+                return neroAacEncPath; 
+            }
             set
             {
                 if (!File.Exists(value))
@@ -1019,10 +1033,16 @@ namespace MeGUI
             set { avimuxgui = value; }
         }
 
-        public ProgramSettings BassAudio
+        public ProgramSettings AviSynth
         {
-            get { return bassaudio; }
-            set { bassaudio = value; }
+            get { return avisynth; }
+            set { avisynth = value; }
+        }
+
+        public ProgramSettings AviSynthPlugins
+        {
+            get { return avisynthplugins; }
+            set { avisynthplugins = value; }
         }
 
         public ProgramSettings BeSplit
@@ -1174,12 +1194,6 @@ namespace MeGUI
             get { return xvid; }
             set { xvid = value; }
         }
-
-        public ProgramSettings Yadif
-        {
-            get { return yadif; }
-            set { yadif = value; }
-        }
         #endregion
 
         private bool bAutoUpdateSession;
@@ -1240,8 +1254,10 @@ namespace MeGUI
                 aften = new ProgramSettings("aften");
             if (avimuxgui == null)
                 avimuxgui = new ProgramSettings("avimux_gui");
-            if (bassaudio == null)
-                bassaudio = new ProgramSettings("bassaudio");
+            if (avisynth == null)
+                avisynth = new ProgramSettings("avs");
+            if (avisynthplugins == null)
+                avisynthplugins = new ProgramSettings("avisynth_plugin");
             if (besplit == null)
                 besplit = new ProgramSettings("besplit");
             if (dgavcindex == null)
@@ -1288,15 +1304,31 @@ namespace MeGUI
                 x265 = new ProgramSettings("x265");
             if (xvid == null)
                 xvid = new ProgramSettings("xvid_encraw");
-            if (yadif == null)
-                yadif = new ProgramSettings("yadif");
 
             // set default name, program paths & files
             aften.UpdateInformation("aften", "Aften", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\aften\aften.exe"));
             avimuxgui.UpdateInformation("avimux_gui", "AVI-Mux GUI", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avimux_gui\avimux_gui.exe"));
-            bassaudio.UpdateInformation("bassaudio", "BassAudio", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bassaudio.dll"));
-            bassaudio.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bass.dll"));
-            bassaudio.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\bassaudio\bass_aac.dll"));
+            avisynth.UpdateInformation("avs", "AviSynth portable", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avs\AviSynth.dll"));
+            avisynth.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avs\DevIL.dll"));
+            avisynth.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avs\plugins\DirectShowSource.dll"));
+            avisynth.Required = true;
+            avisynthplugins.UpdateInformation("avisynth_plugin", "AviSynth plugins", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\bass.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\bass_aac.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\bassaudio.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\colormatrix.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\convolution3dyv12.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\decomb.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\eedi2.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\fluxsmooth.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\leakkerneldeint.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\nicaudio.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\tdeint.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\tivtc.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\tomsmocomp.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\undot.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\vsfilter.dll"));
+            avisynthplugins.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\avisynth_plugin\yadif.dll"));
+            avisynthplugins.Required = true;
             besplit.UpdateInformation("besplit", "Besplit", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\besplit\besplit.exe"));
             dgavcindex.UpdateInformation("dgavcindex", "DGAVCIndex", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgavcindex\dgavcindex.exe"));
             dgavcindex.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\dgavcindex\dgavcdecode.dll"));
@@ -1314,7 +1346,7 @@ namespace MeGUI
             mkvmerge.UpdateInformation("mkvmerge", "mkvmerge", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvmerge.exe"));
             mkvmerge.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mkvmerge\mkvextract.exe"));
             mp4box.UpdateInformation("mp4box", "MP4Box", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\mp4box\mp4box.exe"));
-            neroaacenc.UpdateInformation("neroaacenc", "NeroAACEnc", neroAacEncPath);
+            neroaacenc.UpdateInformation("neroaacenc", "NeroAACEnc", NeroAacEncPath);
             oggenc.UpdateInformation("oggenc2", "OggEnc2", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\oggenc2\oggenc2.exe"));
             opus.UpdateInformation("opus", "Opus", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\opus\opusenc.exe"));
             pgcdemux.UpdateInformation("pgcdemux", "PgcDemux", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\pgcdemux\pgcdemux.exe"));
@@ -1339,11 +1371,19 @@ namespace MeGUI
             x265.UpdateInformation("x265", "x265", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x265\x265.exe"));
             x265.Files.Add(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\x265\avs4x265.exe"));
             xvid.UpdateInformation("xvid_encraw", "Xvid", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\xvid_encraw\xvid_encraw.exe"));
-            yadif.UpdateInformation("yadif", "Yadif", Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), @"tools\yadif\yadif.dll"));
-        }
+       }
         #endregion
     }
 
     public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2, CloseMeGUI = 3 }
     public enum ProxyMode { None = 0, SystemProxy = 1, CustomProxy = 2, CustomProxyWithLogin = 3 }
+    public enum UpdateMode
+    {
+        [EnumTitle("Automatic update")]
+        Automatic = 0,
+        [EnumTitle("Automatic update check only")]
+        Manual = 1,
+        [EnumTitle("Automatic update completly disabled")]
+        Disabled = 2
+    }
 }

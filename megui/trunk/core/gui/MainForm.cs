@@ -61,6 +61,7 @@ namespace MeGUI
         private LogItem _fileIndexerLog;
         private LogItem _updateLog;
         private LogItem _eac3toLog;
+        private UpdateWindow _updateWindow;
         private List<ProgramSettings> _programsettings;
         public List<ProgramSettings> ProgramSettings { get { return _programsettings; } set { _programsettings = value; } }
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
@@ -71,6 +72,16 @@ namespace MeGUI
         public LogItem FileIndexerLog { get { return _fileIndexerLog; } set { _fileIndexerLog = value; } }
         public LogItem UpdateLog { get { return _updateLog; } set { _updateLog = value; } }
         public LogItem Eac3toLog { get { return _eac3toLog; } set { _eac3toLog = value; } }
+        public UpdateWindow UpdateWindow 
+        { 
+            get 
+            {
+                if (_updateWindow == null)
+                    _updateWindow = new UpdateWindow();
+                return _updateWindow; 
+            } 
+            set { _updateWindow = value; } 
+        }
         public MuxProvider MuxProvider { get { return muxProvider; } }
         private bool restart = false;
         private Dictionary<string, CommandlineUpgradeData> filesToReplace = new Dictionary<string, CommandlineUpgradeData>();
@@ -165,7 +176,8 @@ namespace MeGUI
 #if x64
             this.TitleText += " x64";
 #endif
-            if (MainForm.Instance.Settings.AutoUpdate == true && MainForm.Instance.Settings.AutoUpdateServerSubList == 1)
+            getVersionInformation();
+            if (MainForm.Instance.Settings.AutoUpdateServerSubList == 1)
                 this.TitleText += " DEVELOPMENT UPDATE SERVER";
             setGUIInfo();
             Jobs.showAfterEncodingStatus(Settings);
@@ -689,18 +701,15 @@ namespace MeGUI
         }
         #endregion
         #region importing
-        public void importProfiles(Stream data)
+        public void importProfiles(string file, bool bAuto)
         {
             Util.ThreadSafeRun(this, delegate
             {
-                ProfileImporter importer = new ProfileImporter(this, data, true);
+                ProfileImporter importer = new ProfileImporter(this, file, true);
                 if (importer.ErrorDuringInit())
                     return;
-                if (MainForm.Instance.settings.AutoUpdateSession)
-                {
-                    importer.AutoImport();
-                }
-                else
+
+                if (MainForm.Instance.settings.UpdateMode != UpdateMode.Automatic)
                 {
                     importer.Show();
                     while (importer.Visible == true)    // wait until the profiles have been imported
@@ -709,6 +718,8 @@ namespace MeGUI
                         System.Threading.Thread.Sleep(100);
                     }
                 }
+                else
+                    importer.AutoImport();
             });
         }
 
@@ -747,17 +758,18 @@ namespace MeGUI
 
         private void beginUpdateCheck()
         {
-            UpdateWindow update = new UpdateWindow(this, false);
-            update.GetUpdateData(true);
+            UpdateWindow _updateWindow = UpdateWindow;
+            _updateWindow.GetUpdateData(true, UpdateWindow.UpdateStep.Manual);
             bool bIsComponentMissing = UpdateWindow.isComponentMissing();
-            if (!bIsComponentMissing && !update.HasUpdatableFiles()) // If there are updated or missing files, display the window
+            if (!bIsComponentMissing && !_updateWindow.HasUpdatableFiles())
                 return;
 
+            // If there are updated or missing files, display the window
             if (MainForm.Instance.Settings.AutoUpdateSession)
             {
-                update.Visible = true;
-                update.StartAutoUpdate();
-                while (update.Visible == true)
+                _updateWindow.Visible = true;
+                _updateWindow.StartAutoUpdate();
+                while (_updateWindow.Visible == true)
                 {
                     Application.DoEvents();
                     System.Threading.Thread.Sleep(100);
@@ -779,10 +791,11 @@ namespace MeGUI
                     else
                         return;
                 }
-                if (MessageBox.Show("There are updated files available that may be necessary for MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live e.g. in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
+                if (MessageBox.Show("There are updated packages available that may be necessary for MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read and accepted this information.\n\r\n\rDo you wish to proceed reviewing the updates?",
                         "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    update.ShowDialog();
+                    _updateWindow.ShowDialog();
             }
+
             if (UpdateWindow.isComponentMissing() && !this.Restart)
             {
                 if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
@@ -799,21 +812,15 @@ namespace MeGUI
             }
         }
 
-        private void mnuUpdate_Click(object sender, EventArgs e)
-        {
-            UpdateWindow update = new UpdateWindow(this, false);
-            update.ShowDialog();
-        }
-
-        internal void AddFileToReplace(string iUpgradeableName, string tempFilename, string filename, string newUploadDate)
+        internal void AddFileToReplace(string iUpgradeableName, string filename, string newUploadDate)
         {
             CommandlineUpgradeData data = new CommandlineUpgradeData();
             data.filename.Add(filename);
-            data.tempFilename.Add(tempFilename);
+            data.tempFilename.Add(filename + ".tempcopy");
             data.newUploadDate = newUploadDate;
             if (filesToReplace.ContainsKey(iUpgradeableName))
             {
-                filesToReplace[iUpgradeableName].tempFilename.Add(tempFilename);
+                filesToReplace[iUpgradeableName].tempFilename.Add(filename + ".tempcopy");
                 filesToReplace[iUpgradeableName].filename.Add(filename);
                 return;
             }
@@ -824,6 +831,7 @@ namespace MeGUI
         {
             this.profileManager.SaveProfiles();
             this.saveSettings();
+            UpdateWindow.SaveSettings();
             this.saveApplicationSettings();
             jobControl1.saveJobs();
             this.saveLog();
@@ -863,10 +871,9 @@ namespace MeGUI
 
             if (parser.upgradeData.Count > 0)
             {
-                UpdateWindow update = new UpdateWindow(this, false);
                 foreach (string file in parser.upgradeData.Keys)
-                    update.UpdateUploadDate(file, parser.upgradeData[file]);
-                update.SaveSettings();
+                    UpdateWindow.UpdateUploadDate(file, parser.upgradeData[file]);
+                UpdateWindow.SaveSettings();
             }
         }
 
@@ -1348,11 +1355,7 @@ namespace MeGUI
             if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1) || Environment.OSVersion.Version.Major > 6)
                 taskbarItem = (ITaskbarList3)new ProgressTaskbar();
 
-            getVersionInformation();
-
-            if (_updateLog == null)
-                _updateLog = Log.Info("Update detection");
-            if (settings.AutoUpdate)
+            if (settings.UpdateMode != UpdateMode.Disabled)
                 startUpdateCheck();
             else
                 _updateLog.LogEvent("Automatic update is disabled");
@@ -1402,7 +1405,7 @@ namespace MeGUI
                 i.LogValue(".Net Framework", string.Format("{0}", version));
             version = OSInfo.GetDotNetVersion("4.0");
             if (String.IsNullOrEmpty(version))
-                i.LogEvent(".Net Framework 4.0 not installed. It will be required in the feature.", ImageType.Warning);
+                i.LogEvent(".Net Framework 4.0 not installed. It will be required in the future.", ImageType.Warning);
             else
                 i.LogValue(".Net Framework", string.Format("{0}", version));
 

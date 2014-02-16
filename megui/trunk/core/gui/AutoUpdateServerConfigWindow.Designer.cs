@@ -154,13 +154,13 @@ namespace MeGUI.core.gui
             this.label1.Padding = new System.Windows.Forms.Padding(3);
             this.label1.Size = new System.Drawing.Size(114, 23);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Auto-update servers";
+            this.label1.Text = "update server group";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // subList
             // 
-            this.subList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.subList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.subList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.subList.FormattingEnabled = true;
             this.subList.Location = new System.Drawing.Point(123, 3);
@@ -181,7 +181,7 @@ namespace MeGUI.core.gui
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AutoUpdateServerConfigWindow";
-            this.Text = "AutoUpdateServerConfigWindow";
+            this.Text = "Update Server Configuration";
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
             this.flowLayoutPanel3.ResumeLayout(false);

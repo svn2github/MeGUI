@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -41,7 +41,9 @@ namespace MeGUI.core.gui
                 "Please enter the server address", 
                 "Please enter the server address",
                 "http://yourserver.org/path/to/update/folder/");
-            if (serverName == null) return;
+            if (serverName == null)
+                return;
+
             serverName = serverName.Trim();
             if (!serverName.EndsWith("/"))
                 serverName += "/";
@@ -51,17 +53,20 @@ namespace MeGUI.core.gui
                 MessageBox.Show("Server already listed. Adding nothing", "Server already listed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
             if (!serverName.StartsWith("http://"))
             {
                 MessageBox.Show("Only http servers are supported", "Server not http", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            UpdateWindow oUpdateWindow = new UpdateWindow(MainForm.Instance, true);
+
+            UpdateWindow oUpdateWindow = new UpdateWindow();
             if (oUpdateWindow.GetUpdateXML(serverName) != UpdateWindow.ErrorState.Successful)
             {
                 if (MessageBox.Show("The server or the XML file is not available.\r\nShould it be added nevertheless?", "No connection to server", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != System.Windows.Forms.DialogResult.Yes)
                     return;
             }
+
             serverList.Items.Add(serverName);
         }
 

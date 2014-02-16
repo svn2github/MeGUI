@@ -76,11 +76,6 @@ namespace MeGUI.core.util
             }
         }
 
-        public static void ExtractZipFile(string file, string extractFolder)
-        {
-            ExtractZipFile(File.OpenRead(file), extractFolder);
-        }
-
         public static void ExtractZipFile(Stream s, string extractFolder)
         {
             using (ZipFile inputFile = new ZipFile(s))
@@ -229,8 +224,8 @@ namespace MeGUI.core.util
 
             bool bIsFolder = Directory.Exists(filename);
 
-            filter = filter.ToLower(System.Globalization.CultureInfo.InvariantCulture);
-            filename = Path.GetFileName(filename).ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            filter = filter.ToLowerInvariant();
+            filename = Path.GetFileName(filename).ToLowerInvariant();
             string[] filters = filter.Split('|');
 
             for (int i = 1; i < filters.Length; i += 2)
@@ -456,14 +451,15 @@ namespace MeGUI.core.util
 
             // detects included avisynth
             MainForm.Instance.Settings.PortableAviSynth = false;
-            if (GetFileInformation(MainForm.Instance.Settings.AviSynthPath, out fileVersion, out fileDate, out fileProductName))
-            {
-                MainForm.Instance.Settings.PortableAviSynth = true;
+            if (GetFileInformation(MainForm.Instance.Settings.AviSynth.Path, out fileVersion, out fileDate, out fileProductName))
+            { 
                 if (oLog != null)
                     oLog.LogValue("AviSynth" + (fileProductName.Contains("+") ? "+" : String.Empty) + " portable",
                         fileVersion + " (" + fileDate + ")" + (!bFoundInstalledAviSynth ? String.Empty : " (active)"));
                 if (!bFoundInstalledAviSynth || MainForm.Instance.Settings.AlwaysUsePortableAviSynth)
                 {
+                    UpdateCacher.CheckPackage("avs");
+                    MainForm.Instance.Settings.PortableAviSynth = true;
                     PortableAviSynthActions(false);
                     if (fileProductName.Contains("+"))
                         MainForm.Instance.Settings.AviSynthPlus = true;
@@ -541,7 +537,7 @@ namespace MeGUI.core.util
         /// <param name="bRemove">if true the files will be removed / portable AviSynth will be disabled</param>
         public static void PortableAviSynthActions(bool bRemove)
         {
-            string avisynthPath = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynthPath);
+            string avisynthPath = Path.GetDirectoryName(MainForm.Instance.Settings.AviSynth.Path);
 
             ArrayList targetDirectories = new ArrayList();
             targetDirectories.Add(Path.GetDirectoryName(Application.ExecutablePath));

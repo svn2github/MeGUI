@@ -31,7 +31,7 @@ namespace MeGUI
 {
     public class ProgramSettings
     {
-        private bool _enabled;
+        private bool _enabled, _required;
         private string _path;
         private DateTime _lastused;
         private string _name;
@@ -41,7 +41,7 @@ namespace MeGUI
         public ProgramSettings()
         {
             _files = new List<string>();
-            _enabled = false;
+            _enabled = _required = false;
             _path = _name = _displayname = String.Empty;
             _lastused = new DateTime();
             MainForm.Instance.ProgramSettings.Add(this);
@@ -50,7 +50,7 @@ namespace MeGUI
         public ProgramSettings(string name)
         {
             _files = new List<string>();
-            _enabled = false;
+            _enabled = _required = false;
             _path = String.Empty;
             _lastused = new DateTime();
             _name = _displayname = name;
@@ -72,6 +72,13 @@ namespace MeGUI
         {
             get { return _enabled; }
             set { _enabled = value; }
+        }
+
+        [XmlIgnore()]
+        public bool Required
+        {
+            get { return _required; }
+            set { _required = value; }
         }
 
         [XmlIgnore()]
@@ -133,7 +140,7 @@ namespace MeGUI
 
         public bool UpdateAllowed()
         {
-            if (_enabled && _lastused.AddDays(UpdateCacher.REMOVE_PACKAGE_AFTER_DAYS) > DateTime.Now)
+            if (_required || (_enabled && _lastused.AddDays(UpdateCacher.REMOVE_PACKAGE_AFTER_DAYS) > DateTime.Now))
                 return true;
             else
                 return false;
