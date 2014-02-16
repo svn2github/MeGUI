@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -337,7 +337,8 @@ namespace MeGUI.core.gui
         /// </summary>
         public void Play()
         {
-            if(videoReader == null) throw new InvalidOperationException("Video must be loaded before playback can be started");
+            if (videoReader == null)
+                throw new InvalidOperationException("Video must be loaded before playback can be started");
 
             playTimer.Change(0, (int)(1000d / (Framerate * SpeedUp)));
             isPlaying = true;

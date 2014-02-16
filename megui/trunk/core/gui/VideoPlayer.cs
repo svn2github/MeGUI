@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -1349,8 +1349,13 @@ namespace MeGUI
 
         private void videoPreview_PositionChanged(object sender, EventArgs e)
         {
-            positionSlider.Value = videoPreview.Position;
-            setTitleText();
+            if (videoPreview.Position > -1)
+            {
+                positionSlider.Value = videoPreview.Position;
+                setTitleText();
+            }
+            else
+                this.Text = "Error in AviSynth script";
         }
 
         private void btnReloadVideo_Click(object sender, EventArgs e)

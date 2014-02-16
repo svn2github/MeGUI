@@ -319,14 +319,14 @@ namespace MeGUI
             projectPath = mainForm.Settings.DefaultOutputDir;
             if (String.IsNullOrEmpty(indexFile))
             {
-                ext = Path.GetExtension(videoInput).ToLower(System.Globalization.CultureInfo.InvariantCulture);
+                ext = Path.GetExtension(videoInput).ToLowerInvariant();
                 if (string.IsNullOrEmpty(projectPath))
                     projectPath = Path.GetDirectoryName(videoInput);
                 fileNameNoPath = Path.GetFileName(videoInput);
             }
             else
             {
-                ext = Path.GetExtension(indexFile).ToLower(System.Globalization.CultureInfo.InvariantCulture);
+                ext = Path.GetExtension(indexFile).ToLowerInvariant();
                 if (string.IsNullOrEmpty(projectPath))
                     projectPath = Path.GetDirectoryName(indexFile);
                 fileNameNoPath = Path.GetFileName(indexFile);
@@ -619,7 +619,7 @@ namespace MeGUI
                 }
 
                 string tempAvs;
-                if (fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avi"))
+                if (fileName.ToLowerInvariant().EndsWith(".avi"))
                 {
                     tempAvs = "AVISource(\"" + fileName + "\", audio=false)" + VideoUtil.getAssumeFPS(0, fileName);
                 }
@@ -1144,14 +1144,14 @@ namespace MeGUI
 
             if (this.SubtitlesPath.Text != openSubsDialog.FileName)
             {
-                string ext = Path.GetExtension(openSubsDialog.FileName).ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture);
+                string ext = Path.GetExtension(openSubsDialog.FileName).ToString().ToLowerInvariant();
                 this.SubtitlesPath.Text = openSubsDialog.FileName;
-                if (ext == ".idx")
-                    cbCharset.Enabled = false;
+                cbCharset.Enabled = (ext != ".idx");
                 MessageBox.Show("Subtitles successfully added to the script...", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else 
-                MessageBox.Show("The subtitles you chosen was already added...", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("The subtitles you have chosen were already added...", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            
             if (sender != null && e != null)
                 showScript(false);
         }
