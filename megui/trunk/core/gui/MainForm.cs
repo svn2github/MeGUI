@@ -1358,7 +1358,11 @@ namespace MeGUI
             if (settings.UpdateMode != UpdateMode.Disabled)
                 startUpdateCheck();
             else
+            {
+                if (_updateLog == null)
+                    _updateLog = MainForm.Instance.Log.Info("Update detection");
                 _updateLog.LogEvent("Automatic update is disabled");
+            }
 
             if (settings.AutoStartQueueStartup)
                 jobControl1.StartAll(false);

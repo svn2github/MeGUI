@@ -568,6 +568,10 @@ namespace MeGUI
                     string value = (string)key.GetValue("Install_Dir");
                     if (value == null)
                         return String.Empty;
+
+                    if (!Directory.Exists(value))
+                        return String.Empty;
+
                     return value;
                 }
                 catch
