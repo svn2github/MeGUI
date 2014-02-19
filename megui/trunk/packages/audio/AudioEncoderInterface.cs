@@ -683,7 +683,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private bool OpenSourceWithBassAudio(out StringBuilder sbOpen)
         {
             sbOpen = new StringBuilder();
-            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.AvisynthPluginsPath), "BassAudio.dll"), Environment.NewLine);
+            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "BassAudio.dll"), Environment.NewLine);
             sbOpen.AppendFormat("BassAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
             _log.LogEvent("Trying to open the file with BassAudioSource()", ImageType.Information);
             string strErrorText = String.Empty;

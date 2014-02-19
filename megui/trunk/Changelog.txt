@@ -1,3 +1,4 @@
+2474 [AVS Script Creator] fixed path for Yadif and BassAudioSource (regression of 2471)
 2473 [Update]             fixed error if auto update is disabled (regression of 2471)
 2472 [Update]             required packages are always enabled
 2471 [Update]             merged some avisynth plugins into one package
