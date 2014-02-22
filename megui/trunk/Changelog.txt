@@ -1,3 +1,5 @@
+2476 [Queue]              removed general check for missing packages at queue start
+     [Update]             automatically download needed and missing packages after confirmation if the package was disabled (regression of 2471)
 2475 [Audio Encoder]      added needed ConvertAudioToFloat() for AviSynth+
 2474 [AVS Script Creator] fixed path for Yadif and BassAudioSource (regression of 2471)
 2473 [Update]             fixed error if auto update is disabled (regression of 2471)

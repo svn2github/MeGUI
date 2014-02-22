@@ -758,6 +758,9 @@ namespace MeGUI
 
         private void beginUpdateCheck()
         {
+            if (UpdateWindow.InvokeRequired) // as invoke does not work when it comes to making the form visible a new instance is required
+                UpdateWindow = new UpdateWindow();
+
             UpdateWindow _updateWindow = UpdateWindow;
             _updateWindow.GetUpdateData(true, UpdateWindow.UpdateStep.Manual);
             bool bIsComponentMissing = UpdateWindow.isComponentMissing();
@@ -767,8 +770,7 @@ namespace MeGUI
             // If there are updated or missing files, display the window
             if (MainForm.Instance.Settings.AutoUpdateSession)
             {
-                _updateWindow.Visible = true;
-                _updateWindow.StartAutoUpdate();
+               _updateWindow.StartAutoUpdate();
                 while (_updateWindow.Visible == true)
                 {
                     Application.DoEvents();

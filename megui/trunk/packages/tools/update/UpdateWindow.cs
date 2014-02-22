@@ -605,11 +605,10 @@ namespace MeGUI
         }
         #endregion
         #region Delegates and delegate methods
-        delegate void BeginParseUpgradeXml(XmlNode node, XmlNode groupNode, string path);
+        private delegate void BeginParseUpgradeXml(XmlNode node, XmlNode groupNode, string path);
         private delegate void SetLogText();
         private delegate void SetListView(ListViewItem item);
         private delegate void ClearItems(ListView listview);
-
         private delegate void UpdateProgressBar(int minValue, int maxValue, int currentValue);
         public void SetProgressBar(int minValue, int maxValue, int currentValue)
         {
@@ -926,7 +925,10 @@ namespace MeGUI
             CreateTreeview.IsBackground = true;
             CreateTreeview.Start();
             if (wait)
+            {
+                webUpdate.Reset();
                 webUpdate.WaitOne();
+            }
         }
 
         /// <summary>
@@ -990,7 +992,10 @@ namespace MeGUI
             {
                 value = GetUpdateXML(null);
                 if (value != ErrorState.Successful)
+                {
+                    webUpdate.Set();
                     return;
+                }
             }
 
             // I'd prefer the main thread to parse the upgradeXML as opposed to using this
@@ -1019,7 +1024,6 @@ namespace MeGUI
             else
                 AddTextToLog("All packages are up to date", ImageType.Information);
 
-            bool bChecked = chkShowAllFiles.Checked;
             if (chkShowAllFiles.InvokeRequired)
                 chkShowAllFiles.Invoke(new MethodInvoker(delegate { chkShowAllFiles.Checked = iUpdatesCount == 0; }));
             else
@@ -1164,6 +1168,9 @@ namespace MeGUI
         #region GUI
         private void DisplayItems(bool bShowAllFiles)
         {
+            if (!this.Visible)
+                return;
+
             ClearListview(this.listViewDetails);
 
             foreach (iUpgradeable file in upgradeData)
@@ -1408,6 +1415,7 @@ namespace MeGUI
 
         public void StartAutoUpdate()
         {
+            this.Visible = true;
             btnUpdate_Click(null, null);
         }
 
@@ -1539,7 +1547,8 @@ namespace MeGUI
 
             UpdateCacher.flushOldCachedFilesAsync(upgradeData, this);
 
-            if (MainForm.Instance.Settings.UpdateMode == UpdateMode.Automatic)
+            if (MainForm.Instance.Settings.UpdateMode == UpdateMode.Automatic ||
+                (MainForm.Instance.Settings.AutoUpdateSession && (failedFiles.Count + missingFiles.Count) == 0))
             {
                 if (this.InvokeRequired)
                     this.Invoke(new MethodInvoker(delegate { this.Close(); }));
@@ -1559,7 +1568,18 @@ namespace MeGUI
                     return/* true*/;
                 }
             }
-            listViewDetails.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
+
+            int iUpdatesCount = NumUpdatableFiles();
+            if (chkShowAllFiles.Checked != (iUpdatesCount == 0))
+            {
+                if (chkShowAllFiles.InvokeRequired)
+                    chkShowAllFiles.Invoke(new MethodInvoker(delegate { chkShowAllFiles.Checked = iUpdatesCount == 0; }));
+                else
+                    chkShowAllFiles.Checked = iUpdatesCount == 0;
+            }
+            else 
+                listViewDetails.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
+
             Invoke(new MethodInvoker(delegate
             {
                 btnAbort.Enabled = false;
@@ -1791,12 +1811,12 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
+            if (MainForm.Instance.UpdateWindow.InvokeRequired) // as invoke does not work when it comes to making the form visible a new instance is required
+                MainForm.Instance.UpdateWindow = new UpdateWindow();
+
             UpdateWindow _updateWindow = MainForm.Instance.UpdateWindow;
             _updateWindow.GetUpdateData(false, UpdateWindow.UpdateStep.Manual);
-            if (_updateWindow.InvokeRequired)
-                _updateWindow.Invoke(new MethodInvoker(delegate { _updateWindow.ShowDialog(); }));
-            else
-                _updateWindow.ShowDialog();
+            _updateWindow.Visible = true;
         }
 
         public Shortcut[] Shortcuts
