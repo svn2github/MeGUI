@@ -1175,6 +1175,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
 
             // SampleRate
+            if (MainForm.Instance.Settings.AviSynthPlus && audioJob.Settings.SampleRateType > 0)
+                script.Append("ConvertAudioToFloat(last)" + Environment.NewLine);
             switch (audioJob.Settings.SampleRateType)
             {
                 case 0:
