@@ -119,7 +119,7 @@ namespace MeGUI
                     Version latest = this.availableVersion;
                     if (this.name == "neroaacenc")
                     {
-                        if (currentVersion.FileVersion != null && currentVersion.FileVersion.Equals(latest.FileVersion))
+                        if (currentVersion != null && currentVersion.FileVersion != null && currentVersion.FileVersion.Equals(latest.FileVersion))
                             latest.UploadDate = currentVersion.UploadDate;
                     }
                     return latest != null && (latest.CompareTo(currentVersion) != 0);
@@ -863,7 +863,10 @@ namespace MeGUI
         {
             string path = Path.Combine(Application.StartupPath, "AutoUpdate.xml");
             if (!File.Exists(path))
+            {
+                upgradeData = new iUpgradeableCollection();
                 return;
+            }
 
             try
             {
@@ -890,7 +893,8 @@ namespace MeGUI
             }
             catch(Exception)
             {
-                MessageBox.Show("Error: Could not load previous download settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                upgradeData = new iUpgradeableCollection();
+                MessageBox.Show("Error: Could not load previous package settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1024,10 +1028,20 @@ namespace MeGUI
             else
                 AddTextToLog("All packages are up to date", ImageType.Information);
 
-            if (chkShowAllFiles.InvokeRequired)
-                chkShowAllFiles.Invoke(new MethodInvoker(delegate { chkShowAllFiles.Checked = iUpdatesCount == 0; }));
+            if (chkShowAllFiles.Checked != (iUpdatesCount == 0))
+            {
+                if (chkShowAllFiles.InvokeRequired)
+                    chkShowAllFiles.Invoke(new MethodInvoker(delegate { chkShowAllFiles.Checked = iUpdatesCount == 0; }));
+                else
+                    chkShowAllFiles.Checked = iUpdatesCount == 0;
+            }
             else
-                chkShowAllFiles.Checked = iUpdatesCount == 0;
+            {
+                if (listViewDetails.InvokeRequired)
+                    listViewDetails.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
+                else
+                    DisplayItems(chkShowAllFiles.Checked);
+            }
 
             webUpdate.Set();
         }
@@ -1157,8 +1171,8 @@ namespace MeGUI
                 file.AvailableVersion = availableFile;
             }
 
-            if (!file.isAvailable() || (file.AvailableVersion.CompareTo(file.CurrentVersion) != 0 
-                && file.AllowUpdate && file.HasAvailableVersion && (pSettings == null || pSettings.Enabled)))
+            if ((!file.isAvailable() && (pSettings == null || pSettings.UpdateAllowed()))
+                || (file.AllowUpdate && file.HasAvailableVersion && (pSettings == null || pSettings.UpdateAllowed())))
                 file.DownloadChecked = true;
 
             if (!fileAlreadyAdded)
@@ -1178,8 +1192,7 @@ namespace MeGUI
                 if (!bShowAllFiles)
                 {
                     ProgramSettings pSettings = UpdateCacher.GetPackage(file.Name);
-                    if ((pSettings == null || pSettings.Enabled) && file.AllowUpdate 
-                        && (file.HasAvailableVersion || file.DownloadChecked))
+                    if (file.DownloadChecked)
                         AddToListview(file.CreateListViewItem());
                 }
                 else
@@ -1518,10 +1531,10 @@ namespace MeGUI
                         }
                     }
                 }
-                currentFile++;
-
+                
                 if (currentFile >= updateableFileCount)
                     break;
+                currentFile++;
             }
 
             if (_updateStep == UpdateStep.AutomaticCheck)
@@ -1577,8 +1590,13 @@ namespace MeGUI
                 else
                     chkShowAllFiles.Checked = iUpdatesCount == 0;
             }
-            else 
-                listViewDetails.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
+            else
+            {
+                if (listViewDetails.InvokeRequired)
+                    listViewDetails.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
+                else
+                    DisplayItems(chkShowAllFiles.Checked);
+            }
 
             Invoke(new MethodInvoker(delegate
             {

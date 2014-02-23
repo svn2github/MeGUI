@@ -1,3 +1,6 @@
+2477 [Update]             fixed sometimes not possible to enable packages
+     [Update]             improved default update selection logic
+     [Update]             fixed sometimes not processing all packages
 2476 [Queue]              removed general check for missing packages at queue start
      [Update]             automatically download needed and missing packages after confirmation if the package was disabled (regression of 2471)
 2475 [Audio Encoder]      added needed ConvertAudioToFloat() for AviSynth+
@@ -16,7 +19,7 @@
 2465 [Queue]              changed default main window size and queue column size
 2464 [x264]               fixed --sar detection for 720x480 if using the Blu-ray target device
 2463 [AVS Script Creator] improved anamorphic calculation. if the output DAR is the same as the input DAR 
-     +[OneClick]             it will not be rounded within the "acceptable anamorhphic aspect error" tolerance
+     +[OneClick]             it will not be rounded within the "acceptable anamorphic aspect error" tolerance
 2462 [Update]             improved status handling
      [Update]             cosmetics
 2461 [L-SMASH Indexer]    renamed to L-SMASH Works

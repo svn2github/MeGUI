@@ -120,7 +120,7 @@ namespace MeGUI
 
         public bool Update(bool enable, bool forceUpdate)
         {
-            if (enable && (forceUpdate || !_enabled))
+            if (enable)
                 _lastused = DateTime.Now;
             _enabled = enable;
 
