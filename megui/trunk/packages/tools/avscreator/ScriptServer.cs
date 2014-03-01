@@ -386,7 +386,7 @@ namespace MeGUI
             string path = Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "yadif.dll");
             filters.Add(new DeinterlaceFilter(
                 bobber ? "Yadif (with Bob)" : "Yadif",
-                string.Format("LoadCPlugin(\"{0}\"){1}Yadif({2}order={3})", 
+                string.Format("Load_Stdcall_Plugin(\"{0}\"){1}Yadif({2}order={3})", 
                     path, Environment.NewLine,
                     bobber ? "mode=1, " : "", Order(order))));
         }

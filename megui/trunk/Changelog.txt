@@ -1,3 +1,4 @@
+2479 [AVS Script Creator]   reverted Yadif back to Load_Stdcall_Plugin (regression of 2471)
 2478 [HD Streams Extractor] last used open mode will be preselected
      [HD Streams Extractor] fixed using wrong source file in file mode if more than one job is added with "and close" disabled
 2477 [Update]               fixed sometimes not possible to enable packages
