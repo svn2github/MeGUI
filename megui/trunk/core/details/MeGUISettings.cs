@@ -53,13 +53,12 @@ namespace MeGUI
                        strLastDestinationPath, strLastSourcePath, tempDirMP4, neroAacEncPath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir,
                        appendToForcedStreams, lastUsedOneClickFolder, lastUpdateServer;
-        private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
+        private bool autoForceFilm, autoStartQueue, autoOpenScript, bUseQAAC, bUseX265, bUseDGIndexNV,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
-                     deleteAbortedOutput, openProgressWindow, autoSelectHDStreams, autoscroll,
-                     alwaysOnTop, safeProfileAlteration, addTimePosition, alwaysbackupfiles, bUseITU,
+                     deleteAbortedOutput, openProgressWindow, autoSelectHDStreams,
+                     alwaysOnTop, addTimePosition, alwaysbackupfiles, bUseITU, bEac3toLastUsedFileMode,
                      bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bAlwayUsePortableAviSynth,
-                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bExternalMuxerX264, bUseNeroAacEnc,
-                     bUseQAAC, bUseX265, bUseDGIndexNV;
+                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bExternalMuxerX264, bUseNeroAacEnc;
         private decimal forceFilmThreshold, acceptableFPSError;
         private int nbPasses, autoUpdateServerSubList, minComplexity, updateFormSplitter,
                     maxComplexity, jobColumnWidth, inputColumnWidth, outputColumnWidth, codecColumnWidth,
@@ -72,7 +71,7 @@ namespace MeGUI
         private DialogSettings dialogSettings;
         private ProcessPriority defaultPriority;
         private Point mainFormLocation, updateFormLocation;
-        private Size mainFormSize, updateFormSize, jobWorkerSize;
+        private Size mainFormSize, updateFormSize;
         private FileSize[] customFileSizes;
         private FPS[] customFPSs;
         private Dar[] customDARs;
@@ -94,7 +93,6 @@ namespace MeGUI
                 b64bitX264 = true;
 #endif
 
-            autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
                 new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
             lastUpdateCheck = DateTime.Now.ToUniversalTime();
@@ -106,7 +104,6 @@ namespace MeGUI
             sdSettings = new SourceDetectorSettings();
             AedSettings = new AutoEncodeDefaultsSettings();
             meguiupdatecache = Path.Combine(strMeGUIPath, "update_cache");
-            recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
             bAutoLoadDG = true;
 			autoStartQueue = true;
@@ -118,7 +115,6 @@ namespace MeGUI
             defaultPriority = ProcessPriority.IDLE;
             afterEncoding = AfterEncoding.DoNothing;
 			autoOpenScript = true;
-			enableMP3inMP4 = false;
 			overwriteStats = true;
 			keep2of3passOutput = false;
 			deleteCompletedJobs = false;
@@ -129,7 +125,6 @@ namespace MeGUI
 			openProgressWindow = true;
             videoExtension = "";
             audioExtension = "";
-            safeProfileAlteration = false;
             alwaysOnTop = false;
             httpProxyMode = ProxyMode.None;
             httpproxyaddress = "";
@@ -159,7 +154,6 @@ namespace MeGUI
             updateFormServerDateColumnWidth = 70;
             updateFormLastUsedColumnWidth = 70;
             updateFormStatusColumnWidth = 111;
-            jobWorkerSize = new Size(565, 498);
             jobColumnWidth = 40;
             inputColumnWidth = 89;
             outputColumnWidth = 89;
@@ -179,6 +173,7 @@ namespace MeGUI
             lastUsedOneClickFolder = "";
             bUseNeroAacEnc = bUseQAAC = bUseX265 = bUseDGIndexNV = false;
             chapterCreatorMinimumLength = 900;
+            bEac3toLastUsedFileMode = false;
         }
 
         #region properties
@@ -259,12 +254,6 @@ namespace MeGUI
         {
             get { return updateFormStatusColumnWidth; }
             set { updateFormStatusColumnWidth = value; }
-        }
-
-        public Size JobWorkerSize
-        {
-            get { return jobWorkerSize; }
-            set { jobWorkerSize = value; }
         }
 
         public int JobColumnWidth
@@ -357,13 +346,10 @@ namespace MeGUI
             set { strLastDestinationPath = value; }
         }
 
-        /// <summary>
-        /// Gets / sets whether the log should be autoscrolled
-        /// </summary>
-        public bool AutoScrollLog
+        public bool Eac3toLastUsedFileMode
         {
-            get { return autoscroll; }
-            set { autoscroll = value; }
+            get { return bEac3toLastUsedFileMode; }
+            set { bEac3toLastUsedFileMode = value; }
         }
 
         /// <summary>
@@ -382,12 +368,6 @@ namespace MeGUI
         {
             get { return bEnsureCorrectPlaybackSpeed; }
             set { bEnsureCorrectPlaybackSpeed = value; }
-        }
-
-        public bool SafeProfileAlteration
-        {
-            get { return safeProfileAlteration; }
-            set { safeProfileAlteration = value; }
         }
 
         /// <summary>
@@ -601,14 +581,6 @@ namespace MeGUI
             get { return meguiupdatecache; }
         }
 
-        /// <summary>
-		/// should the video bitrate be recalculated after credits encoding in video only mode?
-		/// </summary>
-		public bool RecalculateMainMovieBitrate
-		{
-			get {return recalculateMainMovieBitrate;}
-			set {recalculateMainMovieBitrate = value;}
-		}
 		/// <summary>
 		/// should force film automatically be applies if the film percentage crosses the forceFilmTreshold?
 		/// </summary>
@@ -617,6 +589,7 @@ namespace MeGUI
 			get {return autoForceFilm;}
 			set {autoForceFilm = value;}
 		}
+
         /// <summary>
         /// should the file autoloaded incrementally if VOB
         /// </summary>
@@ -625,6 +598,7 @@ namespace MeGUI
             get { return bAutoLoadDG; }
             set { bAutoLoadDG = value; }
         }
+
         /// <summary>
         /// true if HD Streams Extractor should automatically select tracks
         /// </summary>
@@ -633,6 +607,7 @@ namespace MeGUI
             get { return autoSelectHDStreams; }
             set { autoSelectHDStreams = value; }
         }
+
         /// <summary>
 		/// gets / sets whether pressing Queue should automatically start encoding at startup
 		/// </summary>
@@ -641,6 +616,7 @@ namespace MeGUI
             get { return bAutoStartQueueStartup; }
             set { bAutoStartQueueStartup = value; }
 		}
+
         /// <summary>
         /// gets / sets whether MKV files should always be muxed with mkvmerge even if x264 can output it directly
         /// </summary>
@@ -649,6 +625,7 @@ namespace MeGUI
             get { return bAlwaysMuxMKV; }
             set { bAlwaysMuxMKV = value; }
         }
+
 		/// <summary>
 		/// gets / sets whether pressing Queue should automatically start encoding
 		/// </summary>
@@ -657,6 +634,7 @@ namespace MeGUI
 			get {return autoStartQueue;}
 			set {autoStartQueue = value;}
 		}
+
 		/// <summary>
 		/// gets / sets whether megui automatically opens the preview window upon loading an avisynth script
 		/// </summary>
@@ -665,6 +643,7 @@ namespace MeGUI
 			get {return autoOpenScript;}
 			set {autoOpenScript = value;}
 		}
+
 		/// <summary>
 		/// gets / sets whether the progress window should be opened for each job
 		/// </summary>
@@ -673,6 +652,7 @@ namespace MeGUI
 			get {return openProgressWindow;}
 			set {openProgressWindow = value;}
 		}
+
 		/// <summary>
 		/// the threshold to apply force film. If the film percentage is higher than this threshold,
 		/// force film will be applied
@@ -682,6 +662,7 @@ namespace MeGUI
 			get {return forceFilmThreshold;}
 			set {forceFilmThreshold = value;}
 		}
+
 		/// <summary>
 		/// <summary>
 		/// first default language
@@ -691,6 +672,7 @@ namespace MeGUI
 			get {return defaultLanguage1;}
 			set {defaultLanguage1 = value;}
 		}
+
 		/// <summary>
 		/// second default language
 		/// </summary>
@@ -699,6 +681,7 @@ namespace MeGUI
 			get {return defaultLanguage2;}
 			set {defaultLanguage2 = value;}
 		}
+
 		/// <summary>
 		/// default priority for all processes
 		/// </summary>
@@ -707,6 +690,7 @@ namespace MeGUI
 			get {return defaultPriority;}
 			set {defaultPriority = value;}
 		}
+
         private ProcessPriority processingPriority;
         private bool processingPrioritySet;
         /// <summary>
@@ -726,6 +710,7 @@ namespace MeGUI
             }
             set { processingPriority = value; }
         }
+
         /// <summary>
         /// open AVS files in a thread
         /// </summary>
@@ -734,6 +719,7 @@ namespace MeGUI
             get { return bOpenAVSInThread; }
             set { bOpenAVSInThread = value; }
         }
+
         private bool bOpenAVSInThreadDuringSession;
         private bool bOpenAVSInThreadDuringSessionSet;
         /// <summary>
@@ -753,14 +739,7 @@ namespace MeGUI
             }
             set { bOpenAVSInThreadDuringSession = value; }
         }
-		/// <summary>
-		/// enables no spec compliant mp3 in mp4 muxing
-		/// </summary>
-		public bool EnableMP3inMP4
-		{
-			get {return enableMP3inMP4;}
-			set {enableMP3inMP4 = value;}
-		}
+
 		/// <summary>
 		/// sets / gets if the stats file is updated in the 3rd pass of 3 pass encoding
 		/// </summary>
@@ -769,6 +748,7 @@ namespace MeGUI
 			get {return overwriteStats;}
 			set {overwriteStats = value;}
 		}
+
 		/// <summary>
 		///  gets / sets if the output is video output of the 2nd pass is overwritten in the 3rd pass of 3 pass encoding
 		/// </summary>
@@ -777,6 +757,7 @@ namespace MeGUI
 			get {return keep2of3passOutput;}
 			set {keep2of3passOutput = value;}
 		}
+
 		/// <summary>
 		/// sets the number of passes to be done in automated encoding mode
 		/// </summary>
@@ -785,6 +766,7 @@ namespace MeGUI
 			get {return nbPasses;}
 			set {nbPasses = value;}
 		}
+
 		/// <summary>
 		/// sets / gets whether completed jobs will be deleted
 		/// </summary>
@@ -793,6 +775,7 @@ namespace MeGUI
 			get {return deleteCompletedJobs;}
 			set {deleteCompletedJobs = value;}
 		}
+
 		/// <summary>
 		/// sets / gets if intermediate files are to be deleted after encoding
 		/// </summary>
@@ -801,6 +784,7 @@ namespace MeGUI
 			get {return deleteIntermediateFiles;}
 			set {deleteIntermediateFiles = value;}
 		}
+
 		/// <summary>
 		/// gets / sets if the output of an aborted job is to be deleted
 		/// </summary>
@@ -809,16 +793,19 @@ namespace MeGUI
 			get {return deleteAbortedOutput;}
 			set {deleteAbortedOutput = value;}
 		}
+
         public string VideoExtension
         {
             get {return videoExtension;}
             set {videoExtension = value;}
         }
+
         public string AudioExtension
         {
             get { return audioExtension; }
             set { audioExtension = value; }
         }
+
         /// <summary>
         /// gets / sets the settings for the update mode
         /// </summary>
@@ -832,21 +819,25 @@ namespace MeGUI
                     return MeGUI.UpdateMode.Disabled;
             }
         }
+
         public bool AutoUpdate
         {
             get { return autoUpdate; }
             set { autoUpdate = value; }
         }
+
         public DialogSettings DialogSettings
         {
             get { return dialogSettings; }
             set { dialogSettings = value; }
         }
+
         public SourceDetectorSettings SourceDetectorSettings
         {
             get { return sdSettings; }
             set { sdSettings = value; }
         }
+
         /// <summary>
         /// gets / sets the default settings for the autoencode window
         /// </summary>
@@ -855,6 +846,7 @@ namespace MeGUI
             get { return aedSettings; }
             set { aedSettings = value; }
         }
+
         /// <summary>
         /// gets / sets the default settings for the Proxy
         /// </summary>
@@ -863,6 +855,7 @@ namespace MeGUI
             get { return httpProxyMode; }
             set { httpProxyMode = value; }
         }
+
         /// <summary>
         /// gets / sets the default settings for the Proxy Adress
         /// </summary>
@@ -871,6 +864,7 @@ namespace MeGUI
             get { return httpproxyaddress;}
             set {httpproxyaddress = value;}
         }
+
         /// <summary>
         /// gets / sets the default settings for the Proxy Port
         /// </summary>
@@ -879,6 +873,7 @@ namespace MeGUI
             get { return httpproxyport;}
             set {httpproxyport = value;}
         }
+
         /// <summary>
         /// gets / sets the default settings for the Proxy Uid
         /// </summary>
@@ -887,6 +882,7 @@ namespace MeGUI
             get { return httpproxyuid;}
             set {httpproxyuid = value;}
         }
+
         /// <summary>
         /// gets / sets the default settings for the Proxy Password
         /// </summary>
@@ -895,26 +891,7 @@ namespace MeGUI
             get { return httpproxypwd; }
             set { httpproxypwd = value; }
         }
-        /// <summary>
-        /// gets / sets the default settings for the Proxy
-        /// </summary>
-        public string UseHttpProxy
-        {
-            get { return "migrated"; }
-            set 
-            {
-                if (value.Equals("migrated"))
-                    return;
 
-                if (value.Equals("true"))
-                {
-                    httpProxyMode = ProxyMode.CustomProxy;
-                    System.Windows.Forms.MessageBox.Show("Please verify that your proxy settings are correct as they have been updated.", "Proxy settings changed");                        
-                }
-                else
-                    httpProxyMode = ProxyMode.None;
-            }
-        }
         /// <summary>
         /// gets / sets the text to append to forced streams
         /// </summary>

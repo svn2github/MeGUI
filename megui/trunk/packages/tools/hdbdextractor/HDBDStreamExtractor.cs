@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -35,19 +35,16 @@ namespace MeGUI.packages.tools.hdbdextractor
 {
     public partial class HdBdStreamExtractor : Form
     {
-        MainForm mainForm;
-        private MeGUISettings settings;
-        private HDStreamsExJob lastJob = null;
         private int inputType = 1;
-        string dummyInput = "";
-        Eac3toInfo _oEac3toInfo;
-        List<string> input = new List<string>();
+        private string dummyInput = "";
+        private Eac3toInfo _oEac3toInfo;
+        private List<string> input = new List<string>();
 
-        public HdBdStreamExtractor(MainForm info)
+        public HdBdStreamExtractor()
         {
-            this.mainForm = info;
-            this.settings = info.Settings;
-            InitializeComponent(); 
+            InitializeComponent();
+            if (MainForm.Instance.Settings.Eac3toLastUsedFileMode)
+                FileSelection.Select();
         }
 
         #region backgroundWorker
@@ -325,9 +322,7 @@ namespace MeGUI.packages.tools.hdbdextractor
 
 
             eac3toArgs args = new eac3toArgs();
-            HDStreamsExJob job;
-
-            args.eac3toPath = settings.Eac3to.Path;
+            args.eac3toPath = MainForm.Instance.Settings.Eac3to.Path;
             if (FolderSelection.Checked)
                 args.featureNumber = ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number.ToString();
             args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);
@@ -344,25 +339,15 @@ namespace MeGUI.packages.tools.hdbdextractor
             }
 
             // Load to MeGUI job queue
+            HDStreamsExJob job;
             if (FolderSelection.Checked)
                 job = new HDStreamsExJob(new List<string>() { dummyInput }, this.FolderOutputTextBox.Text, args.featureNumber, args.args, inputType);
             else
-                job = new HDStreamsExJob(input, this.FolderOutputTextBox.Text, null, args.args, inputType);
+                job = new HDStreamsExJob(new List<string>(input), this.FolderOutputTextBox.Text, null, args.args, inputType);
 
-            lastJob = job;
-            mainForm.Jobs.addJobsToQueue(job);
+            MainForm.Instance.Jobs.addJobsToQueue(job);
             if (this.closeOnQueue.Checked)
                 this.Close();
-        }
-
-        public HDStreamsExJob LastJob
-        {
-            get { return lastJob; }
-            set { lastJob = value; }
-        }
-        public bool JobCreated
-        {
-            get { return lastJob != null; }
         }
 
         private string GenerateArguments()
@@ -410,15 +395,7 @@ namespace MeGUI.packages.tools.hdbdextractor
 
         private void HdBrStreamExtractor_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
         {
-            //if (backgroundWorker != null)
-            //{
-            //    if (backgroundWorker.IsBusy)
-            //        if (MessageBox.Show("A process is still running. Do you want to cancel it?", "Cancel process?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            //            backgroundWorker.CancelAsync();
-
-            //    if (backgroundWorker.CancellationPending)
-            //        backgroundWorker.Dispose();
-            //}
+            MainForm.Instance.Settings.Eac3toLastUsedFileMode = FileSelection.Checked;
         }
 
         private bool IsStreamCheckedForExtract()
@@ -605,7 +582,8 @@ namespace MeGUI.packages.tools.hdbdextractor
 
         public void Run(MainForm info)
         {
-            (new HdBdStreamExtractor(info)).Show();
+            HdBdStreamExtractor form = new HdBdStreamExtractor();
+            form.Show();
         }
 
         public Shortcut[] Shortcuts

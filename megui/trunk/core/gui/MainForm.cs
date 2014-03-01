@@ -884,7 +884,6 @@ namespace MeGUI
             fillMenus();
             jobControl1.MainForm = this;
             jobControl1.loadJobs();
-
         }
 
         /// <summary>
