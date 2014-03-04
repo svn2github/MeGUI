@@ -174,6 +174,7 @@ namespace MeGUI
             bUseNeroAacEnc = bUseQAAC = bUseX265 = bUseDGIndexNV = false;
             chapterCreatorMinimumLength = 900;
             bEac3toLastUsedFileMode = false;
+            bExternalMuxerX264 = true;
         }
 
         #region properties

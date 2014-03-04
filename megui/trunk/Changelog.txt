@@ -1,3 +1,4 @@
+2481 [MKV Muxer]            added HEVC support (requires mkvmerge 6.8.0+)
 2480 [OneClick]             changed resize behaviour so that upsizing will be used if enabled
 2479 [AVS Script Creator]   reverted Yadif back to Load_Stdcall_Plugin (regression of 2471)
 2478 [HD Streams Extractor] last used open mode will be preselected

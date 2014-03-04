@@ -562,7 +562,7 @@ namespace MeGUI
             // 
             // defaultOutputDir
             // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.defaultOutputDir.Filename = "";
             this.defaultOutputDir.Filter = null;
@@ -994,9 +994,9 @@ namespace MeGUI
             this.chx264ExternalMuxer.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chx264ExternalMuxer.Location = new System.Drawing.Point(225, 43);
             this.chx264ExternalMuxer.Name = "chx264ExternalMuxer";
-            this.chx264ExternalMuxer.Size = new System.Drawing.Size(208, 17);
+            this.chx264ExternalMuxer.Size = new System.Drawing.Size(236, 17);
             this.chx264ExternalMuxer.TabIndex = 49;
-            this.chx264ExternalMuxer.Text = "x264: use external muxer (MKV, MP4)";
+            this.chx264ExternalMuxer.Text = "x264/x265: use external muxer (MKV, MP4)";
             this.chx264ExternalMuxer.UseVisualStyleBackColor = true;
             // 
             // useQAAC
@@ -1116,7 +1116,7 @@ namespace MeGUI
             // 
             // neroaacencLocation
             // 
-            this.neroaacencLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.neroaacencLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.neroaacencLocation.Enabled = false;
             this.neroaacencLocation.Filename = "";
@@ -1153,7 +1153,7 @@ namespace MeGUI
             // 
             // tempDirMP4
             // 
-            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tempDirMP4.Filename = "";
             this.tempDirMP4.Filter = null;

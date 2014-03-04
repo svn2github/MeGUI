@@ -558,6 +558,7 @@ namespace MeGUI
             supportedVideoTypes.Add(VideoType.MPEG1);
             supportedVideoTypes.Add(VideoType.MPEG2);
             supportedVideoTypes.Add(VideoType.VC1);
+            supportedVideoTypes.Add(VideoType.RAWHEVC);
 
             supportedAudioTypes.Add(AudioType.RAWAAC);
             supportedAudioTypes.Add(AudioType.MP4AAC);
@@ -580,6 +581,7 @@ namespace MeGUI
 
             supportedVideoCodecs.Add(VideoCodec.ASP);
             supportedVideoCodecs.Add(VideoCodec.AVC);
+            supportedVideoCodecs.Add(VideoCodec.HEVC);
             supportedVideoCodecs.Add(VideoCodec.HFYU);
             supportedVideoCodecs.Add(VideoCodec.MPEG1);
             supportedVideoCodecs.Add(VideoCodec.MPEG2);
@@ -1260,7 +1262,8 @@ namespace MeGUI
         public X265EncoderProvider()
         {
             supportedCodecs.Add(VideoCodec.HEVC);
-            supportedTypes.Add(VideoType.MP4); 
+            supportedTypes.Add(VideoType.MP4);
+            supportedTypes.Add(VideoType.MKV); 
             supportedTypes.Add(VideoType.RAWHEVC);
             supportedEncoderTypes.Add(VideoEncoderType.X265);
         }
