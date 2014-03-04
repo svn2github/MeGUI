@@ -427,8 +427,6 @@ namespace MeGUI
 
             _videoInputInfo = iFile;
 
-            int maxHorizontalResolution = int.Parse(iFile.VideoInfo.Width.ToString());
-       
             List<OneClickStream> arrAudioTrackInfo = new List<OneClickStream>();
             foreach (AudioTrackInfo oInfo in iFile.AudioInfo.Tracks)
                 arrAudioTrackInfo.Add(new OneClickStream(oInfo));
@@ -441,8 +439,6 @@ namespace MeGUI
 
             beingCalled = false;
             updatePossibleContainers();
-
-            horizontalResolution.Maximum = maxHorizontalResolution;
             
             // Detect Chapters
             if (!VideoUtil.HasChapters(iFile))
@@ -649,8 +645,7 @@ namespace MeGUI
 
             splitting.Value = settings.SplitSize;
             fileSize.Value = settings.Filesize;
-            if (settings.OutputResolution <= horizontalResolution.Maximum)
-                horizontalResolution.Value = settings.OutputResolution;
+            horizontalResolution.Value = settings.OutputResolution;
             if (Directory.Exists(settings.DefaultWorkingDirectory) && FileUtil.IsDirWriteable(settings.DefaultWorkingDirectory))
                 workingDirectory.Filename = settings.DefaultWorkingDirectory;
             else
@@ -659,7 +654,7 @@ namespace MeGUI
             // device type
             devicetype.Text = settings.DeviceOutputType;
 
-            // Clean up after those settings were set
+            // clean up after those settings were set
             updatePossibleContainers();
             containerFormat_SelectedIndexChanged(null, null);
 

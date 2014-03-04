@@ -595,12 +595,27 @@ namespace MeGUI
 
             Dar? suggestedDar = null;
             if (desiredOutputWidth == 0)
+                desiredOutputWidth = outputWidthIncludingPadding = (int)iMediaFile.VideoInfo.Width;
+            else if (!avsSettings.Upsize && desiredOutputWidth > (int)iMediaFile.VideoInfo.Width)
                 outputWidthIncludingPadding = (int)iMediaFile.VideoInfo.Width;
             else
                 outputWidthIncludingPadding = desiredOutputWidth;
             CropValues paddingValues;
 
-            bool resizeEnabled = !keepInputResolution;
+            bool resizeEnabled;
+            int outputWidthWithoutUpsizing = outputWidthIncludingPadding;
+            if (avsSettings.Upsize)
+            {
+                resizeEnabled = !keepInputResolution;
+                CropValues cropValuesTemp = cropValues.Clone();
+                int outputHeightIncludingPaddingTemp = 0;
+                Resolution.GetResolution((int)iMediaFile.VideoInfo.Width, (int)iMediaFile.VideoInfo.Height, customDAR,
+                    ref cropValuesTemp, autoCrop && !keepInputResolution, mod, ref resizeEnabled, false, signalAR, true,
+                    avsSettings.AcceptableAspectError, xTargetDevice, Convert.ToDouble(iMediaFile.VideoInfo.FPS_N) / iMediaFile.VideoInfo.FPS_D,
+                    ref outputWidthWithoutUpsizing, ref outputHeightIncludingPaddingTemp, out paddingValues, out suggestedDar, _log);
+            }
+
+            resizeEnabled = !keepInputResolution;
             Resolution.GetResolution((int)iMediaFile.VideoInfo.Width, (int)iMediaFile.VideoInfo.Height, customDAR,
                 ref cropValues, autoCrop && !keepInputResolution, mod, ref resizeEnabled, avsSettings.Upsize, signalAR, true,
                 avsSettings.AcceptableAspectError, xTargetDevice, Convert.ToDouble(iMediaFile.VideoInfo.FPS_N) / iMediaFile.VideoInfo.FPS_D, 
@@ -613,6 +628,11 @@ namespace MeGUI
             outputWidthCropped = outputWidthIncludingPadding - paddingValues.left - paddingValues.right;
             outputHeightCropped = outputHeightIncludingPadding - paddingValues.bottom - paddingValues.top;
             _log.LogValue("Input resolution", iMediaFile.VideoInfo.Width + "x" + iMediaFile.VideoInfo.Height);
+            _log.LogValue("Desired maximum width", desiredOutputWidth);
+            if (!avsSettings.Upsize && outputWidthIncludingPadding < desiredOutputWidth)
+                _log.LogEvent("Desired maximum width not reached. Enable upsizing in the AviSynth profile if you want to force it.");
+            if (avsSettings.Upsize && outputWidthIncludingPadding > outputWidthWithoutUpsizing)
+                _log.LogValue("Desired maximum width reached with upsizing. Target width without upsizing", outputWidthWithoutUpsizing);
             if (cropValues.isCropped())
             {
                 _log.LogValue("Autocrop values", cropValues);
@@ -622,8 +642,8 @@ namespace MeGUI
                 _log.LogValue("Output resolution", outputWidthCropped + "x" + outputHeightCropped);
             if (paddingValues.isCropped())
                 _log.LogValue("Padded output resolution", outputWidthIncludingPadding + "x" + outputHeightIncludingPadding);
-
-            //Generate the avs script based on the template
+            
+            // generate the avs script based on the template
             string inputLine = "#input";
             string deinterlaceLines = "#deinterlace";
             string denoiseLines = "#denoise";

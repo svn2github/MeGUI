@@ -244,7 +244,7 @@ namespace MeGUI.packages.tools.oneclick
             0});
             this.horizontalResolution.Location = new System.Drawing.Point(109, 20);
             this.horizontalResolution.Maximum = new decimal(new int[] {
-            5000,
+            9999,
             0,
             0,
             0});
@@ -264,11 +264,11 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // outputResolutionLabel
             // 
-            this.outputResolutionLabel.Location = new System.Drawing.Point(5, 24);
+            this.outputResolutionLabel.Location = new System.Drawing.Point(6, 16);
             this.outputResolutionLabel.Name = "outputResolutionLabel";
-            this.outputResolutionLabel.Size = new System.Drawing.Size(100, 13);
+            this.outputResolutionLabel.Size = new System.Drawing.Size(100, 26);
             this.outputResolutionLabel.TabIndex = 30;
-            this.outputResolutionLabel.Text = "Output Resolution";
+            this.outputResolutionLabel.Text = "Output Resolution        (Max. Width)";
             // 
             // tabControl1
             // 
