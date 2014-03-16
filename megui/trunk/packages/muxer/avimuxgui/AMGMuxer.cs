@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -131,7 +131,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
                 script.AppendLine("SET OPTION NUMBERING ON");
                 script.AppendLine("SET OPTION MAXFILESIZE ON");
                 if ((String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard") && (!settings.SplitSize.HasValue || ((MeGUI.core.util.FileSize)settings.SplitSize).MB > 2000))
+                {
+                    log.LogValue("The output file will be splitted every 2GB. If this is not intended select the device type \"PC\" - but this will reduce compatibility for hardware players.", script);
                     script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", 2000, Environment.NewLine);
+                }
                 else
                     script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", ((MeGUI.core.util.FileSize)settings.SplitSize).MB, Environment.NewLine);
             }

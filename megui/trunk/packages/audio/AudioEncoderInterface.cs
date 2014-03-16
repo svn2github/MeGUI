@@ -1222,7 +1222,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     script.AppendFormat("Normalize(){0}", Environment.NewLine);
             }
 
-            //let's obtain command line & other stuff
+            // let's obtain command line & other stuff
             if (audioJob.Settings is AftenSettings)
             {
                 UpdateCacher.CheckPackage("aften");
