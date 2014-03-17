@@ -152,7 +152,8 @@ namespace MeGUI
                 player.Closed += new EventHandler(player_Closed);
                 player.Show();
                 player.SetScreenSize();
-                if (mainForm.Settings.AlwaysOnTop) player.TopMost = true;
+                if (mainForm.Settings.AlwaysOnTop)
+                    player.TopMost = true;
             }
         }
 

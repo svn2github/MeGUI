@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -213,6 +213,7 @@ namespace MeGUI.core.gui
             this.Name = "AspectRatioChooser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Custom Aspect Ratio";
+            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();

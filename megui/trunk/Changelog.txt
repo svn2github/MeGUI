@@ -1,4 +1,5 @@
-2483 [x264]                 improved error handling
+2484 [video preview]        if video preview is set to "always on top" some GUI elements were hidden (bug #754)
+2483 [x264]                 improved error handling (bug #755)
 2482 [AVI Muxer]            improved logging
 2481 [MKV Muxer]            added HEVC support (requires mkvmerge 6.8.0+)
 2480 [OneClick]             changed resize behaviour so that upsizing will be used if enabled

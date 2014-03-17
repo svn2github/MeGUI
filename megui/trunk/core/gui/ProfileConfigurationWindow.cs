@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -81,6 +81,7 @@ namespace MeGUI.core.gui
             t.Dock = DockStyle.Fill;
             panel1.Controls.Add(t);
             this.Icon = MainForm.Instance.Icon;
+            this.TopMost = MainForm.Instance.Settings.AlwaysOnTop;
         }
 
         private void loadDefaultsButton_Click(object sender, EventArgs e)
@@ -234,8 +235,4 @@ namespace MeGUI.core.gui
             this.Close();
         }
     }
-
-
-
-
 }

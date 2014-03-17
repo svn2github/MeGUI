@@ -1,3 +1,23 @@
+// ****************************************************************************
+// 
+// Copyright (C) 2005-2014 Doom9 & al
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// 
+// ****************************************************************************
+
 namespace MeGUI.packages.tools.cutter
 {
     partial class Cutter
@@ -220,9 +240,11 @@ namespace MeGUI.packages.tools.cutter
             // 
             // doAllClose
             // 
-            this.doAllClose.Location = new System.Drawing.Point(366, 8);
+            this.doAllClose.AutoSize = true;
+            this.doAllClose.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.doAllClose.Location = new System.Drawing.Point(372, 8);
             this.doAllClose.Name = "doAllClose";
-            this.doAllClose.Size = new System.Drawing.Size(97, 23);
+            this.doAllClose.Size = new System.Drawing.Size(91, 23);
             this.doAllClose.TabIndex = 4;
             this.doAllClose.Text = "Do all and close";
             this.doAllClose.UseVisualStyleBackColor = true;
@@ -233,7 +255,7 @@ namespace MeGUI.packages.tools.cutter
             this.closeButton.AutoSize = true;
             this.closeButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.closeButton.Location = new System.Drawing.Point(317, 8);
+            this.closeButton.Location = new System.Drawing.Point(323, 8);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(43, 23);
             this.closeButton.TabIndex = 0;
@@ -245,7 +267,7 @@ namespace MeGUI.packages.tools.cutter
             // 
             this.saveCuts.AutoSize = true;
             this.saveCuts.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.saveCuts.Location = new System.Drawing.Point(230, 8);
+            this.saveCuts.Location = new System.Drawing.Point(236, 8);
             this.saveCuts.Name = "saveCuts";
             this.saveCuts.Size = new System.Drawing.Size(81, 23);
             this.saveCuts.TabIndex = 1;
@@ -257,7 +279,7 @@ namespace MeGUI.packages.tools.cutter
             // 
             this.addCutsToScript.AutoSize = true;
             this.addCutsToScript.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.addCutsToScript.Location = new System.Drawing.Point(123, 8);
+            this.addCutsToScript.Location = new System.Drawing.Point(129, 8);
             this.addCutsToScript.Name = "addCutsToScript";
             this.addCutsToScript.Size = new System.Drawing.Size(101, 23);
             this.addCutsToScript.TabIndex = 2;
@@ -270,7 +292,7 @@ namespace MeGUI.packages.tools.cutter
             this.helpButton1.ArticleName = "Avs Cutter";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(79, 8);
+            this.helpButton1.Location = new System.Drawing.Point(85, 8);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 3;
