@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -58,12 +58,16 @@ namespace MeGUI.packages.audio.qaac
             this.label3 = new System.Windows.Forms.Label();
             this.cbProfile = new System.Windows.Forms.ComboBox();
             this.chNoDelay = new System.Windows.Forms.CheckBox();
+            this.cbQuality = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.encoderGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // encoderGroupBox
             // 
+            this.encoderGroupBox.Controls.Add(this.label4);
+            this.encoderGroupBox.Controls.Add(this.cbQuality);
             this.encoderGroupBox.Controls.Add(this.chNoDelay);
             this.encoderGroupBox.Controls.Add(this.cbProfile);
             this.encoderGroupBox.Controls.Add(this.label3);
@@ -97,7 +101,7 @@ namespace MeGUI.packages.audio.qaac
             this.trackBar.Location = new System.Drawing.Point(6, 50);
             this.trackBar.Maximum = 127;
             this.trackBar.Name = "trackBar";
-            this.trackBar.Size = new System.Drawing.Size(387, 45);
+            this.trackBar.Size = new System.Drawing.Size(400, 45);
             this.trackBar.TabIndex = 2;
             this.trackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.trackBar.Value = 90;
@@ -132,6 +136,41 @@ namespace MeGUI.packages.audio.qaac
             this.chNoDelay.Text = "No Delay";
             this.chNoDelay.UseVisualStyleBackColor = true;
             // 
+            // cbQuality
+            // 
+            this.cbQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbQuality.FormattingEnabled = true;
+            this.cbQuality.Items.AddRange(new object[] {
+            "0",
+            "9",
+            "18",
+            "27",
+            "36",
+            "45",
+            "54",
+            "63",
+            "73",
+            "82",
+            "91",
+            "100",
+            "109",
+            "118",
+            "127"});
+            this.cbQuality.Location = new System.Drawing.Point(88, 59);
+            this.cbQuality.Name = "cbQuality";
+            this.cbQuality.Size = new System.Drawing.Size(121, 21);
+            this.cbQuality.TabIndex = 6;
+            this.cbQuality.SelectedIndexChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(37, 62);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(39, 13);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Quality";
+            // 
             // qaacConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -152,5 +191,7 @@ namespace MeGUI.packages.audio.qaac
         public System.Windows.Forms.ComboBox cbMode;
         public System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox chNoDelay;
+        private System.Windows.Forms.ComboBox cbQuality;
+        public System.Windows.Forms.Label label4;
      }
 }

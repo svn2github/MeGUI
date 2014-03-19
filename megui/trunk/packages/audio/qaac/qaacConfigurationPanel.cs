@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -60,8 +60,8 @@ namespace MeGUI.packages.audio.qaac
                 qas.NoDelay = chNoDelay.Checked;
                 qas.Mode = (QaacMode)(cbMode.SelectedItem as EnumProxy).RealValue;
                 qas.Profile = (QaacProfile)(cbProfile.SelectedItem as EnumProxy).RealValue;
-                if (qas.Mode == QaacMode.TVBR) 
-                    qas.Quality = (Int16)trackBar.Value;
+                if (qas.Mode == QaacMode.TVBR)
+                    qas.Quality = Int16.Parse(cbQuality.SelectedItem.ToString());
                 else 
                     qas.Bitrate = (int)trackBar.Value;
                 return qas;
@@ -72,7 +72,22 @@ namespace MeGUI.packages.audio.qaac
                 cbMode.SelectedItem = EnumProxy.Create(qas.Mode);
                 cbProfile.SelectedItem = EnumProxy.Create(qas.Profile);
                 if (qas.Mode == QaacMode.TVBR)
-                    trackBar.Value = Math.Max(Math.Min(qas.Quality, trackBar.Maximum), trackBar.Minimum);  
+                {
+                    cbQuality.SelectedItem = qas.Quality.ToString();
+                    if (cbQuality.SelectedItem == null)
+                    {
+                        // change to a proper value
+                        foreach (string item in cbQuality.Items)
+                        {
+                            if (qas.Quality >= Int16.Parse(item))
+                                cbQuality.SelectedItem = item;
+                        }
+
+                        // reset to default if required
+                        if (cbQuality.SelectedItem == null)
+                            cbQuality.SelectedItem = 91;
+                    }
+                }
                 else
                     trackBar.Value = Math.Max(Math.Min(qas.Bitrate, trackBar.Maximum), trackBar.Minimum);
                 chNoDelay.Checked = qas.NoDelay;
@@ -99,24 +114,32 @@ namespace MeGUI.packages.audio.qaac
             switch ((QaacMode)(cbMode.SelectedItem as EnumProxy).RealValue)
             {
                 case QaacMode.TVBR:
+                    trackBar.Visible = false;
+                    cbQuality.Visible = label4.Visible = true;
                     trackBar.Minimum = 0;
                     trackBar.Maximum = 127;
                     trackBar.TickFrequency = 1;
-                    encoderGroupBox.Text =  String.Format("QAAC Options - (Q={0})", trackBar.Value);
+                    encoderGroupBox.Text = String.Format("QAAC Options - (Q={0})", cbQuality.SelectedItem);
                     break;
                 case QaacMode.CVBR:
+                    trackBar.Visible = true;
+                    cbQuality.Visible = label4.Visible = false;
                     trackBar.Minimum = 0;
                     trackBar.Maximum = 320;
                     trackBar.TickFrequency = 20;
                     encoderGroupBox.Text = String.Format("QAAC Options - Constrained Variable Bitrate @ {0} kbit/s", trackBar.Value);
                     break;
                 case QaacMode.ABR:
+                    trackBar.Visible = true;
+                    cbQuality.Visible = label4.Visible = false;
                     trackBar.Minimum = 0;
                     trackBar.Maximum = 320;
                     trackBar.TickFrequency = 20;
                     encoderGroupBox.Text = String.Format("QAAC Options - Average Bitrate @ {0} kbit/s", trackBar.Value);
                     break;
                 case QaacMode.CBR:
+                    trackBar.Visible = true;
+                    cbQuality.Visible = label4.Visible = false;
                     trackBar.Minimum = 0;
                     trackBar.Maximum = 320;
                     trackBar.TickFrequency = 20;

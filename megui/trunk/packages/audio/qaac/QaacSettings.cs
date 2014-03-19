@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ namespace MeGUI
 		public QaacSettings() 
             : base(ID, AudioCodec.AAC, AudioEncoderType.QAAC, 0, BitrateManagementMode.VBR)
 		{
-            Quality = 90;
+            Quality = 91;
             Mode = QaacMode.TVBR;
             Profile = QaacProfile.LC;
 		}
