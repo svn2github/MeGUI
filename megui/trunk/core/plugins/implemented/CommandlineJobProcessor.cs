@@ -110,6 +110,11 @@ namespace MeGUI
             get { return true; }
         }
 
+        protected virtual void getErrorLine()
+        {
+            return;
+        }
+
         protected abstract string Commandline
         {
             get;
@@ -129,6 +134,7 @@ namespace MeGUI
             // check the exitcode
             if (checkExitCode && proc.ExitCode != 0) 
             {
+                getErrorLine();
                 string strError = WindowUtil.GetErrorText(proc.ExitCode);
                 if (!su.WasAborted)
                 {

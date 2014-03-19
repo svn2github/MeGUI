@@ -83,6 +83,32 @@ namespace MeGUI
                 Util.ensureExists(strSource);
         }
 
+        /// <summary>
+        /// search for the log file and add error messages to the stdoutLog
+        /// required as the error lines in stderr or stdout are not readable
+        /// </summary>
+        protected override void getErrorLine()
+        {
+            string[] entry = Regex.Split(job.Args, "[0-9]{1,3}:\\\"");
+            if (entry.Length < 2 || entry[1].Length < 3)
+                return;
+
+            string fileName = entry[1].Substring(0, entry[1].Length - 2);
+            fileName = FileUtil.AddToFileName(System.IO.Path.ChangeExtension(fileName, "txt"), " - Log");
+            if (!System.IO.File.Exists(fileName))
+                return;
+
+            using (System.IO.StreamReader file = new System.IO.StreamReader(fileName))
+            {
+                string line;
+                while ((line = file.ReadLine()) != null)
+                {
+                    if (line.ToLowerInvariant().Contains("<error>"))
+                        stdoutLog.LogEvent(line, ImageType.Error);
+                }
+            }
+        }
+
         public override void ProcessLine(string line, StreamType stream, ImageType oType)
         {
             if (line.StartsWith("process: ")) //status update
@@ -98,7 +124,7 @@ namespace MeGUI
                 su.PercentageDoneExact = getPercentage(line);
                 su.Status = "Analyzing...";
             }
-            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("2nd"))
+            else if (line.ToLowerInvariant().Contains("2nd"))
             {
                 startTime = DateTime.Now;
                 su.TimeElapsed = TimeSpan.Zero;
@@ -106,20 +132,20 @@ namespace MeGUI
                 su.Status = "Fixing audio gaps/overlaps...";
                 base.ProcessLine(line, stream, oType);
             }
-            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("without making use of the gap/overlap information"))
+            else if (line.ToLowerInvariant().Contains("without making use of the gap/overlap information"))
             {
                 log.LogEvent("Job will be executed a second time to make use of the gap/overlap information");
                 base.bRunSecondTime = true;
                 base.ProcessLine(line, stream, oType);
             }
-            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("<error>"))
+            else if (line.ToLowerInvariant().Contains("<error>"))
             {
                 base.ProcessLine(line, stream, ImageType.Error);
             }
-            else if (line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("<warning>")
+            else if (line.ToLowerInvariant().Contains("<warning>")
                 || (su.PercentageDoneExact > 0 && su.PercentageDoneExact < 100
-                && !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("creating file ") 
-                && !line.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("(seamless branching)...")))
+                && !line.ToLowerInvariant().Contains("creating file ") 
+                && !line.ToLowerInvariant().Contains("(seamless branching)...")))
             {
                 base.ProcessLine(line, stream, ImageType.Warning);
             }
@@ -134,9 +160,9 @@ namespace MeGUI
                 StringBuilder sb = new StringBuilder();
                 if (job.InputType == 1) // Folder as Input
                 {
-                    if (job.Input.IndexOf("BDMV") > 0 && (job.Input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".m2ts") || job.Input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".mpls")))
+                    if (job.Input.IndexOf("BDMV") > 0 && (job.Input.ToLowerInvariant().EndsWith(".m2ts") || job.Input.ToLowerInvariant().EndsWith(".mpls")))
                         sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input.Substring(0, job.Input.IndexOf("BDMV")), job.FeatureNb, job.Args.Trim() + " -progressnumbers"));
-                    else if (job.Input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".evo"))
+                    else if (job.Input.ToLowerInvariant().EndsWith(".evo"))
                         sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input.Substring(0, job.Input.IndexOf("HVDVD_TS")), job.FeatureNb, job.Args.Trim() + " -progressnumbers"));
                     else
                         sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input, job.FeatureNb, job.Args.Trim() + " -progressnumbers"));
