@@ -31,7 +31,8 @@ namespace MeGUI
 	/// </summary>
 	/// 
 	public enum BitrateManagementMode {CBR, VBR, ABR};
-	public enum ChannelMode
+	
+    public enum ChannelMode
 	{
 	    [EnumTitle("Keep Original Channels")]
 	    KeepOriginal, 
@@ -50,6 +51,7 @@ namespace MeGUI
         [EnumTitle("Upmix 2 to 5.1 with center channel dialog")]
         UpmixWithCenterChannelDialog
 	};
+
     public enum AudioDecodingEngine
     {
         NicAudio,
@@ -57,6 +59,48 @@ namespace MeGUI
         DirectShow,
         BassAudio,
         LWLibavAudioSource
+    };
+
+    public enum SampleRateMode
+    {
+        [EnumTitle("Keep Original Sample Rate")]
+        KeepOriginal,
+        [EnumTitle("Change to   8000 Hz")]
+        ConvertTo08000,
+        [EnumTitle("Change to 11025 Hz")]
+        ConvertTo11025,
+        [EnumTitle("Change to 22050 Hz")]
+        ConvertTo22050,
+        [EnumTitle("Change to 32000 Hz")]
+        ConvertTo32000,
+        [EnumTitle("Change to 44100 Hz")]
+        ConvertTo44100,
+        [EnumTitle("Change to 48000 Hz")]
+        ConvertTo48000,
+        [EnumTitle("Change to 96000 Hz")]
+        ConvertTo96000
+    };
+
+    public enum TimeModificationMode
+    {
+        [EnumTitle("Keep Original")]
+        KeepOriginal,
+        [EnumTitle("Speed-up (23.976 to 25)")]
+        SpeedUp23976To25,
+        [EnumTitle("Slow-down (25 to 23.976)")]
+        SlowDown25To23976,
+        [EnumTitle("Speed-up (24 to 25)")]
+        SpeedUp24To25,
+        [EnumTitle("Slow-down (25 to 24)")]
+        SlowDown25To24,
+        [EnumTitle("Speed-up (23.976 to 25) with pitch correction")]
+        SpeedUp23976To25WithCorrection,
+        [EnumTitle("Slow-down (25 to 23.976) with pitch correction")]
+        SlowDown25To23976WithCorrection,
+        [EnumTitle("Speed-up (24 to 25) with pitch correction")]
+        SpeedUp24To25WithCorrection,
+        [EnumTitle("Slow-down (25 to 24) with pitch correction")]
+        SlowDown25To24WithCorrection
     };
      
     [
@@ -79,11 +123,10 @@ namespace MeGUI
         public virtual void FixFileNames(Dictionary<string, string> _) {}
 		private ChannelMode downmixMode;
 		private BitrateManagementMode bitrateMode;
-        private int sampleRateType;
+        private SampleRateMode sampleRate;
+        private TimeModificationMode timeModification;
 		private int bitrate;
         private int normalize;
-        public int delay;
-		public bool delayEnabled;
         private bool autoGain;
         private bool applyDRC;
         private AudioCodec audioCodec;
@@ -118,13 +161,12 @@ namespace MeGUI
 			downmixMode = ChannelMode.KeepOriginal;
 			bitrateMode = mode;
 			this.bitrate = bitrate;
-			delay = 0;
-			delayEnabled = false;
 			autoGain = false;
             applyDRC = false;
-            sampleRateType = 0;
             normalize = 100;
             preferredDecoder = AudioDecodingEngine.NicAudio;
+            timeModification = TimeModificationMode.KeepOriginal;
+            sampleRate = SampleRateMode.KeepOriginal;
 		}
 
         [XmlIgnore()]
@@ -175,10 +217,51 @@ namespace MeGUI
 			set { autoGain = value; }
 		}
 
-        public int SampleRateType
+        private string sampleRateType;
+        public string SampleRateType
         {
-            get { return sampleRateType; }
-            set { sampleRateType = value; }
+            get { return "deprecated"; }
+            set
+            {
+                if (value.Equals("deprecated"))
+                    return;
+
+                sampleRate = SampleRateMode.KeepOriginal;
+                timeModification = TimeModificationMode.KeepOriginal;
+
+                if (value.Equals("1"))
+                    sampleRate = SampleRateMode.ConvertTo08000;
+                else if (value.Equals("2"))
+                    sampleRate = SampleRateMode.ConvertTo11025;
+                else if (value.Equals("3"))
+                    sampleRate = SampleRateMode.ConvertTo22050;
+                else if (value.Equals("4"))
+                    sampleRate = SampleRateMode.ConvertTo32000;
+                else if (value.Equals("5"))
+                    sampleRate = SampleRateMode.ConvertTo44100;
+                else if (value.Equals("6"))
+                    sampleRate = SampleRateMode.ConvertTo48000;
+                else if (value.Equals("7"))
+                    timeModification = TimeModificationMode.SpeedUp23976To25;
+                else if (value.Equals("8"))
+                    timeModification = TimeModificationMode.SlowDown25To23976;
+                else if (value.Equals("9"))
+                    timeModification = TimeModificationMode.SpeedUp24To25;
+                else if (value.Equals("10"))
+                    timeModification = TimeModificationMode.SlowDown25To24;
+            }
+        }
+
+        public SampleRateMode SampleRate
+        {
+            get { return sampleRate; }
+            set { sampleRate = value; }
+        }
+
+        public TimeModificationMode TimeModification
+        {
+            get { return timeModification; }
+            set { timeModification = value; }
         }
 
         public bool ApplyDRC

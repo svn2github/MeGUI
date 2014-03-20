@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -51,15 +51,16 @@ namespace MeGUI.packages.audio.opus
             // 
             // encoderGroupBox
             // 
+            this.encoderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             this.encoderGroupBox.Controls.Add(this.label2);
             this.encoderGroupBox.Controls.Add(this.trackBar);
             this.encoderGroupBox.Controls.Add(this.cbMode);
-            this.encoderGroupBox.Size = new System.Drawing.Size(390, 134);
+            this.encoderGroupBox.Size = new System.Drawing.Size(402, 111);
             this.encoderGroupBox.Text = "Opus Options";
             // 
             // trackBar
             // 
-            this.trackBar.Location = new System.Drawing.Point(8, 58);
+            this.trackBar.Location = new System.Drawing.Point(9, 58);
             this.trackBar.Maximum = 512;
             this.trackBar.Minimum = 6;
             this.trackBar.Name = "trackBar";
@@ -92,7 +93,7 @@ namespace MeGUI.packages.audio.opus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Name = "OpusConfigurationPanel";
-            this.Size = new System.Drawing.Size(394, 300);
+            this.Size = new System.Drawing.Size(410, 301);
             this.encoderGroupBox.ResumeLayout(false);
             this.encoderGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();

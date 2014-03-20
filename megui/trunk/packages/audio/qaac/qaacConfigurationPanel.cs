@@ -119,7 +119,7 @@ namespace MeGUI.packages.audio.qaac
                     trackBar.Minimum = 0;
                     trackBar.Maximum = 127;
                     trackBar.TickFrequency = 1;
-                    encoderGroupBox.Text = String.Format("QAAC Options - (Q={0})", cbQuality.SelectedItem);
+                    encoderGroupBox.Text = String.Format(" QAAC Options - (Q={0}) ", cbQuality.SelectedItem);
                     break;
                 case QaacMode.CVBR:
                     trackBar.Visible = true;
@@ -127,7 +127,7 @@ namespace MeGUI.packages.audio.qaac
                     trackBar.Minimum = 0;
                     trackBar.Maximum = 320;
                     trackBar.TickFrequency = 20;
-                    encoderGroupBox.Text = String.Format("QAAC Options - Constrained Variable Bitrate @ {0} kbit/s", trackBar.Value);
+                    encoderGroupBox.Text = String.Format(" QAAC Options - Constrained Variable Bitrate @ {0} kbit/s ", trackBar.Value);
                     break;
                 case QaacMode.ABR:
                     trackBar.Visible = true;
@@ -135,7 +135,7 @@ namespace MeGUI.packages.audio.qaac
                     trackBar.Minimum = 0;
                     trackBar.Maximum = 320;
                     trackBar.TickFrequency = 20;
-                    encoderGroupBox.Text = String.Format("QAAC Options - Average Bitrate @ {0} kbit/s", trackBar.Value);
+                    encoderGroupBox.Text = String.Format(" QAAC Options - Average Bitrate @ {0} kbit/s ", trackBar.Value);
                     break;
                 case QaacMode.CBR:
                     trackBar.Visible = true;
@@ -143,7 +143,7 @@ namespace MeGUI.packages.audio.qaac
                     trackBar.Minimum = 0;
                     trackBar.Maximum = 320;
                     trackBar.TickFrequency = 20;
-                    encoderGroupBox.Text = String.Format("QAAC Options - Constant Bitrate  @ {0} kbit/s", trackBar.Value);
+                    encoderGroupBox.Text = String.Format(" QAAC Options - Constant Bitrate  @ {0} kbit/s ", trackBar.Value);
                     break;
             }
             if (cbProfile.SelectedIndex == 2) 
@@ -175,6 +175,5 @@ namespace MeGUI.packages.audio.qaac
 
             cbMode_SelectedIndexChanged(sender, e);
         }
-
     }
 }

@@ -71,10 +71,40 @@ namespace MeGUI.core.details.audio
                     );
 
             InitializeComponent();
-            this.primaryDecoding.DataSource = EnumProxy.CreateArray(new object[] { AudioDecodingEngine.NicAudio, AudioDecodingEngine.FFAudioSource, AudioDecodingEngine.DirectShow, AudioDecodingEngine.BassAudio, AudioDecodingEngine.LWLibavAudioSource, });
-            this.besweetDownmixMode.DataSource = _avisynthChannelSet;
-            this.besweetDownmixMode.BindingContext = new BindingContext();
+            this.primaryDecoding.DataSource = EnumProxy.CreateArray(new object[] {
+                AudioDecodingEngine.NicAudio,
+                AudioDecodingEngine.FFAudioSource,
+                AudioDecodingEngine.DirectShow,
+                AudioDecodingEngine.BassAudio,
+                AudioDecodingEngine.LWLibavAudioSource });
+            
+            this.cbDownmixMode.DataSource = _avisynthChannelSet;
+            this.cbDownmixMode.BindingContext = new BindingContext();
+            
+            this.cbSampleRate.DataSource = EnumProxy.CreateArray(new object[] {
+                SampleRateMode.KeepOriginal,
+                SampleRateMode.ConvertTo08000,
+                SampleRateMode.ConvertTo11025,
+                SampleRateMode.ConvertTo22050,
+                SampleRateMode.ConvertTo32000,
+                SampleRateMode.ConvertTo44100,
+                SampleRateMode.ConvertTo48000,
+                SampleRateMode.ConvertTo96000 });
+
+            this.cbTimeModification.DataSource = EnumProxy.CreateArray(new object[] {
+                TimeModificationMode.KeepOriginal,
+                TimeModificationMode.SlowDown25To23976,
+                TimeModificationMode.SlowDown25To23976WithCorrection,
+                TimeModificationMode.SlowDown25To24,
+                TimeModificationMode.SlowDown25To24WithCorrection,
+                TimeModificationMode.SpeedUp23976To25,
+                TimeModificationMode.SpeedUp23976To25WithCorrection,
+                TimeModificationMode.SpeedUp24To25,
+                TimeModificationMode.SpeedUp24To25WithCorrection });
+
+            this.cbDownmixMode.SelectedIndex = 0;
             this.cbSampleRate.SelectedIndex = 0;
+            this.cbTimeModification.SelectedIndex = 0;
         }
 	    
 		#endregion
@@ -136,11 +166,16 @@ namespace MeGUI.core.details.audio
 			{
                 AudioCodecSettings fas = CodecSettings;
                 fas.PreferredDecoder = (AudioDecodingEngine)primaryDecoding.SelectedIndex;
-                EnumProxy o = besweetDownmixMode.SelectedItem as EnumProxy;
+                EnumProxy o = cbDownmixMode.SelectedItem as EnumProxy;
 			    if(o != null)
 				    fas.DownmixMode = (ChannelMode)o.RealValue ;
+                o = cbSampleRate.SelectedItem as EnumProxy;
+                if (o != null)
+                    fas.SampleRate = (SampleRateMode)o.RealValue;
+                o = cbTimeModification.SelectedItem as EnumProxy;
+                if (o != null)
+                    fas.TimeModification = (TimeModificationMode)o.RealValue;
 				fas.AutoGain = autoGain.Checked;
-                fas.SampleRateType = cbSampleRate.SelectedIndex;
                 fas.ApplyDRC = applyDRC.Checked;
                 fas.Normalize = (int)normalize.Value;
 				return fas;
@@ -148,10 +183,11 @@ namespace MeGUI.core.details.audio
 			set
 			{
 				AudioCodecSettings fas = value;
-                besweetDownmixMode.SelectedItem = EnumProxy.Create(fas.DownmixMode);
+                cbDownmixMode.SelectedItem = EnumProxy.Create(fas.DownmixMode);
+                cbSampleRate.SelectedItem = EnumProxy.Create(fas.SampleRate);
+                cbTimeModification.SelectedItem = EnumProxy.Create(fas.TimeModification);
                 primaryDecoding.SelectedIndex = (int)fas.PreferredDecoder;
 				autoGain.Checked = fas.AutoGain;
-                cbSampleRate.SelectedIndex = fas.SampleRateType;
                 applyDRC.Checked = fas.ApplyDRC;
                 normalize.Value = fas.Normalize;
                 CodecSettings = fas;

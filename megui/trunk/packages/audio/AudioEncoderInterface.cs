@@ -763,7 +763,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private bool OpenSourceWithNicAudio(out StringBuilder sbOpen, MediaInfoFile oInfo, bool bForce)
         {
             sbOpen = new StringBuilder();
-            switch (Path.GetExtension(audioJob.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture))
+            switch (Path.GetExtension(audioJob.Input).ToLowerInvariant())
             {
                 case ".ac3":
                 case ".ddp":
@@ -1015,6 +1015,42 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 }
             }
 
+            string strChannelPositions = string.Empty;
+            int iChannelCount = 0;
+            int iAVSChannelCount = 0;
+
+            if (audioJob.Settings.DownmixMode == ChannelMode.DPLDownmix || 
+                audioJob.Settings.DownmixMode == ChannelMode.DPLIIDownmix ||
+                audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix || 
+                audioJob.Settings.TimeModification == TimeModificationMode.SlowDown25To23976WithCorrection ||
+                audioJob.Settings.TimeModification == TimeModificationMode.SlowDown25To24WithCorrection || 
+                audioJob.Settings.TimeModification == TimeModificationMode.SpeedUp23976To25WithCorrection ||
+                audioJob.Settings.TimeModification == TimeModificationMode.SpeedUp24To25WithCorrection)
+            {
+                if (Path.GetExtension(audioJob.Input).ToLowerInvariant().Equals(".avs"))
+                {
+                    if (AudioUtil.AVSFileHasAudio(audioJob.Input))
+                    {
+                        iChannelCount = AudioUtil.getChannelCountFromAVSFile(audioJob.Input);
+                        script.Append(@"# detected channels: " + iChannelCount + " channels" + Environment.NewLine);
+                        strChannelPositions = AudioUtil.getChannelPositionsFromAVSFile(audioJob.Input);
+                    }
+                }
+                else
+                {
+                    if (oInfo.HasAudio)
+                    {
+                        strChannelPositions = oInfo.AudioInfo.Tracks[0].ChannelPositions;
+                        script.Append(@"# detected channels: " + oInfo.AudioInfo.Tracks[0].NbChannels + Environment.NewLine);
+                        int.TryParse(oInfo.AudioInfo.Tracks[0].NbChannels.Split(' ')[0], out iChannelCount);
+                    }
+                }
+                using (AvsFile avi = AvsFile.ParseScript(script.ToString()))
+                    iAVSChannelCount = avi.Clip.ChannelsCount;
+                if (iAVSChannelCount != iChannelCount)
+                    _log.LogEvent("channel count mismatch! The input file is reporting " + iChannelCount + " channels and the AviSynth script is reporting " + iAVSChannelCount + " channels", ImageType.Warning);
+            }
+
             switch (audioJob.Settings.DownmixMode)
             {
                 case ChannelMode.KeepOriginal:
@@ -1025,52 +1061,26 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 case ChannelMode.DPLDownmix:
                 case ChannelMode.DPLIIDownmix:
                 case ChannelMode.StereoDownmix:
-                    string strChannelPositions;
-                    int iChannelCount = 0;
-                    if (Path.GetExtension(audioJob.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
+                    if (iChannelCount == 0)
                     {
-                        if (!AudioUtil.AVSFileHasAudio(audioJob.Input))
-                        {
-                            _log.LogEvent("avs file has no audio: " + audioJob.Input, ImageType.Error);
-                            break;
-                        }
-                        iChannelCount = AudioUtil.getChannelCountFromAVSFile(audioJob.Input);
-                        script.Append(@"# detected channels: " + iChannelCount + " channels" + Environment.NewLine);
-                        strChannelPositions = AudioUtil.getChannelPositionsFromAVSFile(audioJob.Input);
+                        _log.LogEvent("no audio detected: " + audioJob.Input, ImageType.Error);
+                        break;
                     }
-                    else
+                    if (iAVSChannelCount != iChannelCount)
                     {
-                        if (!oInfo.HasAudio)
-                        {
-                            _log.LogEvent("no audio file detected: " + audioJob.Input, ImageType.Error);
-                            break;
-                        }
-                        strChannelPositions = oInfo.AudioInfo.Tracks[0].ChannelPositions;
-                        script.Append(@"# detected channels: " + oInfo.AudioInfo.Tracks[0].NbChannels + Environment.NewLine);
-                        int.TryParse(oInfo.AudioInfo.Tracks[0].NbChannels.Split(' ')[0], out iChannelCount);
+                        _log.LogEvent("ignoring downmix because of the channel count mismatch", ImageType.Warning);
+                        break;
                     }
-
+                    if (iChannelCount <= 2)
+                    {
+                        _log.LogEvent("ignoring downmix as there is only " + iChannelCount + " channel", ImageType.Information);
+                        break;
+                    }
                     if (!String.IsNullOrEmpty(strChannelPositions))
                         script.Append(@"# detected channel positions: " + strChannelPositions + Environment.NewLine);
                     else
                         _log.LogEvent("no channel positions found. Downmix result may be wrong.", ImageType.Information);
 
-                    if (iChannelCount <= 2)
-                    {
-                        _log.LogEvent("ignoring downmix as there are only " + iChannelCount + " channels", ImageType.Information);
-                        break;
-                    }
-
-                    int iAVSChannelCount = 0;
-                    using (AvsFile avi = AvsFile.ParseScript(script.ToString()))
-                        iAVSChannelCount = avi.Clip.ChannelsCount;
-
-                    if (iAVSChannelCount != iChannelCount)
-                    {
-                        _log.LogEvent("channel count mismatch! ignoring downmix as the input file is reporting " + iChannelCount + " channels and the AviSynth script is reporting " + iAVSChannelCount + " channels", ImageType.Warning);
-                        break;
-                    }
-                    
                     switch (strChannelPositions)
                     {
                         // http://forum.doom9.org/showthread.php?p=1461787#post1461787
@@ -1175,41 +1185,71 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
 
             // SampleRate
-            if (MainForm.Instance.Settings.AviSynthPlus && audioJob.Settings.SampleRateType > 0)
+            if (MainForm.Instance.Settings.AviSynthPlus && 
+                (audioJob.Settings.SampleRate != SampleRateMode.KeepOriginal || audioJob.Settings.TimeModification != TimeModificationMode.KeepOriginal))
                 script.Append("ConvertAudioToFloat(last)" + Environment.NewLine);
-            switch (audioJob.Settings.SampleRateType)
+            switch (audioJob.Settings.SampleRate)
             {
-                case 0:
+                case SampleRateMode.KeepOriginal:
                     break;
-                case 1:
+                case SampleRateMode.ConvertTo08000:
                     script.Append("SSRC(8000)" + Environment.NewLine);
                     break;
-                case 2:
+                case SampleRateMode.ConvertTo11025:
                     script.Append("SSRC(11025)" + Environment.NewLine);
                     break;
-                case 3:
+                case SampleRateMode.ConvertTo22050:
                     script.Append("SSRC(22050)" + Environment.NewLine);
                     break;
-                case 4:
+                case SampleRateMode.ConvertTo32000:
                     script.Append("SSRC(32000)" + Environment.NewLine);
                     break;
-                case 5:
+                case SampleRateMode.ConvertTo44100:
                     script.Append("SSRC(44100)" + Environment.NewLine);
                     break;
-                case 6:
+                case SampleRateMode.ConvertTo48000:
                     script.Append("SSRC(48000)" + Environment.NewLine);
                     break;
-                case 7: // Speed-up (23.976 to 25)
-                    script.Append("AssumeSampleRate((AudioRate()*1001+480)/960).SSRC(AudioRate()).TimeStretch(pitch=Float((AudioRate()*1001+480)/960)*100.0/Float(AudioRate()))" + Environment.NewLine);
+                case SampleRateMode.ConvertTo96000:
+                    script.Append("SSRC(96000)" + Environment.NewLine);
                     break;
-                case 8: // Slow-down (25 to 23.976)
-                    script.Append("SSRC((AudioRate()*1001+480)/960).AssumeSampleRate(AudioRate()).TimeStretch(pitch=Float((AudioRate()*1001+480)/960)*100.0/Float(AudioRate()))" + Environment.NewLine);
+            }
+
+            // TimeModification
+            if (iChannelCount > 2 &&
+                (audioJob.Settings.TimeModification == TimeModificationMode.SlowDown25To23976WithCorrection ||
+                audioJob.Settings.TimeModification == TimeModificationMode.SlowDown25To24WithCorrection ||
+                audioJob.Settings.TimeModification == TimeModificationMode.SpeedUp23976To25WithCorrection ||
+                audioJob.Settings.TimeModification == TimeModificationMode.SpeedUp24To25WithCorrection))
+                _log.LogEvent("When TimeStretch() is used with more than 2 channels, each channel is processed individually in 1 channel mode. This will destroy the phase relationship between the channels.", ImageType.Warning);
+ 
+            switch (audioJob.Settings.TimeModification)
+            {
+                case TimeModificationMode.KeepOriginal:
                     break;
-                case 9: // Speed-up (24 to 25)
-                    script.Append("AssumeSampleRate((AudioRate()*25)/24).SSRC(AudioRate()).TimeStretch(pitch=Float((AudioRate()*25)/24)*100.0/Float(AudioRate()))" + Environment.NewLine);
+                case TimeModificationMode.SpeedUp23976To25:
+                    script.Append("AssumeSampleRate((AudioRate()*1001+480)/960).SSRC(AudioRate())" + Environment.NewLine);
                     break;
-                case 10: // Slow-down (25 to 24)
-                    script.Append("SSRC((AudioRate()*25)/24).AssumeSampleRate(AudioRate()).TimeStretch(pitch=Float((AudioRate()*25)/24)*100.0/Float(AudioRate()))" + Environment.NewLine);
+                case TimeModificationMode.SlowDown25To23976:
+                    script.Append("SSRC((AudioRate()*1001+480)/960).AssumeSampleRate(AudioRate())" + Environment.NewLine);
+                    break;
+                case TimeModificationMode.SpeedUp24To25:
+                    script.Append("AssumeSampleRate((AudioRate()*25 + 12)/24).SSRC(AudioRate())" + Environment.NewLine);
+                    break;
+                case TimeModificationMode.SlowDown25To24:
+                    script.Append("SSRC((AudioRate()*25 + 12)/24).AssumeSampleRate(AudioRate())" + Environment.NewLine);
+                    break;
+                case TimeModificationMode.SpeedUp23976To25WithCorrection:
+                    script.Append("TimeStretch(tempo=Float(5005/48))" + Environment.NewLine);
+                    break;
+                case TimeModificationMode.SlowDown25To23976WithCorrection:
+                    script.Append("TimeStretch(tempo=Float(96000/1001))" + Environment.NewLine);
+                    break;
+                case TimeModificationMode.SpeedUp24To25WithCorrection:
+                    script.Append("TimeStretch(tempo=Float(2500/24))" + Environment.NewLine);
+                    break;
+                case TimeModificationMode.SlowDown25To24WithCorrection:
+                    script.Append("TimeStretch(tempo=Float(2400/25))" + Environment.NewLine);
                     break;
             }
 

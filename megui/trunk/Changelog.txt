@@ -1,3 +1,7 @@
+2487 [Audio Encoder]        fixed TimeStretch support (regression of 2383)
+     [Audio Encoder]        added dedicated TimeStretch options
+     [Audio Encoder]        added 96000 Hz sample rate conversion. Feature request #538
+     [Audio Encoder]        cosmetics
 2486 [HD Streams Extractor] improved logging
 2485 [QAAC]                 allow only specific TVBR values. Please verify your settings.
 2484 [Video Preview]        if video preview is set to "always on top" some GUI elements were hidden. Bug #754

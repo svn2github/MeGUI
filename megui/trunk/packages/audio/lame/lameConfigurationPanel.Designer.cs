@@ -1,3 +1,23 @@
+// ****************************************************************************
+// 
+// Copyright (C) 2005-2014 Doom9 & al
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// 
+// ****************************************************************************
+
 namespace MeGUI.packages.audio.lame
 {
     partial class lameConfigurationPanel
@@ -41,22 +61,22 @@ namespace MeGUI.packages.audio.lame
             // 
             // encoderGroupBox
             // 
+            this.encoderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             this.encoderGroupBox.Controls.Add(this.cbrBitrate);
             this.encoderGroupBox.Controls.Add(this.abrValue);
             this.encoderGroupBox.Controls.Add(this.vbrValue);
             this.encoderGroupBox.Controls.Add(this.vbrMode);
             this.encoderGroupBox.Controls.Add(this.abrMode);
             this.encoderGroupBox.Controls.Add(this.cbrMode);
-            this.encoderGroupBox.Location = new System.Drawing.Point(0, 140);
-            this.encoderGroupBox.Size = new System.Drawing.Size(394, 103);
+            this.encoderGroupBox.Size = new System.Drawing.Size(402, 112);
             this.encoderGroupBox.Text = "  Lame MP3 Encoding Mode  ";
             // 
             // cbrMode
             // 
             this.cbrMode.AutoSize = true;
-            this.cbrMode.Location = new System.Drawing.Point(6, 18);
+            this.cbrMode.Location = new System.Drawing.Point(6, 20);
             this.cbrMode.Name = "cbrMode";
-            this.cbrMode.Size = new System.Drawing.Size(47, 16);
+            this.cbrMode.Size = new System.Drawing.Size(47, 17);
             this.cbrMode.TabIndex = 0;
             this.cbrMode.TabStop = true;
             this.cbrMode.Text = "CBR";
@@ -66,9 +86,9 @@ namespace MeGUI.packages.audio.lame
             // abrMode
             // 
             this.abrMode.AutoSize = true;
-            this.abrMode.Location = new System.Drawing.Point(6, 42);
+            this.abrMode.Location = new System.Drawing.Point(6, 46);
             this.abrMode.Name = "abrMode";
-            this.abrMode.Size = new System.Drawing.Size(47, 16);
+            this.abrMode.Size = new System.Drawing.Size(47, 17);
             this.abrMode.TabIndex = 1;
             this.abrMode.TabStop = true;
             this.abrMode.Text = "ABR";
@@ -78,9 +98,9 @@ namespace MeGUI.packages.audio.lame
             // vbrMode
             // 
             this.vbrMode.AutoSize = true;
-            this.vbrMode.Location = new System.Drawing.Point(6, 66);
+            this.vbrMode.Location = new System.Drawing.Point(6, 72);
             this.vbrMode.Name = "vbrMode";
-            this.vbrMode.Size = new System.Drawing.Size(47, 16);
+            this.vbrMode.Size = new System.Drawing.Size(47, 17);
             this.vbrMode.TabIndex = 2;
             this.vbrMode.TabStop = true;
             this.vbrMode.Text = "VBR";
@@ -91,14 +111,14 @@ namespace MeGUI.packages.audio.lame
             // 
             this.vbrValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.vbrValue.Location = new System.Drawing.Point(112, 66);
+            this.vbrValue.Location = new System.Drawing.Point(112, 72);
             this.vbrValue.Maximum = new decimal(new int[] {
             9,
             0,
             0,
             0});
             this.vbrValue.Name = "vbrValue";
-            this.vbrValue.Size = new System.Drawing.Size(276, 22);
+            this.vbrValue.Size = new System.Drawing.Size(284, 20);
             this.vbrValue.TabIndex = 8;
             this.vbrValue.Value = new decimal(new int[] {
             4,
@@ -115,7 +135,7 @@ namespace MeGUI.packages.audio.lame
             0,
             0,
             0});
-            this.abrValue.Location = new System.Drawing.Point(112, 42);
+            this.abrValue.Location = new System.Drawing.Point(112, 46);
             this.abrValue.Maximum = new decimal(new int[] {
             320,
             0,
@@ -127,7 +147,7 @@ namespace MeGUI.packages.audio.lame
             0,
             0});
             this.abrValue.Name = "abrValue";
-            this.abrValue.Size = new System.Drawing.Size(276, 22);
+            this.abrValue.Size = new System.Drawing.Size(284, 20);
             this.abrValue.TabIndex = 9;
             this.abrValue.Value = new decimal(new int[] {
             128,
@@ -140,16 +160,16 @@ namespace MeGUI.packages.audio.lame
             this.cbrBitrate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbrBitrate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbrBitrate.Location = new System.Drawing.Point(112, 17);
+            this.cbrBitrate.Location = new System.Drawing.Point(112, 18);
             this.cbrBitrate.Name = "cbrBitrate";
-            this.cbrBitrate.Size = new System.Drawing.Size(276, 20);
+            this.cbrBitrate.Size = new System.Drawing.Size(284, 21);
             this.cbrBitrate.TabIndex = 10;
             // 
             // lameConfigurationPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Name = "lameConfigurationPanel";
-            this.Size = new System.Drawing.Size(394, 265);
+            this.Size = new System.Drawing.Size(410, 302);
             this.encoderGroupBox.ResumeLayout(false);
             this.encoderGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.vbrValue)).EndInit();

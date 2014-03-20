@@ -66,6 +66,8 @@ namespace MeGUI.packages.audio.qaac
             // 
             // encoderGroupBox
             // 
+            this.encoderGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.encoderGroupBox.Controls.Add(this.label4);
             this.encoderGroupBox.Controls.Add(this.cbQuality);
             this.encoderGroupBox.Controls.Add(this.chNoDelay);
@@ -74,13 +76,13 @@ namespace MeGUI.packages.audio.qaac
             this.encoderGroupBox.Controls.Add(this.trackBar);
             this.encoderGroupBox.Controls.Add(this.cbMode);
             this.encoderGroupBox.Controls.Add(this.label2);
-            this.encoderGroupBox.Size = new System.Drawing.Size(390, 131);
-            this.encoderGroupBox.Text = "QAAC Options";
+            this.encoderGroupBox.Size = new System.Drawing.Size(402, 125);
+            this.encoderGroupBox.Text = " QAAC Options ";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(37, 26);
+            this.label2.Location = new System.Drawing.Point(53, 26);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(34, 13);
             this.label2.TabIndex = 0;
@@ -90,18 +92,18 @@ namespace MeGUI.packages.audio.qaac
             // 
             this.cbMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbMode.FormattingEnabled = true;
-            this.cbMode.Location = new System.Drawing.Point(88, 23);
+            this.cbMode.Location = new System.Drawing.Point(106, 23);
             this.cbMode.Name = "cbMode";
-            this.cbMode.Size = new System.Drawing.Size(121, 21);
+            this.cbMode.Size = new System.Drawing.Size(117, 21);
             this.cbMode.TabIndex = 1;
             this.cbMode.SelectedIndexChanged += new System.EventHandler(this.cbMode_SelectedIndexChanged);
             // 
             // trackBar
             // 
-            this.trackBar.Location = new System.Drawing.Point(6, 50);
+            this.trackBar.Location = new System.Drawing.Point(3, 50);
             this.trackBar.Maximum = 127;
             this.trackBar.Name = "trackBar";
-            this.trackBar.Size = new System.Drawing.Size(400, 45);
+            this.trackBar.Size = new System.Drawing.Size(393, 45);
             this.trackBar.TabIndex = 2;
             this.trackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.trackBar.Value = 90;
@@ -110,7 +112,7 @@ namespace MeGUI.packages.audio.qaac
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(37, 98);
+            this.label3.Location = new System.Drawing.Point(53, 98);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(36, 13);
             this.label3.TabIndex = 3;
@@ -120,16 +122,16 @@ namespace MeGUI.packages.audio.qaac
             // 
             this.cbProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProfile.FormattingEnabled = true;
-            this.cbProfile.Location = new System.Drawing.Point(88, 95);
+            this.cbProfile.Location = new System.Drawing.Point(106, 95);
             this.cbProfile.Name = "cbProfile";
-            this.cbProfile.Size = new System.Drawing.Size(121, 21);
+            this.cbProfile.Size = new System.Drawing.Size(117, 21);
             this.cbProfile.TabIndex = 4;
             this.cbProfile.SelectedIndexChanged += new System.EventHandler(this.cbProfile_SelectedIndexChanged);
             // 
             // chNoDelay
             // 
             this.chNoDelay.AutoSize = true;
-            this.chNoDelay.Location = new System.Drawing.Point(274, 97);
+            this.chNoDelay.Location = new System.Drawing.Point(229, 97);
             this.chNoDelay.Name = "chNoDelay";
             this.chNoDelay.Size = new System.Drawing.Size(70, 17);
             this.chNoDelay.TabIndex = 5;
@@ -156,16 +158,16 @@ namespace MeGUI.packages.audio.qaac
             "109",
             "118",
             "127"});
-            this.cbQuality.Location = new System.Drawing.Point(88, 59);
+            this.cbQuality.Location = new System.Drawing.Point(106, 59);
             this.cbQuality.Name = "cbQuality";
-            this.cbQuality.Size = new System.Drawing.Size(121, 21);
+            this.cbQuality.Size = new System.Drawing.Size(117, 21);
             this.cbQuality.TabIndex = 6;
             this.cbQuality.SelectedIndexChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(37, 62);
+            this.label4.Location = new System.Drawing.Point(53, 62);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(39, 13);
             this.label4.TabIndex = 7;
@@ -175,7 +177,7 @@ namespace MeGUI.packages.audio.qaac
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Name = "qaacConfigurationPanel";
-            this.Size = new System.Drawing.Size(394, 300);
+            this.Size = new System.Drawing.Size(412, 316);
             this.encoderGroupBox.ResumeLayout(false);
             this.encoderGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
