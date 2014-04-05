@@ -111,6 +111,13 @@ namespace MeGUI
 
         public void GetUpdateInformation(bool bWait)
         {
+            while (_updateRunning)
+            {
+                System.Threading.Thread.Sleep(100);
+                Application.DoEvents();
+            }
+            _updateRunning = true;
+
             // refresh update data
             Thread updateCheck = new Thread(new ThreadStart(RefreshUpdateData));
             updateCheck.IsBackground = true;
@@ -129,6 +136,7 @@ namespace MeGUI
                 GetUpdateData();        // check if new update information is available
                 ParseUpdateXML();       // finally update the data
                 WriteUpdateStatus();    // write the missing update status into the log
+                _updateRunning = false;
             }
         }
 
@@ -384,6 +392,12 @@ namespace MeGUI
 
         public void BeginUpdateCheck()
         {
+            while (_updateRunning)
+            {
+                System.Threading.Thread.Sleep(100);
+                Application.DoEvents();
+            }
+
             bool bIsComponentMissing = UpdateCacher.IsComponentMissing();
             if (!bIsComponentMissing && NumUpdatableFiles() == 0)
                 return;
@@ -405,8 +419,7 @@ namespace MeGUI
                 else
                     return;
             }
-            else if (MessageBox.Show("There are updated packages available that may be necessary for MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read and accepted this information.\n\r\n\rDo you wish to proceed reviewing the updates?",
-                    "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            else if (MainForm.Instance.DialogManager.AskAboutUpdates())
                 ShowUpdateWindow(true, false);
 
             if (UpdateCacher.IsComponentMissing() && !MainForm.Instance.Restart)
@@ -480,6 +493,11 @@ namespace MeGUI
             List<UpdateWindow.iUpgradeable> failedFiles = new List<UpdateWindow.iUpgradeable>();
             List<UpdateWindow.iUpgradeable> missingFiles = new List<UpdateWindow.iUpgradeable>();
 
+            while (_updateRunning)
+            {
+                System.Threading.Thread.Sleep(100);
+                Application.DoEvents();
+            }
             _updateRunning = true;
 
             // Count the number of files we can update before we restart

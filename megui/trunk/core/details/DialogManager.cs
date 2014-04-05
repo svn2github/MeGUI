@@ -250,6 +250,28 @@ namespace MeGUI
             return mainForm.Settings.DialogSettings.AddConvertToYV12;
         }
 
+        public bool AskAboutUpdates()
+        {
+            if (mainForm.Settings.DialogSettings.AskAboutUpdates)
+            {
+                bool askAgain;
+                bool bResult = askAbout("There are updated packages available that may be necessary for MeGUI\r\n" + 
+                    "to work correctly. Some of them are binary files subject to patents, so\r\n" + 
+                    "they could be in violation of your local laws. MeGUI will let you choose\r\n" + 
+                    "what files to update but please check your local laws about patents\r\n" + 
+                    "before proceeding. By clicking on the 'Yes' button you declare you have\r\n" + 
+                    "read and accepted this information.\n\r\n\rDo you wish to proceed reviewing the updates?",
+                                        "Updates Available", MessageBoxIcon.Question, out askAgain);
+
+                if (!bResult && !askAgain)
+                    MainForm.Instance.Settings.AutoUpdate = false;
+                else
+                    mainForm.Settings.DialogSettings.AskAboutUpdates = askAgain;
+                return bResult;
+            }
+            return true;
+        }
+
         public bool DeleteIntermediateFiles(List<string> arrFiles)
         {
             if (mainForm.Settings.DialogSettings.AskAboutIntermediateDelete)

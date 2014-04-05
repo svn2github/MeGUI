@@ -1,3 +1,4 @@
+2491 [Update]               added option to hide the question if you would like to update
 2490 [Update]               added download progress indicator
      [Update]               added sortable columns
      [Update]               update data will only be refreshed every 1 (development) or 5 (stable) days

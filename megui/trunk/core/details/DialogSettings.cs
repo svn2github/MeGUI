@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -77,6 +77,13 @@ namespace MeGUI
             set { askAboutYV12 = value; }
         }
 
+        private bool askAboutUpdates;
+        public bool AskAboutUpdates
+        {
+            get { return askAboutUpdates; }
+            set { askAboutUpdates = value; }
+        }
+
         private bool addConvertToYV12;
         public bool AddConvertToYV12
         {
@@ -124,6 +131,7 @@ namespace MeGUI
             dupResponse = true;
             askAboutIntermediateDelete = true;
             intermediateDelete = true;
+            askAboutUpdates = true;
         }
     }
 }
