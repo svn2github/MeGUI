@@ -189,7 +189,7 @@ namespace MeGUI
 			{
                 MeGUISettings settings = internalSettings;
                 settings.AcceptableFPSError = acceptableFPSError.Value; 
-                settings.AutoUpdate = useAutoUpdateCheckbox.Checked;
+                
                 settings.SourceDetectorSettings = sdSettings;
                 settings.NeroAacEncPath = neroaacencLocation.Filename;
                 settings.VideoExtension = videoExtension.Text;
@@ -231,20 +231,26 @@ namespace MeGUI
                 settings.AutoSelectHDStreams = chkSelectHDTracks.Checked;
                 settings.AedSettings = this.autoEncodeDefaults;
                 settings.AlwaysOnTop = chAlwaysOnTop.Checked;
+                settings.DefaultOutputDir = defaultOutputDir.Filename;
+                settings.TempDirMP4 = tempDirMP4.Filename;
+                settings.AddTimePosition = cbAddTimePos.Checked;
+                settings.Use64bitX264 = chkEnable64bitX264.Checked;
+                settings.FFMSThreads = Decimal.ToInt32(ffmsThreads.Value);
+                settings.AppendToForcedStreams = txtForcedName.Text;
+                settings.UseITUValues = cbUseITUValues.Checked;
+
+                // update server settings
+                settings.AlwaysBackUpFiles = backupfiles.Checked;
+                settings.AutoUpdate = useAutoUpdateCheckbox.Checked;
+                MainForm.Instance.UpdateHandler.UpdateMode = settings.UpdateMode;
                 settings.HttpProxyMode = (ProxyMode)this.cbHttpProxyMode.SelectedIndex;
                 settings.HttpProxyAddress = txt_httpproxyaddress.Text;
                 settings.HttpProxyPort = txt_httpproxyport.Text;
                 settings.HttpProxyUid = txt_httpproxyuid.Text;
                 settings.HttpProxyPwd = txt_httpproxypwd.Text;
-                settings.DefaultOutputDir = defaultOutputDir.Filename;
-                settings.TempDirMP4 = tempDirMP4.Filename;
-                settings.AddTimePosition = cbAddTimePos.Checked;
-                settings.AlwaysBackUpFiles = backupfiles.Checked;
+                if (cbAutoUpdateServerSubList.SelectedIndex != internalSettings.AutoUpdateServerSubList)
+                    settings.LastUpdateCheck = DateTime.Now.AddDays(-7).ToUniversalTime();
                 settings.AutoUpdateServerSubList = cbAutoUpdateServerSubList.SelectedIndex;
-                settings.Use64bitX264 = chkEnable64bitX264.Checked;
-                settings.FFMSThreads = Decimal.ToInt32(ffmsThreads.Value);
-                settings.AppendToForcedStreams = txtForcedName.Text;
-                settings.UseITUValues = cbUseITUValues.Checked;
 
                 if (useDGIndexNV.Checked != internalSettings.UseDGIndexNV)
                     UpdateCacher.CheckPackage("dgindexnv", useDGIndexNV.Checked, false);

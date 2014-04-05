@@ -152,7 +152,7 @@ namespace MeGUI
         {
             if (mainForm.Settings.DialogSettings.AskAboutDuplicates)
             {
-                if (!MainForm.Instance.Settings.AutoUpdateSession)
+                if (MainForm.Instance.UpdateHandler.UpdateMode != UpdateMode.Automatic)
                 {
                     bool askAgain;
                     bool bResult = askAbout("Problem adding profile '"

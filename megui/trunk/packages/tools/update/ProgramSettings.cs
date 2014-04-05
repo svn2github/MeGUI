@@ -131,12 +131,18 @@ namespace MeGUI
                 return false;
 
             // package is not available. Therefore an update check is necessary
-            if (MessageBox.Show("The package " + _displayname + " is not installed.\n\nDo you want to search now online for updates?", "MeGUI package missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MainForm.Instance.Settings.UpdateMode != UpdateMode.Disabled 
+                || MessageBox.Show("The package " + _displayname + " is not installed.\n\nDo you want to search now online for updates?", "MeGUI package missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                MainForm.Instance.startUpdateCheckAndWait();
+                MainForm.Instance.UpdateHandler.ForcePackageInstallation = this._name;
+                MainForm.Instance.UpdateHandler.ShowUpdateWindow(true, true);
+                MainForm.Instance.UpdateHandler.ForcePackageInstallation = string.Empty;
+
                 if (FilesAvailable())
                     return true;
-                MessageBox.Show(String.Format("The update for {0} failed. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to try it later.", _displayname), _displayname + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                if (MainForm.Instance.Settings.UpdateMode == UpdateMode.Disabled)
+                    MessageBox.Show(String.Format("The update for {0} failed. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to try it later.", _displayname), _displayname + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
                 MessageBox.Show(String.Format("You have selected to not update {0}. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to download it later.", _displayname), _displayname + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);

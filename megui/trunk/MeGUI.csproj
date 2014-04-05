@@ -283,6 +283,9 @@
     <Compile Include="core\gui\AspectRatioChooser.Designer.cs">
       <DependentUpon>AspectRatioChooser.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\CustomProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="packages\reader\lmash\lsmashReader.cs" />
     <Compile Include="packages\reader\ttxt\ttxtReader.cs" />
     <Compile Include="packages\tools\avscreator\AviSynthProfileConfigPanel.cs">
@@ -452,6 +455,7 @@
     </Compile>
     <Compile Include="packages\tools\update\ProgramSettings.cs" />
     <Compile Include="packages\tools\update\UpdateCacher.cs" />
+    <Compile Include="packages\tools\update\UpdateHandler.cs" />
     <Compile Include="packages\tools\update\UpdateWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1137,7 +1141,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>cmd /c "SubWCRev $(ProjectDir) $(ProjectDir)AssemblyInfo.template $(ProjectDir)AssemblyInfo.cs&amp;&amp;exit 0"</PreBuildEvent>
+    <PreBuildEvent>cmd /c "SubWCRev $(ProjectDir) $(ProjectDir)AssemblyInfo.template $(ProjectDir)AssemblyInfo.cs&amp;exit 0"</PreBuildEvent>
     <PostBuildEvent>MOVE /Y "$(TargetDir)lib_$(PlatformName)\*.*" "$(TargetDir)"
 RD /S /Q "$(TargetDir)lib_$(PlatformName)"</PostBuildEvent>
   </PropertyGroup>

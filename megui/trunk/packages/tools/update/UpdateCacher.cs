@@ -19,6 +19,7 @@
 // ****************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -38,7 +39,7 @@ namespace MeGUI
     {
         public const int REMOVE_PACKAGE_AFTER_DAYS = 60;
 
-        public static void flushOldCachedFilesAsync(UpdateWindow.iUpgradeableCollection upgradeData, UpdateWindow oUpdate)
+        public static void flushOldCachedFilesAsync(UpdateWindow.iUpgradeableCollection upgradeData)
         {
             if (MainForm.Instance.Settings.AlwaysBackUpFiles)
                 return;
@@ -66,215 +67,12 @@ namespace MeGUI
                 if (DateTime.Now - f.LastWriteTime > new TimeSpan(REMOVE_PACKAGE_AFTER_DAYS, 0, 0, 0, 0))
                 {
                     f.Delete();
-                    oUpdate.AddTextToLog("Deleted cached file " + f.Name, ImageType.Information);
+                    MainForm.Instance.UpdateHandler.AddTextToLog("Deleted cached file " + f.Name, ImageType.Information, false);
                 }
             }
         }
 
-        public static UpdateWindow.ErrorState DownloadFile(string url, string fileName, Uri serverAddress,
-            DownloadProgressChangedEventHandler wc_DownloadProgressChanged, UpdateWindow oUpdate)
-        {
-            FileUtil.ensureDirectoryExists(MainForm.Instance.Settings.MeGUIUpdateCache);
-            UpdateWindow.ErrorState err = UpdateWindow.ErrorState.Successful;
-            string updateCache = MainForm.Instance.Settings.MeGUIUpdateCache;
-            string localFilename = Path.Combine(updateCache, url);
-            if (!String.IsNullOrEmpty(fileName))
-                localFilename = Path.Combine(updateCache, fileName);
-
-            if (!VerifyLocalCacheFile(localFilename, oUpdate, ref err))
-            {
-                err = UpdateWindow.ErrorState.Successful;
-                WebClient wc = new WebClient();
-
-                // check for proxy authentication...
-                wc.Proxy = HttpProxy.GetProxy(MainForm.Instance.Settings);
-
-                ManualResetEvent mre = new ManualResetEvent(false);
-                wc.DownloadFileCompleted += delegate(object sender, AsyncCompletedEventArgs e)
-                {
-                    if (e.Error != null)
-                    {
-                        if (e.Error is WebException)
-                        {
-                            WebException webex = (WebException)e.Error;
-                            if (webex.Response != null && ((HttpWebResponse)webex.Response).StatusCode == HttpStatusCode.NotFound)
-                                err = UpdateWindow.ErrorState.FileNotOnServer;
-                            else
-                                err = UpdateWindow.ErrorState.ServerNotAvailable;
-                        }
-                        else
-                            err = UpdateWindow.ErrorState.CouldNotDownloadFile;
-                    }
-                    mre.Set();
-                };
-
-                if (wc_DownloadProgressChanged != null)
-                    wc.DownloadProgressChanged += wc_DownloadProgressChanged;
-                wc.DownloadFileAsync(new Uri(serverAddress, url), localFilename);
-                mre.WaitOne();
-
-                VerifyLocalCacheFile(localFilename, oUpdate, ref err);
-
-                if (localFilename.ToLowerInvariant().EndsWith(".xml"))
-                {
-                    if (err == UpdateWindow.ErrorState.Successful)
-                        oUpdate.AddTextToLog("Connected to server: " + serverAddress, ImageType.Information);
-                    else
-                        oUpdate.AddTextToLog("Cannot connect to server: " + serverAddress + ". Reason: " + EnumProxy.Create(err).ToString(), ImageType.Information);
-                }
-                if (err == UpdateWindow.ErrorState.Successful)
-                    oUpdate.AddTextToLog("File downloaded: " + Path.GetFileName(localFilename), ImageType.Information);
-            }
-            else if (localFilename.ToLowerInvariant().EndsWith(".xml"))
-                oUpdate.AddTextToLog("Using cached update config and server: " + serverAddress, ImageType.Information);
-
-            return err;
-        }
-
-        public static UpdateWindow.ErrorState ExtractFile(MeGUI.UpdateWindow.iUpgradeable file, UpdateWindow oUpdate)
-        {
-            string filepath = null, filename = null;
-            UpdateWindow.ErrorState extractResult = UpdateWindow.ErrorState.Successful;
-
-            if (file.SaveFolder != null)
-                filepath = file.SaveFolder;
-            else if (file.SavePath != null)
-                filepath = Path.GetDirectoryName(file.SavePath);
-            else
-            {
-                oUpdate.AddTextToLog("The path to save " + file.Name + " to is invalid.", ImageType.Error);
-                return UpdateWindow.ErrorState.CouldNotSaveNewFile;
-            }
-            if (file.SavePath != null)
-                filename = file.SavePath;
-            else
-                filename = filepath + @"\" + Path.GetFileName(file.AvailableVersion.Url);
-
-            try
-            {
-                if (!Directory.Exists(filepath))
-                    Directory.CreateDirectory(filepath);
-            }
-            catch (IOException)
-            {
-                oUpdate.AddTextToLog(string.Format("Could not create directory {0}.", filepath), ImageType.Error);
-                return UpdateWindow.ErrorState.CouldNotSaveNewFile;
-            }
-
-            if (file.AvailableVersion.Url.EndsWith(".7z"))
-            {
-                try
-                {
-                    using (var oArchive = new SevenZipExtractor(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, Path.GetFileName(file.AvailableVersion.Url))))
-                    {
-                        oArchive.Extracting += (s, e) =>
-                        {
-                            oUpdate.SetProgressBar(0, 100, e.PercentDone);
-                        };
-                        oArchive.FileExists += (o, e) =>
-                        {
-                            if (MainForm.Instance.Settings.AlwaysBackUpFiles)
-                            {
-                                extractResult = ManageBackups(e.FileName, file.Name, file.NeedsRestartedCopying, oUpdate);
-                                if (extractResult != UpdateWindow.ErrorState.Successful)
-                                {
-                                    e.Cancel = true;
-                                    return;
-                                }
-                            }
-                        };
-
-                        // To-Do: add restarted copying to 7z handler
-                        //if (!file.NeedsRestartedCopying)
-                        //{
-                        //    string targetPath = filepath;
-                        //    string sourcePath = Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, file.Name);
-
-                        //    oArchive.ExtractArchive(sourcePath);
-                        //    extractResult = ManageRestartedCopying(sourcePath, targetPath, file, oUpdate);
-
-                        //    //oArchive.FileExtractionStarted += (o, e) =>
-                        //    //{
-                        //    //    MainForm.Instance.AddFileToReplace(file.Name, e.FileInfo.FileName, file.AvailableVersion.UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
-                        //    //    e.FileInfo.FileName += ".tempcopy";
-                        //    //};
-                        //}
-                        //else
-                            oArchive.ExtractArchive(filepath);
-                    }
-
-                    if (extractResult != UpdateWindow.ErrorState.Successful)
-                        return extractResult;
-
-                    if (!file.NeedsRestartedCopying)
-                        file.CurrentVersion = file.AvailableVersion;  // the current installed version is now the latest available version
-                    else
-                        file.CurrentVersion.FileVersion = file.AvailableVersion.FileVersion; // after the restart the new files will be active
-                }
-                catch
-                {
-                    oUpdate.AddTextToLog("Could not extract " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
-                    DeleteCacheFile(file.AvailableVersion.Url, oUpdate);
-                    return UpdateWindow.ErrorState.CouldNotExtract;
-                }
-            }
-            else if (file.AvailableVersion.Url.EndsWith(".zip"))
-            {
-                try
-                {
-                    Stream str = File.OpenRead(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, Path.GetFileName(file.AvailableVersion.Url)));
-                    using (ZipInputStream zip = new ZipInputStream(str))
-                    {
-                        ZipEntry zipentry;
-                        while ((zipentry = zip.GetNextEntry()) != null)
-                        {
-                            filename = Path.Combine(filepath, zipentry.Name);
-                            if (zipentry.IsDirectory)
-                            {
-                                if (!Directory.Exists(filename))
-                                    Directory.CreateDirectory(filename);
-                                continue;
-                            }
-                            if (MainForm.Instance.Settings.AlwaysBackUpFiles)
-                            {
-                                UpdateWindow.ErrorState result = ManageBackups(filename, file.Name, file.NeedsRestartedCopying, oUpdate);
-                                if (result != UpdateWindow.ErrorState.Successful)
-                                    return result;
-                            }
-                            if (file.NeedsRestartedCopying)
-                            {
-                                MainForm.Instance.AddFileToReplace(file.Name, filename, file.AvailableVersion.UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
-                                filename += ".tempcopy";
-                            }
-
-                            // create the output writer to save the file onto the harddisc
-                            using (Stream outputWriter = new FileStream(filename, FileMode.Create))
-                                FileUtil.copyData(zip, outputWriter);
-                            File.SetLastWriteTime(filename, zipentry.DateTime);
-                        }
-                        if (!file.NeedsRestartedCopying)
-                            file.CurrentVersion = file.AvailableVersion; // the current installed version is now the latest available version
-                        else
-                            file.CurrentVersion.FileVersion = file.AvailableVersion.FileVersion; // after the restart the new files will be active
-                    }
-                }
-                catch
-                {
-                    oUpdate.AddTextToLog("Could not extract " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
-                    DeleteCacheFile(file.AvailableVersion.Url, oUpdate);
-                    return UpdateWindow.ErrorState.CouldNotExtract;
-                }
-            }
-            else
-            {
-                oUpdate.AddTextToLog("Package " + file.Name + " could not be extracted.", ImageType.Error);
-                return UpdateWindow.ErrorState.CouldNotExtract;
-            }
-
-            return extractResult;
-        }
-
-        private static UpdateWindow.ErrorState ManageRestartedCopying(string sourcePath, string targetPath, UpdateWindow.iUpgradeable file, UpdateWindow oUpdate)
+        private static UpdateWindow.ErrorState ManageRestartedCopying(string sourcePath, string targetPath, UpdateWindow.iUpgradeable file)
         {
             DirectoryInfo fi = new DirectoryInfo(sourcePath);
             FileInfo[] files = fi.GetFiles("*.*", SearchOption.AllDirectories);
@@ -285,7 +83,7 @@ namespace MeGUI
                 if (!Directory.Exists(directory))
                     Directory.CreateDirectory(directory);
                 f.MoveTo(Path.Combine(directory, f.Name + ".tempcopy"));
-                MainForm.Instance.AddFileToReplace(file.Name, f.FullName.Remove(f.FullName.Length - 9), file.AvailableVersion.UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
+                MainForm.Instance.UpdateHandler.AddFileToReplace(file.Name, f.FullName.Remove(f.FullName.Length - 9), file.AvailableVersion.UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
             }
 
             
@@ -308,7 +106,7 @@ namespace MeGUI
             return UpdateWindow.ErrorState.Successful;
         }
 
-        private static UpdateWindow.ErrorState ManageBackups(string savePath, string name, bool bCopyFile, UpdateWindow oUpdate)
+        public static UpdateWindow.ErrorState ManageBackups(string savePath, string name, bool bCopyFile)
         {
             try
             {
@@ -317,7 +115,7 @@ namespace MeGUI
             }
             catch
             {
-                oUpdate.AddTextToLog("Outdated backup version of " + name + " could not be deleted. Check if it is in use.", ImageType.Error);
+                MainForm.Instance.UpdateHandler.AddTextToLog("Outdated backup version of " + name + " could not be deleted. Check if it is in use.", ImageType.Error, true);
                 return UpdateWindow.ErrorState.CouldNotRemoveBackup;
             }
 
@@ -333,14 +131,14 @@ namespace MeGUI
             }
             catch
             {
-                oUpdate.AddTextToLog("Old version of " + name + " could not be backed up correctly.", ImageType.Error);
+                MainForm.Instance.UpdateHandler.AddTextToLog("Old version of " + name + " could not be backed up correctly.", ImageType.Error, true);
                 return UpdateWindow.ErrorState.CouldNotCreateBackup;
             }
 
             return UpdateWindow.ErrorState.Successful;
         }
 
-        public static void DeleteCacheFile(string p, UpdateWindow oUpdate)
+        public static void DeleteCacheFile(string p)
         {
             string localFilename = Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, p);
             try
@@ -350,7 +148,7 @@ namespace MeGUI
             }
             catch (IOException)
             {
-                oUpdate.AddTextToLog("Could not delete file " + localFilename, ImageType.Error);
+                MainForm.Instance.UpdateHandler.AddTextToLog("Could not delete file " + localFilename, ImageType.Error, true);
             }
         }
 
@@ -401,13 +199,76 @@ namespace MeGUI
             return false;
         }
 
+        public static bool IsComponentMissing()
+        {
+            ArrayList arrPath = new ArrayList();
+            string strPath;
+
+            //base 
+            arrPath.Add(System.Windows.Forms.Application.ExecutablePath);
+            //libs":
+            strPath = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+            arrPath.Add((Path.Combine(strPath, @"ICSharpCode.SharpZipLib.dll")));
+            arrPath.Add((Path.Combine(strPath, @"MessageBoxExLib.dll")));
+            arrPath.Add((Path.Combine(strPath, @"LinqBridge.dll")));
+            //mediainfo
+            arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfo.dll"));
+            //mediainfowrapper
+            arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfoWrapper.dll"));
+            //sevenzip
+            arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"7z.dll"));
+            //sevenzipsharp
+            arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"SevenZipSharp.dll"));
+            //data
+            arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"Data\ContextHelp.xml"));
+            //avswrapper
+            arrPath.Add((Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"AvisynthWrapper.dll")));
+            //updatecopier
+            arrPath.Add((Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"updatecopier.exe")));
+
+            foreach (ProgramSettings pSettings in MainForm.Instance.ProgramSettings)
+            {
+                if (!pSettings.UpdateAllowed())
+                    continue;
+                arrPath.AddRange(pSettings.Files);
+            }
+
+            bool bComponentMissing = false;
+            foreach (string strAppPath in arrPath)
+            {
+                ImageType image = ImageType.Error;
+                if (MainForm.Instance.UpdateHandler.UpdateMode == UpdateMode.Automatic)
+                    image = ImageType.Information;
+
+                if (String.IsNullOrEmpty(strAppPath))
+                {
+                    MainForm.Instance.UpdateHandler.AddTextToLog("No path to check for missing components!", image, false);
+                    bComponentMissing = true;
+                    continue;
+                }
+                else if (File.Exists(strAppPath) == false)
+                {
+                    MainForm.Instance.UpdateHandler.AddTextToLog("Component not found: " + strAppPath, image, false);
+                    bComponentMissing = true;
+                    continue;
+                }
+                FileInfo fInfo = new FileInfo(strAppPath);
+                if (fInfo.Length == 0)
+                {
+                    MainForm.Instance.UpdateHandler.AddTextToLog("Component has 0 bytes: " + strAppPath, image, false);
+                    bComponentMissing = true;
+                }
+            }
+            return bComponentMissing;
+        }
+
         /// <summary>
         /// Checks the local update cache file
         /// </summary>
         /// <param name="file">full file name</param>
-        /// <param name="oUpdate">update window</param>
+        /// <param name="err">reference to the error result</param>
         /// <returns>true if file is ok, false if not</returns>
-        private static bool VerifyLocalCacheFile(string file, UpdateWindow oUpdate, ref UpdateWindow.ErrorState err)
+        public static bool VerifyLocalCacheFile(string file, ref UpdateWindow.ErrorState err)
         {
             if (err == UpdateWindow.ErrorState.Successful)
                 err = UpdateWindow.ErrorState.CouldNotDownloadFile;
@@ -418,7 +279,7 @@ namespace MeGUI
             FileInfo finfo = new FileInfo(file);
             if (finfo.Length == 0)
             {
-                DeleteCacheFile(file, oUpdate);
+                DeleteCacheFile(file);
                 return false;
             }
 
@@ -432,16 +293,16 @@ namespace MeGUI
                     {
                         if (oArchive.Check() == false)
                         {
-                            oUpdate.AddTextToLog("Could not extract " + file + ". Deleting file.", ImageType.Information);
-                            DeleteCacheFile(file, oUpdate);
+                            MainForm.Instance.UpdateHandler.AddTextToLog("Could not extract " + file + ". Deleting file.", ImageType.Information, true);
+                            DeleteCacheFile(file);
                             return false;
                         }
                     }
                 }
                 catch
                 {
-                    oUpdate.AddTextToLog("Could not extract " + file + ". Deleting file.", ImageType.Error);
-                    DeleteCacheFile(file, oUpdate);
+                    MainForm.Instance.UpdateHandler.AddTextToLog("Could not extract " + file + ". Deleting file.", ImageType.Error, true);
+                    DeleteCacheFile(file);
                     return false;
                 }
             }
@@ -456,16 +317,16 @@ namespace MeGUI
                         if (zipFile.TestArchive(true) == false)
                         {
                             zipFile.Close();
-                            oUpdate.AddTextToLog("Could not unzip " + file + ". Deleting file.", ImageType.Information);
-                            DeleteCacheFile(file, oUpdate);
+                            MainForm.Instance.UpdateHandler.AddTextToLog("Could not extract " + file + ". Deleting file.", ImageType.Information, true);
+                            DeleteCacheFile(file);
                             return false;
                         }
                     }
                 }
                 catch
                 {
-                    oUpdate.AddTextToLog("Could not unzip " + file + ". Deleting file.", ImageType.Error);
-                    DeleteCacheFile(file, oUpdate);
+                    MainForm.Instance.UpdateHandler.AddTextToLog("Could not extract " + file + ". Deleting file.", ImageType.Error, true);
+                    DeleteCacheFile(file);
                     return false;
                 }
             }
@@ -480,8 +341,8 @@ namespace MeGUI
                 }
                 catch
                 {
-                    oUpdate.AddTextToLog("Invalid or missing update file.", ImageType.Error);
-                    DeleteCacheFile(file, oUpdate);
+                    //MainForm.Instance.UpdateHandler.AddTextToLog("Invalid or missing update file.", ImageType.Error);
+                    DeleteCacheFile(file);
                     return false;
                 }
             }

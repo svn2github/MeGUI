@@ -217,7 +217,6 @@ namespace MeGUI
 			set { autoGain = value; }
 		}
 
-        private string sampleRateType;
         public string SampleRateType
         {
             get { return "deprecated"; }

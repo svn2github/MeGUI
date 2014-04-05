@@ -95,8 +95,8 @@ namespace MeGUI
 
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
                 new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
-            lastUpdateCheck = DateTime.Now.ToUniversalTime();
-            lastUpdateServer = String.Empty;
+            lastUpdateCheck = DateTime.Now.AddDays(-7).ToUniversalTime();
+            lastUpdateServer = "http://megui.org/auto/stable/";
             acceptableFPSError = 0.01M;
             autoUpdateServerSubList = 0;
             autoUpdate = true;
@@ -1177,17 +1177,6 @@ namespace MeGUI
             set { xvid = value; }
         }
         #endregion
-
-        private bool bAutoUpdateSession;
-        /// <summary>
-        /// automatic update process
-        /// </summary>
-        [XmlIgnore()]
-        public bool AutoUpdateSession
-        {
-            get { return bAutoUpdateSession; }
-            set { bAutoUpdateSession = value; }
-        }
 
         private bool bPortableAviSynth;
         /// <summary>

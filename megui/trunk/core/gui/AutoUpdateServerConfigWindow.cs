@@ -60,8 +60,7 @@ namespace MeGUI.core.gui
                 return;
             }
 
-            UpdateWindow oUpdateWindow = new UpdateWindow();
-            if (oUpdateWindow.GetUpdateXML(serverName) != UpdateWindow.ErrorState.Successful)
+            if (MainForm.Instance.UpdateHandler.GetUpdateXML(serverName, true) != UpdateWindow.ErrorState.Successful)
             {
                 if (MessageBox.Show("The server or the XML file is not available.\r\nShould it be added nevertheless?", "No connection to server", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != System.Windows.Forms.DialogResult.Yes)
                     return;

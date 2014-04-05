@@ -59,9 +59,8 @@ namespace MeGUI
         private LogItem _oneClickLog;
         private LogItem _aVSScriptCreatorLog;
         private LogItem _fileIndexerLog;
-        private LogItem _updateLog;
         private LogItem _eac3toLog;
-        private UpdateWindow _updateWindow;
+        private UpdateHandler _updateHandler;
         private List<ProgramSettings> _programsettings;
         public List<ProgramSettings> ProgramSettings { get { return _programsettings; } set { _programsettings = value; } }
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
@@ -70,21 +69,10 @@ namespace MeGUI
         public LogItem OneClickLog { get { return _oneClickLog; } set { _oneClickLog = value; } }
         public LogItem AVSScriptCreatorLog { get { return _aVSScriptCreatorLog; } set { _aVSScriptCreatorLog = value; } }
         public LogItem FileIndexerLog { get { return _fileIndexerLog; } set { _fileIndexerLog = value; } }
-        public LogItem UpdateLog { get { return _updateLog; } set { _updateLog = value; } }
         public LogItem Eac3toLog { get { return _eac3toLog; } set { _eac3toLog = value; } }
-        public UpdateWindow UpdateWindow 
-        { 
-            get 
-            {
-                if (_updateWindow == null)
-                    _updateWindow = new UpdateWindow();
-                return _updateWindow; 
-            } 
-            set { _updateWindow = value; } 
-        }
+        public UpdateHandler UpdateHandler { get { return _updateHandler; } set { _updateHandler = value; } }
         public MuxProvider MuxProvider { get { return muxProvider; } }
         private bool restart = false;
-        private Dictionary<string, CommandlineUpgradeData> filesToReplace = new Dictionary<string, CommandlineUpgradeData>();
         private DialogManager dialogManager;
         private string path; // path the program was started from
         private MediaFileFactory mediaFileFactory;
@@ -756,84 +744,11 @@ namespace MeGUI
             RegisterForm(this);
         }
 
-        private void beginUpdateCheck()
-        {
-            if (UpdateWindow.InvokeRequired) // as invoke does not work when it comes to making the form visible a new instance is required
-                UpdateWindow = new UpdateWindow();
-
-            UpdateWindow _updateWindow = UpdateWindow;
-            _updateWindow.GetUpdateData(true, UpdateWindow.UpdateStep.Manual);
-            bool bIsComponentMissing = UpdateWindow.isComponentMissing();
-            if (!bIsComponentMissing && !_updateWindow.HasUpdatableFiles())
-                return;
-
-            // If there are updated or missing files, display the window
-            if (MainForm.Instance.Settings.AutoUpdateSession)
-            {
-               _updateWindow.StartAutoUpdate();
-                while (_updateWindow.Visible == true)
-                {
-                    Application.DoEvents();
-                    System.Threading.Thread.Sleep(100);
-                }
-            }
-            else
-            {
-                if (bIsComponentMissing)
-                {
-                    if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
-                    {
-                        if (filesToReplace.Keys.Count > 0) // restart required
-                        {
-                            this.Restart = true;
-                            this.Invoke(new MethodInvoker(delegate { this.Close(); }));
-                            return;
-                        }
-                    }
-                    else
-                        return;
-                }
-                if (MessageBox.Show("There are updated packages available that may be necessary for MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read and accepted this information.\n\r\n\rDo you wish to proceed reviewing the updates?",
-                        "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    _updateWindow.ShowDialog();
-            }
-
-            if (UpdateWindow.isComponentMissing() && !this.Restart)
-            {
-                if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
-                {
-                    if (filesToReplace.Keys.Count > 0) // restart required
-                    {
-                        this.Restart = true;
-                        this.Invoke(new MethodInvoker(delegate { this.Close(); }));
-                        return;
-                    }
-                    else
-                        beginUpdateCheck();
-                }
-            }
-        }
-
-        internal void AddFileToReplace(string iUpgradeableName, string filename, string newUploadDate)
-        {
-            CommandlineUpgradeData data = new CommandlineUpgradeData();
-            data.filename.Add(filename);
-            data.tempFilename.Add(filename + ".tempcopy");
-            data.newUploadDate = newUploadDate;
-            if (filesToReplace.ContainsKey(iUpgradeableName))
-            {
-                filesToReplace[iUpgradeableName].tempFilename.Add(filename + ".tempcopy");
-                filesToReplace[iUpgradeableName].filename.Add(filename);
-                return;
-            }
-            filesToReplace.Add(iUpgradeableName, data);
-        }
-
         internal void CloseSilent()
         {
             this.profileManager.SaveProfiles();
             this.saveSettings();
-            UpdateWindow.SaveSettings();
+            _updateHandler.SaveSettings();
             this.saveApplicationSettings();
             jobControl1.saveJobs();
             this.saveLog();
@@ -874,8 +789,8 @@ namespace MeGUI
             if (parser.upgradeData.Count > 0)
             {
                 foreach (string file in parser.upgradeData.Keys)
-                    UpdateWindow.UpdateUploadDate(file, parser.upgradeData[file]);
-                UpdateWindow.SaveSettings();
+                    _updateHandler.UpdateUploadDate(file, parser.upgradeData[file]);
+                _updateHandler.SaveSettings();
             }
         }
 
@@ -1123,6 +1038,7 @@ namespace MeGUI
             CommandlineParser parser = new CommandlineParser();
             parser.Parse(args);
             MainForm mainForm = new MainForm();
+            mainForm.UpdateHandler = new UpdateHandler();
             mainForm.handleCommandline(parser);
             if (parser.start)
                 Application.Run(mainForm);
@@ -1153,20 +1069,20 @@ namespace MeGUI
 
         private void runRestarter()
         {
-            if (filesToReplace.Keys.Count == 0)
+            if (_updateHandler.FilesToReplace.Keys.Count == 0)
                 return;
 
             Process proc = new Process();
             ProcessStartInfo pstart = new ProcessStartInfo();
             pstart.FileName = Path.Combine(Application.StartupPath, "updatecopier.exe");
-            foreach (string file in filesToReplace.Keys)
+            foreach (string file in _updateHandler.FilesToReplace.Keys)
             {
-                pstart.Arguments += string.Format("--component \"{0}\" \"{1}\" ", file, filesToReplace[file].newUploadDate);
-                for (int i = 0; i < filesToReplace[file].filename.Count; i++)
+                pstart.Arguments += string.Format("--component \"{0}\" \"{1}\" ", file, _updateHandler.FilesToReplace[file].newUploadDate);
+                for (int i = 0; i < _updateHandler.FilesToReplace[file].filename.Count; i++)
                 {
                     pstart.Arguments += string.Format("\"{0}\" \"{1}\" ",
-                       filesToReplace[file].filename[i],
-                       filesToReplace[file].tempFilename[i]);
+                       _updateHandler.FilesToReplace[file].filename[i],
+                       _updateHandler.FilesToReplace[file].tempFilename[i]);
                 }
             }
             if (restart)
@@ -1356,40 +1272,11 @@ namespace MeGUI
             if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1) || Environment.OSVersion.Version.Major > 6)
                 taskbarItem = (ITaskbarList3)new ProgressTaskbar();
 
-            if (settings.UpdateMode != UpdateMode.Disabled)
-                startUpdateCheck();
-            else
-            {
-                if (_updateLog == null)
-                    _updateLog = MainForm.Instance.Log.Info("Update detection");
-                _updateLog.LogEvent("Automatic update is disabled");
-            }
-
             if (settings.AutoStartQueueStartup)
                 jobControl1.StartAll(false);
-        }
 
-        public void startUpdateCheck()
-        {
-            // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
-            Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
-            updateCheck.IsBackground = true;
-            updateCheck.Start();
-        }
-
-        public void startUpdateCheckAndWait()
-        {
-            MainForm.Instance.Settings.AutoUpdateSession = true;
-            // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
-            Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
-            updateCheck.IsBackground = true;
-            updateCheck.Start();
-            while (updateCheck.IsAlive)
-            {
-                System.Threading.Thread.Sleep(100);
-                Application.DoEvents();
-            }
-            MainForm.Instance.Settings.AutoUpdateSession = false;
+            if (MainForm.Instance.Settings.UpdateMode != UpdateMode.Disabled)
+                _updateHandler.BeginUpdateCheck();
         }
 
         private void getVersionInformation()
@@ -1475,21 +1362,6 @@ namespace MeGUI
                 Util.ThreadSafeRun(this, delegate { taskbarItem.SetOverlayIcon(this.Handle, oIcon.Handle, null); });
                 taskbarIcon = oIcon;
             }
-        }
-
-        private bool AskToInstallComponents(bool bRestartRequired)
-        {
-            string strQuestionText;
-
-            if (bRestartRequired)
-                strQuestionText = "MeGUI cannot find at least one required component. Without these components, MeGUI will not run properly (e.g. no job can be started).\n\nDo you want to restart MeGUI now?";
-            else
-                strQuestionText = "MeGUI cannot find at least one required component. Without these components, MeGUI will not run properly (e.g. no job can be started).\n\nDo you want to search now online for updates?";
-
-            if (MessageBox.Show(strQuestionText, "MeGUI component(s) missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                return true;
-            else
-                return false;
         }
 
         private void OneClickEncButton_Click(object sender, EventArgs e)

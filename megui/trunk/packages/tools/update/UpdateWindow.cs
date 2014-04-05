@@ -37,18 +37,8 @@ namespace MeGUI
     public partial class UpdateWindow : Form
     {
         #region Variables
-        private List<string> serverList;
-        private bool continueUpdate = true;
-        private iUpgradeableCollection upgradeData = null;
-        private Thread updateThread = null;
-        private StringBuilder logBuilder = new StringBuilder();
-        private System.Threading.ManualResetEvent webUpdate = new ManualResetEvent(false);
-        private XmlDocument upgradeXml = null;
-        public bool needsRestart = false;
-        private LogItem oLog;
-        private String ServerAddress;
-        private UpdateStep _updateStep;
         private ListViewColumnSorter lvwColumnSorter;
+        private bool bUpdateAllowed;
         private enum PackageStatus
         {
             [EnumTitle("no update available")]
@@ -86,14 +76,6 @@ namespace MeGUI
             InvalidXML,
             [EnumTitle("The requirements for this file are not met")]
             RequirementNotMet
-        }
-        public enum UpdateStep
-        {
-            Manual,
-            AutomaticCheck,
-            AutomaticInstall,
-            AutomaticStartup,
-            ServerCheckOnly
         }
         #endregion
         #region Classes
@@ -371,9 +353,9 @@ namespace MeGUI
                 set { needsRestartedCopying = value; }
             }
 
-            public virtual ErrorState Install(iUpgradeable file, UpdateWindow oUpdate)
+            public virtual ErrorState Install(iUpgradeable file)
             {
-                return UpdateCacher.ExtractFile(file, oUpdate);
+                return MainForm.Instance.UpdateHandler.ExtractFile(file);
             }
         }
         public class iUpgradeableCollection : CollectionBase
@@ -439,7 +421,7 @@ namespace MeGUI
                 set { mainForm = value; }
             }
 
-            public override ErrorState Install(iUpgradeable file, UpdateWindow oUpdate)
+            public override ErrorState Install(iUpgradeable file)
             {
                 try
                 {
@@ -609,35 +591,29 @@ namespace MeGUI
         private delegate void SetLogText();
         private delegate void SetListView(ListViewItem item);
         private delegate void ClearItems(ListView listview);
-        private delegate void UpdateProgressBar(int minValue, int maxValue, int currentValue);
-        public void SetProgressBar(int minValue, int maxValue, int currentValue)
+        private delegate void UpdateProgressBar(int minValue, int maxValue, int currentValue, string text);
+        public void SetProgressBar(int minValue, int maxValue, int currentValue, string text)
         {
             if (this.progressBar.InvokeRequired)
             {
                 try
                 {
                     UpdateProgressBar d = new UpdateProgressBar(SetProgressBar);
-                    progressBar.Invoke(d, minValue, maxValue, currentValue);
+                    progressBar.Invoke(d, minValue, maxValue, currentValue, text);
                 }
                 catch (Exception) { }
             }
             else
             {
+                this.progressBar.CustomText = text;
                 this.progressBar.Minimum = (int)minValue;
                 this.progressBar.Maximum = (int)maxValue;
                 this.progressBar.Value = (int)currentValue;
             }
         }
 
-        public void AddTextToLog(string text, ImageType oLogType)
+        public void RefreshText()
         {
-            oLog.LogEvent(text, oLogType);
-
-            if (oLogType == ImageType.Warning || oLogType == ImageType.Error)
-                logBuilder.AppendLine(oLogType + ": " + text);
-            else
-                logBuilder.AppendLine(text);
-
             SetLogText d = new SetLogText(UpdateLogText);
             if (this.txtBoxLog.InvokeRequired)
                 this.Invoke(d);
@@ -647,7 +623,7 @@ namespace MeGUI
 
         private void UpdateLogText()
         {
-            this.txtBoxLog.Text = logBuilder.ToString();
+            this.txtBoxLog.Text = MainForm.Instance.UpdateHandler.UpdateLOG.ToString();
             this.txtBoxLog.SelectionStart = txtBoxLog.Text.Length;
             this.txtBoxLog.ScrollToCaret();
         }
@@ -675,13 +651,11 @@ namespace MeGUI
             }
         }
         #endregion
-
         #region con/de struction
         private void UpdateWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.Visible = false;
-            e.Cancel = true;
-            SaveSettings();
+            MainForm.Instance.UpdateHandler.SaveSettings();
         }
 
         /// <summary>
@@ -695,12 +669,10 @@ namespace MeGUI
             InitializeComponent();
             lvwColumnSorter = new ListViewColumnSorter();
             this.listViewDetails.ListViewItemSorter = lvwColumnSorter;
-            if (MainForm.Instance.UpdateLog == null)
-                MainForm.Instance.UpdateLog = MainForm.Instance.Log.Info("Update detection");
-            this.oLog = MainForm.Instance.UpdateLog;
-            _updateStep = UpdateStep.ServerCheckOnly;
+            lvwColumnSorter.SortColumn = 1;
+            lvwColumnSorter.Order = SortOrder.Ascending;
             LoadComponentSettings();
-            LoadSettings(); // load upgradeData
+            RefreshGUI();
         }
 
         private void LoadComponentSettings()
@@ -732,106 +704,6 @@ namespace MeGUI
             MainForm.Instance.Settings.UpdateFormStatusColumnWidth = colStatus.Width;
         }
 
-        public static bool isComponentMissing()
-        {
-            ArrayList arrPath = new ArrayList();
-            string strPath;
-
-            //base 
-            arrPath.Add(System.Windows.Forms.Application.ExecutablePath);
-            //libs":
-            strPath = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
-            arrPath.Add((Path.Combine(strPath, @"ICSharpCode.SharpZipLib.dll")));
-            arrPath.Add((Path.Combine(strPath, @"MessageBoxExLib.dll")));
-            arrPath.Add((Path.Combine(strPath, @"LinqBridge.dll")));
-            //mediainfo
-            arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfo.dll"));
-            //mediainfowrapper
-            arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfoWrapper.dll"));
-            //sevenzip
-            arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"7z.dll"));
-            //sevenzipsharp
-            arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"SevenZipSharp.dll"));
-            //data
-            arrPath.Add(Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"Data\ContextHelp.xml"));
-            //avswrapper
-            arrPath.Add((Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"AvisynthWrapper.dll")));
-            //updatecopier
-            arrPath.Add((Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"updatecopier.exe")));
-
-            foreach (ProgramSettings pSettings in MainForm.Instance.ProgramSettings)
-            {
-                if (!pSettings.UpdateAllowed())
-                    continue;
-                arrPath.AddRange(pSettings.Files);
-            }
-
-            bool bComponentMissing = false;
-            foreach (string strAppPath in arrPath)
-            {
-                ImageType image = ImageType.Error;
-                if (MainForm.Instance.Settings.AutoUpdateSession)
-                    image = ImageType.Information;
-
-                if (String.IsNullOrEmpty(strAppPath))
-                {
-                    MainForm.Instance.UpdateLog.LogEvent("No path to check for missing components!", image);
-                    bComponentMissing = true;
-                    continue;
-                }
-                else if (File.Exists(strAppPath) == false)
-                {
-                    MainForm.Instance.UpdateLog.LogEvent("Component not found: " + strAppPath, image);
-                    bComponentMissing = true;
-                    continue;
-                }
-                FileInfo fInfo = new FileInfo(strAppPath);
-                if (fInfo.Length == 0)
-                {
-                    MainForm.Instance.UpdateLog.LogEvent("Component has 0 bytes: " + strAppPath, image);
-                    bComponentMissing = true;
-                }
-            }
-            return bComponentMissing;
-        }
-
-        private List<string> getUpdateServerList(string[] serverList)
-        {
-            string lastUpdateServer = MainForm.Instance.Settings.LastUpdateServer;
-            List<string> randomServerList = new List<string>();
-            List<string> sortedServerList = new List<string>(serverList);
-            sortedServerList.RemoveAt(0); // remove header
-
-            if (MainForm.Instance.Settings.LastUpdateCheck.AddHours(4).CompareTo(DateTime.Now.ToUniversalTime()) > 0)
-            {
-                // update server used within the last 4 hours - therefore no new server will be selected
-                if (sortedServerList.Contains(lastUpdateServer))
-                {
-                    sortedServerList.Remove(lastUpdateServer);
-                    randomServerList.Add(lastUpdateServer);
-                    lastUpdateServer = String.Empty;
-                }
-            }
-            else
-            {
-                if (sortedServerList.Contains(lastUpdateServer))
-                    sortedServerList.Remove(lastUpdateServer);
-            }
-
-            Random r = new Random();
-            while (sortedServerList.Count >  0)
-            {
-                int i = r.Next(0, sortedServerList.Count);
-                randomServerList.Add(sortedServerList[i]);
-                sortedServerList.RemoveAt(i);
-            }
-
-            if (!String.IsNullOrEmpty(lastUpdateServer))
-                randomServerList.Add(lastUpdateServer);
-
-            return randomServerList;
-        }
-
         private void UpdateWindow_Load(object sender, EventArgs e)
         {
             // Move window in the visible area of the screen if neccessary
@@ -858,176 +730,10 @@ namespace MeGUI
                 VistaStuff.SetWindowTheme(listViewDetails.Handle, "explorer", null);
         }
         #endregion
-        #region load and save
-        private void LoadSettings()
+        #region GUI
+        public void RefreshGUI()
         {
-            string path = Path.Combine(Application.StartupPath, "AutoUpdate.xml");
-            if (!File.Exists(path))
-            {
-                upgradeData = new iUpgradeableCollection();
-                return;
-            }
-
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(AviSynthFile), typeof(ProfilesFile), typeof(MeGUIFile) });
-                StreamReader settingsReader = new StreamReader(path);
-                iUpgradeableCollection upgradeDataTemp = (iUpgradeableCollection)serializer.Deserialize(settingsReader);
-                settingsReader.Dispose();
-
-                upgradeData = new iUpgradeableCollection();
-                foreach (iUpgradeable file in upgradeDataTemp)
-                {
-                    if (UpdateCacher.IsPackage(file.Name))
-                        this.upgradeData.Add(file);
-                }
-
-                foreach (iUpgradeable file in upgradeData)
-                {
-                    try
-                    {
-                        file.init();
-                    }
-                    catch (FileNotRegisteredYetException) { }
-                }
-            }
-            catch(Exception)
-            {
-                upgradeData = new iUpgradeableCollection();
-                MessageBox.Show("Error: Could not load previous package settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void SaveSettings()
-        {
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(ProfilesFile), typeof(MeGUIFile) });
-                StreamWriter output = new StreamWriter(Path.Combine(Application.StartupPath, "AutoUpdate.xml"), false);
-                serializer.Serialize(output, this.upgradeData);
-                output.Dispose();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Error: Could not save settings", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
-        #region getting update data
-        public void GetUpdateData(bool wait, UpdateStep updateStep)
-        {
-            if (MainForm.Instance.Settings.AutoUpdateServerLists[MainForm.Instance.Settings.AutoUpdateServerSubList].Length <= 1)
-            {
-                AddTextToLog("Couldn't run update since there are no servers registered.", ImageType.Error);
-                return;
-            }
-
-            serverList = getUpdateServerList(MainForm.Instance.Settings.AutoUpdateServerLists[MainForm.Instance.Settings.AutoUpdateServerSubList]);
-            _updateStep = updateStep;
-
-            Thread CreateTreeview = new Thread(new ThreadStart(ProcessUpdateXML));
-            CreateTreeview.IsBackground = true;
-            CreateTreeview.Start();
-            if (wait)
-            {
-                webUpdate.Reset();
-                webUpdate.WaitOne();
-            }
-        }
-
-        /// <summary>
-        /// This method is called to retrieve the update data from the webserver
-        /// and then set the relevant information to the grid.
-        /// </summary>
-        public ErrorState GetUpdateXML(string strServerAddress)
-        {
-            upgradeXml = new XmlDocument();
-
-            if (!String.IsNullOrEmpty(strServerAddress))
-            {
-                string xmlFile = "upgrade.xml";
-#if x64
-                xmlFile = "upgrade_x64.xml";
-#endif
-                ErrorState result = UpdateCacher.DownloadFile(xmlFile, "upgrade.xml", new Uri(strServerAddress), null, this);
-                if (result != ErrorState.Successful)
-                {
-                    AddTextToLog("Could not retrieve update data. " + EnumProxy.Create(result).ToString(), ImageType.Information);
-                    upgradeXml = null;
-                    return result;
-                }
-            }
-
-            if (File.Exists(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, "upgrade.xml")))
-            {
-                upgradeXml.Load(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, "upgrade.xml"));
-                return ErrorState.Successful;
-            }
-            else
-                return ErrorState.ServerNotAvailable;
-        }
-
-        /// <summary>
-        /// This function downloads the update XML file from the server and then processes it.
-        /// </summary>
-        private void ProcessUpdateXML()
-        {
-            // delete cached xml file if the automatic update process is not used
-            if (_updateStep != UpdateStep.AutomaticInstall && _updateStep != UpdateStep.AutomaticStartup)
-                UpdateCacher.DeleteCacheFile("upgrade.xml", this);
-
-            //if (upgradeXml != null) // the update file has already been downloaded and processed
-            //    return ErrorState.Successful;
-
-            ErrorState value = ErrorState.ServerNotAvailable;
-            foreach (string serverName in serverList)
-            {
-                ServerAddress = serverName;
-                value = GetUpdateXML(serverName);
-                if (value == ErrorState.Successful)
-                {
-                    MainForm.Instance.Settings.LastUpdateCheck = DateTime.Now.ToUniversalTime();
-                    MainForm.Instance.Settings.LastUpdateServer = serverName; 
-                    break;
-                }
-            }
-
-            if (value != ErrorState.Successful)
-            {
-                value = GetUpdateXML(null);
-                if (value != ErrorState.Successful)
-                {
-                    webUpdate.Set();
-                    return;
-                }
-            }
-
-            // I'd prefer the main thread to parse the upgradeXML as opposed to using this
-            // "downloading" thread but i didn't know a better way of doing it other than
-            // using a delegate like this.
-            BeginParseUpgradeXml d = new BeginParseUpgradeXml(ParseUpgradeXml);
-            XmlNode node = this.upgradeXml.SelectSingleNode("/UpdateableFiles");
-
-            if (node != null) // xml file could be dodgy.
-            {
-                if (listViewDetails.InvokeRequired)
-                {
-                    listViewDetails.Invoke(d, node, null, node.Name);
-                }
-                else
-                {
-                    d(node, null, node.Name);
-                }
-            }
-            
-            int iUpdatesCount = NumUpdatableFiles();
-            if (iUpdatesCount > 1)
-                AddTextToLog(string.Format("There are {0} packages which can be updated.", iUpdatesCount), ImageType.Information);
-            else if (iUpdatesCount == 1)
-                AddTextToLog("There is 1 package which can be updated.", ImageType.Information);
-            else
-                AddTextToLog("All packages are up to date", ImageType.Information);
-
+            int iUpdatesCount = MainForm.Instance.UpdateHandler.NumUpdatableFiles();
             if (chkShowAllFiles.Checked != (iUpdatesCount == 0))
             {
                 if (chkShowAllFiles.InvokeRequired)
@@ -1042,144 +748,17 @@ namespace MeGUI
                 else
                     DisplayItems(chkShowAllFiles.Checked);
             }
-
-            webUpdate.Set();
         }
 
-        /// <summary>
-        /// Parses the upgrade XML file to populate the upgradeData array. 
-        /// It's a recursive algorithm, so it needs to be passed the root node
-        /// off the upgrade XML to start off, and it will then recurse
-        /// through all the nodes in the file.
-        /// </summary>
-        /// <param name="currentNode">The node that the function should work on</param>
-        private void ParseUpgradeXml(XmlNode currentNode, XmlNode groupNode, string path)
+        public void EnableUpdateButton()
         {
-            foreach (XmlNode childnode in currentNode.ChildNodes)
-            {
-                if (childnode.Attributes["type"].Value.Equals("file"))
-                {
-                    ParseFileData(childnode, groupNode);
-                    continue;
-                }
-    
-                string newPath = path + "." + childnode.Name;
-                if (childnode.Attributes["type"].Value.Equals("tree"))
-                    ParseUpgradeXml(childnode, childnode, newPath);
-                else if (childnode.Attributes["type"].Value.Equals("subtree"))
-                    ParseUpgradeXml(childnode, groupNode, newPath);
-            }
+            bUpdateAllowed = true;
+            if (btnUpdate.InvokeRequired)
+                btnUpdate.Invoke(new MethodInvoker(delegate { btnUpdate.Enabled = true; }));
+            else
+                btnUpdate.Enabled = true;
         }
 
-        /// <summary>
-        /// Once a "file" is found in the upgrade XML file, the files node is passed
-        /// to this function which generates the correct iUpgradeable filetype (i.e. MeGUIFile
-        /// or AviSynthFile) and then fills in all the relevant data.
-        /// </summary>
-        /// <param name="node"></param>
-        private void ParseFileData(XmlNode node, XmlNode groupNode)
-        {
-            iUpgradeable file = null;
-            Version availableFile = null;
-            bool fileAlreadyAdded = false;
-
-            if ((file = upgradeData.FindByName(node.Name)) == null) // If this file isn't already in the upgradeData list
-            {
-                try
-                {
-                    if (!UpdateCacher.IsPackage(node.Name))
-                        return;
-                    if (groupNode.Name.Equals("MeGUI"))
-                        file = new MeGUIFile(node.Name);
-                    else if (groupNode.Name.Equals("ProgramFile"))
-                        file = new ProgramFile(node.Name);
-                    else if (groupNode.Name.Equals("ProfilesFile"))
-                        file = new ProfilesFile(node.Name, MainForm.Instance);
-                    else
-                        return;
-                }
-                catch (FileNotRegisteredYetException)
-                {
-                    return;
-                }
-            }
-            else
-            {
-                file.AvailableVersion = new Version();
-                file.DownloadChecked = false;
-                fileAlreadyAdded = true;
-                if (file is ProfilesFile)
-                    (file as ProfilesFile).MainForm = MainForm.Instance;
-            }
-
-            file.NeedsRestartedCopying = false;
-            var nameAttribute = node.Attributes["needsrestart"];
-            if (nameAttribute != null)
-            {
-                if (nameAttribute.Value.Equals("true"))
-                    file.NeedsRestartedCopying = true;    
-            }
-
-            file.RequiredBuild = 0;
-            nameAttribute = node.Attributes["requiredbuild"];
-            if (nameAttribute != null)
-            {
-                file.RequiredBuild = Int32.Parse(nameAttribute.Value);
-            }
-
-            file.DisplayName = node.Name;
-            nameAttribute = node.Attributes["name"];
-            ProgramSettings pSettings = UpdateCacher.GetPackage(file.Name);
-            if (nameAttribute != null)
-            {
-                file.DisplayName = nameAttribute.Value;
-                if (pSettings != null)
-                    pSettings.DisplayName = file.DisplayName;
-            }
-            else
-            {
-                if (pSettings != null)
-                    file.DisplayName = pSettings.DisplayName;
-            }
-
-            file.RequiredNET = String.Empty;
-            nameAttribute = node.Attributes["net"];
-            if (nameAttribute != null)
-            {
-                file.RequiredNET = nameAttribute.Value;
-            }
-
-            foreach (XmlNode filenode in node.ChildNodes) // each filenode contains the upgrade url and version
-            {
-                availableFile = new Version();
-                availableFile.Url = filenode.FirstChild.Value;
-
-                foreach (XmlAttribute oAttribute in filenode.Attributes)
-                {
-                    if (oAttribute.Name.Equals("version"))
-                        availableFile.FileVersion = filenode.Attributes["version"].Value;
-                    else if (oAttribute.Name.Equals("url"))
-                        availableFile.Web = filenode.Attributes["url"].Value;
-                    else if (oAttribute.Name.Equals("date"))
-                    {
-                        DateTime oDate = new DateTime();
-                        DateTime.TryParse(filenode.Attributes["date"].Value, new System.Globalization.CultureInfo("en-us"), System.Globalization.DateTimeStyles.None, out oDate);
-                        availableFile.UploadDate = oDate;
-                    }
-                }
-
-                file.AvailableVersion = availableFile;
-            }
-
-            if ((!file.isAvailable() && (pSettings == null || pSettings.UpdateAllowed()))
-                || (file.AllowUpdate && file.HasAvailableVersion && (pSettings == null || pSettings.UpdateAllowed())))
-                file.DownloadChecked = true;
-
-            if (!fileAlreadyAdded)
-                upgradeData.Add(file);
-        }
-        #endregion
-        #region GUI
         private void DisplayItems(bool bShowAllFiles)
         {
             if (!this.Visible)
@@ -1187,7 +766,7 @@ namespace MeGUI
 
             ClearListview(this.listViewDetails);
 
-            foreach (iUpgradeable file in upgradeData)
+            foreach (iUpgradeable file in MainForm.Instance.UpdateHandler.UpdateData)
             {
                 if (!bShowAllFiles)
                 {
@@ -1199,8 +778,43 @@ namespace MeGUI
                     AddToListview(file.CreateListViewItem());
             }
 
-            lvwColumnSorter.SortColumn = 1;
-            lvwColumnSorter.Order = SortOrder.Ascending;
+            listViewDetails.Sort();
+
+            foreach (ListViewItem item in listViewDetails.Items)
+            {
+                if (item.Index % 2 != 0)
+                    item.BackColor = Color.White;
+                else
+                    item.BackColor = Color.FromArgb(255, 225, 235, 255);
+            }
+        }
+
+        private void listViewDetails_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == 0)
+                return;
+
+            // Determine if clicked column is already the column that is being sorted.
+            if (e.Column == lvwColumnSorter.SortColumn)
+            {
+                // Reverse the current sort direction for this column.
+                if (lvwColumnSorter.Order == SortOrder.Ascending)
+                {
+                    lvwColumnSorter.Order = SortOrder.Descending;
+                }
+                else
+                {
+                    lvwColumnSorter.Order = SortOrder.Ascending;
+                }
+            }
+            else
+            {
+                // Set the column number that is to be sorted; default to ascending.
+                lvwColumnSorter.SortColumn = e.Column;
+                lvwColumnSorter.Order = SortOrder.Ascending;
+            }
+
+            // Perform the sort with these new sort options.
             listViewDetails.Sort();
 
             foreach (ListViewItem item in listViewDetails.Items)
@@ -1221,7 +835,7 @@ namespace MeGUI
                 || itm.SubItems["Status"].Text.Equals(EnumProxy.Create(PackageStatus.Disabled).ToString()))
                 e.NewValue = CheckState.Unchecked;
 
-            iUpgradeable file = upgradeData.FindByName(itm.Name);
+            iUpgradeable file = MainForm.Instance.UpdateHandler.UpdateData.FindByName(itm.Name);
             if (e.NewValue == CheckState.Checked)
                 file.DownloadChecked = file.AllowUpdate = true;
             else
@@ -1234,7 +848,10 @@ namespace MeGUI
                 if (pSettings != null && !pSettings.UpdateAllowed())
                     itm.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.Disabled).ToString();
                 else if (!file.isAvailable())
+                {
+                    e.NewValue = CheckState.Checked;
                     file.DownloadChecked = file.AllowUpdate = true;
+                }
                 else if (!file.AllowUpdate && file.HasAvailableVersion)
                     itm.SubItems["Status"].Text = EnumProxy.Create(PackageStatus.UpdateIgnored).ToString();
                 else if (file.HasAvailableVersion)
@@ -1251,7 +868,7 @@ namespace MeGUI
 
             // get the program settings
             ProgramSettings pSettings = UpdateCacher.GetPackage(listViewDetails.SelectedItems[0].Name);
-            iUpgradeable file = upgradeData.FindByName(listViewDetails.SelectedItems[0].Name);
+            iUpgradeable file = MainForm.Instance.UpdateHandler.UpdateData.FindByName(listViewDetails.SelectedItems[0].Name);
 
             // set the enable package value
             ToolStripMenuItem ts = (ToolStripMenuItem)statusToolStrip.Items[0];
@@ -1316,7 +933,7 @@ namespace MeGUI
             foreach (ListViewItem item in listViewDetails.SelectedItems)
             {
                 ProgramSettings pSettings = UpdateCacher.GetPackage(item.Name);
-                iUpgradeable file = upgradeData.FindByName(item.Name);
+                iUpgradeable file = MainForm.Instance.UpdateHandler.UpdateData.FindByName(item.Name);
                 Version latest = file.AvailableVersion;
                 file.AllowUpdate = !(ts.Checked);
 
@@ -1358,7 +975,7 @@ namespace MeGUI
             foreach (ListViewItem item in listViewDetails.SelectedItems)
             {
                 ProgramSettings pSettings = UpdateCacher.GetPackage(item.Name);
-                iUpgradeable file = upgradeData.FindByName(item.Name);
+                iUpgradeable file = MainForm.Instance.UpdateHandler.UpdateData.FindByName(item.Name);
                 Version latest = file.AvailableVersion;
 
                 if (pSettings != null && !pSettings.UpdateAllowed())
@@ -1400,7 +1017,7 @@ namespace MeGUI
                 ProgramSettings pSettings = UpdateCacher.GetPackage(item.Name);
                 if (pSettings != null)
                     UpdateCacher.CheckPackage(item.Name, ts.Checked, false);
-                iUpgradeable file = upgradeData.FindByName(item.Name);
+                iUpgradeable file = MainForm.Instance.UpdateHandler.UpdateData.FindByName(item.Name);
                 Version latest = file.AvailableVersion;
 
                 if (pSettings != null && !pSettings.UpdateAllowed())
@@ -1426,253 +1043,39 @@ namespace MeGUI
             }
         }
 
-        public void StartAutoUpdate()
+        public void StartUpdate()
         {
-            this.Visible = true;
             btnUpdate_Click(null, null);
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            btnUpdate.Enabled = false;
             btnAbort.Enabled = true;
-            updateThread = new Thread(new ThreadStart(ProcessUpdate));
+            btnUpdate.Enabled = false;
+            MainForm.Instance.UpdateHandler.AbortUpdate = false;
+
+            Thread updateThread = new Thread(new ThreadStart(MainForm.Instance.UpdateHandler.ProcessUpdate));
             updateThread.IsBackground = true;
             updateThread.Start();
+            while (updateThread.IsAlive)
+            {
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(100);
+            }
+
+            RefreshGUI();
+
+            btnAbort.Enabled = false;
+            btnUpdate.Enabled = bUpdateAllowed;
         }
+
         #endregion
         #region updating
-        private void ProcessUpdate()
-        {
-            continueUpdate = true;
-            bool needsRestart = false;
-            int currentFile = 1; //the first file we update is file 1.
-            ErrorState result;
-            List<iUpgradeable> succeededFiles = new List<iUpgradeable>();
-            List<iUpgradeable> failedFiles = new List<iUpgradeable>();
-            List<iUpgradeable> missingFiles = new List<iUpgradeable>();
-
-            // Count the number of files we can update before we restart
-            int updateableFileCount = 0;
-            foreach (iUpgradeable file in upgradeData)
-                if (file.DownloadChecked)
-                    updateableFileCount++;
-
-            // Now update the files we can
-            foreach (iUpgradeable file in upgradeData)
-            {
-                if (!continueUpdate)
-                {
-                    AddTextToLog("Update aborted by user", ImageType.Information);
-                    return /* false*/;
-                }
-
-                if (!file.DownloadChecked)
-                    continue;
-
-                AddTextToLog(string.Format("Updating {0}. Package {1}/{2}.", file.DisplayName, currentFile, updateableFileCount), ImageType.Information);
-
-                if (!String.IsNullOrEmpty(file.AvailableVersion.Web))
-                {
-                    string strText;
-                    if (file.Name.ToLowerInvariant().Equals("neroaacenc"))
-                    {
-                        string strPath = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\tools\eac3to\neroAacEnc.exe";
-                        strText = "MeGUI cannot find " + file.DisplayName + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own and extract neroaacenc.exe to:\n" + strPath + "\n\nIf necessary change the path in the settings:\n\"Settings\\External Program Settings\"\n\nWould you like to download it now?";
-                    }
-                    else
-                        strText = "MeGUI cannot find " + file.DisplayName + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own, extract it and set the path to the " + file.Name + ".exe in the MeGUI settings\n(\"Settings\\External Program Settings\").\n\nWould you like to download it now?";
-
-                    if (MessageBox.Show(strText, "Component not found", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                    {
-                        System.Diagnostics.Process.Start(file.AvailableVersion.Web);
-                        succeededFiles.Add(file);
-                    }
-                    else
-                        failedFiles.Add(file);
-                }
-                else
-                {
-                    result = UpdateCacher.DownloadFile(file.AvailableVersion.Url, null, new Uri(ServerAddress), wc_DownloadProgressChanged, this);
-                    if (result != ErrorState.Successful)
-                    {
-                        failedFiles.Add(file);
-                        AddTextToLog(string.Format("Failed to download package {0}: {1}.", file.DisplayName, EnumProxy.Create(result).ToString()), ImageType.Error);
-                    }
-                    else if (_updateStep != UpdateStep.AutomaticCheck)
-                    {
-                        // install only if not in full automatic mode and if download successful
-                        ErrorState state = Install(file);
-                        if (state != ErrorState.Successful)
-                        {
-                            if (state != ErrorState.RequirementNotMet)
-                            {
-                                AddTextToLog(string.Format("Failed to install package {0}: {1}.", file.DisplayName, EnumProxy.Create(state).ToString()), ImageType.Error);
-                                failedFiles.Add(file);
-                            }
-                            else
-                                missingFiles.Add(file);
-                        }
-                        else
-                        {
-                            succeededFiles.Add(file);
-                            file.DownloadChecked = false;
-                            if (file.NeedsRestartedCopying)
-                                needsRestart = true;
-
-                            if (file.Name.Equals("ffmpeg") || file.Name.StartsWith("x26")
-                                || file.Name.Equals("xvid_encraw"))
-                            {
-                                if (MainForm.Instance.Settings.PortableAviSynth)
-                                    FileUtil.PortableAviSynthActions(false);
-                                if (!MainForm.Instance.Settings.AviSynthPlus)
-                                    FileUtil.LSMASHFileActions(false);
-                            }
-                        }
-                    }
-                }
-                
-                if (currentFile >= updateableFileCount)
-                    break;
-                currentFile++;
-            }
-
-            if (_updateStep == UpdateStep.AutomaticCheck)
-            {
-                if (this.InvokeRequired)
-                    this.Invoke(new MethodInvoker(delegate { this.Close(); }));
-                else
-                    this.Close();
-                return;
-            }
-
-            SetProgressBar(0, 1, 1); //make sure progress bar is at 100%.
-
-            if (succeededFiles.Count > 0)
-                AddTextToLog("Packages which have been successfully updated: " + succeededFiles.Count, ImageType.Information);
-            if (failedFiles.Count + missingFiles.Count > 0)
-            {
-                if (failedFiles.Count == 0)
-                    AddTextToLog("Packages which have not been successfully updated: " + missingFiles.Count, ImageType.Warning);
-                else
-                    AddTextToLog("Packages which have not been successfully updated: " + (failedFiles.Count + missingFiles.Count), ImageType.Error);
-            }
-
-            UpdateCacher.flushOldCachedFilesAsync(upgradeData, this);
-
-            if (MainForm.Instance.Settings.UpdateMode == UpdateMode.Automatic ||
-                (MainForm.Instance.Settings.AutoUpdateSession && (failedFiles.Count + missingFiles.Count) == 0))
-            {
-                if (this.InvokeRequired)
-                    this.Invoke(new MethodInvoker(delegate { this.Close(); }));
-                else
-                    this.Close();
-                return;
-            }
-
-            if (needsRestart)
-            {
-                if (MessageBox.Show("In order to finish the update, MeGUI needs to be restarted. Do you want to restart now?",
-                    "Restart now?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    MainForm.Instance.Restart = true;
-                    this.Invoke(new MethodInvoker(delegate { this.Close(); }));
-                    MainForm.Instance.Invoke(new MethodInvoker(delegate { MainForm.Instance.Close(); }));
-                    return/* true*/;
-                }
-            }
-
-            int iUpdatesCount = NumUpdatableFiles();
-            if (chkShowAllFiles.Checked != (iUpdatesCount == 0))
-            {
-                if (chkShowAllFiles.InvokeRequired)
-                    chkShowAllFiles.Invoke(new MethodInvoker(delegate { chkShowAllFiles.Checked = iUpdatesCount == 0; }));
-                else
-                    chkShowAllFiles.Checked = iUpdatesCount == 0;
-            }
-            else
-            {
-                if (listViewDetails.InvokeRequired)
-                    listViewDetails.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
-                else
-                    DisplayItems(chkShowAllFiles.Checked);
-            }
-
-            Invoke(new MethodInvoker(delegate
-            {
-                btnAbort.Enabled = false;
-                btnUpdate.Enabled = true;
-            }));
-        }
-
-        private ErrorState Install(iUpgradeable file)
-        {
-            if (file.RequiredBuild > 0 && new System.Version(Application.ProductVersion).Build < file.RequiredBuild)
-            {
-                AddTextToLog(string.Format("Could not install module '{0}' as at least MeGUI build {1} is required.", file.Name, file.RequiredBuild), ImageType.Warning);
-                return ErrorState.RequirementNotMet;
-            }
-
-            if (!String.IsNullOrEmpty(file.RequiredNET) && String.IsNullOrEmpty(OSInfo.GetDotNetVersion(file.RequiredNET)))
-            {
-                AddTextToLog(string.Format("Could not install module '{0}' as .NET {1} is required.", file.Name, file.RequiredNET), ImageType.Warning);
-                return ErrorState.RequirementNotMet;
-            }
-
-            ErrorState state = file.Install(file, this);
-            if (state == ErrorState.Successful)
-            {
-                file.CurrentVersion = file.AvailableVersion;
-                return ErrorState.Successful;
-            }
-
-            AddTextToLog(string.Format("Could not install module '{0}'.", file.Name), ImageType.Error);
-            return state;
-        }
-
-        void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            if (e.TotalBytesToReceive > 0)
-                SetProgressBar(0, (int)e.TotalBytesToReceive, (int)e.BytesReceived);
-        }
-
-        public bool HasUpdatableFiles()
-        {
-            return NumUpdatableFiles() > 0;
-        }
-
-        public int NumUpdatableFiles()
-        {
-            int numUpdateableFiles = 0;
-            foreach (iUpgradeable upgradeable in upgradeData)
-            {
-                if (upgradeable.Name.Equals("neroaacenc"))
-                {
-                    if (upgradeable.CurrentVersion.FileVersion != null && upgradeable.CurrentVersion.FileVersion.Equals(upgradeable.AvailableVersion.FileVersion))
-                        upgradeable.AvailableVersion.UploadDate = upgradeable.CurrentVersion.UploadDate;
-                }
-                if (upgradeable.DownloadChecked)
-                    numUpdateableFiles++;
-            }
-            return numUpdateableFiles;
-        }
-
-        public void UpdateUploadDate(string name, string strDate)
-        {
-            iUpgradeable up = upgradeData.FindByName(name);
-            if (up == null)
-                return;
-
-            DateTime oDate;
-            bool bReady = DateTime.TryParse(strDate, new System.Globalization.CultureInfo("en-us"), System.Globalization.DateTimeStyles.None, out oDate);
-            if (bReady)
-                up.CurrentVersion.UploadDate = oDate;
-        }
 
         private void btnAbort_Click(object sender, EventArgs e)
         {
-            updateThread.Abort();
-            btnUpdate.Enabled = true;
+            MainForm.Instance.UpdateHandler.AbortUpdate = true;
+            btnUpdate.Enabled = bUpdateAllowed;
             btnAbort.Enabled = false;
         }
 
@@ -1711,7 +1114,15 @@ namespace MeGUI
 
         private void UpdateWindow_Shown(object sender, EventArgs e)
         {
-            DisplayItems(chkShowAllFiles.Checked);
+            RefreshGUI();
+        }
+
+        public void CloseWindow()
+        {
+            if (this.InvokeRequired)
+                this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+            else
+                this.Close();
         }
     }
 
@@ -1829,12 +1240,7 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            if (MainForm.Instance.UpdateWindow.InvokeRequired) // as invoke does not work when it comes to making the form visible a new instance is required
-                MainForm.Instance.UpdateWindow = new UpdateWindow();
-
-            UpdateWindow _updateWindow = MainForm.Instance.UpdateWindow;
-            _updateWindow.GetUpdateData(false, UpdateWindow.UpdateStep.Manual);
-            _updateWindow.Visible = true;
+            MainForm.Instance.UpdateHandler.ShowUpdateWindow(false, false);
         }
 
         public Shortcut[] Shortcuts

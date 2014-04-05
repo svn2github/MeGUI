@@ -1,3 +1,24 @@
+// ****************************************************************************
+// 
+// Copyright (C) 2005-2014 Doom9 & al
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// 
+// ****************************************************************************
+
+
 namespace MeGUI
 {
     partial class UpdateWindow
@@ -50,7 +71,7 @@ namespace MeGUI
             this.panel1 = new System.Windows.Forms.Panel();
             this.chkShowAllFiles = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new MeGUI.core.gui.CustomProgressBar();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnAbort = new System.Windows.Forms.Button();
             this.statusToolStrip.SuspendLayout();
@@ -72,7 +93,7 @@ namespace MeGUI
             this.statusToolStrip.Name = "statusToolStrip";
             this.statusToolStrip.ShowCheckMargin = true;
             this.statusToolStrip.ShowImageMargin = false;
-            this.statusToolStrip.Size = new System.Drawing.Size(156, 92);
+            this.statusToolStrip.Size = new System.Drawing.Size(156, 70);
             // 
             // enableToolStripMenuItem
             // 
@@ -152,13 +173,13 @@ namespace MeGUI
             this.colStatus});
             this.listViewDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewDetails.FullRowSelect = true;
-            this.listViewDetails.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewDetails.Location = new System.Drawing.Point(0, 0);
             this.listViewDetails.Name = "listViewDetails";
             this.listViewDetails.Size = new System.Drawing.Size(721, 199);
             this.listViewDetails.TabIndex = 6;
             this.listViewDetails.UseCompatibleStateImageBehavior = false;
             this.listViewDetails.View = System.Windows.Forms.View.Details;
+            this.listViewDetails.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewDetails_ColumnClick);
             this.listViewDetails.ColumnWidthChanged += new System.Windows.Forms.ColumnWidthChangedEventHandler(this.listViewDetails_ColumnWidthChanged);
             this.listViewDetails.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.listViewDetails_ItemCheck);
             this.listViewDetails.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewDetails_MouseClick);
@@ -231,9 +252,9 @@ namespace MeGUI
             // 
             this.chkShowAllFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chkShowAllFiles.AutoSize = true;
-            this.chkShowAllFiles.Location = new System.Drawing.Point(432, 34);
+            this.chkShowAllFiles.Location = new System.Drawing.Point(406, 34);
             this.chkShowAllFiles.Name = "chkShowAllFiles";
-            this.chkShowAllFiles.Size = new System.Drawing.Size(87, 17);
+            this.chkShowAllFiles.Size = new System.Drawing.Size(113, 17);
             this.chkShowAllFiles.TabIndex = 9;
             this.chkShowAllFiles.Text = "Show all packages";
             this.chkShowAllFiles.UseVisualStyleBackColor = true;
@@ -251,15 +272,18 @@ namespace MeGUI
             // 
             // progressBar
             // 
+            this.progressBar.CustomText = null;
+            this.progressBar.DisplayStyle = MeGUI.core.gui.ProgressBarDisplayText.CustomText;
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.progressBar.Location = new System.Drawing.Point(0, 0);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(721, 23);
+            this.progressBar.Size = new System.Drawing.Size(721, 24);
             this.progressBar.TabIndex = 7;
             // 
             // btnUpdate
             // 
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdate.Enabled = false;
             this.btnUpdate.Location = new System.Drawing.Point(556, 30);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
@@ -272,7 +296,6 @@ namespace MeGUI
             // 
             this.btnAbort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAbort.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnAbort.Enabled = false;
             this.btnAbort.Location = new System.Drawing.Point(637, 30);
             this.btnAbort.Name = "btnAbort";
             this.btnAbort.Size = new System.Drawing.Size(72, 23);
@@ -334,7 +357,7 @@ namespace MeGUI
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox chkShowAllFiles;
         private core.gui.HelpButton helpButton1;
-        private System.Windows.Forms.ProgressBar progressBar;
+        private MeGUI.core.gui.CustomProgressBar progressBar;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnAbort;
         private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem;
