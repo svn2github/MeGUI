@@ -219,7 +219,10 @@ namespace MeGUI
                 wc.DownloadFileAsync(new Uri(new Uri(_updateServerURL), url), localFilename);
                 mre.WaitOne();
                 if (_updateWindow != null)
+                {
+                    System.Threading.Thread.Sleep(1000);
                     _updateWindow.SetProgressBar(0, 10, 0, string.Empty);
+                }
             }
 
             if (result == UpdateWindow.ErrorState.Successful)
