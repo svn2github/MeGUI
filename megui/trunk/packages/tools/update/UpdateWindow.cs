@@ -137,8 +137,8 @@ namespace MeGUI
                             {
                                 System.Diagnostics.FileVersionInfo finfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(MainForm.Instance.Settings.NeroAacEnc.Path);
                                 FileInfo fi = new FileInfo(MainForm.Instance.Settings.NeroAacEnc.Path);
-                                this.currentVersion.FileVersion = finfo.FileMajorPart + "." + finfo.FileMinorPart + "." + finfo.FileBuildPart + "." + finfo.FilePrivatePart;
-                                this.currentVersion.UploadDate = fi.LastWriteTimeUtc;
+                                CurrentVersion.FileVersion = finfo.FileMajorPart + "." + finfo.FileMinorPart + "." + finfo.FileBuildPart + "." + finfo.FilePrivatePart;
+                                CurrentVersion.UploadDate = fi.LastWriteTimeUtc;
                             }
                         }
                         break;

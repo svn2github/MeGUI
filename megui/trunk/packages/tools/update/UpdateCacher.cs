@@ -58,7 +58,19 @@ namespace MeGUI
             }
 
             DirectoryInfo fi = new DirectoryInfo(updateCache);
-            FileInfo[] files = fi.GetFiles();
+            FileInfo[] files = fi.GetFiles("*.zip");
+            foreach (FileInfo f in files)
+            {
+                if (urls.IndexOf(f.Name.ToLowerInvariant()) >= 0)
+                    continue;
+
+                if (DateTime.Now - f.LastWriteTime > new TimeSpan(REMOVE_PACKAGE_AFTER_DAYS, 0, 0, 0, 0))
+                {
+                    f.Delete();
+                    MainForm.Instance.UpdateHandler.AddTextToLog("Deleted cached file " + f.Name, ImageType.Information, false);
+                }
+            }
+            files = fi.GetFiles("*.7z");
             foreach (FileInfo f in files)
             {
                 if (urls.IndexOf(f.Name.ToLowerInvariant()) >= 0)
