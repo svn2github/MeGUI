@@ -33,7 +33,7 @@ namespace MeGUI
         public static string ID = "x265";
 
         public static readonly x265PsyTuningModes[] SupportedPsyTuningModes = new x265PsyTuningModes[] 
-        { x265PsyTuningModes.NONE, x265PsyTuningModes.PSNR, x265PsyTuningModes.SSIM 
+        { x265PsyTuningModes.NONE, x265PsyTuningModes.PSNR, x265PsyTuningModes.SSIM, x265PsyTuningModes.ZeroLatency, x265PsyTuningModes.FastDecode 
         };
 
         public enum x265PsyTuningModes
@@ -43,7 +43,11 @@ namespace MeGUI
             [EnumTitle("PSNR")]
             PSNR,
             [EnumTitle("SSIM")]
-            SSIM
+            SSIM,
+            [EnumTitle("ZeroLatency")]
+            ZeroLatency,
+            [EnumTitle("FastDecode")]
+            FastDecode
         };
 
         public enum x265PresetLevelModes : int 
@@ -99,7 +103,7 @@ namespace MeGUI
             ssimCalc = false;
             psnrCalc = false;
 			EncodingMode = 2;
-			BitrateQuantizer = 23;
+			BitrateQuantizer = 28;
 			KeyframeInterval = 250;
 			nbRefFrames = 3;
 			noMixedRefs = false;

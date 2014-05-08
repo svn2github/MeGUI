@@ -121,8 +121,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x265Encoder");
             {
                 switch (xs.x265PsyTuning)
                 {
-                    case x265Settings.x265PsyTuningModes.PSNR: sb.Append("--tune psnr"); break;
-                    case x265Settings.x265PsyTuningModes.SSIM: sb.Append("--tune ssim"); break;
+                    case x265Settings.x265PsyTuningModes.PSNR: sb.Append("--tune psnr "); break;
+                    case x265Settings.x265PsyTuningModes.SSIM: sb.Append("--tune ssim "); break;
+                    case x265Settings.x265PsyTuningModes.FastDecode: sb.Append("--tune fastdecode "); break;
+                    case x265Settings.x265PsyTuningModes.ZeroLatency: sb.Append("--tune zerolatency "); break;
                     default: break;
                 }
             }
@@ -160,7 +162,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x265Encoder");
                     break;*/
                 case 2: // constant quality
                     if (!xs.CustomEncoderOptions.Contains("--crf "))
-                        if (xs.QuantizerCRF != 32)
+                        if (xs.QuantizerCRF != 28)
                             sb.Append("--crf " + xs.QuantizerCRF.ToString(ci) + " ");
                     break;
             }
