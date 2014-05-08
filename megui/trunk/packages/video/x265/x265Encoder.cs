@@ -174,7 +174,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x265Encoder");
                 sb.Append(" --no-ssim --no-psnr ");
 
             if (!String.IsNullOrEmpty(output))
-                sb.Append(" --timinginfo --output " + "\"" + output + "\" ");
+                sb.Append(" --output " + "\"" + output + "\" ");
 
             if (!String.IsNullOrEmpty(input))
                 sb.Append("\"" + input + "\"");
