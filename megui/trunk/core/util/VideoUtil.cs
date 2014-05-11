@@ -100,6 +100,8 @@ namespace MeGUI
                     ChapterInfo pgc;
                     IfoExtractor ex = new IfoExtractor();
                     pgc = ex.GetChapterInfo(ifoFile, iPGCNumber);
+                    if (pgc == null)
+                        return null;
                     if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(outputDirectory)))
                     {
                         if (qpfile)
@@ -151,7 +153,7 @@ namespace MeGUI
 
             IfoExtractor ex = new IfoExtractor();
             ChapterInfo pgc = ex.GetChapterInfo(videoIFO, iPGCNumber);
-            if (pgc.Chapters.Count > 0)
+            if (pgc != null && pgc.Chapters.Count > 0)
                 return true;
             return false;
         }

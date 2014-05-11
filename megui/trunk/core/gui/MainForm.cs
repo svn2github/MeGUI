@@ -620,10 +620,19 @@ namespace MeGUI
                 return false;
             }
 
+            if (Directory.Exists(file))
+            {
+                OneClickWindow ocmt = new OneClickWindow(this);
+                ocmt.setInput(file);
+                ocmt.ShowDialog();
+                return true;
+            }
+
             MediaInfoFile iFile = new MediaInfoFile(file);
             if (iFile.HasVideo)
             {
-                if (iFile.isD2VIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable() || iFile.isFFMSIndexable())
+                FileIndexerWindow.IndexType x;
+                if (iFile.recommendIndexer(out x, true))
                 {
                     openIndexableFile(file);
                 }
@@ -642,7 +651,9 @@ namespace MeGUI
                 }
             }
             else if (iFile.HasAudio)
+            {
                 audioEncodingComponent1.openAudioFile(file);
+            }
             else if (Path.GetExtension(iFile.FileName).ToLowerInvariant().Equals(".avs"))
             {
                 try

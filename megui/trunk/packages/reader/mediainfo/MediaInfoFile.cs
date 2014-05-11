@@ -282,7 +282,20 @@ namespace MeGUI
                 if (oLog != null)
                 {
                     infoLog = oLog.LogValue("MediaInfo", String.Empty);
-                    infoLog.Info("File: " + _file);
+                    infoLog.LogEvent("File: " + _file);
+                }
+
+                if (!File.Exists(file))
+                {
+                    if (oLog != null)
+                        infoLog.LogEvent("The file cannot be opened", ImageType.Warning);
+                    else
+                    {
+                        oLog = MainForm.Instance.Log.Info("MediaInfo");
+                        oLog.LogEvent("File: " + _file);
+                        oLog.LogEvent("The file cannot be opened", ImageType.Warning);
+                    }  
+                    return;
                 }
 
                 // if an index file is used extract the real file name
