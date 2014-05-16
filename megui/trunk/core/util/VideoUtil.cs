@@ -917,21 +917,21 @@ namespace MeGUI
                 indexFile = null;
 
             string extension = Path.GetExtension(inputFile).ToLowerInvariant();
+            bool bUseLsmash = (extension.Equals(".mp4") || extension.Equals(".m4v") || extension.Equals(".mov") 
+                || extension.Equals(".3gp") || extension.Equals(".3g2") || extension.Equals(".qt"));
             if (video)
             {
                 script.AppendFormat("{0}(\"{1}\"{2})",
-                    ((extension.Equals(".mp4") || extension.Equals(".m4v") || extension.Equals(".mov") || extension.Equals(".3gp") || 
-                    extension.Equals(".3g2") || extension.Equals(".qt")) ? "LSMASHVideoSource" : "LWLibavVideoSource"),
+                    (bUseLsmash ? "LSMASHVideoSource" : "LWLibavVideoSource"),
                     (!String.IsNullOrEmpty(indexFile) ? indexFile : inputFile),
-                    (track > -1 ? ", track=" + track : String.Empty));
+                    (bUseLsmash && track > -1 ? ", track=" + track : String.Empty));
             }
             else
             {
                 script.AppendFormat("{0}(\"{1}\"{2}){3}",
-                    ((extension.Equals(".mp4") || extension.Equals(".m4v") || extension.Equals(".mov") || extension.Equals(".3gp") ||
-                    extension.Equals(".3g2") || extension.Equals(".qt")) ? "LSMASHAudioSource" : "LWLibavAudioSource"),
+                    (bUseLsmash ? "LSMASHAudioSource" : "LWLibavAudioSource"),
                     (!String.IsNullOrEmpty(indexFile) ? indexFile : inputFile),
-                    (track > -1 ? ", track=" + track : String.Empty),
+                    (bUseLsmash && track > -1 ? ", track=" + track : String.Empty),
                     Environment.NewLine);
             }
             return script.ToString();
