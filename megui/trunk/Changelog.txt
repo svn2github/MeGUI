@@ -1,4 +1,5 @@
-2497 [L-SMASH Indexer]      do not use the track argument if using LWLibav*Source
+2498 [L-SMASH Indexer]      use the stream_index argument instead of track if using LWLibav*Source. Part II
+2497 [L-SMASH Indexer]      use the stream_index argument instead of track if using LWLibav*Source
 2496 [MainForm]             enabled Drag & Drop for folders
 2495 [x265]                 introduced fastdecode & zerolatency tunings
 2494 [x265]                 removed --timinginfo switch. frame rate information is handled automatically now.

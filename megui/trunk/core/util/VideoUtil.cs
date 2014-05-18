@@ -924,14 +924,14 @@ namespace MeGUI
                 script.AppendFormat("{0}(\"{1}\"{2})",
                     (bUseLsmash ? "LSMASHVideoSource" : "LWLibavVideoSource"),
                     (!String.IsNullOrEmpty(indexFile) ? indexFile : inputFile),
-                    (bUseLsmash && track > -1 ? ", track=" + track : String.Empty));
+                    (track > -1 ? (bUseLsmash ? ", track=" + track : ", stream_index=" + track) : String.Empty));
             }
             else
             {
                 script.AppendFormat("{0}(\"{1}\"{2}){3}",
                     (bUseLsmash ? "LSMASHAudioSource" : "LWLibavAudioSource"),
                     (!String.IsNullOrEmpty(indexFile) ? indexFile : inputFile),
-                    (bUseLsmash && track > -1 ? ", track=" + track : String.Empty),
+                    (track > -1 ? (bUseLsmash ? ", track=" + track : ", stream_index=" + track) : String.Empty),
                     Environment.NewLine);
             }
             return script.ToString();
