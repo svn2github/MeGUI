@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -42,8 +42,11 @@ namespace MeGUI.core.details.video
         private bool loaded;
         protected string input = "input", output = "output", encoderPath = "program";
         #endregion
-        protected ToolTip tooltipHelp;
         private IContainer components;
+        protected ToolTip tooltipHelp;
+        protected TabControl tabControl1;
+        protected TextBox commandline;
+        protected TabPage mainTabPage;
         #region start / stop
         public VideoConfigurationPanel()
             : this(null, new VideoInfo())
@@ -137,15 +140,7 @@ namespace MeGUI.core.details.video
             set { bytesPerFrame = value; }
         }
 
-        #endregion
-
-
-
-
-        protected TabControl tabControl1;
-        protected TextBox commandline;
-        protected TabPage mainTabPage;
-    
+        #endregion    
 
         private void InitializeComponent()
         {

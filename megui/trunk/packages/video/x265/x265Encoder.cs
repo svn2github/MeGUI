@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -91,6 +91,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "x265Encoder");
                     log.LogValue("aspect ratio", d.Value);
                 if (!String.IsNullOrEmpty(xs.CustomEncoderOptions))
                     log.LogEvent("custom command line: " + xs.CustomEncoderOptions);
+#if x86
+                if (OSInfo.isWow64())
+                    sb.Append("--x265-binary \".\\x64\\x265.exe\" ");
+                else
+                    sb.Append("--x265-binary \".\\x86\\x265.exe\" ");
+#else
+                sb.Append("--x265-binary \".\\x64\\x265.exe\" ");
+#endif
             }
 
             #region main tab
@@ -172,8 +180,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x265Encoder");
                 if (xs.NbThreads > 0)
                     sb.Append("--frame-threads " + xs.NbThreads + " ");
 
-            if (xs.x265PsyTuning == x265Settings.x265PsyTuningModes.NONE)
-                sb.Append(" --no-ssim --no-psnr ");
+            if (!String.IsNullOrEmpty(xs.CustomEncoderOptions)) // add custom encoder options
+                sb.Append(xs.CustomEncoderOptions + " ");
 
             if (!String.IsNullOrEmpty(output))
                 sb.Append(" --output " + "\"" + output + "\" ");

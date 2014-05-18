@@ -1,3 +1,6 @@
+2500 [x265]                 added custom command line
+     [x265]                 added support for 64bit x265
+     [x265]                 removed --no-ssim and --no-psnr as they are disabled by default
 2499 [Audio Encoder]        fixed TimeStretch support (regression of 2487)
      [Audio Encoder]        enhanced logging
      [Audio Encoder]        added 5.1 downmix if necessary (provided by tebasuna51)

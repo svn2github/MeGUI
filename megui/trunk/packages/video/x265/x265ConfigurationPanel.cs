@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -39,8 +39,6 @@ namespace MeGUI.packages.video.x265
         public static bool levelEnforced; // flag to prevent recursion in EnforceLevels. There's probably a better way to do this.
         private XmlDocument ContextHelp = new XmlDocument();
         #endregion
-
-
         #region start / stop
         public x265ConfigurationPanel()
             : base()
@@ -1153,8 +1151,8 @@ namespace MeGUI.packages.video.x265
                 tabControl1.TabPages.Remove(RCTabPage);
             if (tabControl1.TabPages.Contains(AnalysisTabPage))
                 tabControl1.TabPages.Remove(AnalysisTabPage);
-            if (tabControl1.TabPages.Contains(MiscTabPage))
-                tabControl1.TabPages.Remove(MiscTabPage);
+            //if (tabControl1.TabPages.Contains(MiscTabPage))
+            //    tabControl1.TabPages.Remove(MiscTabPage);
                 x265EncodingMode.Visible = true;
                 //cbTarget.Visible = false;
             genericUpdate();
