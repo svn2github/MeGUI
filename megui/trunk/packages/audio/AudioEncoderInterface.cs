@@ -1015,41 +1015,34 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 }
             }
 
+            // detect audio information
             string strChannelPositions = string.Empty;
             int iChannelCount = 0;
             int iAVSChannelCount = 0;
-
-            if (audioJob.Settings.DownmixMode == ChannelMode.DPLDownmix || 
-                audioJob.Settings.DownmixMode == ChannelMode.DPLIIDownmix ||
-                audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix || 
-                audioJob.Settings.TimeModification == TimeModificationMode.SlowDown25To23976WithCorrection ||
-                audioJob.Settings.TimeModification == TimeModificationMode.SlowDown25To24WithCorrection || 
-                audioJob.Settings.TimeModification == TimeModificationMode.SpeedUp23976To25WithCorrection ||
-                audioJob.Settings.TimeModification == TimeModificationMode.SpeedUp24To25WithCorrection)
+            if (Path.GetExtension(audioJob.Input).ToLowerInvariant().Equals(".avs"))
             {
-                if (Path.GetExtension(audioJob.Input).ToLowerInvariant().Equals(".avs"))
+                if (AudioUtil.AVSFileHasAudio(audioJob.Input))
                 {
-                    if (AudioUtil.AVSFileHasAudio(audioJob.Input))
-                    {
-                        iChannelCount = AudioUtil.getChannelCountFromAVSFile(audioJob.Input);
-                        script.Append(@"# detected channels: " + iChannelCount + " channels" + Environment.NewLine);
-                        strChannelPositions = AudioUtil.getChannelPositionsFromAVSFile(audioJob.Input);
-                    }
+                    iChannelCount = AudioUtil.getChannelCountFromAVSFile(audioJob.Input);
+                    strChannelPositions = AudioUtil.getChannelPositionsFromAVSFile(audioJob.Input);
+                    script.AppendFormat(@"# detected channels: {0}{1}", oInfo.AudioInfo.Tracks[0].NbChannels, Environment.NewLine);
+                    script.AppendFormat(@"# detected channel positions: {0}{1}", strChannelPositions, Environment.NewLine);
                 }
-                else
-                {
-                    if (oInfo.HasAudio)
-                    {
-                        strChannelPositions = oInfo.AudioInfo.Tracks[0].ChannelPositions;
-                        script.Append(@"# detected channels: " + oInfo.AudioInfo.Tracks[0].NbChannels + Environment.NewLine);
-                        int.TryParse(oInfo.AudioInfo.Tracks[0].NbChannels.Split(' ')[0], out iChannelCount);
-                    }
-                }
-                using (AvsFile avi = AvsFile.ParseScript(script.ToString()))
-                    iAVSChannelCount = avi.Clip.ChannelsCount;
-                if (iAVSChannelCount != iChannelCount)
-                    _log.LogEvent("channel count mismatch! The input file is reporting " + iChannelCount + " channels and the AviSynth script is reporting " + iAVSChannelCount + " channels", ImageType.Warning);
             }
+            else
+            {
+                if (oInfo.HasAudio)
+                {
+                    int.TryParse(oInfo.AudioInfo.Tracks[0].NbChannels.Split(' ')[0], out iChannelCount);
+                    strChannelPositions = oInfo.AudioInfo.Tracks[0].ChannelPositions;
+                    script.AppendFormat(@"# detected channels: {0}{1}", oInfo.AudioInfo.Tracks[0].NbChannels, Environment.NewLine);
+                    script.AppendFormat(@"# detected channel positions: {0}{1}", strChannelPositions, Environment.NewLine);
+                }
+            }
+            using (AvsFile avi = AvsFile.ParseScript(script.ToString()))
+                iAVSChannelCount = avi.Clip.ChannelsCount;
+            if (iAVSChannelCount != iChannelCount)
+                _log.LogEvent("channel count mismatch! The input file is reporting " + iChannelCount + " channels and the AviSynth script is reporting " + iAVSChannelCount + " channels", ImageType.Warning);
 
             switch (audioJob.Settings.DownmixMode)
             {
@@ -1076,9 +1069,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         _log.LogEvent("ignoring downmix as there is only " + iChannelCount + " channel", ImageType.Information);
                         break;
                     }
-                    if (!String.IsNullOrEmpty(strChannelPositions))
-                        script.Append(@"# detected channel positions: " + strChannelPositions + Environment.NewLine);
-                    else
+                    if (String.IsNullOrEmpty(strChannelPositions))
                         _log.LogEvent("no channel positions found. Downmix result may be wrong.", ImageType.Information);
 
                     switch (strChannelPositions)
@@ -1150,21 +1141,27 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                         break;
                         default:        if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix)
                                         {
-                                            script.Append(@"6<=Audiochannels(last)?c6_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            script.Append(@"8<=Audiochannels(last)?c71_c51(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            script.Append(@"7==Audiochannels(last)?c61_c51(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            script.Append(@"6==Audiochannels(last)?c6_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                             script.Append(@"5==Audiochannels(last)?c5_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                             script.Append(@"4==Audiochannels(last)?c4_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                             script.Append(@"3==Audiochannels(last)?c3_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                         }
                                         else if (audioJob.Settings.DownmixMode == ChannelMode.DPLDownmix)
                                         {
-                                            script.Append(@"6<=Audiochannels(last)?c6_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            script.Append(@"8<=Audiochannels(last)?c71_c51(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            script.Append(@"7==Audiochannels(last)?c61_c51(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            script.Append(@"6==Audiochannels(last)?c6_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                             script.Append(@"5==Audiochannels(last)?c5_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                             script.Append(@"4==Audiochannels(last)?c4_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                             script.Append(@"3==Audiochannels(last)?c3_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                         }
                                         else
                                         {
-                                            script.Append(@"6<=Audiochannels(last)?c6_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            script.Append(@"8<=Audiochannels(last)?c71_c51(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            script.Append(@"7==Audiochannels(last)?c61_c51(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            script.Append(@"6==Audiochannels(last)?c6_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                             script.Append(@"5==Audiochannels(last)?c5_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                             script.Append(@"4==Audiochannels(last)?c4_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
                                             script.Append(@"3==Audiochannels(last)?c3_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
@@ -1173,14 +1170,32 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     }
                     break;
                 case ChannelMode.Upmix:
-                    createTemporallyEqFiles(tmp);
-                    script.Append("2==Audiochannels(last)?x_upmix" + id + @"(last):last" + Environment.NewLine);
-                    break;
                 case ChannelMode.UpmixUsingSoxEq:
-                    script.Append("2==Audiochannels(last)?x_upmixR" + id + @"(last):last" + Environment.NewLine);
-                    break;
                 case ChannelMode.UpmixWithCenterChannelDialog:
-                    script.Append("2==Audiochannels(last)?x_upmixC" + id + @"(last):last" + Environment.NewLine);
+                    if (iChannelCount == 0)
+                    {
+                        _log.LogEvent("no audio detected: " + audioJob.Input, ImageType.Error);
+                        break;
+                    }
+                    if (iAVSChannelCount != iChannelCount)
+                    {
+                        _log.LogEvent("ignoring upmix because of the channel count mismatch", ImageType.Warning);
+                        break;
+                    }
+                    if (iChannelCount != 2)
+                    {
+                        _log.LogEvent("ignoring upmix as it can only be used for 2 channels", ImageType.Information);
+                        break;
+                    }
+                    if (audioJob.Settings.DownmixMode == ChannelMode.Upmix)
+                    {
+                        createTemporallyEqFiles(tmp);
+                        script.Append("2==Audiochannels(last)?x_upmix" + id + @"(last):last" + Environment.NewLine);
+                    }
+                    else if (audioJob.Settings.DownmixMode == ChannelMode.UpmixUsingSoxEq)
+                        script.Append("2==Audiochannels(last)?x_upmixR" + id + @"(last):last" + Environment.NewLine);
+                    else
+                        script.Append("2==Audiochannels(last)?x_upmixC" + id + @"(last):last" + Environment.NewLine);
                     break;
             }
 
@@ -1228,28 +1243,28 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 case TimeModificationMode.KeepOriginal:
                     break;
                 case TimeModificationMode.SpeedUp23976To25:
-                    script.Append("AssumeSampleRate((AudioRate()*1001+480)/960).SSRC(AudioRate())" + Environment.NewLine);
+                    script.Append("AssumeSampleRate(Round((AudioRate()*1001.0)/960.0)).SSRC(AudioRate())" + Environment.NewLine);
                     break;
                 case TimeModificationMode.SlowDown25To23976:
-                    script.Append("SSRC((AudioRate()*1001+480)/960).AssumeSampleRate(AudioRate())" + Environment.NewLine);
+                    script.Append("SSRC(Round((AudioRate()*1001.0)/960.0)).AssumeSampleRate(AudioRate())" + Environment.NewLine);
                     break;
                 case TimeModificationMode.SpeedUp24To25:
-                    script.Append("AssumeSampleRate((AudioRate()*25 + 12)/24).SSRC(AudioRate())" + Environment.NewLine);
+                    script.Append("AssumeSampleRate(Round((AudioRate()*25.0)/24.0)).SSRC(AudioRate())" + Environment.NewLine);
                     break;
                 case TimeModificationMode.SlowDown25To24:
-                    script.Append("SSRC((AudioRate()*25 + 12)/24).AssumeSampleRate(AudioRate())" + Environment.NewLine);
+                    script.Append("SSRC(Round((AudioRate()*25.0)/24.0)).AssumeSampleRate(AudioRate())" + Environment.NewLine);
                     break;
                 case TimeModificationMode.SpeedUp23976To25WithCorrection:
-                    script.Append("TimeStretch(tempo=Float(5005/48))" + Environment.NewLine);
+                    script.Append("TimeStretch(tempo=(1001.0/9.6))" + Environment.NewLine);
                     break;
                 case TimeModificationMode.SlowDown25To23976WithCorrection:
-                    script.Append("TimeStretch(tempo=Float(96000/1001))" + Environment.NewLine);
+                    script.Append("TimeStretch(tempo=(96.0/1.001))" + Environment.NewLine);
                     break;
                 case TimeModificationMode.SpeedUp24To25WithCorrection:
-                    script.Append("TimeStretch(tempo=Float(2500/24))" + Environment.NewLine);
+                    script.Append("TimeStretch(tempo=(2500.0/24.0))" + Environment.NewLine);
                     break;
                 case TimeModificationMode.SlowDown25To24WithCorrection:
-                    script.Append("TimeStretch(tempo=Float(2400/25))" + Environment.NewLine);
+                    script.Append("TimeStretch(tempo=(2400.0/25.0))" + Environment.NewLine);
                     break;
             }
 
@@ -1266,6 +1281,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             if (audioJob.Settings is AftenSettings)
             {
                 UpdateCacher.CheckPackage("aften");
+                if (iAVSChannelCount > 6 && (audioJob.Settings.DownmixMode == ChannelMode.KeepOriginal || audioJob.Settings.DownmixMode == ChannelMode.Upmix 
+                    || audioJob.Settings.DownmixMode == ChannelMode.UpmixUsingSoxEq ||audioJob.Settings.DownmixMode == ChannelMode.UpmixWithCenterChannelDialog))
+                {
+                    script.Append(@"8<=Audiochannels(last)?c71_c51(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                    script.Append(@"7==Audiochannels(last)?c61_c51(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                }
                 _mustSendWavHeaderToEncoderStdIn = true;
                 AftenSettings n = audioJob.Settings as AftenSettings;
                 _encoderExecutablePath = this._settings.Aften.Path;
@@ -1283,7 +1304,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             else if (audioJob.Settings is AC3Settings)
             {
                 UpdateCacher.CheckPackage("ffmpeg");
-                script.Append("6<=Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);
+                
                 script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine); // ffac3 encoder doesn't support 32bits streams
                 _mustSendWavHeaderToEncoderStdIn = true;
                 AC3Settings n = audioJob.Settings as AC3Settings;
@@ -1428,7 +1449,35 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             script.AppendLine(@"return last");
             script.AppendLine(Environment.NewLine);
 
-            // copy the appropriate function at the end of the script
+            // copy the appropriate functions at the end of the script
+            if (iAVSChannelCount > 6)
+            {
+                script.AppendLine(@"
+# 7.1 Channels L,R,C,LFE,BL,BR,SL,SR -> standard 5.1
+function c71_c51(clip a)
+  {");
+                script.AppendFormat("     LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "AudioLimiter.dll"), Environment.NewLine);
+                script.AppendLine(@"
+     front = GetChannel(a, 1, 2, 3, 4)
+     back  = GetChannel(a, 5, 6)
+     side  = GetChannel(a, 7, 8)
+     mix   = MixAudio(back, side, 1.0, 1.0).SoftClipperFromAudX(0.0)
+     return MergeChannels(front, mix)
+  }
+# 6.1 Channels L,R,C,LFE,BC,SL,SR -> standard 5.1
+function c61_c51(clip a)
+  {");
+                script.AppendFormat("     LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "AudioLimiter.dll"), Environment.NewLine);
+                script.AppendLine(@"
+     front = GetChannel(a, 1, 2, 3, 4)
+     bcent = GetChannel(a, 5).Amplify(0.7071)
+     back  = MergeChannels(bcent, bcent)
+     side  = GetChannel(a, 6, 7)
+     mix   = MixAudio(back, side, 1.0, 1.0).SoftClipperFromAudX(0.0)
+     return MergeChannels(front, mix)
+  }");
+            }
+
             switch (audioJob.Settings.DownmixMode)
             {
                 case ChannelMode.KeepOriginal:
