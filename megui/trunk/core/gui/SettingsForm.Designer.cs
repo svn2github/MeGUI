@@ -768,8 +768,9 @@ namespace MeGUI
             "Use custom update server"});
             this.cbAutoUpdateServerSubList.Location = new System.Drawing.Point(9, 47);
             this.cbAutoUpdateServerSubList.Name = "cbAutoUpdateServerSubList";
-            this.cbAutoUpdateServerSubList.Size = new System.Drawing.Size(176, 21);
+            this.cbAutoUpdateServerSubList.Size = new System.Drawing.Size(225, 21);
             this.cbAutoUpdateServerSubList.TabIndex = 5;
+            this.cbAutoUpdateServerSubList.SelectedIndexChanged += new System.EventHandler(this.cbAutoUpdateServerSubList_SelectedIndexChanged);
             // 
             // backupfiles
             // 
@@ -788,11 +789,12 @@ namespace MeGUI
             // 
             this.configureServersButton.AutoSize = true;
             this.configureServersButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.configureServersButton.Enabled = false;
             this.configureServersButton.Location = new System.Drawing.Point(9, 74);
             this.configureServersButton.Name = "configureServersButton";
-            this.configureServersButton.Size = new System.Drawing.Size(115, 23);
+            this.configureServersButton.Size = new System.Drawing.Size(152, 23);
             this.configureServersButton.TabIndex = 1;
-            this.configureServersButton.Text = "Configure servers...";
+            this.configureServersButton.Text = "Configure custom servers...";
             this.configureServersButton.UseVisualStyleBackColor = true;
             this.configureServersButton.Click += new System.EventHandler(this.configureServersButton_Click);
             // 

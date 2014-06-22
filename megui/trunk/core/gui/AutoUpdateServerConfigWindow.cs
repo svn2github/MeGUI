@@ -41,18 +41,13 @@ namespace MeGUI.core.gui
                 "Please enter the server address", 
                 "Please enter the server address",
                 "http://yourserver.org/path/to/update/folder/");
+            
             if (serverName == null)
                 return;
 
-            serverName = serverName.Trim();
+            serverName = serverName.Trim().ToLowerInvariant();
             if (!serverName.EndsWith("/"))
                 serverName += "/";
-
-            if (serverList.Items.Contains(serverName))
-            {
-                MessageBox.Show("Server already listed. Adding nothing", "Server already listed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
 
             if (!serverName.StartsWith("http://"))
             {
@@ -60,11 +55,30 @@ namespace MeGUI.core.gui
                 return;
             }
 
-            if (MainForm.Instance.UpdateHandler.GetUpdateXML(serverName, true) != UpdateWindow.ErrorState.Successful)
+            if (serverList.Items.Contains(serverName))
             {
-                if (MessageBox.Show("The server or the XML file is not available.\r\nShould it be added nevertheless?", "No connection to server", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != System.Windows.Forms.DialogResult.Yes)
-                    return;
+                MessageBox.Show("Server already listed. Adding nothing", "Server already listed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
             }
+
+#if !DEBUG
+            foreach (string server in serverLists[0])
+            {
+                if (serverName.Equals(server))
+                {
+                    MessageBox.Show("An official server cannot be added as custom server.", "Invalid server", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+            }
+            foreach (string server in serverLists[1])
+            {
+                if (serverName.Equals(server))
+                {
+                    MessageBox.Show("An official server cannot be added as custom server.", "Invalid server", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+            }
+#endif
 
             serverList.Items.Add(serverName);
         }

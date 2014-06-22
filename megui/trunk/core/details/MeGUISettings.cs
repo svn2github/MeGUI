@@ -424,13 +424,13 @@ namespace MeGUI
                 {
                     autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/" },
                                                              new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, 
-                                                             new string[] {"Custom"}};
+                                                             new string[] { "Custom"}};
                 }
 #endif
 #if x64 && !DEBUG
                 autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" },
                                                          new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" },
-                                                         new string[] { "Custom", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }};
+                                                         new string[] { "Custom"}};
 #endif
 #if DEBUG
                 autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/" },

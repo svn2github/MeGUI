@@ -413,5 +413,10 @@ namespace MeGUI
             if (cbUseIncludedAviSynth.Checked != internalSettings.AlwaysUsePortableAviSynth)
                 MessageBox.Show("You have to restart MeGUI so that the new AviSynth configuration can be changed.", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void cbAutoUpdateServerSubList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            configureServersButton.Enabled = (cbAutoUpdateServerSubList.SelectedIndex == 2);
+        }
 	}
 }
