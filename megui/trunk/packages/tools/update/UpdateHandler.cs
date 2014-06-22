@@ -727,7 +727,7 @@ namespace MeGUI
         {
             // get the value how often the update server can be checked
             // check more often when the development update server is selected
-            _updateCheckEveryXHours = 120;
+            _updateCheckEveryXHours = 240;
             if (MainForm.Instance.Settings.AutoUpdateServerSubList > 0)
                 _updateCheckEveryXHours = 24;
 #if DEBUG

@@ -93,7 +93,7 @@ namespace MeGUI
                 b64bitX264 = true;
 #endif
 
-            autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
+            autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/" },
                 new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
             lastUpdateCheck = DateTime.Now.AddDays(-7).ToUniversalTime();
             lastUpdateServer = "http://megui.org/auto/stable/";
@@ -417,13 +417,14 @@ namespace MeGUI
 #if x86 && !DEBUG
                 if (autoUpdateServerLists.Length > 2)
                 {
-                    autoUpdateServerLists[0] = new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" };
+                    autoUpdateServerLists[0] = new string[] { "Stable", "http://megui.org/auto/stable/" };
                     autoUpdateServerLists[1] = new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" };
                 }
                 else
                 {
-                    autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
-                                                             new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] {"Custom"}};
+                    autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/" },
+                                                             new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, 
+                                                             new string[] {"Custom"}};
                 }
 #endif
 #if x64 && !DEBUG

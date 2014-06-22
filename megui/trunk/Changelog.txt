@@ -1,3 +1,5 @@
+2501 [Update]               removed update server megui.xvidvideo.ru for the stable branch as it cannot be synced anymore
+     [Update]               increased update data refresh interval to 10 days for the stable server
 2500 [x265]                 added custom command line
      [x265]                 added support for 64bit x265
      [x265]                 removed --no-ssim and --no-psnr as they are disabled by default
