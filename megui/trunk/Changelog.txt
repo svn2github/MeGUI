@@ -1,142 +1,88 @@
+2503 [L-SMASH Indexer]      the cache file was sometimes not deleted
 2502 [Update]               fixed freeze when adding new custom update servers. Bug #769
 2501 [Update]               removed update server megui.xvidvideo.ru for the stable branch as it cannot be synced anymore
      [Update]               increased update data refresh interval to 10 days for the stable server
-2500 [x265]                 added custom command line
-     [x265]                 added support for 64bit x265
-     [x265]                 removed --no-ssim and --no-psnr as they are disabled by default
-2499 [Audio Encoder]        fixed TimeStretch support (regression of 2487)
-     [Audio Encoder]        enhanced logging
-     [Audio Encoder]        added 5.1 downmix if necessary (provided by tebasuna51)
-2498 [L-SMASH Indexer]      use the stream_index argument instead of track if using LWLibav*Source. Part II
-2497 [L-SMASH Indexer]      use the stream_index argument instead of track if using LWLibav*Source
-2496 [MainForm]             enabled Drag & Drop for folders
-2495 [x265]                 introduced fastdecode & zerolatency tunings
-2494 [x265]                 removed --timinginfo switch. frame rate information is handled automatically now.
-2493 [Update]               fixed a crash in some situations if neroaacenc is enabled (regression of 2490)
-2492 [Update]               fixed a crash on some systems without visual styles (regression of 2490)
-2491 [Update]               added option to hide the question if you would like to update
-2490 [Update]               added download progress indicator
-     [Update]               added sortable columns
-     [Update]               update data will only be refreshed every 1 (development) or 5 (stable) days
-     [Update]               internal optimizations
-2488 [x265]                 added --timinginfo switch in order to have fps information in the stream
-2487 [Audio Encoder]        fixed TimeStretch support (regression of 2383)
-     [Audio Encoder]        added dedicated TimeStretch options
-     [Audio Encoder]        added 96000 Hz sample rate conversion. Feature request #538
-     [Audio Encoder]        cosmetics
-2486 [HD Streams Extractor] improved logging
-2485 [QAAC]                 allow only specific TVBR values. Please verify your settings.
-2484 [Video Preview]        if video preview is set to "always on top" some GUI elements were hidden. Bug #754
-2483 [x264]                 improved error handling. Bug #755
-2482 [AVI Muxer]            improved logging
-2481 [MKV Muxer]            added HEVC support (requires mkvmerge 6.8.0+)
-2480 [OneClick]             changed resize behaviour so that upsizing will be used if enabled
-2479 [AVS Script Creator]   reverted Yadif back to Load_Stdcall_Plugin (regression of 2471)
-2478 [HD Streams Extractor] last used open mode will be preselected
-     [HD Streams Extractor] fixed using wrong source file in file mode if more than one job is added with "and close" disabled
-2477 [Update]               fixed sometimes not possible to enable packages
-     [Update]               improved default update selection logic
-     [Update]               fixed sometimes not processing all packages
-2476 [Queue]                removed general check for missing packages at queue start
-     [Update]               automatically download needed and missing packages after confirmation if the package was disabled (regression of 2471)
-2475 [Audio Encoder]        added needed ConvertAudioToFloat() for AviSynth+
-2474 [AVS Script Creator]   fixed path for Yadif and BassAudioSource (regression of 2471)
-2473 [Update]               fixed error if auto update is disabled (regression of 2471)
-2472 [Update]               required packages are always enabled
-2471 [Update]               merged some avisynth plugins into one package
-     [Update]               fixed problem with the installation of the avs package
-     [Update]               internal optimizations
-2470 [AVS Script Creator]   fixed sometimes using VobSub instead of TextSub
-2469 [FFMS Indexer]         do not index audio tracks if they will be demuxed
-2468 [MKV Demuxer]          if a delay is needed e.g. "Delay 123ms" (instead of "123ms") will be added to the demuxed file name
-2467 [OneClick]             "Don't encode video" is now used for all containers
-     [OneClick]             improved detection of suitable output containers
-2466 [Update]               automatically download needed and missing packages after confirmation if the package was disabled
-2465 [Queue]                changed default main window size and queue column size
-2464 [x264]                 fixed --sar detection for 720x480 if using the Blu-ray target device
-2463 [AVS Script Creator]   improved anamorphic calculation. if the output DAR is the same as the input DAR 
-     +[OneClick]             it will not be rounded within the "acceptable anamorphic aspect error" tolerance
-2462 [Update]               improved status handling
-     [Update]               cosmetics
-2461 [L-SMASH Indexer]      renamed to L-SMASH Works
-     [L-SMASH Indexer]      internal optimizations
-2460 [Update]               if external tools are disabled in the settings they are also disabled for updates
-2459 [Audio Encoder]        added AddAutoloadDir() if using the included AviSynth+
-2458 [OneClick]             fixed problem if using the same internal audio track several times
-2457 [Audio Encoder]        fixed missing SSRC() function in included AviSynth+
-     [Audio Encoder]        improved error handling
-2456 [Log]                  improved .NET detection
-2455 [Update]               cosmetics
-2454 [Log]                  show information about .NET 2.0 and 4.0
-     [Log]                  removed information about highest .NET build
-2453 [Audio Encoder]        fixed sometimes choosing the wrong decoder (regression of 2448)
-2452 [Audio Encoder]        lowered also the priority for the LWLibavAudioSource decoder
-     [Audio Encoder]        default order: NicAudio, BassAudio, FFAudioSource, LWLibavAudioSource, DirectShow
-2451 [Chapter Creator]      added support for mkv input files
-     [Chapter Creator]      added option to specify the minimum title length
-     [Chapter Creator]      added option to specify the FPS value
-     [Chapter Creator]      improved FPS detection for DVD/Bluray
-2450 [L-SMASH Indexer]      show time/file progress during indexing
-     [L-SMASH Indexer]      added possibility to set output file/folder
-     [L-SMASH Indexer]      blocked indexer if input file is in a read only directory
-     [L-SMASH Indexer]      lowered the default priority so that it will be used after FFMS
-     [L-SMASH Indexer]      added log information
-     [L-SMASH Indexer]      copy the runtimes if required
-     [FFMS Indexer]         defaults to LoadPlugin if LoadCPlugin is also possible
-2449 [Update]               show the lsmash package in the updater
-2448 [L-SMASH Indexer]      added LSMASHVideoSource/LWLibavVideoSource support
-     [L-SMASH Indexer]      as no indexer is available no progress during "indexing" is available
-     [L-SMASH Indexer]      also the cache file must be created in the same directory as the source file
-     [Audio Encoder]        added LSMASHAudioSource/LWLibavAudioSource support
-2447 [Update]               fixed a regression in 2446
-2446 [Update]               removed "Platform" column
-     [Update]               added "Last Used" column
-     [Update]               sort based on first column
-     [Update]               internal optimizations
-2445 [Update]               fixed an error if tools\avs does not exists (regression of 2444)
-2444 [Settings]             added option to always use the included/portable AviSynth build (disabled by default)
-     [Update]               improved AviSynth portable support for external tools
-     [Log]                  added AviSynth+ detection
-2443 [Settings]             removed "Force Video File Extension for QT compatibility"
-     [Settings]             removed "Samples between audio progress updates"
-     [Settings]             removed "Use Advanced ToolTips"
-     [Settings]             cosmetics
-2442 [x265]                 fixed error during preset startup (regression of 2422)
-2441 [OneClick]             fixed PCM audio track handling in mkv files (regression of 2378)
-2440 [XviD]                 hide FourCC box as it will not be used
-2439 [FFMS Indexer]         automatically switch to LoadCPlugin if required
-     [FFMS Indexer]         added fpsnum and fpsden if required
-2438 [x264]                 custom --fps values will be detected and used
-2437 [OneClick]             improved working directory generation
-     [OneClick]             improved handling if selected output container cannot be used
-2436 [M2TS Muxer]           added HEVC/x265 and MKV support (requires tsmuxer 2.5.5+)
-     [OneClick]             added HEVC/x265 support for MP4 and removed it for MKV
-2435 [Update]               optional packages will only be downloaded/enabled if needed (part II)
-     [Update]               now all external programs are disabled by default
-2434 [Update]               an update to 2431+ will not disable DGIndexNV, NeroAACenc, QAAC or x265 if already enabled
-2433 [AVS Script Creator]   fixed "TDeint (with EDI)" (regression of 2305)
-2432 [Update]               fixed DGIndexNV, NeroAACenc, QAAC and x265 update handling (regression of 2431)
-2431 [Update]               optional packages will only be downloaded/enabled if needed
-     [Update]               therefore during first use of such packages an online connection may be required
-     [Update]               if a package is not used in 60 days it will be disabled again
-     [Update]               currently the following packages are disabled by default (more to come):
-     [Update]               DGIndexNV, FFmpeg, MKVMerge, NeroAACenc, QAAC, x264, x264_10b, x265
-     [Update]               DGIndexNV, NeroAACenc, QAAC and x265 still need to be enabled in the MeGUI settings
-     [Update]               NeroAACenc, QAAC and x265 need a restart of MeGUI so that the presets are enabled
-2430 [OneClick]             fixed unnecessary resize/crop in some cases (regression of 2357)
-2429 [Update]               version/date information will be shown also for disabled packages
-2428 [Update]               disabled packages are not hidden anymore
-2427 [Update]               hide x264 10bit completely if disabled (regression of 2395)
-2426 [x265]                 added option to enable/disable x265 in the MeGUI settings (disabled by default)
-2425 [Queue]                fixed crash if more than one worker is opening an avs script
-2424 [x265]                 fixed default encoding mode part II
-2423 [x265]                 fixed default encoding mode
-2422 [x265]                 added basic x265 encoding support
-2421 [Log]                  do not log progress messages from the FFmpeg encoder
-2420 [Log]                  delete devil.dll in the MeGUI root folder if avisynth.dll is not available also
-2419 [Update]               added possibility to use display names for the update files
-     [Update]               added possibility to use .NET requirements for the update files
-     [Update]               improved error handling and log output
+
+Changelog 2419 --> 2500
+
+Features/Changes:
+[Update]               several changes have been made to save bandwidth during the update process:
+[Update]               - update data will only be refreshed every 1 (development) or 5 (stable) days
+[Update]               - all optional packages are disabled by default
+[Update]               - optional packages will only be downloaded/enabled if needed
+[Update]               - therefore during first use of such packages an online connection may be required
+[Update]               - if a package is not used in 60 days it will be disabled again
+[Update]               - if external tools are disabled in the settings they are also disabled for updates
+[Update]               - required packages are always enabled
+[L-SMASH Indexer]      added LSMASHVideoSource/LWLibavVideoSource support
+[L-SMASH Indexer]      the cache file must be created in the same directory as the source file
+[L-SMASH Indexer]       therefore the indexer will be blocked if the input file is in a read only directory
+[L-SMASH Indexer]      it will be used after FFMS (default priority)
+[x265]                 added basic x265 encoding support
+[x265]                 added option to enable/disable x265 in the MeGUI settings (disabled by default)
+
+Enhancements/Fixes:
+[Audio Encoder]        added 5.1 downmix if necessary (provided by tebasuna51)
+[Audio Encoder]        added 96000 Hz sample rate conversion. Feature request #538
+[Audio Encoder]        added AddAutoloadDir() if using the included AviSynth+
+[Audio Encoder]        added dedicated TimeStretch options
+[Audio Encoder]        added LSMASHAudioSource/LWLibavAudioSource support
+[Audio Encoder]         default order: NicAudio, BassAudio, FFAudioSource, LWLibavAudioSource, DirectShow
+[Audio Encoder]        fixed TimeStretch support (regression of 2383)
+[AVI Muxer]            improved logging
+[AVS Script Creator]   fixed "TDeint (with EDI)" (regression of 2305)
+[AVS Script Creator]   fixed sometimes using VobSub instead of TextSub
+[AVS Script Creator]   improved anamorphic calculation. if the output DAR is the same as the input DAR
+[AVS Script Creator]    it will not be rounded within the "acceptable anamorphic aspect error" tolerance
+[Chapter Creator]      added option to specify the FPS value and the minimum title length
+[Chapter Creator]      added support for mkv input files
+[Chapter Creator]      improved FPS detection for DVD/Bluray
+[FFMS Indexer]         added fpsnum and fpsden if required
+[FFMS Indexer]         automatically switch to LoadCPlugin if required
+[FFMS Indexer]          defaults to LoadPlugin if LoadCPlugin is also possible
+[FFMS Indexer]         do not index audio tracks if they will be demuxed
+[HD Streams Extractor] fixed using wrong source file in file mode if more than one job is added with "and close" disabled
+[HD Streams Extractor] last used open mode will be preselected
+[Log]                  added AviSynth+ detection
+[Log]                  delete devil.dll in the MeGUI root folder if avisynth.dll is not available also
+[Log]                  do not log progress messages from the FFmpeg encoder
+[Log]                  removed information about highest .NET build
+[Log]                   show information about .NET 2.0 and 4.0 instead
+[M2TS Muxer]           added HEVC/x265 and MKV support (requires tsmuxer 2.5.5+)
+[MainForm]             enabled Drag & Drop for folders
+[MKV Demuxer]          if a delay is needed e.g. "Delay 123ms" (instead of "123ms") will be added to the demuxed file name
+[MKV Muxer]            added HEVC support (requires mkvmerge 6.8.0+)
+[OneClick]             "Don't encode video" is now used for all containers
+[OneClick]             added HEVC/x265 support for MP4 and MKV
+[OneClick]             changed resize behaviour so that upsizing will be used if enabled
+[OneClick]             fixed PCM audio track handling in mkv files (regression of 2378)
+[OneClick]             fixed problem if using the same internal audio track several times
+[OneClick]             fixed unnecessary resize/crop in some cases (regression of 2357)
+[OneClick]             improved detection/handling of suitable output containers
+[OneClick]             improved working directory generation
+[OneClick]             improved anamorphic calculation. if the output DAR is the same as the input DAR
+[OneClick]              it will not be rounded within the "acceptable anamorphic aspect error" tolerance
+[QAAC]                 allow only specific TVBR values. Please verify your settings.
+[Queue]                changed default main window size and queue column size
+[Queue]                fixed crash if more than one worker is opening an avs script
+[Queue]                removed general check for missing packages at queue start
+[Settings]             added option to always use the included/portable AviSynth build (disabled by default)
+[Settings]             removed "Force Video File Extension for QT compatibility"
+[Settings]             removed "Samples between audio progress updates"
+[Settings]             removed "Use Advanced ToolTips"
+[Update]               added "Last Used" column
+[Update]               added download progress indicator
+[Update]               added option to hide the question if you would like to update
+[Update]               added possibility to use .NET requirements for the update files
+[Update]               added possibility to use display names for the update files
+[Update]               added sortable columns
+[Update]               removed "Platform" column
+[Update]               merged some avisynth plugins into one package
+[Video Preview]        if video preview is set to "always on top" some GUI elements were hidden. Bug #754
+[x264]                 custom --fps values will be detected and used
+[x264]                 fixed --sar detection for 720x480 if using the Blu-ray target device
+[x264]                 improved error handling. Bug #755
+[XviD]                 hide FourCC box as it will not be used
 
 Changelog 2356 --> 2418
 
@@ -190,33 +136,10 @@ Enhancements/Fixes:
        --weightp is restricted to 0 or 1
 
 
-Changelog 2341 --> 2356
-
-Features/Changes:
-[MainForm] improved File\Open and drag & drop handling
-[OneClick] added option to disable intermediate MKV files
-[Log] improved logging - console output is added to the log immediately
-
-Enhancements/Fixes:
-[AVS Script Creator] + [OneClick] fixed memory leak when using autocrop. Bug #653
-[HD Streams Extractor] select audio/subtitle tracks without language tag by default
-[MKV Muxer] fixed raw LC-AAC files detected as HE-AAC
-[MKV Muxer] fixed wrong default duration for interlaced AVC in some cases
-[MP4 Muxer] revert r2299 (allow Nero & Apple Chapters styles muxing for better interoperability with players)
-[OneClick] + [HD Streams Extractor] fixed detection of Blu-Ray if not using the root folder of the BD. Bug #721
-[OneClick] enhanced error handling
-[OneClick] fixed wrong stream order in some TS files. Bug #718
-[Preset Exporter] fixed not exporting the AviSynth preset included in a OneClick preset. Bug #719
-[x264] as too high vbv values are also logged by x264 as a warning the MeGUI log warning has been removed
-[x264] fixed max values for --crf and --qp
-[x264] fixed not applying proper vbv values if only changing the AVC profile
-[x264] fixed wrong detection of errors if file name contains "error"
-[x264] vbv values are shown in red if the values are too high or not limited
-
 Known Problems:
 - Unicode is not supported
 - non default DPI values are not supported
 - M2TS bitrate calculator does not calculate correct values as the specifications are not known
 
 Full changelog: 
-https://sourceforge.net/p/megui/code/2418/tree/megui/trunk/Changelog_full.txt
+http://sourceforge.net/p/megui/code/HEAD/tree/megui/trunk/Changelog_full.txt?format=raw

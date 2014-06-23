@@ -150,6 +150,8 @@ namespace MeGUI
                 return;
             }
 
+            bool bFound = File.Exists(job.Input + ".lwi");
+
             int iTracksFound = 0;
             int iCurrentAudioTrack = -1;
             for (int iCurrentTrack = 0; iCurrentTrack <= 29; iCurrentTrack++) // hard limit to max. 30 tracks
@@ -189,6 +191,10 @@ namespace MeGUI
                 if (++iTracksFound == job.AudioTracks.Count)
                     break;
             }
+
+            if (!bFound && File.Exists(job.Input + ".lwi"))
+                File.Delete(job.Input + ".lwi");
+
             base.doExitConfig();
         }
 
