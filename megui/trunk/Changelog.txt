@@ -1,3 +1,4 @@
+2504 [Adaptive Muxer]       fixed first subtitle unintended set to default. Bug #774
 2503 [L-SMASH Indexer]      the cache file was sometimes not deleted
 2502 [Update]               fixed freeze when adding new custom update servers. Bug #769
 2501 [Update]               removed update server megui.xvidvideo.ru for the stable branch as it cannot be synced anymore

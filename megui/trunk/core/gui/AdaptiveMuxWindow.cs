@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2013 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ namespace MeGUI
         private bool minimizedMode = false;
         private VideoEncoderType knownVideoType;
         private AudioEncoderType[] knownAudioTypes;
+        private ContainerType lastSelectedContainerType = null;
 
         public AdaptiveMuxWindow(MainForm mainForm)
             : base(mainForm, null)
@@ -52,7 +53,6 @@ namespace MeGUI
             lbContainer.Visible = true;
 
             subtitleTracks[0].chkDefaultStream.CheckedChanged += new System.EventHandler(base.chkDefaultStream_CheckedChanged);
-            this.cbContainer.SelectedIndexChanged += new System.EventHandler(this.cbContainer_SelectedIndexChanged);
             base.muxButton.Click += new System.EventHandler(this.muxButton_Click);
         }
 
@@ -64,27 +64,6 @@ namespace MeGUI
         protected override void upDeviceTypes()
         {
             updateDeviceTypes();
-        }
-
-        private void cbContainer_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            output.Filename = Path.ChangeExtension(output.Filename, (this.cbContainer.SelectedItem as ContainerType).Extension);
-
-            if (cbContainer.SelectedItem is ContainerType)
-                output.Filter = (cbContainer.SelectedItem as ContainerType).OutputFilterString;
-            else
-                output.Filter = "";
-
-            foreach (MuxStreamControl oStream in subtitleTracks)
-            {
-                if ((this.cbContainer.SelectedItem as ContainerType).Extension.Equals("mkv"))
-                    oStream.ShowDefaultSubtitleStream = oStream.ShowForceSubtitleStream = oStream.ShowDelay = true;
-                else
-                    oStream.ShowDefaultSubtitleStream = oStream.ShowForceSubtitleStream = oStream.ShowDelay = false;
-            }
-
-            if ((this.cbContainer.SelectedItem as ContainerType).Extension.Equals("mkv"))
-                subtitleTracks[0].chkDefaultStream.Checked = true;
         }
 
         private void getTypes(out AudioEncoderType[] aCodec, out MuxableType[] audioTypes, out MuxableType[] subtitleTypes)
@@ -134,9 +113,33 @@ namespace MeGUI
 
         private void updateDeviceTypes()
         {
+            if (cbContainer.SelectedItem is ContainerType && lastSelectedContainerType == cbContainer.SelectedItem as ContainerType)
+                return;
+            
+            if (cbContainer.SelectedItem is ContainerType)
+            {
+                lastSelectedContainerType = cbContainer.SelectedItem as ContainerType;
+                output.Filter = (cbContainer.SelectedItem as ContainerType).OutputFilterString;
+            }
+            else
+                output.Filter = "";
+
+            output.Filename = Path.ChangeExtension(output.Filename, (this.cbContainer.SelectedItem as ContainerType).Extension);
+
+            foreach (MuxStreamControl oStream in subtitleTracks)
+            {
+                if ((this.cbContainer.SelectedItem as ContainerType).Extension.Equals("mkv"))
+                    oStream.ShowDefaultSubtitleStream = oStream.ShowForceSubtitleStream = oStream.ShowDelay = true;
+                else
+                    oStream.ShowDefaultSubtitleStream = oStream.ShowForceSubtitleStream = oStream.ShowDelay = false;
+            }
+
             if (this.cbContainer.Text == "MKV")
+            {
                 this.cbType.Enabled = false;
-            else 
+                subtitleTracks[0].chkDefaultStream.Checked = true;
+            }
+            else
                 this.cbType.Enabled = true;
 
             List<DeviceType> supportedOutputDeviceTypes = this.muxProvider.GetSupportedDevices((ContainerType)cbContainer.SelectedItem);
@@ -174,14 +177,6 @@ namespace MeGUI
                 }
             }
 
-            if (!minimizedMode && videoType == null)
-            {
-                this.cbContainer.Items.Clear();
-                this.cbContainer.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
-                this.cbContainer.SelectedIndex = 0;
-                return;
-            }
-
             MuxableType[] audioTypes;
             MuxableType[] subTypes;
             AudioEncoderType[] audioCodecs;
@@ -199,17 +194,14 @@ namespace MeGUI
             else
                 supportedOutputTypes = this.muxProvider.GetSupportedContainers(allTypes.ToArray());
 
-            ContainerType lastSelectedFileType = null;
-            if (cbContainer.SelectedItem is ContainerType)
-                lastSelectedFileType = cbContainer.SelectedItem as ContainerType;
-
             if (supportedOutputTypes.Count > 0)
             {
                 this.cbContainer.Items.Clear();
                 this.cbContainer.Items.AddRange(supportedOutputTypes.ToArray());
-                this.cbContainer.SelectedIndex = 0;
-                if (lastSelectedFileType != null && cbContainer.Items.Contains(lastSelectedFileType))
-                    cbContainer.SelectedItem = lastSelectedFileType;
+                if (lastSelectedContainerType != null && cbContainer.Items.Contains(lastSelectedContainerType))
+                    cbContainer.SelectedItem = lastSelectedContainerType;
+                else
+                    this.cbContainer.SelectedIndex = 0;
             }
             else
             {

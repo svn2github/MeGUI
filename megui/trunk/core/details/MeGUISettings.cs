@@ -110,8 +110,8 @@ namespace MeGUI
             bAlwaysMuxMKV = true;
             bAutoStartQueueStartup = false;
 			forceFilmThreshold = new decimal(95);
-			defaultLanguage1 = "";
-			defaultLanguage2 = "";
+			defaultLanguage1 = "English";
+			defaultLanguage2 = "English";
             defaultPriority = ProcessPriority.IDLE;
             afterEncoding = AfterEncoding.DoNothing;
 			autoOpenScript = true;
