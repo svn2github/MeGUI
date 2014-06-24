@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -133,16 +133,27 @@ namespace MeGUI
             try
             {
                 string line;
-                StreamReader file = new StreamReader(strAVSFile);
-                while ((line = file.ReadLine()) != null)
+                using (StreamReader file = new StreamReader(strAVSFile))
                 {
-                    if (line.IndexOf(@"# detected channels: ") == 0)
+                    while ((line = file.ReadLine()) != null)
                     {
-                        int.TryParse(line.Substring(21).Split(' ')[0], out iChannelCount);
-                        break;
+                        if (line.IndexOf(@"# detected channels: ") == 0)
+                        {
+                            Int32.TryParse(line.Substring(21).Split(' ')[0], out iChannelCount);
+                            break;
+                        }
                     }
                 }
-                file.Close();
+
+                if (iChannelCount == 0)
+                {
+                    using (AvsFile avi = AvsFile.OpenScriptFile(strAVSFile))
+                    {
+                        if (avi.Clip.HasAudio)
+                            Int32.TryParse(avi.Clip.ChannelsCount.ToString(), out iChannelCount);
+                    }
+                }
+
                 return iChannelCount;
             }
             catch
