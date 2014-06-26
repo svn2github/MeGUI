@@ -421,6 +421,10 @@ namespace MeGUI.core.util
             string fileProductName = string.Empty;
             bool bFoundInstalledAviSynth = false;
 
+            // remove msvc files
+            LSMASHFileActions(true);
+            PortableAviSynthActions(true);
+
             // detect system installation
             string syswow64path = Environment.GetFolderPath(Environment.SpecialFolder.System).ToLowerInvariant().Replace("\\system32", "\\SysWOW64");
 #if x86
@@ -444,7 +448,8 @@ namespace MeGUI.core.util
                         fileVersion + " (" + fileDate + ")" + (!MainForm.Instance.Settings.AlwaysUsePortableAviSynth ? String.Empty : " (inactive)"));
                 if (!MainForm.Instance.Settings.AlwaysUsePortableAviSynth)
                 {
-                    PortableAviSynthActions(true);
+                    if (!MainForm.Instance.Settings.AviSynthPlus)
+                        LSMASHFileActions(false);
                     return;
                 }
             }
@@ -469,14 +474,9 @@ namespace MeGUI.core.util
             {
                 if (oLog != null)
                     oLog.LogValue("AviSynth", "not found", ImageType.Error);
-                PortableAviSynthActions(true);
             }
-            else
-                PortableAviSynthActions(true);
 
-            if (MainForm.Instance.Settings.AviSynthPlus)
-                LSMASHFileActions(true);
-            else
+            if (!MainForm.Instance.Settings.AviSynthPlus)
                 LSMASHFileActions(false);
         }
 

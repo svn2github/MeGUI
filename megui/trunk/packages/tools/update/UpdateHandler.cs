@@ -575,6 +575,11 @@ namespace MeGUI
                                 if (!MainForm.Instance.Settings.AviSynthPlus)
                                     FileUtil.LSMASHFileActions(false);
                             }
+                            else if (file.Name.Equals("lsmash"))
+                            {
+                                if (!MainForm.Instance.Settings.AviSynthPlus)
+                                    FileUtil.LSMASHFileActions(false);
+                            }
                         }
                     }
                 }
