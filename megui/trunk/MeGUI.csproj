@@ -453,6 +453,7 @@
     <Compile Include="core\gui\TextViewer.Designer.cs">
       <DependentUpon>TextViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\tools\chaptercreator\BDInfo\TSStreamFile.cs" />
     <Compile Include="packages\tools\update\ProgramSettings.cs" />
     <Compile Include="packages\tools\update\UpdateCacher.cs" />
     <Compile Include="packages\tools\update\UpdateHandler.cs" />

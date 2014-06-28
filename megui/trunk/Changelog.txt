@@ -1,3 +1,4 @@
+2507 [Chapter Creator]      improved multi angle Blu-Ray support
 2506 [Update]               improved runtime copying process
 2505 [Audio Encoder]        fixed wrong channel count mismatch warning for AVS files. Bug #767
 2504 [Adaptive Muxer]       fixed first subtitle unintended set to default. Bug #774

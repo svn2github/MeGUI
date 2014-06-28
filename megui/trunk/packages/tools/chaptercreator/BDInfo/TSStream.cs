@@ -1,10 +1,21 @@
-﻿// ****************************************************************************
-// 
-// Copyright (C) 2009  Cinema Squid
-// 
-// code from http://www.cinemasquid.com/blu-ray/tools/bdinfo
-// 
-// ****************************************************************************
+﻿//============================================================================
+// BDInfo - Blu-ray Video and Audio Analysis Tool
+// Copyright © 2010 Cinema Squid
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//=============================================================================
 
 using System;
 using System.Collections.Generic;
@@ -18,6 +29,7 @@ namespace BDInfo
         MPEG1_VIDEO = 0x01,
         MPEG2_VIDEO = 0x02,
         AVC_VIDEO = 0x1b,
+        MVC_VIDEO = 0x20,
         VC1_VIDEO = 0xea,
         MPEG1_AUDIO = 0x03,
         MPEG2_AUDIO = 0x04,
@@ -98,7 +110,7 @@ namespace BDInfo
 
         public TSDescriptor Clone()
         {
-            TSDescriptor descriptor = 
+            TSDescriptor descriptor =
                 new TSDescriptor(Name, (byte)Value.Length);
             Value.CopyTo(descriptor.Value, 0);
             return descriptor;
@@ -124,6 +136,7 @@ namespace BDInfo
         public bool IsVBR = false;
         public bool IsInitialized = false;
         public string LanguageName;
+        public bool IsHidden = false;
 
         public ulong PayloadBytes = 0;
         public ulong PacketCount = 0;
@@ -141,15 +154,15 @@ namespace BDInfo
         private string _LanguageCode;
         public string LanguageCode
         {
-            get 
+            get
             {
-                return _LanguageCode; 
+                return _LanguageCode;
             }
-            set 
+            set
             {
                 _LanguageCode = value;
                 LanguageName = LanguageCodes.GetName(value);
-            } 
+            }
         }
 
         public bool IsVideoStream
@@ -161,6 +174,7 @@ namespace BDInfo
                     case TSStreamType.MPEG1_VIDEO:
                     case TSStreamType.MPEG2_VIDEO:
                     case TSStreamType.AVC_VIDEO:
+                    case TSStreamType.MVC_VIDEO:
                     case TSStreamType.VC1_VIDEO:
                         return true;
 
@@ -238,6 +252,8 @@ namespace BDInfo
                         return "MPEG-2 Video";
                     case TSStreamType.AVC_VIDEO:
                         return "MPEG-4 AVC Video";
+                    case TSStreamType.MVC_VIDEO:
+                        return "MPEG-4 MVC Video";
                     case TSStreamType.VC1_VIDEO:
                         return "VC-1 Video";
                     case TSStreamType.MPEG1_AUDIO:
@@ -262,7 +278,7 @@ namespace BDInfo
                         else
                             return "DTS Audio";
                     case TSStreamType.DTS_HD_AUDIO:
-                        return "DTS-HD Audio";
+                        return "DTS-HD High-Res Audio";
                     case TSStreamType.DTS_HD_SECONDARY_AUDIO:
                         return "DTS Express";
                     case TSStreamType.DTS_HD_MASTER_AUDIO:
@@ -291,6 +307,8 @@ namespace BDInfo
                         return "MPEG-2";
                     case TSStreamType.AVC_VIDEO:
                         return "AVC";
+                    case TSStreamType.MVC_VIDEO:
+                        return "MVC";
                     case TSStreamType.VC1_VIDEO:
                         return "VC-1";
                     case TSStreamType.MPEG1_AUDIO:
@@ -338,6 +356,8 @@ namespace BDInfo
                         return "MPEG-2";
                     case TSStreamType.AVC_VIDEO:
                         return "AVC";
+                    case TSStreamType.MVC_VIDEO:
+                        return "MVC";
                     case TSStreamType.VC1_VIDEO:
                         return "VC-1";
                     case TSStreamType.MPEG1_AUDIO:
@@ -388,7 +408,7 @@ namespace BDInfo
         }
 
         public abstract TSStream Clone();
-        
+
         protected void CopyTo(TSStream stream)
         {
             stream.PID = PID;
@@ -416,7 +436,7 @@ namespace BDInfo
 
         public int Width;
         public int Height;
-        public bool IsInterlaced;        
+        public bool IsInterlaced;
         public int FrameRateEnumerator;
         public int FrameRateDenominator;
         public TSAspectRatio AspectRatio;
@@ -562,7 +582,7 @@ namespace BDInfo
             stream.FrameRate = _FrameRate;
             stream.Width = Width;
             stream.Height = Height;
-            stream.IsInterlaced = IsInterlaced;        
+            stream.IsInterlaced = IsInterlaced;
             stream.FrameRateEnumerator = FrameRateEnumerator;
             stream.FrameRateDenominator = FrameRateDenominator;
             stream.AspectRatio = AspectRatio;
@@ -619,6 +639,11 @@ namespace BDInfo
         {
             get
             {
+                if (ChannelLayout == TSChannelLayout.CHANNELLAYOUT_MONO &&
+                    ChannelCount == 2)
+                {
+                }
+
                 string description = "";
                 if (ChannelCount > 0)
                 {
@@ -647,7 +672,9 @@ namespace BDInfo
                     {
                         description += "-EX";
                     }
-                    if (StreamType == TSStreamType.DTS_AUDIO)
+                    if (StreamType == TSStreamType.DTS_AUDIO ||
+                        StreamType == TSStreamType.DTS_HD_AUDIO ||
+                        StreamType == TSStreamType.DTS_HD_MASTER_AUDIO)
                     {
                         description += "-ES";
                     }
@@ -677,6 +704,11 @@ namespace BDInfo
                     description += string.Format(
                         " / {0:D}-bit", BitDepth);
                 }
+                if (DialNorm != 0)
+                {
+                    description += string.Format(
+                        " / DN {0}dB", DialNorm);
+                }
                 if (ChannelCount == 2)
                 {
                     switch (AudioMode)
@@ -700,14 +732,14 @@ namespace BDInfo
                     switch (CoreStream.StreamType)
                     {
                         case TSStreamType.AC3_AUDIO:
-                            codec = "AC3";
+                            codec = "AC3 Embedded";
                             break;
                         case TSStreamType.DTS_AUDIO:
-                            codec = "DTS";
+                            codec = "DTS Core";
                             break;
                     }
                     description += string.Format(
-                        " ({0} Core: {1})",
+                        " ({0}: {1})",
                         codec,
                         CoreStream.Description);
                 }

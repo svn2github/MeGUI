@@ -780,12 +780,19 @@ namespace MeGUI
                     int iAudioCount = 0;
                     int iTextCount = 0;
                     bool bVideoFound = false;
-                    int i = oInfo.Video.Count;
+                    int iCount = 0;
                     foreach (eac3to.Stream oTrack in _Eac3toInfo.Features[0].Streams)
                     {
-                        if (oTrack.Type == eac3to.StreamType.Subtitle)
+                        if (oTrack.Number < iCount)
+                            break;
+                        else
+                            iCount = oTrack.Number;
+
+                        if (oTrack.Type == eac3to.StreamType.Subtitle && iTextCount < oInfo.Text.Count)
+                        {
                             oInfo.Text[iTextCount++].StreamOrder = oTrack.Number.ToString();
-                        else if (oTrack.Type == eac3to.StreamType.Audio)
+                        }
+                        else if (oTrack.Type == eac3to.StreamType.Audio && iAudioCount < oInfo.Audio.Count)
                         {
                             oInfo.Audio[iAudioCount].ID = oTrack.Number.ToString();
                             oInfo.Audio[iAudioCount++].StreamOrder = oTrack.Number.ToString();

@@ -19,33 +19,21 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace BDInfo
 {
-    public class TSStreamClip
+    public class TSStreamFile
     {
-        public int AngleIndex = 0;
-        public string Name;
-        public double TimeIn;
-        public double TimeOut;
-        public double RelativeTimeIn;
-        public double RelativeTimeOut;
-        public double Length;
+        public FileInfo FileInfo = null;
+        public string Name = null;
 
-        public ulong FileSize = 0;
-        public ulong InterleavedFileSize = 0;
-        public ulong PayloadBytes = 0;
-        public ulong PacketCount = 0;
-        public double PacketSeconds = 0;
-
-        public List<double> Chapters = new List<double>();
-        public TSStreamClipFile StreamClipFile = null;
-
-        public TSStreamClip(TSStreamClipFile streamClipFile)
+        public TSStreamFile(FileInfo fileInfo)
         {
-            Name = streamClipFile.Name;
-            StreamClipFile = streamClipFile;
+            FileInfo = fileInfo;
+            Name = fileInfo.Name.ToUpper();
         }
     }
 }

@@ -1,10 +1,21 @@
-﻿// ****************************************************************************
-// 
-// Copyright (C) 2009  Jarrett Vance
-// 
-// code from http://jvance.com/pages/ChapterGrabber.xhtml
-// 
-// ****************************************************************************
+﻿//============================================================================
+// BDInfo - Blu-ray Video and Audio Analysis Tool
+// Copyright © 2010 Cinema Squid
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//=============================================================================
 
 using System;
 using System.Collections.Generic;
@@ -28,6 +39,50 @@ namespace MeGUI
             get { return false; }
         }
 
+        private DirectoryInfo GetDirectoryBDMV(
+    string path)
+        {
+            DirectoryInfo dir = new DirectoryInfo(path);
+
+            while (dir != null)
+            {
+                if (dir.Name == "BDMV")
+                {
+                    return dir;
+                }
+                dir = dir.Parent;
+            }
+
+            return GetDirectory("BDMV", new DirectoryInfo(path), 0);
+        }
+
+        private DirectoryInfo GetDirectory(
+            string name,
+            DirectoryInfo dir,
+            int searchDepth)
+        {
+            if (dir != null)
+            {
+                DirectoryInfo[] children = dir.GetDirectories();
+                foreach (DirectoryInfo child in children)
+                {
+                    if (child.Name == name)
+                    {
+                        return child;
+                    }
+                }
+                if (searchDepth > 0)
+                {
+                    foreach (DirectoryInfo child in children)
+                    {
+                        GetDirectory(
+                            name, child, searchDepth - 1);
+                    }
+                }
+            }
+            return null;
+        }
+
         public override List<ChapterInfo> GetStreams(string location)
         {
             ChapterInfo pgc = new ChapterInfo();
@@ -37,9 +92,60 @@ namespace MeGUI
             pgc.Title = Path.GetFileNameWithoutExtension(location);
             pgc.SourceType = "Blu-Ray";
 
+            DirectoryInfo DirectoryBDMV = GetDirectoryBDMV(location);
+            if (DirectoryBDMV == null)
+            {
+                throw new Exception("Unable to locate BD structure.");
+            }
+
+            DirectoryInfo DirectoryRoot =
+                DirectoryBDMV.Parent;
+            DirectoryInfo DirectoryBDJO =
+                GetDirectory("BDJO", DirectoryBDMV, 0);
+            DirectoryInfo DirectoryCLIPINF =
+                GetDirectory("CLIPINF", DirectoryBDMV, 0);
+            DirectoryInfo DirectoryPLAYLIST =
+                GetDirectory("PLAYLIST", DirectoryBDMV, 0);
+            DirectoryInfo DirectorySNP =
+                GetDirectory("SNP", DirectoryRoot, 0);
+            DirectoryInfo DirectorySTREAM =
+                GetDirectory("STREAM", DirectoryBDMV, 0);
+            DirectoryInfo DirectorySSIF =
+                GetDirectory("SSIF", DirectorySTREAM, 0);
+
+            Dictionary<string, TSStreamClipFile> StreamClipFiles = new Dictionary<string, TSStreamClipFile>();
+            Dictionary<string, TSStreamFile> StreamFiles = new Dictionary<string, TSStreamFile>();
+            if (DirectorySTREAM != null)
+            {
+                FileInfo[] files = DirectorySTREAM.GetFiles("*.m2ts");
+                if (files.Length == 0)
+                {
+                    files = DirectoryPLAYLIST.GetFiles("*.M2TS");
+                }
+                foreach (FileInfo file in files)
+                {
+                    StreamFiles.Add(file.Name.ToUpper(), new TSStreamFile(file));
+                }
+            }
+
+            if (DirectoryCLIPINF != null)
+            {
+                FileInfo[] files = DirectoryCLIPINF.GetFiles("*.clpi");
+                if (files.Length == 0)
+                {
+                    files = DirectoryPLAYLIST.GetFiles("*.CLPI");
+                }
+                foreach (FileInfo file in files)
+                {
+                    StreamClipFiles.Add(file.Name.ToUpper(), new TSStreamClipFile(file));
+                }
+            }
+
             FileInfo fileInfo = new FileInfo(location);
             TSPlaylistFile mpls = new TSPlaylistFile(fileInfo);
-            mpls.Scan(); int count = 1;
+            mpls.Scan(StreamFiles, StreamClipFiles);
+
+            int count = 1;
             foreach (double d in mpls.Chapters)
             {
                 pgc.Chapters.Add(new Chapter()
