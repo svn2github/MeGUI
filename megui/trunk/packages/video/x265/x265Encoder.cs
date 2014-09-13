@@ -91,13 +91,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "x265Encoder");
                     log.LogValue("aspect ratio", d.Value);
                 if (!String.IsNullOrEmpty(xs.CustomEncoderOptions))
                     log.LogEvent("custom command line: " + xs.CustomEncoderOptions);
+                string path = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "tools\\x265");
 #if x86
                 if (OSInfo.isWow64())
-                    sb.Append("--x265-binary \".\\x64\\x265.exe\" ");
+                    sb.Append("--x265-binary \"" + Path.Combine(path, "x64\\x265.exe") + "\" ");
                 else
-                    sb.Append("--x265-binary \".\\x86\\x265.exe\" ");
+                    sb.Append("--x265-binary \"" + Path.Combine(path, "x86\\x265.exe") + "\" ");
 #else
-                sb.Append("--x265-binary \".\\x64\\x265.exe\" ");
+                sb.Append("--x265-binary \"" + Path.Combine(path, "x64\\x265.exe") + "\" ");
 #endif
             }
 

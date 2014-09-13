@@ -1,11 +1,18 @@
-2507 [Chapter Creator]      improved multi angle Blu-Ray support
-2506 [Update]               improved runtime copying process
-2505 [Audio Encoder]        fixed wrong channel count mismatch warning for AVS files. Bug #767
-2504 [Adaptive Muxer]       fixed first subtitle unintended set to default. Bug #774
-2503 [L-SMASH Indexer]      the cache file was sometimes not deleted
-2502 [Update]               fixed freeze when adding new custom update servers. Bug #769
-2501 [Update]               removed update server megui.xvidvideo.ru for the stable branch as it cannot be synced anymore
-     [Update]               increased update data refresh interval to 10 days for the stable server
+2508 [x265]                 adjusted command line for recent avs4x265
+
+Changelog 2501 --> 2507
+
+Features/Changes:
+[Update]               removed update server megui.xvidvideo.ru for the stable branch as it cannot be synced anymore
+[Update]               increased update data refresh interval to 10 days for the stable server
+
+Enhancements/Fixes:
+[Adaptive Muxer]       fixed first subtitle unintended set to default. Bug #774
+[Audio Encoder]        fixed wrong channel count mismatch warning for AVS files. Bug #767
+[Chapter Creator]      improved multi angle Blu-Ray support
+[L-SMASH Indexer]      the cache file was sometimes not deleted
+[Update]               fixed freeze when adding new custom update servers. Bug #769
+[Update]               improved runtime copying process
 
 
 Changelog 2419 --> 2500
