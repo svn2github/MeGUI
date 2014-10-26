@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2014 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -58,7 +58,13 @@ namespace MeGUI
         #region button handlers
         private void queueButton_Click(object sender, EventArgs e)
         {
-            if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(output.Filename)))
+            if (String.IsNullOrEmpty(output.Filename))
+            {
+                MessageBox.Show("Please select a propper output file", "Configuration Incomplete", MessageBoxButtons.OK);
+                return;
+            }
+
+            if (!String.IsNullOrEmpty(output.Filename) && Drives.ableToWriteOnThisDrive(Path.GetPathRoot(output.Filename)))
             {
                 if (configured)
                 {
@@ -76,7 +82,7 @@ namespace MeGUI
             }
             else
                 MessageBox.Show("MeGUI cannot write on " + Path.GetPathRoot(output.Filename) +
-                                ". Please, select another output path.", "Configuration Incomplete", MessageBoxButtons.OK);
+                                ". Please select a propper output file.", "Configuration Incomplete", MessageBoxButtons.OK);
         }
         #endregion
         private void openVideo(string fileName)
