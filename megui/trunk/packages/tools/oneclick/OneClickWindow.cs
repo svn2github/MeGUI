@@ -1943,7 +1943,7 @@ namespace MeGUI
         private void subtitlesTab_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
-                SubtitleRemoveTrack(audioTab.SelectedIndex);
+                SubtitleRemoveTrack(subtitlesTab.SelectedIndex);
         }
 
         private bool isDontEncodeAudioPossible(MediaInfoFile iFile, bool bIsStandardTrack, ContainerType inputContainer)
