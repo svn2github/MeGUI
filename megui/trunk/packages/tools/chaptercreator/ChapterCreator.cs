@@ -198,6 +198,12 @@ namespace MeGUI
 		#region saving files
 		private void saveButton_Click(object sender, System.EventArgs e)
 		{
+            if (String.IsNullOrEmpty(output.Text))
+            {
+                MessageBox.Show("Please select the output file first", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (!bFPSKnown && !rbTXT.Checked)
             {
                 if (MessageBox.Show("The FPS value for the input file is unknown. Please make sure that the correct value is selected.\nCurrently " +

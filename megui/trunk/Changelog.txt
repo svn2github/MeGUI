@@ -1,4 +1,5 @@
-2510 [VonSubber]            improved error handling
+2511 [Chapter Creator]      improved error handling
+2510 [VobSubber]            improved error handling
 2509 [OneClick]             fixed removing the wrong subtitle track when using the DEL key
 2508 [x265]                 adjusted command line for recent avs4x265
 
