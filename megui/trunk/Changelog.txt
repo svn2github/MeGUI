@@ -1,3 +1,4 @@
+2512 [OneClick]             better support for Blu-ray playlist where eac3to and mediainfo report different track information
 2511 [Chapter Creator]      improved error handling
 2510 [VobSubber]            improved error handling
 2509 [OneClick]             fixed removing the wrong subtitle track when using the DEL key

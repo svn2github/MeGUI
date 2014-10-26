@@ -772,13 +772,13 @@ namespace MeGUI
                 {
                     // Blu-ray Input File
                     if (infoLog != null)
-                        infoLog.Info("Blu-ray playlist detected. Getting information from eac3to.");
+                        infoLog.LogEvent("Blu-ray playlist detected. Getting information from eac3to.", ImageType.Information);
 
                     _Eac3toInfo = new Eac3toInfo(new List<string>() { strFile }, this, infoLog);
                     _Eac3toInfo.FetchAllInformation();
 
-                    int iAudioCount = 0;
-                    int iTextCount = 0;
+                    int iAudioCount = 0; int iAudioEac3toCount = 0;
+                    int iTextCount = 0; int iTextEac3toCount = 0;
                     bool bVideoFound = false;
                     int iCount = 0;
                     foreach (eac3to.Stream oTrack in _Eac3toInfo.Features[0].Streams)
@@ -788,14 +788,36 @@ namespace MeGUI
                         else
                             iCount = oTrack.Number;
 
-                        if (oTrack.Type == eac3to.StreamType.Subtitle && iTextCount < oInfo.Text.Count)
+                        if (oTrack.Type == eac3to.StreamType.Subtitle)
                         {
-                            oInfo.Text[iTextCount++].StreamOrder = oTrack.Number.ToString();
+                            iTextEac3toCount++;
+                            while (oInfo.Text.Count > iTextCount && !oInfo.Text[iTextCount].LanguageString.Trim().Equals(oTrack.Name.Trim()))
+                            {
+                                // this workaround works only if there are additional tracks in MediaInfo which are not available in eac3to (already seen in the wild)
+                                // it works not when tracks are flipped (not noticed yet)
+                                infoLog.LogEvent("Language information does not match. MediaInfo subtitle track will be removed: " + oInfo.Text[iTextCount].LanguageString + " <--> " + oTrack.Name, ImageType.Information);
+                                oInfo.Text.RemoveRange(iTextCount, 1);
+                            }
+
+                            if (oInfo.Text.Count > iTextCount)
+                                oInfo.Text[iTextCount++].StreamOrder = oTrack.Number.ToString();
                         }
-                        else if (oTrack.Type == eac3to.StreamType.Audio && iAudioCount < oInfo.Audio.Count)
+                        else if (oTrack.Type == eac3to.StreamType.Audio)
                         {
-                            oInfo.Audio[iAudioCount].ID = oTrack.Number.ToString();
-                            oInfo.Audio[iAudioCount++].StreamOrder = oTrack.Number.ToString();
+                            iAudioEac3toCount++;
+                            while (oInfo.Audio.Count > iAudioCount && !oInfo.Audio[iAudioCount].LanguageString.Equals(oTrack.Language.Split(',')[0]))
+                            {
+                                // this workaround works only if there are additional tracks in MediaInfo which are not available in eac3to (already seen in the wild)
+                                // it works not when tracks are flipped (not noticed yet)
+                                infoLog.LogEvent("Language information does not match. MediaInfo audio track will be removed: " + oInfo.Audio[iAudioCount].LanguageString + " <--> " + oTrack.Language.Split(',')[0], ImageType.Information);
+                                oInfo.Audio.RemoveRange(iAudioCount, 1);
+                            }
+
+                            if (oInfo.Audio.Count > iAudioCount)
+                            {
+                                oInfo.Audio[iAudioCount].ID = oTrack.Number.ToString();
+                                oInfo.Audio[iAudioCount++].StreamOrder = oTrack.Number.ToString();
+                            }
                         }
                         else if (oTrack.Type == eac3to.StreamType.Video && !bVideoFound && !oTrack.Name.Contains("(right eye)"))
                         {
@@ -803,8 +825,14 @@ namespace MeGUI
                             bVideoFound = true;
                         }
                     }
+
                     oInfo.Audio.RemoveRange(iAudioCount, oInfo.Audio.Count - iAudioCount);
+                    if (iAudioEac3toCount != oInfo.Audio.Count)
+                        infoLog.LogEvent((iAudioEac3toCount - oInfo.Audio.Count) + " eac3to audio tracks not found!", ImageType.Warning);
+
                     oInfo.Text.RemoveRange(iTextCount, oInfo.Text.Count - iTextCount);
+                    if (iTextEac3toCount != oInfo.Text.Count)
+                        infoLog.LogEvent((iTextEac3toCount - oInfo.Text.Count) + " eac3to subtitle tracks not found!", ImageType.Warning);
                 }
                 else if (oInfo.Audio.Count == 0 && oInfo.Video.Count == 0 && Path.GetExtension(strFile).ToLowerInvariant().Equals(".avs"))
                 {
