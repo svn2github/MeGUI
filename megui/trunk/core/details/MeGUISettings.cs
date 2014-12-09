@@ -94,7 +94,7 @@ namespace MeGUI
 #endif
 
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/" },
-                new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
+                new string[] { "Development", "http://megui.org/auto/" }, new string[] { "Custom"}};
             lastUpdateCheck = DateTime.Now.AddDays(-7).ToUniversalTime();
             lastUpdateServer = "http://megui.org/auto/stable/";
             acceptableFPSError = 0.01M;
@@ -418,18 +418,18 @@ namespace MeGUI
                 if (autoUpdateServerLists.Length > 2)
                 {
                     autoUpdateServerLists[0] = new string[] { "Stable", "http://megui.org/auto/stable/" };
-                    autoUpdateServerLists[1] = new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" };
+                    autoUpdateServerLists[1] = new string[] { "Development", "http://megui.org/auto/" };
                 }
                 else
                 {
                     autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/" },
-                                                             new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, 
+                                                             new string[] { "Development", "http://megui.org/auto/" }, 
                                                              new string[] { "Custom"}};
                 }
 #endif
 #if x64 && !DEBUG
-                autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" },
-                                                         new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" },
+                autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/" },
+                                                         new string[] { "Development", "http://megui.org/auto/" },
                                                          new string[] { "Custom"}};
 #endif
 #if DEBUG
