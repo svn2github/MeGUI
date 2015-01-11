@@ -806,7 +806,8 @@ namespace MeGUI
                         else if (oTrack.Type == eac3to.StreamType.Audio)
                         {
                             iAudioEac3toCount++;
-                            while (oInfo.Audio.Count > iAudioCount && !oInfo.Audio[iAudioCount].LanguageString.Equals(oTrack.Language.Split(',')[0]))
+                            string strLanguageEac3To = oTrack.Language.Split(',')[0].Trim().Replace("Undetermined", "");
+                            while (oInfo.Audio.Count > iAudioCount && !oInfo.Audio[iAudioCount].LanguageString.Trim().Equals(strLanguageEac3To))
                             {
                                 // this workaround works only if there are additional tracks in MediaInfo which are not available in eac3to (already seen in the wild)
                                 // it works not when tracks are flipped (not noticed yet)
