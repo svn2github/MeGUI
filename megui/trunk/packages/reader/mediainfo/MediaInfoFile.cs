@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2014 Doom9 & al
+// Copyright (C) 2005-2015 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -791,7 +791,8 @@ namespace MeGUI
                         if (oTrack.Type == eac3to.StreamType.Subtitle)
                         {
                             iTextEac3toCount++;
-                            while (oInfo.Text.Count > iTextCount && !oInfo.Text[iTextCount].LanguageString.Trim().Equals(oTrack.Name.Trim()))
+                            string strLanguageEac3To = oTrack.Name.Trim().Replace("Undetermined", "");
+                            while (oInfo.Text.Count > iTextCount && !oInfo.Text[iTextCount].LanguageString.Trim().Equals(strLanguageEac3To))
                             {
                                 // this workaround works only if there are additional tracks in MediaInfo which are not available in eac3to (already seen in the wild)
                                 // it works not when tracks are flipped (not noticed yet)
