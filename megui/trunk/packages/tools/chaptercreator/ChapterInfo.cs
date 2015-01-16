@@ -30,10 +30,10 @@ namespace MeGUI
 
         public override string ToString()
         {
-            if (Chapters.Count > 1 || Chapters.Count == 0)
-                return string.Format("{0} - {1}  -  {2}  -  [{3} Chapters]", Title, SourceName, Duration.ToString(), Chapters.Count);
+            if (Chapters.Count != 1)
+                return string.Format("{0} - {1}  -  {2}  -  [{3} Chapters]", Title, SourceName, string.Format("{0:00}:{1:00}:{2:00}.{3:000}", Duration.TotalHours, Duration.Minutes, Duration.Seconds, Duration.Milliseconds), Chapters.Count);
             else
-                return string.Format("{0} - {1}  -  {2}  -  [{3} Chapter]", Title, SourceName, Duration.ToString(), Chapters.Count);
+                return string.Format("{0} - {1}  -  {2}  -  [{3} Chapter]", Title, SourceName, string.Format("{0:00}:{1:00}:{2:00}.{3:000}", Duration.TotalHours, Duration.Minutes, Duration.Seconds, Duration.Milliseconds), Chapters.Count);
         }
 
         public void ChangeFps(double fps)

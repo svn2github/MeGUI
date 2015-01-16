@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012 Doom9 & al
+// Copyright (C) 2005-2015 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -83,51 +83,26 @@ namespace MeGUI
                 MessageBox.Show("Please select a stream", "Selection missing", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void btnSortName_CheckedChanged(object sender, EventArgs e)
+        private void btnSort_CheckedChanged(object sender, EventArgs e)
         {
-            if (!btnSortName.Checked || listBox1.Items.Count == 0)
+            if (listBox1.Items.Count == 0)
                 return;
 
             List<ChapterInfo> oSelectedList = new List<ChapterInfo>(listBox1.SelectedItems.Cast<ChapterInfo>());
 
             List<ChapterInfo> list = new List<ChapterInfo>(listBox1.Items.Cast<ChapterInfo>());
-            list = list.OrderBy(p => (p.Title + p.TitleNumber)).ToList();
+            if (btnSortName.Checked)
+                list = list.OrderBy(p => (p.Title + p.TitleNumber)).ToList();
+            else if (btnSortDuration.Checked)
+                list = list.OrderByDescending(p => p.Duration).ToList();
+            else
+                list = list.OrderByDescending(p => p.Chapters.Count).ToList();
             listBox1.Items.Clear();
             listBox1.Items.AddRange(list.ToArray());
 
             if (oSelectedList.Count > 0)
             {
                 for (int i = 0; i < listBox1.Items.Count; i++)
-                {
-                    foreach (ChapterInfo oSelectedItem in oSelectedList)
-                    {
-                        if ((ChapterInfo)listBox1.Items[i] == oSelectedItem)
-                        {
-                            listBox1.SetSelected(i, true);
-                            break;
-                        }
-                    }
-                }
-            }
-            else
-                listBox1.SelectedIndex = 0;
-        }
-
-        private void btnSortDuration_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!btnSortDuration.Checked || listBox1.Items.Count == 0)
-                return;
-
-            List<ChapterInfo> oSelectedList = new List<ChapterInfo>(listBox1.SelectedItems.Cast<ChapterInfo>());
-
-            List<ChapterInfo> list = new List<ChapterInfo>(listBox1.Items.Cast<ChapterInfo>());
-            list = list.OrderByDescending(p => p.Duration).ToList();
-            listBox1.Items.Clear();
-            listBox1.Items.AddRange(list.ToArray());
-
-            if (oSelectedList.Count > 0)
-            {
-                for(int i = 0; i < listBox1.Items.Count; i++)
                 {
                     foreach (ChapterInfo oSelectedItem in oSelectedList)
                     {

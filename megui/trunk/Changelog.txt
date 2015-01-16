@@ -1,3 +1,5 @@
+2516 [Chapter Creator]      added option to sort the title list by chapter count
+     [Chapter Creator]      cosmetics
 2515 [OneClick]             improved handling of track information in case no language information is available (regression of 2512). Part II
 2514 [OneClick]             improved handling of track information in case no language information is available (regression of 2512)
 2513 [Update]               removed update server megui.xvidvideo.ru completly

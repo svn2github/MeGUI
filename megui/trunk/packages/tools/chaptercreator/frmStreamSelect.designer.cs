@@ -1,4 +1,25 @@
-﻿namespace MeGUI
+﻿// ****************************************************************************
+// 
+// Copyright (C) 2005-2015 Doom9 & al
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// 
+// ****************************************************************************
+
+
+namespace MeGUI
 {
   partial class frmStreamSelect
   {
@@ -34,6 +55,7 @@
             this.btnSortDuration = new System.Windows.Forms.RadioButton();
             this.btnSortName = new System.Windows.Forms.RadioButton();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.btnSortChapter = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // btnOK
@@ -62,26 +84,25 @@
             // btnSortDuration
             // 
             this.btnSortDuration.AutoSize = true;
-            this.btnSortDuration.Location = new System.Drawing.Point(91, 13);
+            this.btnSortDuration.Location = new System.Drawing.Point(13, 12);
             this.btnSortDuration.Name = "btnSortDuration";
             this.btnSortDuration.Size = new System.Drawing.Size(102, 17);
             this.btnSortDuration.TabIndex = 3;
             this.btnSortDuration.Text = "sort by duration";
             this.btnSortDuration.UseVisualStyleBackColor = true;
-            this.btnSortDuration.CheckedChanged += new System.EventHandler(this.btnSortDuration_CheckedChanged);
+            this.btnSortDuration.CheckedChanged += new System.EventHandler(this.btnSort_CheckedChanged);
             // 
             // btnSortName
             // 
             this.btnSortName.AutoSize = true;
             this.btnSortName.Checked = true;
-            this.btnSortName.Location = new System.Drawing.Point(253, 13);
+            this.btnSortName.Location = new System.Drawing.Point(175, 12);
             this.btnSortName.Name = "btnSortName";
             this.btnSortName.Size = new System.Drawing.Size(88, 17);
             this.btnSortName.TabIndex = 4;
-            this.btnSortName.TabStop = true;
             this.btnSortName.Text = "sort by name";
             this.btnSortName.UseVisualStyleBackColor = true;
-            this.btnSortName.CheckedChanged += new System.EventHandler(this.btnSortName_CheckedChanged);
+            this.btnSortName.CheckedChanged += new System.EventHandler(this.btnSort_CheckedChanged);
             // 
             // btnCancel
             // 
@@ -94,6 +115,17 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // btnSortChapter
+            // 
+            this.btnSortChapter.AutoSize = true;
+            this.btnSortChapter.Location = new System.Drawing.Point(307, 12);
+            this.btnSortChapter.Name = "btnSortChapter";
+            this.btnSortChapter.Size = new System.Drawing.Size(129, 17);
+            this.btnSortChapter.TabIndex = 7;
+            this.btnSortChapter.Text = "sort by chapter count";
+            this.btnSortChapter.UseVisualStyleBackColor = true;
+            this.btnSortChapter.CheckedChanged += new System.EventHandler(this.btnSort_CheckedChanged);
+            // 
             // frmStreamSelect
             // 
             this.AcceptButton = this.btnOK;
@@ -102,6 +134,7 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(448, 298);
             this.ControlBox = false;
+            this.Controls.Add(this.btnSortChapter);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSortName);
             this.Controls.Add(this.btnSortDuration);
@@ -127,5 +160,6 @@
     private System.Windows.Forms.RadioButton btnSortDuration;
     private System.Windows.Forms.RadioButton btnSortName;
     private System.Windows.Forms.Button btnCancel;
+    private System.Windows.Forms.RadioButton btnSortChapter;
   }
 }
