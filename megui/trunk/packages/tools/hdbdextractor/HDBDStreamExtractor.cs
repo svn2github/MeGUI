@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2014 Doom9 & al
+// Copyright (C) 2005-2015 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -271,7 +271,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                     bool bFound = false;
                     foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                     {
-                        if (s.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                        if (s.Language.ToLowerInvariant().Contains(strLanguage.Key.ToLowerInvariant()))
                         {
                             s.Language = strLanguage.Key;
                             bFound = true;
@@ -280,7 +280,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                     }
                     if (!bFound)
                     {
-                        if (!FolderSelection.Checked && System.IO.Path.GetExtension(FolderInputTextBox.Text).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".mkv"))
+                        if (!FolderSelection.Checked && System.IO.Path.GetExtension(FolderInputTextBox.Text).ToLowerInvariant().Equals(".mkv"))
                             s.Language = "English";
                         else
                             s.Language = "";
@@ -366,11 +366,11 @@ namespace MeGUI.packages.tools.hdbdextractor
 
                     if (FolderSelection.Checked)
                         sb.Append(string.Format("{0}:\"{1}\" {2} ", stream.Number,
-                            System.IO.Path.Combine(FolderOutputTextBox.Text, string.Format("F{0}_T{1}_{2} - {3}.{4}", ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number, stream.Number, Extensions.GetStringValue(stream.Type), row.Cells["languageDataGridViewTextBoxColumn"].Value, (row.Cells["StreamExtractAsComboBox"].Value).ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture))),
+                            System.IO.Path.Combine(FolderOutputTextBox.Text, string.Format("F{0}_T{1}_{2} - {3}.{4}", ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number, stream.Number, Extensions.GetStringValue(stream.Type), row.Cells["languageDataGridViewTextBoxColumn"].Value, (row.Cells["StreamExtractAsComboBox"].Value).ToString().ToLowerInvariant())),
                             row.Cells["StreamAddOptionsTextBox"].Value).Trim());
                     else
                         sb.Append(string.Format("{0}:\"{1}\" {2} ", stream.Number,
-                            System.IO.Path.Combine(FolderOutputTextBox.Text, string.Format("T{0}_{1} - {2}.{3}", stream.Number, Extensions.GetStringValue(stream.Type), row.Cells["languageDataGridViewTextBoxColumn"].Value, (row.Cells["StreamExtractAsComboBox"].Value).ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture))),
+                            System.IO.Path.Combine(FolderOutputTextBox.Text, string.Format("T{0}_{1} - {2}.{3}", stream.Number, Extensions.GetStringValue(stream.Type), row.Cells["languageDataGridViewTextBoxColumn"].Value, (row.Cells["StreamExtractAsComboBox"].Value).ToString().ToLowerInvariant())),
                             row.Cells["StreamAddOptionsTextBox"].Value).Trim());
 
                     if (row.Cells["StreamExtractAsComboBox"].Value.Equals(AudioCodec.DTS.ID))
@@ -441,14 +441,14 @@ namespace MeGUI.packages.tools.hdbdextractor
                         {
                             if (feature.Description.Contains("+"))
                             {
-                                if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("HVDVD_TS"))
+                                if (FolderInputTextBox.Text.ToUpperInvariant().Contains("HVDVD_TS"))
                                     dummyInput = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.IndexOf("HVDVD_TS")) + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf("+"));
                                 else
                                     dummyInput = FolderInputTextBox.Text + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf("+"));
                             }
                             else
                             {
-                                if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("HVDVD_TS"))
+                                if (FolderInputTextBox.Text.ToUpperInvariant().Contains("HVDVD_TS"))
                                     dummyInput = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.IndexOf("HVDVD_TS")) + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
                                 else
                                     dummyInput = FolderInputTextBox.Text + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));

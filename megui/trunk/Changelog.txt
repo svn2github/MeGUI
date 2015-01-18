@@ -1,3 +1,4 @@
+2517 [HD Streams Extractor] cosmetics
 2516 [Chapter Creator]      added option to sort the title list by chapter count
      [Chapter Creator]      cosmetics
 2515 [OneClick]             improved handling of track information in case no language information is available (regression of 2512). Part II

@@ -150,6 +150,9 @@
   <metadata name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>641, 17</value>
   </metadata>
+  <data name="openFileDialog1.Filter" xml:space="preserve">
+    <value>E-VOB Files (.*evo,*.vob)|*.evo;*.vob|Transport Streams Files (*.m2t*,*.mts,*.ts)|*.m2t*;*.mts;*.ts|Matroska Files (.*mkv)|*.mkv|Blu-ray Playlist|*.mpls|All Files supported|*.evo;*.vob;*.m2t*;*.mts;*.ts;*.mkv;*.mpls</value>
+  </data>
   <metadata name="extractTypesBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>781, 17</value>
   </metadata>
