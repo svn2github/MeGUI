@@ -511,13 +511,18 @@ namespace MeGUI
 
             _abortUpdate = false;
 
+            
+
             // Now update the files we can
             foreach (UpdateWindow.iUpgradeable file in UpdateData)
             {
                 if ((!String.IsNullOrEmpty(_forcePackage) || !file.DownloadChecked) && !file.Name.Equals(_forcePackage))
                     continue;
 
-                AddTextToLog(string.Format("{1}/{2} - updating package {0}", file.DisplayName, currentFile, updateableFileCount), ImageType.Information, true);
+                if (!String.IsNullOrEmpty(_forcePackage))
+                    AddTextToLog(string.Format("updating active package {0} as it is missing or outdated", file.DisplayName), ImageType.Information, true);
+                else
+                    AddTextToLog(string.Format("{1}/{2} - updating package {0}", file.DisplayName, currentFile, updateableFileCount), ImageType.Information, true);
 
                 if (!String.IsNullOrEmpty(file.AvailableVersion.Web))
                 {

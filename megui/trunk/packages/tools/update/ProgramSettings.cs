@@ -70,13 +70,24 @@ namespace MeGUI
 
         public bool Enabled
         {
-            get 
+            get
             {
                 if (_required)
                     return true;
-                return _enabled; 
+                return _enabled;
             }
             set { _enabled = value; }
+        }
+
+        public DateTime LastUsed
+        {
+            get { return _lastused; }
+            set
+            {
+                _lastused = value;
+                if (_lastused.AddDays(UpdateCacher.REMOVE_PACKAGE_AFTER_DAYS) <= DateTime.Now)
+                    _enabled = false;
+            }
         }
 
         [XmlIgnore()]
@@ -112,19 +123,28 @@ namespace MeGUI
             set { _displayname = value; }
         }
 
-        public DateTime LastUsed
-        {
-            get { return _lastused; }
-            set { _lastused = value; }
-        }
-
         public bool Update(bool enable, bool forceUpdate)
         {
+            bool bUpdateNeeded = false;
+            bool bFilesAvailable = false;
             if (enable)
+            {
                 _lastused = DateTime.Now;
+                bFilesAvailable = FilesAvailable();
+                if (!bFilesAvailable)
+                {
+                    bUpdateNeeded = true;
+                }
+                else if (!_enabled)
+                {
+                    MeGUI.UpdateWindow.iUpgradeable file = MainForm.Instance.UpdateHandler.UpdateData.FindByName(this._name);
+                    if (file.AvailableVersion != null && file.CurrentVersion == null || file.AvailableVersion.CompareTo(file.CurrentVersion) != 0)
+                        bUpdateNeeded = true;
+                }
+            }
             _enabled = enable;
 
-            if (!enable || FilesAvailable())
+            if (!enable || !bUpdateNeeded)
                 return true;
 
             if (!forceUpdate)
@@ -132,7 +152,7 @@ namespace MeGUI
 
             // package is not available. Therefore an update check is necessary
             if (MainForm.Instance.Settings.UpdateMode != UpdateMode.Disabled 
-                || MessageBox.Show("The package " + _displayname + " is not installed.\n\nDo you want to search now online for updates?", "MeGUI package missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                || (!bFilesAvailable && MessageBox.Show("The package " + _displayname + " is not installed.\n\nDo you want to search now online for updates?", "MeGUI package missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes))
             {
                 MainForm.Instance.UpdateHandler.ForcePackageInstallation = this._name;
                 MainForm.Instance.UpdateHandler.ShowUpdateWindow(true, true);
@@ -144,7 +164,7 @@ namespace MeGUI
                 if (MainForm.Instance.Settings.UpdateMode == UpdateMode.Disabled)
                     MessageBox.Show(String.Format("The update for {0} failed. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to try it later.", _displayname), _displayname + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else
+            else if (!bFilesAvailable)
                 MessageBox.Show(String.Format("You have selected to not update {0}. Therefore {0} will not be available and the current job will fail. Run the updater on your own if you want to download it later.", _displayname), _displayname + " not installed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }

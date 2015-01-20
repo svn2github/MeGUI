@@ -1,4 +1,8 @@
-2518                        update copyright year to 2015
+2519 [Update]               if an outdated package is enabled the update will be downloaded automatically (if auto update is not disabled)
+     [Update]               reduced time after an inactive package will be disabled to 14 days
+                            a lot of the last changes in the update handling are caused by the fact that the remaining update server has to be protected
+                            if you want to help please have a look here: http://forum.doom9.org/showpost.php?p=1706329&postcount=4410
+2518                        updated copyright year to 2015
 2517 [HD Streams Extractor] cosmetics
 2516 [Chapter Creator]      added option to sort the title list by chapter count
      [Chapter Creator]      cosmetics

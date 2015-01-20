@@ -37,7 +37,7 @@ namespace MeGUI
 {
     class UpdateCacher
     {
-        public const int REMOVE_PACKAGE_AFTER_DAYS = 60;
+        public const int REMOVE_PACKAGE_AFTER_DAYS = 14;
 
         public static void flushOldCachedFilesAsync(UpdateWindow.iUpgradeableCollection upgradeData)
         {
